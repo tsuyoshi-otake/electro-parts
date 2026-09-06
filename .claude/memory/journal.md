@@ -58,3 +58,41 @@
 - Learning: size a background benchmark's timeout from the largest row, and write each row to the log as it completes (the script already did, which is why nothing was lost).
 - Production bootstrap run 34034624075 succeeded in 7m51s: 18 genres / 211 pages, 211 HTTP attempts with 0 retries and 95 s of polite waiting, 12,215 occurrences deduplicated to 8,677 products, `complete=true`; import 672 ms, generate 1,971 ms (16.07 MB), finalize 81 ms (SQLite 5.93 MB), verify 897 ms; `datasetVersion 193bb3a90bc4c2c6` served from Pages together with `state/state.json`, the landing page and the userscript.
 - Learning: the live crawl costs ~7.5 min wall clock, of which 95 s is deliberate waiting; the 10-minute budget holds but leaves little headroom if the catalogue grows, so `maxPagesPerGenre` and the interval are the knobs to watch.
+
+## 2026-09-06/07 — Catalogue coverage: crawl targets from the sitemap (#1, 9cacfde)
+
+- Symptom: the user opened product 131975 and the panel rendered but said 「記録なし」.
+- Root cause: the crawler walked a hand-written list of 18 `/catalog/r/` genres. Nobody had ever checked what that list covered. Akizuki's sitemap counts 13,027 product pages; the 18 genres reached 8,677 (66.6 %). A product outside them is permanently absent, and the gap is silent by construction — a hand-written list cannot report what it omits.
+- Fix: discover crawl targets from `Sitemap_index.xml` (458 `c` categories, 1,412 `r` genres, 13,027 products). Config states only which families to walk (`collector.listingKinds`); `collector.genres` is removed from raw schema 3 and is an error if still present. The sitemap's product set became the coverage oracle: `uncovered` above `maxUncoveredProducts` marks the run incomplete.
+- Measurement that decided the config (full probe of every listing): `c` 11,098/13,027 (85.19 %, 777 requests), `r` 12,677/13,027 (97.31 %, 1,937), `c ∪ r` 12,772/13,027 (98.04 %, 2,714). Threshold 600: the residual is 255 and 10 of 10 sampled were 販売終了 products removed from every listing, which a listing crawl cannot reach.
+- Learning: **fix the families, never alternate them.** Alternating `c` and `r` by day would churn `coverageId` (invalidating ADR-0004's missing-product comparison every run) and would fabricate delisted/relisted history for the 1,674 products only one family lists.
+- Side effect: the `c` tree uses a second listing layout (`table.block-goods-list-l--table`) with no cart and no quantity, which the parser had never seen because the hand-written genre list happened to be all card layout.
+
+## 2026-09-06/07 — Monthly observation cadence (#1, 8a3c9b9)
+
+- Request: 「そんなに頻繁にかわらないので1ヶ月に1回でいいよ」.
+- Change: cron `17 20 1 * *` (2nd of the month, 05:17 JST). ~81,000 → ~2,700 requests a month.
+- Learning: a cadence change is not just the cron line. Everything downstream had to move with it — the user-visible sampling caveat in `userscript/core/format.ts` (not `src/publisher/generate.ts`, which the docs pointed at), snapshot artifact retention (30 → 90 days, otherwise the artifact expires before the next run), the runbook's recovery expectations, and the README's framing of a daily benchmark as an upper bound. Sanity thresholds were deliberately left alone: they detect parser breakage, they are not predictions about how much a month of drift should move.
+- Judgment call: an 85-minute crawl was in flight when the cadence changed. Cancelled at ~12 min and re-dispatched from the new commit rather than publish a userscript claiming daily sampling and pay for a second full crawl to correct it (~350 wasted requests vs ~2,700).
+
+## 2026-09-06/07 — Quarantined snapshot, phantom listing disagreements, re-import path (#1, 3dc2af3)
+
+- Symptom: production run 34042660353 crawled all 12,772 products, then quarantined on 3 × `item.price_tax` ("price is not marked tax included"), so nothing was imported and Pages still served 8,677.
+- Root cause: a 販売終了 row's price cell has `amountYen: null, taxIncluded: false`. `normalizeAkizukiItem` turns that into an `unavailable` quote **without reading `taxIncluded`**, so the validator was rejecting an 12,772-item snapshot over a field nothing consumes.
+- Fix: only require 税込 when the cell actually states an amount (`src/adapters/akizuki/snapshotAdapter.ts`).
+- Second symptom in the same run: 221 "listing differs between listings" warnings, all of the form `￥770` vs `￥770～`.
+- Root cause: the spec-table layout prints **every** price with a trailing 〜. Verified live: all 54 rows of `c/cantenna-` carry it while product page g110958 shows a single price. It is the template's wording, not a range.
+- Fix: `sameListing` compares recorded facts (`amountYen`, `taxIncluded`, `quantityUnit`, stock status) instead of the display string.
+- Also added `reimport_snapshot_from_run` to the workflow so a pipeline-only fix can re-import a previous run's snapshot artifact instead of crawling again. Run 34048105257 re-imported and published in ~1 minute rather than 85.
+- Verification: manifest `3ccce668810808ca`, productCount 12,772, `latestCoverageId sitemap:c+r`; `products/131975.json` present; the live page renders the history the user reported missing.
+- Learning: **a validator must not demand a field the normalizer ignores.** The check cost a full crawl to discover, and it was guarding nothing.
+
+## 2026-09-07 — Panel width and colliding axis dates (#1, 11644d1)
+
+- Symptom: on the live page the panel rendered 420 px wide, below the page's last section, with its two date labels drawn on top of each other.
+- Root cause (1): `.block-goods-detail` is a two-column CSS grid (measured 420 px + 660 px) whose five panes each pin their own `grid-row`. Inserting a sibling before `.pane-goods-center` made the panel an auto-placed extra grid item — 420 px wide, in a new row after every pane. The chart column collapsed to ~110 px.
+- Fix (1): mount as the first child of `.pane-goods-center`, a plain 1080 px block that begins exactly under the gallery/buy columns. `MountPoint` gained an optional `hostStyle` that the controller applies to the host element, so the three fallbacks that still land inside the grid can claim `grid-column: 1 / -1`.
+- Root cause (2): the chart's drawing tail had a one-day floor. For a two-observation window that is the whole span, so `end` landed mid-plot and its label overlapped the start label. The gap test also compared anchor positions, which say nothing about where a `text-anchor: end` label actually sits.
+- Fix (2): tail floor 1 hour; labels placed by measured extent (58 units per date) and dropped when they repeat the previous date or would overlap it.
+- Verification: live g131975 and g109951 mount into `.pane-goods-center` at 1080 px, chart 649×239, axis reads 2026-09-06 / 2026-09-07 with no overlap. 230 vitest + 3 E2E pass.
+- Learning: measure the host page's own layout before choosing a mount point — `display: block` on the host says nothing when the parent is a grid with pinned rows.
