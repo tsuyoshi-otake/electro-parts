@@ -35,6 +35,14 @@ export interface RunOptions {
   previous?: PreviousStateSource;
   /** Import this raw snapshot instead of crawling. */
   snapshotPath?: string;
+  /**
+   * Regenerate and republish the site from the published history without
+   * observing anything: no crawl, no import, no new run. For changes that
+   * live in the site rather than in the data (the userscript bundle, the
+   * landing page, a generator fix). Contradicts `bootstrap` and
+   * `snapshotPath`, which both bring an observation with them.
+   */
+  republish?: boolean;
   /** Root for relative paths from the config. */
   cwd: string;
   deps: RunDeps;
@@ -94,6 +102,12 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
   let db: Db | null = null;
   let outcome: PipelineOutcome = 'failed';
   try {
+    // Both of these bring an observation with them, which is exactly what a
+    // republish must not do.
+    if (options.republish === true && (options.bootstrap || options.snapshotPath !== undefined)) {
+      throw new Error('republish cannot be combined with bootstrap or a snapshot: both add an observation');
+    }
+
     // previous_state
     const state = await runStage(report, 'previous_state', now, async (d) => {
       const r = await acquirePreviousState(previous, workDir, options.bootstrap, deps.fetchImpl);
@@ -111,81 +125,90 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
     report.mode = state.mode;
     const working = db as unknown as Db;
 
-    // collect
-    const collected = await runStage(report, 'collect', now, async (d) => {
-      if (options.snapshotPath !== undefined) {
-        const file = await readRawSnapshotFile(resolve(options.snapshotPath));
-        d['source'] = 'file';
-        d['bytes'] = file.bytes;
-        d['rawSha256'] = file.rawSha256;
-        report.snapshotPath = options.snapshotPath;
-        return { raw: file.json, rawSha256: file.rawSha256, retrievedAt: null as string | null };
+    // collect / validate / import / compact. A republish skips all four: the
+    // published history is regenerated as it stands, so a fix that only
+    // changes what the site serves never has to invent an observation to
+    // reach Pages, and never inflates the run count.
+    if (options.republish === true) {
+      log('republish: regenerating the site from the published history; nothing observed');
+      outcome = 'unchanged';
+    } else {
+      // collect
+      const collected = await runStage(report, 'collect', now, async (d) => {
+        if (options.snapshotPath !== undefined) {
+          const file = await readRawSnapshotFile(resolve(options.snapshotPath));
+          d['source'] = 'file';
+          d['bytes'] = file.bytes;
+          d['rawSha256'] = file.rawSha256;
+          report.snapshotPath = options.snapshotPath;
+          return { raw: file.json, rawSha256: file.rawSha256, retrievedAt: null as string | null };
+        }
+        const collector = getStoreCollector(config.storeId);
+        const outcome = await collector.collect(config.collector, deps);
+        Object.assign(d, outcome.metrics, { complete: outcome.complete, errors: outcome.errors.length });
+        report.warnings.push(...outcome.warnings.map((w) => `collect: ${w}`));
+        report.warnings.push(...outcome.errors.map((w) => `collect error: ${w}`));
+        await mkdir(snapshotsDir, { recursive: true });
+        const file = path.join(snapshotsDir, snapshotFileName(config.storeId, outcome.retrievedAt));
+        const written = await writeRawSnapshotFile(file, outcome.raw);
+        d['bytes'] = written.bytes;
+        d['rawSha256'] = written.rawSha256;
+        report.snapshotPath = path.relative(options.cwd, file);
+        log(`snapshot written: ${file} (${written.bytes} bytes, complete=${String(outcome.complete)})`);
+        return { raw: outcome.raw, rawSha256: written.rawSha256, retrievedAt: outcome.retrievedAt };
+      });
+
+      // validate (adapter validation, normalization, sanity vs previous run)
+      let normalized: NormalizedSnapshot | null = null;
+      let validation: ValidationResult | null = null;
+      try {
+        const v = await runStage(report, 'validate', now, (d) => {
+          const structural = adapter.validateRaw(collected.raw);
+          d['errors'] = structural.errors.length;
+          d['warnings'] = structural.warnings.length;
+          Object.assign(d, structural.metrics);
+          report.warnings.push(...structural.warnings.map((w) => `validate: ${w.code} ${w.message}`));
+          if (!isImportable(structural)) throw new Quarantine('validate', structural);
+          const snapshot = adapter.normalize(collected.raw, collected.rawSha256);
+          const previousSummary = latestSnapshotSummary(working, config.storeId);
+          const sanity = sanityCheck(snapshot, previousSummary, config.sanity);
+          Object.assign(d, sanity.metrics);
+          d['sanityErrors'] = sanity.errors.length;
+          d['comparedWith'] = previousSummary?.observedAt ?? null;
+          report.warnings.push(...sanity.warnings.map((w) => `sanity: ${w.code} ${w.message}`));
+          const merged = mergeValidation(structural, sanity);
+          if (!isImportable(merged)) throw new Quarantine('validate', merged);
+          return { snapshot, merged };
+        });
+        normalized = v.snapshot;
+        validation = v.merged;
+      } catch (e) {
+        const q = e instanceof StageFailedError ? e.cause : e;
+        if (!(q instanceof Quarantine)) throw e;
+        const record = report.stages.find((s) => s.name === 'validate');
+        if (record !== undefined) record.status = 'ok';
+        const reason = { stage: q.stageName, errors: q.result.errors, warnings: q.result.warnings, metrics: q.result.metrics };
+        recordRejectedRun(working, config.storeId, safeObservedAt(collected.retrievedAt), collected.rawSha256, reason, now().toISOString());
+        report.warnings.push(...q.result.errors.map((x) => `quarantined: ${x.code} ${x.message}`));
+        log(`snapshot quarantined: ${q.result.errors.map((x) => `${x.code} (${x.message})`).join('; ')}`);
+        outcome = 'quarantined';
       }
-      const collector = getStoreCollector(config.storeId);
-      const outcome = await collector.collect(config.collector, deps);
-      Object.assign(d, outcome.metrics, { complete: outcome.complete, errors: outcome.errors.length });
-      report.warnings.push(...outcome.warnings.map((w) => `collect: ${w}`));
-      report.warnings.push(...outcome.errors.map((w) => `collect error: ${w}`));
-      await mkdir(snapshotsDir, { recursive: true });
-      const file = path.join(snapshotsDir, snapshotFileName(config.storeId, outcome.retrievedAt));
-      const written = await writeRawSnapshotFile(file, outcome.raw);
-      d['bytes'] = written.bytes;
-      d['rawSha256'] = written.rawSha256;
-      report.snapshotPath = path.relative(options.cwd, file);
-      log(`snapshot written: ${file} (${written.bytes} bytes, complete=${String(outcome.complete)})`);
-      return { raw: outcome.raw, rawSha256: written.rawSha256, retrievedAt: outcome.retrievedAt };
-    });
 
-    // validate (adapter validation, normalization, sanity vs previous run)
-    let normalized: NormalizedSnapshot | null = null;
-    let validation: ValidationResult | null = null;
-    try {
-      const v = await runStage(report, 'validate', now, (d) => {
-        const structural = adapter.validateRaw(collected.raw);
-        d['errors'] = structural.errors.length;
-        d['warnings'] = structural.warnings.length;
-        Object.assign(d, structural.metrics);
-        report.warnings.push(...structural.warnings.map((w) => `validate: ${w.code} ${w.message}`));
-        if (!isImportable(structural)) throw new Quarantine('validate', structural);
-        const snapshot = adapter.normalize(collected.raw, collected.rawSha256);
-        const previousSummary = latestSnapshotSummary(working, config.storeId);
-        const sanity = sanityCheck(snapshot, previousSummary, config.sanity);
-        Object.assign(d, sanity.metrics);
-        d['sanityErrors'] = sanity.errors.length;
-        d['comparedWith'] = previousSummary?.observedAt ?? null;
-        report.warnings.push(...sanity.warnings.map((w) => `sanity: ${w.code} ${w.message}`));
-        const merged = mergeValidation(structural, sanity);
-        if (!isImportable(merged)) throw new Quarantine('validate', merged);
-        return { snapshot, merged };
-      });
-      normalized = v.snapshot;
-      validation = v.merged;
-    } catch (e) {
-      const q = e instanceof StageFailedError ? e.cause : e;
-      if (!(q instanceof Quarantine)) throw e;
-      const record = report.stages.find((s) => s.name === 'validate');
-      if (record !== undefined) record.status = 'ok';
-      const reason = { stage: q.stageName, errors: q.result.errors, warnings: q.result.warnings, metrics: q.result.metrics };
-      recordRejectedRun(working, config.storeId, safeObservedAt(collected.retrievedAt), collected.rawSha256, reason, now().toISOString());
-      report.warnings.push(...q.result.errors.map((x) => `quarantined: ${x.code} ${x.message}`));
-      log(`snapshot quarantined: ${q.result.errors.map((x) => `${x.code} (${x.message})`).join('; ')}`);
-      outcome = 'quarantined';
-    }
-
-    // import + compact
-    if (normalized !== null && validation !== null) {
-      const snapshot = normalized;
-      const merged = validation;
-      const stats = await runStage(report, 'import', now, (d) => {
-        const s = importSnapshot(working, snapshot, { capabilities: adapter.capabilities, validation: merged, now });
-        Object.assign(d, s);
-        return s;
-      });
-      outcome = stats.status === 'already_imported' ? 'unchanged' : 'published';
-      await runStage(report, 'compact', now, (d) => {
-        const c = compactInventory(working, { retentionDays: config.inventory.retentionDays, now });
-        Object.assign(d, c);
-      });
+      // import + compact
+      if (normalized !== null && validation !== null) {
+        const snapshot = normalized;
+        const merged = validation;
+        const stats = await runStage(report, 'import', now, (d) => {
+          const s = importSnapshot(working, snapshot, { capabilities: adapter.capabilities, validation: merged, now });
+          Object.assign(d, s);
+          return s;
+        });
+        outcome = stats.status === 'already_imported' ? 'unchanged' : 'published';
+        await runStage(report, 'compact', now, (d) => {
+          const c = compactInventory(working, { retentionDays: config.inventory.retentionDays, now });
+          Object.assign(d, c);
+        });
+      }
     }
 
     // Nothing to publish when the history is still empty (bootstrap + quarantine).

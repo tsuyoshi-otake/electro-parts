@@ -2,7 +2,7 @@
  * Command-line entry point. Every command is a thin wrapper around the
  * pipeline modules; nothing here knows about a specific store.
  *
- *   pipeline  --config config/<store>.json [--bootstrap] [--previous-dir DIR] [--snapshot FILE]
+ *   pipeline  --config config/<store>.json [--bootstrap] [--previous-dir DIR] [--snapshot FILE] [--republish]
  *   crawl     --config ...                     write a raw snapshot only (exit 2 when incomplete)
  *   verify    --config ... [--site DIR]        re-verify a produced site directory
  *   summary   --report reports/pipeline-<store>.json   print Markdown for the Actions summary
@@ -19,7 +19,7 @@ import { verifyStoreDataset } from '../publisher/write.ts';
 import { getStoreCollector } from '../stores/collectorRegistry.ts';
 
 const USAGE = `usage:
-  main.ts pipeline --config FILE [--bootstrap] [--previous-dir DIR] [--snapshot FILE]
+  main.ts pipeline --config FILE [--bootstrap] [--previous-dir DIR] [--snapshot FILE] [--republish]
   main.ts crawl    --config FILE [--out DIR]
   main.ts verify   --config FILE [--site DIR]
   main.ts summary  --report FILE [--append-to FILE]`;
@@ -34,6 +34,7 @@ async function commandPipeline(args: string[]): Promise<number> {
     options: {
       config: { type: 'string' },
       bootstrap: { type: 'boolean', default: false },
+      republish: { type: 'boolean', default: false },
       'previous-dir': { type: 'string' },
       snapshot: { type: 'string' },
     },
@@ -43,6 +44,7 @@ async function commandPipeline(args: string[]): Promise<number> {
   const result = await runPipeline({
     config,
     bootstrap: values.bootstrap,
+    republish: values.republish,
     cwd: process.cwd(),
     deps: { log },
     ...(values['previous-dir'] === undefined ? {} : { previous: { dir: values['previous-dir'] } }),

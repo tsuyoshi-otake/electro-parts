@@ -147,6 +147,37 @@ describe('pipeline state machine', () => {
     expect(r.report.publishable).toBe(true);
   });
 
+  it('republishes the site from the published history without observing anything', async () => {
+    const manifestPath = path.join(root, 'site', 'data', 'v1', 'stores', 'akizuki', 'manifest.json');
+    const before = JSON.parse(await readFile(manifestPath, 'utf8')).datasetVersion as string;
+    const r = await run(false, { republish: true });
+    expect(r.report.stages.map((s) => `${s.name}:${s.status}`)).toEqual([
+      'previous_state:ok',
+      'collect:skipped',
+      'validate:skipped',
+      'import:skipped',
+      'compact:skipped',
+      'generate:ok',
+      'finalize:ok',
+      'verify:ok',
+    ]);
+    expect(r.report.outcome).toBe('unchanged');
+    expect(r.exitCode).toBe(0);
+    expect(r.report.publishable).toBe(true);
+    // Same history in, same history out: the run count and the dataset
+    // version must not move because the site was rebuilt.
+    expect(JSON.parse(await readFile(manifestPath, 'utf8')).datasetVersion).toBe(before);
+    expect((await verifyStateDir(path.join(root, 'site', SITE_STATE_DIR))).stores['akizuki']!.runCount).toBe(2);
+    await deploy();
+  });
+
+  it('refuses a republish that also carries an observation', async () => {
+    const r = await run(true, { republish: true });
+    expect(r.report.outcome).toBe('failed');
+    expect(r.report.publishable).toBe(false);
+    expect(r.report.stages.every((s) => s.status === 'skipped')).toBe(true);
+  });
+
   it('quarantines a crawl that lost most of the catalogue and keeps the history intact', async () => {
     resetSite(site);
     addListing(site, { kind: 'r', slug: 'rkit' }, '組立キット', catalog(5), 10);

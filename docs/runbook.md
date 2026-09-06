@@ -41,6 +41,16 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 
 前回状態は `previousStateUrl` から取得される。ローカルで試すだけなら `--previous-dir` に成果物 `state-<run id>` を展開したディレクトリを渡す。
 
+## サイトだけ差し替える(観測を増やさない)
+
+ユーザースクリプトのバンドルやランディングページなど、**データではなくサイトの中身**を直したときに使う。公開済みの履歴をそのまま再生成してデプロイするだけで、クロールも取り込みもしない。
+
+- Actions → "Crawl and publish" → Run workflow → `republish` にチェック。
+- 段階は `previous_state` → `generate` → `finalize` → `verify` だけ走り、`collect` / `validate` / `import` / `compact` は skipped。結果は `unchanged`(exit 0)。
+- **run 数も `datasetVersion` も変わらない。** ここが再取り込みとの違いで、同じスナップショットをもう一度取り込むと「同じ内容の観測」が 1 回増えてしまう。サイトを直したいだけのときにそれをやってはいけない。
+- ローカルでは `node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --republish`。
+- `--bootstrap` や `--snapshot` とは併用できない(どちらも観測を持ち込むため、run は失敗する)。
+
 ## ロールバック
 
 壊れた状態を公開してしまった場合:

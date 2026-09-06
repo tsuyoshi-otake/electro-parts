@@ -38,6 +38,10 @@ on:
         description: 'Run id whose raw snapshot to re-import instead of crawling (pipeline-only fixes)'
         type: string
         default: ''
+      republish:
+        description: 'Rebuild and deploy the site from the published history: no crawl, no import, no new observation'
+        type: boolean
+        default: false
 
 permissions: {}
 
@@ -80,9 +84,12 @@ jobs:
       # A fix in the import/generate stages must not cost another full crawl of
       # the store (~2,700 requests). Re-importing the snapshot a previous run
       # already collected reproduces everything downstream of `collect`.
+      # `republish` goes further and skips the import too: use it when only the
+      # site changed (userscript bundle, landing page), so the deployment does
+      # not fabricate an observation.
       - name: Download the snapshot to re-import
         id: reimport
-        if: inputs.reimport_snapshot_from_run != ''
+        if: inputs.reimport_snapshot_from_run != '' && inputs.republish != true
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ inputs.reimport_snapshot_from_run }}
@@ -98,12 +105,13 @@ jobs:
         id: pipeline
         env:
           BOOTSTRAP_FLAG: ${{ inputs.bootstrap == true && '--bootstrap' || '' }}
+          REPUBLISH_FLAG: ${{ inputs.republish == true && '--republish' || '' }}
           SNAPSHOT_FLAG: ${{ steps.reimport.outputs.file && format('--snapshot {0}', steps.reimport.outputs.file) || '' }}
         run: |
           set +e
           # tee so the job log shows the run even when the artifact is not read.
           # shellcheck disable=SC2086
-          node --import tsx src/cli/main.ts pipeline --config "$STORE_CONFIG" $BOOTSTRAP_FLAG $SNAPSHOT_FLAG 2>&1 | tee pipeline-stdout.md
+          node --import tsx src/cli/main.ts pipeline --config "$STORE_CONFIG" $BOOTSTRAP_FLAG $REPUBLISH_FLAG $SNAPSHOT_FLAG 2>&1 | tee pipeline-stdout.md
           code=${PIPESTATUS[0]}
           set -e
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
