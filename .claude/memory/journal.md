@@ -46,7 +46,7 @@
 - Benchmark (9,000 products, daily): 1 y import total 148.9 s, p95 460.7 ms, SQLite 14.73 MB, site 27.08 MB; 3 y import total 610.2 s, p95 740.5 ms, SQLite 35.39 MB, site 32.23 MB; 5 y row recorded in README.
 - Learning: heredocs are unusable for Japanese docs in this harness; ADRs / docs written via a Python script created with the Write tool.
 
-## 2026-09-06 — Phase 1 published: public repo, Pages, bootstrap run (#1, commit pending)
+## 2026-09-06 — Phase 1 published: public repo, Pages, bootstrap run (#1, 3e91b11)
 
 - Work: pushed `main`, flipped the repository to public (explicitly authorised by the user, overriding the default private-only policy), enabled Pages with `build_type=workflow`, ran the bootstrap `Crawl and publish` dispatch.
 - Verification before publishing: full pipeline run locally with both recorded snapshots through the exact CLI the workflow uses — bootstrap (8,701 products, `datasetVersion a7669a9381e9102f`) then incremental (8,809 product files, `6aa44a3bf73859e3`, 168 primary price changes, 132 absent, 108 new). `summary` renders the stage table; `verify` exits 0. FT232RQ 109951 shows `1150 → 1200 (+50, +4.35 %)` and RE-280RA 106438 `250 → 280 (+30, +12 %)` in the published files; exactly one product (117275) carries the `suspicious_identity` caveat, so the metadata-change path reaches the contract.
@@ -56,4 +56,5 @@
 - Root cause: the wrapper timeout was sized for the 1/3-year rows; the 5-year row alone needs ~20 min of import time.
 - Fix: re-ran `--years 5` separately with a 5,400 s timeout; results pasted into the README between the `bench:` markers.
 - Learning: size a background benchmark's timeout from the largest row, and write each row to the log as it completes (the script already did, which is why nothing was lost).
-
+- Production bootstrap run 34034624075 succeeded in 7m51s: 18 genres / 211 pages, 211 HTTP attempts with 0 retries and 95 s of polite waiting, 12,215 occurrences deduplicated to 8,677 products, `complete=true`; import 672 ms, generate 1,971 ms (16.07 MB), finalize 81 ms (SQLite 5.93 MB), verify 897 ms; `datasetVersion 193bb3a90bc4c2c6` served from Pages together with `state/state.json`, the landing page and the userscript.
+- Learning: the live crawl costs ~7.5 min wall clock, of which 95 s is deliberate waiting; the 10-minute budget holds but leaves little headroom if the catalogue grows, so `maxPagesPerGenre` and the interval are the knobs to watch.
