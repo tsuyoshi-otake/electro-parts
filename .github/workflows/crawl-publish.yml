@@ -1,0 +1,190 @@
+# Scheduled crawl → SQLite import → static dataset → GitHub Pages.
+#
+# Design notes (see docs/adr/0006-state-publication-on-pages.md):
+# - Exactly one writer at a time: the `pages-publish` concurrency group never
+#   cancels a running publication; later runs queue behind it.
+# - The previous finalized state is downloaded from Pages and verified inside
+#   the pipeline. When it cannot be obtained the run fails instead of
+#   silently resetting the history. `bootstrap=true` is the only way to start
+#   from nothing and is refused once a state exists.
+# - Deployment happens only when the report says `publishable`, and always as
+#   one Pages artifact (data + state + userscript), so readers never see a
+#   half-written dataset.
+# - Exit codes: 0 published/unchanged, 3 quarantined (still publishable, the
+#   rejection is recorded in the state), 1 failed (nothing deployed).
+name: Crawl and publish
+
+on:
+  schedule:
+    # 05:17 JST daily (20:17 UTC). Off the hour to avoid the crowd.
+    - cron: '17 20 * * *'
+  workflow_dispatch:
+    inputs:
+      bootstrap:
+        description: 'Start a NEW history (only allowed when no state is published yet)'
+        type: boolean
+        default: false
+      dry_run:
+        description: 'Run the pipeline and upload artifacts, but do not deploy to Pages'
+        type: boolean
+        default: false
+      snapshot_retention_days:
+        description: 'Retention (days) of the raw snapshot artifact'
+        type: number
+        default: 30
+
+permissions: {}
+
+concurrency:
+  group: pages-publish
+  cancel-in-progress: false
+
+env:
+  STORE_CONFIG: config/akizuki.json
+  NODE_OPTIONS: --max-old-space-size=2048
+
+jobs:
+  crawl:
+    name: Crawl, import and generate
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    outputs:
+      publishable: ${{ steps.report.outputs.publishable }}
+      outcome: ${{ steps.report.outputs.outcome }}
+      dataset_version: ${{ steps.report.outputs.dataset_version }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies (lockfile only)
+        run: npm ci
+
+      - name: Run pipeline
+        id: pipeline
+        env:
+          BOOTSTRAP_FLAG: ${{ inputs.bootstrap == true && '--bootstrap' || '' }}
+        run: |
+          set +e
+          # tee so the job log shows the run even when the artifact is not read.
+          # shellcheck disable=SC2086
+          node --import tsx src/cli/main.ts pipeline --config "$STORE_CONFIG" $BOOTSTRAP_FLAG 2>&1 | tee pipeline-stdout.md
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          echo "pipeline exit code: $code"
+          # 1 = failed. Artifacts are uploaded first; the job fails in the last step.
+
+      - name: Read report
+        id: report
+        run: |
+          report=reports/pipeline-akizuki.json
+          if [ ! -f "$report" ]; then echo "::error::pipeline report missing"; exit 1; fi
+          {
+            echo "publishable=$(jq -r '.publishable' "$report")"
+            echo "outcome=$(jq -r '.outcome' "$report")"
+            echo "dataset_version=$(jq -r '.datasetVersion // ""' "$report")"
+          } >> "$GITHUB_OUTPUT"
+          node --import tsx src/cli/main.ts summary --report "$report" --append-to "$GITHUB_STEP_SUMMARY"
+          case "$(jq -r '.outcome' "$report")" in
+            quarantined) echo "::warning title=Snapshot quarantined::The crawl was rejected by the sanity checks; history unchanged. See the job summary." ;;
+            failed) echo "::error title=Pipeline failed::See the job summary for the failing stage." ;;
+          esac
+
+      - name: Build userscript and static pages into site/
+        if: steps.report.outputs.publishable == 'true'
+        run: |
+          node --import tsx scripts/build-userscript.ts --out site
+          cp -R public/. site/
+          touch site/.nojekyll
+          {
+            echo "### Site"
+            echo '```'
+            du -sh site site/data site/state
+            echo "files: $(find site -type f | wc -l)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify site before upload
+        if: steps.report.outputs.publishable == 'true'
+        run: node --import tsx src/cli/main.ts verify --config "$STORE_CONFIG" --site site
+
+      - name: Upload raw snapshot
+        if: always() && hashFiles('snapshots/**') != ''
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: snapshot-akizuki-${{ github.run_id }}
+          path: snapshots/
+          retention-days: ${{ inputs.snapshot_retention_days || 30 }}
+          if-no-files-found: ignore
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: report-akizuki-${{ github.run_id }}
+          path: |
+            reports/
+            pipeline-stdout.md
+          retention-days: 90
+          if-no-files-found: ignore
+
+      - name: Upload finalized state (backup)
+        if: always() && hashFiles('site/state/**') != ''
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: state-${{ github.run_id }}
+          path: site/state/
+          retention-days: 90
+          if-no-files-found: ignore
+
+      - name: Upload Pages artifact
+        if: steps.report.outputs.publishable == 'true'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site/
+          retention-days: 7
+
+      - name: Fail the job when the pipeline failed
+        if: steps.pipeline.outputs.exit_code == '1'
+        run: exit 1
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: crawl
+    if: needs.crawl.outputs.publishable == 'true' && inputs.dry_run != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+
+      - name: Verify the published manifest
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          EXPECTED: ${{ needs.crawl.outputs.dataset_version }}
+        run: |
+          url="${PAGE_URL%/}/data/v1/stores/akizuki/manifest.json?v=$EXPECTED"
+          for i in 1 2 3 4 5 6; do
+            got=$(curl -fsSL --max-time 30 "$url" | jq -r '.datasetVersion' 2>/dev/null || true)
+            if [ "$got" = "$EXPECTED" ]; then echo "published datasetVersion $got"; exit 0; fi
+            echo "attempt $i: got '$got', expected '$EXPECTED'; waiting for the CDN"
+            sleep 20
+          done
+          echo "::warning::Pages did not serve datasetVersion $EXPECTED within 2 minutes (CDN propagation?)"

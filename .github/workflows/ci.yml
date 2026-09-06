@@ -1,0 +1,122 @@
+# Continuous integration: typecheck, unit / property / DB / userscript tests,
+# Playwright E2E on the saved fixture (no live site), userscript build and
+# supply-chain audit. Nothing here touches the network except npm.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Typecheck and tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies (lockfile only)
+        run: npm ci
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit, property, DB, contract, integration and userscript tests
+        run: timeout 900 npm test
+
+      - name: Common core must not name a store
+        run: |
+          set -euo pipefail
+          # Store knowledge lives in adapters/collectors only. Comments are allowed
+          # (they document the shape of the opaque id); code is not.
+          hits=$(grep -rniE 'akizuki|aitendo|switch[-_ ]?science|akizukidenshi' src/core src/db src/publisher src/pipeline userscript/core userscript/ui \
+            | grep -vE ':[0-9]+:\s*(//|\*|/\*)' || true)
+          if [ -n "$hits" ]; then
+            echo "$hits"
+            echo "::error::store-specific names found in the common core"; exit 1
+          fi
+
+      - name: Build userscript
+        run: |
+          node --import tsx scripts/build-userscript.ts --out dist/site
+          bundle=dist/site/electronics-price-history.user.js
+          # Defence in depth: the bundle must never build markup from strings
+          # and must not load anything at runtime.
+          if grep -Eq 'innerHTML|outerHTML|insertAdjacentHTML|document\.write' "$bundle"; then
+            echo "::error::userscript bundle contains an HTML-string sink"; exit 1
+          fi
+          if grep -Eq 'https?://[^"'"'"' ]*(cdn|unpkg|jsdelivr)' "$bundle"; then
+            echo "::error::userscript bundle references a CDN"; exit 1
+          fi
+          ls -l dist/site
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end (saved fixture, both origins intercepted)
+        run: timeout 600 npm run test:e2e
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ci-reports-${{ github.run_id }}
+          path: |
+            reports/
+            test-results/e2e/**/*.png
+            dist/site/electronics-price-history.user.js
+          retention-days: 14
+          if-no-files-found: ignore
+
+  mutation:
+    name: Mutation testing (core)
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies (lockfile only)
+        run: npm ci
+
+      - name: Stryker
+        run: timeout 5000 npm run test:mutation
+
+      - name: Upload mutation report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: mutation-report-${{ github.run_id }}
+          path: reports/mutation/
+          retention-days: 30
+          if-no-files-found: ignore
