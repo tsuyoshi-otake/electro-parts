@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { akizukiCollector, parseAkizukiCollectorConfig } from '../../src/collectors/akizuki/collector.ts';
-import { AKIZUKI_DEFAULT_GENRES } from '../../src/collectors/akizuki/genres.ts';
 import { DEFAULT_SANITY_THRESHOLDS } from '../../src/core/sanity.ts';
 import { loadPipelineConfig, parsePipelineConfig } from '../../src/pipeline/config.ts';
 import { newReport, reportToMarkdown, runStage, StageFailedError } from '../../src/pipeline/report.ts';
@@ -14,7 +13,11 @@ describe('pipeline config', () => {
     expect(c.paths).toEqual({ snapshots: 'snapshots', work: 'state/work', site: 'site', reports: 'reports' });
     expect(c.previousStateUrl).toBe('https://tsuyoshi-otake.github.io/electro-parts/state');
     const collector = parseAkizukiCollectorConfig(c.collector);
-    expect(collector.genres).toEqual(AKIZUKI_DEFAULT_GENRES);
+    // Both families, always: neither reaches the whole catalogue alone, and
+    // alternating them would churn the coverage id every run (ADR-0012).
+    expect(collector.listingKinds).toEqual(['c', 'r']);
+    expect(collector.maxUncoveredProducts).toBe(600);
+    expect(collector.maxRequests).toBeGreaterThanOrEqual(2800);
     expect(collector.minIntervalMs).toBeGreaterThanOrEqual(1000);
     expect(collector.userAgent).toContain('github.com/tsuyoshi-otake');
     expect(() => getStoreCollector('akizuki').validateConfig(c.collector)).not.toThrow();
@@ -35,7 +38,8 @@ describe('pipeline config', () => {
   it('collector config refuses anonymous or crawler-named agents and bad genres', () => {
     expect(() => parseAkizukiCollectorConfig({ userAgent: 'x' })).toThrow(/identify/);
     expect(() => parseAkizukiCollectorConfig({ userAgent: 'my-crawler/1.0 (+https://example.test)' })).toThrow(/crawler/);
-    expect(() => parseAkizukiCollectorConfig({ userAgent: 'electro-parts test agent', genres: ['rkit', 'bad slug'] })).toThrow(/genre slugs/);
+    expect(() => parseAkizukiCollectorConfig({ userAgent: 'electro-parts test agent', genres: ['rkit'] })).toThrow(/collector.genres was removed/);
+    expect(() => parseAkizukiCollectorConfig({ userAgent: 'electro-parts test agent', listingKinds: ['x'] })).toThrow(/listingKinds/);
     expect(() => parseAkizukiCollectorConfig({ userAgent: 'electro-parts test agent', baseUrl: 'https://akizukidenshi.com/catalog' })).toThrow(/origin/);
     expect(() => parseAkizukiCollectorConfig({ userAgent: 'electro-parts test agent', minIntervalMs: 100 })).toThrow(/>= 500/);
   });

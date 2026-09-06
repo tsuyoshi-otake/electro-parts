@@ -19,7 +19,8 @@
 export interface TransportResponse {
   status: number;
   header(name: string): string | null;
-  text(): Promise<string>;
+  /** Raw body. Text is decoded by the fetcher so binary bodies (gzip) stay intact. */
+  bytes(): Promise<Uint8Array>;
 }
 
 export type HttpTransport = (url: string, init: { headers: Record<string, string>; signal: AbortSignal }) => Promise<TransportResponse>;
@@ -94,7 +95,7 @@ export function parseRetryAfterMs(value: string | null, nowMs: number): number |
 
 export const defaultTransport: HttpTransport = async (url, init) => {
   const res = await fetch(url, { method: 'GET', headers: init.headers, signal: init.signal, redirect: 'follow', credentials: 'omit' });
-  return { status: res.status, header: (n) => res.headers.get(n), text: () => res.text() };
+  return { status: res.status, header: (n) => res.headers.get(n), bytes: async () => new Uint8Array(await res.arrayBuffer()) };
 };
 
 export class PoliteFetcher {
@@ -126,7 +127,19 @@ export class PoliteFetcher {
 
   /** Fetches one URL as text, serialised behind every earlier call. */
   fetchText(url: string): Promise<string> {
-    const run = this.chain.then(() => this.fetchSerial(url));
+    return this.enqueue(() => this.fetchSerial(url, true));
+  }
+
+  /**
+   * Fetches one URL as raw bytes. Needed for the gzip sitemaps; the transient
+   * body check is skipped because a compressed body is never a maintenance page.
+   */
+  fetchBytes(url: string): Promise<Uint8Array> {
+    return this.enqueue(() => this.fetchSerial(url, false));
+  }
+
+  private enqueue<T>(work: () => Promise<T>): Promise<T> {
+    const run = this.chain.then(work);
     this.chain = run.catch(() => undefined);
     return run;
   }
@@ -144,7 +157,9 @@ export class PoliteFetcher {
     if (delay > 0) await this.wait(delay);
   }
 
-  private async fetchSerial(url: string): Promise<string> {
+  private async fetchSerial(url: string, decode: true): Promise<string>;
+  private async fetchSerial(url: string, decode: false): Promise<Uint8Array>;
+  private async fetchSerial(url: string, decode: boolean): Promise<string | Uint8Array> {
     this.stats.logicalPages++;
     let lastStatus: number | null = null;
     let lastMessage = '';
@@ -163,13 +178,16 @@ export class PoliteFetcher {
           signal: controller.signal,
         });
         lastStatus = res.status;
-        const body = await res.text();
+        const raw = await res.bytes();
+        // Error bodies are always text, so the transient check can decode them
+        // even when the caller asked for bytes.
+        const body = decode || res.status < 200 || res.status >= 300 ? new TextDecoder().decode(raw) : '';
         if (res.status >= 200 && res.status < 300) {
           if (this.o.isTransientBody?.(res.status, body) === true) {
             lastMessage = `transient body (status ${res.status})`;
           } else {
             this.stats.successfulResponses++;
-            return body;
+            return decode ? body : raw;
           }
         } else if (RETRYABLE_STATUS.has(res.status) || this.o.isTransientBody?.(res.status, body) === true) {
           retryAfterMs = parseRetryAfterMs(res.header('retry-after'), this.o.now());

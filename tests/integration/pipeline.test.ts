@@ -10,7 +10,7 @@ import { reportToMarkdown } from '../../src/pipeline/report.ts';
 import { runPipeline, SITE_STATE_DIR, type RunResult } from '../../src/pipeline/run.ts';
 import { isProductFileV1, validateManifestV1 } from '../../src/publisher/contract.ts';
 import { syntheticItem, type SyntheticListing } from '../helpers/akizukiHtml.ts';
-import { addGenre, FAKE_BASE, fakeSite, transportFor, type FakeSite } from '../helpers/fakeAkizukiSite.ts';
+import { addListing, FAKE_BASE, fakeSite, resetSite, transportFor, type FakeSite } from '../helpers/fakeAkizukiSite.ts';
 
 /**
  * End-to-end pipeline against the fake site: bootstrap, an incremental run
@@ -52,7 +52,7 @@ describe('pipeline state machine', () => {
     pagesDir = path.join(root, 'published-state');
     config = parsePipelineConfig({
       storeId: 'akizuki',
-      collector: { userAgent: 'electro-parts test agent', baseUrl: FAKE_BASE, genres: ['rkit', 'rsensor'], minIntervalMs: 500, jitterMs: 0 },
+      collector: { userAgent: 'electro-parts test agent', baseUrl: FAKE_BASE, listingKinds: ['r'], minIntervalMs: 500, jitterMs: 0 },
       inventory: { retentionDays: 400, pointLimit: 10 },
       previousStateUrl: null,
     });
@@ -73,8 +73,8 @@ describe('pipeline state machine', () => {
   });
 
   it('bootstraps from an empty history and produces a verified site', async () => {
-    addGenre(site, 'rkit', '組立キット', catalog(30), 10);
-    addGenre(site, 'rsensor', 'センサー', catalog(12, (i) => ({ salesCode: String(200000 + i) })), 10);
+    addListing(site, { kind: 'r', slug: 'rkit' }, '組立キット', catalog(30), 10);
+    addListing(site, { kind: 'r', slug: 'rsensor' }, 'センサー', catalog(12, (i) => ({ salesCode: String(200000 + i) })), 10);
     const r = await run(true);
     expect(r.report.stages.map((s) => `${s.name}:${s.status}`)).toEqual([
       'previous_state:ok',
@@ -120,11 +120,11 @@ describe('pipeline state machine', () => {
 
   it('runs incrementally from the published state and records the price change', async () => {
     // One price change, one product gone, one new product, quantities drift.
-    site.pages.clear();
+    resetSite(site);
     const kits = catalog(30, (i) => ({ availableQuantity: 40 + i, ...(i === 3 ? { priceYen: 999 } : {}) })).filter((k) => k.salesCode !== '100030');
     kits.push(syntheticItem(31));
-    addGenre(site, 'rkit', '組立キット', kits, 10);
-    addGenre(site, 'rsensor', 'センサー', catalog(12, (i) => ({ salesCode: String(200000 + i) })), 10);
+    addListing(site, { kind: 'r', slug: 'rkit' }, '組立キット', kits, 10);
+    addListing(site, { kind: 'r', slug: 'rsensor' }, 'センサー', catalog(12, (i) => ({ salesCode: String(200000 + i) })), 10);
     const r = await run(false);
     expect(r.report.outcome).toBe('published');
     expect(r.report.mode).toBe('incremental');
@@ -148,9 +148,9 @@ describe('pipeline state machine', () => {
   });
 
   it('quarantines a crawl that lost most of the catalogue and keeps the history intact', async () => {
-    site.pages.clear();
-    addGenre(site, 'rkit', '組立キット', catalog(5), 10);
-    addGenre(site, 'rsensor', 'センサー', catalog(3, (i) => ({ salesCode: String(200000 + i) })), 10);
+    resetSite(site);
+    addListing(site, { kind: 'r', slug: 'rkit' }, '組立キット', catalog(5), 10);
+    addListing(site, { kind: 'r', slug: 'rsensor' }, 'センサー', catalog(3, (i) => ({ salesCode: String(200000 + i) })), 10);
     const r = await run(false);
     expect(r.report.outcome).toBe('quarantined');
     expect(r.exitCode).toBe(3);
@@ -179,9 +179,9 @@ describe('pipeline state machine', () => {
   });
 
   it('quarantines an incomplete crawl (server failure on one page)', async () => {
-    site.pages.clear();
-    addGenre(site, 'rkit', '組立キット', catalog(30), 10);
-    addGenre(site, 'rsensor', 'センサー', catalog(12, (i) => ({ salesCode: String(200000 + i) })), 10);
+    resetSite(site);
+    addListing(site, { kind: 'r', slug: 'rkit' }, '組立キット', catalog(30), 10);
+    addListing(site, { kind: 'r', slug: 'rsensor' }, 'センサー', catalog(12, (i) => ({ salesCode: String(200000 + i) })), 10);
     site.failures.set(`${FAKE_BASE}/catalog/r/rkit_p2/`, 99);
     const r = await run(false);
     site.failures.clear();

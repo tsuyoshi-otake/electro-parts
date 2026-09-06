@@ -1,7 +1,8 @@
 /**
  * Round-trip property: any listing rendered in the site's markup is parsed
  * back exactly — names with entities and odd whitespace, thousands separators,
- * stacked status badges, missing model numbers, unpurchasable items.
+ * stacked status badges, missing model numbers, unpurchasable items — in both
+ * layouts the shop uses (product cards and the sortable spec table).
  */
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
@@ -37,8 +38,10 @@ const listingArb: fc.Arbitrary<SyntheticListing> = fc
 
 const pageArb = fc
   .record({
-    slug: fc.stringMatching(/^r[a-z0-9]{1,8}$/),
-    genreName: text(1, 30),
+    kind: fc.constantFrom('c' as const, 'r' as const),
+    layout: fc.constantFrom('cards' as const, 'table' as const),
+    slug: fc.stringMatching(/^[cr][a-z0-9]{1,8}$/),
+    listingName: text(1, 30),
     current: fc.integer({ min: 1, max: 5 }),
     extra: fc.integer({ min: 0, max: 4 }),
     items: fc.uniqueArray(listingArb, { minLength: 0, maxLength: 12, selector: (l) => l.salesCode }),
@@ -50,13 +53,13 @@ describe('listing parser round trip (property)', () => {
     fc.assert(
       fc.property(pageArb, (p) => {
         const listedTotal = p.items.length === 0 ? 0 : p.items.length + 3;
-        const html = renderListingPage({ genreSlug: p.slug, genreName: p.genreName, listedTotal, currentPage: p.current, lastPage: p.last, items: p.items });
+        const html = renderListingPage({ kind: p.kind, layout: p.layout, slug: p.slug, name: p.listingName, listedTotal, currentPage: p.current, lastPage: p.last, items: p.items });
         const page = parseAkizukiListingPage(html);
-        expect(page.genreName).toBe(p.genreName);
+        expect(page.listingName).toBe(p.listingName);
         expect(page.listedTotal).toBe(listedTotal);
         expect(page.currentPage).toBe(p.current);
         expect(page.lastPage).toBe(p.last);
-        expect(page.nextPath).toBe(p.current < p.last ? (p.current + 1 === 1 ? `/catalog/r/${p.slug}/` : `/catalog/r/${p.slug}_p${p.current + 1}/`) : null);
+        expect(page.nextPath).toBe(p.current < p.last ? (p.current + 1 === 1 ? `/catalog/${p.kind}/${p.slug}/` : `/catalog/${p.kind}/${p.slug}_p${p.current + 1}/`) : null);
         expect(page.issues.filter((i) => !i.includes('no price block'))).toEqual([]);
         expect(page.items).toHaveLength(p.items.length);
         page.items.forEach((item, i) => {
@@ -73,6 +76,12 @@ describe('listing parser round trip (property)', () => {
             expect(item.prices).toEqual([{ amountYen: src.priceYen, display: `￥${src.priceYen.toLocaleString('en-US')}(税込)`, quantityUnit: src.unit, taxIncluded: true }]);
           }
           expect(item.stock.status).toBe(src.statuses.join(' / '));
+          if (p.layout === 'table') {
+            // The spec table has no cart at all: purchasability and the
+            // purchasable quantity are simply not stated there.
+            expect(item.stock).toMatchObject({ purchasable: null, availableQuantity: null, quantityUnit: null, quantityDisplay: null });
+            return;
+          }
           expect(item.stock.purchasable).toBe(src.purchasable);
           if (src.purchasable) {
             expect(item.stock.availableQuantity).toBe(src.availableQuantity);

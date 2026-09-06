@@ -14,12 +14,13 @@ import type { StoreSnapshotAdapter } from '../../stores/adapter.ts';
 import { normalizeAkizukiAvailability } from './availability.ts';
 import { AKIZUKI_CAPABILITIES, AKIZUKI_STORE_ID } from './capabilities.ts';
 import {
-  AKIZUKI_RAW_SCHEMA_VERSION,
   AKIZUKI_SALES_CODE_PATTERN,
+  AKIZUKI_SUPPORTED_RAW_SCHEMA_VERSIONS,
   akizukiProductUrl,
   type AkizukiRawItem,
   type AkizukiRawSnapshot,
 } from './rawSchema.ts';
+import { parseListingRef } from '../../collectors/akizuki/listings.ts';
 
 /**
  * Akizuki snapshot adapter.
@@ -30,7 +31,14 @@ import {
  */
 const MAX_ISSUES_PER_CODE = 20;
 
-const GENRE_SLUG_PATTERN = /\/catalog\/r\/([a-z0-9]+)\/?$/i;
+/**
+ * Raw schema 2 called them `genres` and only ever held `/catalog/r/` slugs;
+ * schema 3 calls them `listings` and holds the sitemap-discovered set. Both
+ * shapes are read so the archived observations keep importing.
+ */
+function rawListings(raw: Record<string, unknown>): unknown {
+  return raw['listings'] ?? raw['genres'];
+}
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -69,7 +77,7 @@ export function validateAkizukiRaw(raw: unknown): ValidationResult {
     c.error('raw.not_object', 'snapshot is not a JSON object');
     return c.result();
   }
-  if (raw['schemaVersion'] !== AKIZUKI_RAW_SCHEMA_VERSION) {
+  if (typeof raw['schemaVersion'] !== 'number' || !AKIZUKI_SUPPORTED_RAW_SCHEMA_VERSIONS.includes(raw['schemaVersion'])) {
     c.error('raw.schema_version', `unsupported schemaVersion ${JSON.stringify(raw['schemaVersion'])}`);
     return c.result();
   }
@@ -90,8 +98,9 @@ export function validateAkizukiRaw(raw: unknown): ValidationResult {
     if (Array.isArray(errors) && errors.length > 0) {
       c.error('raw.collector_errors', `collector reported ${errors.length} error(s): ${String(errors[0])}`);
     }
-    if (typeof validation['genreMismatches'] === 'number' && validation['genreMismatches'] > 0) {
-      c.error('raw.genre_mismatch', `${validation['genreMismatches']} genre(s) did not match listed totals`);
+    const mismatches = validation['listingMismatches'] ?? validation['genreMismatches'];
+    if (typeof mismatches === 'number' && mismatches > 0) {
+      c.error('raw.listing_mismatch', `${mismatches} listing(s) did not match listed totals`);
     }
     const warnings = validation['warnings'];
     if (Array.isArray(warnings)) {
@@ -102,24 +111,41 @@ export function validateAkizukiRaw(raw: unknown): ValidationResult {
     c.error('raw.validation_missing', 'validation block missing');
   }
 
-  const genres = raw['genres'];
-  if (!Array.isArray(genres) || genres.length === 0) {
-    c.error('raw.genres', 'genres missing or empty');
+  const listings = rawListings(raw);
+  if (!Array.isArray(listings) || listings.length === 0) {
+    c.error('raw.listings', 'listings missing or empty');
   } else {
-    const slugs = new Set<string>();
-    genres.forEach((g, i) => {
-      if (!isRecord(g)) {
-        c.error('raw.genre_shape', `genre[${i}] is not an object`);
+    const ids = new Set<string>();
+    listings.forEach((l, i) => {
+      if (!isRecord(l)) {
+        c.error('raw.listing_shape', `listing[${i}] is not an object`);
         return;
       }
-      const slug = genreSlug(g['url']);
-      if (slug === null) c.error('raw.genre_url', `genre[${i}] has no recognizable url`, String(g['name']));
-      else if (slugs.has(slug)) c.error('raw.genre_duplicate', `genre ${slug} listed twice`, slug);
-      else slugs.add(slug);
-      if (g['failedPages'] !== 0) c.error('raw.genre_failed_pages', `genre has failed pages`, slug ?? String(i));
-      if (g['matchesListedTotal'] !== true) c.error('raw.genre_total_mismatch', `extracted count differs from listed total`, slug ?? String(i));
+      const id = listingKey(l['url']);
+      if (id === null) c.error('raw.listing_url', `listing[${i}] has no recognizable url`, String(l['name']));
+      else if (ids.has(id)) c.error('raw.listing_duplicate', `listing ${id} appears twice`, id);
+      else ids.add(id);
+      if (l['failedPages'] !== 0) c.error('raw.listing_failed_pages', `listing has failed pages`, id ?? String(i));
+      if (l['matchesListedTotal'] !== true) c.error('raw.listing_total_mismatch', `extracted count differs from listed total`, id ?? String(i));
     });
-    c.metrics['genreCount'] = genres.length;
+    c.metrics['listingCount'] = listings.length;
+  }
+
+  // Schema 3 carries the sitemap coverage check; schema 2 predates it.
+  const catalog = raw['catalog'];
+  if (isRecord(catalog)) {
+    const productTotal = catalog['productTotal'];
+    const uncovered = catalog['uncovered'];
+    if (typeof productTotal !== 'number' || productTotal <= 0) c.error('raw.catalog_total', 'catalog.productTotal missing or not positive');
+    else c.metrics['catalogProductTotal'] = productTotal;
+    if (typeof uncovered !== 'number' || uncovered < 0) c.error('raw.catalog_uncovered', 'catalog.uncovered missing');
+    else {
+      c.metrics['catalogUncovered'] = uncovered;
+      if (uncovered > 0) c.warn('raw.catalog_gap', `${uncovered} catalogue product(s) appeared in no listing`);
+    }
+    if (typeof catalog['unlisted'] === 'number') c.metrics['catalogUnlisted'] = catalog['unlisted'];
+  } else if (raw['schemaVersion'] !== 2) {
+    c.error('raw.catalog_missing', 'catalog block missing');
   }
 
   const items = raw['items'];
@@ -176,7 +202,7 @@ export function validateAkizukiRaw(raw: unknown): ValidationResult {
     if (!isRecord(stock)) {
       c.error('item.stock', 'stock missing', code);
     } else {
-      if (typeof stock['purchasable'] !== 'boolean') c.error('item.purchasable', 'purchasable not boolean', code);
+      if (typeof stock['purchasable'] !== 'boolean' && stock['purchasable'] !== null) c.error('item.purchasable', 'purchasable not boolean or null', code);
       if (typeof stock['status'] !== 'string') c.error('item.status', 'status not a string', code);
       const q = stock['availableQuantity'];
       if (q === null) nullQuantity += 1;
@@ -193,16 +219,28 @@ export function validateAkizukiRaw(raw: unknown): ValidationResult {
   return c.result();
 }
 
-function genreSlug(url: unknown): string | null {
-  if (typeof url !== 'string') return null;
-  const m = GENRE_SLUG_PATTERN.exec(url);
-  return m?.[1]?.toLowerCase() ?? null;
+function listingKey(url: unknown): string | null {
+  const ref = parseListingRef(url);
+  return ref === null ? null : `${ref.kind}/${ref.slug.toLowerCase()}`;
 }
 
-/** Coverage id: sorted genre slugs joined by `+`, e.g. `rai+rbatt+...`. */
+/**
+ * Coverage id: what the run claims to have observed, so the sanity check can
+ * refuse to compare two runs of different scope.
+ *
+ * Schema 3 walks whatever the sitemap lists, so the id names the listing
+ * families rather than the individual slugs — adding a category to the shop
+ * does not change what a run covers. Schema 2 snapshots keep their old id
+ * (sorted genre slugs), which is why the switch reads as a coverage change
+ * instead of thousands of products appearing out of nowhere.
+ */
 export function akizukiCoverageId(raw: AkizukiRawSnapshot): string {
-  const slugs = raw.genres.map((g) => genreSlug(g.url)).filter((s): s is string => s !== null);
-  return [...new Set(slugs)].sort().join('+');
+  const legacy = (raw as unknown as { genres?: { url: string }[] }).genres;
+  const listings = (raw.listings ?? legacy ?? []) as { url: string }[];
+  const keys = listings.map((l) => listingKey(l.url)).filter((k): k is string => k !== null);
+  if (raw.schemaVersion === 2) return [...new Set(keys.map((k) => k.slice(2)))].sort().join('+');
+  const kinds = [...new Set(keys.map((k) => k[0] as string))].sort();
+  return `sitemap:${kinds.join('+')}`;
 }
 
 export function normalizeAkizukiItem(item: AkizukiRawItem): NormalizedProduct {

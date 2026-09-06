@@ -25,11 +25,22 @@ function item(overrides: Partial<AkizukiRawItem> = {}): AkizukiRawItem {
 function snapshot(overrides: Partial<AkizukiRawSnapshot> = {}): AkizukiRawSnapshot {
   const items = overrides.items ?? [item()];
   return {
-    schemaVersion: 2,
-    source: 'https://akizukidenshi.com/',
+    schemaVersion: 3,
+    source: 'https://akizukidenshi.com/catalog/',
     retrievedAt: '2026-09-06T09:54:15.029Z',
     complete: true,
-    genreCount: 1,
+    catalog: {
+      sitemapUrl: 'https://akizukidenshi.com/Sitemap_index.xml',
+      sitemapLastModified: '2026-09-06T00:00:00.000Z',
+      productTotal: items.length,
+      listingTotal: 1,
+      listingsCrawled: 1,
+      covered: items.length,
+      uncovered: 0,
+      uncoveredSample: [],
+      unlisted: 0,
+    },
+    listingCount: 1,
     occurrenceTotal: items.length,
     extractedTotal: items.length,
     deduplication: {
@@ -42,12 +53,15 @@ function snapshot(overrides: Partial<AkizukiRawSnapshot> = {}): AkizukiRawSnapsh
     },
     dataQuality: { missingSalesCode: 0, missingModelNumber: 0, missingName: 0 },
     requests: { logicalPages: 1, httpAttemptsIncludingRetries: 1, successfulResponses: 1, intervalMs: 1500 },
-    validation: { genreMismatches: 0, errors: [], warnings: [] },
-    genres: [
+    validation: { listingMismatches: 0, errors: [], warnings: [] },
+    listings: [
       {
+        kind: 'c',
+        slug: 'ckit',
         name: 'キット',
-        url: 'https://akizukidenshi.com/catalog/r/rkit/',
+        url: 'https://akizukidenshi.com/catalog/c/ckit/',
         listedTotal: items.length,
+        truncated: false,
         totalPages: 1,
         successfulPages: 1,
         failedPages: 0,
@@ -57,6 +71,25 @@ function snapshot(overrides: Partial<AkizukiRawSnapshot> = {}): AkizukiRawSnapsh
     ],
     ...overrides,
     items,
+  };
+}
+
+/** A schema 2 snapshot exactly as the hand-written genre collector wrote it. */
+function legacySnapshot(): Record<string, unknown> {
+  const s = snapshot() as unknown as Record<string, unknown>;
+  delete s['catalog'];
+  delete s['listings'];
+  delete s['listingCount'];
+  return {
+    ...s,
+    schemaVersion: 2,
+    source: 'https://akizukidenshi.com/',
+    genreCount: 2,
+    validation: { genreMismatches: 0, errors: [], warnings: [] },
+    genres: [
+      { name: 'AI', url: 'https://akizukidenshi.com/catalog/r/rai/', listedTotal: 1, totalPages: 1, successfulPages: 1, failedPages: 0, extractedOccurrences: 1, matchesListedTotal: true },
+      { name: 'キット', url: 'https://akizukidenshi.com/catalog/r/rkit/', listedTotal: 1, totalPages: 1, successfulPages: 1, failedPages: 0, extractedOccurrences: 1, matchesListedTotal: true },
+    ],
   };
 }
 
@@ -148,8 +181,8 @@ describe('Akizuki raw validation', () => {
     ['schema version', { schemaVersion: 1 }, 'raw.schema_version'],
     ['incomplete', { complete: false }, 'raw.incomplete'],
     ['naive timestamp', { retrievedAt: '2026-09-06T09:54:15' }, 'raw.retrieved_at'],
-    ['collector errors', { validation: { genreMismatches: 0, errors: ['boom'], warnings: [] } }, 'raw.collector_errors'],
-    ['genre mismatch', { validation: { genreMismatches: 1, errors: [], warnings: [] } }, 'raw.genre_mismatch'],
+    ['collector errors', { validation: { listingMismatches: 0, errors: ['boom'], warnings: [] } }, 'raw.collector_errors'],
+    ['listing mismatch', { validation: { listingMismatches: 1, errors: [], warnings: [] } }, 'raw.listing_mismatch'],
     ['extracted total mismatch', { extractedTotal: 99 }, 'raw.extracted_total'],
     ['empty items', { items: [] }, 'raw.items_empty'],
   ] as const)('rejects %s', (_label, overrides, code) => {
@@ -157,10 +190,26 @@ describe('Akizuki raw validation', () => {
     expect(r.errors.map((e) => e.code)).toContain(code);
   });
 
-  it('rejects failed genre pages', () => {
+  it('rejects failed listing pages', () => {
     const s = snapshot();
-    s.genres[0]!.failedPages = 1;
-    expect(validateAkizukiRaw(s).errors.map((e) => e.code)).toContain('raw.genre_failed_pages');
+    s.listings[0]!.failedPages = 1;
+    expect(validateAkizukiRaw(s).errors.map((e) => e.code)).toContain('raw.listing_failed_pages');
+  });
+
+  it('warns when the sitemap holds products no listing showed', () => {
+    const s = snapshot();
+    s.catalog.uncovered = 3;
+    s.catalog.covered = s.catalog.productTotal - 3;
+    const r = validateAkizukiRaw(s);
+    expect(r.errors).toEqual([]);
+    expect(r.warnings.map((w) => w.code)).toContain('raw.catalog_gap');
+    expect(r.metrics['catalogUncovered']).toBe(3);
+  });
+
+  it('rejects a schema 3 snapshot without the catalogue coverage block', () => {
+    const s = snapshot() as unknown as Record<string, unknown>;
+    delete s['catalog'];
+    expect(validateAkizukiRaw(s).errors.map((e) => e.code)).toContain('raw.catalog_missing');
   });
 
   it.each([
@@ -197,10 +246,21 @@ describe('Akizuki raw validation', () => {
 });
 
 describe('Akizuki adapter contract', () => {
-  it('derives a stable coverage id from sorted genre slugs', () => {
+  it('names the listing families a sitemap-driven run covered', () => {
     const s = snapshot();
-    s.genres.push({ ...s.genres[0]!, url: 'https://akizukidenshi.com/catalog/r/rai/' });
-    expect(akizukiCoverageId(s)).toBe('rai+rkit');
+    expect(akizukiCoverageId(s)).toBe('sitemap:c');
+    s.listings.push({ ...s.listings[0]!, kind: 'r', slug: 'rkit', url: 'https://akizukidenshi.com/catalog/r/rkit/' });
+    // Adding a category to the shop must not change what a run claims to
+    // cover, so the id names the families rather than the slugs.
+    expect(akizukiCoverageId(s)).toBe('sitemap:c+r');
+  });
+
+  it('keeps reading the archived schema 2 snapshots, including their coverage id', () => {
+    const legacy = legacySnapshot();
+    const r = validateAkizukiRaw(legacy);
+    expect(r.errors).toEqual([]);
+    expect(akizukiCoverageId(legacy as unknown as AkizukiRawSnapshot)).toBe('rai+rkit');
+    expect(akizukiSnapshotAdapter.normalize(legacy, 'sha').products).toHaveLength(1);
   });
 
   it('sorts products by external id and hashes deterministically', () => {

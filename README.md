@@ -169,7 +169,7 @@ npm run verify -- --config config/akizuki.json --site site
 npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.io/electro-parts
 ```
 
-設定 `config/akizuki.json` の主なキー: `collector.userAgent`(識別可能な UA、連絡先入り)、`collector.minIntervalMs` / `jitterMs`(既定 1500 ms + 0〜750 ms)、`maxAttempts`、`maxRequests`(1 回の上限)、`sanity.*`(隔離しきい値)、`inventory.retentionDays` / `pointLimit`、`paths.*`、`previousStateUrl`。
+設定 `config/akizuki.json` の主なキー: `collector.userAgent`(識別可能な UA、連絡先入り)、`collector.listingKinds`(巡回する一覧の系統。`c` = 分類ツリー、`r` = ジャンルタグ。個々の slug はサイトマップから発見するので設定に書きません → ADR-0012)、`collector.maxUncoveredProducts`(サイトマップにあってどの一覧にも出なかった商品の許容数。秋月は 600。実測の残差 255 件はすべて販売終了で一覧から外された商品 → ADR-0012)、`collector.minIntervalMs` / `jitterMs`(既定 1500 ms + 0〜750 ms)、`maxAttempts`、`maxRequests`(1 回の上限)、`maxPagesPerListing`、`sanity.*`(隔離しきい値)、`inventory.retentionDays` / `pointLimit`、`paths.*`、`previousStateUrl`。
 
 ## GitHub Actions と公開
 
@@ -215,21 +215,21 @@ npm run bench
 
 Playwright は初回に `npx playwright install chromium` が必要です。
 
-実績: ユニット～統合 204 テスト（22 ファイル、13 s）、E2E 3 テスト（7 s）、変異スコア **89.45 %**（704 変異体: killed 595 / timeout 7 / survived 61 / no coverage 10、しきい値 break 70）。
+実績: ユニット～統合 227 テスト（23 ファイル、11 s）、E2E 3 テスト（7 s）、変異スコア **89.45 %**（704 変異体: killed 595 / timeout 7 / survived 61 / no coverage 10、しきい値 break 70）。
 
 ## 性能予算と実測
 
-予算(Phase 1、秋月約 8,800 商品):
+予算(Phase 1、秋月約 13,000 商品):
 
 | 項目 | 予算 |
 |---|---|
-| 1 回のクロール | 18 ジャンル・約 200 ページ、1.5〜2.25 s 間隔で 10 分以内 |
+| 1 回のクロール | サイトマップ 7 + 分類ツリー 458 一覧(約 780 ページ)+ ジャンルタグ 1,412 一覧(約 1,940 ページ)、1.5〜2.25 s 間隔で約 85 分 |
 | 取り込み(1 スナップショット) | 5 年分の履歴があっても 10 s 以内 |
 | 生成 + 書き込み | 30 s 以内 |
 | 商品ファイル | 中央値 2 KB 以下、最大 64 KB 以下(5 年分) |
 | データセット全体 | 5 年分で 50 MB 以下 |
 | ユーザースクリプト | 1 商品ページで通信 2 回以下(マニフェスト + 商品)、キャッシュ有効時 0 回。バンドル 100 KB 以下 |
-| Actions 実行時間 | 30 分以内 |
+| Actions 実行時間 | 120 分以内(ジョブ上限 180 分) |
 
 実測(`npm run bench -- --products 9000 --years 1,3,5 --interval-days 1`、Windows 11 / Node 26。合成データは毎日 1 % の価格変更、3 % の在庫表示変化、20 % の在庫数変動、0.2 % の掲載変化):
 
@@ -297,5 +297,6 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 | [0009](docs/adr/0009-polite-crawler-identification.md) | クローラーの識別と丁寧さ |
 | [0010](docs/adr/0010-userscript-swr-cache.md) | ユーザースクリプトの stale-while-revalidate キャッシュと LRU |
 | [0011](docs/adr/0011-userscript-rendering-safety.md) | Shadow DOM、`innerHTML` 禁止、CDN なし、fail-open |
+| [0012](docs/adr/0012-sitemap-as-catalogue-authority.md) | クロール対象はサイトマップから発見し、カバレッジの正解として使う |
 
 ライセンス: MIT。観測データは店舗の表示を記録したもので、権利は各店舗にあります。

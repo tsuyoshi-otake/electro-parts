@@ -2,7 +2,7 @@ import { AKIZUKI_STORE_ID } from '../../adapters/akizuki/capabilities.ts';
 import type { CollectDeps, CollectOutcome, StoreCollector } from '../../stores/collector.ts';
 import { PoliteFetcher, type PoliteFetcherOptions } from '../politeFetcher.ts';
 import { crawlAkizuki } from './crawl.ts';
-import { AKIZUKI_BASE_URL, AKIZUKI_DEFAULT_GENRES, AKIZUKI_GENRE_SLUG_PATTERN } from './genres.ts';
+import { AKIZUKI_BASE_URL, AKIZUKI_LISTING_PAGE_CAP, type ListingKind } from './listings.ts';
 import { isAkizukiMaintenancePage } from './listingParser.ts';
 
 /**
@@ -13,13 +13,15 @@ import { isAkizukiMaintenancePage } from './listingParser.ts';
 export interface AkizukiCollectorConfig {
   userAgent: string;
   baseUrl: string;
-  genres: readonly string[];
+  /** Listing families to walk. `c` is the category tree, `r` the genre tags. */
+  listingKinds: readonly ListingKind[];
   minIntervalMs: number;
   jitterMs: number;
   maxAttempts: number;
   timeoutMs: number;
   maxRequests: number;
-  maxPagesPerGenre: number;
+  maxPagesPerListing: number;
+  maxUncoveredProducts: number;
 }
 
 function num(v: unknown, name: string, fallback: number, min: number): number {
@@ -34,20 +36,24 @@ export function parseAkizukiCollectorConfig(config: Record<string, unknown>): Ak
   if (/crawler|bot|spider/i.test(ua)) throw new Error('collector.userAgent: the site rejects agents named like generic crawlers; use the project name and contact URL');
   const baseUrl = config['baseUrl'] ?? AKIZUKI_BASE_URL;
   if (typeof baseUrl !== 'string' || !/^https?:\/\/[^/]+$/.test(baseUrl)) throw new Error('collector.baseUrl must be an origin without a path');
-  const genres = config['genres'] ?? AKIZUKI_DEFAULT_GENRES;
-  if (!Array.isArray(genres) || genres.length === 0 || !genres.every((g) => typeof g === 'string' && AKIZUKI_GENRE_SLUG_PATTERN.test(g))) {
-    throw new Error('collector.genres must be a non-empty list of genre slugs such as "rkit"');
+  if (config['genres'] !== undefined) {
+    throw new Error('collector.genres was removed in raw schema 3; listings are discovered from the sitemap, see collector.listingKinds');
+  }
+  const kinds = config['listingKinds'] ?? ['c'];
+  if (!Array.isArray(kinds) || kinds.length === 0 || !kinds.every((k) => k === 'c' || k === 'r')) {
+    throw new Error('collector.listingKinds must be a non-empty list of "c" (category tree) and/or "r" (genre tags)');
   }
   return {
     userAgent: ua,
     baseUrl,
-    genres: genres as string[],
+    listingKinds: kinds as ListingKind[],
     minIntervalMs: num(config['minIntervalMs'], 'minIntervalMs', 1000, 500),
     jitterMs: num(config['jitterMs'], 'jitterMs', 500, 0),
     maxAttempts: num(config['maxAttempts'], 'maxAttempts', 4, 1),
     timeoutMs: num(config['timeoutMs'], 'timeoutMs', 30_000, 1000),
     maxRequests: num(config['maxRequests'], 'maxRequests', 2000, 1),
-    maxPagesPerGenre: num(config['maxPagesPerGenre'], 'maxPagesPerGenre', 200, 1),
+    maxPagesPerListing: num(config['maxPagesPerListing'], 'maxPagesPerListing', AKIZUKI_LISTING_PAGE_CAP, 1),
+    maxUncoveredProducts: num(config['maxUncoveredProducts'], 'maxUncoveredProducts', 0, 0),
   };
 }
 
@@ -75,9 +81,10 @@ export const akizukiCollector: StoreCollector = {
     const fetcher = new PoliteFetcher(fetcherOptions);
     const result = await crawlAkizuki({
       fetcher,
-      genres: c.genres,
+      listingKinds: c.listingKinds,
       baseUrl: c.baseUrl,
-      maxPagesPerGenre: c.maxPagesPerGenre,
+      maxPagesPerListing: c.maxPagesPerListing,
+      maxUncoveredProducts: c.maxUncoveredProducts,
       log: deps.log,
       ...(deps.now === undefined ? {} : { now: deps.now }),
     });
@@ -89,7 +96,10 @@ export const akizukiCollector: StoreCollector = {
       errors: s.validation.errors,
       warnings: s.validation.warnings,
       metrics: {
-        genres: s.genreCount,
+        listings: s.listingCount,
+        catalogProducts: s.catalog.productTotal,
+        catalogCovered: s.catalog.covered,
+        catalogUncovered: s.catalog.uncovered,
         occurrences: s.occurrenceTotal,
         items: s.extractedTotal,
         duplicatesRemoved: s.deduplication.duplicatesRemoved,

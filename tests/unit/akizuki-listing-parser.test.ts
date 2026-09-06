@@ -13,7 +13,7 @@ import { loadAkizukiRaw, readHtmlFixture } from '../helpers/fixtures.ts';
 describe('Akizuki listing parser on recorded pages', () => {
   it('reads the pager and every product block of the first rkit page', async () => {
     const page = parseAkizukiListingPage(await readHtmlFixture('rkit_p1'));
-    expect(page.genreName).toBe('組立キット(モジュール)');
+    expect(page.listingName).toBe('組立キット(モジュール)');
     expect(page.listedTotal).toBe(670);
     expect(page.currentPage).toBe(1);
     expect(page.lastPage).toBe(12);
@@ -56,7 +56,7 @@ describe('Akizuki listing parser on recorded pages', () => {
     expect(restocking.prices[0]!.amountYen).toBe(5200);
 
     const sbc = parseAkizukiListingPage(await readHtmlFixture('rsbcomp1'));
-    expect(sbc.genreName).toBe('シングルボードコンピューター本体');
+    expect(sbc.listingName).toBe('シングルボードコンピューター本体');
     expect(sbc.listedTotal).toBe(76);
     expect(sbc.lastPage).toBe(2);
     const ended = sbc.items.find((i) => i.salesCode === '117563')!;
@@ -64,6 +64,31 @@ describe('Akizuki listing parser on recorded pages', () => {
     expect(ended.prices[0]).toEqual({ amountYen: 65400, display: '￥65,400(税込)', quantityUnit: '1台', taxIncluded: true });
     const statuses = new Set(sbc.items.map((i) => i.stock.status));
     expect(statuses.has('11月中旬入荷予定')).toBe(true);
+  });
+
+  it('reads the spec-table layout that some categories use instead of cards', async () => {
+    // `/catalog/c/cheatsink/` renders a sortable table: no cards, no cart
+    // buttons, the same products. Reading it is the difference between
+    // collecting the category and dropping it.
+    const page = parseAkizukiListingPage(await readHtmlFixture('cheatsink'));
+    expect(page.listingName).toBe('ヒートシンク');
+    expect(page.listedTotal).toBe(11);
+    expect(page.items).toHaveLength(11);
+    expect(page.issues).toEqual([]);
+    expect(page.items[0]).toEqual({
+      salesCode: '105053',
+      modelNumber: '16PB017-01025',
+      name: '放熱器(ヒートシンク)16.5×16×25mm',
+      category: 'ヒートシンク(heatsink)',
+      url: 'https://akizukidenshi.com/catalog/g/g105053/',
+      prices: [{ amountYen: 60, display: '￥60～(税込)', quantityUnit: '1個', taxIncluded: true }],
+      // The layout offers no cart at all, so purchasability is unknown rather
+      // than false; the badge is the only availability evidence.
+      stock: { status: '在庫あり', availableQuantity: null, quantityUnit: null, quantityDisplay: null, purchasable: null },
+      positionOnPage: 1,
+    });
+    expect(page.items.every((i) => i.stock.purchasable === null)).toBe(true);
+    expect(new Set(page.items.map((i) => i.stock.status))).toEqual(new Set(['在庫あり', '在庫僅少']));
   });
 
   it('reproduces the previous collector output for the same day (quantities aside)', async () => {
@@ -94,9 +119,18 @@ describe('Akizuki listing parser on recorded pages', () => {
     const maintenance = '<html><body><div class="block-custom-error-403"><p>現在メンテナンス中です。</p></div></body></html>';
     expect(isAkizukiMaintenancePage(maintenance)).toBe(true);
     expect(() => parseAkizukiListingPage(maintenance)).toThrow(ListingParseError);
-    expect(() => parseAkizukiListingPage('<html><body>nothing</body></html>')).toThrow(/genre header/);
+    expect(() => parseAkizukiListingPage('<html><body>nothing</body></html>')).toThrow(/listing header/);
+    // Category listings (`/catalog/c/...`) carry the same markup under a different header class.
+    expect(parseAkizukiListingPage('<h1 class="h1 block-category-list--header">C</h1><span class="pager-count"><span>0</span>件あります</span>')).toMatchObject({ listingName: 'C', listedTotal: 0, items: [] });
+    // No counter and no products: a branch of the tree that only links to its
+    // children. Reported as such, not as an error.
     const noCounter = '<h1 class="h1 block-genre-page--header">X</h1>';
-    expect(() => parseAkizukiListingPage(noCounter)).toThrow(/listed total/);
+    expect(parseAkizukiListingPage(noCounter)).toMatchObject({ listingName: 'X', indexOnly: true, listedTotal: 0, items: [] });
+    // Products but no counter is a structural surprise, in either layout.
+    const cardNoCounter = `${noCounter}<dl class="block-cart-i--goods"></dl>`;
+    expect(() => parseAkizukiListingPage(cardNoCounter)).toThrow(/listed total/);
+    const tableNoCounter = `${noCounter}<table class="block-goods-list-l--table"><tbody><tr class="js-enhanced-ecommerce-item "></tr></tbody></table>`;
+    expect(() => parseAkizukiListingPage(tableNoCounter)).toThrow(/listed total/);
     const noItems = `${noCounter}<span class="pager-count"><span>12</span>件あります</span>`;
     expect(() => parseAkizukiListingPage(noItems)).toThrow(/no product blocks/);
     // An empty genre is fine.

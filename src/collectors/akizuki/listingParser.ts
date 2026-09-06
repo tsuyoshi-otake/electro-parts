@@ -1,7 +1,8 @@
 /**
- * Parser for Akizuki genre listing pages (`/catalog/r/<genre>/`,
- * `/catalog/r/<genre>_p<n>/`). Pure function over the HTML string; no
- * network, no DOM library. The markup is regular server-rendered HTML with
+ * Parser for Akizuki listing pages — both the category tree
+ * (`/catalog/c/<slug>/`) and the genre tags (`/catalog/r/<slug>/`), plus their
+ * `_p<n>` pages. Pure function over the HTML string; no network, no DOM
+ * library. The markup is regular server-rendered HTML with
  * stable BEM class names (`block-cart-i--*`), so each product block is
  * located by its class name and the fields are read with anchored patterns.
  *
@@ -13,8 +14,14 @@ import type { AkizukiRawItem, AkizukiRawPrice, AkizukiRawStock } from '../../ada
 import { akizukiProductUrl, AKIZUKI_SALES_CODE_PATTERN } from '../../adapters/akizuki/rawSchema.ts';
 
 export interface ListingPage {
-  /** Genre display name from the page header. */
-  genreName: string;
+  /** Listing display name from the page header. */
+  listingName: string;
+  /**
+   * True for a branch of the category tree that only links to its children:
+   * header, no counter, no product blocks. Not an error — the products are on
+   * the child categories.
+   */
+  indexOnly: boolean;
   /** "N件あります" counter: how many products the site says the genre has. */
   listedTotal: number;
   currentPage: number;
@@ -27,7 +34,7 @@ export interface ListingPage {
   issues: string[];
 }
 
-/** One product occurrence on a listing page, before cross-genre deduplication. */
+/** One product occurrence on a listing page, before cross-listing deduplication. */
 export type ListingItem = Pick<AkizukiRawItem, 'salesCode' | 'modelNumber' | 'name' | 'category' | 'url' | 'prices' | 'stock'> & {
   positionOnPage: number;
 };
@@ -39,9 +46,19 @@ export class ListingParseError extends Error {
   }
 }
 
-const ITEM_OPEN = /<dl class="block-cart-i--goods\b/g;
-/** End of the product list: the closing of `ul.block-cart-i--items`. */
-const ITEMS_END = /<\/ul>\s*<\/div>/;
+/**
+ * The shop renders a listing in one of two layouts. Most categories use the
+ * card layout (`dl.block-cart-i--goods`); categories whose products share a
+ * spec sheet (heatsinks, screws, ...) use a sortable table
+ * (`table.block-goods-list-l--table`) instead. Same data, different markup, so
+ * each layout only contributes the patterns that locate its fields.
+ */
+const CARD_OPEN = /<dl class="block-cart-i--goods\b/g;
+/** End of the card list: the closing of `ul.block-cart-i--items`. */
+const CARD_END = /<\/ul>\s*<\/div>/;
+const TABLE_OPEN = /<tr class="[^"]*js-enhanced-ecommerce-item\b/g;
+const TABLE_END = /<\/tbody>/;
+const TABLE_MARKER = /<table class="[^"]*block-goods-list-l--table\b/;
 const MAINTENANCE_MARKER = /class="block-custom-error-403"/;
 
 const NAMED_ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', yen: '¥' };
@@ -91,10 +108,49 @@ export function isAkizukiMaintenancePage(html: string): boolean {
   return MAINTENANCE_MARKER.test(html);
 }
 
-function parseItem(block: string, position: number, issues: string[]): ListingItem | null {
-  const href = first(/class="block-cart-i--goods-name"[^>]*>\s*<a href="([^"]+)"/, block);
+/** Where each layout keeps the fields of one product. */
+interface ItemLayout {
+  /** Product link (`/catalog/g/g<code>/`). */
+  href: RegExp;
+  /** "販売コード：<code>". */
+  code: RegExp;
+  name: RegExp;
+  category: RegExp;
+  model: RegExp;
+  /** Global; capture 1 = quantity/unit, capture 2 = price display. */
+  price: RegExp;
+  /**
+   * Whether the shop offered a cart affordance here. The table layout has no
+   * cart at all, so it reports `null` (unknown) rather than `false` — the
+   * stock badge is then the only availability evidence.
+   */
+  purchasable: (block: string) => boolean | null;
+}
+
+const CARD_LAYOUT: ItemLayout = {
+  href: /class="block-cart-i--goods-name"[^>]*>\s*<a href="([^"]+)"/,
+  code: /class="block-cart-i--code">\s*<strong>[^<]*<\/strong>\s*([^<]*)<\/div>/,
+  name: /class="block-cart-i--goods-name">\s*<a [^>]*>([\s\S]*?)<\/a>/,
+  category: /class="block-cart-i--goods-name">\s*<a [^>]*data-category="([^"]*)"/,
+  model: /class="block-cart-i--model_number">\s*<strong>[^<]*<\/strong>([\s\S]*?)<\/div>/,
+  price: /class="block-cart-i--price-qty">([\s\S]*?)<\/div>\s*<div class="block-cart-i--price price[^"]*">([\s\S]*?)<\/div>/g,
+  purchasable: (block) => /data-purchasable-qty="/.test(block) || /class="block-cart-i--add_cart/.test(block),
+};
+
+const TABLE_LAYOUT: ItemLayout = {
+  href: /class="block-goods-list-l--goods-name">\s*<a href="([^"]+)"/,
+  code: /class="block-goods-list-l--code">\s*<strong>[^<]*<\/strong>\s*([^<]*)<\/div>/,
+  name: /class="block-goods-list-l--goods-name">\s*<a [^>]*>([\s\S]*?)<\/a>/,
+  category: /class="block-goods-list-l--goods-name">\s*<a [^>]*data-category="([^"]*)"/,
+  model: /class="block-goods-list-l--model_number"[^>]*>\s*<p>([\s\S]*?)<\/p>/,
+  price: /class="block-goods-list-l--price-qty">([\s\S]*?)<\/div>\s*<div class="block-goods-list-l--price price[^"]*">([\s\S]*?)<\/div>/g,
+  purchasable: () => null,
+};
+
+function parseItem(block: string, position: number, issues: string[], layout: ItemLayout): ListingItem | null {
+  const href = first(layout.href, block);
   const codeFromHref = href === null ? null : first(/\/catalog\/g\/g(\d+)\//, href);
-  const codeText = (first(/class="block-cart-i--code">\s*<strong>[^<]*<\/strong>\s*([^<]*)<\/div>/, block) ?? '').trim();
+  const codeText = (first(layout.code, block) ?? '').trim();
   const textUsable = AKIZUKI_SALES_CODE_PATTERN.test(codeText);
   const salesCode = textUsable ? codeText : codeFromHref;
   if (salesCode === null || !AKIZUKI_SALES_CODE_PATTERN.test(salesCode)) {
@@ -106,16 +162,16 @@ function parseItem(block: string, position: number, issues: string[]): ListingIt
   } else if (codeFromHref !== null && codeFromHref !== salesCode) {
     issues.push(`item ${position}: sales code ${salesCode} disagrees with link ${codeFromHref}`);
   }
-  const nameHtml = first(/class="block-cart-i--goods-name">\s*<a [^>]*>([\s\S]*?)<\/a>/, block);
+  const nameHtml = first(layout.name, block);
   const name = nameHtml === null ? '' : cleanText(nameHtml);
   if (name === '') issues.push(`item ${position} (${salesCode}): empty name`);
-  const categoryRaw = first(/class="block-cart-i--goods-name">\s*<a [^>]*data-category="([^"]*)"/, block);
+  const categoryRaw = first(layout.category, block);
   const category = categoryRaw === null ? null : cleanText(categoryRaw) || null;
-  const modelRaw = first(/class="block-cart-i--model_number">\s*<strong>[^<]*<\/strong>([\s\S]*?)<\/div>/, block);
+  const modelRaw = first(layout.model, block);
   const modelNumber = modelRaw === null ? null : cleanText(modelRaw) || null;
 
   const prices: AkizukiRawPrice[] = [];
-  const priceRe = /class="block-cart-i--price-qty">([\s\S]*?)<\/div>\s*<div class="block-cart-i--price price[^"]*">([\s\S]*?)<\/div>/g;
+  const priceRe = new RegExp(layout.price.source, 'g');
   for (let m = priceRe.exec(block); m !== null; m = priceRe.exec(block)) {
     const quantityUnit = cleanText(m[1] ?? '');
     const display = cleanText(m[2] ?? '').replace(/\s+\(/, '(');
@@ -130,7 +186,7 @@ function parseItem(block: string, position: number, issues: string[]): ListingIt
     if (text !== '') statuses.push(text);
   }
   if (statuses.length === 0) issues.push(`item ${position} (${salesCode}): no stock status`);
-  const purchasable = /data-purchasable-qty="/.test(block) || /class="block-cart-i--add_cart/.test(block);
+  const purchasable = layout.purchasable(block);
   const availRaw = first(/class="block-cart-i--available_purchase">[\s\S]*?<dd>([\s\S]*?)<\/dd>/, block);
   const quantityDisplay = availRaw === null ? null : cleanText(availRaw) || null;
   const parsedQty = quantityDisplay === null ? { quantity: null, unit: null } : parseQuantityDisplay(quantityDisplay);
@@ -145,35 +201,60 @@ function parseItem(block: string, position: number, issues: string[]): ListingIt
   return { salesCode, modelNumber, name, category, url: akizukiProductUrl(salesCode), prices, stock, positionOnPage: position };
 }
 
+/** Start offsets of every product block, plus where the last one ends. */
+function blockRanges(html: string, open: RegExp, end: RegExp): { starts: number[]; end: number } {
+  const starts: number[] = [];
+  const re = new RegExp(open.source, 'g');
+  for (let m = re.exec(html); m !== null; m = re.exec(html)) starts.push(m.index);
+  const lastStart = starts[starts.length - 1];
+  const endMatch = lastStart === undefined ? null : end.exec(html.slice(lastStart));
+  return { starts, end: lastStart === undefined || endMatch === null ? html.length : lastStart + endMatch.index };
+}
+
+/** True when the page shows products in either layout. */
+function hasItems(html: string): boolean {
+  if (blockRanges(html, CARD_OPEN, CARD_END).starts.length > 0) return true;
+  return TABLE_MARKER.test(html) && blockRanges(html, TABLE_OPEN, TABLE_END).starts.length > 0;
+}
+
+/** Reads the products of whichever layout the page uses. */
+function extractItems(html: string, issues: string[]): ListingItem[] {
+  const useTable = TABLE_MARKER.test(html) && blockRanges(html, CARD_OPEN, CARD_END).starts.length === 0;
+  const layout = useTable ? TABLE_LAYOUT : CARD_LAYOUT;
+  const { starts, end } = blockRanges(html, useTable ? TABLE_OPEN : CARD_OPEN, useTable ? TABLE_END : CARD_END);
+  const items: ListingItem[] = [];
+  starts.forEach((start, i) => {
+    const block = html.slice(start, i + 1 < starts.length ? starts[i + 1] : end);
+    const item = parseItem(block, i + 1, issues, layout);
+    if (item !== null) items.push(item);
+  });
+  return items;
+}
+
 export function parseAkizukiListingPage(html: string): ListingPage {
   if (isAkizukiMaintenancePage(html)) throw new ListingParseError('maintenance / access-denied page');
-  const genreName = first(/<h1 class="[^"]*block-genre-page--header[^"]*">([\s\S]*?)<\/h1>/, html);
-  if (genreName === null) throw new ListingParseError('genre header not found');
+  const rawName = first(/<h1 class="[^"]*block-(?:genre-page|category-list)--header[^"]*">([\s\S]*?)<\/h1>/, html);
+  if (rawName === null) throw new ListingParseError('listing header not found');
+  const listingName = cleanText(rawName);
   const listedTotalText = first(/class="pager-count">\s*<span>([\d,]+)<\/span>/, html);
-  if (listedTotalText === null) throw new ListingParseError('listed total (pager-count) not found');
+  if (listedTotalText === null) {
+    // A category that only links to its children carries no counter and no
+    // products. Anything else without a counter is a structural surprise.
+    if (hasItems(html)) throw new ListingParseError('listed total (pager-count) not found although the page shows products');
+    return { listingName, indexOnly: true, listedTotal: 0, currentPage: 1, lastPage: 1, nextPath: null, items: [], issues: [] };
+  }
   const listedTotal = Number.parseInt(listedTotalText.replace(/,/g, ''), 10);
   const currentPage = Number.parseInt(first(/class="pager-current">\s*<span>(\d+)<\/span>/, html) ?? '1', 10);
   const nextPath = first(/<a rel="next" href="([^"]+)"/, html) ?? first(/<link rel="next" href="https?:\/\/[^/]+([^"]+)"/, html);
   let lastPage = currentPage;
-  const pageLinkRe = /href="\/catalog\/r\/[A-Za-z0-9]+_p(\d+)\/"/g;
+  const pageLinkRe = /href="\/catalog\/[rc]\/[A-Za-z0-9_-]+_p(\d+)\/"/g;
   for (let m = pageLinkRe.exec(html); m !== null; m = pageLinkRe.exec(html)) {
     const n = Number.parseInt(m[1] ?? '0', 10);
     if (n > lastPage) lastPage = n;
   }
 
   const issues: string[] = [];
-  const items: ListingItem[] = [];
-  const starts: number[] = [];
-  ITEM_OPEN.lastIndex = 0;
-  for (let m = ITEM_OPEN.exec(html); m !== null; m = ITEM_OPEN.exec(html)) starts.push(m.index);
-  const lastStart = starts[starts.length - 1];
-  const endMatch = lastStart === undefined ? null : ITEMS_END.exec(html.slice(lastStart));
-  const end = lastStart === undefined || endMatch === null ? html.length : lastStart + endMatch.index;
-  starts.forEach((start, i) => {
-    const block = html.slice(start, i + 1 < starts.length ? starts[i + 1] : end);
-    const item = parseItem(block, i + 1, issues);
-    if (item !== null) items.push(item);
-  });
+  const items = extractItems(html, issues);
   if (items.length === 0 && listedTotal > 0) throw new ListingParseError(`no product blocks found on a page listing ${listedTotal} items`);
-  return { genreName: cleanText(genreName), listedTotal, currentPage, lastPage, nextPath, items, issues };
+  return { listingName, indexOnly: false, listedTotal, currentPage, lastPage, nextPath, items, issues };
 }

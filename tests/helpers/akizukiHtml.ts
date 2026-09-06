@@ -4,6 +4,8 @@
  * against a fake site with controlled pagination, duplicates and failures,
  * and the parser can be round-trip tested with generated data.
  */
+import type { ListingKind } from '../../src/collectors/akizuki/listings.ts';
+
 export interface SyntheticListing {
   salesCode: string;
   name: string;
@@ -19,9 +21,18 @@ export interface SyntheticListing {
   quantityUnit: string;
 }
 
+/**
+ * `cards` is the usual product-card list; `table` is the sortable spec table
+ * some categories use instead (no cart affordance, same products).
+ */
+export type SyntheticLayout = 'cards' | 'table';
+
 export interface SyntheticPage {
-  genreSlug: string;
-  genreName: string;
+  /** `c` renders the category header, `r` the genre header. */
+  kind: ListingKind;
+  slug: string;
+  name: string;
+  layout?: SyntheticLayout;
   listedTotal: number;
   currentPage: number;
   lastPage: number;
@@ -67,8 +78,44 @@ export function renderListingItem(it: SyntheticListing): string {
 </dl>`;
 }
 
+/** One row of the spec-table layout: no cart, no purchasable quantity. */
+export function renderTableRow(it: SyntheticListing): string {
+  const name = escapeHtml(it.name);
+  const statusDivs = it.statuses.map((s, i) => `<div class="block-cart-i--stock-info-${['green', 'orange', 'gray'][i % 3]}">${escapeHtml(s)}</div>`).join('\n');
+  const price =
+    it.priceYen === null
+      ? ''
+      : `<div class="block-goods-list-l--price-items">
+<div class="block-goods-list-l--price-qty">
+${escapeHtml(it.unit)}
+</div>
+<div class="block-goods-list-l--price price js-enhanced-ecommerce-goods-price">${yen(it.priceYen)}<span class="tax">(税込)</span></div>
+</div>`;
+  return `<tr class="js-enhanced-ecommerce-item ">
+<td class="block-goods-list-l--goods-name-items">
+<div class="block-goods-list-l--goods-image"><a href="/catalog/g/g${it.salesCode}/" title="${name}" class="js-enhanced-ecommerce-image"><figure class="img-center"><img alt="${name}" src="/img/usr/lazyloading.png"></figure></a></div>
+${statusDivs}
+</td>
+<td class="block-goods-list-l--goods-name-items">
+<div class="block-goods-list-l--goods-name"><a href="/catalog/g/g${it.salesCode}/" title="${name}" data-category="${escapeHtml(it.category ?? '')}" data-brand="" class="js-enhanced-ecommerce-goods-name">${name}</a></div>
+<div class="block-goods-list-l--code"><strong>販売コード：</strong>${it.salesCode}</div>
+</td>
+<td class="block-goods-list-l--price-infos">
+${price}
+</td>
+<td class="block-goods-list-l--model_number">
+<p>${it.modelNumber === null ? '' : escapeHtml(it.modelNumber)}</p>
+</td>
+</tr>`;
+}
+
+/** Header markup differs between the two listing families; nothing else does. */
+function headerClass(kind: ListingKind): string {
+  return kind === 'c' ? 'block-category-list--header' : 'block-genre-page--header';
+}
+
 export function renderListingPage(p: SyntheticPage): string {
-  const pageHref = (n: number): string => (n === 1 ? `/catalog/r/${p.genreSlug}/` : `/catalog/r/${p.genreSlug}_p${n}/`);
+  const pageHref = (n: number): string => (n === 1 ? `/catalog/${p.kind}/${p.slug}/` : `/catalog/${p.kind}/${p.slug}_p${n}/`);
   const next = p.currentPage < p.lastPage ? pageHref(p.currentPage + 1) : null;
   const numbers = Array.from({ length: p.lastPage }, (_, i) => i + 1)
     .map((n) => (n === p.currentPage ? `<li class="pager-current"><span>${n}</span></li>` : `<li><a href="${pageHref(n)}">${n}</a></li>`))
@@ -76,26 +123,54 @@ export function renderListingPage(p: SyntheticPage): string {
   const nav = next === null ? '' : `<ul class="pagination"><li class="pager-next"><a rel="next" href="${next}">次</a></li><li class="pager-last"><a href="${pageHref(p.lastPage)}">最後</a></li></ul>`;
   const groups: string[] = [];
   for (let i = 0; i < p.items.length; i += 3) groups.push(`<li>\n${p.items.slice(i, i + 3).map(renderListingItem).join('\n')}\n</li>`);
+  const list =
+    p.layout === 'table'
+      ? `<div class="block-goods-list-l">
+<table class="block-goods-list-l--table">
+<thead><tr><th><div class="ttl"></div></th><th><div class="ttl">商品情報</div></th><th><div class="ttl">販売価格</div></th><th><div class="ttl">型番</div></th></tr></thead>
+<tbody>
+${p.items.map(renderTableRow).join('\n')}
+</tbody>
+</table>
+</div>`
+      : `<div class="block-cart-i">
+<ul class="block-cart-i--items">
+${groups.join('\n')}
+</ul>
+</div>`;
   return `<!DOCTYPE html>
-<html lang="ja"><head><meta charset="UTF-8"><title>${escapeHtml(p.genreName)} 秋月電子通商-電子部品・ネット通販</title>
+<html lang="ja"><head><meta charset="UTF-8"><title>${escapeHtml(p.name)} 秋月電子通商-電子部品・ネット通販</title>
 <link rel="canonical" href="https://akizukidenshi.com${pageHref(1)}">
 ${next === null ? '' : `<link rel="next" href="https://akizukidenshi.com${next}">`}
 </head><body>
-<h1 class="h1 block-genre-page--header">${escapeHtml(p.genreName)}</h1>
+<h1 class="h1 ${headerClass(p.kind)}">${escapeHtml(p.name)}</h1>
 <div class="block-goods-list--pager-top block-goods-list--pager pager">
 <div class="pager-total"><span class="pager-count"><span>${p.listedTotal}</span>件あります</span></div>
 <ul class="pagination">${numbers}</ul>
 ${nav}
 </div>
-<div class="block-cart-i">
-<ul class="block-cart-i--items">
-${groups.join('\n')}
-</ul>
-</div>
+${list}
 <div class="block-goods-list--pager-bottom block-goods-list--pager pager">
 <div class="pager-total"><span class="pager-count"><span>${p.listedTotal}</span>件あります</span></div>
 ${nav}
 </div>
+</body></html>`;
+}
+
+/**
+ * A branch of the category tree that only links to its children: header, no
+ * counter, no product blocks. Real pages such as `/catalog/c/ckeyboard/`.
+ */
+export function renderIndexOnlyPage(slug: string, name: string, children: readonly string[]): string {
+  const links = children.map((c) => `<li><a href="/catalog/c/${c}/">${escapeHtml(c)}</a></li>`).join('\n');
+  return `<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><title>${escapeHtml(name)} 秋月電子通商-電子部品・ネット通販</title>
+<link rel="canonical" href="https://akizukidenshi.com/catalog/c/${slug}/">
+</head><body>
+<h1 class="h1 block-category-list--header">${escapeHtml(name)}</h1>
+<ul class="block-category-list--items">
+${links}
+</ul>
 </body></html>`;
 }
 

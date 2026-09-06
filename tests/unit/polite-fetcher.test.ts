@@ -32,7 +32,7 @@ function harness(script: Scripted[], overrides: Partial<PoliteFetcherOptions> = 
     const res: TransportResponse = {
       status: step.status ?? 200,
       header: (n) => step.headers?.[n.toLowerCase()] ?? null,
-      text: async () => step.body ?? 'ok',
+      bytes: async () => new TextEncoder().encode(step.body ?? 'ok'),
     };
     return res;
   };
@@ -135,7 +135,7 @@ describe('PoliteFetcher', () => {
         if (calls === 1) {
           init.signal.addEventListener('abort', () => reject(init.signal.reason as Error));
         } else {
-          resolve({ status: 200, header: () => null, text: async () => 'late but fine' });
+          resolve({ status: 200, header: () => null, bytes: async () => new TextEncoder().encode('late but fine') });
         }
       });
     const fetcher = new PoliteFetcher({ userAgent: 'x', transport, timeoutMs: 20, minIntervalMs: 0, jitterMs: 0, backoffBaseMs: 1, sleep: async () => undefined });

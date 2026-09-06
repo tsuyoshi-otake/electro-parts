@@ -37,7 +37,7 @@ export function loadAkizukiNormalized(which: keyof typeof AKIZUKI_FIXTURES): Pro
   return cached;
 }
 
-export const AKIZUKI_HTML_FIXTURES = ['rkit_p1', 'rkit_p3', 'rkit_p6', 'rsbcomp1', 'g109951'] as const;
+export const AKIZUKI_HTML_FIXTURES = ['rkit_p1', 'rkit_p3', 'rkit_p6', 'rsbcomp1', 'cheatsink', 'g109951'] as const;
 export type AkizukiHtmlFixture = (typeof AKIZUKI_HTML_FIXTURES)[number];
 
 const htmlCache = new Map<string, Promise<string>>();

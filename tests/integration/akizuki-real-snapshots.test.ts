@@ -15,7 +15,7 @@ describe('Akizuki real snapshot: adapter', () => {
       const raw = await loadAkizukiRaw(which);
       const r = validateAkizukiRaw(raw.json);
       expect(r.errors, which).toEqual([]);
-      expect(r.metrics['genreCount']).toBe(18);
+      expect(r.metrics['listingCount']).toBe(18);
     }
   });
 

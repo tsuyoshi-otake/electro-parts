@@ -13,5 +13,6 @@
 | 0009 | [クローラーの識別と丁寧さ](0009-polite-crawler-identification.md) | 採用 |
 | 0010 | [ユーザースクリプトの stale-while-revalidate キャッシュと LRU](0010-userscript-swr-cache.md) | 採用 |
 | 0011 | [Shadow DOM、`innerHTML` 禁止、CDN なし、fail-open](0011-userscript-rendering-safety.md) | 採用 |
+| 0012 | [クロール対象はサイトマップから発見し、カバレッジの正解として使う](0012-sitemap-as-catalogue-authority.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。
