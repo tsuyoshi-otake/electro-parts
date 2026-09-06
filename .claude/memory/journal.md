@@ -96,3 +96,11 @@
 - Fix (2): tail floor 1 hour; labels placed by measured extent (58 units per date) and dropped when they repeat the previous date or would overlap it.
 - Verification: live g131975 and g109951 mount into `.pane-goods-center` at 1080 px, chart 649×239, axis reads 2026-09-06 / 2026-09-07 with no overlap. 230 vitest + 3 E2E pass.
 - Learning: measure the host page's own layout before choosing a mount point — `display: block` on the host says nothing when the parent is a grid with pinned rows.
+
+## 2026-09-07 — The fix reached Pages but not the browser (#1, 839e83d)
+
+- Symptom: none visible to me. Every check I ran said the work had shipped — CI green, Pages serving the rebuilt bundle, live pages rendering the fixed panel. I reported it complete. The user asked 「リリースした?」and that question is what exposed it.
+- Root cause: `@version` stayed at `0.1.0` across the mount-point and axis fixes. Tampermonkey fetches `@updateURL` only when the advertised version exceeds the installed one, so any copy installed before 2026-09-07 would have kept the 420 px panel indefinitely. Deploying the bundle is not the same as delivering it.
+- Why my verification missed it: I compared the Pages-served bundle against the local build byte-for-byte and called that proof of delivery. It proved the file was published; it said nothing about whether an installed client would ever ask for it. A fresh install (which is what the E2E fixture and my live probes do) always gets the newest file, so the whole verification path was blind to the update mechanism by construction.
+- Fix: `USERSCRIPT_VERSION` and the package version to 0.2.0, rebuild (53,414 bytes, identical apart from the banner), redeploy with `--republish`.
+- Learning: **for anything distributed by an updater, the version string is part of the fix.** Verify delivery from the position of an existing install, not a fresh one.
