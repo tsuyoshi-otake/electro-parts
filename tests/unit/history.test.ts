@@ -122,29 +122,38 @@ describe('insertObservation', () => {
 });
 
 describe('insertPresence', () => {
-  it('keeps a leading absent observation in storage but trims it in the canonical view', () => {
+  it('treats absence before the first sighting as implicit and splits it exactly on out-of-order presence', () => {
     // Runs 1 and 2 exist; the product was first seen in run 3. Later, run 1
-    // reports it absent. That is real information: if run 0 is imported
-    // afterwards with the product present, the gap at run 1 must survive.
+    // reports it absent: implicit already, nothing stored. If run 0 is then
+    // imported with the product present, the gap at run 1 is synthesized from
+    // the known runs, so the result equals the chronological import.
     const r = insertPresence([{ t: 3, state: true }], { t: 1, state: false }, [2, 3]);
-    expect(r.changed).toBe(true);
-    expect(r.series).toEqual([
-      { t: 1, state: false },
-      { t: 3, state: true },
-    ]);
-    expect(canonicalPresence(r.series)).toEqual([{ t: 3, state: true }]);
+    expect(r.changed).toBe(false);
+    expect(r.series).toEqual([{ t: 3, state: true }]);
     const later = insertPresence(r.series, { t: 0, state: true }, [1, 2, 3]);
     expect(later.series).toEqual([
       { t: 0, state: true },
       { t: 1, state: false },
       { t: 3, state: true },
     ]);
+    expect(canonicalPresence(later.series)).toEqual(later.series);
   });
 
-  it('stores absent on an empty series and canonicalizes to empty', () => {
+  it('ignores absent on an empty series and synthesizes absence for a late first sighting', () => {
     const s = insertPresence([], { t: 1, state: false }, []).series;
-    expect(s).toEqual([{ t: 1, state: false }]);
-    expect(canonicalPresence(s)).toEqual([]);
+    expect(s).toEqual([]);
+    expect(canonicalPresence([{ t: 1, state: false }, { t: 2, state: true }])).toEqual([{ t: 2, state: true }]);
+    // First sighting at run 0 imported after runs 1 and 2 already exist.
+    expect(insertPresence([], { t: 0, state: true }, [1, 2]).series).toEqual([
+      { t: 0, state: true },
+      { t: 1, state: false },
+    ]);
+    // Present again at run 2 merges with the implicit span end.
+    expect(insertPresence([{ t: 0, state: true }, { t: 1, state: false }], { t: 2, state: true }, [0, 1]).series).toEqual([
+      { t: 0, state: true },
+      { t: 1, state: false },
+      { t: 2, state: true },
+    ]);
   });
 
   it('records absence after presence and presence again', () => {

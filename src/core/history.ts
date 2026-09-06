@@ -8,6 +8,12 @@
  * an existing span splits the span at the next run that was observed, instead
  * of being dropped or approximated.
  *
+ * The algorithm only needs a three-point window (existing / previous / next
+ * change point around the observation), so the SQLite layer can apply it
+ * with indexed lookups instead of loading whole series (`planInsert`). The
+ * array form (`insertObservation`) is built on the same plan and is used by
+ * tests, property tests and the in-memory oracle comparison.
+ *
  * Invariants (checked by property tests):
  *   - series is sorted by `t` strictly ascending
  *   - no two adjacent change points have equal state
@@ -34,6 +40,24 @@ export interface InsertResult<S> {
   changed: boolean;
 }
 
+/** The three change points that can be affected by inserting at `t`. */
+export interface SeriesWindow<S> {
+  /** Change point exactly at `t`, if any. */
+  existing: ChangePoint<S> | undefined;
+  /** Last change point before `t`. */
+  prev: ChangePoint<S> | undefined;
+  /** First change point after `t`. */
+  next: ChangePoint<S> | undefined;
+}
+
+export interface InsertPlan<S> {
+  changed: boolean;
+  /** Change points to add (none of them exist yet). */
+  inserts: ChangePoint<S>[];
+  /** Times of change points to remove (always `next.t` when non-empty). */
+  deletes: number[];
+}
+
 /** State in effect at time `t`, or `undefined` before the first change point. */
 export function stateAt<S>(series: readonly ChangePoint<S>[], t: number): S | undefined {
   let result: S | undefined;
@@ -57,7 +81,7 @@ function lowerBound<S>(series: readonly ChangePoint<S>[], target: number): numbe
 }
 
 /** First run strictly inside `(after, before)` or `undefined`. `runs` sorted ascending. */
-function firstRunBetween(runs: readonly number[], after: number, before: number): number | undefined {
+export function firstRunBetween(runs: readonly number[], after: number, before: number): number | undefined {
   let lo = 0;
   let hi = runs.length;
   while (lo < hi) {
@@ -69,81 +93,109 @@ function firstRunBetween(runs: readonly number[], after: number, before: number)
   return candidate !== undefined && candidate < before ? candidate : undefined;
 }
 
+export function windowOf<S>(series: readonly ChangePoint<S>[], t: number): SeriesWindow<S> {
+  const idx = lowerBound(series, t);
+  const at = series[idx];
+  if (at !== undefined && at.t === t) {
+    return { existing: at, prev: idx > 0 ? series[idx - 1] : undefined, next: series[idx + 1] };
+  }
+  return { existing: undefined, prev: idx > 0 ? series[idx - 1] : undefined, next: at };
+}
+
 /**
- * Inserts one observation into a change-point series.
+ * Decides how one observation changes a series.
  *
- * @param series   existing change points (sorted, adjacent-distinct)
- * @param obs      the observation to insert
- * @param runs     ascending times of every run in which this entity was
- *                 observed, EXCLUDING `obs.t`. Every time in `series` must be
- *                 in `runs`.
- * @param equal    state equality
+ * @param window  change points around `obs.t`
+ * @param obs     the observation to insert
+ * @param runs    ascending times of every run in which this entity was
+ *                observed, EXCLUDING `obs.t`. Every time in the series must be
+ *                in `runs`.
+ * @param equal   state equality
+ * @param initial optional state in effect before the first change point
+ *                (a virtual `prev` at -infinity). Presence series use
+ *                `absent`: an entity is absent from every run before its
+ *                first sighting, so a leading `absent` observation is a
+ *                no-op and a `present` observation inserted before the first
+ *                sighting splits the implicit absent span exactly.
  */
+export function planInsert<S>(
+  window: SeriesWindow<S>,
+  obs: ChangePoint<S>,
+  runs: readonly number[],
+  equal: Equal<S>,
+  initial?: { state: S },
+): InsertPlan<S> {
+  const none: InsertPlan<S> = { changed: false, inserts: [], deletes: [] };
+  const { existing, next } = window;
+  const prev = window.prev ?? initial;
+  if (existing !== undefined) {
+    if (equal(existing.state, obs.state)) return none;
+    throw new SeriesConflictError(`conflicting state for existing change point at ${obs.t}`);
+  }
+  const point = { t: obs.t, state: obs.state };
+  if (prev !== undefined) {
+    // Observation lies inside prev's span with the same state: nothing new.
+    if (equal(prev.state, obs.state)) return none;
+    const returnRun = firstRunBetween(runs, obs.t, next?.t ?? Number.POSITIVE_INFINITY);
+    if (returnRun !== undefined) {
+      // prev's state was confirmed again at `returnRun`, so the span splits.
+      // `next` (if any) differs from prev's state because the series is
+      // canonical, so the return point never duplicates it.
+      return { changed: true, inserts: [point, { t: returnRun, state: prev.state }], deletes: [] };
+    }
+  }
+  if (next !== undefined && equal(next.state, obs.state)) {
+    // obs starts the state earlier than previously known; merge with next.
+    return { changed: true, inserts: [point], deletes: [next.t] };
+  }
+  return { changed: true, inserts: [point], deletes: [] };
+}
+
+export function applyPlan<S>(series: readonly ChangePoint<S>[], plan: InsertPlan<S>): ChangePoint<S>[] {
+  if (!plan.changed) return series.slice();
+  const removed = new Set(plan.deletes);
+  const out = series.filter((cp) => !removed.has(cp.t)).concat(plan.inserts);
+  out.sort((a, b) => a.t - b.t);
+  return out;
+}
+
+/** Inserts one observation into an in-memory change-point series. */
 export function insertObservation<S>(
   series: readonly ChangePoint<S>[],
   obs: ChangePoint<S>,
   runs: readonly number[],
   equal: Equal<S>,
+  initial?: { state: S },
 ): InsertResult<S> {
-  const idx = lowerBound(series, obs.t);
-  const existing = series[idx];
-  if (existing !== undefined && existing.t === obs.t) {
-    if (equal(existing.state, obs.state)) return { series: series.slice(), changed: false };
-    throw new SeriesConflictError(`conflicting state for existing change point at ${obs.t}`);
-  }
-  const prev = idx > 0 ? series[idx - 1] : undefined;
-  const next = existing; // first change point after obs.t, if any
-
-  if (prev !== undefined) {
-    if (equal(prev.state, obs.state)) {
-      // Observation lies inside prev's span with the same state: nothing new.
-      return { series: series.slice(), changed: false };
-    }
-    const nextT = next?.t ?? Number.POSITIVE_INFINITY;
-    const returnRun = firstRunBetween(runs, obs.t, nextT);
-    const head = series.slice(0, idx);
-    const tail = series.slice(idx);
-    if (returnRun !== undefined) {
-      // prev's state was confirmed again at `returnRun`, so the span splits.
-      return {
-        series: [...head, { t: obs.t, state: obs.state }, { t: returnRun, state: prev.state }, ...tail],
-        changed: true,
-      };
-    }
-    if (next !== undefined && equal(next.state, obs.state)) {
-      // obs starts the state earlier than previously known; merge with next.
-      return { series: [...head, { t: obs.t, state: obs.state }, ...tail.slice(1)], changed: true };
-    }
-    return { series: [...head, { t: obs.t, state: obs.state }, ...tail], changed: true };
-  }
-
-  // No earlier change point: obs becomes the head.
-  if (next !== undefined && equal(next.state, obs.state)) {
-    return { series: [{ t: obs.t, state: obs.state }, ...series.slice(1)], changed: true };
-  }
-  return { series: [{ t: obs.t, state: obs.state }, ...series], changed: true };
+  const plan = planInsert(windowOf(series, obs.t), obs, runs, equal, initial);
+  return { series: applyPlan(series, plan), changed: plan.changed };
 }
 
-const equalBoolean: Equal<boolean> = (a, b) => a === b;
+export const equalBoolean: Equal<boolean> = (a, b) => a === b;
+
+/** Presence series start from an implicit `absent` state. */
+export const PRESENCE_INITIAL = { state: false } as const;
 
 /**
- * Presence series (present / absent) over *every* run of the store, because a
- * complete crawl observes each known entity as either present or absent.
- *
- * Leading `absent` change points are kept in storage: dropping them at insert
- * time loses information when an earlier run is imported later (out-of-order
- * import), which breaks order independence. `canonicalPresence` trims them
- * for publication.
+ * Presence series (present / absent) over *every* run of the entity's
+ * universe (store runs for products, product-present runs for offers, ...),
+ * because a complete crawl observes each known entity as either present or
+ * absent. Before its first sighting an entity is implicitly absent, which
+ * makes leading `absent` observations no-ops and keeps the series canonical
+ * regardless of import order (see `planInsert`'s `initial`).
  */
 export function insertPresence(
   series: readonly ChangePoint<boolean>[],
   obs: ChangePoint<boolean>,
   runs: readonly number[],
 ): InsertResult<boolean> {
-  return insertObservation(series, obs, runs, equalBoolean);
+  return insertObservation(series, obs, runs, equalBoolean, PRESENCE_INITIAL);
 }
 
-/** Presence series without leading `absent` change points (starts at first sighting). */
+/**
+ * Presence series without leading `absent` change points. Insertion never
+ * produces them; this is a defensive normalization for readers.
+ */
 export function canonicalPresence(series: readonly ChangePoint<boolean>[]): ChangePoint<boolean>[] {
   let i = 0;
   while (i < series.length && !(series[i] as ChangePoint<boolean>).state) i += 1;
