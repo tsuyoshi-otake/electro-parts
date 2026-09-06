@@ -16,8 +16,10 @@ name: Crawl and publish
 
 on:
   schedule:
-    # 05:17 JST daily (20:17 UTC). Off the hour to avoid the crowd.
-    - cron: '17 20 * * *'
+    # Monthly, on the 2nd at 05:17 JST (the 1st at 20:17 UTC). Akizuki's
+    # prices move slowly, so a month is the sampling interval (ADR-0013).
+    # Off the hour to avoid the crowd.
+    - cron: '17 20 1 * *'
   workflow_dispatch:
     inputs:
       bootstrap:
@@ -31,7 +33,7 @@ on:
       snapshot_retention_days:
         description: 'Retention (days) of the raw snapshot artifact'
         type: number
-        default: 30
+        default: 90
 
 permissions: {}
 
@@ -124,7 +126,9 @@ jobs:
         with:
           name: snapshot-akizuki-${{ github.run_id }}
           path: snapshots/
-          retention-days: ${{ inputs.snapshot_retention_days || 30 }}
+          # Longer than the crawl interval, so two consecutive snapshots can
+          # always be compared when a run needs explaining (ADR-0013).
+          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
           if-no-files-found: ignore
 
       - name: Upload report

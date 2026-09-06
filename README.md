@@ -2,7 +2,7 @@
 
 日本の電子部品通販サイトの商品ページに、**観測した価格・在庫表示・掲載状況の履歴**を表示するプロジェクトです。
 
-- クローラーが 1 日 1 回、対象サイトのカタログ一覧ページを巡回して生スナップショットを保存し、
+- クローラーが 1 か月に 1 回、対象サイトのカタログ一覧ページを巡回して生スナップショットを保存し、
 - 店舗ごとの SQLite に**変化点だけ**を取り込み、
 - 静的 JSON(契約 v1)として GitHub Pages に公開し、
 - Tampermonkey ユーザースクリプト **Electronics Price History** が商品ページにパネルを差し込みます。
@@ -175,7 +175,7 @@ npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.
 
 | ワークフロー | トリガー | 内容 |
 |---|---|---|
-| `crawl-publish.yml` | 毎日 20:17 UTC(05:17 JST)、`workflow_dispatch`(`bootstrap`、`dry_run`、`snapshot_retention_days`) | パイプライン → Actions summary にレポート → `site/` にユーザースクリプトと index を追加 → 検証 → 成果物アップロード(スナップショット 30 日、レポートと状態 90 日)→ `publishable` のときだけ Pages へデプロイ → 公開後にマニフェストの `datasetVersion` を確認 |
+| `crawl-publish.yml` | 毎月 1 日 20:17 UTC(2 日 05:17 JST)、`workflow_dispatch`(`bootstrap`、`dry_run`、`snapshot_retention_days`) | パイプライン → Actions summary にレポート → `site/` にユーザースクリプトと index を追加 → 検証 → 成果物アップロード(スナップショット 90 日、レポートと状態 90 日)→ `publishable` のときだけ Pages へデプロイ → 公開後にマニフェストの `datasetVersion` を確認 |
 | `ci.yml` | push(main)、pull_request、手動 | `npm audit`、typecheck、vitest(全プロジェクト)、ユーザースクリプトのビルドと禁止 API・CDN 参照の検査、Playwright E2E、Stryker(PR 以外) |
 
 - 公開は `pages-publish` の concurrency グループで**単一ライター**。実行中の公開はキャンセルされず、後続はキューに入ります。
@@ -211,7 +211,7 @@ npm run bench
 | ユーザースクリプト(jsdom) | `tests/userscript/` | キャッシュ/LRU、SWR、Page Adapter、コントローラー、チャート |
 | E2E(Playwright) | `tests/e2e/` | ビルド済みユーザースクリプトを**保存済み**商品ページで実行。両オリジンとも route interception で提供し、本物のサイトには触れません。キャッシュ再利用、障害時の fail-open、未収録商品を検証 |
 | 変異(Stryker) | `stryker.config.mjs` | `src/core/` の履歴・価格・統計・健全性・同一性・時刻 |
-| ベンチ | `tests/bench/run-bench.ts` | 合成カタログで 1 / 3 / 5 年分を毎日取り込み |
+| ベンチ | `tests/bench/run-bench.ts` | 合成カタログで 1 / 3 / 5 年分を毎日取り込み(実運用より高頻度の上限側テスト) |
 
 Playwright は初回に `npx playwright install chromium` が必要です。
 
@@ -240,7 +240,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 | 3 年 | 1,095 | 453.8 ms | 740.5 ms | 3841.4 ms | 610.2 s | 941.7 ms | 175.3 ms | 5473.0 ms | 493.5 ms | 35.39 MB | 32.23 MB | 6.4 KB | 72,756 | 562.75 MB |
 | 5 年 | 1,825 | 413.3 ms | 719.9 ms | 4508.0 ms | 905.3 s | 877.9 ms | 95.2 ms | 4281.5 ms | 509.9 ms | 53.86 MB | 39.00 MB | 7.8 KB | 110,020 | 666.30 MB |
 
-「取り込み合計」は履歴を作るために 365〜1,825 回の取り込みを連続で回した合計で、実運用では 1 日 1 回ぶん(p95 で 0.5〜0.8 秒)だけです。5 年の p50 が 3 年より小さいのは同じマシンでの測定ばらつき(他プロセスの影響)で、傾向としては履歴が伸びても取り込み時間はほぼ横ばいです。「最大」は SQLite が WAL/ページを整理する run に当たったときの値。
+「取り込み合計」は履歴を作るために 365〜1,825 回の取り込みを連続で回した合計で、実運用では 1 run ぶん(p95 で 0.5〜0.8 秒)だけです。ベンチは 1 日 1 回の観測を仮定しているので、月 1 回(ADR-0013)の実運用に対しては上限側の負荷です — 実際の 5 年は 1,825 run ではなく 60 run 程度で、SQLite も静的データもこの表よりはるかに小さくなります。5 年の p50 が 3 年より小さいのは同じマシンでの測定ばらつき(他プロセスの影響)で、傾向としては履歴が伸びても取り込み時間はほぼ横ばいです。「最大」は SQLite が WAL/ページを整理する run に当たったときの値。
 
 予算に対する実測(5 年時点): 取り込み 4.5 s < 10 s、生成 + 書き込み 4.4 s < 30 s、最大の商品ファイル 7.8 KB < 64 KB、静的データ 39.0 MB < 50 MB、SQLite 53.9 MB(Pages の 1 ファイル 100 MB 制限内)。すべて予算内です。
 <!-- bench:end -->
@@ -252,7 +252,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 パネルとマニフェストの `caveats` に同じ内容が載ります。
 
 - **observation_window**: 履歴はこのプロジェクトが観測を始めた日以降のものです。それ以前の価格は分かりません。
-- **sampling_interval**: 観測は約 1 日 1 回です。観測の間に起きた変化(短時間の値下げ、在庫の増減)は記録されません。「変化点の時刻」は**変化を初めて観測した時刻**で、実際に変わった時刻ではありません。
+- **sampling_interval**: 観測は約 1 か月に 1 回です。観測の間に起きた変化(短時間の値下げ、在庫の増減)は記録されません。「変化点の時刻」は**変化を初めて観測した時刻**で、実際に変わった時刻ではありません。
 - **absence_not_discontinued**: 一覧から消えたことは「掲載なし」と記録します。販売終了とは限りません(一時的な非掲載、ジャンル変更、クロール範囲外など)。
 - **site_reported_quantity**: 在庫数は店舗が表示した数値そのものです。店舗側の集計ルールや倉庫の実数とは異なることがあります。
 - **suspicious_identity**: 同じ商品コードで名前や型番が大きく変わった場合に付きます。コードの再利用の可能性があります。

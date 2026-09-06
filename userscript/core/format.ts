@@ -71,7 +71,7 @@ export function availabilityLabel(state: AvailabilityState): string {
 
 export const CAVEAT_TEXT: Record<CaveatKey, string> = {
   observation_window: '表示される最安値・最高値は観測期間内の値であり、全期間の最安値ではありません。',
-  sampling_interval: '価格・在庫はおおむね1日1回の観測です。観測の間の変化は記録されません。',
+  sampling_interval: '価格・在庫はおおむね1か月に1回の観測です。観測の間の変化は記録されません。',
   absence_not_discontinued: '一覧から消えた商品は「未掲載」であり、販売終了とは限りません。',
   site_reported_quantity: '在庫数はサイト表示値をそのまま記録したもので、実在庫を保証しません。',
   quantity_semantics_unknown: '在庫数の意味(実在庫か目安か)は不明です。',
