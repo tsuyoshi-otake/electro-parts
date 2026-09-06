@@ -31,16 +31,19 @@ export interface PreviousSnapshotSummary {
   observedAt: string;
   coverageId: string;
   itemCount: number;
-  /** externalProductId -> primary price key (basis + point) of the default/first offer */
+  /** externalProductId -> primary price key (basis + point) of the primary offer/basis */
   primaryPriceByProduct: Map<string, string>;
 }
 
 export function summarizeForSanity(snapshot: NormalizedSnapshot): PreviousSnapshotSummary {
   const map = new Map<string, string>();
   for (const p of snapshot.products) {
-    const offer = p.offers[0];
-    const quote = offer?.priceQuotes[0];
-    if (quote) map.set(p.externalProductId, `${basisKey(basisOf(quote))}|${pricePointKey(pricePointOf(quote))}`);
+    // Deterministic choice that the database reader reproduces: the offer
+    // with the smallest external id, then the quote with the smallest basis key.
+    const offer = [...p.offers].sort((a, b) => (a.externalOfferId < b.externalOfferId ? -1 : a.externalOfferId > b.externalOfferId ? 1 : 0))[0];
+    const keyed = (offer?.priceQuotes ?? []).map((q) => ({ q, k: basisKey(basisOf(q)) })).sort((a, b) => (a.k < b.k ? -1 : a.k > b.k ? 1 : 0));
+    const quote = keyed[0];
+    if (quote) map.set(p.externalProductId, `${quote.k}|${pricePointKey(pricePointOf(quote.q))}`);
   }
   return {
     observedAt: snapshot.observedAt,

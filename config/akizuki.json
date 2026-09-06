@@ -1,0 +1,26 @@
+{
+  "storeId": "akizuki",
+  "collector": {
+    "userAgent": "electro-parts-price-history/0.1 (+https://github.com/tsuyoshi-otake/electro-parts; research)",
+    "baseUrl": "https://akizukidenshi.com",
+    "genres": [
+      "rkit", "rdisp", "rcamera", "rkosaku", "rbatt", "rparts", "rcar", "rsensor", "rsbcomp1",
+      "rmicon", "rmicon2", "rsemi", "rpower", "rcomp", "rrf", "rled", "ropto", "rai"
+    ],
+    "minIntervalMs": 1500,
+    "jitterMs": 750,
+    "maxAttempts": 4,
+    "timeoutMs": 30000,
+    "maxRequests": 2000,
+    "maxPagesPerGenre": 200
+  },
+  "sanity": {
+    "maxItemCountDropRatio": 0.2,
+    "maxMissingProductRatio": 0.2,
+    "maxPriceChangeRatio": 0.3,
+    "maxUnavailablePriceRatio": 0.5
+  },
+  "inventory": { "retentionDays": 400, "pointLimit": 730 },
+  "paths": { "snapshots": "snapshots", "work": "state/work", "site": "site", "reports": "reports" },
+  "previousStateUrl": "https://tsuyoshi-otake.github.io/electro-parts/state"
+}
