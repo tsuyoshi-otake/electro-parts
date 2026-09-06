@@ -32,9 +32,11 @@ export interface ControllerHandle {
   destroy(): void;
 }
 
-function insert(mount: MountPoint, node: Element): void {
+function insert(mount: MountPoint, node: HTMLElement): void {
   const { anchor, position } = mount;
+  for (const [property, value] of Object.entries(mount.hostStyle ?? {})) node.style.setProperty(property, value);
   if (position === 'append') anchor.appendChild(node);
+  else if (position === 'prepend') anchor.insertBefore(node, anchor.firstChild);
   else if (position === 'before') anchor.parentNode?.insertBefore(node, anchor);
   else anchor.parentNode?.insertBefore(node, anchor.nextSibling);
 }

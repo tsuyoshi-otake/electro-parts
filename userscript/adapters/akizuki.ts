@@ -12,6 +12,9 @@ import type { MountPoint, StorePageAdapter } from '../core/types.ts';
 const PRODUCT_PATH = /^\/catalog\/g\/g(\d+)\/?$/;
 const CANONICAL = /\/catalog\/g\/g(\d+)\/?$/;
 
+/** Span every column, for the fallbacks that land inside the detail grid. Inert elsewhere. */
+const FULL_WIDTH = { 'grid-column': '1 / -1' } as const;
+
 export function pageKeyFromPath(pathname: string): string | null {
   const m = PRODUCT_PATH.exec(pathname);
   return m?.[1] ?? null;
@@ -46,14 +49,21 @@ export const akizukiPageAdapter: StorePageAdapter = {
   findMountPoint(doc): MountPoint | null {
     // Full content width, right below the gallery/buy columns: the chart needs
     // the horizontal room, and the panel reads as its own section there.
+    //
+    // Inside `.pane-goods-center`, not beside it. `.block-goods-detail` is a
+    // two-column CSS grid (measured 420px + 660px) whose five panes each pin
+    // their own `grid-row`, so an inserted sibling is auto-placed into the
+    // 420px column of a new row after all of them — squeezing the chart to
+    // ~110px and pushing the panel below the page's last section. The centre
+    // pane is a plain 1080px block that starts exactly where we want to be.
     const center = doc.querySelector('.pane-goods-center');
-    if (center !== null) return { anchor: center, position: 'before' };
+    if (center !== null) return { anchor: center, position: 'prepend' };
     const detail = doc.querySelector('.block-goods-detail');
-    if (detail !== null) return { anchor: detail, position: 'append' };
+    if (detail !== null) return { anchor: detail, position: 'append', hostStyle: FULL_WIDTH };
     const sales = doc.getElementById('SalesArea');
-    if (sales !== null) return { anchor: sales, position: 'append' };
+    if (sales !== null) return { anchor: sales, position: 'append', hostStyle: FULL_WIDTH };
     const name = doc.querySelector('h1.block-goods-name--text');
-    if (name !== null) return { anchor: name, position: 'after' };
+    if (name !== null) return { anchor: name, position: 'after', hostStyle: FULL_WIDTH };
     return null;
   },
 };

@@ -9,7 +9,14 @@
 export interface MountPoint {
   anchor: Element;
   /** Where the panel goes relative to `anchor`. */
-  position: 'before' | 'after' | 'append';
+  position: 'before' | 'after' | 'append' | 'prepend';
+  /**
+   * Inline declarations the host element needs to occupy the width the panel
+   * was designed for at this mount point, as CSS property names. Only the
+   * store adapter knows the page's own layout, so only it can say this; the
+   * panel's own styling stays inside the Shadow DOM.
+   */
+  hostStyle?: Readonly<Record<string, string>>;
 }
 
 export interface StorePageAdapter {

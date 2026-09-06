@@ -82,11 +82,19 @@ function niceTicks(lo: number, hi: number, count: number): number[] {
   return ticks;
 }
 
+/** A `YYYY-MM-DD` at the axis font size, in viewBox units (measured: 56). */
+const X_LABEL_WIDTH = 58;
+/** Clear space required between two x-axis dates, in the same units. */
+const X_LABEL_GAP = 12;
+
 export function buildStepChart(doc: Document, points: readonly PricePointV1[], presence: readonly PresencePointV1[], options: ChartOptions): SVGSVGElement {
   const { width, height, start, end, currency } = options;
   // The price in effect at the last observation is drawn up to a short tail
-  // past `end`, otherwise a change at the final observation would be invisible.
-  const tail = Math.max(86_400_000, (end - start) * 0.04);
+  // past `end`, otherwise a change at the final observation would be
+  // invisible. The tail is a drawing artifact, so it must stay a small
+  // fraction of the width: a one-day floor consumed half the plot of a
+  // two-observation window and dragged the end label into the start label.
+  const tail = Math.max(3_600_000, (end - start) * 0.04);
   const drawEnd = end + tail;
   const intervals = pricedIntervals(points, presence, drawEnd);
   const svg = el(doc, 'svg', { viewBox: `0 0 ${width} ${height}`, width: '100%', role: 'img', class: 'eph-chart' });
@@ -135,11 +143,25 @@ export function buildStepChart(doc: Document, points: readonly PricePointV1[], p
     label.textContent = formatMoney(v, currency);
     svg.appendChild(label);
   }
-  // x labels: first, middle, last.
+  // x labels: first, middle, last -- but only those that stay readable. A
+  // window a day or two wide puts all three within a few dozen units of each
+  // other and repeats the same date, which rendered as one smear of glyphs.
+  // The last change point sits well left of the right edge in that case, so
+  // the labels have to be measured where they actually land, not spaced by
+  // their anchor positions.
+  let lastRight = -Infinity;
+  let lastText = '';
   for (const t of [start, start + (end - start) / 2, end]) {
-    const label = el(doc, 'text', { x: x(t), y: height - 6, 'text-anchor': t === start ? 'start' : t === end ? 'end' : 'middle', class: 'eph-axis' });
-    label.textContent = formatDate(t);
+    const text = formatDate(t);
+    const anchor = t === start ? 'start' : t === end ? 'end' : 'middle';
+    const at = x(t);
+    const left = anchor === 'start' ? at : anchor === 'end' ? at - X_LABEL_WIDTH : at - X_LABEL_WIDTH / 2;
+    if (text === lastText || left < lastRight + X_LABEL_GAP) continue;
+    const label = el(doc, 'text', { x: at, y: height - 6, 'text-anchor': anchor, class: 'eph-axis' });
+    label.textContent = text;
     svg.appendChild(label);
+    lastRight = left + X_LABEL_WIDTH;
+    lastText = text;
   }
 
   // Range band (min..max) and step line (min).

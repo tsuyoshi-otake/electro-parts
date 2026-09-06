@@ -83,6 +83,19 @@ describe('history panel controller', () => {
     expect(document.getElementById(HOST_ELEMENT_ID)).toBeNull();
   });
 
+  it('applies the layout declarations the adapter attaches to the mount point', async () => {
+    page();
+    const buy = document.getElementById('buy')!;
+    const adapter = {
+      ...testAdapter,
+      findMountPoint: () => ({ anchor: buy, position: 'after' as const, hostStyle: { 'grid-column': '1 / -1' } }),
+    };
+    await mount(hostWithData(), { adapters: [adapter] });
+    // The page's own layout is the adapter's business; the panel only asks to
+    // be given the width it was designed for.
+    expect(document.getElementById(HOST_ELEMENT_ID)?.style.getPropertyValue('grid-column')).toBe('1 / -1');
+  });
+
   it('shows the stale badge and note when only the cache is available', async () => {
     page();
     const host = hostWithData();

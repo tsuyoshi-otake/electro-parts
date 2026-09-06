@@ -59,6 +59,20 @@ describe('step chart intervals', () => {
     expect(svg.querySelector('title')?.textContent).toContain('変更点 2 件');
   });
 
+  it('prints one date per x label, and drops the ones that would collide', () => {
+    const axis = (start: number, end: number) =>
+      [...buildStepChart(document, [[start, 'exact', 100, 100]], [[start, 1]], { width: 640, height: 200, start, end, currency: 'JPY' })
+        .querySelectorAll('text.eph-axis')]
+        .map((n) => n.textContent)
+        .filter((v) => v !== null && /^\d{4}-/.test(v));
+    // A wide window has room for first / middle / last.
+    expect(axis(t(0), t(90))).toHaveLength(3);
+    // Two days: the midpoint reads as the same date as the start, so it goes.
+    expect(axis(t(0), t(1))).toEqual(['2027-01-15', '2027-01-16']);
+    // A single observation has one date to state, not three.
+    expect(axis(t(0), t(0))).toEqual(['2027-01-15']);
+  });
+
   it('renders an explicit empty state when nothing priced was listed', () => {
     const svg = buildStepChart(document, [[t(0), 'unavailable', null, null]], [[t(0), 1]], { width: 640, height: 200, start: t(0), end: t(8), currency: 'JPY' });
     expect(svg.textContent).toContain('価格の記録なし');

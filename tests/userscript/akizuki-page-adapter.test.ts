@@ -27,9 +27,12 @@ describe('Akizuki page adapter', () => {
     loadHtml(document, html);
     expect(akizukiPageAdapter.extractPageKey(document, AT('/catalog/g/g109951/'))).toBe('109951');
     const mount = akizukiPageAdapter.findMountPoint(document);
-    // Full content width, so the chart is not squeezed into the buy column.
+    // Inside the centre pane, which is a plain full-width block. Placed as a
+    // sibling it would become an extra item of the detail grid: 420px wide
+    // and below the page's last section.
     expect(mount?.anchor.className).toContain('pane-goods-center');
-    expect(mount?.position).toBe('before');
+    expect(mount?.position).toBe('prepend');
+    expect(mount?.hostStyle).toBeUndefined();
   });
 
   it('refuses ambiguous identity (hidden input disagreeing with the canonical link)', () => {
@@ -50,7 +53,8 @@ describe('Akizuki page adapter', () => {
   it('degrades through the container chain down to the product name heading', () => {
     loadHtml(document, html);
     document.querySelector('.pane-goods-center')?.remove();
-    expect(akizukiPageAdapter.findMountPoint(document)).toMatchObject({ position: 'append' });
+    // The fallbacks land inside the detail grid, so they must claim every column.
+    expect(akizukiPageAdapter.findMountPoint(document)).toMatchObject({ position: 'append', hostStyle: { 'grid-column': '1 / -1' } });
     expect(akizukiPageAdapter.findMountPoint(document)?.anchor.className).toContain('block-goods-detail');
 
     document.querySelector('.block-goods-detail')?.remove();
