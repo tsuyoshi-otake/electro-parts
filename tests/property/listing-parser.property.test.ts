@@ -73,7 +73,12 @@ describe('listing parser round trip (property)', () => {
           if (src.priceYen === null) {
             expect(item.prices).toEqual([]);
           } else {
-            expect(item.prices).toEqual([{ amountYen: src.priceYen, display: `￥${src.priceYen.toLocaleString('en-US')}(税込)`, quantityUnit: src.unit, taxIncluded: true }]);
+            // The spec table prints every price as "￥N～"; the amount is the
+            // same, and the 〜 survives only in the display text.
+            const tilde = p.layout === 'table' ? '～' : '';
+            expect(item.prices).toEqual([
+              { amountYen: src.priceYen, display: `￥${src.priceYen.toLocaleString('en-US')}${tilde}(税込)`, quantityUnit: src.unit, taxIncluded: true },
+            ]);
           }
           expect(item.stock.status).toBe(src.statuses.join(' / '));
           if (p.layout === 'table') {

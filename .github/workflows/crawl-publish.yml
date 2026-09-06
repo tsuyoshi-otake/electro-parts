@@ -34,6 +34,10 @@ on:
         description: 'Retention (days) of the raw snapshot artifact'
         type: number
         default: 90
+      reimport_snapshot_from_run:
+        description: 'Run id whose raw snapshot to re-import instead of crawling (pipeline-only fixes)'
+        type: string
+        default: ''
 
 permissions: {}
 
@@ -52,6 +56,8 @@ jobs:
     timeout-minutes: 180
     permissions:
       contents: read
+      # Only to read a previous run's snapshot artifact when re-importing.
+      actions: read
     outputs:
       publishable: ${{ steps.report.outputs.publishable }}
       outcome: ${{ steps.report.outputs.outcome }}
@@ -71,15 +77,33 @@ jobs:
       - name: Install dependencies (lockfile only)
         run: npm ci
 
+      # A fix in the import/generate stages must not cost another full crawl of
+      # the store (~2,700 requests). Re-importing the snapshot a previous run
+      # already collected reproduces everything downstream of `collect`.
+      - name: Download the snapshot to re-import
+        id: reimport
+        if: inputs.reimport_snapshot_from_run != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.reimport_snapshot_from_run }}
+        run: |
+          mkdir -p snapshots
+          gh run download "$RUN_ID" --repo "$GITHUB_REPOSITORY" --name "snapshot-akizuki-$RUN_ID" --dir snapshots
+          file=$(find snapshots -type f -name '*.json*' | sort | tail -1)
+          if [ -z "$file" ]; then echo "::error::no snapshot file in run $RUN_ID"; exit 1; fi
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+          echo "::notice title=Re-importing::$file (from run $RUN_ID; no crawl)"
+
       - name: Run pipeline
         id: pipeline
         env:
           BOOTSTRAP_FLAG: ${{ inputs.bootstrap == true && '--bootstrap' || '' }}
+          SNAPSHOT_FLAG: ${{ steps.reimport.outputs.file && format('--snapshot {0}', steps.reimport.outputs.file) || '' }}
         run: |
           set +e
           # tee so the job log shows the run even when the artifact is not read.
           # shellcheck disable=SC2086
-          node --import tsx src/cli/main.ts pipeline --config "$STORE_CONFIG" $BOOTSTRAP_FLAG 2>&1 | tee pipeline-stdout.md
+          node --import tsx src/cli/main.ts pipeline --config "$STORE_CONFIG" $BOOTSTRAP_FLAG $SNAPSHOT_FLAG 2>&1 | tee pipeline-stdout.md
           code=${PIPESTATUS[0]}
           set -e
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"

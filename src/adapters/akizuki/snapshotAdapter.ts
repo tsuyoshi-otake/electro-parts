@@ -194,7 +194,11 @@ export function validateAkizukiRaw(raw: unknown): ValidationResult {
         }
         if (amount === 0) c.warn('item.price_zero', 'amountYen is 0', code);
         if (typeof p['quantityUnit'] !== 'string' || p['quantityUnit'] === '') c.error('item.price_unit', 'quantityUnit missing', code);
-        if (p['taxIncluded'] !== true) c.error('item.price_tax', 'price is not marked tax included', code);
+        // Only a price that has an amount can carry a tax treatment. A cell
+        // reading 販売終了 has `amountYen: null`, and `normalizeAkizukiItem`
+        // turns it into an `unavailable` quote without consulting this flag,
+        // so demanding 税込 there rejects a snapshot over a field nothing reads.
+        if (amount !== null && p['taxIncluded'] !== true) c.error('item.price_tax', 'price is not marked tax included', code);
       }
     }
 

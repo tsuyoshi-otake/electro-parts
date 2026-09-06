@@ -78,7 +78,12 @@ export function renderListingItem(it: SyntheticListing): string {
 </dl>`;
 }
 
-/** One row of the spec-table layout: no cart, no purchasable quantity. */
+/**
+ * One row of the spec-table layout: no cart, no purchasable quantity, and a
+ * price always printed as "￥N～". The 〜 is the template's, not the
+ * product's: on `c/cantenna-` all 54 rows carry it while the product pages
+ * show a single price.
+ */
 export function renderTableRow(it: SyntheticListing): string {
   const name = escapeHtml(it.name);
   const statusDivs = it.statuses.map((s, i) => `<div class="block-cart-i--stock-info-${['green', 'orange', 'gray'][i % 3]}">${escapeHtml(s)}</div>`).join('\n');
@@ -89,7 +94,7 @@ export function renderTableRow(it: SyntheticListing): string {
 <div class="block-goods-list-l--price-qty">
 ${escapeHtml(it.unit)}
 </div>
-<div class="block-goods-list-l--price price js-enhanced-ecommerce-goods-price">${yen(it.priceYen)}<span class="tax">(税込)</span></div>
+<div class="block-goods-list-l--price price js-enhanced-ecommerce-goods-price">${yen(it.priceYen)}～<span class="tax">(税込)</span></div>
 </div>`;
   return `<tr class="js-enhanced-ecommerce-item ">
 <td class="block-goods-list-l--goods-name-items">

@@ -205,7 +205,10 @@ describe('Akizuki crawl against a fake site', () => {
       expect(item.stock.availableQuantity).toBe(51);
       expect(item.sourceListings).toHaveLength(2);
       expect(item.duplicateOccurrences).toBe(1);
-      // Reading the same product in both layouts is not a disagreement.
+      // The table prints "￥N～" for the same price the card prints as "￥N".
+      // The kept reading is the card's, and the wording difference is not a
+      // disagreement — treating it as one warned about 221 real products.
+      expect(item.prices[0]!.display).toBe('￥110(税込)');
       expect(snapshot.validation.warnings).toEqual([]);
     }
   });

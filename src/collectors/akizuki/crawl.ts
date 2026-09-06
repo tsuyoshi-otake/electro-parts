@@ -156,12 +156,28 @@ async function crawlListing(ref: ListingRef, o: ListingCrawlOptions): Promise<Li
   return { record, occurrences, errors, warnings };
 }
 
+/**
+ * What a price means, without how the page happened to render it. The
+ * spec-table layout prints every price as "￥770～" where the card prints
+ * "￥770" — measured on `c/cantenna-`, all 54 rows carry the 〜 and the product
+ * pages show a single price, so it is the table template's wording, not a
+ * range. Comparing the display text would report all 221 such products as
+ * disagreeing every run; comparing what is actually recorded reports only the
+ * cases where the site really says two different things.
+ */
+function priceFacts(item: ListingItem): unknown {
+  return item.prices.map((p) => [p.amountYen, p.taxIncluded, p.quantityUnit]);
+}
+
 function sameListing(a: ListingItem, b: ListingItem): boolean {
   // `purchasable` is only comparable when both layouts reported it; the
   // spec-table layout has no cart affordance and reports null.
   const comparablePurchasable =
     a.stock.purchasable === null || b.stock.purchasable === null || a.stock.purchasable === b.stock.purchasable;
-  return comparablePurchasable && JSON.stringify([a.prices, a.stock.status]) === JSON.stringify([b.prices, b.stock.status]);
+  return (
+    comparablePurchasable &&
+    JSON.stringify([priceFacts(a), a.stock.status]) === JSON.stringify([priceFacts(b), b.stock.status])
+  );
 }
 
 /**

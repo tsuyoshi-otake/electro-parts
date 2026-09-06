@@ -25,6 +25,16 @@
 
 ## 特定スナップショットの取り込み直し
 
+### Actions で(クロールし直さない)
+
+取り込み以降の段階(validate / import / generate)を直したときは、**前の run が集めたスナップショットを再利用する**。クロールをやり直すと約 2,700 リクエストを相手サイトに無駄に投げることになる。
+
+- Actions → "Crawl and publish" → Run workflow → `reimport_snapshot_from_run` に元の run id を入れる。
+- その run の `snapshot-akizuki-<run id>` 成果物を落として `--snapshot` で流すので、`collect` は走らない(数十秒で終わる)。
+- 成果物の保持は 90 日。それを過ぎた run のスナップショットは使えないので、通常のクロールをやり直す。
+
+### ローカルで
+
 ```bash
 node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapshot snapshots/akizuki-<timestamp>.json
 ```

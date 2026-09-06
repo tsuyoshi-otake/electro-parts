@@ -175,7 +175,7 @@ npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.
 
 | ワークフロー | トリガー | 内容 |
 |---|---|---|
-| `crawl-publish.yml` | 毎月 1 日 20:17 UTC(2 日 05:17 JST)、`workflow_dispatch`(`bootstrap`、`dry_run`、`snapshot_retention_days`) | パイプライン → Actions summary にレポート → `site/` にユーザースクリプトと index を追加 → 検証 → 成果物アップロード(スナップショット 90 日、レポートと状態 90 日)→ `publishable` のときだけ Pages へデプロイ → 公開後にマニフェストの `datasetVersion` を確認 |
+| `crawl-publish.yml` | 毎月 1 日 20:17 UTC(2 日 05:17 JST)、`workflow_dispatch`(`bootstrap`、`dry_run`、`snapshot_retention_days`、`reimport_snapshot_from_run` = 過去 run のスナップショットを再取り込みしてクロールを省く) | パイプライン → Actions summary にレポート → `site/` にユーザースクリプトと index を追加 → 検証 → 成果物アップロード(スナップショット 90 日、レポートと状態 90 日)→ `publishable` のときだけ Pages へデプロイ → 公開後にマニフェストの `datasetVersion` を確認 |
 | `ci.yml` | push(main)、pull_request、手動 | `npm audit`、typecheck、vitest(全プロジェクト)、ユーザースクリプトのビルドと禁止 API・CDN 参照の検査、Playwright E2E、Stryker(PR 以外) |
 
 - 公開は `pages-publish` の concurrency グループで**単一ライター**。実行中の公開はキャンセルされず、後続はキューに入ります。

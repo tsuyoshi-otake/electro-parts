@@ -227,6 +227,22 @@ describe('Akizuki raw validation', () => {
     expect(r.errors.map((e) => e.code)).toContain(code);
   });
 
+  it('accepts a discontinued row whose price cell states no amount', () => {
+    // Akizuki prints 販売終了 where the price would be. There is no amount, so
+    // there is no tax treatment to state either, and `normalizeAkizukiItem`
+    // turns it into an `unavailable` quote. Rejecting it here quarantined a
+    // whole 12,772-item snapshot over three such rows.
+    const ended = item({
+      prices: [{ amountYen: null, display: '販売終了', quantityUnit: '1パック30枚入', taxIncluded: false }],
+      stock: { status: '販売終了', availableQuantity: null, quantityUnit: null, quantityDisplay: null, purchasable: false },
+    });
+    const r = validateAkizukiRaw(snapshot({ items: [ended] }));
+    expect(r.errors).toEqual([]);
+    const product = normalizeAkizukiItem(ended);
+    expect(product.offers[0]!.priceQuotes[0]).toMatchObject({ state: 'unavailable', minAmountMinor: null, taxTreatment: 'tax_included' });
+    expect(product.offers[0]!.availability.state).toBe('discontinued');
+  });
+
   it('rejects duplicate sales codes', () => {
     const r = validateAkizukiRaw(snapshot({ items: [item(), item()] }));
     expect(r.errors.map((e) => e.code)).toContain('item.duplicate');
