@@ -1,0 +1,31 @@
+# --- raw catalog snapshots stay local (8-100 MB each); Akizuki test fixtures are gzipped under tests/fixtures ---
+/*.json
+!/package.json
+!/package-lock.json
+!/tsconfig*.json
+!/vitest.config.json
+!/stryker.config.json
+
+# --- build & runtime output ---
+node_modules/
+dist/
+coverage/
+reports/
+state/
+snapshots/
+.stryker-tmp/
+test-results/
+playwright-report/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.tsbuildinfo
+
+# --- local tooling ---
+.claude/worktrees/
+.claude/settings.local.json
+desktop.ini
+.DS_Store
+.env
+.env.*
+!.env.example

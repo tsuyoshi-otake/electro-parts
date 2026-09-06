@@ -1,0 +1,47 @@
+{
+  "name": "electro-parts-price-history",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Price / stock / listing history tracker for Japanese electronic-parts retailers. Phase 1: Akizuki Denshi.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p userscript/tsconfig.json --noEmit",
+    "test": "vitest run --exclude \"tests/e2e/**\"",
+    "test:unit": "vitest run tests/unit tests/db tests/contract tests/userscript",
+    "test:property": "vitest run tests/property",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "playwright test -c tests/e2e/playwright.config.ts",
+    "test:mutation": "stryker run",
+    "bench": "node --import tsx tests/bench/run-bench.ts",
+    "build:userscript": "node --import tsx scripts/build-userscript.ts",
+    "crawl": "node --import tsx src/cli/main.ts crawl",
+    "import": "node --import tsx src/cli/main.ts import",
+    "generate": "node --import tsx src/cli/main.ts generate",
+    "pipeline": "node --import tsx src/cli/main.ts pipeline",
+    "verify": "node --import tsx src/cli/main.ts verify",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "@stryker-mutator/core": "10.0.0",
+    "@stryker-mutator/vitest-runner": "10.0.0",
+    "@types/jsdom": "30.0.0",
+    "@types/node": "26.4.0",
+    "esbuild": "0.28.2",
+    "fast-check": "4.9.0",
+    "jsdom": "30.0.1",
+    "tsx": "4.23.13",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  },
+  "overrides": {
+    "qs": "6.16.0"
+  }
+}
