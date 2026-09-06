@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises';
+import { gunzipSync } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { readRawSnapshotFile, type RawSnapshotFile } from '../../src/core/snapshotFile.ts';
@@ -31,6 +33,21 @@ export function loadAkizukiNormalized(which: keyof typeof AKIZUKI_FIXTURES): Pro
   if (cached === undefined) {
     cached = loadAkizukiRaw(which).then((raw) => akizukiSnapshotAdapter.normalize(raw.json, raw.rawSha256));
     normalizedCache.set(p, cached);
+  }
+  return cached;
+}
+
+export const AKIZUKI_HTML_FIXTURES = ['rkit_p1', 'rkit_p3', 'rkit_p6', 'rsbcomp1', 'g109951'] as const;
+export type AkizukiHtmlFixture = (typeof AKIZUKI_HTML_FIXTURES)[number];
+
+const htmlCache = new Map<string, Promise<string>>();
+
+/** Sanitized copies of real Akizuki pages (scripts removed, tokens blanked), gzipped. */
+export function readHtmlFixture(name: AkizukiHtmlFixture): Promise<string> {
+  let cached = htmlCache.get(name);
+  if (cached === undefined) {
+    cached = readFile(path.join(FIXTURE_DIR, 'akizuki', 'html', `${name}.html.gz`)).then((buf) => gunzipSync(buf).toString('utf8'));
+    htmlCache.set(name, cached);
   }
   return cached;
 }
