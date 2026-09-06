@@ -14,3 +14,4 @@
 - **Playwright needs `npx playwright install chromium`** once per machine; in CI `--with-deps`.
 - **After test / bench runs, verify processes exited** (`Get-CimInstance Win32_Process` filtered on the command line). Long benches run for 30+ min; do not block on them.
 - **Full 9,000-product daily benchmark takes ~3 min (1 y), ~10 min (3 y), ~20 min (5 y) of import time.** Run it in the background and write results to a file outside the repo.
+- **Size a background benchmark’s `timeout` from the largest row.** The 5-year / 9,000-product row alone needs ~20 min of import time; a shared timeout killed the run (exit 124) after the 3-year row. Print each row to stderr as it completes so a kill does not lose finished work.

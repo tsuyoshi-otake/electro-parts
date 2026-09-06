@@ -15,7 +15,7 @@
 - チャートは `IntersectionObserver` で見えるまで描かない(遅延)。差し込み位置が遅れて現れるページに備え、`MutationObserver` は 10 秒で必ず切る。
 - どの段階の失敗もページに影響しない(`try` で囲み、ログだけ残す)。同じページに二重に差し込まない。
 - 通信は `GM_xmlhttpRequest` の `anonymous` で、宛先は `@connect` に列挙したデータホストのみ。ページの内容を送らない。
-- アクセシビリティ: チャートは `role="img"` と要約の `aria-label`、変更点の表(折りたたみ)、`prefers-reduced-motion` の尊重、色だけに頼らない状態表示。
+- アクセシビリティ: チャートは `role="img"` と要約の `aria-label`、変更点の表(折りたたみ)、アニメーションを一切使わない（`transition` / `@keyframes` なし。`prefers-reduced-motion` を見る必要がない）、色だけに頼らない状態表示。
 - 名前は汎用の「Electronics Price History」。店舗名はアダプターの `storeId` 経由でのみ現れる。
 
 ## 理由

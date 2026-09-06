@@ -37,7 +37,7 @@
 - Symptom: chart tail did not reach "now"; fixed by extending the last step to the manifest `generatedAt`.
 - Learning: Buffer → ArrayBuffer slicing bug when serving fixtures; see rules.
 
-## 2026-09-06 — Workflows, benchmark, mutation testing, docs (#1, commit pending)
+## 2026-09-06 — Workflows, benchmark, mutation testing, docs (#1, fe9ad82)
 
 - Symptom: first Stryker run scored 68.95 % (< 70 break) with 100 NoCoverage mutants.
 - Root cause: `vitest.related: true` only ran tests importing the mutated file directly; core is mostly exercised via adapters/DB/publisher.
@@ -45,3 +45,15 @@
 - Verification: second run 89.45 % (595 killed, 7 timeout, 61 survived, 10 no coverage of 704).
 - Benchmark (9,000 products, daily): 1 y import total 148.9 s, p95 460.7 ms, SQLite 14.73 MB, site 27.08 MB; 3 y import total 610.2 s, p95 740.5 ms, SQLite 35.39 MB, site 32.23 MB; 5 y row recorded in README.
 - Learning: heredocs are unusable for Japanese docs in this harness; ADRs / docs written via a Python script created with the Write tool.
+
+## 2026-09-06 — Phase 1 published: public repo, Pages, bootstrap run (#1, commit pending)
+
+- Work: pushed `main`, flipped the repository to public (explicitly authorised by the user, overriding the default private-only policy), enabled Pages with `build_type=workflow`, ran the bootstrap `Crawl and publish` dispatch.
+- Verification before publishing: full pipeline run locally with both recorded snapshots through the exact CLI the workflow uses — bootstrap (8,701 products, `datasetVersion a7669a9381e9102f`) then incremental (8,809 product files, `6aa44a3bf73859e3`, 168 primary price changes, 132 absent, 108 new). `summary` renders the stage table; `verify` exits 0. FT232RQ 109951 shows `1150 → 1200 (+50, +4.35 %)` and RE-280RA 106438 `250 → 280 (+30, +12 %)` in the published files; exactly one product (117275) carries the `suspicious_identity` caveat, so the metadata-change path reaches the contract.
+- CI on the pushed commit: typecheck + 204 tests + 3 E2E in 1m33s, mutation job 13m41s, both green.
+- Benchmark (9,000 products, daily): 5-year row 1,825 runs, import p50 413.3 ms / p95 719.9 ms / max 4508.0 ms, SQLite 53.86 MB, static payload 39.00 MB, largest product file 7.8 KB, 110,020 price change points, peak RSS 666.30 MB — inside every budget.
+- Symptom: the first full benchmark was killed by its `timeout` (exit 124) after the 3-year row, so the Markdown table was never printed.
+- Root cause: the wrapper timeout was sized for the 1/3-year rows; the 5-year row alone needs ~20 min of import time.
+- Fix: re-ran `--years 5` separately with a 5,400 s timeout; results pasted into the README between the `bench:` markers.
+- Learning: size a background benchmark's timeout from the largest row, and write each row to the log as it completes (the script already did, which is why nothing was lost).
+
