@@ -84,9 +84,11 @@ test('shows the FT232RQ kit history (1150 → 1200) on the saved product page wi
   await expect(page.locator('#electronics-price-history-root svg[role="img"]')).toBeVisible();
   await expect(page.locator('#electronics-price-history-root svg circle')).toHaveCount(2);
   await panel(page).screenshot({ path: path.resolve(process.cwd(), 'test-results', 'e2e', 'panel-109951.png') });
-  // Page content untouched, panel inside the sales area.
+  await page.locator('.block-goods-detail').screenshot({ path: path.resolve(process.cwd(), 'test-results', 'e2e', 'detail-109951.png') });
+  // Page content untouched, panel across the full content width of the detail block.
   await expect(page.locator('h1.block-goods-name--text')).toHaveText('[109951]FT232RQ USBシリアル変換モジュールキット');
-  expect(await page.locator('#SalesArea #electronics-price-history-root').count()).toBe(1);
+  expect(await page.locator('.block-goods-detail > #electronics-price-history-root').count()).toBe(1);
+  expect(await page.locator('#electronics-price-history-root + .pane-goods-center').count()).toBe(1);
   const requests = await page.evaluate(() => (window as unknown as { __gmRequests: string[] }).__gmRequests);
   expect(requests[0]).toContain(`${DATA_BASE}/data/v1/stores/akizuki/manifest.json`);
   expect(requests[1]).toMatch(/\/data\/v1\/stores\/akizuki\/products\/109951\.json\?v=[0-9a-f]{16}$/);

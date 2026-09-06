@@ -27,8 +27,9 @@ describe('Akizuki page adapter', () => {
     loadHtml(document, html);
     expect(akizukiPageAdapter.extractPageKey(document, AT('/catalog/g/g109951/'))).toBe('109951');
     const mount = akizukiPageAdapter.findMountPoint(document);
-    expect(mount?.anchor.id).toBe('SalesArea');
-    expect(mount?.position).toBe('append');
+    // Full content width, so the chart is not squeezed into the buy column.
+    expect(mount?.anchor.className).toContain('pane-goods-center');
+    expect(mount?.position).toBe('before');
   });
 
   it('refuses ambiguous identity (hidden input disagreeing with the canonical link)', () => {
@@ -46,13 +47,28 @@ describe('Akizuki page adapter', () => {
     expect(akizukiPageAdapter.extractPageKey(document, AT('/catalog/g/'))).toBeNull();
   });
 
-  it('falls back to the product name heading when the sales area is missing', () => {
+  it('degrades through the container chain down to the product name heading', () => {
     loadHtml(document, html);
-    document.getElementById('SalesArea')?.remove();
+    document.querySelector('.pane-goods-center')?.remove();
+    expect(akizukiPageAdapter.findMountPoint(document)).toMatchObject({ position: 'append' });
+    expect(akizukiPageAdapter.findMountPoint(document)?.anchor.className).toContain('block-goods-detail');
+
+    document.querySelector('.block-goods-detail')?.remove();
+    // The heading lives inside the detail block, so re-add the pieces the last
+    // two fallbacks look for.
+    const sales = document.createElement('div');
+    sales.id = 'SalesArea';
+    document.body.appendChild(sales);
+    const h1 = document.createElement('h1');
+    h1.className = 'block-goods-name--text';
+    document.body.appendChild(h1);
+    expect(akizukiPageAdapter.findMountPoint(document)).toMatchObject({ anchor: sales, position: 'append' });
+
+    sales.remove();
     const mount = akizukiPageAdapter.findMountPoint(document);
     expect(mount?.anchor.tagName).toBe('H1');
     expect(mount?.position).toBe('after');
-    document.querySelector('h1.block-goods-name--text')?.remove();
+    h1.remove();
     expect(akizukiPageAdapter.findMountPoint(document)).toBeNull();
   });
 });

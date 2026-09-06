@@ -44,6 +44,12 @@ export const akizukiPageAdapter: StorePageAdapter = {
   },
 
   findMountPoint(doc): MountPoint | null {
+    // Full content width, right below the gallery/buy columns: the chart needs
+    // the horizontal room, and the panel reads as its own section there.
+    const center = doc.querySelector('.pane-goods-center');
+    if (center !== null) return { anchor: center, position: 'before' };
+    const detail = doc.querySelector('.block-goods-detail');
+    if (detail !== null) return { anchor: detail, position: 'append' };
     const sales = doc.getElementById('SalesArea');
     if (sales !== null) return { anchor: sales, position: 'append' };
     const name = doc.querySelector('h1.block-goods-name--text');
