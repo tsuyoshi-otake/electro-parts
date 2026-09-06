@@ -16,5 +16,5 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["./**/*.ts", "../src/publisher/contract.ts", "../src/core/domain.ts", "../src/core/price.ts", "../src/core/stats.ts", "../tests/userscript/**/*.ts"]
+  "include": ["./**/*.ts", "../src/publisher/contract.ts", "../src/core/domain.ts", "../src/core/price.ts", "../src/core/stats.ts"]
 }
