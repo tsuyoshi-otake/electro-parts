@@ -47,3 +47,53 @@ export function computeSegmentStats(points: readonly ChangePoint<PricePoint>[]):
     changePointCount: points.length,
   };
 }
+
+export interface WindowStats {
+  minMinor: number;
+  maxMinor: number;
+}
+
+/**
+ * Lowest / highest price in effect during `[start, end]`, counting a price
+ * only while the segment was listed (`presence` true). A price point stays in
+ * effect until the next point; a presence gap suspends it. Returns `null`
+ * when nothing priced was listed inside the window.
+ */
+export function windowStats(
+  points: readonly ChangePoint<PricePoint>[],
+  presence: readonly ChangePoint<boolean>[],
+  start: number,
+  end: number,
+): WindowStats | null {
+  if (start > end) return null;
+  // Merge both change-point streams into one ascending walk.
+  const events: { t: number; kind: 'price' | 'presence'; index: number }[] = [];
+  points.forEach((p, index) => events.push({ t: p.t, kind: 'price', index }));
+  presence.forEach((p, index) => events.push({ t: p.t, kind: 'presence', index }));
+  events.sort((a, b) => a.t - b.t || (a.kind === 'presence' ? -1 : 1));
+
+  let price: PricePoint | undefined;
+  let present = false;
+  let min: number | null = null;
+  let max: number | null = null;
+  const fold = (from: number, to: number) => {
+    // Interval [from, to) — `to` exclusive, but a window boundary equal to a
+    // point time still sees the state in effect at that instant.
+    if (to < from || to < start || from > end) return;
+    if (!present || price === undefined || price.state === 'unavailable') return;
+    const lo = price.minAmountMinor as number;
+    const hi = price.maxAmountMinor as number;
+    if (min === null || lo < min) min = lo;
+    if (max === null || hi > max) max = hi;
+  };
+  let cursor = Number.NEGATIVE_INFINITY;
+  for (const e of events) {
+    if (e.t > end) break;
+    fold(cursor, e.t - 1);
+    cursor = e.t;
+    if (e.kind === 'price') price = (points[e.index] as ChangePoint<PricePoint>).state;
+    else present = (presence[e.index] as ChangePoint<boolean>).state;
+  }
+  fold(cursor, end);
+  return min === null || max === null ? null : { minMinor: min, maxMinor: max };
+}
