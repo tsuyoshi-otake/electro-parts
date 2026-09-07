@@ -1,0 +1,26 @@
+{
+  "storeId": "switch-science",
+  "collector": {
+    "userAgent": "electro-parts-price-history/0.1 (+https://github.com/tsuyoshi-otake/electro-parts; research)",
+    "baseUrl": "https://www.switch-science.com",
+    "collection": "all",
+    "pageLimit": 250,
+    "maxPages": 200,
+    "minIntervalMs": 1500,
+    "jitterMs": 750,
+    "maxAttempts": 4,
+    "timeoutMs": 30000,
+    "maxRequests": 300,
+    "maxSubSitemaps": 64,
+    "maxUncoveredProducts": 25
+  },
+  "sanity": {
+    "maxItemCountDropRatio": 0.1,
+    "maxMissingProductRatio": 0.1,
+    "maxPriceChangeRatio": 0.3,
+    "maxUnavailablePriceRatio": 0.02
+  },
+  "inventory": { "retentionDays": 400, "pointLimit": 730 },
+  "paths": { "snapshots": "snapshots", "work": "state/work", "site": "site", "reports": "reports" },
+  "previousStateUrl": "https://tsuyoshi-otake.github.io/electro-parts/state"
+}

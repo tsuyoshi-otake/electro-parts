@@ -9,7 +9,7 @@ import {
 import { sha256OfCanonicalJson } from '../../core/hash.ts';
 import { isSafeKey } from '../../core/identity.ts';
 import { normalizeUtcIso, parseUtcMs } from '../../core/time.ts';
-import type { ValidationIssue, ValidationResult } from '../../core/validation.ts';
+import { IssueCollector, type ValidationResult } from '../../core/validation.ts';
 import type { StoreSnapshotAdapter } from '../../stores/adapter.ts';
 import { normalizeAkizukiAvailability } from './availability.ts';
 import { AKIZUKI_CAPABILITIES, AKIZUKI_STORE_ID } from './capabilities.ts';
@@ -29,8 +29,6 @@ import { parseListingRef } from '../../collectors/akizuki/listings.ts';
  * code ("販売コード") is the product identity, the page key and the URL segment
  * (`/catalog/g/g<salesCode>/`). This mapping lives only here.
  */
-const MAX_ISSUES_PER_CODE = 20;
-
 /**
  * Raw schema 2 called them `genres` and only ever held `/catalog/r/` slugs;
  * schema 3 calls them `listings` and holds the sitemap-discovered set. Both
@@ -42,33 +40,6 @@ function rawListings(raw: Record<string, unknown>): unknown {
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
-}
-
-class IssueCollector {
-  readonly errors: ValidationIssue[] = [];
-  readonly warnings: ValidationIssue[] = [];
-  readonly metrics: Record<string, number> = {};
-  private readonly counts = new Map<string, number>();
-
-  error(code: string, message: string, subject?: string): void {
-    this.push(this.errors, code, message, subject);
-  }
-
-  warn(code: string, message: string, subject?: string): void {
-    this.push(this.warnings, code, message, subject);
-  }
-
-  private push(list: ValidationIssue[], code: string, message: string, subject?: string): void {
-    const n = (this.counts.get(code) ?? 0) + 1;
-    this.counts.set(code, n);
-    this.metrics[`issue.${code}`] = n;
-    if (n <= MAX_ISSUES_PER_CODE) list.push(subject === undefined ? { code, message } : { code, message, subject });
-    else if (n === MAX_ISSUES_PER_CODE + 1) list.push({ code, message: `further ${code} issues suppressed` });
-  }
-
-  result(): ValidationResult {
-    return { errors: this.errors, warnings: this.warnings, metrics: this.metrics };
-  }
 }
 
 export function validateAkizukiRaw(raw: unknown): ValidationResult {

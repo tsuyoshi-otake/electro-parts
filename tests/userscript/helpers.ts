@@ -151,8 +151,8 @@ export const testAdapter: StorePageAdapter = {
   },
 };
 
-export async function readFixtureHtml(name: string): Promise<string> {
-  const file = path.resolve('tests', 'fixtures', 'akizuki', 'html', `${name}.html.gz`);
+export async function readFixtureHtml(name: string, store = 'akizuki'): Promise<string> {
+  const file = path.resolve('tests', 'fixtures', store, 'html', `${name}.html.gz`);
   return gunzipSync(await readFile(file)).toString('utf8');
 }
 

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { readRawSnapshotFile, type RawSnapshotFile } from '../../src/core/snapshotFile.ts';
 import { akizukiSnapshotAdapter } from '../../src/adapters/akizuki/snapshotAdapter.ts';
+import { switchScienceSnapshotAdapter } from '../../src/adapters/switch-science/snapshotAdapter.ts';
 import type { NormalizedSnapshot } from '../../src/core/domain.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -33,6 +34,33 @@ export function loadAkizukiNormalized(which: keyof typeof AKIZUKI_FIXTURES): Pro
   if (cached === undefined) {
     cached = loadAkizukiRaw(which).then((raw) => akizukiSnapshotAdapter.normalize(raw.json, raw.rawSha256));
     normalizedCache.set(p, cached);
+  }
+  return cached;
+}
+
+/**
+ * A 60-product cut of the real 2026-09-07 Switch Science crawl. Every value is
+ * the store's own; only `items` was sampled (7 named products plus every 149th
+ * of the rest) and the counts that describe the cut — `extractedTotal`, the
+ * catalog totals, `deduplication`, `dataQuality` — were recomputed so the
+ * fixture stays internally consistent. See the fixture directory's README.
+ */
+export const SWITCH_SCIENCE_FIXTURE = path.join(FIXTURE_DIR, 'switch-science', 'switch-science-sample-2026-09-07T00-05-56-401Z.json.gz');
+
+export function loadSwitchScienceRaw(): Promise<RawSnapshotFile> {
+  let cached = rawCache.get(SWITCH_SCIENCE_FIXTURE);
+  if (cached === undefined) {
+    cached = readRawSnapshotFile(SWITCH_SCIENCE_FIXTURE);
+    rawCache.set(SWITCH_SCIENCE_FIXTURE, cached);
+  }
+  return cached;
+}
+
+export function loadSwitchScienceNormalized(): Promise<NormalizedSnapshot> {
+  let cached = normalizedCache.get(SWITCH_SCIENCE_FIXTURE);
+  if (cached === undefined) {
+    cached = loadSwitchScienceRaw().then((raw) => switchScienceSnapshotAdapter.normalize(raw.json, raw.rawSha256));
+    normalizedCache.set(SWITCH_SCIENCE_FIXTURE, cached);
   }
   return cached;
 }

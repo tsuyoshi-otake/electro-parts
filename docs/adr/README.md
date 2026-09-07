@@ -15,5 +15,7 @@
 | 0011 | [Shadow DOM、`innerHTML` 禁止、CDN なし、fail-open](0011-userscript-rendering-safety.md) | 採用 |
 | 0012 | [クロール対象はサイトマップから発見し、カバレッジの正解として使う](0012-sitemap-as-catalogue-authority.md) | 採用 |
 | 0013 | [観測頻度は 1 か月に 1 回](0013-monthly-observation-cadence.md) | 採用 |
+| 0014 | [Switch Science は HTML ではなく Shopify のカタログ JSON から読む](0014-shopify-catalog-api-over-html.md) | 採用 |
+| 0015 | [Switch Science の商品同一性は Shopify の handle、商品 ID と SKU はエイリアス](0015-shopify-handle-as-identity.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。

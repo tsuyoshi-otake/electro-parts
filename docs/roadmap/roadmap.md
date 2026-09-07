@@ -1,6 +1,6 @@
 # ロードマップ
 
-Phase 1(秋月電子通商)が完了した状態からの拡張計画。**Phase 2 / 3 は未実装**で、ここに書くのは「共通コアを変えずに追加できること」と「追加時に決めるべきこと」の整理です。
+秋月電子通商とスイッチサイエンスが**実装済み**、aitendo が**未実装**です。ここに書くのは「共通コアを変えずに追加できること」と「追加時に決めるべきこと」の整理です。
 
 ## 拡張点(すでに用意されているもの)
 
@@ -9,13 +9,13 @@ Phase 1(秋月電子通商)が完了した状態からの拡張計画。**Phase 
 | Collector | `src/collectors/<store>/` | 店舗ごとの取得(HTML、JSON API)。`RawSnapshot` を返す。`politeFetcher` は再利用 |
 | Store Snapshot Adapter | `src/adapters/<store>/snapshotAdapter.ts` | `RawSnapshot` → 共通 `NormalizedSnapshot`。`StoreCapabilities` の宣言 |
 | Config | `config/<store>.json` | 収集パラメータ、健全性しきい値、`previousStateUrl` |
-| Workflow | `.github/workflows/crawl-publish.yml` | 店舗ごとの job または matrix。Pages のデプロイは 1 つの job にまとめる(単一ライター) |
+| Workflow | `.github/workflows/crawl-publish.yml` | `env.STORES` に店舗 ID を足し、スナップショット成果物の upload step を 1 つ足すだけ。店舗は 1 つの job の中で**直列**に回る(共有する SQLite と `state/` を並行に書けないため) |
 | Userscript adapter | `userscript/adapters/<store>.ts` | `StorePageAdapter`(`matches`、`pageKey`、`mountPoint`、`storeId`)。`@match` の追加 |
 | 静的契約 | `data/v1/stores/<store>/` | 変更不要。`manifest.json` の `capabilities` と `caveats` で店舗の性質を伝える |
 
 共通コア(`src/core`、`src/db`、`src/publisher`、`src/pipeline`、`userscript/core`、`userscript/ui`)に店舗名を書かないことを CI が検査します。
 
-## Phase 2: aitendo
+## aitendo(未実装)
 
 - 取得: 一覧ページはサーバー描画。ページ構造は秋月と異なるので専用パーサー。`external_product_id` は商品コード。
 - ドメインへの写像で決めること:
@@ -24,16 +24,17 @@ Phase 1(秋月電子通商)が完了した状態からの拡張計画。**Phase 
   - 税込 / 税抜表示の確認 → `taxTreatment`。
 - 契約・DB・UI の変更: なし(想定)。
 
-## Phase 3: スイッチサイエンス
+## スイッチサイエンス(実装済み)
 
-- 取得: Shopify。`/products.json?limit=250&page=N` の JSON API が使えれば HTML パーサーは不要(利用規約と robots を確認してから)。
-- ドメインへの写像で決めること:
-  - `external_product_id` = Shopify product ID、`pageKey` = handle。**両者が別**になる最初の店舗。`manifest.productPathTemplate` は `pageKey` を使うので静的側は変更不要。
-  - バリアントごとの価格 → `Offer(kind: 'variant')` を複数。集約表示は `range` 状態の `aggregate` オファー。型は Phase 1 で用意済みで合成データのテストがある。
-  - 在庫数は非公開 → `quantity: null`、`quantitySemantics: 'not_displayed'`。
-- ユーザースクリプト: 商品ページ URL `/products/<handle>` から `pageKey` を取る。Shopify テーマは非同期描画が多いので `MutationObserver` の待ちが効く。
+共通コア・DB・静的契約はどれも変えずに入りました。計画と食い違った点を記録として残します。
 
-## 店舗横断の商品対応付け(Phase 4 以降、設計方針だけ)
+- 取得: Shopify のカタログ JSON `/collections/all/products.json?limit=250&page=N`(ADR-0014)。実測 10,382 商品をカタログ 42 ページ + サイトマップ 12 リクエスト = 1 回あたり約 54 リクエストで取り切る。HTML パーサーは不要になった。
+- **同一性は handle**(ADR-0015)。計画は `external_product_id` = 数値 product ID、`pageKey` = handle で「両者が別になる最初の店舗」としていたが、実際は両方 handle にした。ユーザースクリプトが URL から得られるのは handle だけで、数値 ID を選ぶと商品ページのマークアップを読むことになる — ADR-0014 で捨てた依存を、同一性の側から呼び戻すことになる。数値 ID と SKU はエイリアスとして記録する。
+- 在庫数は `quantitySemantics: 'not_displayed'` ではなく **`'not_exposed'`**。一括カタログ API が返すのは `available` の真偽値だけで、数は「表示されていない」のではなく最初から無い。パネルは在庫数の行そのものを出さない。
+- バリアント: 現在は全商品が 1 variant だが、オファー ID は `__default__` ではなく **variant ID** にした。2 つ目の variant が付いた日に唯一のオファーが消えて履歴が振り出しに戻るのを避けるため。集約 `range` オファーは未使用(型と DB には残っている)。
+- ユーザースクリプト: `MutationObserver` の待ちは要らなかった。商品ページはサーバー描画で、canonical link も差し込み先も初回 HTML にある。`/collections/<コレクション>/products/<handle>` も同じ商品として扱い、canonical link とパスが食い違う画面は商品ページとして扱わない。
+
+## 店舗横断の商品対応付け(将来、設計方針だけ)
 
 自動名寄せはしない(ADR-0001)。やるなら:
 

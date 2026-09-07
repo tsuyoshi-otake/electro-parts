@@ -1,12 +1,13 @@
 import { akizukiSnapshotAdapter } from '../adapters/akizuki/snapshotAdapter.ts';
+import { switchScienceSnapshotAdapter } from '../adapters/switch-science/snapshotAdapter.ts';
 import type { StoreId } from '../core/domain.ts';
 import type { StoreSnapshotAdapter } from './adapter.ts';
 
 /**
- * The only place that enumerates concrete stores. Phase 1 registers Akizuki
- * alone; Phase 2/3 add one entry each without touching the core.
+ * The only place that enumerates concrete stores. Adding a store is one entry
+ * here and one in `collectorRegistry.ts`; nothing in the core changes.
  */
-const ADAPTERS: readonly StoreSnapshotAdapter[] = [akizukiSnapshotAdapter];
+const ADAPTERS: readonly StoreSnapshotAdapter[] = [akizukiSnapshotAdapter, switchScienceSnapshotAdapter];
 
 export function listStoreIds(): StoreId[] {
   return ADAPTERS.map((a) => a.storeId);

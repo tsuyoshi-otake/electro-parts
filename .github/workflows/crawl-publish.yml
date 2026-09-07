@@ -7,23 +7,35 @@
 #   the pipeline. When it cannot be obtained the run fails instead of
 #   silently resetting the history. `bootstrap=true` is the only way to start
 #   from nothing and is refused once a state exists.
-# - Deployment happens only when the report says `publishable`, and always as
-#   one Pages artifact (data + state + userscript), so readers never see a
-#   half-written dataset.
+# - Every store shares one history and one `state/` directory, so the stores
+#   run one after another: the first reads the published state, each later one
+#   continues from what the previous store just finalized. Running them in
+#   parallel would make each finalize discard the other's run.
+# - The deployment replaces the whole site, so a store that produced nothing
+#   this run would be removed from Pages. Any store the history knows but the
+#   site is missing is republished from that history before the gate, and the
+#   gate refuses to deploy a site that is still missing one.
+# - Deployment happens only when the site is complete, and always as one Pages
+#   artifact (data + state + userscript), so readers never see a half-written
+#   dataset.
 # - Exit codes: 0 published/unchanged, 3 quarantined (still publishable, the
-#   rejection is recorded in the state), 1 failed (nothing deployed).
+#   rejection is recorded in the state), 1 failed (that store observed nothing).
 name: Crawl and publish
 
 on:
   schedule:
-    # Monthly, on the 2nd at 05:17 JST (the 1st at 20:17 UTC). Akizuki's
-    # prices move slowly, so a month is the sampling interval (ADR-0013).
-    # Off the hour to avoid the crowd.
+    # Monthly, on the 2nd at 05:17 JST (the 1st at 20:17 UTC). Retail prices
+    # for these parts move slowly, so a month is the sampling interval
+    # (ADR-0013). Off the hour to avoid the crowd.
     - cron: '17 20 1 * *'
   workflow_dispatch:
     inputs:
+      stores:
+        description: 'Stores to observe, space separated (empty = all). The rest keep their published dataset.'
+        type: string
+        default: ''
       bootstrap:
-        description: 'Start a NEW history (only allowed when no state is published yet)'
+        description: 'Start a NEW history (only allowed when no state is published yet; set `stores` to one store)'
         type: boolean
         default: false
       dry_run:
@@ -35,7 +47,7 @@ on:
         type: number
         default: 90
       reimport_snapshot_from_run:
-        description: 'Run id whose raw snapshot to re-import instead of crawling (pipeline-only fixes)'
+        description: 'Run id whose raw snapshot to re-import instead of crawling (set `stores` to one store)'
         type: string
         default: ''
       republish:
@@ -50,22 +62,25 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  STORE_CONFIG: config/akizuki.json
+  # Every store the site publishes, in run order. Adding one means adding
+  # `config/<store>.json`, a collector, an adapter, and the upload step that
+  # names its snapshot artifact.
+  STORES: akizuki switch-science
   NODE_OPTIONS: --max-old-space-size=2048
 
 jobs:
   crawl:
     name: Crawl, import and generate
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 240
     permissions:
       contents: read
       # Only to read a previous run's snapshot artifact when re-importing.
       actions: read
     outputs:
-      publishable: ${{ steps.report.outputs.publishable }}
-      outcome: ${{ steps.report.outputs.outcome }}
-      dataset_version: ${{ steps.report.outputs.dataset_version }}
+      publishable: ${{ steps.gate.outputs.publishable }}
+      dataset_versions: ${{ steps.gate.outputs.dataset_versions }}
+      failed_stores: ${{ steps.pipeline.outputs.failed_stores }}
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -82,95 +97,195 @@ jobs:
         run: npm ci
 
       # A fix in the import/generate stages must not cost another full crawl of
-      # the store (~2,700 requests). Re-importing the snapshot a previous run
-      # already collected reproduces everything downstream of `collect`.
-      # `republish` goes further and skips the import too: use it when only the
-      # site changed (userscript bundle, landing page), so the deployment does
-      # not fabricate an observation.
+      # a store (Akizuki alone is ~2,700 requests). Re-importing the snapshot a
+      # previous run already collected reproduces everything downstream of
+      # `collect`. `republish` goes further and skips the import too: use it
+      # when only the site changed (userscript bundle, landing page), so the
+      # deployment does not fabricate an observation.
       - name: Download the snapshot to re-import
         id: reimport
         if: inputs.reimport_snapshot_from_run != '' && inputs.republish != true
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ inputs.reimport_snapshot_from_run }}
+          OBSERVE: ${{ inputs.stores }}
         run: |
+          set -euo pipefail
+          case "${OBSERVE:-}" in
+            '' | *' '*) echo "::error::set 'stores' to exactly one store when re-importing a snapshot"; exit 1 ;;
+          esac
           mkdir -p snapshots
-          gh run download "$RUN_ID" --repo "$GITHUB_REPOSITORY" --name "snapshot-akizuki-$RUN_ID" --dir snapshots
-          file=$(find snapshots -type f -name '*.json*' | sort | tail -1)
-          if [ -z "$file" ]; then echo "::error::no snapshot file in run $RUN_ID"; exit 1; fi
+          gh run download "$RUN_ID" --repo "$GITHUB_REPOSITORY" --name "snapshot-$OBSERVE-$RUN_ID" --dir snapshots
+          file=$(find snapshots -type f -name "$OBSERVE-*.json*" | sort | tail -1)
+          if [ -z "$file" ]; then echo "::error::no $OBSERVE snapshot in run $RUN_ID"; exit 1; fi
           echo "file=$file" >> "$GITHUB_OUTPUT"
           echo "::notice title=Re-importing::$file (from run $RUN_ID; no crawl)"
 
-      - name: Run pipeline
+      - name: Run the pipeline for every store
         id: pipeline
         env:
-          BOOTSTRAP_FLAG: ${{ inputs.bootstrap == true && '--bootstrap' || '' }}
-          REPUBLISH_FLAG: ${{ inputs.republish == true && '--republish' || '' }}
-          SNAPSHOT_FLAG: ${{ steps.reimport.outputs.file && format('--snapshot {0}', steps.reimport.outputs.file) || '' }}
+          OBSERVE: ${{ inputs.stores }}
+          BOOTSTRAP: ${{ inputs.bootstrap }}
+          REPUBLISH: ${{ inputs.republish }}
+          SNAPSHOT_FILE: ${{ steps.reimport.outputs.file }}
         run: |
-          set +e
-          # tee so the job log shows the run even when the artifact is not read.
-          # shellcheck disable=SC2086
-          node --import tsx src/cli/main.ts pipeline --config "$STORE_CONFIG" $BOOTSTRAP_FLAG $REPUBLISH_FLAG $SNAPSHOT_FLAG 2>&1 | tee pipeline-stdout.md
-          code=${PIPESTATUS[0]}
-          set -e
-          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
-          echo "pipeline exit code: $code"
-          # 1 = failed. Artifacts are uploaded first; the job fails in the last step.
+          set -uo pipefail
+          observe="${OBSERVE:-}"
+          if [ -z "$observe" ]; then observe="$STORES"; fi
+          if [ "${REPUBLISH:-false}" = "true" ]; then observe=""; fi
+          for store in $observe; do
+            case " $STORES " in
+              *" $store "*) ;;
+              *) echo "::error::unknown store '$store'; known stores: $STORES"; exit 1 ;;
+            esac
+          done
+          if [ "${BOOTSTRAP:-false}" = "true" ] && [ "$(echo $observe | wc -w)" != "1" ]; then
+            echo "::error::bootstrap starts one store's history; set 'stores' to exactly one store"
+            exit 1
+          fi
 
-      - name: Read report
-        id: report
+          failed=""
+          for store in $STORES; do
+            config="config/$store.json"
+            if [ ! -f "$config" ]; then echo "::error::no config for store $store ($config)"; exit 1; fi
+            flags=""
+            case " $observe " in
+              *" $store "*)
+                if [ "${BOOTSTRAP:-false}" = "true" ]; then flags="$flags --bootstrap"; fi
+                if [ -n "${SNAPSHOT_FILE:-}" ]; then flags="$flags --snapshot $SNAPSHOT_FILE"; fi
+                ;;
+              # Not observed this run: regenerate its dataset from the published
+              # history so the deployment does not remove it from Pages.
+              *) flags="--republish" ;;
+            esac
+            # The stores share one history. The first run reads the published
+            # state named in its config; every later one continues from the
+            # state the previous store just finalized, or its run would be lost.
+            if [ -f site/state/state.json ]; then flags="$flags --previous-dir site/state"; fi
+
+            echo "::group::pipeline $store ${flags# }"
+            # tee so the job log shows the run even when the artifact is not read.
+            # shellcheck disable=SC2086
+            node --import tsx src/cli/main.ts pipeline --config "$config" $flags 2>&1 | tee "pipeline-$store.md"
+            code=${PIPESTATUS[0]}
+            echo "::endgroup::"
+            echo "$store: pipeline exit code $code"
+            if [ "$code" = "1" ]; then
+              failed="$failed $store"
+              echo "::error title=$store failed::The store observed nothing this run; see the job summary for the failing stage."
+              # Keep the failing report: the repair step below overwrites it.
+              cp "reports/pipeline-$store.json" "reports/pipeline-$store.failed-run.json" 2>/dev/null || true
+            fi
+          done
+          echo "failed_stores=${failed# }" >> "$GITHUB_OUTPUT"
+
+      # A store that failed before it wrote anything leaves no dataset in the
+      # site, and the deployment replaces the site wholesale — so publishing as
+      # it stands would delete that store from Pages. Its history is untouched,
+      # so republishing puts back exactly what is already published: same
+      # dataset version, no new observation, no change to the run count.
+      - name: Restore stores the site is missing
+        if: always() && hashFiles('site/state/state.json') != ''
         run: |
-          report=reports/pipeline-akizuki.json
-          if [ ! -f "$report" ]; then echo "::error::pipeline report missing"; exit 1; fi
-          {
-            echo "publishable=$(jq -r '.publishable' "$report")"
-            echo "outcome=$(jq -r '.outcome' "$report")"
-            echo "dataset_version=$(jq -r '.datasetVersion // ""' "$report")"
-          } >> "$GITHUB_OUTPUT"
-          node --import tsx src/cli/main.ts summary --report "$report" --append-to "$GITHUB_STEP_SUMMARY"
-          case "$(jq -r '.outcome' "$report")" in
-            quarantined) echo "::warning title=Snapshot quarantined::The crawl was rejected by the sanity checks; history unchanged. See the job summary." ;;
-            failed) echo "::error title=Pipeline failed::See the job summary for the failing stage." ;;
-          esac
+          set -euo pipefail
+          for store in $(jq -r '.stores | to_entries[] | select(.value.runCount > 0) | .key' site/state/state.json); do
+            if [ -f "site/data/v1/stores/$store/manifest.json" ]; then continue; fi
+            echo "::warning title=$store restored::Republishing its dataset from the published history."
+            node --import tsx src/cli/main.ts pipeline --config "config/$store.json" --republish --previous-dir site/state 2>&1 | tee -a "pipeline-$store.md"
+          done
+
+      - name: Job summary
+        if: always()
+        run: |
+          set -euo pipefail
+          for report in reports/pipeline-*.json; do
+            [ -f "$report" ] || continue
+            node --import tsx src/cli/main.ts summary --report "$report" --append-to "$GITHUB_STEP_SUMMARY"
+            if [ "$(jq -r '.outcome' "$report")" = "quarantined" ]; then
+              echo "::warning title=Snapshot quarantined::$(jq -r '.storeId' "$report"): the crawl was rejected by the sanity checks; history unchanged."
+            fi
+          done
 
       - name: Build userscript and static pages into site/
-        if: steps.report.outputs.publishable == 'true'
+        if: hashFiles('site/state/state.json') != ''
         run: |
           node --import tsx scripts/build-userscript.ts --out site
           cp -R public/. site/
           touch site/.nojekyll
+
+      # Fail-closed gate: the site is deployable only when every store the
+      # history knows about is in it, and every dataset in it verifies against
+      # the published contract.
+      - name: Check the site is complete
+        id: gate
+        if: always()
+        run: |
+          set -uo pipefail
+          if [ ! -f site/state/state.json ]; then
+            echo "::warning::no finalized state was produced; nothing to deploy"
+            echo "publishable=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          ok=true
+          for store in $(jq -r '.stores | to_entries[] | select(.value.runCount > 0) | .key' site/state/state.json); do
+            if [ ! -f "config/$store.json" ]; then
+              echo "::error::the published history contains store '$store' but the repository has no config/$store.json"
+              ok=false
+              continue
+            fi
+            if [ ! -f "site/data/v1/stores/$store/manifest.json" ]; then
+              echo "::error::store '$store' has runs in the state but no dataset in site/; refusing to deploy a site that would remove it"
+              ok=false
+              continue
+            fi
+            if ! node --import tsx src/cli/main.ts verify --config "config/$store.json" --site site; then
+              echo "::error::store '$store' failed dataset verification"
+              ok=false
+            fi
+          done
+          versions=$(jq -c -n '[inputs | {(.storeId): .datasetVersion}] | add' site/data/v1/stores/*/manifest.json)
+          echo "publishable=$ok" >> "$GITHUB_OUTPUT"
+          echo "dataset_versions=$versions" >> "$GITHUB_OUTPUT"
           {
             echo "### Site"
             echo '```'
             du -sh site site/data site/state
             echo "files: $(find site -type f | wc -l)"
+            echo "datasets: $versions"
+            echo "publishable: $ok"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Verify site before upload
-        if: steps.report.outputs.publishable == 'true'
-        run: node --import tsx src/cli/main.ts verify --config "$STORE_CONFIG" --site site
-
-      - name: Upload raw snapshot
-        if: always() && hashFiles('snapshots/**') != ''
+      # One artifact per store: a snapshot is the input a re-import needs, and
+      # they are large enough that fetching one should not drag the other along.
+      - name: Upload raw snapshot (akizuki)
+        if: always() && hashFiles('snapshots/akizuki-*') != ''
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: snapshot-akizuki-${{ github.run_id }}
-          path: snapshots/
+          path: snapshots/akizuki-*
           # Longer than the crawl interval, so two consecutive snapshots can
           # always be compared when a run needs explaining (ADR-0013).
           retention-days: ${{ inputs.snapshot_retention_days || 90 }}
           if-no-files-found: ignore
 
-      - name: Upload report
+      - name: Upload raw snapshot (switch-science)
+        if: always() && hashFiles('snapshots/switch-science-*') != ''
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: snapshot-switch-science-${{ github.run_id }}
+          path: snapshots/switch-science-*
+          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
+          if-no-files-found: ignore
+
+      - name: Upload reports
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: report-akizuki-${{ github.run_id }}
+          name: reports-${{ github.run_id }}
           path: |
             reports/
-            pipeline-stdout.md
+            pipeline-*.md
           retention-days: 90
           if-no-files-found: ignore
 
@@ -184,20 +299,26 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload Pages artifact
-        if: steps.report.outputs.publishable == 'true'
+        if: steps.gate.outputs.publishable == 'true'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site/
           retention-days: 7
 
-      - name: Fail the job when the pipeline failed
-        if: steps.pipeline.outputs.exit_code == '1'
-        run: exit 1
+      # Last, so the artifacts of a failed store are always uploaded. The other
+      # stores were still published; this marks the run for a human to look at.
+      - name: Fail the job when a store failed
+        if: steps.pipeline.outputs.failed_stores != ''
+        run: |
+          echo "stores that observed nothing: ${{ steps.pipeline.outputs.failed_stores }}"
+          exit 1
 
   deploy:
     name: Deploy to GitHub Pages
     needs: crawl
-    if: needs.crawl.outputs.publishable == 'true' && inputs.dry_run != true
+    # `always()`: one store failing must not keep the stores that did run off
+    # Pages. The gate has already refused any site that is missing a store.
+    if: always() && needs.crawl.outputs.publishable == 'true' && inputs.dry_run != true
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -211,16 +332,23 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
 
-      - name: Verify the published manifest
+      - name: Verify the published manifests
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-          EXPECTED: ${{ needs.crawl.outputs.dataset_version }}
+          VERSIONS: ${{ needs.crawl.outputs.dataset_versions }}
         run: |
-          url="${PAGE_URL%/}/data/v1/stores/akizuki/manifest.json?v=$EXPECTED"
-          for i in 1 2 3 4 5 6; do
-            got=$(curl -fsSL --max-time 30 "$url" | jq -r '.datasetVersion' 2>/dev/null || true)
-            if [ "$got" = "$EXPECTED" ]; then echo "published datasetVersion $got"; exit 0; fi
-            echo "attempt $i: got '$got', expected '$EXPECTED'; waiting for the CDN"
-            sleep 20
+          set -uo pipefail
+          for store in $(echo "$VERSIONS" | jq -r 'keys[]'); do
+            expected=$(echo "$VERSIONS" | jq -r --arg s "$store" '.[$s]')
+            url="${PAGE_URL%/}/data/v1/stores/$store/manifest.json?v=$expected"
+            served=""
+            for i in 1 2 3 4 5 6; do
+              got=$(curl -fsSL --max-time 30 "$url" | jq -r '.datasetVersion' 2>/dev/null || true)
+              if [ "$got" = "$expected" ]; then served=yes; echo "$store: published datasetVersion $got"; break; fi
+              echo "$store attempt $i: got '$got', expected '$expected'; waiting for the CDN"
+              sleep 20
+            done
+            if [ -z "$served" ]; then
+              echo "::warning::Pages did not serve $store datasetVersion $expected within 2 minutes (CDN propagation?)"
+            fi
           done
-          echo "::warning::Pages did not serve datasetVersion $EXPECTED within 2 minutes (CDN propagation?)"

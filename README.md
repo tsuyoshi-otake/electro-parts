@@ -2,14 +2,14 @@
 
 日本の電子部品通販サイトの商品ページに、**観測した価格・在庫表示・掲載状況の履歴**を表示するプロジェクトです。
 
-- クローラーが 1 か月に 1 回、対象サイトのカタログ一覧ページを巡回して生スナップショットを保存し、
+- クローラーが 1 か月に 1 回、対象サイトのカタログを巡回して生スナップショットを保存し、
 - 店舗ごとの SQLite に**変化点だけ**を取り込み、
 - 静的 JSON(契約 v1)として GitHub Pages に公開し、
 - Tampermonkey ユーザースクリプト **Electronics Price History** が商品ページにパネルを差し込みます。
 
-Phase 1 の対象は **秋月電子通商**(`akizuki`)のみです。Phase 2(aitendo)、Phase 3(スイッチサイエンス)は設計上の拡張点だけを用意し、実装していません([docs/roadmap/roadmap.md](docs/roadmap/roadmap.md))。
+対象は **秋月電子通商**(`akizuki`、一覧ページの HTML)と **スイッチサイエンス**(`switch-science`、Shopify のカタログ JSON → [ADR-0014](docs/adr/0014-shopify-catalog-api-over-html.md))の 2 店舗です。aitendo は設計上の拡張点だけを用意し、実装していません([docs/roadmap/roadmap.md](docs/roadmap/roadmap.md))。
 
-> データについて: 表示される値はこのプロジェクトが観測した時点の店頭表示の記録で、店舗の公式データではありません。観測間隔(約 1 日)の間の変化は記録されません。詳しくは [データの注意点](#データの注意点) を読んでください。
+> データについて: 表示される値はこのプロジェクトが観測した時点の店頭表示の記録で、店舗の公式データではありません。観測間隔(約 1 か月)の間の変化は記録されません。詳しくは [データの注意点](#データの注意点) を読んでください。
 
 ## 目次
 
@@ -29,7 +29,9 @@ Phase 1 の対象は **秋月電子通商**(`akizuki`)のみです。Phase 2(ait
 
 1. ブラウザに [Tampermonkey](https://www.tampermonkey.net/) を入れる。
 2. 公開サイトの `https://tsuyoshi-otake.github.io/electro-parts/electronics-price-history.user.js` を開き、インストールする。更新は `@updateURL` 経由で自動配信されます。
-3. 秋月電子通商の商品ページ(`https://akizukidenshi.com/catalog/g/g<通販コード>/`)を開くと、購入エリアの下に「Electronics Price History」パネルが出ます。
+3. 対応店舗の商品ページを開くと「Electronics Price History」パネルが出ます。
+   - 秋月電子通商 `https://akizukidenshi.com/catalog/g/g<通販コード>/` → 購入エリアの下。
+   - スイッチサイエンス `https://www.switch-science.com/products/<handle>`(`/collections/<コレクション>/products/<handle>` も同じ商品として扱います)→ 商品情報の 2 段組みの下。
 
 パネルの内容:
 
@@ -61,22 +63,22 @@ Collector ─▶ Raw Snapshot ─▶ Store Snapshot Adapter ─▶ Common Normal
 
 | 層 | 場所 | 店舗を知っているか |
 |---|---|---|
-| Collector | `src/collectors/akizuki/`(一覧ページの正規表現パーサー、丁寧な fetcher は `src/collectors/politeFetcher.ts`) | 店舗別 |
-| Snapshot Adapter | `src/adapters/akizuki/`(生スキーマ → 共通ドメイン、在庫文言の解釈、capabilities) | 店舗別 |
+| Collector | `src/collectors/akizuki/`(一覧ページの正規表現パーサー)、`src/collectors/switch-science/`(Shopify のカタログ JSON)。丁寧な fetcher は共通で `src/collectors/politeFetcher.ts` | 店舗別 |
+| Snapshot Adapter | `src/adapters/akizuki/`、`src/adapters/switch-science/`(生スキーマ → 共通ドメイン、在庫表現の解釈、capabilities) | 店舗別 |
 | 共通ドメイン・履歴コア | `src/core/`(domain / price / history / stats / sanity / identity / validation) | 知らない |
 | SQLite | `src/db/`(migrations、順序非依存の取り込み、在庫の保持期間、最終化と検証) | 知らない(`store_id` 列で分離) |
 | Publisher | `src/publisher/`(契約 v1 型・検証・生成・原子的書き込み) | 知らない |
 | Pipeline / CLI | `src/pipeline/`, `src/cli/main.ts` | 知らない(`config/<store>.json` とレジストリで解決) |
 | 店舗レジストリ | `src/stores/`(`registry.ts` = adapter、`collectorRegistry.ts` = collector) | ここだけ |
 | ユーザースクリプト共通コア | `userscript/core/`(dataClient、cache、controller、format)、`userscript/ui/`(panel、chart) | 知らない |
-| Page Adapter | `userscript/adapters/akizuki.ts`、`registry.ts` | 店舗別 |
+| Page Adapter | `userscript/adapters/akizuki.ts`、`userscript/adapters/switch-science.ts`、`registry.ts` | 店舗別 |
 
-共通コアに `if (store === 'akizuki')` は存在しません(CI の grep と設計レビューで確認)。店舗差は `StoreCapabilities`(範囲価格の有無、在庫数の意味など)としてデータに載り、UI はそれを見て表示を変えます。
+共通コアに `if (store === 'akizuki')` は存在しません(CI の grep と設計レビューで確認)。店舗差は `StoreCapabilities`(範囲価格の有無、在庫数の意味など)としてデータに載り、UI はそれを見て表示を変えます。実際に効いているのが在庫数で、秋月は表示在庫数を出し、スイッチサイエンスは公開していない(`inventoryQuantitySemantics: 'not_exposed'`)ので、パネルは在庫数の行そのものを出しません。
 
 ### ドメインの要点
 
-- **同一性** は `(store_id, external_product_id)`。秋月では通販コードが `external_product_id` かつ `pageKey`(URL の `g<コード>`)です。これはアダプター内の前提であり、共通コアは両者を別の文字列として扱います。店舗をまたぐ名寄せ、型番による自動マージはしません。
-- **Product と Offer**: Phase 1 の秋月は商品 = 1 オファー(`__default__`)。バリアント・集約オファーは型と DB にあり、合成データでテストしています。
+- **同一性** は `(store_id, external_product_id)`。秋月では通販コードが、スイッチサイエンスでは Shopify の handle が `external_product_id` かつ `pageKey` です([ADR-0015](docs/adr/0015-shopify-handle-as-identity.md))。これはアダプター内の前提であり、共通コアは両者を別の文字列として扱います。店舗をまたぐ名寄せ、型番による自動マージはしません(handle の多くは `9381` のような数字で、秋月の通販コードと見た目が区別できません。同一性が店舗スコープである理由がこれです)。
+- **Product と Offer**: 秋月は商品 = 1 オファー(`__default__`)。スイッチサイエンスは Shopify の variant を 1 オファーとし、variant ID をオファー ID にします(現在はすべて 1 variant ですが、2 つ目が付いた日に履歴が切れないため)。集約オファーは型と DB にあり、合成データでテストしています。
 - **価格** は整数の最小通貨単位(JPY は円)。`state`(`exact` / `range` / `unavailable`)、`quoteKind`(`selling` / `compare_at`)、`taxTreatment`、`unitLabel`(`1個`、`1パック` など)を持ち、これらが履歴の**基準(basis)** を決めます。基準が違えば別の系列です(「1 個 100 円」と「1 袋 100 円」を同じ系列にしない)。
 - **在庫** は `availability`(`in_stock`、`low_stock`、`out_of_stock`、`restocking`、`preparing`、`checking`、`discontinued`、`unknown`、`not_displayed`)、`purchasable`、`quantity` と `quantitySemantics`(`site_reported` / `unknown`)、`rawStatus`(元の文言)を保持します。
 - **掲載(presence)**: 一覧から消えた商品は「掲載なし」として記録され、販売終了とは区別します。
@@ -148,10 +150,26 @@ npm run typecheck
 npm run pipeline -- --config config/akizuki.json --bootstrap
 ```
 
-- `--bootstrap` は**公開済み状態が無いときだけ**許可されます。状態があるのに付けると失敗します。
-- 2 回目以降は `--bootstrap` なし。`config/akizuki.json` の `previousStateUrl` から `state.json` と SQLite を取得し、SHA-256・サイズ・`integrity_check`・スキーマ版を検証してから使います。取得できなければ失敗します(履歴の巻き戻しを防ぐため)。
+- `--bootstrap` は**公開済み状態が無いときだけ**許可されます。状態があるのに付けると失敗します。既に公開されているサイトに 2 店舗目を足すのはブートストラップ**ではありません**(`--bootstrap` なしの通常 run で、その店舗の run 数 0 から始まります)。
+- 2 回目以降は `--bootstrap` なし。`config/<store>.json` の `previousStateUrl` から `state.json` と SQLite を取得し、SHA-256・サイズ・`integrity_check`・スキーマ版を検証してから使います。取得できなければ失敗します(履歴の巻き戻しを防ぐため)。
 - ローカルで前回状態を渡すときは `--previous-dir site/state`。
 - 保存済みスナップショットを取り込むときは `--snapshot snapshots/akizuki-….json.gz`(クロールをスキップ)。
+
+### 2 店舗を 1 つのサイトに公開する
+
+店舗は **SQLite 履歴・`state/` ディレクトリ・`site/` ツリー**の 3 つを共有します。だから**順番に**回し、後の店舗は前の店舗が最終化した状態から続けます。
+
+```bash
+node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --previous-dir site/state
+```
+
+```bash
+node --import tsx src/cli/main.ts pipeline --config config/switch-science.json --previous-dir site/state
+```
+
+- 同じ前回状態から**並行に**回してはいけません。後から最終化したほうが、もう一方の run を無かったことにします。
+- 生成は自分の店舗のディレクトリ(`site/data/v1/stores/<storeId>/`)だけを置き換えるので、隣の店舗のデータセットは触りません。
+- Pages はサイト全体を差し替えます。**ある店舗がこの run で何も書かなければ、公開サイトからその店舗が消えます。** 失敗した店舗は公開済み履歴から `--republish` で作り直してからデプロイします(ワークフローが自動でやります。下記)。この不変条件は `tests/integration/multi-store-pipeline.test.ts` が検証しています。
 
 終了コード: `0` 公開可(published / unchanged)、`3` 隔離(quarantined、履歴は変わらず公開はされる)、`1` 失敗(何も公開しない)。レポートは `reports/pipeline-akizuki.json`、Markdown 要約は標準出力と `node --import tsx src/cli/main.ts summary --report reports/pipeline-akizuki.json`。
 
@@ -169,16 +187,30 @@ npm run verify -- --config config/akizuki.json --site site
 npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.io/electro-parts
 ```
 
-設定 `config/akizuki.json` の主なキー: `collector.userAgent`(識別可能な UA、連絡先入り)、`collector.listingKinds`(巡回する一覧の系統。`c` = 分類ツリー、`r` = ジャンルタグ。個々の slug はサイトマップから発見するので設定に書きません → ADR-0012)、`collector.maxUncoveredProducts`(サイトマップにあってどの一覧にも出なかった商品の許容数。秋月は 600。実測の残差 255 件はすべて販売終了で一覧から外された商品 → ADR-0012)、`collector.minIntervalMs` / `jitterMs`(既定 1500 ms + 0〜750 ms)、`maxAttempts`、`maxRequests`(1 回の上限)、`maxPagesPerListing`、`sanity.*`(隔離しきい値)、`inventory.retentionDays` / `pointLimit`、`paths.*`、`previousStateUrl`。
+設定は `config/<storeId>.json`。共通のキーは `collector.userAgent`(識別可能な UA、連絡先入り)、`collector.minIntervalMs` / `jitterMs`(既定 1500 ms + 0〜750 ms)、`maxAttempts`、`timeoutMs`、`maxRequests`(1 回の上限)、`collector.maxUncoveredProducts`(サイトマップにあって本体の巡回に出なかった商品の許容数 → ADR-0012)、`sanity.*`(隔離しきい値)、`inventory.retentionDays` / `pointLimit`、`paths.*`、`previousStateUrl`。
+
+店舗固有:
+
+| キー | 店舗 | 意味 |
+|---|---|---|
+| `collector.listingKinds` | akizuki | 巡回する一覧の系統。`c` = 分類ツリー、`r` = ジャンルタグ。個々の slug はサイトマップから発見するので設定に書きません(ADR-0012) |
+| `collector.maxPagesPerListing` | akizuki | 1 つの一覧で辿るページ数の上限 |
+| `collector.collection` | switch-science | 巡回する Shopify コレクション。`all` = 公開中の全商品 |
+| `collector.pageLimit` / `maxPages` | switch-science | カタログ JSON 1 ページの件数(Shopify の上限は 250)とページ数の上限 |
+| `collector.maxSubSitemaps` | switch-science | サイトマップ索引から読む子サイトマップ数の上限 |
+
+`maxUncoveredProducts` は店舗で桁が違います。秋月は 600(実測の残差 255 件はすべて販売終了で一覧から外れた商品)、スイッチサイエンスは 25(カタログ JSON とサイトマップは同じカタログの 2 つのビューなので、ずれは更新のラグぶんしか出ません)。
 
 ## GitHub Actions と公開
 
 | ワークフロー | トリガー | 内容 |
 |---|---|---|
-| `crawl-publish.yml` | 毎月 1 日 20:17 UTC(2 日 05:17 JST)、`workflow_dispatch`(`bootstrap`、`dry_run`、`snapshot_retention_days`、`reimport_snapshot_from_run` = 過去 run のスナップショットを再取り込みしてクロールを省く、`republish` = 公開済み履歴からサイトを作り直すだけで観測を増やさない) | パイプライン → Actions summary にレポート → `site/` にユーザースクリプトと index を追加 → 検証 → 成果物アップロード(スナップショット 90 日、レポートと状態 90 日)→ `publishable` のときだけ Pages へデプロイ → 公開後にマニフェストの `datasetVersion` を確認 |
+| `crawl-publish.yml` | 毎月 1 日 20:17 UTC(2 日 05:17 JST)、`workflow_dispatch`(`stores` = 観測する店舗を空白区切りで指定、空なら全部、`bootstrap`、`dry_run`、`snapshot_retention_days`、`reimport_snapshot_from_run` = 過去 run のスナップショットを再取り込みしてクロールを省く、`republish` = 公開済み履歴からサイトを作り直すだけで観測を増やさない) | 店舗を順に回す(後の店舗は前の店舗が最終化した状態から) → 履歴にあるのにサイトに無い店舗を `--republish` で復元 → Actions summary にレポート → `site/` にユーザースクリプトと index を追加 → サイトの完全性を検査 → 成果物アップロード(店舗ごとのスナップショット 90 日、レポートと状態 90 日)→ 完全なときだけ Pages へデプロイ → 公開後に店舗ごとの `datasetVersion` を確認 |
 | `ci.yml` | push(main)、pull_request、手動 | `npm audit`、typecheck、vitest(全プロジェクト)、ユーザースクリプトのビルドと禁止 API・CDN 参照の検査、Playwright E2E、Stryker(PR 以外) |
 
 - 公開は `pages-publish` の concurrency グループで**単一ライター**。実行中の公開はキャンセルされず、後続はキューに入ります。
+- 店舗は 1 つの job の中で**直列**に回ります。共有するのは 1 つの SQLite と 1 つの `state/` なので、並行にすると後から最終化したほうが他方の run を捨てます。ワークフローは 1 店舗目のあと `--previous-dir site/state` を足して連結します。
+- **1 店舗が失敗しても、走った店舗の公開は止めません。** ただしデプロイはサイト全体の差し替えなので、失敗した店舗をそのままにすると公開データが消えます。そこで、履歴に run がある(`state.json` の `stores.<id>.runCount > 0`)のにサイトにマニフェストが無い店舗を `--republish` で作り直し、それでも欠けていればゲートがデプロイを**拒否**します(fail-closed)。ジョブ自体は失敗した店舗があれば最後に失敗します。
 - Pages への反映は 1 つのアーティファクト(データ + 状態 + ユーザースクリプト)で行うので、読者が中途半端なデータセットを見ることはありません(原子的公開)。
 - SQLite は git にコミットしません。最終化した DB は Pages の `state/` に公開し、次回の入力になります。バックアップは Actions の成果物(90 日)。ロールバックは「該当 run の `state-<run id>` 成果物を `--previous-dir` で読み直して公開する」手順([docs/runbook.md](docs/runbook.md))。
 - 権限は最小(`contents: read`、デプロイジョブだけ `pages: write` + `id-token: write`)。アクションはコミット SHA でピン留め。シークレットは使いません。
@@ -203,27 +235,28 @@ npm run bench
 
 | 種類 | 場所 | 内容 |
 |---|---|---|
-| ユニット | `tests/unit/` | 価格正規化、在庫文言、履歴コア、統計、一覧パーサー、丁寧な fetcher、設定 |
+| ユニット | `tests/unit/` | 価格正規化、在庫文言、履歴コア、統計、一覧パーサー、Shopify カタログの読み取りと handle の検証、丁寧な fetcher、設定 |
 | プロパティ(fast-check) | `tests/property/` | 取り込み順序非依存、系列の不変条件、パーサーの頑健性 |
 | DB | `tests/db/` | 冪等取り込み、変化点、在庫保持、隔離、メタデータ変化 |
 | 契約 | `tests/contract/` | 生成物の検証、決定性(同じ DB → 同じ `datasetVersion`) |
-| 統合 | `tests/integration/` | 保存済み一覧ページに対するクロール、**実データ**(2026-08-02 と 2026-09-06 の秋月全量スナップショット。FT232RQ キット 109951: 1150 → 1200 円、RE-280RA 106438: 250 → 280 円)、パイプラインの状態機械 |
+| 統合 | `tests/integration/` | 保存済み一覧ページ / 偽 Shopify ストアに対するクロール、**実データ**(2026-08-02 と 2026-09-06 の秋月全量スナップショット。FT232RQ キット 109951: 1150 → 1200 円、RE-280RA 106438: 250 → 280 円。スイッチサイエンスは 2026-09-07 の 10,382 商品)、パイプラインの状態機械、**2 店舗が 1 つのサイトを共有する場合**(後発店舗の合流、1 サイクルで両方の履歴を進める、失敗した店舗を republish で戻す) |
 | ユーザースクリプト(jsdom) | `tests/userscript/` | キャッシュ/LRU、SWR、Page Adapter、コントローラー、チャート |
-| E2E(Playwright) | `tests/e2e/` | ビルド済みユーザースクリプトを**保存済み**商品ページで実行。両オリジンとも route interception で提供し、本物のサイトには触れません。キャッシュ再利用、障害時の fail-open、未収録商品を検証 |
+| E2E(Playwright) | `tests/e2e/` | ビルド済みユーザースクリプトを**保存済み**商品ページ(秋月とスイッチサイエンス)で実行。両オリジンとも route interception で提供し、本物のサイトには触れません。キャッシュ再利用、障害時の fail-open、未収録商品、コレクション URL 経由の同一性、そして**自分の店舗のデータセットしか読まないこと**を検証 |
 | 変異(Stryker) | `stryker.config.mjs` | `src/core/` の履歴・価格・統計・健全性・同一性・時刻 |
 | ベンチ | `tests/bench/run-bench.ts` | 合成カタログで 1 / 3 / 5 年分を毎日取り込み(実運用より高頻度の上限側テスト) |
 
 Playwright は初回に `npx playwright install chromium` が必要です。
 
-実績: ユニット～統合 227 テスト（23 ファイル、11 s）、E2E 3 テスト（7 s）、変異スコア **89.45 %**（704 変異体: killed 595 / timeout 7 / survived 61 / no coverage 10、しきい値 break 70）。
+実績: ユニット〜統合 315 テスト(31 ファイル、13 s)、E2E 7 テスト(8 s)、変異スコア **89.45 %**(704 変異体: killed 595 / timeout 7 / survived 61 / no coverage 10、しきい値 break 70)。
 
 ## 性能予算と実測
 
-予算(Phase 1、秋月約 13,000 商品):
+予算(秋月約 13,000 商品 + スイッチサイエンス約 10,400 商品):
 
 | 項目 | 予算 |
 |---|---|
-| 1 回のクロール | サイトマップ 7 + 分類ツリー 458 一覧(約 780 ページ)+ ジャンルタグ 1,412 一覧(約 1,940 ページ)、1.5〜2.25 s 間隔で約 85 分 |
+| 1 回のクロール(秋月) | サイトマップ 7 + 分類ツリー 458 一覧(約 780 ページ)+ ジャンルタグ 1,412 一覧(約 1,940 ページ)、1.5〜2.25 s 間隔で約 85 分 |
+| 1 回のクロール(スイッチサイエンス) | サイトマップ索引 1 + 商品サイトマップ 11 + カタログ JSON 42 ページ(`limit=250`)= 約 54 リクエスト、同じ間隔で約 2 分(ADR-0014) |
 | 取り込み(1 スナップショット) | 5 年分の履歴があっても 10 s 以内 |
 | 生成 + 書き込み | 30 s 以内 |
 | 商品ファイル | 中央値 2 KB 以下、最大 64 KB 以下(5 年分) |
@@ -245,7 +278,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 予算に対する実測(5 年時点): 取り込み 4.5 s < 10 s、生成 + 書き込み 4.4 s < 30 s、最大の商品ファイル 7.8 KB < 64 KB、静的データ 39.0 MB < 50 MB、SQLite 53.9 MB(Pages の 1 ファイル 100 MB 制限内)。すべて予算内です。
 <!-- bench:end -->
 
-実データ(統合テストの保存済みスナップショット): 2 run(2026-08-02、2026-09-06)から 8,809 商品ファイルを生成。これは 18 ジャンルを手書きしていた頃のスナップショットで、サイトマップ由来の巡回(ADR-0012)に切り替えたあとの公開データは 12,772 商品(datasetVersion `3ccce668810808ca`、2026-09-06〜09-07 の 2 run)。ユーザースクリプトのバンドルは 53,414 バイト(52.2 KiB、圧縮なし)。
+実データ(統合テストの保存済みスナップショット): 秋月は 2 run(2026-08-02、2026-09-06)から 8,809 商品ファイルを生成。これは 18 ジャンルを手書きしていた頃のスナップショットで、サイトマップ由来の巡回(ADR-0012)に切り替えたあとの公開データは 12,772 商品(datasetVersion `3ccce668810808ca`、2026-09-06〜09-07 の 2 run)。スイッチサイエンスは 2026-09-07 の実クロール(10,382 商品、カタログ 42 ページ、商品サイトマップ 11)から 60 商品を切り出したものを使い、`¥165` のカメラケーブルから `¥8,910,000` の装置まで、価格 0 円の 4 商品も含めて写像を検証しています。ユーザースクリプトのバンドルは 55,613 バイト(54.3 KiB、圧縮なし)。
 
 ## データの注意点
 
@@ -276,13 +309,16 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 2. `src/collectors/<store>/`: `StoreCollector` 実装(`politeFetcher` を使う)。
 3. `src/stores/registry.ts` と `collectorRegistry.ts` に登録、`config/<store>.json` を追加。
 4. `userscript/adapters/<store>.ts`: `StorePageAdapter`(URL 判定、ページキー抽出、差し込み位置)。`registry.ts` に登録すると `@match` が自動で増えます。
-5. テスト: 保存済みページのフィクスチャ、実データ統合テスト、E2E。
+5. `.github/workflows/crawl-publish.yml` の `env.STORES` に店舗 ID を足し、スナップショット成果物のアップロード step を 1 つ足す。`STORES` に載せるだけで、パイプラインの実行・失敗時の復元・デプロイ前の完全性検査はすべて追随します。
+6. テスト: 保存済みページのフィクスチャ、実データ統合テスト、E2E。
+
+新しい店舗を既存のサイトに足すのは `--bootstrap` **ではありません**。公開済み状態を前回状態として通常どおり回すと、その店舗だけ run 数 0 から始まります。`--bootstrap` は状態がある限り拒否されます(他店舗の履歴を消さないため)。
 
 共通コアに店舗名が現れたらレビューで差し戻します。
 
 ## 設計判断(ADR)
 
-[docs/adr/](docs/adr/) に 11 本あります。
+[docs/adr/](docs/adr/) に 15 本あります。
 
 | # | 題名 |
 |---|---|
@@ -298,5 +334,8 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 | [0010](docs/adr/0010-userscript-swr-cache.md) | ユーザースクリプトの stale-while-revalidate キャッシュと LRU |
 | [0011](docs/adr/0011-userscript-rendering-safety.md) | Shadow DOM、`innerHTML` 禁止、CDN なし、fail-open |
 | [0012](docs/adr/0012-sitemap-as-catalogue-authority.md) | クロール対象はサイトマップから発見し、カバレッジの正解として使う |
+| [0013](docs/adr/0013-monthly-observation-cadence.md) | 観測頻度は 1 か月に 1 回 |
+| [0014](docs/adr/0014-shopify-catalog-api-over-html.md) | Switch Science は HTML ではなく Shopify のカタログ JSON から読む |
+| [0015](docs/adr/0015-shopify-handle-as-identity.md) | Switch Science の商品同一性は Shopify の handle、商品 ID と SKU はエイリアス |
 
 ライセンス: MIT。観測データは店舗の表示を記録したもので、権利は各店舗にあります。

@@ -2,6 +2,7 @@ import { mkdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AKIZUKI_CAPABILITIES } from '../../src/adapters/akizuki/capabilities.ts';
+import { SWITCH_SCIENCE_CAPABILITIES } from '../../src/adapters/switch-science/capabilities.ts';
 import { openInMemory } from '../../src/db/connection.ts';
 import { importSnapshot } from '../../src/db/importSnapshot.ts';
 import { migrate, SQLITE_SCHEMA_VERSION } from '../../src/db/migrations/index.ts';
@@ -9,14 +10,19 @@ import { readStoreHistory } from '../../src/db/read.ts';
 import { generateStoreDataset } from '../../src/publisher/generate.ts';
 import { writeStoreDataset } from '../../src/publisher/write.ts';
 import { buildUserscript } from '../../scripts/build-userscript.ts';
-import { loadAkizukiNormalized } from '../helpers/fixtures.ts';
+import { loadAkizukiNormalized, loadSwitchScienceNormalized } from '../helpers/fixtures.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const E2E_SITE_DIR = path.resolve(here, '..', '..', 'test-results', 'e2e-site');
 
 /**
- * Produces, once per run, a real contract v1 dataset from the two checked-in
- * Akizuki snapshots plus the built userscript, under test-results/e2e-site.
+ * Produces, once per run, real contract v1 datasets from the checked-in
+ * snapshots plus the built userscript, under test-results/e2e-site.
+ *
+ * Both stores are written into the *same* site directory, which is what the
+ * published site is: one Pages deployment with a dataset per store. Akizuki has
+ * two observations and Switch Science one, so the specs between them cover both
+ * a history with a change and a store's very first run.
  */
 export default async function globalSetup(): Promise<void> {
   await rm(E2E_SITE_DIR, { recursive: true, force: true });
@@ -24,13 +30,20 @@ export default async function globalSetup(): Promise<void> {
   const db = openInMemory();
   migrate(db);
   for (const which of ['aug', 'sep'] as const) importSnapshot(db, await loadAkizukiNormalized(which), { capabilities: AKIZUKI_CAPABILITIES });
-  const dataset = generateStoreDataset(readStoreHistory(db, 'akizuki'), {
-    generatedAt: new Date().toISOString(),
-    sqliteSchemaVersion: SQLITE_SCHEMA_VERSION,
-    sourceSchemaVersion: '2',
-  });
+  importSnapshot(db, await loadSwitchScienceNormalized(), { capabilities: SWITCH_SCIENCE_CAPABILITIES });
+  const generatedAt = new Date().toISOString();
+  const options = { generatedAt, sqliteSchemaVersion: SQLITE_SCHEMA_VERSION };
+  const akizuki = generateStoreDataset(readStoreHistory(db, 'akizuki'), { ...options, sourceSchemaVersion: '2' });
+  const switchScience = generateStoreDataset(readStoreHistory(db, 'switch-science'), { ...options, sourceSchemaVersion: '1' });
   db.close();
-  const summary = await writeStoreDataset(E2E_SITE_DIR, dataset);
+  const summaries = [await writeStoreDataset(E2E_SITE_DIR, akizuki), await writeStoreDataset(E2E_SITE_DIR, switchScience)];
   const built = await buildUserscript(E2E_SITE_DIR);
-  await writeFile(path.join(E2E_SITE_DIR, 'e2e-setup.json'), JSON.stringify({ datasetVersion: dataset.manifest.datasetVersion, products: summary.productCount, userscriptBytes: built.bytes }));
+  await writeFile(
+    path.join(E2E_SITE_DIR, 'e2e-setup.json'),
+    JSON.stringify({
+      stores: summaries.map((s, i) => ({ storeId: [akizuki, switchScience][i]!.manifest.storeId, products: s.productCount })),
+      datasetVersion: akizuki.manifest.datasetVersion,
+      userscriptBytes: built.bytes,
+    }),
+  );
 }

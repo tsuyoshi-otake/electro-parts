@@ -7,14 +7,8 @@ import {
   listingId,
   parseListingRef,
 } from '../../src/collectors/akizuki/listings.ts';
-import {
-  collectSitemapUrls,
-  decodeSitemapBody,
-  fetchAkizukiSitemap,
-  parseSitemapIndex,
-  sitemapIndexUrl,
-  SitemapError,
-} from '../../src/collectors/akizuki/sitemap.ts';
+import { collectSitemapUrls, fetchAkizukiSitemap, sitemapIndexUrl } from '../../src/collectors/akizuki/sitemap.ts';
+import { decodeSitemapBody, parseSitemapIndex, SitemapError } from '../../src/collectors/sitemapXml.ts';
 import { PoliteFetcher, type HttpTransport } from '../../src/collectors/politeFetcher.ts';
 
 const BASE = 'https://akizuki.test';

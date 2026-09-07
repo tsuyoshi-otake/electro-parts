@@ -1,6 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { akizukiPageAdapter, pageKeyFromPath } from '../../userscript/adapters/akizuki.ts';
-import { PAGE_ADAPTERS } from '../../userscript/adapters/registry.ts';
 import { loadHtml, readFixtureHtml } from './helpers.ts';
 
 const AT = (pathname: string, hostname = 'akizukidenshi.com') => ({ hostname, pathname });
@@ -11,13 +10,13 @@ describe('Akizuki page adapter', () => {
     html = await readFixtureHtml('g109951');
   });
 
-  it('is the only registered adapter and only matches Akizuki product URLs', () => {
-    expect(PAGE_ADAPTERS.map((a) => a.storeId)).toEqual(['akizuki']);
-    expect(PAGE_ADAPTERS.flatMap((a) => a.matchPatterns)).toEqual(['https://akizukidenshi.com/catalog/g/*']);
+  it('matches Akizuki product URLs and nothing else', () => {
+    expect(akizukiPageAdapter.matchPatterns).toEqual(['https://akizukidenshi.com/catalog/g/*']);
     expect(akizukiPageAdapter.matches(AT('/catalog/g/g109951/'))).toBe(true);
     expect(akizukiPageAdapter.matches(AT('/catalog/g/g109951/', 'www.akizukidenshi.com'))).toBe(true);
     expect(akizukiPageAdapter.matches(AT('/catalog/r/rkit/'))).toBe(false);
     expect(akizukiPageAdapter.matches(AT('/catalog/g/g109951/', 'www.aitendo.com'))).toBe(false);
+    expect(akizukiPageAdapter.matches(AT('/products/9381', 'www.switch-science.com'))).toBe(false);
     expect(pageKeyFromPath('/catalog/g/g109951/')).toBe('109951');
     expect(pageKeyFromPath('/catalog/g/g109951')).toBe('109951');
     expect(pageKeyFromPath('/catalog/g/gABC/')).toBeNull();

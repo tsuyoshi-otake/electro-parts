@@ -1,6 +1,6 @@
 {
   "name": "electro-parts-price-history",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "Price / stock / listing history tracker for Japanese electronic-parts retailers. Phase 1: Akizuki Denshi.",
   "license": "MIT",
