@@ -36,6 +36,25 @@ describe('cross-store comparison panel', () => {
     expect(f.shadow.querySelector<HTMLElement>('[role="status"]')!.hidden).toBe(false);
   });
 
+  it('keeps detailed own-store statistics available in a disclosure without stretching the initial comparison', () => {
+    const f = setup(); f.draw();
+    const details = f.shadow.querySelector<HTMLDetailsElement>('details[data-state-key="own-statistics"]')!;
+    expect(details.open).toBe(false); expect(details.querySelector('dl')?.textContent).toContain('直近30日');
+    details.open = true; details.querySelector('summary')!.focus(); f.draw();
+    expect(f.shadow.querySelector<HTMLDetailsElement>('details[data-state-key="own-statistics"]')!.open).toBe(true);
+    expect(f.shadow.activeElement?.getAttribute('data-focus-key')).toBe('own-statistics');
+  });
+
+  it('connects the final price change vertically without extrapolating beyond the final observation', () => {
+    const t = Date.parse('2026-09-01'), day = 86_400_000;
+    const svg = buildComparisonChart(document, [{id: 'a', label: 'A', start: t, end: t + day,
+      points: [[t, 'exact', 100, 100], [t + day, 'exact', 200, 200]], presence: [[t, 1]]}], {width: 640, height: 200, currency: 'JPY'});
+    const line = svg.querySelector('path')!.getAttribute('d')!;
+    const endY = Number(svg.querySelectorAll('circle')[1]!.getAttribute('cy')).toFixed(1);
+    expect(line).toMatch(/^M[\d.]+ [\d.]+H[\d.]+V[\d.]+$/);
+    expect(line.endsWith(`V${endY}`)).toBe(true);
+  });
+
   it.each(['candidate', 'similar', 'unresolved', 'unit', 'error', 'missing', 'loading'])('keeps own history while showing %s separately without an overlay or difference', (kind) => {
     const f = setup();
     if (kind === 'candidate') f.relation.reviewStatus = 'candidate';

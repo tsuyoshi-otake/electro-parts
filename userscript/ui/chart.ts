@@ -128,6 +128,13 @@ export function buildComparisonChart(doc: Document, series: readonly ComparisonS
       if (iv.min !== iv.max) band += `M${x0} ${y(iv.max).toFixed(1)}H${x1}V${yy}H${x0}Z`;
       lastTo = iv.to;
     }
+    // A change exactly at the final observation has no positive-length
+    // interval, but its vertical step still belongs to the history. Do not
+    // invent a horizontal tail or bridge an absent interval to that point.
+    const endpoint = s.points.find((p) => p[0] === s.end);
+    let endpointPresent = false;
+    for (const [at, present] of s.presence) { if (at > s.end) break; endpointPresent = present === 1; }
+    if (lastTo === s.end && endpointPresent && endpoint && endpoint[1] !== 'unavailable' && endpoint[2] !== null) line += `V${y(endpoint[2]).toFixed(1)}`;
     if (band) group.appendChild(el(doc, 'path', { d: band, class: 'eph-band' }));
     if (line) group.appendChild(el(doc, 'path', { d: line, class: 'eph-line', fill: 'none' }));
     for (const p of s.points) {

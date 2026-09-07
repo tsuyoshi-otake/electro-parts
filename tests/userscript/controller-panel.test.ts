@@ -91,6 +91,23 @@ describe('history panel controller', () => {
     expect(host.requests).toHaveLength(1);
     expect(host.requests[0]).toContain('/teststore/');
   });
+
+  it('disconnects the pending lazy chart observer when the mounted panel is destroyed', async () => {
+    page();
+    const previous = Object.getOwnPropertyDescriptor(window, 'IntersectionObserver');
+    const disconnect = vi.fn();
+    Object.defineProperty(window, 'IntersectionObserver', {configurable: true, value: class {
+      observe() {} disconnect = disconnect;
+    }});
+    try {
+      const handle = await mount(hostWithData(), {lazyChart: true});
+      const before = disconnect.mock.calls.length;
+      handle.destroy(); expect(disconnect.mock.calls.length).toBe(before + 1);
+    } finally {
+      if (previous) Object.defineProperty(window, 'IntersectionObserver', previous);
+      else Reflect.deleteProperty(window, 'IntersectionObserver');
+    }
+  });
   it('switches both ways, preserves keyboard focus, and shares the saved preference between stores', async () => {
     page();
     const host = hostWithData();

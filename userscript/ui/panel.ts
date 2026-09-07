@@ -210,10 +210,11 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
   }
   col.appendChild(hero);
   col.appendChild(text(doc, 'div', `${formatDate(s.currentSinceAt)} から${s.previousDistinct === null ? '(初回観測)' : ''}`, 'hero-meta'));
+  const lastAvail = offer.availability[offer.availability.length - 1];
   if (related.length) {
     col.appendChild(text(doc, 'div', `最終観測 ${formatDateTime(product.product.lastSeenAt)}`, 'hero-meta'));
+    if (lastAvail) col.appendChild(text(doc, 'div', `観測時の在庫: ${availabilityLabel(lastAvail[1])}`, 'hero-meta'));
     renderStorePrices(doc, col, product, segment, related, storeLabel, ownFresh);
-    col.appendChild(text(doc, 'div', `${storeLabel(product.storeId)}の価格履歴・統計`, 'comparison-heading'));
   }
 
   const rows = doc.createElement('dl');
@@ -231,7 +232,6 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
     const w = s.windows[key];
     row(doc, rows, `${label}の最低〜最高`, w === null ? '記録なし' : `${money(w.minMinor)}〜${money(w.maxMinor)}`);
   }
-  const lastAvail = offer.availability[offer.availability.length - 1];
   if (lastAvail !== undefined) {
     const qty = offer.inventory.points[offer.inventory.points.length - 1];
     const qtyText = qty !== undefined && qty[1] !== null && offer.inventory.semantics !== 'not_exposed' ? `表示在庫数 ${qty[1]}` : undefined;
@@ -239,7 +239,11 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
     row(doc, rows, '最新の在庫表示', label, qtyText !== undefined ? `${qtyText} · ${formatDate(lastAvail[0])}` : formatDate(lastAvail[0]));
   }
   row(doc, rows, '価格変更の記録', `${s.changePointCount} 件`, product.product.listed ? '現在掲載中' : '最新の観測では未掲載');
-  col.appendChild(rows);
+  if (related.length) {
+    const details = doc.createElement('details'); details.dataset['stateKey'] = 'own-statistics';
+    const summary = text(doc, 'summary', `${storeLabel(product.storeId)}の価格履歴・統計`);
+    summary.dataset['focusKey'] = 'own-statistics'; details.append(summary, rows); col.appendChild(details);
+  } else col.appendChild(rows);
   parent.appendChild(col);
 }
 
