@@ -15,7 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { PAGE_ADAPTERS } from '../userscript/adapters/registry.ts';
-import { DATA_HOSTS, USERSCRIPT_VERSION } from '../userscript/version.ts';
+import { DATA_HOSTS, DEFAULT_DATA_BASE_URL, USERSCRIPT_VERSION } from '../userscript/version.ts';
 import { renderIcon } from './lib/icon.ts';
 import { encodePng } from './lib/png.ts';
 import { zipSync } from './lib/zip.ts';
@@ -25,6 +25,38 @@ const repoRoot = path.resolve(here, '..');
 
 export const EXTENSION_ZIP_NAME = 'electronics-price-history-extension.zip';
 export const ICON_SIZES = [16, 32, 48, 128] as const;
+
+/** Listing name. The Web Store rejects names longer than 45 characters. */
+export const EXTENSION_NAME = 'Electronics Price History';
+/** Manifest description. The Web Store rejects descriptions longer than 132 characters. */
+export const EXTENSION_DESCRIPTION = '対応する電子部品通販サイトの商品ページに、観測した価格・在庫・掲載状況の履歴を表示します。';
+export const SOURCE_URL = 'https://github.com/tsuyoshi-otake/electro-parts';
+export const PRIVACY_POLICY_URL = `${DEFAULT_DATA_BASE_URL}/privacy.html`;
+
+/**
+ * Header of every generated bundle.
+ *
+ * A store reviewer opens these files with no other context. This says what the
+ * file is, where its sources are, how to reproduce it, and that nothing is
+ * fetched and executed at runtime. The bundles are left unminified for the same
+ * reason: readable code is a review requirement, not a nicety.
+ */
+function banner(entry: string): string {
+  return `${[
+    '/**',
+    ` * ${EXTENSION_NAME} ${USERSCRIPT_VERSION} - ${entry.replace(/\.ts$/, '.js')}`,
+    ' *',
+    ` * Generated file. Sources: ${SOURCE_URL}`,
+    ' * Reproduce with: npm ci && npm run build:extension',
+    ' * Built by esbuild, bundle only: no minification, no obfuscation, no eval.',
+    ' *',
+    ' * This extension executes no remote code; every line it runs is in this file.',
+    ` * Its only network access is the published dataset at ${DEFAULT_DATA_BASE_URL},`,
+    ' * fetched without cookies. Most of content.js is a generated cross-store',
+    ' * product mapping table (data, not code) from scripts/matching/generate.ts.',
+    ' */',
+  ].join('\n')}\n`;
+}
 
 export interface ExtensionManifest {
   manifest_version: 3;
@@ -43,10 +75,10 @@ export interface ExtensionManifest {
 export function extensionManifest(): ExtensionManifest {
   return {
     manifest_version: 3,
-    name: 'Electronics Price History',
+    name: EXTENSION_NAME,
     version: USERSCRIPT_VERSION,
-    description: '対応する電子部品通販サイトの商品ページに、観測した価格・在庫・掲載状況の履歴を表示します。',
-    homepage_url: 'https://github.com/tsuyoshi-otake/electro-parts',
+    description: EXTENSION_DESCRIPTION,
+    homepage_url: SOURCE_URL,
     // Promise-returning chrome.* APIs under MV3; below this the panel would
     // fail on the first storage read rather than degrade.
     minimum_chrome_version: '102',
@@ -75,6 +107,7 @@ async function bundle(entry: string): Promise<string> {
     target: ['chrome102'],
     platform: 'browser',
     minify: false,
+    banner: { js: banner(entry) },
     legalComments: 'none',
     charset: 'utf8',
     absWorkingDir: repoRoot,

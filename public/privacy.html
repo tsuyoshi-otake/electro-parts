@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>プライバシーポリシー - Electronics Price History</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.6; }
+    body { margin: 0 auto; max-width: 48rem; padding: 2rem 1rem; }
+    code { font-size: .95em; }
+    .note { border-left: 4px solid #999; padding: .25rem .75rem; opacity: .9; }
+    table { border-collapse: collapse; }
+    th, td { border: 1px solid #8888; padding: .3rem .6rem; text-align: left; vertical-align: top; }
+  </style>
+</head>
+<body>
+  <h1>プライバシーポリシー</h1>
+  <p>対象: Chrome 拡張機能およびユーザースクリプト <strong>Electronics Price History</strong>(以下「本ソフトウェア」)。
+    最終更新: 2026-09-07。</p>
+
+  <h2>要点</h2>
+  <p>本ソフトウェアは利用者の個人情報を<strong>収集しません</strong>。閲覧履歴・入力内容・識別子を送信せず、解析ツールも広告も入れていません。
+    データの販売・第三者提供・目的外利用もありません。</p>
+
+  <h2>本ソフトウェアが扱う情報</h2>
+  <table>
+    <tr><th>情報</th><th>用途</th><th>送信先</th><th>保存場所</th></tr>
+    <tr>
+      <td>表示中の商品ページの URL と、そのページ内の商品番号・型番</td>
+      <td>どの商品の履歴を表示するかの判定</td>
+      <td>送信しません(ブラウザ内で処理します)</td>
+      <td>保存しません</td>
+    </tr>
+    <tr>
+      <td>取得した価格・在庫・掲載状況の履歴データ(公開済みの静的 JSON)</td>
+      <td>パネルの表示と再取得の抑制</td>
+      <td>—</td>
+      <td>拡張は <code>chrome.storage.local</code>、ユーザースクリプトは Tampermonkey のストレージ。いずれも利用者の端末内のみ。最大 200 商品(LRU)</td>
+    </tr>
+    <tr>
+      <td>取得先の URL 設定(<code>dataBaseUrl</code>、既定値のまま使えます)</td>
+      <td>自分でホストしたデータを見る場合の切り替え</td>
+      <td>—</td>
+      <td>同上(1 項目)</td>
+    </tr>
+  </table>
+
+  <h2>通信</h2>
+  <p>本ソフトウェアが行う通信は、履歴データの取得のみです。取得先は <code>tsuyoshi-otake.github.io</code>(GitHub Pages)に限定しており、
+    拡張機能では取得先ホストをコードで固定したうえで、サービスワーカーが <code>credentials: 'omit'</code>(Cookie を送らない)で取得します。
+    商品ページを開いた店舗のサーバーに対して、本ソフトウェアが追加のリクエストを送ることはありません。</p>
+  <p>取得先である GitHub Pages には、通常の Web サーバーと同様にアクセスログ(IP アドレスなど)が
+    <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub のプライバシーステートメント</a>のもとで記録され得ます。
+    これは GitHub による運用であり、本プロジェクトはそのログを取得も利用もしていません。</p>
+
+  <h2>権限</h2>
+  <ul>
+    <li><code>storage</code>: 上記のキャッシュと設定 1 項目の保存にのみ使います。</li>
+    <li><code>https://tsuyoshi-otake.github.io/*</code>: 履歴データの取得にのみ使います。</li>
+    <li>コンテンツスクリプトの実行対象は、対応する商品ページ(秋月電子通商・スイッチサイエンスの商品ページ URL)に限定しています。</li>
+    <li>タブ・Cookie・閲覧履歴・ダウンロード・任意サイトへのアクセス権限は要求しません。リモートコードの読み込みや実行もありません。</li>
+  </ul>
+
+  <h2>データの削除</h2>
+  <p>拡張機能を削除すると、<code>chrome.storage.local</code> に保存されたキャッシュと設定も削除されます。
+    ユーザースクリプトの場合は Tampermonkey からスクリプトを削除してください。端末外に保存されたものはありません。</p>
+
+  <h2>その他</h2>
+  <ul>
+    <li>本ソフトウェアは個人が公開しているものであり、秋月電子通商・スイッチサイエンスその他の販売店の公式製品ではなく、これらとの提携関係もありません。</li>
+    <li>表示される値は本プロジェクトが観測した時点の店頭表示の記録であり、店舗の公式データではありません。</li>
+    <li>本ポリシーを変更する場合は、このページと <a href="https://github.com/tsuyoshi-otake/electro-parts" rel="noopener">リポジトリ</a>で更新日とともに公開します。</li>
+    <li>問い合わせ: <a href="https://github.com/tsuyoshi-otake/electro-parts/issues" rel="noopener">GitHub Issues</a>(Chrome ウェブストアの掲載情報にも連絡先を記載しています)。</li>
+  </ul>
+
+  <h2>English summary</h2>
+  <p><strong>Electronics Price History</strong> collects no personal data. It does not transmit browsing history, page content,
+    keystrokes or identifiers, and contains no analytics, advertising or tracking. It reads the URL and the product
+    number of the product page you are viewing, in the page, to decide which history to show; that never leaves your browser.</p>
+  <p>Its only network access is a read of the published static JSON dataset at
+    <code>https://tsuyoshi-otake.github.io/electro-parts</code>, performed by the extension's service worker with
+    <code>credentials: 'omit'</code>. Fetched data and one setting are cached in <code>chrome.storage.local</code>
+    on your own device (up to 200 products, LRU) and are removed when you uninstall the extension. GitHub may record
+    standard server logs for that hosting; this project neither receives nor uses them. Permissions are limited to
+    <code>storage</code> and that one origin. No remote code is loaded or executed. No data is sold or shared.</p>
+
+  <p><a href="./">← Electronics Price History</a></p>
+</body>
+</html>

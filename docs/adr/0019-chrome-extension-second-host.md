@@ -2,6 +2,8 @@
 
 状態: 採用 / 2026-09-07 / Issue #6 / userscript 0.4.1
 
+配布方法(「ウェブストアには出さない」)は [ADR-0020](0020-chrome-web-store-submission.md) が置き換えた。第 2 のホスト束縛という構成はそのまま。
+
 ## 背景と境界
 
 パネルを見るのに Tampermonkey の導入が要る。拡張機能を 1 つ入れれば済む利用者にとっては、これは余分な段階が 1 つ多い。
@@ -16,7 +18,7 @@
 - ワーカーは拡張内で唯一ネットワークに触れる場所であり、閉じた扉として書く。受け付けるメッセージは 1 種類、送り主は自分の拡張 ID のみ、URL は `DATA_HOSTS` の https のみ、待ち時間は上限 30 秒。店舗のページから任意の中継として使えない。
 - `manifest.json` は**生成物**で、手書きしない。`content_scripts[].matches` はアダプタ登録簿から、`host_permissions` は `DATA_HOSTS` から、`version` は `USERSCRIPT_VERSION` から作る。権限は `storage` だけで、`tabs`・`cookies`・`<all_urls>` は持たない。
 - アイコンも生成物とする(`scripts/lib/icon.ts` + `png.ts`)。バイナリを 1 つも repo に置かず、色はパネルの配色から取る。
-- 配布は `site/electronics-price-history-extension.zip` 1 つ。展開して「パッケージ化されていない拡張機能を読み込む」で入れる。**ウェブストアには出さない**。
+- 配布は `site/electronics-price-history-extension.zip` 1 つ。展開して「パッケージ化されていない拡張機能を読み込む」で入れる。~~**ウェブストアには出さない**~~(ADR-0020 で撤回。zip の導線は残す)。
 - 版はユーザースクリプトと同じ番号を使う。両方が同じバンドルから出る以上、別々の番号は嘘になる。
 
 ## 理由

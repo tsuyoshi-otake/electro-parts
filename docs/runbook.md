@@ -77,7 +77,8 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 3. Verify: `npm run build:extension` のあと `chrome://extensions` で `dist/extension` を読み込み、両店舗の実商品ページを開く。Expect: パネルが出る。**これは人が行う確認**で、自動化していない。
 4. 公開は「サイトだけ差し替える」と同じ(`republish`)。zip は `site/electronics-price-history-extension.zip` として同じアーティファクトに入る。
 5. Verify: 公開後に zip を落として `manifest.json` の `version` を見る。Expect: 上げた版。
-6. **利用者側は自動更新されない。** 既に入れている人は zip を取り直して読み込み直す必要がある。版を上げたら README とランディングページの案内も合わせる。
+6. **zip で入れた利用者は自動更新されない。** 取り直して読み込み直してもらう必要がある。版を上げたら README とランディングページの案内も合わせる。
+7. ウェブストアに掲載している場合は、同じ zip をダッシュボードにもアップロードする。**ストアは同じ版を 2 回受け付けない**ので、版を上げずに出し直すことはできない。貼る文言と手順は `docs/chrome-web-store-listing.md`(ADR-0020)。プライバシーポリシー(`/privacy.html`)が 404 だと審査に出せないので、Pages の更新を先に済ませる。
 
 ## ロールバック
 

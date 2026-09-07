@@ -86,7 +86,18 @@ jobs:
             if grep -Eq 'https?://[^"'"'"' ]*(cdn|unpkg|jsdelivr)' "$bundle"; then
               echo "::error::$bundle references a CDN"; exit 1
             fi
+            # Chrome Web Store: no remote code, and no API the manifest did not ask for.
+            if grep -Eq "\beval[[:space:]]*\(|new[[:space:]]+Function[[:space:]]*\(|\bimport[[:space:]]*\(|XMLHttpRequest" "$bundle"; then
+              echo "::error::$bundle can execute remote code"; exit 1
+            fi
+            if grep -Eq "chrome[.](tabs|cookies|scripting|webRequest|history|downloads|management)\b" "$bundle"; then
+              echo "::error::$bundle uses a chrome API the manifest does not declare"; exit 1
+            fi
           done
+          # The content script must not reach the network; that is the worker's job alone.
+          if grep -Eq "\bfetch[[:space:]]*\(" dist/extension/content.js; then
+            echo "::error::dist/extension/content.js fetches directly"; exit 1
+          fi
           ls -l dist/extension dist/site/electronics-price-history-extension.zip
 
       - name: Install Playwright Chromium
