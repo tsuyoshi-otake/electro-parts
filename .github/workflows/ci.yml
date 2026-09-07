@@ -74,6 +74,21 @@ jobs:
           fi
           ls -l dist/site
 
+      - name: Build Chrome extension
+        run: |
+          set -euo pipefail
+          node --import tsx scripts/build-extension.ts --out dist/extension --zip dist/site/electronics-price-history-extension.zip
+          # Same defence in depth as the userscript bundle, for both entry points.
+          for bundle in dist/extension/content.js dist/extension/background.js; do
+            if grep -Eq 'innerHTML|outerHTML|insertAdjacentHTML|document\.write' "$bundle"; then
+              echo "::error::$bundle contains an HTML-string sink"; exit 1
+            fi
+            if grep -Eq 'https?://[^"'"'"' ]*(cdn|unpkg|jsdelivr)' "$bundle"; then
+              echo "::error::$bundle references a CDN"; exit 1
+            fi
+          done
+          ls -l dist/extension dist/site/electronics-price-history-extension.zip
+
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
@@ -89,6 +104,7 @@ jobs:
             reports/
             test-results/e2e/**/*.png
             dist/site/electronics-price-history.user.js
+            dist/site/electronics-price-history-extension.zip
           retention-days: 14
           if-no-files-found: ignore
 

@@ -5,7 +5,7 @@
 - クローラーが定期的に(店舗ごとに月 1 回または週 1 回 → [ADR-0016](docs/adr/0016-per-store-observation-cadence.md))対象サイトのカタログを巡回して生スナップショットを保存し、
 - 店舗ごとの SQLite に**変化点だけ**を取り込み、
 - 静的 JSON(契約 v1)として GitHub Pages に公開し、
-- Tampermonkey ユーザースクリプト **Electronics Price History** が商品ページにパネルを差し込みます。
+- **Electronics Price History** が商品ページにパネルを差し込みます。Tampermonkey ユーザースクリプトと Chrome 拡張の 2 つの形があり、中身は同じバンドルです([ADR-0019](docs/adr/0019-chrome-extension-second-host.md))。
 
 対象は **秋月電子通商**(`akizuki`、一覧ページの HTML)と **スイッチサイエンス**(`switch-science`、Shopify のカタログ JSON → [ADR-0014](docs/adr/0014-shopify-catalog-api-over-html.md))の 2 店舗です。aitendo は設計上の拡張点だけを用意し、実装していません([docs/roadmap/roadmap.md](docs/roadmap/roadmap.md))。
 
@@ -14,6 +14,7 @@
 ## 目次
 
 - [ユーザースクリプトのインストール](#ユーザースクリプトのインストール)
+- [Chrome 拡張のインストール](#chrome-拡張のインストール)
 - [アーキテクチャ](#アーキテクチャ)
 - [静的データ契約 v1](#静的データ契約-v1)
 - [ローカルでの実行](#ローカルでの実行)
@@ -51,6 +52,27 @@
 
 データ取得先を変えたいとき(自分でホストする場合)は、Tampermonkey のストレージに `dataBaseUrl` を `https://` の URL で設定します。`@connect` に無いホストは Tampermonkey が確認を出します。
 
+## Chrome 拡張のインストール
+
+Tampermonkey を入れずに使う場合はこちらです。表示されるパネル・取得するデータ・観測頻度はユーザースクリプトとまったく同じで、ソースも同じものをビルドしています。
+
+1. `https://tsuyoshi-otake.github.io/electro-parts/electronics-price-history-extension.zip` を落として展開する。
+2. Chrome の `chrome://extensions` を開き、右上の「デベロッパーモード」を入れる。
+3. 「パッケージ化されていない拡張機能を読み込む」で展開したフォルダを選ぶ。
+4. 対応店舗の商品ページを開くとパネルが出ます(表示モードの切り替えも同じです)。
+
+- **自動更新はありません。** 版を上げたときは zip を取り直してください(ユーザースクリプトは `@updateURL` で自動更新されます)。デベロッパーモードの拡張機能に関する Chrome の警告も毎回出ます。ウェブストアには出していません。
+- 権限は `storage`(設定 1 個)とデータ取得先 `https://tsuyoshi-otake.github.io/*` だけです。閲覧履歴・タブ・Cookie にはアクセスしません。
+- データの取得はサービスワーカーが `credentials: 'omit'` で行い、URL は上記データオリジンだけを許可します。店舗のページから中継として使うことはできません。
+- 取得先を変えたいとき(自分でホストする場合)は `chrome.storage.local` の `dataBaseUrl` に `https://` の URL を入れます。データオリジン以外を入れた場合は既定値に戻ります。
+- 自分でビルドする場合:
+
+```bash
+npm run build:extension
+```
+
+`dist/extension/` が「パッケージ化されていない拡張機能」として読み込めるフォルダです。`--zip <ファイル>` を付けると配布用 zip も作ります。マニフェストとアイコンは生成物で、手書きしません。
+
 ## アーキテクチャ
 
 ```
@@ -78,6 +100,7 @@ Collector ─▶ Raw Snapshot ─▶ Store Snapshot Adapter ─▶ Common Normal
 | 店舗レジストリ | `src/stores/`(`registry.ts` = adapter、`collectorRegistry.ts` = collector) | ここだけ |
 | ユーザースクリプト共通コア | `userscript/core/`(dataClient、cache、controller、format)、`userscript/ui/`(panel、chart) | 知らない |
 | Page Adapter | `userscript/adapters/akizuki.ts`、`userscript/adapters/switch-science.ts`、`registry.ts` | 店舗別 |
+| ブラウザ束縛(ホスト) | `userscript/main.ts`(Tampermonkey)、`extension/`(Chrome 拡張: `host.ts` / `background.ts` / `content.ts`) | 知らない(`@match` もマニフェストの `matches` も Page Adapter 登録簿から生成) |
 
 共通コアに `if (store === 'akizuki')` は存在しません(CI の grep と設計レビューで確認)。店舗差は `StoreCapabilities`(範囲価格の有無、在庫数の意味など)としてデータに載り、UI はそれを見て表示を変えます。実際に効いているのが在庫数で、秋月は表示在庫数を出し、スイッチサイエンスは公開していない(`inventoryQuantitySemantics: 'not_exposed'`)ので、パネルは在庫数の行そのものを出しません。
 
@@ -211,14 +234,14 @@ npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.
 
 | ワークフロー | トリガー | 内容 |
 |---|---|---|
-| `crawl-publish.yml` | 毎月 1 日 20:17 UTC(2 日 05:17 JST)と毎週日曜 20:17 UTC(月曜 05:17 JST)、`workflow_dispatch`(`stores` = 観測する店舗を空白区切りで指定、空なら全部、`bootstrap`、`dry_run`、`snapshot_retention_days`、`reimport_snapshot_from_run` = 過去 run のスナップショットを再取り込みしてクロールを省く、`republish` = 公開済み履歴からサイトを作り直すだけで観測を増やさない) | 店舗を順に回す(後の店舗は前の店舗が最終化した状態から) → 履歴にあるのにサイトに無い店舗を `--republish` で復元 → Actions summary にレポート → `site/` にユーザースクリプトと index を追加 → サイトの完全性を検査 → 成果物アップロード(店舗ごとのスナップショット 90 日、レポートと状態 90 日)→ 完全なときだけ Pages へデプロイ → 公開後に店舗ごとの `datasetVersion` を確認 |
-| `ci.yml` | push(main)、pull_request、手動 | `npm audit`、typecheck、vitest(全プロジェクト)、ユーザースクリプトのビルドと禁止 API・CDN 参照の検査、Playwright E2E、Stryker(PR 以外) |
+| `crawl-publish.yml` | 毎月 1 日 20:17 UTC(2 日 05:17 JST)と毎週日曜 20:17 UTC(月曜 05:17 JST)、`workflow_dispatch`(`stores` = 観測する店舗を空白区切りで指定、空なら全部、`bootstrap`、`dry_run`、`snapshot_retention_days`、`reimport_snapshot_from_run` = 過去 run のスナップショットを再取り込みしてクロールを省く、`republish` = 公開済み履歴からサイトを作り直すだけで観測を増やさない) | 店舗を順に回す(後の店舗は前の店舗が最終化した状態から) → 履歴にあるのにサイトに無い店舗を `--republish` で復元 → Actions summary にレポート → `site/` にユーザースクリプト・Chrome 拡張 zip・index を追加 → サイトの完全性を検査 → 成果物アップロード(店舗ごとのスナップショット 90 日、レポートと状態 90 日)→ 完全なときだけ Pages へデプロイ → 公開後に店舗ごとの `datasetVersion` を確認 |
+| `ci.yml` | push(main)、pull_request、手動 | `npm audit`、typecheck、vitest(全プロジェクト)、ユーザースクリプトと Chrome 拡張のビルドおよび禁止 API・CDN 参照の検査、Playwright E2E、Stryker(PR 以外) |
 
 - 公開は `pages-publish` の concurrency グループで**単一ライター**。実行中の公開はキャンセルされず、後続はキューに入ります。
 - 店舗は 1 つの job の中で**直列**に回ります。共有するのは 1 つの SQLite と 1 つの `state/` なので、並行にすると後から最終化したほうが他方の run を捨てます。ワークフローは 1 店舗目のあと `--previous-dir site/state` を足して連結します。
 - **1 店舗が失敗しても、走った店舗の公開は止めません。** ただしデプロイはサイト全体の差し替えなので、失敗した店舗をそのままにすると公開データが消えます。そこで、履歴に run がある(`state.json` の `stores.<id>.runCount > 0`)のにサイトにマニフェストが無い店舗を `--republish` で作り直し、それでも欠けていればゲートがデプロイを**拒否**します(fail-closed)。ジョブ自体は失敗した店舗があれば最後に失敗します。
 - **どの schedule がどの店舗を観測するかは cron には書いてありません。** 起動した cron の周期(月次 / 週次)と、各 `config/<store>.json` の `observation.cadence` を突き合わせて選びます。選ばれなかった店舗は `--republish` で維持されるので、公開サイトから消えることはありません。現在は秋月電子通商 = 月 1(1 run 約 2,700 リクエスト)、スイッチサイエンス = 週 1(約 54 リクエスト)([ADR-0016](docs/adr/0016-per-store-observation-cadence.md))。
-- Pages への反映は 1 つのアーティファクト(データ + 状態 + ユーザースクリプト)で行うので、読者が中途半端なデータセットを見ることはありません(原子的公開)。
+- Pages への反映は 1 つのアーティファクト(データ + 状態 + ユーザースクリプト + 拡張 zip)で行うので、読者が中途半端なデータセットを見ることはありません(原子的公開)。
 - SQLite は git にコミットしません。最終化した DB は Pages の `state/` に公開し、次回の入力になります。バックアップは Actions の成果物(90 日)。ロールバックは「該当 run の `state-<run id>` 成果物を `--previous-dir` で読み直して公開する」手順([docs/runbook.md](docs/runbook.md))。
 - 権限は最小(`contents: read`、デプロイジョブだけ `pages: write` + `id-token: write`)。アクションはコミット SHA でピン留め。シークレットは使いません。
 
@@ -245,16 +268,16 @@ npm run bench
 | ユニット | `tests/unit/` | 価格正規化、在庫文言、履歴コア、統計、一覧パーサー、Shopify カタログの読み取りと handle の検証、丁寧な fetcher、設定 |
 | プロパティ(fast-check) | `tests/property/` | 取り込み順序非依存、系列の不変条件、パーサーの頑健性 |
 | DB | `tests/db/` | 冪等取り込み、変化点、在庫保持、隔離、メタデータ変化 |
-| 契約 | `tests/contract/` | 生成物の検証、決定性(同じ DB → 同じ `datasetVersion`) |
+| 契約 | `tests/contract/` | 生成物の検証、決定性(同じ DB → 同じ `datasetVersion`)、Chrome 拡張マニフェストが Page Adapter 登録簿・データホスト・版と一致すること |
 | 統合 | `tests/integration/` | 保存済み一覧ページ / 偽 Shopify ストアに対するクロール、**実データ**(2026-08-02 と 2026-09-06 の秋月全量スナップショット。FT232RQ キット 109951: 1150 → 1200 円、RE-280RA 106438: 250 → 280 円。スイッチサイエンスは 2026-09-07 の 10,382 商品)、パイプラインの状態機械、**2 店舗が 1 つのサイトを共有する場合**(後発店舗の合流、1 サイクルで両方の履歴を進める、失敗した店舗を republish で戻す) |
-| ユーザースクリプト(jsdom) | `tests/userscript/` | キャッシュ/LRU、SWR、Page Adapter、コントローラー、チャート |
-| E2E(Playwright) | `tests/e2e/` | ビルド済みユーザースクリプトを**保存済み**商品ページ(秋月とスイッチサイエンス)で実行。両オリジンとも route interception で提供し、本物のサイトには触れません。キャッシュ再利用、障害時の fail-open、未収録商品、コレクション URL 経由の同一性、対応表のない商品では自店だけを読むこと、店舗横断比較の双方向性・取得上限・狭幅表示を検証 |
+| ユーザースクリプト(jsdom) | `tests/userscript/` | キャッシュ/LRU、SWR、Page Adapter、コントローラー、チャート、拡張のホスト束縛(`chrome.storage.local`、ワーカーへのメッセージ、保存済みページでの描画) |
+| E2E(Playwright) | `tests/e2e/` | ビルド済みユーザースクリプトを**保存済み**商品ページ(秋月とスイッチサイエンス)で実行。両オリジンとも route interception で提供し、本物のサイトには触れません。キャッシュ再利用、障害時の fail-open、未収録商品、コレクション URL 経由の同一性、対応表のない商品では自店だけを読むこと、店舗横断比較の双方向性・取得上限・狭幅表示を検証。**未展開の Chrome 拡張を実際に読み込む** spec もあり、サービスワーカーが取得したデータでパネルが出ること・通信が 2 回であることを確認します |
 | 変異(Stryker) | `stryker.config.mjs` | `src/core/` の履歴・価格・統計・健全性・同一性・時刻 |
 | ベンチ | `tests/bench/run-bench.ts` | 合成カタログで 1 / 3 / 5 年分を毎日取り込み(実運用より高頻度の上限側テスト) |
 
 Playwright は初回に `npx playwright install chromium` が必要です。
 
-実績: ユニット〜統合 323 テスト(32 ファイル、15 s)、E2E 7 テスト(10 s)、変異スコア **89.60 %**(704 変異体: killed 595 / timeout 8 / survived 60 / no coverage 10 / ignored 31、しきい値 break 70)。
+実績: ユニット〜統合 423 テスト(38 ファイル、12 s)、E2E 11 テスト(12 s)、変異スコア **89.60 %**(704 変異体: killed 595 / timeout 8 / survived 60 / no coverage 10 / ignored 31、しきい値 break 70)。
 
 ## 性能予算と実測
 
@@ -297,7 +320,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 
 観測回数は 4.33 倍でも配信サイズは 1.23 倍にしかなりません。変化点しか保存しないので、商品名や型番のような 1 商品あたりの固定費が観測回数で増えないからです。**頻度を決めているのはサイズではなく相手サイトへの負荷**です([ADR-0016](docs/adr/0016-per-store-observation-cadence.md))。
 
-実データ(統合テストの保存済みスナップショット): 秋月は 2 run(2026-08-02、2026-09-06)から 8,809 商品ファイルを生成。これは 18 ジャンルを手書きしていた頃のスナップショットで、サイトマップ由来の巡回(ADR-0012)に切り替えたあとの公開データは 12,772 商品(datasetVersion `3ccce668810808ca`、2026-09-06〜09-07 の 2 run)。スイッチサイエンスは 2026-09-07 の実クロール(10,382 商品、カタログ 42 ページ、商品サイトマップ 11)から 60 商品を切り出したものを使い、`¥165` のカメラケーブルから `¥8,910,000` の装置まで、価格 0 円の 4 商品も含めて写像を検証しています。0.4.1のユーザースクリプトは対応表を含め677,674バイト(圧縮なし)。照合元カタログ全体はバンドルに含めません。
+実データ(統合テストの保存済みスナップショット): 秋月は 2 run(2026-08-02、2026-09-06)から 8,809 商品ファイルを生成。これは 18 ジャンルを手書きしていた頃のスナップショットで、サイトマップ由来の巡回(ADR-0012)に切り替えたあとの公開データは 12,772 商品(datasetVersion `3ccce668810808ca`、2026-09-06〜09-07 の 2 run)。スイッチサイエンスは 2026-09-07 の実クロール(10,382 商品、カタログ 42 ページ、商品サイトマップ 11)から 60 商品を切り出したものを使い、`¥165` のカメラケーブルから `¥8,910,000` の装置まで、価格 0 円の 4 商品も含めて写像を検証しています。0.4.1のユーザースクリプトは対応表を含め677,674バイト(圧縮なし)。Chrome 拡張は同じバンドルで、配布 zip が 89,893 バイト、展開後が 682,395 バイト(バンドル + マニフェスト + 生成アイコン 4 枚)。照合元カタログ全体はバンドルに含めません。
 
 ## データの注意点
 
@@ -314,6 +337,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 
 - ユーザースクリプトは **Cookie を使わず、テレメトリを送らず**、アクセス先は `@connect` に書かれたデータホスト(`tsuyoshi-otake.github.io`)だけです。閲覧中のページの内容は外に送りません(ページキーだけをデータ URL に使います)。
 - 取得は `GM_xmlhttpRequest` の `anonymous` モード(Cookie なし)。キャッシュは Tampermonkey のストレージにあり、LRU で 200 商品まで。
+- Chrome 拡張も同じで、Cookie もテレメトリもありません。取得はサービスワーカーが `credentials: 'omit'` で行い(店舗のページは発行元にならない)、受け付けるメッセージは 1 種類・送り主は自分の拡張のみ・URL はデータオリジンのみ・待ち時間の上限は 30 秒です。権限は `storage` とそのオリジンだけで、キャッシュは `chrome.storage.local`。
 - 描画は Shadow DOM 内で、`textContent` と DOM API だけを使います(`innerHTML` などは CI が禁止)。外部スクリプトや CDN は読み込みません。チャートは同梱の SVG 実装です。
 - ページキーなど URL に入る文字列は `src/core/identity.ts` の安全な文字集合に限定し、Publisher はサイトルートの外に書きません。
 - クローラーは連絡先入りの UA、1 リクエストずつ、1.5 s + ジッタの間隔、`Retry-After` 尊重、4xx は即中止。アクセス制御を回避する仕組みはありません。
@@ -327,7 +351,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 1. `src/adapters/<store>/`: 生スナップショットのスキーマ、`StoreSnapshotAdapter` 実装、`StoreCapabilities`。
 2. `src/collectors/<store>/`: `StoreCollector` 実装(`politeFetcher` を使う)。
 3. `src/stores/registry.ts` と `collectorRegistry.ts` に登録、`config/<store>.json` を追加。
-4. `userscript/adapters/<store>.ts`: `StorePageAdapter`(URL 判定、ページキー抽出、差し込み位置)。`registry.ts` に登録すると `@match` が自動で増えます。
+4. `userscript/adapters/<store>.ts`: `StorePageAdapter`(URL 判定、ページキー抽出、差し込み位置)。`registry.ts` に登録すると、ユーザースクリプトの `@match` も拡張マニフェストの `matches` も自動で増えます。
 5. `.github/workflows/crawl-publish.yml` の `env.STORES` に店舗 ID を足し、スナップショット成果物のアップロード step を 1 つ足す。`STORES` に載せるだけで、パイプラインの実行・失敗時の復元・デプロイ前の完全性検査はすべて追随します。
 6. テスト: 保存済みページのフィクスチャ、実データ統合テスト、E2E。
 
@@ -359,5 +383,6 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 | [0016](docs/adr/0016-per-store-observation-cadence.md) | 観測頻度は店舗ごとに宣言する(スイッチサイエンスは週 1、秋月は月 1) |
 | [0017](docs/adr/0017-cross-store-comparisons.md) | 店舗横断の対応表と価格比較承認を分離する |
 | [0018](docs/adr/0018-reviewed-catalog-mapping-pipeline.md) | 保存カタログの候補探索と承認済み対応表の再生成を分離する |
+| [0019](docs/adr/0019-chrome-extension-second-host.md) | Chrome 拡張はユーザースクリプトの第 2 のホスト束縛として出す |
 
 ライセンス: MIT。観測データは店舗の表示を記録したもので、権利は各店舗にあります。

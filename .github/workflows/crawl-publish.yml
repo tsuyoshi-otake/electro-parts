@@ -233,10 +233,13 @@ jobs:
             fi
           done
 
-      - name: Build userscript and static pages into site/
+      - name: Build userscript, Chrome extension and static pages into site/
         if: hashFiles('site/state/state.json') != ''
         run: |
           node --import tsx scripts/build-userscript.ts --out site
+          # The extension ships as the zip only: it is installed from disk, so
+          # the unpacked tree on Pages would just be a second copy of the bundle.
+          node --import tsx scripts/build-extension.ts --out "$RUNNER_TEMP/extension" --zip site/electronics-price-history-extension.zip
           cp -R public/. site/
           touch site/.nojekyll
 

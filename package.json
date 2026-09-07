@@ -9,7 +9,7 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p userscript/tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p userscript/tsconfig.json --noEmit && tsc -p extension/tsconfig.json --noEmit",
     "test": "vitest run --exclude \"tests/e2e/**\"",
     "test:unit": "vitest run tests/unit tests/db tests/contract tests/userscript",
     "test:property": "vitest run tests/property",
@@ -18,6 +18,7 @@
     "test:mutation": "stryker run",
     "bench": "node --import tsx tests/bench/run-bench.ts",
     "build:userscript": "node --import tsx scripts/build-userscript.ts",
+    "build:extension": "node --import tsx scripts/build-extension.ts",
     "matching:build": "node --import tsx scripts/matching/generate.ts",
     "matching:check": "node --import tsx scripts/matching/generate.ts --check",
     "matching:discover": "node --import tsx scripts/matching/generate.ts --discover",

@@ -9,11 +9,14 @@ import { migrate, SQLITE_SCHEMA_VERSION } from '../../src/db/migrations/index.ts
 import { readStoreHistory } from '../../src/db/read.ts';
 import { generateStoreDataset } from '../../src/publisher/generate.ts';
 import { writeStoreDataset } from '../../src/publisher/write.ts';
+import { buildExtension } from '../../scripts/build-extension.ts';
 import { buildUserscript } from '../../scripts/build-userscript.ts';
 import { loadAkizukiNormalized, loadSwitchScienceNormalized } from '../helpers/fixtures.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const E2E_SITE_DIR = path.resolve(here, '..', '..', 'test-results', 'e2e-site');
+/** Unpacked Chrome extension under test, built from the same sources as the userscript. */
+export const E2E_EXTENSION_DIR = path.resolve(here, '..', '..', 'test-results', 'e2e-extension');
 
 /**
  * Produces, once per run, real contract v1 datasets from the checked-in
@@ -38,6 +41,8 @@ export default async function globalSetup(): Promise<void> {
   db.close();
   const summaries = [await writeStoreDataset(E2E_SITE_DIR, akizuki), await writeStoreDataset(E2E_SITE_DIR, switchScience)];
   const built = await buildUserscript(E2E_SITE_DIR);
+  await rm(E2E_EXTENSION_DIR, { recursive: true, force: true });
+  await buildExtension(E2E_EXTENSION_DIR);
   await writeFile(
     path.join(E2E_SITE_DIR, 'e2e-setup.json'),
     JSON.stringify({

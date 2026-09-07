@@ -59,7 +59,7 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 
 ## サイトだけ差し替える(観測を増やさない)
 
-ユーザースクリプトのバンドルやランディングページなど、**データではなくサイトの中身**を直したときに使う。公開済みの履歴をそのまま再生成してデプロイするだけで、クロールも取り込みもしない。
+ユーザースクリプトのバンドル、Chrome 拡張の zip、ランディングページなど、**データではなくサイトの中身**を直したときに使う。公開済みの履歴をそのまま再生成してデプロイするだけで、クロールも取り込みもしない。
 
 - Actions → "Crawl and publish" → Run workflow → `republish` にチェック(全店舗が対象になる)。
 - 段階は `previous_state` → `generate` → `finalize` → `verify` だけ走り、`collect` / `validate` / `import` / `compact` は skipped。結果は `unchanged`(exit 0)。
@@ -67,6 +67,17 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 - ローカルでは `node --import tsx src/cli/main.ts pipeline --config config/<store>.json --republish`。
 - `--bootstrap` や `--snapshot` とは併用できない(どちらも観測を持ち込むため、run は失敗する)。
 - ワークフローは同じ仕組みを 2 か所で自動的に使う: `stores` で選ばれなかった店舗の維持と、失敗した店舗の復元。どちらも「公開済み履歴からその店舗のデータセットを作り直す」だけで、観測は増えない。
+
+## Chrome 拡張を出し直す
+
+拡張はユーザースクリプトと同じソース・同じ版番号から作る。片方だけ直すことはない。
+
+1. `userscript/version.ts` の `USERSCRIPT_VERSION` を上げる(バンドルを変えたなら必須。ユーザースクリプトの自動更新も、拡張マニフェストの `version` もこの 1 か所から来る)。
+2. Verify: `npm run typecheck && npm test && npm run test:e2e`。Expect: 拡張マニフェストの契約テストと、未展開の拡張を実ブラウザに読み込む E2E が通る。
+3. Verify: `npm run build:extension` のあと `chrome://extensions` で `dist/extension` を読み込み、両店舗の実商品ページを開く。Expect: パネルが出る。**これは人が行う確認**で、自動化していない。
+4. 公開は「サイトだけ差し替える」と同じ(`republish`)。zip は `site/electronics-price-history-extension.zip` として同じアーティファクトに入る。
+5. Verify: 公開後に zip を落として `manifest.json` の `version` を見る。Expect: 上げた版。
+6. **利用者側は自動更新されない。** 既に入れている人は zip を取り直して読み込み直す必要がある。版を上げたら README とランディングページの案内も合わせる。
 
 ## ロールバック
 

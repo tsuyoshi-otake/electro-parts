@@ -14,13 +14,24 @@
 <body>
   <h1>Electronics Price History</h1>
   <p>電子部品通販サイトの商品ページで観測した価格・在庫表示・掲載状況の履歴を、静的データとして公開しています。
-    Tampermonkey 用ユーザースクリプトを入れると、対応サイトの商品ページに履歴パネルが表示されます。</p>
+    Chrome 拡張または Tampermonkey 用ユーザースクリプトを入れると、対応サイトの商品ページに履歴パネルが表示されます。</p>
   <h2>インストール</h2>
+  <p>どちらか一方で足ります。表示されるパネルも取得するデータも同じで、同じソースからビルドしています。
+    対応サイト(秋月電子通商・スイッチサイエンス)の商品ページを開くと、購入エリアの下に「Electronics Price History」パネルが出ます。</p>
+  <h3>Chrome 拡張</h3>
+  <ol>
+    <li><a href="electronics-price-history-extension.zip">electronics-price-history-extension.zip</a> を落として展開する。</li>
+    <li>Chrome で <code>chrome://extensions</code> を開き、右上の「デベロッパーモード」を入れる。</li>
+    <li>「パッケージ化されていない拡張機能を読み込む」で、展開したフォルダを選ぶ。</li>
+  </ol>
+  <p>自動更新はありません。版が上がったら zip を取り直してください(デベロッパーモードの拡張機能に関する Chrome の警告も毎回出ます)。
+    権限は設定 1 個の保存と、このサイトからのデータ取得だけです。閲覧履歴・タブ・Cookie にはアクセスしません。</p>
+  <h3>Tampermonkey ユーザースクリプト</h3>
   <ol>
     <li>ブラウザに <a href="https://www.tampermonkey.net/" rel="noopener">Tampermonkey</a> を入れる。</li>
     <li><a href="electronics-price-history.user.js">electronics-price-history.user.js</a> を開き、Tampermonkey の確認画面でインストールする。</li>
-    <li>対応サイト(秋月電子通商・スイッチサイエンス)の商品ページを開くと、購入エリアの下に「Electronics Price History」パネルが出ます。</li>
   </ol>
+  <p>こちらは <code>@updateURL</code> 経由で自動更新されます。</p>
   <h2>0.4.1: 商品照合の拡充と仕様差の表示</h2>
   <p>対応表のある商品では、同一商品・類似商品・要確認候補を分けて表示します。販売条件まで確認済みの同一商品は、店舗別の履歴を重ねて記録価格差を表示。類似商品は仕様差と商品リンクを別枠に表示し、互換性を保証しません。</p>
   <p>0.4.1の対応表は424組。同一商品は保存カタログ照合済み293組・候補3組、類似商品は照合済み108組・候補6組、要確認14組です。秋月8,677商品・スイッチサイエンス10,343商品の保存カタログを型番で探索し、Picoなど13の製品群で具体的な仕様差を表示します。現在の全商品・全別名を網羅したものではなく、全件の詳細ページ確認でもありません。</p>
@@ -35,7 +46,7 @@
   <div class="note">
     <p><strong>データについて</strong>: 表示される値は、このプロジェクトが観測した時点の店頭表示の記録であり、店舗の公式データではありません。
       観測間隔は店舗ごとに異なり(秋月は約1か月、スイッチサイエンスは約1週間)、観測の間に起きた変化は記録されません。価格は記録した販売単位・条件によるもので、在庫数は店舗が表示した数値そのものです。
-      ユーザースクリプトは Cookie を使わず、閲覧履歴を送信しません。データ取得先は GitHub Pages のこのサイトだけです。</p>
+      ユーザースクリプトも Chrome 拡張も Cookie を使わず、閲覧履歴を送信しません。データ取得先は GitHub Pages のこのサイトだけです。</p>
   </div>
   <p>ソースコード・仕様・ロードマップ: <a href="https://github.com/tsuyoshi-otake/electro-parts">github.com/tsuyoshi-otake/electro-parts</a></p>
 </body>
