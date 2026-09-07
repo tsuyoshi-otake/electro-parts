@@ -41,4 +41,9 @@
 
 - **Chrome ウェブストア never accepts the same version twice**, and an uploaded package may not carry `update_url` or `key`. Resubmitting means bumping `USERSCRIPT_VERSION` (which is also the extension version - same bundle, one number). The privacy policy URL must already resolve: publish Pages before submitting.
 - **The panel's `section` is replaced when data arrives.** A Playwright locator resolved during loading detaches mid-action ("Element is not attached to the DOM"). Scroll and wait by the host element `#electronics-price-history-root`, which keeps its identity.
-- **The chart is lazy (IntersectionObserver).** Waiting for `svg[role="img"]` to be visible before scrolling the panel into view times out. Scroll first, then wait for the SVG.
+- **The chart is lazy (IntersectionObserver).** Waiting for the chart (`svg.eph-chart`) to be visible before scrolling the panel into view times out. Scroll first, then wait for the SVG.
+
+- **Screenshots and demos: one throwaway browser profile per shot.** The extension caches manifests and products in `chrome.storage.local`, so a shared profile leaks one dataset's version into another shot and the panel renders `dataset version differs from manifest (publication in progress?)`.
+- **The comparison chart's `svg` is `role="group"`; the single-store chart is `role="img"`.** Wait on `svg.eph-chart` when either may appear.
+- **No mapped pair is capturable offline.** The checked-in switch-science snapshot is a 60-product sample and shares no relation with the akizuki snapshot, and only 2 of 424 relations carry a `pricePolicy` (ATOM Lite, Arduino UNO R4 Minima). Showing a real cross-store comparison means reading the published dataset - never synthesising one for an image a user will see.
+- **A generated image is not verified until it has been looked at.** All three screenshot defects (wrong wait selector, cache bleed, visible spinner) exited 0.
