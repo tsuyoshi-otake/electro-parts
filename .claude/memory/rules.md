@@ -60,3 +60,13 @@
 - **掲載画像は 6 枚**: スクリーンショット 4(1280×800)、ショップアイコン 128×128、プロモーションタイル 440×280 と 1400×560。
   **JPEG か 24 ビット PNG のみ**(アルファ不可)。スクリーンショットの file input は `multiple` ではないので 1 枚ずつ設定する。
 - **提出可否の根拠は「送信できない理由」ダイアログだけを見る。** Google が未入力欄を列挙する。全部埋めると本文が空になる。
+
+- **Chrome 152 は `--load-extension` を完全に無視する。** 同じ `dist/extension` を Chromium 151 は読み込む
+  (chrome://extensions に掲載され、service worker `.../background.js` が動く)のに、Chrome 152 は一覧が空。
+  `--disable-features=DisableLoadExtensionCommandLineSwitch` でも戻らない。CDP の `Extensions.loadUnpacked` は
+  **ブラウザ級ドメイン**なので `context.browser().newBrowserCDPSession()` が要る(ページ側の session では
+  `Method not available`)。それは id を返して成功するが、Chrome 152 では拡張が不活性のまま
+  (service worker なし、自分の manifest.json すら `ERR_BLOCKED_BY_CLIENT`、content script が動かない)。
+  **実ブラウザでの拡張検証は `channel: 'chromium'` で行う。** インストール済み Chrome での最終確認は人手。
+- **保存済みスナップショットを `context.route` で返す E2E は「実サイトで動作確認した」ことにはならない。**
+  実データ・実 DOM・実 CSP のどれも通っていない。リリース前に一度は実ページで開く(1 ストア 1 ページで足りる)。

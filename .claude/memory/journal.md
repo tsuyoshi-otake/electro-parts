@@ -254,3 +254,28 @@
 - 現状: ドラフト `jklcjijjlombfgmagcbmfkjglomaiipj`。掲載情報・プライバシー・販売地域(料金なし/公開/155 地域)まで入力し
   下書き保存済み。**審査のため送信は押していない** - 外向きで取り消しの利かない操作なので、埋まった画面を見せて承認を待つ。
 - 検証: typecheck(3 プロジェクト)、433 tests / 39 files 13 秒、生成画像 6 枚を 1 枚ずつ目視、テストプロセスの残骸なし。
+
+## 2026-09-07 - パッケージ版拡張を実サイトで開発者インストール検証 (#8)
+
+- 問いかけ:「これさ、ローカルで開発者インストールして動作確認したんだよね？」。正直な答えは**その時点では No**。
+  拡張を実際に読み込むテストは `tests/e2e/extension-akizuki.spec.ts` の 1 本だけで、`context.route` で
+  保存済みスナップショットを返している。**実サイト上でパッケージ版を動かした証拠は存在しなかった。**
+- やったこと: `dist/extension`(v0.4.1、アップロード済み zip と同一内容)を `--load-extension` で読み込み、
+  秋月 g117209 と スイッチサイエンス 6262 の**実ページを 1 回ずつ**開いた。ストアへの負荷は実測を報告
+  (akizukidenshi.com: 69 / www.switch-science.com: 60 リクエスト = それぞれ 1 ページ表示ぶん)。クロールはしない。
+- 結果(Playwright の Chromium 151): 両ストアとも ok。公開中の実データを読み、秋月 ¥1,980 / SS ¥1,793、
+  記録価格差 ±¥187、観測期間 2026-09-07、データ版 762d7ad2cd13eaf8。パネル・チャート・他店比較まで描画を確認。
+- 自分の検証スクリプト側にバグがあった。`svg.eph-chart` を待ってから `scrollIntoViewIfNeeded()` していたため
+  Switch Science でタイムアウト。パネルは完全に描けているのに `charts: 0, svgs: 0`。チャートは
+  IntersectionObserver で遅延描画されるので**先にスクロールする**。`scripts/build-store-assets.ts:121` に
+  同じ順序のコメントがあり、rules.md にも既に書いてあった - 読んでから書けば防げた失敗。
+- **インストール済み Chrome 152.0.7977.77 では拡張が起動しない。** A/B で切り分け済み: 同一ディレクトリを
+  Chromium 151 は読み込むが Chrome 152 は `--load-extension` を無視して一覧が空。機能フラグでも戻らない。
+  CDP の `Extensions.loadUnpacked` は id(`giifkbgnonfciomdhdfiookcdnpdogfb`)を返すのに拡張は不活性のまま。
+  **Chrome 側の自動化対策であって、パッケージの欠陥ではない**(同じディレクトリが Chromium では動くのが対照実験)。
+- 残った唯一の未検証経路: chrome://extensions の「パッケージ化されていない拡張機能を読み込む」。
+  OS のネイティブファイルダイアログが開くため Playwright では操作できず、computer-use もブラウザは tier "read" で
+  クリックできない。**本人の手で 1 分の確認**として引き渡した(UI 経路は Chrome が塞いでいないので通るはず)。
+- 検証: 実ページ 2 枚のスクリーンショットを目視。ブラウザプロセスの残骸なしを CommandLine で確認。
+- 審査のため送信は**まだ押していない**。掲載情報のホームページ URL は指摘を受けてリポジトリから
+  公開サイト <https://tsuyoshi-otake.github.io/electro-parts/> に直した。
