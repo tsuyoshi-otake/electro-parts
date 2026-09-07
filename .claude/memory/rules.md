@@ -47,3 +47,16 @@
 - **The comparison chart's `svg` is `role="group"`; the single-store chart is `role="img"`.** Wait on `svg.eph-chart` when either may appear.
 - **No mapped pair is capturable offline.** The checked-in switch-science snapshot is a 60-product sample and shares no relation with the akizuki snapshot, and only 2 of 424 relations carry a `pricePolicy` (ATOM Lite, Arduino UNO R4 Minima). Showing a real cross-store comparison means reading the published dataset - never synthesising one for an image a user will see.
 - **A generated image is not verified until it has been looked at.** All three screenshot defects (wrong wait selector, cache bleed, visible spinner) exited 0.
+
+- **Chrome ウェブストアのギャラリー(`chrome.google.com/webstore/*`)は拡張からのスクリプト実行もスクリーンショットも禁止**
+  (`The extensions gallery cannot be scripted`)。claude-in-chrome も computer-use(ブラウザは tier "read")も使えない。
+  ダッシュボードを自動操作する唯一の経路は**外部 CDP** - Playwright の `connectOverCDP` は拡張ではないので通る。
+- **Chrome 136 以降は既定の user-data-dir では `--remote-debugging-port` を無視する。** フラグが付いていても 9222 は listen しない。
+  `--user-data-dir` に別ディレクトリを渡した Chrome を新しく起動し、本人にログインしてもらう。署名済みプロファイルの複製はしない。
+- **Google の Material UI では Playwright の `.click()` が overlay に奪われる**(`div.VfPpkd-aPP78e`、`div[jsname="GGAcbc"]`、
+  開いたままのダイアログ)。`page.evaluate` から DOM の `.click()` を呼ぶ。ネイティブ input のラジオ/チェックボックスもこれで change が出る。
+- **ストアのアイテム名と概要はダッシュボードで編集できない**(アップロードした zip のマニフェストから読む)。
+  文言を変えるにはパッケージを作り直して版を上げる。
+- **掲載画像は 6 枚**: スクリーンショット 4(1280×800)、ショップアイコン 128×128、プロモーションタイル 440×280 と 1400×560。
+  **JPEG か 24 ビット PNG のみ**(アルファ不可)。スクリーンショットの file input は `multiple` ではないので 1 枚ずつ設定する。
+- **提出可否の根拠は「送信できない理由」ダイアログだけを見る。** Google が未入力欄を列挙する。全部埋めると本文が空になる。

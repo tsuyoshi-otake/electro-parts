@@ -229,3 +229,28 @@
   3. The related cards load after the chart, so the first good-looking image still had "記録価格を読み込み中…" in it. The shot now waits until the panel's shadow root contains no 読み込み中 anywhere.
 - Verified: typecheck (3 projects), 433 tests / 39 files in 13 s, 11 E2E in 11 s, all four images regenerated and inspected one by one, no browser or test process left behind (checked by CommandLine, not by name - the user's own Chrome is always running).
 - Remaining, unchanged: the submission needs the account holder to sign in, register (fee, 2FA, verified contact) and accept the developer agreement. Recorded in #8.
+
+## 2026-09-07 - Chrome ウェブストアのダッシュボードを CDP で埋めた (#8, 8ce61be)
+
+- 依頼:「申請まで頼むよ」。ブラウザ自動化の経路を 3 つ試し、2 つが構造的に不可能だと分かった。
+  1. claude-in-chrome(拡張)→ 全 URL で `The extensions gallery cannot be scripted`。
+     `chrome.google.com/webstore/*` は拡張のスクリプト実行もスクリーンショットも禁止で、4 URL で再現。回避策なし。
+  2. computer-use → ブラウザは tier "read" 固定。画面は見えるがクリックもタイプもできない。
+  3. 外部 CDP → 動く。**拡張ではない**のでギャラリーの禁止に当たらない。
+- 途中で分かった罠: **Chrome 136 以降は既定の user-data-dir を使うと `--remote-debugging-port` を無視する**。
+  この箱の Chrome 152 は当該フラグ付きで起動していたのに 9222 は 127.0.0.1 も ::1 も listen していなかった。
+  署名済みプロファイルの複製は勧めない(アカウント側の異常検知)ので、別プロファイルを新規に作って本人にログインしてもらった。
+- Material Web の UI で 2 回止まった。`div.VfPpkd-aPP78e`(リップル)と `div[jsname="GGAcbc"]`、それに閉じ忘れたダイアログが
+  pointer events を奪う。Playwright の `.click()` は 15 秒待って諦める。`page.evaluate` から DOM の `.click()` を呼べば通る。
+  ラジオとチェックボックスもネイティブ input なので、JS クリックで change が発火する。
+- 掲載情報タブで 2 つ手戻り。**アイテム名と概要はダッシュボードで読み取り専用**(zip のマニフェストから読む)ため、
+  「対応する電子部品通販サイト」を「秋月電子通商とスイッチサイエンス」に直すのにパッケージの作り直しが要った。
+  画像も 4 枚では足りず、ショップアイコンとプロモーションタイル 2 枚が必須/推奨で空だった。
+  スクリーンショットの file input は `multiple` ではないので 1 枚ずつ入れる。
+- ブロッカーの正解は**「送信できない理由」ダイアログ**にしかない。Google 自身が 5 件(storage・ホスト権限・リモートコード・
+  単一用途・データ使用の表明)を列挙してくれるので、推測で埋めずにこれを読んでから埋めた。全部埋めるとダイアログの本文が空になる。
+- トレーダー申告は**非取引業者**で設定済みだった(パブリッシャー > 設定、`input[name=merchantType]` の 2 番目が checked)。
+  取引業者を選ぶと氏名・住所・電話番号が掲載ページに出る。住所欄が空でよいのはこの申告のため。
+- 現状: ドラフト `jklcjijjlombfgmagcbmfkjglomaiipj`。掲載情報・プライバシー・販売地域(料金なし/公開/155 地域)まで入力し
+  下書き保存済み。**審査のため送信は押していない** - 外向きで取り消しの利かない操作なので、埋まった画面を見せて承認を待つ。
+- 検証: typecheck(3 プロジェクト)、433 tests / 39 files 13 秒、生成画像 6 枚を 1 枚ずつ目視、テストプロセスの残骸なし。
