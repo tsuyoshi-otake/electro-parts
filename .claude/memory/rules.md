@@ -8,7 +8,7 @@
 - **`basisKey` joins fields with `\u0000` and encodes a null `unitLabel` as `\u0001`.** Tests must build expected keys with `String.fromCharCode`.
 - **`npm run pipeline -- summary` is wrong**: the script already contains `pipeline`. Use `node --import tsx src/cli/main.ts summary --report ...`.
 - **Sanity thresholds are strict `>`.** A drop of exactly the threshold is not quarantined; tests must use the boundary in both directions.
-- **Stryker with `vitest.related: true` produced 100 NoCoverage mutants (68.95 %)**; `related: false, dir: 'tests'` plus targeted guard tests gives 89.45 %. Keep `related: false`.
+- **Stryker with `vitest.related: true` produced 100 NoCoverage mutants (68.95 %)**; `related: false, dir: 'tests'` plus targeted guard tests gives 89.60 %. Keep `related: false`.
 - **Buffer → ArrayBuffer**: slice with `buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength)`; a pooled Buffer's `.buffer` is larger than the data.
 - **jsdom fixtures**: building test DOMs with `innerHTML` is fine in tests, but the production bundle must never contain HTML-string sinks (CI greps the bundle).
 - **Playwright needs `npx playwright install chromium`** once per machine; in CI `--with-deps`.
@@ -22,3 +22,7 @@
 - **Coverage claims need an oracle.** Akizuki publishes `Sitemap_index.xml` (13,027 products, 458 `c`, 1,412 `r`); crawl families are fixed at `c + r` (98.04 %) and must never alternate, or `coverageId` churns and single-family products get fake delisted/relisted history.
 - **Changing the crawl cadence touches more than cron**: the user-visible sampling caveat lives in `userscript/core/format.ts`, and snapshot artifact retention must exceed the crawl interval (30 days was shorter than a month).
 - **A userscript fix is not shipped until `@version` is bumped.** Tampermonkey only re-fetches `@updateURL` when the advertised version is higher, so a deployed-but-unversioned bundle reaches Pages and never reaches an installed browser. Byte-comparing the published file against the local build does not catch this — it verifies publication, not delivery. Bump `userscript/version.ts` in the same commit as any change to the bundle.
+
+- **The published `site/` tree is replaced whole, so every store must be regenerated in every run.** Two stores share one SQLite history, one `state/` and one `site/`: run them serially with the second chained via `--previous-dir site/state` (from the same previous state, the last `finalizeDatabase` discards the other run), regenerate unselected or failed stores with `--republish`, and gate the deploy on every expected manifest being present. A store that writes nothing in a run disappears from Pages.
+- **`$TMPDIR` is unset under Git Bash here.** `--out "$TMPDIR/x"` resolves to `C:\Program Files\Git\x` and fails on mkdir. Pass the scratchpad path explicitly.
+- **No YAML parser is installed** (no PyYAML, no `yaml`/`js-yaml`). Validate workflows with `~/tmp/actionlint-1.7.12-win/actionlint.exe .github/workflows/*.yml` instead of building a venv to parse one file.

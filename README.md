@@ -247,7 +247,7 @@ npm run bench
 
 Playwright は初回に `npx playwright install chromium` が必要です。
 
-実績: ユニット〜統合 315 テスト(31 ファイル、13 s)、E2E 7 テスト(8 s)、変異スコア **89.45 %**(704 変異体: killed 595 / timeout 7 / survived 61 / no coverage 10、しきい値 break 70)。
+実績: ユニット〜統合 315 テスト(31 ファイル、13 s)、E2E 7 テスト(8 s)、変異スコア **89.60 %**(704 変異体: killed 595 / timeout 8 / survived 60 / no coverage 10 / ignored 31、しきい値 break 70)。
 
 ## 性能予算と実測
 
