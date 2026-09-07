@@ -24,11 +24,14 @@
 | アイテム名 | `Electronics Price History` |
 | 概要(132 文字以内) | `対応する電子部品通販サイトの商品ページに、観測した価格・在庫・掲載状況の履歴を表示します。` |
 | カテゴリ | ショッピング |
-| スクリーンショット | `dist/store/screenshot-akizuki.png`、`dist/store/screenshot-switch-science.png`(いずれも 1280×800) |
+| スクリーンショット | この順に 4 枚(いずれも 1280×800)。`dist/store/screenshot-comparison-akizuki.png`、`dist/store/screenshot-comparison-switch-science.png`、`dist/store/screenshot-akizuki.png`、`dist/store/screenshot-switch-science.png` |
 | ホームページ URL | <https://github.com/tsuyoshi-otake/electro-parts> |
 | サポート URL | <https://github.com/tsuyoshi-otake/electro-parts/issues> |
 
 アイテム名と概要はマニフェストの `name` / `description` と同じ文字列を使う。マニフェスト側を直したらここも直す(テストが文字数を見張る)。
+
+先頭 2 枚は**店舗をまたいだ価格比較**(秋月電子とスイッチサイエンスの ATOM Lite)で、公開済みデータセットを読んで撮る。したがって
+**Pages を公開してから撮る**。残り 2 枚は保存済みスナップショットから作った履歴表示で、ネットワークに出ずに撮れる。
 
 ### 説明(そのまま貼る)
 
