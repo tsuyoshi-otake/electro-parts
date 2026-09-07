@@ -5,7 +5,7 @@
 このファイルは**人が答える欄**だけを扱う。
 
 - パッケージ: `npm run build:extension -- --zip dist/electronics-price-history-extension.zip`(公開済みの zip をそのまま出しても同じ)
-- スクリーンショット: `npm run build:store-assets` → `dist/store/`
+- 掲載画像: `npm run build:store-assets` → `dist/store/`(スクリーンショット 4 枚とプロモーション タイル 2 枚)。ショップアイコンは生成しない。パッケージ同梱の `dist/extension/icons/icon-128.png` をそのまま上げる。
 - プライバシーポリシー URL: <https://tsuyoshi-otake.github.io/electro-parts/privacy.html>(`public/privacy.html` が公開されたもの)
 - 版: `userscript/version.ts` の `USERSCRIPT_VERSION`。**ストアは同じ版を 2 回受け付けない**ので、再提出のたびに上げる。
 
@@ -15,6 +15,7 @@
 2. Google アカウントの 2 段階認証を有効化(未設定だと公開できない)。
 3. 連絡先メールアドレスの確認(ダッシュボードの「アカウント」→ 連絡先メール)。掲載ページに表示される。
 4. 公開範囲は「公開」。有料機能・広告・アプリ内購入はなし。
+5. トレーダーの申告(「アカウント」→ 設定)。個人の非商用公開なので**非取引業者**を選ぶ。取引業者を選ぶと氏名・住所・電話番号・メールアドレスが掲載ページに公開される。
 
 ## 掲載情報タブ
 
@@ -22,13 +23,18 @@
 | --- | --- |
 | 言語 | 日本語 |
 | アイテム名 | `Electronics Price History` |
-| 概要(132 文字以内) | `対応する電子部品通販サイトの商品ページに、観測した価格・在庫・掲載状況の履歴を表示します。` |
+| 概要(132 文字以内) | `秋月電子通商とスイッチサイエンスの商品ページに、観測した価格・在庫・掲載状況の履歴を表示します。` |
 | カテゴリ | ショッピング |
 | スクリーンショット | この順に 4 枚(いずれも 1280×800)。`dist/store/screenshot-comparison-akizuki.png`、`dist/store/screenshot-comparison-switch-science.png`、`dist/store/screenshot-akizuki.png`、`dist/store/screenshot-switch-science.png` |
+| ショップ アイコン | 128×128。`dist/extension/icons/icon-128.png`(パッケージに入っているものと同じファイル) |
+| プロモーション タイル | 小 440×280 `dist/store/promo-tile-small.png`、マーキー 1400×560 `dist/store/promo-tile-marquee.png` |
 | ホームページ URL | <https://github.com/tsuyoshi-otake/electro-parts> |
 | サポート URL | <https://github.com/tsuyoshi-otake/electro-parts/issues> |
 
 アイテム名と概要はマニフェストの `name` / `description` と同じ文字列を使う。マニフェスト側を直したらここも直す(テストが文字数を見張る)。
+**ダッシュボードではこの 2 欄は読み取り専用**で、アップロードした zip から読まれる。文面を変えるには `scripts/build-extension.ts` を直して版を上げ、zip を上げ直すしかない。
+
+画像の要件はストア側が厳しい: スクリーンショットは 1280×800 か 640×400、タイルは 440×280 と 1400×560、いずれも **JPEG か 24 ビット PNG(アルファなし)**。`build-store-assets` は不透明な背景で撮るので、Chromium がアルファ無しの PNG を書く。透過を含む PNG はアップロードで弾かれる。
 
 先頭 2 枚は**店舗をまたいだ価格比較**(秋月電子とスイッチサイエンスの ATOM Lite)で、公開済みデータセットを読んで撮る。したがって
 **Pages を公開してから撮る**。残り 2 枚は保存済みスナップショットから作った履歴表示で、ネットワークに出ずに撮れる。
@@ -36,7 +42,7 @@
 ### 説明(そのまま貼る)
 
 ```
-対応する電子部品通販サイトの商品ページに、その商品の価格・在庫表示・掲載状況の履歴を表示します。
+秋月電子通商とスイッチサイエンスの商品ページに、その商品の価格・在庫表示・掲載状況の履歴を表示します。
 
 ■ できること
 ・商品ページの購入エリアの下に、価格の推移グラフと観測値の一覧を表示します。
@@ -74,7 +80,7 @@ https://github.com/tsuyoshi-otake/electro-parts
 ### 単一用途の説明(そのまま貼る)
 
 ```
-対応する電子部品通販サイトの商品ページで、その商品の価格・在庫・掲載状況の観測履歴を表示すること。この 1 つの用途以外の機能はありません。
+秋月電子通商とスイッチサイエンスの商品ページで、その商品の価格・在庫・掲載状況の観測履歴を表示すること。この 1 つの用途以外の機能はありません。
 ```
 
 ### 権限の理由
