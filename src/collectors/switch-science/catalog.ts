@@ -116,6 +116,11 @@ export function parseCatalogPage(json: unknown, page: number): ParsedCatalogPage
       title,
       vendor: optionalString(product['vendor']),
       productType: optionalString(product['product_type']),
+      // Already present in the catalogue response: preserve evidence without
+      // additional product-page requests. A selling SKU is still not an MPN.
+      descriptionHtml: optionalString(product['body_html']),
+      tags: Array.isArray(product['tags']) ? product['tags'].filter((tag): tag is string => typeof tag === 'string')
+        : typeof product['tags'] === 'string' ? product['tags'].split(',').map(tag => tag.trim()).filter(Boolean) : [],
       url: switchScienceProductUrl(handle),
       publishedAt: optionalString(product['published_at']),
       updatedAt: optionalString(product['updated_at']),

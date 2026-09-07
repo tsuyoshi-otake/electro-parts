@@ -23,6 +23,9 @@ export interface ProductRelation {
   differences: readonly string[];
   missingEvidence: readonly string[];
   reviewedAt: string;
+  /** Reviewed family distance, for stable closest-first display only; not identity confidence. */
+  similarity?: { family: string; distance: number };
+  evidenceUrls?: readonly string[];
   provenance: { method: 'catalog' | 'retailer-pages'; model: string | null; originalClassification: string | null; originalReason: string | null };
   /** Null means reference prices only, even when the underlying product is the same. */
   pricePolicy: null | {
@@ -39,8 +42,11 @@ export interface RelatedEntry {
   relation: ProductRelation;
   sourceIndex: 0 | 1;
   target: RelationProduct;
-  state: LoadState;
+  state: LoadState | { kind: 'reference_only' };
 }
+
+/** Per page, beyond the current product; all remaining relation links still render. */
+export const MAX_RELATED_HISTORY_LOADS = 8;
 
 export const relationProductKey = (storeId: string, pageKey: string): string => JSON.stringify([storeId, pageKey]);
 
@@ -60,10 +66,18 @@ export function indexRelations(relations: readonly ProductRelation[]): ReadonlyM
 
 export function relatedEntries(relations: readonly ProductRelation[], storeId: string, pageKey: string): RelatedEntry[] {
   const key = relationProductKey(storeId, pageKey);
-  return relations.flatMap((relation) => {
+  const rank = (r: ProductRelation): number => r.kind === 'same_product' ? r.reviewStatus === 'verified' ? 0 : 1 : r.kind === 'similar_product' ? 2 : 3;
+  const ordered = [...relations].sort((a, b) => rank(a) - rank(b)
+    || (a.similarity?.distance ?? a.differences.length) - (b.similarity?.distance ?? b.differences.length)
+    || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  const loading = new Set<string>();
+  return ordered.flatMap((relation): RelatedEntry[] => {
     const i = relation.products.findIndex((p) => relationProductKey(p.storeId, p.pageKey) === key);
     if (i !== 0 && i !== 1) return [];
-    return [{ relation, sourceIndex: i, target: relation.products[i === 0 ? 1 : 0], state: { kind: 'loading' } }];
+    const target = relation.products[i === 0 ? 1 : 0];
+    const targetKey = relationProductKey(target.storeId, target.pageKey);
+    if (loading.size < MAX_RELATED_HISTORY_LOADS) loading.add(targetKey);
+    return [{ relation, sourceIndex: i, target, state: { kind: loading.has(targetKey) ? 'loading' : 'reference_only' } }];
   });
 }
 

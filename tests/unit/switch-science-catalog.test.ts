@@ -13,6 +13,15 @@ describe('catalogPageUrl', () => {
 });
 
 describe('parseCatalogPage', () => {
+  it('archives description and category evidence without treating it or the selling SKU as a manufacturer code', () => {
+    const product = { ...shopifyProduct(1), body_html: '<p>Maker part ABX00062; 10 piece pack</p>', tags: ['Arduino', 'board', 42] };
+    const item = parseCatalogPage(page([product]), 1).items[0]!;
+    expect(item.descriptionHtml).toBe(product.body_html);
+    expect(item.tags).toEqual(['Arduino', 'board']);
+    expect(item).not.toHaveProperty('manufacturerProductCode');
+    expect(parseCatalogPage(page([{...product, tags: ' Arduino, board, '}]), 1).items[0]!.tags).toEqual(['Arduino', 'board']);
+    expect(parseCatalogPage(page([shopifyProduct(2)]), 1).items[0]).toMatchObject({descriptionHtml: null, tags: []});
+  });
   it('reads the fields the domain needs and derives the product URL from the handle', () => {
     const parsed = parseCatalogPage(page([shopifyProduct(1, { handle: '9381', product_type: 'Cable' })]), 1);
     expect(parsed.rawCount).toBe(1);

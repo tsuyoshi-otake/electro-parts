@@ -42,6 +42,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Reviewed mapping reproducibility (offline)
+        run: npm run matching:check
+
       - name: Unit, property, DB, contract, integration and userscript tests
         run: timeout 900 npm test
 

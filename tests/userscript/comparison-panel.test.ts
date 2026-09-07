@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { renderPanel, type PanelContext } from '../../userscript/ui/panel.ts';
 import { buildComparisonChart } from '../../userscript/ui/chart.ts';
 import { comparisonFixture } from './comparison-fixtures.ts';
+import { renderRelatedGroups } from '../../userscript/ui/related.ts';
+import { PRODUCT_RELATIONS } from '../../userscript/adapters/productRelations.ts';
+import { relatedEntries } from '../../userscript/core/relations.ts';
 
 function setup() {
   document.body.replaceChildren(); const host = document.createElement('div'); document.body.appendChild(host);
@@ -14,6 +17,18 @@ function setup() {
 }
 
 describe('cross-store comparison panel', () => {
+  it('shows reviewed family differences in the current-to-other direction on both stores', () => {
+    const relation = PRODUCT_RELATIONS.find(r => r.id === 'a116132-s8171')!;
+    const parent = document.createElement('div');
+    renderRelatedGroups(document, parent, relatedEntries([relation], 'akizuki', '116132'), id => id);
+    expect(parent.querySelector('.related-name')?.textContent).toBe('無線: なし → Wi-Fi/Bluetooth');
+    const sourceLink = parent.querySelector<HTMLAnchorElement>('.related-evidence a')!;
+    expect(sourceLink.href).toBe('https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html');
+    expect(sourceLink.rel).toBe('noopener noreferrer');
+    parent.replaceChildren();
+    renderRelatedGroups(document, parent, relatedEntries([relation], 'switch-science', '8171'), id => id);
+    expect(parent.querySelector('.related-name')?.textContent).toBe('無線: Wi-Fi/Bluetooth → なし');
+  });
   it('shows independent store timestamps, labelled statistics, safe links, two series and a signed recorded-price difference', () => {
     const f = setup(); f.draw();
     expect(f.text()).toContain('店舗別の記録価格'); expect(f.text()).toContain('Store A（閲覧中）'); expect(f.text()).toContain('Store Aの価格履歴・統計');

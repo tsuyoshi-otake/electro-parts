@@ -154,6 +154,7 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
     // no automatic retries, and destroyed panels do not start queued requests.
     const groups = new Map<string, NonNullable<PanelContext['related']>>();
     for (const entry of ctx.related ?? []) {
+      if (entry.state.kind === 'reference_only') continue;
       const key = relationProductKey(entry.target.storeId, entry.target.pageKey);
       const group = groups.get(key) ?? [];
       group.push(entry);

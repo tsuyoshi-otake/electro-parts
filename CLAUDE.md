@@ -17,6 +17,8 @@
 
 ## 店舗横断の商品照合・比較候補
 
+- 0.4.1以降の正本は `data/matching/catalog.jsonl`、`reviews.json`、`families.json`、`legacy.json`。`userscript/adapters/productRelations.ts` は生成物なので直接編集しない。`npm run matching:discover` で探索、明示的な根拠確認後に `matching:build` / `matching:check`。入力の変更をフィンガープリントの一括追認で通さない。詳細は [ADR-0018](docs/adr/0018-reviewed-catalog-mapping-pipeline.md)。
+
 - **少数サンプルを全候補と扱わない。** 調査した店舗・メーカー・カテゴリ、対象件数、重複除外後の候補数、未調査範囲を記録する。件数上限で打ち切った結果は「初回サンプル」と明記し、主要メーカー別の件数・未照合商品を確認してから候補一覧を提示する。委任した場合も統合側がこの確認を行う。
 - 候補探索は `name`、`modelNumber`、利用可能なら `manufacturerName` / `manufacturerProductCode` / `manufacturerProductName` / `vendor` を併用する。保存済みカタログと現行コレクターではフィールドが違うため、実際のスキーマを確認する。まず件数・分布を出し、絞った候補だけを表示する。
 - **店舗側の型番接頭辞をメーカー型番の相違と即断しない。** M5Stackでは秋月の `M5STACK-C008` とSSの `C008` のような表記差がある。メーカー・商品名の対応を確認したM5Stack候補に限定して先頭の `M5STACK-` を正規化し、元の型番も保持する。このルールを他メーカーへ無条件に適用しない。

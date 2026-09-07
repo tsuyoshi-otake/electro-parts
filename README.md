@@ -43,7 +43,9 @@
 - 変更点の一覧表(折りたたみ)、データの注意点、観測期間・データ版・取得時刻
 - 対応表のある商品では、他店の同一商品・類似商品・要確認候補を分けて表示。販売条件まで確認済みの同一商品だけを共通グラフに重ね、記録価格差を表示します。その他は参考記録価格と商品リンクに留めます。
 
-0.4.0 の初回対応表は 80 組(同一商品候補を含む 60、類似 8、要確認 12)。全商品の網羅的な照合ではありません。M5Stack 系は保存カタログの秋月 20 商品を確認し、型番対応 18 組と別名要確認 2 組を収録しています。差額・重ね合わせを承認したのは ATOM Lite と Arduino UNO R4 Minima の 2 組です。店舗ごとの観測日時・条件を必ず確認してください。詳細と更新手順は [ADR-0017](docs/adr/0017-cross-store-comparisons.md)。
+0.4.1 の対応表は 424 組です。同一商品は保存カタログ照合済み 293 組・未確定候補 3 組、類似商品は照合済み 108 組・候補 6 組、要確認は 14 組。Pico の MCU/無線/ヘッダーなど、13 の製品群で具体的な仕様差を示します。秋月 8,677 商品・SS 10,343 商品の保存カタログ全行から型番候補を探索していますが、現在の全商品や全別名を網羅したものではありません。詳細ページを全件再確認したという意味でもありません。
+
+差額・重ね合わせの承認は、引き続き ATOM Lite と Arduino UNO R4 Minima の **2 組だけ**です。他は参考記録価格として、店舗ごとの観測日時・条件を表示します。関連リンクは省略せず、他商品の履歴取得は 1 ページ最大 8 商品・同時 2 件に制限します。設計は [ADR-0017](docs/adr/0017-cross-store-comparisons.md)、根拠ファイル・件数・更新手順は [ADR-0018](docs/adr/0018-reviewed-catalog-mapping-pipeline.md) を参照してください。
 
 状態の表示: `最新`(今回取得)、`キャッシュ表示`(取得に失敗したので保存済みデータを表示)、`記録なし`(まだデータセットに含まれていない)、`取得できません`。取得に失敗してもページの動作は妨げません(fail-open)。
 
@@ -335,7 +337,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 
 ## 設計判断(ADR)
 
-[docs/adr/](docs/adr/) に 15 本あります。
+[docs/adr/](docs/adr/) に設計判断を記録しています。
 
 | # | 題名 |
 |---|---|
@@ -355,5 +357,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 | [0014](docs/adr/0014-shopify-catalog-api-over-html.md) | Switch Science は HTML ではなく Shopify のカタログ JSON から読む |
 | [0015](docs/adr/0015-shopify-handle-as-identity.md) | Switch Science の商品同一性は Shopify の handle、商品 ID と SKU はエイリアス |
 | [0016](docs/adr/0016-per-store-observation-cadence.md) | 観測頻度は店舗ごとに宣言する(スイッチサイエンスは週 1、秋月は月 1) |
+| [0017](docs/adr/0017-cross-store-comparisons.md) | 店舗横断の対応表と価格比較承認を分離する |
+| [0018](docs/adr/0018-reviewed-catalog-mapping-pipeline.md) | 保存カタログの候補探索と承認済み対応表の再生成を分離する |
 
 ライセンス: MIT。観測データは店舗の表示を記録したもので、権利は各店舗にあります。

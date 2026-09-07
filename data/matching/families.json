@@ -1,0 +1,827 @@
+[
+  {
+    "id": "pico",
+    "label": "Raspberry Pi Picoシリーズ",
+    "purpose": "GPIOを備えた小型マイコン開発ボード",
+    "reviewedAt": "2026-09-07",
+    "sources": [
+      "https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html"
+    ],
+    "members": [
+      {
+        "key": "akizuki/116132",
+        "fingerprint": "a9738b3b288a61e321600d07117d2d0170c5027966b43991b22895695cf340e6",
+        "variant": "pico",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/6900",
+        "fingerprint": "2cb547e1b751dc52fa7f7fce845e1902ff4ba052e779a01d5707ca5c1d93bf3a",
+        "variant": "pico",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/118085",
+        "fingerprint": "98147bb4300fd15d4ab23e3ad8e9a849bb224f31f6f8dd4be7ddfaa1da6e74a5",
+        "variant": "picoh",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "なし",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/8170",
+        "fingerprint": "b65e46aea624c270875ba2c91dde35c4169f2ca68e3e692080fc614744ca0a37",
+        "variant": "picoh",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "なし",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "akizuki/117947",
+        "fingerprint": "6fe17f1d7835643af04996953e6c2e10ff73a5630c34523c907a82a025a126b2",
+        "variant": "picow",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/8171",
+        "fingerprint": "55912c9ecf1c7e3686273d6b58876b08c26444b604641b50642591380519dfd0",
+        "variant": "picow",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/118086",
+        "fingerprint": "5013d33abbe02c373b016c7ee65a47e9493a8ad596de512ffb48d545945c5adf",
+        "variant": "picowh",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/8172",
+        "fingerprint": "f25c2a96c28c8ed27c1e7213b5489efb9bf3ac28782b5b6a98b7741aad3bf02a",
+        "variant": "picowh",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "akizuki/129604",
+        "fingerprint": "4b7e971b9ca7654fb9e49d659d5b427b23b03fa4af73ef3f83ad5072712e9b39",
+        "variant": "pico2",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/9809",
+        "fingerprint": "951fa88956e5e3f8615cf4fe4d3ec2946c3ed1038ccb6d712b00a0dd5ca97733",
+        "variant": "pico2",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/130982",
+        "fingerprint": "59542b2e0943984b47307dcd5c95ad8c61b4523693c1812067adef861e6f6f9d",
+        "variant": "pico2h",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "なし",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/10257",
+        "fingerprint": "6587e1118351baf55c527ffc6a4a70011f835c262693221128df837adc389bcc",
+        "variant": "pico2h",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "なし",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "akizuki/130330",
+        "fingerprint": "b53565823e5c4b5688e921b8b5294ee534127040d7377e40e1da8d3924803555",
+        "variant": "pico2w",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/10053",
+        "fingerprint": "05160f72d0af70b47213a2572413b871a791cb38e078123cf2d40cd07a739075",
+        "variant": "pico2w",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/130399",
+        "fingerprint": "ea2e2634d1a97f770d8de035b63773bbe862af93ba88fb99c3086b19cd11563d",
+        "variant": "pico2wh",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/10258",
+        "fingerprint": "5a62f43e57c80cff049815b4ba546c4816037f47b90ef213e9faa6a32a2bdc07",
+        "variant": "pico2wh",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "pi5",
+    "label": "Raspberry Pi 5",
+    "purpose": "同じ世代のシングルボードコンピューターの容量選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "akizuki/131519",
+        "fingerprint": "7bc57dabcddedfbd062273c5f21a2a8b749e2518b0802cadab168fd5fcf8b834",
+        "variant": "1gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "1GB"
+        }
+      },
+      {
+        "key": "akizuki/129606",
+        "fingerprint": "95728ad50150e0d160cefd21bcb246046846c837ec3b4b7ceed9ea7e1e404b27",
+        "variant": "2gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "2GB"
+        }
+      },
+      {
+        "key": "switch-science/9810",
+        "fingerprint": "d6444f655df8562d024af9b2fc06b9db04ad8b3e34b86147bc58442240775773",
+        "variant": "2gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "2GB"
+        }
+      },
+      {
+        "key": "akizuki/129325",
+        "fingerprint": "576042dc6d5637b7c2074c91c915be01fbb30d2a117607780d448b836f4be86d",
+        "variant": "4gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "4GB"
+        }
+      },
+      {
+        "key": "switch-science/9249",
+        "fingerprint": "9caddee76caadda17a3d3b5d078da590cd4ec4dc3a502497cc39adbdb3d14c52",
+        "variant": "4gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "4GB"
+        }
+      },
+      {
+        "key": "akizuki/129326",
+        "fingerprint": "cd2462875db2d3a4b281c3e9e60c311330ce2409e995b143da06cfa6b3634055",
+        "variant": "8gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "8GB"
+        }
+      },
+      {
+        "key": "switch-science/9250",
+        "fingerprint": "e891b3aecc4e847d0783566374edf441b36bbcffa908476bb34c413171780f9e",
+        "variant": "8gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "8GB"
+        }
+      },
+      {
+        "key": "akizuki/130199",
+        "fingerprint": "30c09b09ef11ea3155a67fd123c70e443b2d4f6b90a0079bbd045c8fc7c9fb54",
+        "variant": "16gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "16GB"
+        }
+      },
+      {
+        "key": "switch-science/10055",
+        "fingerprint": "781bbd6192d405206ffc930fd8de8ab8f79a996d8149d151b89d7c728dab4f5f",
+        "variant": "16gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "16GB"
+        }
+      }
+    ]
+  },
+  {
+    "id": "pi4",
+    "label": "Raspberry Pi 4 Model B",
+    "purpose": "同じ世代のシングルボードコンピューターの容量選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "akizuki/114839",
+        "fingerprint": "1a57fc441296abd8235f47bdf05124729f51955c65757c83393871115708a694",
+        "variant": "2gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "2GB"
+        }
+      },
+      {
+        "key": "switch-science/5681",
+        "fingerprint": "37a47c2def004c9fea8c6d07a703ae9ca1b5e2f362854f5eb4735a1d40f29c4a",
+        "variant": "2gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "2GB"
+        }
+      },
+      {
+        "key": "akizuki/132017",
+        "fingerprint": "f670f9d715372f54e2842ac3ad3748b9dab9762e417c198ec172a344270d52de",
+        "variant": "3gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "3GB"
+        }
+      },
+      {
+        "key": "switch-science/11130",
+        "fingerprint": "936b2277cf53ff7f3c1e965c9c6b7dd30967012ed7a6a235319ffd6c0ed2eeab",
+        "variant": "3gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "3GB"
+        }
+      }
+    ]
+  },
+  {
+    "id": "touch-display-2",
+    "label": "Raspberry Pi Touch Display 2",
+    "purpose": "公式タッチディスプレイの画面サイズ選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "akizuki/131437",
+        "fingerprint": "ebaf567779dd8569f65c9cba4d84238b8a6fdbd8275fcd429aa72cecc28fe2db",
+        "variant": "5inch",
+        "features": {
+          "系列": "Touch Display 2",
+          "画面": "5インチ"
+        }
+      },
+      {
+        "key": "switch-science/10672",
+        "fingerprint": "1b198d6fb4fdad8c404cdd85dac5426b3a03e3c0b5e0084eb81fcbdf6c2768bf",
+        "variant": "5inch",
+        "features": {
+          "系列": "Touch Display 2",
+          "画面": "5インチ"
+        }
+      },
+      {
+        "key": "akizuki/130170",
+        "fingerprint": "a25e22c8204b9c7e2a45ca20174b530fd981eaa22fc05a6e5598fd6b3841f580",
+        "variant": "7inch",
+        "features": {
+          "系列": "Touch Display 2",
+          "画面": "7インチ"
+        }
+      },
+      {
+        "key": "switch-science/9940",
+        "fingerprint": "5633d0e8f5a8de562cec5091d084c79fd29a33764ca512f8b147166136167b9c",
+        "variant": "7inch",
+        "features": {
+          "系列": "Touch Display 2",
+          "画面": "7インチ"
+        }
+      },
+      {
+        "key": "akizuki/132045",
+        "fingerprint": "2911e06d860d9d40212c5f5ab5ff9708bc5403c751b07ae7c0005a2095096fda",
+        "variant": "10inch",
+        "features": {
+          "系列": "Touch Display 2",
+          "画面": "10インチ"
+        }
+      },
+      {
+        "key": "switch-science/11300",
+        "fingerprint": "8add628f0fe5b756a9ecdabe95cca760a02ee5cd2404bde20d12a36cfd6e0894",
+        "variant": "10inch",
+        "features": {
+          "系列": "Touch Display 2",
+          "画面": "10インチ"
+        }
+      }
+    ]
+  },
+  {
+    "id": "uno-r4",
+    "label": "Arduino UNO R4",
+    "purpose": "UNO R4世代のマイコン開発ボード",
+    "reviewedAt": "2026-09-07",
+    "sources": [
+      "https://docs.arduino.cc/hardware/uno-r4-wifi/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/118114",
+        "fingerprint": "874f4dbc09a62c92ab04f822da01c0ffe29f45513109020f8dff6b8636a53b8e",
+        "variant": "minima",
+        "features": {
+          "系列": "UNO R4",
+          "構成": "Minima"
+        }
+      },
+      {
+        "key": "switch-science/9000",
+        "fingerprint": "582bd3e72bf9b78de44f3fc6214c2c67c996136618989cdefe022d8f8c44d2c4",
+        "variant": "minima",
+        "features": {
+          "系列": "UNO R4",
+          "構成": "Minima"
+        }
+      },
+      {
+        "key": "akizuki/118246",
+        "fingerprint": "5c8c96d14e3753b4ee47d6d0ffde9afa8d51f642e37e3991fe624c300c7ab5df",
+        "variant": "wifi",
+        "features": {
+          "系列": "UNO R4",
+          "構成": "WiFi"
+        }
+      },
+      {
+        "key": "switch-science/9090",
+        "fingerprint": "4a16f4bfca7dc775862f89ec5e9234b24fded5e32a1bb0c7b2dcaf0ab31656db",
+        "variant": "wifi",
+        "features": {
+          "系列": "UNO R4",
+          "構成": "WiFi"
+        }
+      }
+    ]
+  },
+  {
+    "id": "nano-r4",
+    "label": "Arduino Nano R4",
+    "purpose": "Nano R4ボードのヘッダー実装選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "akizuki/131210",
+        "fingerprint": "de4a85a5ebcc359aedcaea9238eb714703f789c37fe085c9dc2ed0300efd179b",
+        "variant": "bare",
+        "features": {
+          "系列": "Nano R4",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/10438",
+        "fingerprint": "66f168adf4d53631a81ca3021a3014098b9832868d410b9fee7a973cb54cfcc0",
+        "variant": "bare",
+        "features": {
+          "系列": "Nano R4",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/131211",
+        "fingerprint": "8cf7614576a2eedff0605b5081417191827223acfe47f90c4fe6cf569acf8079",
+        "variant": "headers",
+        "features": {
+          "系列": "Nano R4",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/10439",
+        "fingerprint": "728417b8ddd326c4b436d84e4de586d8d3e51d6787df5c6aab1a15e244f92fe5",
+        "variant": "headers",
+        "features": {
+          "系列": "Nano R4",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "nano33-iot",
+    "label": "Arduino Nano 33 IoT",
+    "purpose": "Nano 33 IoTボードのヘッダー実装選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "akizuki/117976",
+        "fingerprint": "5265478c8db9ea8fb4d62f707e4a05f2fbc714f45f026c9dad1e0786972e1880",
+        "variant": "bare",
+        "features": {
+          "系列": "Nano 33 IoT",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/9003",
+        "fingerprint": "f059ae2f5bfa40a3b637639724af6495d11f242bc303b8d84ef6a4d05e23472a",
+        "variant": "bare",
+        "features": {
+          "系列": "Nano 33 IoT",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/117977",
+        "fingerprint": "0e93b99e4e860eded1fa9d28105aa239ae1b0404ef00d6d79ef67566e25b6a7d",
+        "variant": "headers",
+        "features": {
+          "系列": "Nano 33 IoT",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/9002",
+        "fingerprint": "dda43ae4036f1ae5bbd503d3dc275131536187a12bd0da7a42418438325957f1",
+        "variant": "headers",
+        "features": {
+          "系列": "Nano 33 IoT",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "uno-q",
+    "label": "Arduino UNO Q",
+    "purpose": "UNO QシリーズのRAM/eMMC容量選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "akizuki/131542",
+        "fingerprint": "efb6b3dbea65ff507f60adec1a84fb517a4f5f385548712173536d4247fbd45d",
+        "variant": "2gb",
+        "features": {
+          "系列": "UNO Q",
+          "RAM": "2GB",
+          "eMMC": "16GB"
+        }
+      },
+      {
+        "key": "switch-science/10790",
+        "fingerprint": "36e02884b592b9e525036ab30a98ba001f81114cd8c34ec3c604bb7621b0a510",
+        "variant": "2gb",
+        "features": {
+          "系列": "UNO Q",
+          "RAM": "2GB",
+          "eMMC": "16GB"
+        }
+      },
+      {
+        "key": "akizuki/131696",
+        "fingerprint": "1cf79e1c1304ba453e4e40d0c02bd2edc18635a1a556bf982beb313fa1cc745c",
+        "variant": "4gb",
+        "features": {
+          "系列": "UNO Q",
+          "RAM": "4GB",
+          "eMMC": "32GB"
+        }
+      },
+      {
+        "key": "switch-science/10800",
+        "fingerprint": "b875f791576130e958e54f584addec862d6a4836988d7c843965bab0e4a05cd5",
+        "variant": "4gb",
+        "features": {
+          "系列": "UNO Q",
+          "RAM": "4GB",
+          "eMMC": "32GB"
+        }
+      }
+    ]
+  },
+  {
+    "id": "opta",
+    "label": "Arduino Opta",
+    "purpose": "Optaコントローラーの構成選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "akizuki/117627",
+        "fingerprint": "c27a19bc0befdb237ccf1768f453b90bf79356b1f9466b8a286907cc7619ce64",
+        "variant": "lite",
+        "features": {
+          "系列": "Opta",
+          "構成": "Lite"
+        }
+      },
+      {
+        "key": "switch-science/8883",
+        "fingerprint": "dba50dfa1004295e36012bca98f02765d08264af1e8ae065a904053b3a6c214d",
+        "variant": "lite",
+        "features": {
+          "系列": "Opta",
+          "構成": "Lite"
+        }
+      },
+      {
+        "key": "akizuki/117628",
+        "fingerprint": "055f7f36422b6e95dbbb4f3104067a024590795d377e2ca4f982c0378e2205f9",
+        "variant": "rs485",
+        "features": {
+          "系列": "Opta",
+          "構成": "RS485"
+        }
+      },
+      {
+        "key": "switch-science/8882",
+        "fingerprint": "428c3203c97be03cc7496e2b9bae0ad6c142541b3295553369b05c65ec462d5a",
+        "variant": "rs485",
+        "features": {
+          "系列": "Opta",
+          "構成": "RS485"
+        }
+      }
+    ]
+  },
+  {
+    "id": "atom",
+    "label": "M5Stack ATOM",
+    "purpose": "ATOM小型開発ボードのモデル/版選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "akizuki/117209",
+        "fingerprint": "7649e3bb9e7e058c3dcc0c313976a5d38b930df0816bc0870673c5c25d177847",
+        "variant": "lite",
+        "features": {
+          "モデル": "ATOM Lite",
+          "版": "C008"
+        }
+      },
+      {
+        "key": "switch-science/6262",
+        "fingerprint": "ccf814b72fd0ce0efcdbaa3b2876a2bd62ff5ce5272f5665c45b362fa01af545",
+        "variant": "lite",
+        "features": {
+          "モデル": "ATOM Lite",
+          "版": "C008"
+        }
+      },
+      {
+        "key": "akizuki/117215",
+        "fingerprint": "ca0de079ea5da038dd54156aa873ee5dec5b1c190895e667e0c1193beeda528c",
+        "variant": "matrix",
+        "features": {
+          "モデル": "ATOM Matrix",
+          "版": "C008-B"
+        }
+      },
+      {
+        "key": "switch-science/6260",
+        "fingerprint": "97e2786149da9f89922f9cb03efa259aefd99d9de3789781450e2fbfba297f69",
+        "variant": "matrix",
+        "features": {
+          "モデル": "ATOM Matrix",
+          "版": "C008-B"
+        }
+      },
+      {
+        "key": "switch-science/11175",
+        "fingerprint": "eadbe3a3225caceafcef4ffb57ada6093d233d249aba275a3c32dc4b3c6bbb14",
+        "variant": "matrix11",
+        "features": {
+          "モデル": "ATOM Matrix",
+          "版": "C008-B-V11 (v1.1)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "core2",
+    "label": "M5Stack Core2",
+    "purpose": "Core2 IoT開発キットの構成/リビジョン選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "switch-science/6530",
+        "fingerprint": "87f0d71bb3aa8e9554d6a9191e30bc299277e5646899595cada2fdafb8c18ecc",
+        "variant": "core2",
+        "features": {
+          "構成": "Core2",
+          "版": "K010 (旧版)"
+        }
+      },
+      {
+        "key": "switch-science/9349",
+        "fingerprint": "dc6c0ad88b024c1c0a00266600e9857c6a841dbef0ffefdfb9176ba593134e71",
+        "variant": "core211",
+        "features": {
+          "構成": "Core2",
+          "版": "v1.1"
+        }
+      },
+      {
+        "key": "akizuki/116170",
+        "fingerprint": "05ed6910aba1b5a7d450f58b7dcb89106a66d11cb9d15109406dfb0ce890d341",
+        "variant": "core213",
+        "features": {
+          "構成": "Core2",
+          "版": "v1.3"
+        }
+      },
+      {
+        "key": "switch-science/11050",
+        "fingerprint": "fa21b4da3371754d40d70ac7cf375b86545315183319801255f6390ba63b07a2",
+        "variant": "core213",
+        "features": {
+          "構成": "Core2",
+          "版": "v1.3"
+        }
+      },
+      {
+        "key": "akizuki/117205",
+        "fingerprint": "29653f73def7db7a188148c72d96e683013df9158100512a28a9a93c6f6f876a",
+        "variant": "aws",
+        "features": {
+          "構成": "Core2 for AWS",
+          "版": "K010-AWS (旧版)"
+        }
+      },
+      {
+        "key": "switch-science/6784",
+        "fingerprint": "f344fc7acff4ae0a0bb799ca4020b2c73d7d88654663cc5436c53605dd607bed",
+        "variant": "aws",
+        "features": {
+          "構成": "Core2 for AWS",
+          "版": "K010-AWS (旧版)"
+        }
+      },
+      {
+        "key": "switch-science/11049",
+        "fingerprint": "6c5160664f8247cc3df1d7800c65d4d9db75be7dd6307d15fa3bd68827e49612",
+        "variant": "aws13",
+        "features": {
+          "構成": "Core2 for AWS",
+          "版": "v1.3"
+        }
+      }
+    ]
+  },
+  {
+    "id": "basic",
+    "label": "M5Stack Basic",
+    "purpose": "Basic開発キットのリビジョン選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "switch-science/3647",
+        "fingerprint": "ea14c3d65b35a9a3617bf637fc3bd982ac3dd5a0ab82b1a7099cfe7caaf9ec06",
+        "variant": "basic",
+        "features": {
+          "モデル": "Basic",
+          "版": "K001 (旧版)"
+        }
+      },
+      {
+        "key": "switch-science/7362",
+        "fingerprint": "16a662b3ea72022af42ea6bb8d401e120a309cd5e8246d63f5ec42608f2853dd",
+        "variant": "basic26",
+        "features": {
+          "モデル": "Basic",
+          "版": "V2.6"
+        }
+      },
+      {
+        "key": "akizuki/117375",
+        "fingerprint": "9ab9c2c036698393eccb21d09b5d47b2afea80e2ec88320619cbf21bd8ecd089",
+        "variant": "basic27",
+        "features": {
+          "モデル": "Basic",
+          "版": "V2.7"
+        }
+      },
+      {
+        "key": "switch-science/9010",
+        "fingerprint": "a97d2622dc8a3b9dccd4970a8c2021d42ae6598c3c192430d54e48c819e54b10",
+        "variant": "basic27",
+        "features": {
+          "モデル": "Basic",
+          "版": "V2.7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "poe-camera",
+    "label": "M5Stack PoEカメラ",
+    "purpose": "PoE給電カメラのセンサー/無線構成選択",
+    "reviewedAt": "2026-09-07",
+    "sources": [],
+    "members": [
+      {
+        "key": "switch-science/7477",
+        "fingerprint": "b653422a60fbd5b6d9c921443f61954e58438fe6db1889da06417f3a1c33278d",
+        "variant": "ov2640",
+        "features": {
+          "カメラ": "OV2640",
+          "無線": "Wi-Fiなし"
+        }
+      },
+      {
+        "key": "akizuki/118154",
+        "fingerprint": "55de19d3e71b64c7a84d4d2232343c48ac1cd548f11e6c4a1be68d4f4eccab7f",
+        "variant": "ov2640wifi",
+        "features": {
+          "カメラ": "OV2640",
+          "無線": "Wi-Fi付き"
+        }
+      },
+      {
+        "key": "switch-science/8660",
+        "fingerprint": "ff7579727a66f6c53702ab5a4d5185ba9fffe0ed15236798a441e1d546ee8f38",
+        "variant": "ov2640wifi",
+        "features": {
+          "カメラ": "OV2640",
+          "無線": "Wi-Fi付き"
+        }
+      },
+      {
+        "key": "akizuki/131914",
+        "fingerprint": "db874a0882c2194e3309204252aecd18b08e3e0d04b654af9d76cb814ded7412",
+        "variant": "ov3660wifi",
+        "features": {
+          "カメラ": "OV3660",
+          "無線": "Wi-Fi付き"
+        }
+      },
+      {
+        "key": "switch-science/9771",
+        "fingerprint": "b2cdfb11128bc209dc5d5556102ca03534d78aec7769a2999dd387043a5ed65e",
+        "variant": "ov3660wifi",
+        "features": {
+          "カメラ": "OV3660",
+          "無線": "Wi-Fi付き"
+        }
+      }
+    ]
+  }
+]

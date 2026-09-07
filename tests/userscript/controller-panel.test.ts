@@ -50,6 +50,22 @@ async function mount(host: FakeHost, options: Partial<Parameters<typeof mountHis
 }
 
 describe('history panel controller', () => {
+  it('limits total related history work but retains every link and a terminal reference-only state', async () => {
+    page(); const host = hostWithData(); const { relation, other } = comparisonFixture();
+    const relations = Array.from({length: 12}, (_, i) => ({ ...relation, id: `pair-${String(i).padStart(2, '0')}`, kind: 'similar_product' as const,
+      pricePolicy: null, differences: [`構成: 0 ↔ ${i + 1}`],
+      products: [relation.products[0], {...relation.products[1], pageKey: `Q${i}`, url: `https://other.test/Q${i}`}] as typeof relation.products }));
+    host.routes.set(`${BASE}/${manifestPath('otherstore')}`, json(sampleManifest({storeId: 'otherstore'})));
+    for (let i = 0; i < 12; i++) host.routes.set(`${BASE}/${productPath('otherstore', `Q${i}`)}`, json({...other, pageKey: `Q${i}`, externalProductId: `Q${i}`}));
+    const handle = await mount(host, {relationIndex: indexRelations(relations)});
+    expect(host.requests.filter(url => url.includes('/otherstore/products/'))).toHaveLength(8);
+    const root = document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!;
+    expect(root.querySelectorAll('.related-card')).toHaveLength(12);
+    expect(shadowText()).toContain('履歴の自動取得は上位候補のみ');
+    expect(shadowText()).not.toContain('読み込み中');
+    const before = [...host.requests]; root.querySelectorAll('button')[1]!.click();
+    await Promise.resolve(); expect(host.requests).toEqual(before); handle.destroy();
+  });
   it('bounds related loads to two, deduplicates endpoints, and does not reload on display changes', async () => {
     page();
     const host = hostWithData();

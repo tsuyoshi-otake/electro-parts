@@ -1,10 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { PRODUCT_RELATIONS } from '../../userscript/adapters/productRelations.ts';
 import { PAGE_ADAPTERS } from '../../userscript/adapters/registry.ts';
-import { comparisonEligibility, indexRelations, matchesRelationProduct, relatedEntries, relationProductKey } from '../../userscript/core/relations.ts';
+import { comparisonEligibility, indexRelations, matchesRelationProduct, relatedEntries, relationProductKey, MAX_RELATED_HISTORY_LOADS } from '../../userscript/core/relations.ts';
 import { comparisonFixture } from './comparison-fixtures.ts';
 
 describe('curated relation catalogue', () => {
+  it('ranks identity first and closest reviewed family differences next without dropping links', () => {
+    const entries = relatedEntries(PRODUCT_RELATIONS, 'akizuki', '116132');
+    expect(entries[0]!.relation).toMatchObject({kind: 'same_product', reviewStatus: 'verified'});
+    const distances = entries.filter(e => e.relation.similarity).map(e => e.relation.similarity!.distance);
+    expect(distances).toEqual([...distances].sort((a,b) => a-b));
+    expect(entries.filter(e => e.state.kind === 'loading').length).toBeLessThanOrEqual(MAX_RELATED_HISTORY_LOADS);
+    expect(entries.length).toBe(PRODUCT_RELATIONS.filter(r => r.products.some(p => p.storeId === 'akizuki' && p.pageKey === '116132')).length);
+  });
   it('contains unique, reversible store-scoped pairs with source evidence and safe endpoint URLs', () => {
     document.head.replaceChildren(); document.body.replaceChildren();
     const seen = new Set<string>();

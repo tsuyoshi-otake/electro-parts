@@ -19,5 +19,6 @@
 | 0015 | [Switch Science の商品同一性は Shopify の handle、商品 ID と SKU はエイリアス](0015-shopify-handle-as-identity.md) | 採用 |
 | 0016 | [観測頻度は店舗ごとに宣言する(スイッチサイエンスは週 1、秋月は月 1)](0016-per-store-observation-cadence.md) | 採用 |
 | 0017 | [店舗横断の対応表と価格比較承認を分離する](0017-cross-store-comparisons.md) | 採用 |
+| 0018 | [保存カタログの候補探索と承認済み対応表の再生成を分離する](0018-reviewed-catalog-mapping-pipeline.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。

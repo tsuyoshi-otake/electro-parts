@@ -34,6 +34,7 @@ export const RELATED_CSS = `
 .eph .series-controls input { accent-color: var(--accent); }
 @media (pointer: coarse) { .eph .series-controls label, .eph summary, .eph .related-card a { min-height: 44px; } }
 @media (max-width: 900px) { .eph .body.has-comparison .stats-col { grid-row: 1; } }
+@container (max-width: 700px) { .eph .body.has-comparison .stats-col { grid-row: 1; } }
 `;
 
 function node(doc: Document, tag: string, content: string, className = ''): HTMLElement {
@@ -54,21 +55,38 @@ function details(doc: Document, label: string, key: string): HTMLDetailsElement 
   const summary = node(doc, 'summary', label); summary.dataset['focusKey'] = key; element.appendChild(summary); return element;
 }
 
+function directedDifference(difference: string, sourceIndex: 0 | 1): string {
+  const parts = difference.match(/^([^:]+): (.+) ↔ (.+)$/);
+  return parts ? `${parts[1]}: ${sourceIndex === 0 ? parts[2] : parts[3]} → ${sourceIndex === 0 ? parts[3] : parts[2]}` : difference;
+}
+
 function evidence(doc: Document, entry: RelatedEntry): HTMLElement {
   const { relation } = entry;
   const element = details(doc, '照合根拠・比較条件', `evidence-${relation.id}`); element.className = 'related-evidence';
   element.appendChild(node(doc, 'p', relation.evidence));
-  for (const difference of relation.differences) element.appendChild(node(doc, 'p', `相違点: ${difference}`));
+  for (const difference of relation.differences) element.appendChild(node(doc, 'p', `相違点: ${directedDifference(difference, entry.sourceIndex)}`));
   if (relation.missingEvidence.length) element.appendChild(node(doc, 'p', `未確認: ${relation.missingEvidence.join(' / ')}`));
-  element.appendChild(node(doc, 'p', `型番: ${relation.products.map((p) => p.modelNumber).join(' ↔ ')}`));
+  const orderedProducts = entry.sourceIndex === 0 ? relation.products : [...relation.products].reverse();
+  element.appendChild(node(doc, 'p', `型番（閲覧中 → 他店）: ${orderedProducts.map((p) => p.modelNumber).join(' → ')}`));
   element.appendChild(node(doc, 'p', `照合日: ${relation.reviewedAt} · ${relation.provenance.method === 'retailer-pages' ? '店舗ページ確認' : '保存カタログ照合'}${relation.provenance.model ? ` / 候補抽出: ${relation.provenance.model}` : ''}`));
-  element.appendChild(node(doc, 'p', `照合元データ取得日: ${relation.products.map((p) => p.observedAt.slice(0, 10)).join(' / ')}`));
+  element.appendChild(node(doc, 'p', `照合元データ取得日（閲覧中 / 他店）: ${orderedProducts.map((p) => p.observedAt.slice(0, 10)).join(' / ')}`));
+  for (const [i, source] of (relation.evidenceUrls ?? []).entries()) {
+    try {
+      const url = new URL(source); if (url.protocol !== 'https:' || url.username || url.password) continue;
+      const link = doc.createElement('a'); link.href = url.href; link.target = '_blank'; link.rel = 'noopener noreferrer';
+      link.textContent = `仕様の根拠（${url.hostname}）`; link.dataset['focusKey'] = `source-${relation.id}-${i}`; element.appendChild(link);
+    } catch { /* Invalid evidence links do not interrupt the product panel. */ }
+  }
   if (relation.pricePolicy) element.appendChild(node(doc, 'p', relation.pricePolicy.evidence));
   return element;
 }
 
 function price(doc: Document, parent: HTMLElement, entry: RelatedEntry): void {
   const state = entry.state;
+  if (state.kind === 'reference_only') {
+    parent.appendChild(node(doc, 'div', '通信量を抑えるため履歴の自動取得は上位候補のみ。商品リンクで確認できます。', 'related-meta'));
+    return;
+  }
   if (state.kind !== 'ready') {
     parent.appendChild(node(doc, 'div', state.kind === 'loading' ? '記録価格を読み込み中…' : state.kind === 'missing' ? '他店の履歴はまだ記録されていません' : '他店データを取得できませんでした', 'related-meta'));
     return;
@@ -113,12 +131,16 @@ export function renderRelatedGroups(doc: Document, parent: HTMLElement, entries:
     const group = entries.filter(matches); if (!group.length) continue;
     const section = details(doc, `${title} (${group.length})`, `group-${key}`); section.className = 'related-section';
     section.open = key === 'similar';
-    if (key === 'similar') section.appendChild(node(doc, 'p', '用途・機能が近い商品です。互換性や置き換え可能性は保証しません。', 'related-meta'));
+    if (key === 'similar') section.appendChild(node(doc, 'p', '用途・機能が近い商品を、確認した差分が少ない順に表示します。互換性や置き換え可能性は保証しません。差分は閲覧中の商品 → 他店の商品です。', 'related-meta'));
     for (const entry of group) {
       const card = node(doc, 'div', '', 'related-card'); card.dataset['relationId'] = entry.relation.id;
       card.appendChild(node(doc, 'div', `${label(entry.target.storeId)} · ${entry.relation.reviewStatus === 'verified' ? '照合確認済み' : entry.relation.reviewStatus === 'needs_review' ? '要確認' : '候補・未確定'}`, 'related-meta'));
       card.appendChild(productLink(doc, entry));
-      if (key === 'similar') for (const difference of entry.relation.differences) card.appendChild(node(doc, 'p', difference, 'related-name'));
+      if (key === 'similar') for (const difference of entry.relation.differences) {
+        // Generated feature differences have an explicit ordered pair. Reverse
+        // them on the other store; free-text legacy evidence keeps its wording.
+        card.appendChild(node(doc, 'p', directedDifference(difference, entry.sourceIndex), 'related-name'));
+      }
       card.appendChild(node(doc, 'div', '参考記録価格（販売条件を要確認）', 'related-meta'));
       price(doc, card, entry); card.appendChild(evidence(doc, entry)); section.appendChild(card);
     }

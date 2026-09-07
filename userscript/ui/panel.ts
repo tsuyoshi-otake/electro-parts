@@ -11,7 +11,8 @@ import { RELATED_CSS, renderRelatedGroups, renderStorePrices } from './related.t
  *
  * Layout: the panel is mounted as a full-width block, so the chart is the
  * primary element (left) and the figures read as a compact summary beside it
- * (right). Below ~900 px the two stack. No animation anywhere (ADR-0011).
+ * (right). Narrow viewports or embedding columns stack the two. No animation
+ * anywhere (ADR-0011).
  */
 
 export const PANEL_TITLE = 'Electronics Price History';
@@ -36,6 +37,7 @@ export interface PanelContext {
 export const PANEL_CSS = `
 :host { all: initial; display: block; font: 13px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif; }
 .eph {
+  container-type: inline-size;
   color-scheme: light;
   --bg: #fff; --fg: #16202b; --muted: #5f6b7a; --line: #e3e8ef; --line-soft: #eef2f6;
   --accent: #1f6feb; --up: #b42318; --down: #027a48; --chip: #eef2f7; --chip-fg: #46525f;
@@ -69,6 +71,7 @@ export const PANEL_CSS = `
 
 .body { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(250px, 1fr); gap: 4px 26px; align-items: start; padding-top: 12px; }
 @media (max-width: 900px) { .body { grid-template-columns: 1fr; } }
+@container (max-width: 700px) { .body { grid-template-columns: 1fr; } }
 .chart-box { min-width: 0; min-height: 90px; }
 .eph svg { display: block; width: 100%; height: auto; }
 .eph .eph-grid { stroke: var(--line-soft); stroke-width: 1; }

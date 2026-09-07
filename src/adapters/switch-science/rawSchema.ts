@@ -33,6 +33,9 @@ export interface SwitchScienceRawItem {
   title: string;
   vendor: string | null;
   productType: string | null;
+  /** Optional archived matching evidence; never rendered or imported as an MPN. */
+  descriptionHtml?: string | null;
+  tags?: string[];
   url: string;
   publishedAt: string | null;
   updatedAt: string | null;
