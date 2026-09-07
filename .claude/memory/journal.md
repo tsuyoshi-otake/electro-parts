@@ -156,3 +156,13 @@
 - Learning: **frequency and the sampling caveat must derive from one value.** They are two statements of the same fact; if they disagree, a reader cannot tell a gap in the history from a gap in the observation. Writing store names next to a cron is exactly what lets them drift, so the schedule stays store-agnostic and `tests/integration/observation-cadence.test.ts` pins the agreement.
 - Learning: **not raising a crawl rate is a decision worth writing down.** Akizuki's robots.txt has no `Crawl-delay`, so 0.53 req/s is a limit we chose, not one the store granted; the gain from weekly (a better date for a price revision) does not cover the risk of a 403, which ends the crawl entirely.
 - Shipped together with the light/dark panel controls from the previous entry, which had only been built locally at 0.3.1 — they reach users as part of 0.3.2. Known limit: with no saved preference the theme is read from `prefers-color-scheme` once at mount, so a system theme change while the page is open is no longer followed live.
+
+## 2026-09-07 — Released userscript 0.3.2 and the weekly caveat (#3, commit f39043d)
+
+- Released with `Crawl and publish` / `republish=true` (run 34078380414): regenerates the site from the published history, so no store was crawled and no observation was added.
+- Verify: the served bundle. Expect: `@version 0.3.2`, byte-identical to the local build, theme controls present. Result: 200, 58,110 bytes, `buf.equals(local) === true`, `theme-controls` and `eph:theme` present, and the weekly caveat sentence is in the bundle.
+- Verify: the manifests. Expect: switch-science carries `sampling_interval_weekly`, akizuki is untouched, and neither `datasetVersion` moves (the caveat is not part of the dataset hash — asserted in tests/contract/publisher.test.ts before deploying). Result: switch-science `762d7ad2cd13eaf8` with `["observation_window","sampling_interval_weekly","absence_not_discontinued"]`; akizuki `3ccce668810808ca` with `sampling_interval`, 12,772 products.
+- Verify: published `state/state.json`. Expect: run counts unchanged. Result: akizuki `runCount 2` (latest 2026-09-06T17:03:58Z), switch-science `runCount 1` (2026-09-07T01:42:04Z) — the republish added nothing, as intended.
+- Verify: CI on main. Result: green (run 34078371759; includes the layering check "Common core must not name a store", mutation and E2E).
+- The published manifests live at `/data/v1/stores/<store>/manifest.json`; the finalized state is at `/state/state.json` (not under `/data`). Two 404s while probing came from guessing those paths.
+- Learning: **a release that must not change the data is verifiable as "nothing moved"** — datasetVersion, runCount and the other store's manifest are the assertions, not the absence of errors in the log.
