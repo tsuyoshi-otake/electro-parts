@@ -147,7 +147,10 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
   const draw = () => {
     if (box.childNodes.length > 0) return;
     if (others.length) {
-      const svg = buildComparisonChart(doc, series, { ...CHART_SIZE, currency: segment.basis.currency });
+      const chartWidth = () => Math.max(280, Math.min(CHART_SIZE.width, box.clientWidth || CHART_SIZE.width));
+      let width = chartWidth();
+      const makeSvg = () => buildComparisonChart(doc, series, { width, height: width < 450 ? 220 : CHART_SIZE.height, currency: segment.basis.currency });
+      let svg = makeSvg();
       const controls = doc.createElement('div'); controls.className = 'series-controls'; controls.setAttribute('role', 'group'); controls.setAttribute('aria-label', 'グラフに表示する店舗');
       const hidden = ctx.hiddenSeries ??= new Set();
       const message = text(doc, 'div', '表示する店舗を選択してください', 'related-meta'); message.setAttribute('role', 'status');
@@ -155,13 +158,28 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
       series.forEach((s, i) => {
         const label = doc.createElement('label'); label.dataset['seriesIndex'] = String(i);
         const input = doc.createElement('input'); input.type = 'checkbox'; input.checked = !hidden.has(s.id); input.dataset['focusKey'] = `series-${s.id}`;
-        const group = [...svg.querySelectorAll<SVGGElement>('g[data-series]')].find((g) => g.dataset['series'] === s.id);
-        const update = () => { if (group) group.style.display = input.checked ? '' : 'none'; updateMessage(); };
+        const update = () => {
+          const group = [...svg.querySelectorAll<SVGGElement>('g[data-series]')].find((g) => g.dataset['series'] === s.id);
+          if (group) group.style.display = input.checked ? '' : 'none'; updateMessage();
+        };
         input.addEventListener('change', () => { if (input.checked) hidden.delete(s.id); else hidden.add(s.id); update(); });
         const swatch = text(doc, 'span', '', 'series-swatch'); swatch.setAttribute('aria-hidden', 'true');
         label.append(input, swatch, doc.createTextNode(s.label)); controls.appendChild(label); update();
       });
       box.append(controls, svg, message, text(doc, 'div', '各店舗の最終観測までを表示。点にフォーカスすると日時と価格を確認できます。', 'related-meta'));
+      // Resize only the SVG, not the controls or data. This keeps axis text
+      // readable on narrow screens and avoids refetching or losing checkboxes.
+      if (doc.defaultView && typeof doc.defaultView.ResizeObserver === 'function') {
+        const resize = new doc.defaultView.ResizeObserver(() => {
+          const nextWidth = chartWidth(); if (nextWidth === width) return; width = nextWidth;
+          const next = makeSvg();
+          for (const group of next.querySelectorAll<SVGGElement>('g[data-series]')) group.style.display = hidden.has(group.dataset['series']!) ? 'none' : '';
+          svg.replaceWith(next); svg = next;
+        });
+        resize.observe(box);
+        const previousCleanup = ctx.cleanup;
+        ctx.cleanup = () => { previousCleanup?.(); resize.disconnect(); };
+      }
       return;
     }
     box.appendChild(

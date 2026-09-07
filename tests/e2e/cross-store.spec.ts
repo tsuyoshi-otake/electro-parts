@@ -74,6 +74,12 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(checkbox).toBeFocused();
   expect(requests).toHaveLength(4);
   await page.setViewportSize({ width: 390, height: 844 });
+  await expect(panel(page).locator('.eph-comparison-chart')).toHaveAttribute('viewBox', /^0 0 3\d{2} 220$/);
+  await expect(checkbox).not.toBeChecked();
+  await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
+  await checkbox.check();
+  await expect(panel(page).locator('g[data-series]').nth(1)).toBeVisible();
+  expect(requests).toHaveLength(4);
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-mobile.png' });
   const overflow = await panel(page).evaluate((el) => {
     const section = el.shadowRoot!.querySelector('section')!;
