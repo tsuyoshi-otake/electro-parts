@@ -28,7 +28,7 @@
 | スクリーンショット | この順に 4 枚(いずれも 1280×800)。`dist/store/screenshot-comparison-akizuki.png`、`dist/store/screenshot-comparison-switch-science.png`、`dist/store/screenshot-akizuki.png`、`dist/store/screenshot-switch-science.png` |
 | ショップ アイコン | 128×128。`dist/extension/icons/icon-128.png`(パッケージに入っているものと同じファイル) |
 | プロモーション タイル | 小 440×280 `dist/store/promo-tile-small.png`、マーキー 1400×560 `dist/store/promo-tile-marquee.png` |
-| ホームページ URL | <https://github.com/tsuyoshi-otake/electro-parts> |
+| ホームページ URL | <https://tsuyoshi-otake.github.io/electro-parts/>(公開サイト。`public/index.html` が公開されたもの) |
 | サポート URL | <https://github.com/tsuyoshi-otake/electro-parts/issues> |
 
 アイテム名と概要はマニフェストの `name` / `description` と同じ文字列を使う。マニフェスト側を直したらここも直す(テストが文字数を見張る)。
