@@ -35,20 +35,14 @@ const PAD = { left: 56, right: 12, top: 10, bottom: 24 };
 /** Splits the price change points into priced, listed intervals. Exported for tests. */
 export function pricedIntervals(points: readonly PricePointV1[], presence: readonly PresencePointV1[], end: number): Interval[] {
   const out: Interval[] = [];
-  const presentAt = (t: number): boolean => {
-    let present = false;
-    for (const [pt, p] of presence) {
-      if (pt > t) break;
-      present = p === 1;
-    }
-    return present;
-  };
   const cuts = new Set<number>([end]);
   for (const [t] of points) cuts.add(t);
   for (const [t] of presence) cuts.add(t);
   const times = [...cuts].sort((a, b) => a - b);
   let price: PricePointV1 | null = null;
   let pi = 0;
+  let presenceIndex = 0;
+  let present = false;
   for (let i = 0; i < times.length - 1; i++) {
     const from = times[i] as number;
     const to = times[i + 1] as number;
@@ -57,13 +51,95 @@ export function pricedIntervals(points: readonly PricePointV1[], presence: reado
       pi += 1;
     }
     if (price === null || price[1] === 'unavailable' || price[2] === null || price[3] === null) continue;
-    if (!presentAt(from)) continue;
+    while (presenceIndex < presence.length && presence[presenceIndex]![0] <= from) {
+      present = presence[presenceIndex]![1] === 1;
+      presenceIndex += 1;
+    }
+    if (!present) continue;
     if (to > end) continue;
     const last = out[out.length - 1];
     if (last !== undefined && last.to === from && last.min === price[2] && last.max === price[3]) last.to = to;
     else out.push({ from, to, min: price[2], max: price[3] });
   }
   return out;
+}
+
+export interface ComparisonSeries {
+  id: string;
+  label: string;
+  points: readonly PricePointV1[];
+  presence: readonly PresencePointV1[];
+  start: number;
+  end: number;
+}
+
+/** Shared axes, but each series stops at its own last observation. No invented tail. */
+export function buildComparisonChart(doc: Document, series: readonly ComparisonSeries[], options: Pick<ChartOptions, 'width' | 'height' | 'currency'>): SVGSVGElement {
+  const { width, height, currency } = options;
+  const svg = el(doc, 'svg', { viewBox: `0 0 ${width} ${height}`, width: '100%', role: 'group', class: 'eph-chart eph-comparison-chart', 'aria-label': '店舗別の記録価格。各系列はその店舗の最終観測まで。点にフォーカスすると観測日時と価格を確認できます。' });
+  if (!series.length) return svg;
+  const start = Math.min(...series.map((s) => s.start));
+  const end = Math.max(...series.map((s) => s.end));
+  const span = Math.max(3_600_000, end - start);
+  const plotW = width - PAD.left - PAD.right;
+  const plotH = height - PAD.top - PAD.bottom;
+  const x = (t: number) => PAD.left + plotW * (0.02 + 0.96 * (t - start) / span);
+  const prepared = series.map((s) => ({ ...s, intervals: pricedIntervals(s.points, s.presence, s.end).filter((iv) => iv.to >= s.start) }));
+  let lo = Infinity;
+  let hi = -Infinity;
+  for (const s of prepared) {
+    for (const iv of s.intervals) { lo = Math.min(lo, iv.min); hi = Math.max(hi, iv.max); }
+    for (const p of s.points) {
+      if (p[0] >= s.start && p[0] <= s.end && p[1] !== 'unavailable' && p[2] !== null && p[3] !== null) { lo = Math.min(lo, p[2]); hi = Math.max(hi, p[3]); }
+    }
+  }
+  if (!Number.isFinite(lo)) {
+    const msg = el(doc, 'text', { x: width / 2, y: height / 2, 'text-anchor': 'middle', class: 'eph-chart-empty' });
+    msg.textContent = '比較できる価格の記録なし'; svg.appendChild(msg); return svg;
+  }
+  const margin = Math.max(1, (hi - lo) * 0.15, hi === lo ? hi * 0.1 : 0);
+  lo = Math.max(0, lo - margin); hi += margin;
+  const y = (v: number) => PAD.top + plotH - (v - lo) / (hi - lo) * plotH;
+  for (const v of niceTicks(lo, hi, 4)) {
+    const yy = y(v);
+    svg.appendChild(el(doc, 'line', { x1: PAD.left, x2: width - PAD.right, y1: yy, y2: yy, class: 'eph-grid' }));
+    const label = el(doc, 'text', { x: PAD.left - 6, y: yy + 4, 'text-anchor': 'end', class: 'eph-axis' });
+    label.textContent = formatMoney(v, currency); svg.appendChild(label);
+  }
+  let right = -Infinity;
+  let previous = '';
+  for (const t of [start, start + (end - start) / 2, end]) {
+    const content = formatDate(t);
+    const anchor = t === start ? 'start' : t === end ? 'end' : 'middle';
+    const left = x(t) - (anchor === 'end' ? X_LABEL_WIDTH : anchor === 'middle' ? X_LABEL_WIDTH / 2 : 0);
+    if (content === previous || left < right + X_LABEL_GAP) continue;
+    const label = el(doc, 'text', { x: x(t), y: height - 6, 'text-anchor': anchor, class: 'eph-axis' });
+    label.textContent = content; svg.appendChild(label);
+    right = left + X_LABEL_WIDTH; previous = content;
+  }
+  prepared.forEach((s, i) => {
+    const group = el(doc, 'g', { 'data-series': s.id, 'data-series-index': i, 'aria-label': s.label });
+    let line = ''; let band = ''; let lastTo: number | null = null;
+    for (const iv of s.intervals) {
+      const from = Math.max(iv.from, s.start);
+      if (iv.to <= from) continue;
+      const x0 = x(from).toFixed(1), x1 = x(iv.to).toFixed(1), yy = y(iv.min).toFixed(1);
+      line += lastTo === from ? `V${yy}H${x1}` : `M${x0} ${yy}H${x1}`;
+      if (iv.min !== iv.max) band += `M${x0} ${y(iv.max).toFixed(1)}H${x1}V${yy}H${x0}Z`;
+      lastTo = iv.to;
+    }
+    if (band) group.appendChild(el(doc, 'path', { d: band, class: 'eph-band' }));
+    if (line) group.appendChild(el(doc, 'path', { d: line, class: 'eph-line', fill: 'none' }));
+    for (const p of s.points) {
+      if (p[0] < s.start || p[0] > s.end || p[1] === 'unavailable' || p[2] === null) continue;
+      const value = p[1] === 'range' && p[3] !== null ? `${formatMoney(p[2], currency)}〜${formatMoney(p[3], currency)}` : formatMoney(p[2], currency);
+      const label = `${s.label} · ${new Date(p[0]).toISOString()} · ${value}`;
+      const dot = el(doc, 'circle', { cx: x(p[0]), cy: y(p[2]), r: 4, class: 'eph-dot', tabindex: 0, role: 'img', 'aria-label': label });
+      const title = el(doc, 'title', {}); title.textContent = label; dot.appendChild(title); group.appendChild(dot);
+    }
+    svg.appendChild(group);
+  });
+  return svg;
 }
 
 function el<K extends keyof SVGElementTagNameMap>(doc: Document, name: K, attrs: Record<string, string | number>): SVGElementTagNameMap[K] {

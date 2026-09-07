@@ -19,17 +19,21 @@
   <ol>
     <li>ブラウザに <a href="https://www.tampermonkey.net/" rel="noopener">Tampermonkey</a> を入れる。</li>
     <li><a href="electronics-price-history.user.js">electronics-price-history.user.js</a> を開き、Tampermonkey の確認画面でインストールする。</li>
-    <li>対応サイト(現在は秋月電子通商)の商品ページを開くと、購入エリアの下に「Electronics Price History」パネルが出ます。</li>
+    <li>対応サイト(秋月電子通商・スイッチサイエンス)の商品ページを開くと、購入エリアの下に「Electronics Price History」パネルが出ます。</li>
   </ol>
+  <h2>0.4.0: 店舗横断の商品比較</h2>
+  <p>対応表のある商品では、同一商品・類似商品・要確認候補を分けて表示します。販売条件まで確認済みの同一商品は、店舗別の履歴を重ねて記録価格差を表示。類似商品は仕様差と商品リンクを別枠に表示し、互換性を保証しません。</p>
+  <p>初回対応表は80組(未確定を含む同一商品60、類似8、要確認12)。全商品の網羅的な照合ではありません。差額表示の承認はATOM LiteとArduino UNO R4 Minimaの2組で、他は参考記録価格です。送料・数量割引・販売店独自保証は含まず、現在の最安価格を示すものではありません。</p>
   <h2>データ</h2>
   <ul>
     <li>マニフェスト: <a href="data/v1/stores/akizuki/manifest.json"><code>data/v1/stores/akizuki/manifest.json</code></a></li>
+    <li>マニフェスト: <a href="data/v1/stores/switch-science/manifest.json"><code>data/v1/stores/switch-science/manifest.json</code></a></li>
     <li>商品ごと: <code>data/v1/stores/akizuki/products/&lt;pageKey&gt;.json</code></li>
     <li>最終化済み履歴 DB(SQLite、次回クロールの入力): <a href="state/state.json"><code>state/state.json</code></a></li>
   </ul>
   <div class="note">
     <p><strong>データについて</strong>: 表示される値は、このプロジェクトが観測した時点の店頭表示の記録であり、店舗の公式データではありません。
-      観測は 1 日 1 回程度で、観測の間に起きた変化は記録されません。価格は税込・単位あたりの販売価格、在庫数は店舗が表示した数値そのものです。
+      観測間隔は店舗ごとに異なり(秋月は約1か月、スイッチサイエンスは約1週間)、観測の間に起きた変化は記録されません。価格は記録した販売単位・条件によるもので、在庫数は店舗が表示した数値そのものです。
       ユーザースクリプトは Cookie を使わず、閲覧履歴を送信しません。データ取得先は GitHub Pages のこのサイトだけです。</p>
   </div>
   <p>ソースコード・仕様・ロードマップ: <a href="https://github.com/tsuyoshi-otake/electro-parts">github.com/tsuyoshi-otake/electro-parts</a></p>

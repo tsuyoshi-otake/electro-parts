@@ -42,6 +42,7 @@ function parse<T>(text: string | null): T | null {
 }
 
 export class LruCache {
+  private updates: Promise<void> = Promise.resolve();
   constructor(
     private readonly storage: HostStorage,
     private readonly maxEntries: number,
@@ -76,7 +77,13 @@ export class LruCache {
   }
 
   /** Moves `key` to the most-recent end and evicts the least recent entries beyond `maxEntries`. */
-  private async touch(key: string): Promise<void> {
+  private touch(key: string): Promise<void> {
+    const update = this.updates.then(() => this.touchNow(key));
+    this.updates = update.catch(() => undefined);
+    return update;
+  }
+
+  private async touchNow(key: string): Promise<void> {
     const list = (await this.index()).filter((k) => k !== key);
     list.push(key);
     while (list.length > this.maxEntries) {

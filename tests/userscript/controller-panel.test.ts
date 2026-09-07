@@ -3,6 +3,8 @@ import { manifestPath, productPath } from '../../src/publisher/contract.ts';
 import { HOST_ELEMENT_ID, THEME_STORAGE_KEY, mountHistoryPanel } from '../../userscript/core/controller.ts';
 import { DataClient } from '../../userscript/core/dataClient.ts';
 import { PANEL_TITLE } from '../../userscript/ui/panel.ts';
+import { indexRelations } from '../../userscript/core/relations.ts';
+import { comparisonFixture } from './comparison-fixtures.ts';
 import { fakeHost, json, sampleManifest, sampleProduct, testAdapter, type FakeHost } from './helpers.ts';
 
 const BASE = 'https://data.example.test';
@@ -48,6 +50,47 @@ async function mount(host: FakeHost, options: Partial<Parameters<typeof mountHis
 }
 
 describe('history panel controller', () => {
+  it('bounds related loads to two, deduplicates endpoints, and does not reload on display changes', async () => {
+    page();
+    const host = hostWithData();
+    const { relation, other } = comparisonFixture();
+    const relations = ['P2', 'P3', 'P4', 'P2'].map((key, i) => ({ ...relation, id: `pair-${i}`,
+      products: [relation.products[0], { ...relation.products[1], pageKey: key }] as typeof relation.products }));
+    host.routes.set(`${BASE}/${manifestPath('otherstore')}`, json(sampleManifest({ storeId: 'otherstore' })));
+    for (const key of ['P2', 'P3', 'P4']) host.routes.set(`${BASE}/${productPath('otherstore', key)}`, key === 'P3'
+      ? { status: 429, text: 'rate limited' } : json({ ...other, pageKey: key, externalProductId: key }));
+    const fetch = host.fetchText;
+    let active = 0;
+    let peak = 0;
+    host.fetchText = async (url, timeout) => {
+      if (!url.includes('/otherstore/products/')) return fetch(url, timeout);
+      active++; peak = Math.max(peak, active);
+      try { await new Promise((resolve) => setTimeout(resolve, 20)); return await fetch(url, timeout); }
+      finally { active--; }
+    };
+    const handle = await mount(host, { relationIndex: indexRelations(relations) });
+    expect(peak).toBe(2);
+    expect(active).toBe(0);
+    expect(host.requests.filter((url) => url.includes('/otherstore/manifest'))).toHaveLength(1);
+    expect(host.requests.filter((url) => url.includes('/otherstore/products/'))).toHaveLength(3);
+    expect(shadowText()).not.toContain('読込中');
+    const before = host.requests.length;
+    document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!.querySelectorAll('button')[1]!.click();
+    await Promise.resolve();
+    expect(host.requests).toHaveLength(before);
+    handle.destroy();
+    expect(document.getElementById(HOST_ELEMENT_ID)).toBeNull();
+  });
+
+  it('does not request invisible related histories when the current product fails', async () => {
+    page();
+    const host = fakeHost();
+    const { relation } = comparisonFixture();
+    await mount(host, { relationIndex: indexRelations([relation]) });
+    expect(shadowText()).toContain('取得できませんでした');
+    expect(host.requests).toHaveLength(1);
+    expect(host.requests[0]).toContain('/teststore/');
+  });
   it('switches both ways, preserves keyboard focus, and shares the saved preference between stores', async () => {
     page();
     const host = hostWithData();

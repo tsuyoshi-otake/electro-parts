@@ -3,6 +3,8 @@ import { mountHistoryPanel } from './core/controller.ts';
 import { DataClient } from './core/dataClient.ts';
 import type { HostEnv } from './core/types.ts';
 import { DEFAULT_DATA_BASE_URL } from './version.ts';
+import { PRODUCT_RELATIONS, STORE_LABELS } from './adapters/productRelations.ts';
+import { indexRelations } from './core/relations.ts';
 
 /**
  * Tampermonkey entry point. Binds the store-neutral core to the GM APIs:
@@ -55,7 +57,8 @@ function resolveBaseUrl(): string {
     const host = gmHost();
     const dataBaseUrl = resolveBaseUrl();
     const client = new DataClient(host, { baseUrl: dataBaseUrl });
-    await mountHistoryPanel({ adapters: PAGE_ADAPTERS, host, client, doc: document, location: window.location, dataBaseUrl });
+    await mountHistoryPanel({ adapters: PAGE_ADAPTERS, host, client, doc: document, location: window.location, dataBaseUrl,
+      relationIndex: indexRelations(PRODUCT_RELATIONS), storeLabels: STORE_LABELS });
   } catch (e) {
     console.warn(`${LOG_PREFIX} failed: ${(e as Error).message}`);
   }

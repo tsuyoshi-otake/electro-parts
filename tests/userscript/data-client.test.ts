@@ -22,6 +22,48 @@ const errorOf = (states: LoadState[]): string => {
 const kinds = (states: LoadState[]) => states.map((s) => (s.kind === 'ready' ? `ready:${s.freshness}` : s.kind === 'missing' ? `missing:${s.freshness}` : s.kind));
 
 describe('DataClient (stale-while-revalidate)', () => {
+  it('deduplicates in-flight products and manifests, and keeps all concurrent cache entries', async () => {
+    const host = fakeHost();
+    host.routes.set(M, json(sampleManifest())); host.routes.set(P, json(sampleProduct()));
+    host.routes.set(`${BASE}/${productPath('teststore', 'P2')}`, json(sampleProduct({ pageKey: 'P2', externalProductId: 'P2' })));
+    const client = new DataClient(host, { baseUrl: BASE });
+    const results = await Promise.all([run(client), run(client), run(client, 'P2')]);
+    expect(results.every((states) => states[states.length - 1]!.kind === 'ready')).toBe(true);
+    expect(host.requests).toHaveLength(3);
+    expect(host.requests.filter((url) => url.includes('manifest.json'))).toHaveLength(1);
+    expect(await new LruCache(host.storage, 200).index()).toHaveLength(2);
+  });
+
+  it('isolates a failing subscriber and gives other subscribers a terminal state', async () => {
+    const host = fakeHost(); host.routes.set(M, json(sampleManifest())); host.routes.set(P, json(sampleProduct()));
+    const client = new DataClient(host, { baseUrl: BASE });
+    const [, states] = await Promise.all([client.load('teststore', 'P1', () => { throw new Error('render failed'); }), run(client)]);
+    expect(states[states.length - 1]!.kind).toBe('ready'); expect(host.requests).toHaveLength(2);
+  });
+
+  it('does not retry a rate-limited comparison request', async () => {
+    const host = fakeHost(); host.routes.set(M, json(sampleManifest())); host.routes.set(P, { status: 429, text: 'rate limited' });
+    const states = await run(new DataClient(host, { baseUrl: BASE }));
+    expect(states[states.length - 1]!.kind).toBe('error'); expect(host.requests).toHaveLength(2);
+  });
+
+  it('shares a failed manifest across concurrent and queued products without a retry storm', async () => {
+    const host = fakeHost(); host.routes.set(M, { status: 429, text: 'rate limited' });
+    const client = new DataClient(host, { baseUrl: BASE });
+    const first = await Promise.all([run(client, 'P1'), run(client, 'P2')]);
+    const queued = await run(client, 'P3');
+    expect([...first, queued].every((states) => states.at(-1)?.kind === 'error')).toBe(true);
+    expect(host.requests).toHaveLength(1);
+  });
+
+  it('does not emit a foreign product from a structurally valid poisoned cache entry', async () => {
+    const host = fakeHost(); host.routes.set(M, json(sampleManifest())); host.routes.set(P, json(sampleProduct()));
+    host.store.set(productCacheKey('teststore', 'P1'), JSON.stringify({ datasetVersion: 'v1', storedAt: host.clock, body: sampleProduct({ storeId: 'foreign' }) }));
+    const states = await run(new DataClient(host, { baseUrl: BASE }));
+    expect(states[0]!.kind).toBe('loading');
+    expect(states.filter((s) => s.kind === 'ready').every((s) => s.kind === 'ready' && s.product.storeId === 'teststore')).toBe(true);
+    expect(host.requests).toHaveLength(2);
+  });
   it('first visit: loading → manifest → product fetched with the dataset version, then cached', async () => {
     const host = fakeHost();
     host.routes.set(M, json(sampleManifest()));

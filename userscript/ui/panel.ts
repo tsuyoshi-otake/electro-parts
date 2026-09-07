@@ -1,7 +1,9 @@
 import type { CaveatKey, ManifestV1, OfferV1, ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
 import type { LoadState } from '../core/dataClient.ts';
 import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatPercent, formatPriceValue, formatSignedMoney } from '../core/format.ts';
-import { buildStepChart } from './chart.ts';
+import { buildStepChart, buildComparisonChart, type ComparisonSeries } from './chart.ts';
+import { comparisonEligibility, type RelatedEntry } from '../core/relations.ts';
+import { RELATED_CSS, renderRelatedGroups, renderStorePrices } from './related.ts';
 
 /**
  * The history panel. Rendered into a Shadow DOM root so neither the page's
@@ -25,6 +27,10 @@ export interface PanelContext {
   lazyChart: boolean;
   theme: 'light' | 'dark';
   onThemeChange(theme: 'light' | 'dark'): void;
+  storeLabel?: (storeId: string) => string;
+  related?: RelatedEntry[];
+  hiddenSeries?: Set<string>;
+  cleanup?: () => void;
 }
 
 export const PANEL_CSS = `
@@ -95,7 +101,7 @@ export const PANEL_CSS = `
 .eph a { color: var(--accent); }
 .eph p { margin: 6px 0; }
 .eph .muted { color: var(--muted); }
-`;
+` + RELATED_CSS;
 
 function text(doc: Document, tag: string, content: string, className?: string): HTMLElement {
   const node = doc.createElement(tag);
@@ -121,15 +127,43 @@ function pickSegment(offer: OfferV1, index: number | null): { segment: SegmentV1
 }
 
 /** Chart column: drawn immediately, or when the panel first becomes visible. */
-function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, segment: SegmentV1): void {
+function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, segment: SegmentV1, ownFresh: boolean): void {
   const doc = ctx.doc;
   const box = doc.createElement('div');
   box.className = 'chart-box';
   parent.appendChild(box);
   const start = product.observation.firstObservedAt ?? segment.stats.segmentStartAt;
   const end = product.observation.latestObservedAt ?? segment.stats.currentSinceAt;
+  const storeLabel = ctx.storeLabel ?? ((id: string) => id);
+  const others = (ctx.related ?? []).flatMap((entry) => {
+    const eligibility = comparisonEligibility(product, segment, entry);
+    if (!ownFresh || !eligibility.comparable || entry.state.kind !== 'ready') return [];
+    return [{ id: entry.relation.id, label: storeLabel(entry.target.storeId), points: eligibility.other.points, presence: eligibility.other.presence,
+      start: Math.max(entry.state.product.observation.firstObservedAt ?? eligibility.other.stats.segmentStartAt, eligibility.other.stats.segmentStartAt),
+      end: entry.state.product.product.lastSeenAt }];
+  });
+  const series: ComparisonSeries[] = [{ id: 'current', label: `${storeLabel(product.storeId)}（閲覧中）`, points: segment.points, presence: segment.presence,
+    start: Math.max(start, segment.stats.segmentStartAt), end: product.product.lastSeenAt }, ...others];
   const draw = () => {
     if (box.childNodes.length > 0) return;
+    if (others.length) {
+      const svg = buildComparisonChart(doc, series, { ...CHART_SIZE, currency: segment.basis.currency });
+      const controls = doc.createElement('div'); controls.className = 'series-controls'; controls.setAttribute('role', 'group'); controls.setAttribute('aria-label', 'グラフに表示する店舗');
+      const hidden = ctx.hiddenSeries ??= new Set();
+      const message = text(doc, 'div', '表示する店舗を選択してください', 'related-meta'); message.setAttribute('role', 'status');
+      const updateMessage = () => { message.hidden = series.some((s) => !hidden.has(s.id)); };
+      series.forEach((s, i) => {
+        const label = doc.createElement('label'); label.dataset['seriesIndex'] = String(i);
+        const input = doc.createElement('input'); input.type = 'checkbox'; input.checked = !hidden.has(s.id); input.dataset['focusKey'] = `series-${s.id}`;
+        const group = [...svg.querySelectorAll<SVGGElement>('g[data-series]')].find((g) => g.dataset['series'] === s.id);
+        const update = () => { if (group) group.style.display = input.checked ? '' : 'none'; updateMessage(); };
+        input.addEventListener('change', () => { if (input.checked) hidden.delete(s.id); else hidden.add(s.id); update(); });
+        const swatch = text(doc, 'span', '', 'series-swatch'); swatch.setAttribute('aria-hidden', 'true');
+        label.append(input, swatch, doc.createTextNode(s.label)); controls.appendChild(label); update();
+      });
+      box.append(controls, svg, message, text(doc, 'div', '各店舗の最終観測までを表示。点にフォーカスすると日時と価格を確認できます。', 'related-meta'));
+      return;
+    }
     box.appendChild(
       buildStepChart(doc, segment.points, segment.presence, {
         ...CHART_SIZE,
@@ -149,13 +183,14 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
       }
     });
     io.observe(box);
+    ctx.cleanup = () => io.disconnect();
   } else {
     draw();
   }
 }
 
 /** Summary column: the current price as the headline, then the comparison figures. */
-function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, offer: OfferV1, segment: SegmentV1): void {
+function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, offer: OfferV1, segment: SegmentV1, ownFresh: boolean): void {
   const doc = ctx.doc;
   const currency = segment.basis.currency;
   const s = segment.stats;
@@ -163,7 +198,10 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
 
   const col = doc.createElement('div');
   col.className = 'stats-col';
-  col.appendChild(text(doc, 'div', '現在の記録価格', 'hero-label'));
+  const related = ctx.related ?? [];
+  const storeLabel = ctx.storeLabel ?? ((id: string) => id);
+  if (related.length) col.appendChild(text(doc, 'div', '店舗別の記録価格', 'comparison-heading'));
+  col.appendChild(text(doc, 'div', related.length ? `${storeLabel(product.storeId)}（閲覧中）` : '現在の記録価格', 'hero-label'));
   const hero = text(doc, 'div', formatPriceValue(s.current, currency), 'hero-value');
   const dir = s.change.direction;
   if (s.change.differenceMinor !== null) {
@@ -172,6 +210,11 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
   }
   col.appendChild(hero);
   col.appendChild(text(doc, 'div', `${formatDate(s.currentSinceAt)} から${s.previousDistinct === null ? '(初回観測)' : ''}`, 'hero-meta'));
+  if (related.length) {
+    col.appendChild(text(doc, 'div', `最終観測 ${formatDateTime(product.product.lastSeenAt)}`, 'hero-meta'));
+    renderStorePrices(doc, col, product, segment, related, storeLabel, ownFresh);
+    col.appendChild(text(doc, 'div', `${storeLabel(product.storeId)}の価格履歴・統計`, 'comparison-heading'));
+  }
 
   const rows = doc.createElement('dl');
   rows.className = 'rows';
@@ -203,6 +246,7 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
 /** The change-point table, kept collapsed but always in the accessibility tree. */
 function renderChangeTable(doc: Document, parent: HTMLElement, segment: SegmentV1): void {
   const details = doc.createElement('details');
+  details.dataset['stateKey'] = 'price-changes';
   details.appendChild(text(doc, 'summary', `価格変更の一覧(${segment.points.length} 件)`));
   const table = doc.createElement('table');
   const head = doc.createElement('tr');
@@ -230,6 +274,7 @@ function renderCaveats(doc: Document, root: HTMLElement, keys: Iterable<CaveatKe
   }
   if (list.childNodes.length === 0) return;
   const details = doc.createElement('details');
+  details.dataset['stateKey'] = 'caveats';
   details.appendChild(text(doc, 'summary', `このデータの注意点(${seen.size} 件)`));
   details.appendChild(list);
   root.appendChild(details);
@@ -260,7 +305,7 @@ function renderFooter(ctx: PanelContext, root: HTMLElement, manifest: ManifestV1
 }
 
 /** Replaces the shadow root's content with the rendering of `state`. */
-export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadState, selectedSegment: number | null, onSelectSegment: (index: number) => void): void {
+function renderPanelContent(ctx: PanelContext, shadow: ShadowRoot, state: LoadState, selectedSegment: number | null, onSelectSegment: (index: number) => void): void {
   const doc = ctx.doc;
   while (shadow.firstChild) shadow.removeChild(shadow.firstChild);
   const style = doc.createElement('style');
@@ -281,6 +326,7 @@ export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   for (const [value, label] of [['light', 'ライト'], ['dark', 'ダーク']] as const) {
     const button = doc.createElement('button');
     button.type = 'button';
+    button.dataset['focusKey'] = `theme-${value}`;
     button.textContent = label;
     button.setAttribute('aria-pressed', String(ctx.theme === value));
     button.addEventListener('click', () => {
@@ -335,6 +381,7 @@ export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
     if (offer.segments.length > 1) {
       const select = doc.createElement('select');
       select.setAttribute('aria-label', '価格の種類');
+      select.dataset['focusKey'] = 'segment';
       offer.segments.forEach((seg, i) => {
         const opt = doc.createElement('option');
         opt.value = String(i);
@@ -348,17 +395,32 @@ export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
       head.appendChild(text(doc, 'span', basisLabel(picked.segment.basis), 'basis'));
     }
     const body = doc.createElement('div');
-    body.className = 'body';
-    renderChart(ctx, body, product, picked.segment);
-    renderStats(ctx, body, product, offer, picked.segment);
+    body.className = `body${ctx.related?.length ? ' has-comparison' : ''}`;
+    const ownFresh = state.freshness === 'fresh' && state.note === null;
+    renderChart(ctx, body, product, picked.segment, ownFresh);
+    renderStats(ctx, body, product, offer, picked.segment, ownFresh);
     root.appendChild(body);
     tail.className = 'foot-blocks';
     root.appendChild(tail);
     renderChangeTable(doc, tail, picked.segment);
   }
 
+  renderRelatedGroups(doc, tail, ctx.related ?? [], ctx.storeLabel ?? ((id: string) => id));
+
   const caveats: CaveatKey[] = [...(state.manifest?.caveats ?? []), ...product.caveats];
   if (product.product.metadata.some((m) => m.suspicious)) caveats.push('suspicious_identity');
   renderCaveats(doc, tail, caveats);
   renderFooter(ctx, tail, state.manifest, product, state);
+}
+
+/** Async updates keep disclosures, legend selection and keyboard focus intact. */
+export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadState, selectedSegment: number | null, onSelectSegment: (index: number) => void): void {
+  const disclosures = new Map([...shadow.querySelectorAll<HTMLDetailsElement>('details[data-state-key]')].map((d) => [d.dataset['stateKey'], d.open]));
+  const focused = shadow.activeElement?.getAttribute('data-focus-key');
+  ctx.cleanup?.(); delete ctx.cleanup;
+  renderPanelContent(ctx, shadow, state, selectedSegment, onSelectSegment);
+  for (const d of shadow.querySelectorAll<HTMLDetailsElement>('details[data-state-key]')) {
+    const open = disclosures.get(d.dataset['stateKey']); if (open !== undefined) d.open = open;
+  }
+  if (focused) [...shadow.querySelectorAll<HTMLElement>('[data-focus-key]')].find((e) => e.dataset['focusKey'] === focused)?.focus({ preventScroll: true });
 }

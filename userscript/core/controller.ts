@@ -1,6 +1,7 @@
 import type { DataClient, LoadState } from './dataClient.ts';
 import type { HostEnv, MountPoint, StorePageAdapter } from './types.ts';
 import { renderPanel, type PanelContext } from '../ui/panel.ts';
+import { relatedEntries, relationProductKey, type ProductRelation } from './relations.ts';
 
 /**
  * Page lifecycle: pick the adapter for the current location, find the page
@@ -24,6 +25,8 @@ export interface ControllerOptions {
   /** How long to watch the DOM for a late mount point before giving up. */
   mountTimeoutMs?: number;
   lazyChart?: boolean;
+  relationIndex?: ReadonlyMap<string, readonly ProductRelation[]>;
+  storeLabels?: Readonly<Record<string, string>>;
 }
 
 export interface ControllerHandle {
@@ -97,7 +100,9 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
     const shadow = hostEl.attachShadow({ mode: 'open' });
     insert(mount, hostEl);
     handle.mounted = true;
-    handle.destroy = () => hostEl.remove();
+    let destroyed = false;
+    let cleanup = () => undefined as void;
+    handle.destroy = () => { destroyed = true; cleanup(); hostEl.remove(); };
 
     let theme: 'light' | 'dark' = doc.defaultView?.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     try {
@@ -110,6 +115,8 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
     let themeSave = Promise.resolve();
     const ctx: PanelContext = {
       doc, dataBaseUrl: options.dataBaseUrl, lazyChart: options.lazyChart ?? true, theme,
+      storeLabel: (storeId) => options.storeLabels?.[storeId] ?? storeId,
+      related: relatedEntries(options.relationIndex?.get(relationProductKey(adapter.storeId, pageKey)) ?? [], adapter.storeId, pageKey),
       onThemeChange: (value) => {
         ctx.theme = value;
         themeSave = themeSave.then(() => host.storage.set(THEME_STORAGE_KEY, value)).catch(() => {
@@ -117,9 +124,11 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
         });
       },
     };
+    cleanup = () => ctx.cleanup?.();
     let current: LoadState = { kind: 'loading' };
     let selected: number | null = null;
     const render = () => {
+      if (destroyed) return;
       try {
         renderPanel(ctx, shadow, current, selected, (index) => {
           selected = index;
@@ -134,6 +143,36 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       current = state;
       render();
     });
+    // Related content is not displayed without the current product. Complete
+    // those states explicitly without spending requests on invisible cards.
+    if ((current as LoadState).kind !== 'ready') {
+      for (const entry of ctx.related ?? []) entry.state = { kind: 'error', message: 'この商品の観測データがありません' };
+      return handle;
+    }
+    // Only the page controller owns related loads. Renders, theme changes and
+    // stale-while-revalidate callbacks never initiate more work. Two workers,
+    // no automatic retries, and destroyed panels do not start queued requests.
+    const groups = new Map<string, NonNullable<PanelContext['related']>>();
+    for (const entry of ctx.related ?? []) {
+      const key = relationProductKey(entry.target.storeId, entry.target.pageKey);
+      const group = groups.get(key) ?? [];
+      group.push(entry);
+      groups.set(key, group);
+    }
+    const jobs = [...groups.values()];
+    let next = 0;
+    await Promise.all(Array.from({ length: Math.min(2, jobs.length) }, async () => {
+      while (!destroyed && next < jobs.length) {
+        const group = jobs[next++];
+        const first = group?.[0];
+        if (!first || !group) continue;
+        await options.client.load(first.target.storeId, first.target.pageKey, (state) => {
+          if (destroyed) return;
+          for (const entry of group) entry.state = state;
+          render();
+        });
+      }
+    }));
   } catch (e) {
     host.log('error', `history panel failed: ${(e as Error).message}`);
   }
