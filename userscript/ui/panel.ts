@@ -23,21 +23,23 @@ export interface PanelContext {
   dataBaseUrl: string;
   /** Whether the chart is drawn immediately or when the panel becomes visible. */
   lazyChart: boolean;
+  theme: 'light' | 'dark';
+  onThemeChange(theme: 'light' | 'dark'): void;
 }
 
 export const PANEL_CSS = `
 :host { all: initial; display: block; font: 13px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif; }
 .eph {
+  color-scheme: light;
   --bg: #fff; --fg: #16202b; --muted: #5f6b7a; --line: #e3e8ef; --line-soft: #eef2f6;
   --accent: #1f6feb; --up: #b42318; --down: #027a48; --chip: #eef2f7; --chip-fg: #46525f;
   box-sizing: border-box; width: 100%; margin: 16px 0; padding: 14px 16px 10px;
   border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--fg);
 }
-@media (prefers-color-scheme: dark) {
-  .eph {
+.eph[data-theme="dark"] {
+    color-scheme: dark;
     --bg: #161b22; --fg: #e6edf3; --muted: #9aa7b4; --line: #2b3440; --line-soft: #232c36;
     --accent: #6ea8ff; --up: #ff8078; --down: #5ed6a4; --chip: #232c36; --chip-fg: #b6c2ce;
-  }
 }
 .eph * { box-sizing: border-box; }
 
@@ -46,10 +48,15 @@ export const PANEL_CSS = `
 .badge { font-size: 11px; padding: 1px 7px; border-radius: 10px; background: var(--chip); color: var(--chip-fg); font-weight: 500; }
 .badge.stale { background: #fff4e5; color: #8a5a00; }
 .badge.error { background: #fde8e8; color: #9b1c1c; }
-@media (prefers-color-scheme: dark) {
-  .badge.stale { background: #3b2f14; color: #f0c274; }
-  .badge.error { background: #3d1f1f; color: #f5a3a3; }
-}
+.eph[data-theme="dark"] .badge.stale { background: #3b2f14; color: #f0c274; }
+.eph[data-theme="dark"] .badge.error { background: #3d1f1f; color: #f5a3a3; }
+.theme-controls { display: flex; gap: 4px; }
+.theme-controls button { font: inherit; font-size: 12px; min-height: 32px; padding: 4px 10px; border: 1px solid var(--muted); border-radius: 4px; background: var(--bg); color: var(--fg); cursor: pointer; }
+.theme-controls button:hover { background: var(--chip); }
+.theme-controls button[aria-pressed="true"] { background: var(--chip); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.theme-controls button:active { background: var(--line); }
+.theme-controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (pointer: coarse) { .theme-controls button { min-height: 44px; } }
 .spacer { flex: 1 1 auto; }
 .basis { font-size: 12px; color: var(--muted); }
 .eph select { font: inherit; font-size: 12px; padding: 2px 4px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
@@ -261,10 +268,30 @@ export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   shadow.appendChild(style);
   const root = doc.createElement('section');
   root.className = 'eph';
+  root.dataset['theme'] = ctx.theme;
   root.setAttribute('aria-label', PANEL_TITLE);
   const head = doc.createElement('div');
   head.className = 'head';
   head.appendChild(text(doc, 'span', PANEL_TITLE, 'brand'));
+  const themes = doc.createElement('div');
+  themes.className = 'theme-controls';
+  themes.setAttribute('role', 'group');
+  themes.setAttribute('aria-label', '表示モード');
+  const themeButtons: HTMLButtonElement[] = [];
+  for (const [value, label] of [['light', 'ライト'], ['dark', 'ダーク']] as const) {
+    const button = doc.createElement('button');
+    button.type = 'button';
+    button.textContent = label;
+    button.setAttribute('aria-pressed', String(ctx.theme === value));
+    button.addEventListener('click', () => {
+      root.dataset['theme'] = value;
+      for (const candidate of themeButtons) candidate.setAttribute('aria-pressed', String(candidate === button));
+      ctx.onThemeChange(value);
+    });
+    themeButtons.push(button);
+    themes.appendChild(button);
+  }
+  head.appendChild(themes);
   root.appendChild(head);
   shadow.appendChild(root);
 

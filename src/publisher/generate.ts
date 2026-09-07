@@ -10,6 +10,7 @@ import {
   PRODUCT_PATH_TEMPLATE,
   type CaveatKey,
   type ManifestV1,
+  type ObservationCadence,
   type OfferV1,
   type PresencePointV1,
   type PriceValueV1,
@@ -26,6 +27,8 @@ export interface GenerateOptions {
   sourceSchemaVersion: string | null;
   /** Most recent inventory points kept per offer. */
   inventoryPointLimit?: number;
+  /** How often this store is observed; selects the sampling caveat. Default monthly. */
+  observationCadence?: ObservationCadence;
 }
 
 export interface StoreDataset {
@@ -60,7 +63,7 @@ export function generateStoreDataset(history: StoreHistory, options: GenerateOpt
   };
   const latestObservedAt = latest?.observedAt ?? 0;
 
-  const storeCaveats = storeLevelCaveats(history.capabilities);
+  const storeCaveats = storeLevelCaveats(history.capabilities, options.observationCadence ?? 'monthly');
   const seenPageKeys = new Set<string>();
   const products: ProductFileV1[] = [];
   for (const product of history.products) {
@@ -110,8 +113,12 @@ interface ProductContext {
   inventoryPointLimit: number;
 }
 
-function storeLevelCaveats(capabilities: StoreCapabilities): CaveatKey[] {
-  const caveats: CaveatKey[] = ['observation_window', 'sampling_interval', 'absence_not_discontinued'];
+function storeLevelCaveats(capabilities: StoreCapabilities, cadence: ObservationCadence): CaveatKey[] {
+  const caveats: CaveatKey[] = [
+    'observation_window',
+    cadence === 'weekly' ? 'sampling_interval_weekly' : 'sampling_interval',
+    'absence_not_discontinued',
+  ];
   if (capabilities.supportsInventoryQuantity) {
     caveats.push(capabilities.inventoryQuantitySemantics === 'site_reported' ? 'site_reported_quantity' : 'quantity_semantics_unknown');
   }

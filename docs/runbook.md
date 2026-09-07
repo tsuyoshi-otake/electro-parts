@@ -18,10 +18,12 @@
 - 初回だけ `stores: <新店舗>` を指定すると、既存店舗はクロールされず公開済みデータセットのまま(`--republish`)で、新店舗だけが観測される。
 - 完了後、両方の `manifest.json` と `state/state.json` の `stores` を確認する。既存店舗の `datasetVersion` が変わっていなければ正しい。
 
-## 月次の run
+## 定期 run(月次と週次)
 
-- schedule は `17 20 1 * *`(UTC)= 毎月 2 日の日本時間 05:17(ADR-0013)。
-- 頻度が低いぶん、1 回失敗すると次の自動 run まで 1 か月空く。**失敗・隔離が出たら、直してから `workflow_dispatch` で回し直す**のが通常の運用。特定の店舗だけ直したいときは `stores` にその店舗を書く(他店舗は公開済みデータセットのまま維持される)。
+- schedule は 2 本。`17 20 1 * *`(UTC)= 毎月 2 日 05:17 JST と、`17 20 * * 0`(UTC)= 毎週月曜 05:17 JST(ADR-0013、ADR-0016)。
+- **どちらの schedule がどの店舗を観測するかは cron には書いていない。** 起動した cron の周期と `config/<store>.json` の `observation.cadence`(`weekly` / `monthly`)が一致する店舗だけを観測し、残りは `--republish` で維持する。現在は秋月電子通商 = `monthly`、スイッチサイエンス = `weekly`。選んだ結果は Actions の notice(`Schedule`)に出る。
+- 日曜と 1 日が重なる月は 2 本が同じ日に走る。`pages-publish` の concurrency で直列化されるので、後から来たほうが待つ。
+- 頻度が低いぶん、秋月は 1 回失敗すると次の自動 run まで 1 か月空く(スイッチサイエンスは 1 週間)。**失敗・隔離が出たら、直してから `workflow_dispatch` で回し直す**のが通常の運用。特定の店舗だけ直したいときは `stores` にその店舗を書く(他店舗は公開済みデータセットのまま維持される)。
 - Actions summary に**店舗ごとに**、結果(`published` / `unchanged` / `quarantined` / `failed`)、run 時間、リクエスト数、件数、価格変更数、隔離理由が出る。最後に `### Site` として、サイトに載った店舗と `datasetVersion`、サイトサイズが出る。
 - 終了コード(店舗ごと): 0 = 公開または変化なし、3 = 隔離(公開は続く、warning)、1 = 失敗。
 - **1 店舗が失敗しても、他店舗の公開は止まらない。** 失敗した店舗は公開済み履歴から `--republish` で復元されてからデプロイされ、ジョブ自体は最後に失敗する(`failed_stores` に名前が出る)。復元もできなければゲートがデプロイを拒否する。
@@ -34,7 +36,7 @@
    - `item_count_drop` / `missing_product_ratio`: サイト側の一覧が欠けた可能性。`npm run crawl -- --config config/<store>.json` をローカルで実行し、`complete` と `issues`、`catalog.uncovered` を見る。
    - `price_change_ratio`: 本当の価格改定か、読み違い(秋月なら単位・税、スイッチサイエンスなら `price` 文字列の解釈)。スナップショット成果物(`snapshot-<store>-<run id>`)を落として数件を目で比較する。
    - `unavailable_price_ratio`: 価格表示の変更。スイッチサイエンスはしきい値が 2 % と厳しい(JSON の `price` は素直な数値文字列なので、読めない価格が増えるのは形が変わった証拠)。
-2. 本当の変化(価格改定)だった場合: `config/<store>.json` の `sanity` しきい値を一時的に上げてコミットし、`workflow_dispatch` で `stores: <store>` を指定して回し直して取り込む(次の schedule を待つと 1 か月空く)。または成果物のスナップショットを `--snapshot` で再取り込みする(下記)。
+2. 本当の変化(価格改定)だった場合: `config/<store>.json` の `sanity` しきい値を一時的に上げてコミットし、`workflow_dispatch` で `stores: <store>` を指定して回し直して取り込む(秋月は次の schedule まで 1 か月空く)。または成果物のスナップショットを `--snapshot` で再取り込みする(下記)。
 3. 隔離された run は `rejected_runs` に残る。取り込み直したい run は同じ観測時刻のスナップショットで `--snapshot` を指定すると通常の取り込みになる(隔離記録は残る)。
 
 ## 特定スナップショットの取り込み直し
@@ -84,10 +86,12 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 - verify 失敗: 生成物の契約検証エラー。Publisher のバグなのでコードを直す。
 - デプロイされない(`publishable: false`): サイトに載っていない店舗がある。summary の `### Site` に、どの店舗のマニフェストが無いかが出る。履歴に run がある店舗は自動で復元されるので、ここまで来るのは「復元も失敗した」か「その店舗の設定ファイルが無い」場合。**この状態でデプロイしないのは意図した動作**で、公開サイトから店舗が丸ごと消えるより run が 1 回無駄になるほうがましだから。
 
-## 頻度を下げる / 止める
+## 頻度を変える / 止める
 
-- 止める: workflow の schedule をコメントアウトしてコミット。公開データはそのまま残る。
-- 下げる: cron を変える。**このとき `caveats.sampling_interval` の文言も直す**(キーは `src/publisher/generate.ts`、利用者に見える文言は `userscript/core/format.ts`)。
+- 止める: workflow の schedule を(2 本とも)コメントアウトしてコミット。公開データはそのまま残る。
+- 店舗の頻度を変える: `config/<store>.json` の `observation.cadence` を `weekly` / `monthly` に変えるだけ。**注意書き(`caveats.sampling_interval` / `sampling_interval_weekly`)は cadence から決まるので、手で直さない。** その周期の cron が workflow に無ければ `tests/integration/observation-cadence.test.ts` が落ちる。
+- 新しい周期を足す: `src/publisher/contract.ts`(`ObservationCadence` と `CAVEAT_KEYS`)、`userscript/core/format.ts`(利用者に見える文言)、workflow の cron と選択ロジック、そして上のテストを一緒に更新する(ADR-0016)。
+- **上げるときはサイズではなく相手サイトへの負荷で判断する**(サイズの実測は README)。秋月の HTML 巡回は 1 run 約 2,700 リクエスト・約 85 分で、週 1 にすると相手からは毎週 85 分走るクローラーに見える。
 
 ## サイト運営者から連絡があった場合
 

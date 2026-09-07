@@ -49,6 +49,13 @@ describe('generateStoreDataset', () => {
     expect(ds.manifest.productCount).toBe(2);
     expect(ds.manifest.observation).toEqual({ runCount: 4, firstObservedAt: dayMs(0), latestObservedAt: dayMs(3), latestCoverageId: 'all' });
     expect(ds.manifest.caveats).toEqual(['observation_window', 'sampling_interval', 'absence_not_discontinued', 'site_reported_quantity']);
+
+    // A weekly store says so in its manifest: the sampling caveat is the
+    // only place a reader learns how far apart two change points can be.
+    const weekly = generateStoreDataset(readStoreHistory(db, 'synthetic'), { ...gen, observationCadence: 'weekly' });
+    expect(validateManifestV1(weekly.manifest)).toEqual([]);
+    expect(weekly.manifest.caveats).toEqual(['observation_window', 'sampling_interval_weekly', 'absence_not_discontinued', 'site_reported_quantity']);
+    expect(weekly.manifest.datasetVersion).toBe(ds.manifest.datasetVersion);
     expect(ds.products.map((p) => p.pageKey)).toEqual(['a', 'b']);
 
     const a = product(ds.products, 'a');

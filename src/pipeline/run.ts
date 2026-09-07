@@ -223,6 +223,7 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
           sqliteSchemaVersion: SQLITE_SCHEMA_VERSION,
           sourceSchemaVersion: latestSourceSchema(working, config.storeId),
           inventoryPointLimit: config.inventory.pointLimit,
+          observationCadence: config.observation.cadence,
         });
         const w = await writeStoreDataset(siteDir, dataset);
         Object.assign(d, { productCount: w.productCount, bytesTotal: w.bytesTotal, bytesMax: w.bytesMax, runs: history.runs.length });

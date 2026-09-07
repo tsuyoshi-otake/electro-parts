@@ -3,6 +3,7 @@ import { DEFAULT_SANITY_THRESHOLDS, type SanityThresholds } from '../core/sanity
 import { assertStoreId } from '../core/identity.ts';
 import { DEFAULT_INVENTORY_RETENTION_DAYS } from '../db/inventoryRetention.ts';
 import { DEFAULT_INVENTORY_POINT_LIMIT } from '../publisher/generate.ts';
+import type { ObservationCadence } from '../publisher/contract.ts';
 
 /**
  * Per-store pipeline configuration (`config/<store>.json`). The `collector`
@@ -15,6 +16,8 @@ export interface PipelineConfig {
   collector: Record<string, unknown>;
   sanity: SanityThresholds;
   inventory: { retentionDays: number; pointLimit: number };
+  /** How often the workflow crawls this store. Must match the schedule. */
+  observation: { cadence: ObservationCadence };
   paths: { snapshots: string; work: string; site: string; reports: string };
   /** Base URL of the published `state/` directory (previous run), if deployed. */
   previousStateUrl: string | null;
@@ -38,6 +41,12 @@ function positiveInt(v: unknown, name: string, fallback: number): number {
   return v as number;
 }
 
+function cadence(v: unknown): ObservationCadence {
+  if (v === undefined) return 'monthly';
+  if (v !== 'weekly' && v !== 'monthly') throw new Error("config: observation.cadence must be 'weekly' or 'monthly'");
+  return v;
+}
+
 function optionalString(v: unknown, name: string, fallback: string): string {
   if (v === undefined) return fallback;
   if (typeof v !== 'string' || v === '') throw new Error(`config: ${name} must be a non-empty string`);
@@ -52,6 +61,7 @@ export function parsePipelineConfig(value: unknown): PipelineConfig {
   const sanity = isRecord(value['sanity']) ? value['sanity'] : {};
   const inventory = isRecord(value['inventory']) ? value['inventory'] : {};
   const paths = isRecord(value['paths']) ? value['paths'] : {};
+  const observation = isRecord(value['observation']) ? value['observation'] : {};
   const previous = value['previousStateUrl'];
   if (previous !== undefined && previous !== null && (typeof previous !== 'string' || !/^https:\/\//.test(previous))) {
     throw new Error('config: previousStateUrl must be an https URL or null');
@@ -69,6 +79,7 @@ export function parsePipelineConfig(value: unknown): PipelineConfig {
       retentionDays: positiveInt(inventory['retentionDays'], 'inventory.retentionDays', DEFAULT_INVENTORY_RETENTION_DAYS),
       pointLimit: positiveInt(inventory['pointLimit'], 'inventory.pointLimit', DEFAULT_INVENTORY_POINT_LIMIT),
     },
+    observation: { cadence: cadence(observation['cadence']) },
     paths: {
       snapshots: optionalString(paths['snapshots'], 'paths.snapshots', DEFAULT_PATHS.snapshots),
       work: optionalString(paths['work'], 'paths.work', DEFAULT_PATHS.work),

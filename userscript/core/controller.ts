@@ -12,6 +12,7 @@ import { renderPanel, type PanelContext } from '../ui/panel.ts';
  */
 
 export const HOST_ELEMENT_ID = 'electronics-price-history-root';
+export const THEME_STORAGE_KEY = 'eph:theme';
 
 export interface ControllerOptions {
   adapters: readonly StorePageAdapter[];
@@ -98,7 +99,24 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
     handle.mounted = true;
     handle.destroy = () => hostEl.remove();
 
-    const ctx: PanelContext = { doc, dataBaseUrl: options.dataBaseUrl, lazyChart: options.lazyChart ?? true };
+    let theme: 'light' | 'dark' = doc.defaultView?.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    try {
+      const saved = await host.storage.get(THEME_STORAGE_KEY);
+      if (saved === 'light' || saved === 'dark') theme = saved;
+    } catch {
+      host.log('warn', 'display preference unavailable; using system theme');
+    }
+    // Serialize writes so a slow earlier save cannot overwrite a later click.
+    let themeSave = Promise.resolve();
+    const ctx: PanelContext = {
+      doc, dataBaseUrl: options.dataBaseUrl, lazyChart: options.lazyChart ?? true, theme,
+      onThemeChange: (value) => {
+        ctx.theme = value;
+        themeSave = themeSave.then(() => host.storage.set(THEME_STORAGE_KEY, value)).catch(() => {
+          host.log('warn', 'display preference could not be saved');
+        });
+      },
+    };
     let current: LoadState = { kind: 'loading' };
     let selected: number | null = null;
     const render = () => {

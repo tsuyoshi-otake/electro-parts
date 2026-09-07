@@ -109,12 +109,20 @@ export interface OfferV1 {
 export const CAVEAT_KEYS = [
   'observation_window',
   'sampling_interval',
+  'sampling_interval_weekly',
   'absence_not_discontinued',
   'site_reported_quantity',
   'quantity_semantics_unknown',
   'suspicious_identity',
 ] as const;
 export type CaveatKey = (typeof CAVEAT_KEYS)[number];
+
+/**
+ * How often a store is observed. Stores are crawled at different rates --
+ * a JSON catalogue costs ~54 requests, an HTML crawl ~2,700 -- so the
+ * sampling caveat is per store, not per project.
+ */
+export type ObservationCadence = 'weekly' | 'monthly';
 
 export interface ObservationWindowV1 {
   runCount: number;

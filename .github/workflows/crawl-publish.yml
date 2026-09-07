@@ -24,10 +24,18 @@ name: Crawl and publish
 
 on:
   schedule:
-    # Monthly, on the 2nd at 05:17 JST (the 1st at 20:17 UTC). Retail prices
-    # for these parts move slowly, so a month is the sampling interval
-    # (ADR-0013). Off the hour to avoid the crowd.
+    # Two cadences, because the two stores cost different amounts to observe
+    # (ADR-0016). Which stores each schedule picks up is NOT written here: it
+    # is read from `observation.cadence` in each `config/<store>.json`, so the
+    # published sampling caveat and the crawl frequency cannot drift apart.
+    #
+    # Monthly, on the 2nd at 05:17 JST (the 1st at 20:17 UTC). An HTML crawl
+    # of Akizuki is ~2,700 requests over ~85 minutes (ADR-0013).
     - cron: '17 20 1 * *'
+    # Weekly, Monday 05:17 JST (Sunday 20:17 UTC). A Shopify catalogue read is
+    # ~54 requests over ~2 minutes, so weekly is still a rounding error for
+    # the store. Keep this string identical to WEEKLY_CRON below.
+    - cron: '17 20 * * 0'
   workflow_dispatch:
     inputs:
       stores:
@@ -66,6 +74,8 @@ env:
   # `config/<store>.json`, a collector, an adapter, and the upload step that
   # names its snapshot artifact.
   STORES: akizuki switch-science
+  # Must match the second `cron:` above exactly; the cadence test pins this.
+  WEEKLY_CRON: '17 20 * * 0'
   NODE_OPTIONS: --max-old-space-size=2048
 
 jobs:
@@ -128,10 +138,27 @@ jobs:
           BOOTSTRAP: ${{ inputs.bootstrap }}
           REPUBLISH: ${{ inputs.republish }}
           SNAPSHOT_FILE: ${{ steps.reimport.outputs.file }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_CRON: ${{ github.event.schedule }}
         run: |
           set -uo pipefail
           observe="${OBSERVE:-}"
-          if [ -z "$observe" ]; then observe="$STORES"; fi
+          # A schedule observes only the stores that declare its cadence. The
+          # mapping lives in the store configs, never here, so a store cannot
+          # be crawled weekly while its manifest claims a monthly interval.
+          by_schedule=false
+          if [ -z "$observe" ] && [ "${EVENT_NAME:-}" = "schedule" ]; then
+            wanted=monthly
+            if [ "${EVENT_CRON:-}" = "$WEEKLY_CRON" ]; then wanted=weekly; fi
+            for store in $STORES; do
+              declared=$(jq -r '.observation.cadence // "monthly"' "config/$store.json")
+              if [ "$declared" = "$wanted" ]; then observe="$observe $store"; fi
+            done
+            observe=$(echo $observe)
+            by_schedule=true
+            echo "::notice title=Schedule::cron '${EVENT_CRON:-}' observes the $wanted stores: ${observe:-none}"
+          fi
+          if [ -z "$observe" ] && [ "$by_schedule" != "true" ]; then observe="$STORES"; fi
           if [ "${REPUBLISH:-false}" = "true" ]; then observe=""; fi
           for store in $observe; do
             case " $STORES " in

@@ -17,5 +17,6 @@
 | 0013 | [観測頻度は 1 か月に 1 回](0013-monthly-observation-cadence.md) | 採用 |
 | 0014 | [Switch Science は HTML ではなく Shopify のカタログ JSON から読む](0014-shopify-catalog-api-over-html.md) | 採用 |
 | 0015 | [Switch Science の商品同一性は Shopify の handle、商品 ID と SKU はエイリアス](0015-shopify-handle-as-identity.md) | 採用 |
+| 0016 | [観測頻度は店舗ごとに宣言する(スイッチサイエンスは週 1、秋月は月 1)](0016-per-store-observation-cadence.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。
