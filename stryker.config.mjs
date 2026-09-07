@@ -21,6 +21,9 @@ export default {
     'src/core/time.ts',
   ],
   checkers: [],
+  // Only source under mutation needs type-check suppression. Preprocessing a
+  // generated userscript table adds @ts-nocheck and breaks byte-exact tests.
+  disableTypeChecks: 'src/**/*.ts',
   ignoreStatic: true,
   coverageAnalysis: 'perTest',
   reporters: ['clear-text', 'progress', 'html', 'json'],
