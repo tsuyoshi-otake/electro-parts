@@ -37,6 +37,7 @@ function gmHost(): HostEnv {
       },
       set: async (key, value) => GM_setValue(key, value),
       remove: async (key) => GM_deleteValue(key),
+      keys: async (prefix) => GM_listValues().filter((key) => key.startsWith(prefix)),
     },
     now: () => Date.now(),
     log: (level, message) => {

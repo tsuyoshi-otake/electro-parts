@@ -55,7 +55,7 @@ describe('generateStoreDataset', () => {
     const weekly = generateStoreDataset(readStoreHistory(db, 'synthetic'), { ...gen, observationCadence: 'weekly' });
     expect(validateManifestV1(weekly.manifest)).toEqual([]);
     expect(weekly.manifest.caveats).toEqual(['observation_window', 'sampling_interval_weekly', 'absence_not_discontinued', 'site_reported_quantity']);
-    expect(weekly.manifest.datasetVersion).toBe(ds.manifest.datasetVersion);
+    expect(weekly.manifest.datasetVersion).not.toBe(ds.manifest.datasetVersion);
     expect(ds.products.map((p) => p.pageKey)).toEqual(['a', 'b']);
 
     const a = product(ds.products, 'a');
@@ -109,7 +109,7 @@ describe('generateStoreDataset', () => {
     expect(b.caveats).toEqual([]);
   });
 
-  it('is deterministic and versions the dataset by its runs only', () => {
+  it('is deterministic and versions the dataset by runs and output semantics', () => {
     const runs: [string, SyntheticProduct[]][] = [
       [day(0), [{ id: 'a', price: 100 }]],
       [day(1), [{ id: 'a', price: 110 }]],
@@ -125,6 +125,8 @@ describe('generateStoreDataset', () => {
     const h3 = readStoreHistory(dbWith([...runs, [day(2), [{ id: 'a', price: 110 }]]]), 'synthetic');
     expect(datasetVersionOf(h3)).not.toBe(datasetVersionOf(h1));
     expect(datasetVersionOf(h1)).toMatch(/^[0-9a-f]{16}$/);
+    expect(generateStoreDataset(h1, { ...gen, inventoryPointLimit: 4 }).manifest.datasetVersion).not.toBe(d1.manifest.datasetVersion);
+    expect(generateStoreDataset(h1, { ...gen, sqliteSchemaVersion: gen.sqliteSchemaVersion + 1 }).manifest.datasetVersion).not.toBe(d1.manifest.datasetVersion);
   });
 
   it('truncates long inventory series and flags it', () => {

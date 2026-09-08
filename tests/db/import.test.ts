@@ -21,12 +21,12 @@ function freshDb(): Db {
 }
 
 describe('migrations', () => {
-  it('applies schema v1 idempotently', () => {
+  it('applies the current schema idempotently', () => {
     const db = openInMemory();
     expect(currentSchemaVersion(db)).toBe(0);
     expect(migrate(db)).toEqual({ from: 0, to: SQLITE_SCHEMA_VERSION });
     expect(migrate(db)).toEqual({ from: SQLITE_SCHEMA_VERSION, to: SQLITE_SCHEMA_VERSION });
-    expect(currentSchemaVersion(db)).toBe(1);
+    expect(currentSchemaVersion(db)).toBe(SQLITE_SCHEMA_VERSION);
     const tables = (db.prepare(`SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name`).all() as { name: string }[]).map(
       (r) => r.name,
     );

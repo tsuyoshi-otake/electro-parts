@@ -37,6 +37,7 @@ export function fakeHost(clock = 1_800_000_000_000): FakeHost {
       remove: async (k) => {
         host.store.delete(k);
       },
+      keys: async (prefix) => [...host.store.keys()].filter((key) => key.startsWith(prefix)),
     },
     now: () => host.clock,
     log: (level, message) => {
@@ -70,7 +71,7 @@ export function sampleManifest(overrides: Partial<ManifestV1> = {}): ManifestV1 
     observation: { runCount: 2, firstObservedAt: T0, latestObservedAt: T1, latestCoverageId: 'all' },
     productCount: 1,
     productPathTemplate: PRODUCT_PATH_TEMPLATE,
-    versions: { contract: CONTRACT_VERSION, sqliteSchema: 1, sourceSchema: '2' },
+    versions: { contract: CONTRACT_VERSION, sqliteSchema: 2, sourceSchema: '2' },
     caveats: ['observation_window', 'sampling_interval', 'absence_not_discontinued', 'site_reported_quantity'],
     ...overrides,
   };

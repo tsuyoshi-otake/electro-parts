@@ -11,11 +11,10 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { writeRawSnapshotFile } from '../core/snapshotFile.ts';
-import { verifyStateDir } from '../db/finalize.ts';
 import { loadPipelineConfig } from '../pipeline/config.ts';
 import { reportToMarkdown, type PipelineReport } from '../pipeline/report.ts';
 import { runPipeline, SITE_STATE_DIR } from '../pipeline/run.ts';
-import { verifyStoreDataset } from '../publisher/write.ts';
+import { verifyPublication } from '../pipeline/verifyPublication.ts';
 import { getStoreCollector } from '../stores/collectorRegistry.ts';
 
 const USAGE = `usage:
@@ -75,10 +74,9 @@ async function commandVerify(args: string[]): Promise<number> {
   if (values.config === undefined) throw new Error(USAGE);
   const config = await loadPipelineConfig(values.config);
   const site = values.site ?? config.paths.site;
-  const dataset = await verifyStoreDataset(site, config.storeId);
-  const state = await verifyStateDir(path.join(site, SITE_STATE_DIR));
+  const verified = await verifyPublication(site, config);
   process.stdout.write(
-    `${JSON.stringify({ datasetVersion: dataset.datasetVersion, productFiles: dataset.productCount, bytesTotal: dataset.bytesTotal, stateSha256: state.sha256, stateBytes: state.bytes, stores: state.stores }, null, 2)}\n`,
+    `${JSON.stringify({ datasetVersion: verified.datasetVersion, productFiles: verified.productCount, bytesTotal: verified.bytesTotal, stateSha256: verified.stateSha256, stateBytes: verified.stateBytes, stores: verified.stores }, null, 2)}\n`,
   );
   return 0;
 }

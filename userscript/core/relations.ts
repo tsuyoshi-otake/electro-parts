@@ -95,13 +95,23 @@ export function matchesRelationProduct(ref: RelationProduct, product: ProductFil
 }
 
 export function primaryQuote(product: ProductFileV1): { offer: OfferV1; segment: SegmentV1 } | null {
-  const offer = product.offers[0];
+  const offer = currentOffer(product);
   const segment = offer?.segments.find((s) => s.primary) ?? offer?.segments[0];
   return offer && segment ? { offer, segment } : null;
 }
 
 function presentAtEnd(points: readonly [number, 0 | 1][]): boolean {
   return points[points.length - 1]?.[1] === 1;
+}
+
+/** Current offer first; for an unlisted product, the most recently listed offer. */
+export function currentOffer(product: ProductFileV1): OfferV1 | null {
+  const present = product.offers.filter((offer) => presentAtEnd(offer.presence));
+  if (present.length > 0) return present[0] ?? null;
+  return [...product.offers].sort((a, b) => {
+    const lastPresent = (offer: OfferV1) => [...offer.presence].reverse().find((point) => point[1] === 1)?.[0] ?? Number.NEGATIVE_INFINITY;
+    return lastPresent(b) - lastPresent(a) || a.externalOfferId.localeCompare(b.externalOfferId);
+  })[0] ?? null;
 }
 
 export type ComparisonEligibility = { comparable: false; reason: string } | { comparable: true; other: SegmentV1; label: string; differenceMinor: number | null };
@@ -118,7 +128,9 @@ export function comparisonEligibility(current: ProductFileV1, segment: SegmentV1
   const otherProduct = state.product;
   const own = primaryQuote(current);
   const other = primaryQuote(otherProduct);
-  if (current.offers.length !== 1 || otherProduct.offers.length !== 1 || !own || !other || own.segment !== segment) return reject('バリエーション・価格の種類が異なるため参考表示');
+  const currentOffers = current.offers.filter((offer) => presentAtEnd(offer.presence));
+  const otherCurrentOffers = otherProduct.offers.filter((offer) => presentAtEnd(offer.presence));
+  if (currentOffers.length !== 1 || otherCurrentOffers.length !== 1 || !own || !other || own.segment !== segment) return reject('バリエーション・価格の種類が異なるため参考表示');
   if (!current.product.listed || !otherProduct.product.listed || !presentAtEnd(own.offer.presence) || !presentAtEnd(other.offer.presence)
     || !presentAtEnd(segment.presence) || !presentAtEnd(other.segment.presence)) return reject('最新の観測では掲載されていない価格です');
   const basis = segment.basis;

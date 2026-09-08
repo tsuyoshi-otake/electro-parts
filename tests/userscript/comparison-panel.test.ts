@@ -17,6 +17,20 @@ function setup() {
 }
 
 describe('cross-store comparison panel', () => {
+  it('renders the present offer instead of an earlier retired offer', () => {
+    const f = setup();
+    const active = f.current.offers[0]!;
+    const retired = structuredClone(active);
+    retired.externalOfferId = '000-retired';
+    retired.presence = [[f.current.product.firstSeenAt, 1], [f.current.product.lastSeenAt, 0]];
+    retired.segments[0]!.stats.current = { state: 'exact', minAmountMinor: 100, maxAmountMinor: 100 };
+    retired.segments[0]!.points = [[f.current.product.firstSeenAt, 'exact', 100, 100]];
+    f.current.offers = [retired, active];
+    f.draw();
+    expect(f.text()).toContain('￥1,200');
+    expect(f.text()).not.toContain('￥100');
+  });
+
   it('shows reviewed family differences in the current-to-other direction on both stores', () => {
     const relation = PRODUCT_RELATIONS.find(r => r.id === 'a116132-s8171')!;
     const parent = document.createElement('div');

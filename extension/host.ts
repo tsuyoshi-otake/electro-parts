@@ -37,6 +37,7 @@ export function chromeHost(): HostEnv {
       },
       set: async (key, value) => chrome.storage.local.set({ [key]: value }),
       remove: async (key) => chrome.storage.local.remove(key),
+      keys: async (prefix) => Object.keys(await chrome.storage.local.get(null)).filter((key) => key.startsWith(prefix)),
     },
     now: () => Date.now(),
     log: (level, message) => {

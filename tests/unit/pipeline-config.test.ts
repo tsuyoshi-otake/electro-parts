@@ -12,6 +12,7 @@ describe('pipeline config', () => {
     expect(c.sanity).toEqual(DEFAULT_SANITY_THRESHOLDS);
     expect(c.paths).toEqual({ snapshots: 'snapshots', work: 'state/work', site: 'site', reports: 'reports' });
     expect(c.previousStateUrl).toBe('https://tsuyoshi-otake.github.io/electro-parts/state');
+    expect(c.previousStateTimeoutMs).toBe(60_000);
     const collector = parseAkizukiCollectorConfig(c.collector);
     // Both families, always: neither reaches the whole catalogue alone, and
     // alternating them would churn the coverage id every run (ADR-0012).
@@ -27,10 +28,12 @@ describe('pipeline config', () => {
   it('rejects unsafe or malformed values', () => {
     const base = { storeId: 'akizuki', collector: { userAgent: 'electro-parts test agent' } };
     expect(parsePipelineConfig(base).inventory).toEqual({ retentionDays: 400, pointLimit: 730 });
+    expect(parsePipelineConfig({ ...base, previousStateTimeoutMs: 1234 }).previousStateTimeoutMs).toBe(1234);
     expect(() => parsePipelineConfig({ ...base, storeId: 'Akizuki!' })).toThrow(/store id/i);
     expect(() => parsePipelineConfig({ ...base, sanity: { maxItemCountDropRatio: 2 } })).toThrow(/between 0 and 1/);
     expect(() => parsePipelineConfig({ ...base, inventory: { retentionDays: 0 } })).toThrow(/positive integer/);
     expect(() => parsePipelineConfig({ ...base, previousStateUrl: 'http://insecure' })).toThrow(/https/);
+    expect(() => parsePipelineConfig({ ...base, previousStateTimeoutMs: 0 })).toThrow(/positive integer/);
     expect(() => parsePipelineConfig({ storeId: 'akizuki' })).toThrow(/collector/);
     expect(() => getStoreCollector('aitendo')).toThrow(/no collector/);
   });

@@ -5,7 +5,8 @@
  * of a few hundred pages):
  *  - one request at a time, with a minimum interval plus random jitter
  *    between request starts;
- *  - `Retry-After` is honoured on 429/503 (seconds or HTTP-date, capped);
+ *  - `Retry-After` is honoured on 429/503; a delay beyond the configured
+ *    per-run wait limit stops requests instead of contacting the server early;
  *  - 429, 408, 5xx, network errors and timeouts are retried with exponential
  *    backoff and jitter, up to `maxAttempts`;
  *  - other 4xx responses fail immediately (the site said no; do not insist);
@@ -35,7 +36,7 @@ export interface PoliteFetcherOptions {
   maxAttempts?: number;
   /** Base of the exponential backoff. Default 2000 ms. */
   backoffBaseMs?: number;
-  /** Upper bound for any single wait (backoff or Retry-After). Default 120 s. */
+  /** Upper bound for a wait performed by this run. Longer server delays stop requests. Default 120 s. */
   maxWaitMs?: number;
   /** Per-request timeout. Default 30 s. */
   timeoutMs?: number;
@@ -102,6 +103,7 @@ export class PoliteFetcher {
   readonly stats: FetchStats = { logicalPages: 0, httpAttempts: 0, successfulResponses: 0, retries: 0, failures: 0, waitedMs: 0 };
   private readonly o: Required<Omit<PoliteFetcherOptions, 'headers' | 'isTransientBody' | 'log'>> & Pick<PoliteFetcherOptions, 'headers' | 'isTransientBody' | 'log'>;
   private lastStartAt = Number.NEGATIVE_INFINITY;
+  private blockedUntil = Number.NEGATIVE_INFINITY;
   private chain: Promise<unknown> = Promise.resolve();
 
   constructor(options: PoliteFetcherOptions) {
@@ -151,7 +153,11 @@ export class PoliteFetcher {
     await this.o.sleep(bounded);
   }
 
-  private async politePause(): Promise<void> {
+  private async politePause(url: string): Promise<void> {
+    const serverDelay = this.blockedUntil - this.o.now();
+    if (serverDelay > 0) {
+      throw new FetchFailedError(url, null, 0, `GET ${url} blocked by Retry-After for another ${Math.ceil(serverDelay)} ms`);
+    }
     const target = this.lastStartAt + this.o.minIntervalMs + this.o.random() * this.o.jitterMs;
     const delay = target - this.o.now();
     if (delay > 0) await this.wait(delay);
@@ -165,7 +171,7 @@ export class PoliteFetcher {
     let lastMessage = '';
     for (let attempt = 1; attempt <= this.o.maxAttempts; attempt++) {
       if (this.stats.httpAttempts >= this.o.maxRequests) throw new RequestBudgetExceededError(this.o.maxRequests);
-      await this.politePause();
+      await this.politePause(url);
       this.lastStartAt = this.o.now();
       this.stats.httpAttempts++;
       if (attempt > 1) this.stats.retries++;
@@ -191,6 +197,7 @@ export class PoliteFetcher {
           }
         } else if (RETRYABLE_STATUS.has(res.status) || this.o.isTransientBody?.(res.status, body) === true) {
           retryAfterMs = parseRetryAfterMs(res.header('retry-after'), this.o.now());
+          if (retryAfterMs !== null) this.blockedUntil = Math.max(this.blockedUntil, this.o.now() + retryAfterMs);
           lastMessage = `HTTP ${res.status}`;
         } else {
           this.stats.failures++;
@@ -206,6 +213,16 @@ export class PoliteFetcher {
       if (attempt < this.o.maxAttempts) {
         const backoff = this.o.backoffBaseMs * 2 ** (attempt - 1) * (0.5 + this.o.random());
         const delay = retryAfterMs === null ? backoff : Math.max(retryAfterMs, backoff);
+        if (retryAfterMs !== null && retryAfterMs > this.o.maxWaitMs) {
+          this.blockedUntil = Math.max(this.blockedUntil, this.o.now() + retryAfterMs);
+          this.stats.failures++;
+          throw new FetchFailedError(
+            url,
+            lastStatus,
+            attempt,
+            `GET ${url}: server requested Retry-After ${retryAfterMs} ms, exceeding this run's ${this.o.maxWaitMs} ms wait limit`,
+          );
+        }
         this.o.log?.(`retry ${attempt}/${this.o.maxAttempts - 1} for ${url} after ${lastMessage}; waiting ${Math.round(delay)} ms`);
         await this.wait(delay);
       }

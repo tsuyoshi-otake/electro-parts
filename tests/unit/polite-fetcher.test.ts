@@ -92,10 +92,21 @@ describe('PoliteFetcher', () => {
     expect(dated.waits[0]).toBeLessThanOrEqual(45_000);
   });
 
-  it('caps any single wait', async () => {
-    const h = harness([{ status: 429, headers: { 'retry-after': '99999' } }, { body: 'ok' }], { maxWaitMs: 60_000 });
-    await h.fetcher.fetchText('u');
-    expect(h.waits).toEqual([60_000]);
+  it('stops the run when Retry-After exceeds its wait limit and blocks queued requests', async () => {
+    const h = harness([{ status: 429, headers: { 'retry-after': '99999' } }, { body: 'must not be fetched' }], { maxWaitMs: 60_000 });
+    const first = h.fetcher.fetchText('u');
+    const queued = h.fetcher.fetchText('v');
+    await expect(first).rejects.toThrow(/Retry-After 99999000 ms/);
+    await expect(queued).rejects.toThrow(/blocked by Retry-After/);
+    expect(h.waits).toEqual([]);
+    expect(h.requests.map((request) => request.url)).toEqual(['u']);
+  });
+
+  it('keeps the server block after a final rate-limited attempt', async () => {
+    const h = harness([{ status: 429, headers: { 'retry-after': '30' } }, { body: 'must not be fetched' }], { maxAttempts: 1 });
+    await expect(h.fetcher.fetchText('u')).rejects.toThrow(/failed after 1 attempts/);
+    await expect(h.fetcher.fetchText('v')).rejects.toThrow(/blocked by Retry-After/);
+    expect(h.requests.map((request) => request.url)).toEqual(['u']);
   });
 
   it('gives up after maxAttempts and reports the last status', async () => {

@@ -22,15 +22,25 @@ export interface ManifestEntry {
   body: unknown;
 }
 
-export function productCacheKey(storeId: string, pageKey: string): string {
-  return `${PREFIX}:product:${encodeURIComponent(storeId)}:${encodeURIComponent(pageKey)}`;
+export function normalizeBaseUrl(baseUrl: string): string {
+  const url = new URL(baseUrl);
+  url.hash = '';
+  url.search = '';
+  url.pathname = url.pathname.replace(/\/+$/, '');
+  return url.href.replace(/\/$/, '');
 }
 
-export function manifestCacheKey(storeId: string): string {
-  return `${PREFIX}:manifest:${encodeURIComponent(storeId)}`;
+export function cacheNamespace(baseUrl: string): string {
+  return `${PREFIX}:source:${encodeURIComponent(normalizeBaseUrl(baseUrl))}`;
 }
 
-const INDEX_KEY = `${PREFIX}:index`;
+export function productCacheKey(storeId: string, pageKey: string, namespace = PREFIX): string {
+  return `${namespace}:product:${encodeURIComponent(storeId)}:${encodeURIComponent(pageKey)}`;
+}
+
+export function manifestCacheKey(storeId: string, namespace = PREFIX): string {
+  return `${namespace}:manifest:${encodeURIComponent(storeId)}`;
+}
 
 function parse<T>(text: string | null): T | null {
   if (text === null) return null;
@@ -46,10 +56,11 @@ export class LruCache {
   constructor(
     private readonly storage: HostStorage,
     private readonly maxEntries: number,
+    private readonly namespace = PREFIX,
   ) {}
 
   async getProduct(storeId: string, pageKey: string): Promise<ProductEntry | null> {
-    const key = productCacheKey(storeId, pageKey);
+    const key = productCacheKey(storeId, pageKey, this.namespace);
     const entry = parse<ProductEntry>(await this.storage.get(key));
     if (entry === null || typeof entry.datasetVersion !== 'string' || typeof entry.storedAt !== 'number') return null;
     await this.touch(key);
@@ -57,22 +68,22 @@ export class LruCache {
   }
 
   async putProduct(storeId: string, pageKey: string, entry: ProductEntry): Promise<void> {
-    const key = productCacheKey(storeId, pageKey);
+    const key = productCacheKey(storeId, pageKey, this.namespace);
     await this.storage.set(key, JSON.stringify(entry));
     await this.touch(key);
   }
 
   async getManifest(storeId: string): Promise<ManifestEntry | null> {
-    const entry = parse<ManifestEntry>(await this.storage.get(manifestCacheKey(storeId)));
+    const entry = parse<ManifestEntry>(await this.storage.get(manifestCacheKey(storeId, this.namespace)));
     return entry !== null && typeof entry.storedAt === 'number' ? entry : null;
   }
 
   async putManifest(storeId: string, entry: ManifestEntry): Promise<void> {
-    await this.storage.set(manifestCacheKey(storeId), JSON.stringify(entry));
+    await this.storage.set(manifestCacheKey(storeId, this.namespace), JSON.stringify(entry));
   }
 
   async index(): Promise<string[]> {
-    const list = parse<unknown>(await this.storage.get(INDEX_KEY));
+    const list = parse<unknown>(await this.storage.get(`${this.namespace}:index`));
     return Array.isArray(list) ? list.filter((k): k is string => typeof k === 'string') : [];
   }
 
@@ -84,12 +95,24 @@ export class LruCache {
   }
 
   private async touchNow(key: string): Promise<void> {
-    const list = (await this.index()).filter((k) => k !== key);
-    list.push(key);
+    const indexed = await this.index();
+    const productPrefix = `${this.namespace}:product:`;
+    const actual = await this.storage.keys(productPrefix);
+    // A write from another tab may have lost the index race. Treat an
+    // unindexed body as oldest so the next access deterministically repairs it.
+    const indexedActual = indexed.filter((candidate) => actual.includes(candidate));
+    const orphans = actual.filter((candidate) => !indexed.includes(candidate)).sort();
+    const list = [...indexedActual, ...orphans];
+    // Moving an already indexed key records a read. Concurrent new keys stay
+    // in deterministic key order, so independent tabs choose the same victim.
+    if (indexedActual.includes(key)) {
+      list.splice(list.indexOf(key), 1);
+      list.push(key);
+    }
     while (list.length > this.maxEntries) {
       const victim = list.shift();
       if (victim !== undefined) await this.storage.remove(victim);
     }
-    await this.storage.set(INDEX_KEY, JSON.stringify(list));
+    await this.storage.set(`${this.namespace}:index`, JSON.stringify(list));
   }
 }

@@ -20,3 +20,4 @@ declare function GM_xmlhttpRequest(details: GMXmlHttpRequestDetails): void;
 declare function GM_getValue(key: string, defaultValue?: unknown): unknown;
 declare function GM_setValue(key: string, value: unknown): void;
 declare function GM_deleteValue(key: string): void;
+declare function GM_listValues(): string[];

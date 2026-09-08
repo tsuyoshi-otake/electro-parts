@@ -54,6 +54,7 @@ async function setup(page: Page, source: 0 | 1, failure = false, selected = rela
       GM_getValue: (key: string, fallback: unknown) => mem.get(key) ?? fallback,
       GM_setValue: (key: string, value: unknown) => mem.set(key, value),
       GM_deleteValue: (key: string) => mem.delete(key),
+      GM_listValues: () => [...mem.keys()],
       GM_xmlhttpRequest: (d: { url: string; onload(r: unknown): void; onerror(r: unknown): void }) => {
         fetch(d.url).then(async r => d.onload({ status: r.status, responseText: await r.text() })).catch(() => d.onerror({ status: 0 }));
       },

@@ -6,20 +6,21 @@ import { readRawSnapshotFile, writeRawSnapshotFile } from '../core/snapshotFile.
 import { parseUtcMs } from '../core/time.ts';
 import { isImportable, mergeValidation, type ValidationResult } from '../core/validation.ts';
 import { openDatabase, type Db } from '../db/connection.ts';
-import { finalizeDatabase, verifyStateDir } from '../db/finalize.ts';
+import { finalizeDatabase } from '../db/finalize.ts';
 import { importSnapshot, recordRejectedRun } from '../db/importSnapshot.ts';
 import { compactInventory } from '../db/inventoryRetention.ts';
 import { migrate, SQLITE_SCHEMA_VERSION } from '../db/migrations/index.ts';
 import { listRuns, readStoreHistory } from '../db/read.ts';
 import { latestSnapshotSummary } from '../db/sanitySummary.ts';
 import { generateStoreDataset } from '../publisher/generate.ts';
-import { verifyStoreDataset, writeStoreDataset } from '../publisher/write.ts';
+import { writeStoreDataset } from '../publisher/write.ts';
 import type { CollectDeps } from '../stores/collector.ts';
 import { getStoreCollector } from '../stores/collectorRegistry.ts';
 import { getStoreAdapter } from '../stores/registry.ts';
 import type { PipelineConfig } from './config.ts';
 import { acquirePreviousState, type FetchLike, type PreviousStateSource } from './previousState.ts';
 import { EXIT_CODES, newReport, runStage, StageFailedError, type PipelineOutcome, type PipelineReport } from './report.ts';
+import { verifyPublication } from './verifyPublication.ts';
 
 export const SITE_STATE_DIR = 'state';
 
@@ -110,7 +111,7 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
 
     // previous_state
     const state = await runStage(report, 'previous_state', now, async (d) => {
-      const r = await acquirePreviousState(previous, workDir, options.bootstrap, deps.fetchImpl);
+      const r = await acquirePreviousState(previous, workDir, options.bootstrap, deps.fetchImpl, config.previousStateTimeoutMs);
       d['mode'] = r.mode;
       if (r.meta !== null) {
         d['previousSha256'] = r.meta.sha256;
@@ -240,12 +241,11 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
       });
 
       await runStage(report, 'verify', now, async (d) => {
-        const v = await verifyStoreDataset(siteDir, config.storeId);
+        const v = await verifyPublication(siteDir, config);
         if (v.datasetVersion !== generated) throw new Error(`written datasetVersion ${v.datasetVersion} != generated ${generated}`);
-        const s = await verifyStateDir(path.join(siteDir, SITE_STATE_DIR));
         d['datasetVersion'] = v.datasetVersion;
         d['productFiles'] = v.productCount;
-        d['stateSha256'] = s.sha256;
+        d['stateSha256'] = v.stateSha256;
       });
       report.publishable = true;
     }

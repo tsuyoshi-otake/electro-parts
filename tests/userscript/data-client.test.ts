@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { manifestPath, productPath } from '../../src/publisher/contract.ts';
-import { LruCache, productCacheKey } from '../../userscript/core/cache.ts';
+import { cacheNamespace, LruCache, productCacheKey } from '../../userscript/core/cache.ts';
 import { DataClient, type LoadState } from '../../userscript/core/dataClient.ts';
 import { fakeHost, json, sampleManifest, sampleProduct } from './helpers.ts';
 
 const BASE = 'https://data.example.test/site';
 const M = `${BASE}/${manifestPath('teststore')}`;
 const P = `${BASE}/${productPath('teststore', 'P1')}`;
+const NS = cacheNamespace(BASE);
+const dataKey = (pageKey: string) => productCacheKey('teststore', pageKey, NS);
 
 async function run(client: DataClient, pageKey = 'P1'): Promise<LoadState[]> {
   const states: LoadState[] = [];
@@ -31,7 +33,7 @@ describe('DataClient (stale-while-revalidate)', () => {
     expect(results.every((states) => states[states.length - 1]!.kind === 'ready')).toBe(true);
     expect(host.requests).toHaveLength(3);
     expect(host.requests.filter((url) => url.includes('manifest.json'))).toHaveLength(1);
-    expect(await new LruCache(host.storage, 200).index()).toHaveLength(2);
+    expect(await new LruCache(host.storage, 200, NS).index()).toHaveLength(2);
   });
 
   it('isolates a failing subscriber and gives other subscribers a terminal state', async () => {
@@ -58,7 +60,7 @@ describe('DataClient (stale-while-revalidate)', () => {
 
   it('does not emit a foreign product from a structurally valid poisoned cache entry', async () => {
     const host = fakeHost(); host.routes.set(M, json(sampleManifest())); host.routes.set(P, json(sampleProduct()));
-    host.store.set(productCacheKey('teststore', 'P1'), JSON.stringify({ datasetVersion: 'v1', storedAt: host.clock, body: sampleProduct({ storeId: 'foreign' }) }));
+    host.store.set(dataKey('P1'), JSON.stringify({ datasetVersion: 'v1', storedAt: host.clock, body: sampleProduct({ storeId: 'foreign' }) }));
     const states = await run(new DataClient(host, { baseUrl: BASE }));
     expect(states[0]!.kind).toBe('loading');
     expect(states.filter((s) => s.kind === 'ready').every((s) => s.kind === 'ready' && s.product.storeId === 'teststore')).toBe(true);
@@ -72,7 +74,7 @@ describe('DataClient (stale-while-revalidate)', () => {
     const states = await run(client);
     expect(kinds(states)).toEqual(['loading', 'ready:fresh']);
     expect(host.requests).toEqual([`${M}?b=${Math.floor(host.clock / (30 * 60_000))}`, `${P}?v=v1`]);
-    expect(host.store.has(productCacheKey('teststore', 'P1'))).toBe(true);
+    expect(host.store.has(dataKey('P1'))).toBe(true);
 
     // Second visit within the TTLs: cache only, no network at all.
     host.requests.length = 0;
@@ -141,6 +143,35 @@ describe('DataClient (stale-while-revalidate)', () => {
     expect(kinds(await run(client, 'NOPE'))).toEqual(['missing:fresh', 'ready:fresh']);
   });
 
+  it('namespaces positive and negative caches by the normalized data source URL', async () => {
+    const host = fakeHost();
+    const other = 'https://data.example.test/other';
+    const otherManifest = `${other}/${manifestPath('teststore')}`;
+    const otherProduct = `${other}/${productPath('teststore', 'P1')}`;
+    host.routes.set(M, json(sampleManifest()));
+    host.routes.set(P, json(sampleProduct()));
+    await run(new DataClient(host, { baseUrl: `${BASE}/` }));
+
+    host.requests.length = 0;
+    host.routes.set(otherManifest, json(sampleManifest({ datasetVersion: 'other-v1' })));
+    host.routes.set(otherProduct, json(sampleProduct({ datasetVersion: 'other-v1' })));
+    const fromOther = await run(new DataClient(host, { baseUrl: other }));
+    expect(host.requests).toHaveLength(2);
+    expect(at(fromOther, 1)).toMatchObject({ kind: 'ready', product: { datasetVersion: 'other-v1' } });
+
+    host.requests.length = 0;
+    await run(new DataClient(host, { baseUrl: `${BASE}///` }));
+    expect(host.requests).toEqual([]);
+
+    const missingHost = fakeHost();
+    missingHost.routes.set(M, json(sampleManifest()));
+    await run(new DataClient(missingHost, { baseUrl: BASE }), 'NOPE');
+    missingHost.requests.length = 0;
+    missingHost.routes.set(`${other}/${manifestPath('teststore')}`, new Error('offline'));
+    expect(kinds(await run(new DataClient(missingHost, { baseUrl: other }), 'NOPE'))).toEqual(['loading', 'error']);
+    expect(missingHost.requests).toHaveLength(1);
+  });
+
   it('rejects structurally invalid or foreign payloads and never caches them', async () => {
     const host = fakeHost();
     host.routes.set(M, json(sampleManifest()));
@@ -149,7 +180,7 @@ describe('DataClient (stale-while-revalidate)', () => {
     let states = await run(client);
     expect(kinds(states)).toEqual(['loading', 'error']);
     expect(errorOf(states)).toContain('invalid product file');
-    expect(host.store.has(productCacheKey('teststore', 'P1'))).toBe(false);
+    expect(host.store.has(dataKey('P1'))).toBe(false);
 
     host.routes.set(P, json(sampleProduct({ pageKey: 'OTHER' })));
     states = await run(client);
@@ -179,5 +210,34 @@ describe('DataClient (stale-while-revalidate)', () => {
     expect(productCacheKey('s', 'x/y')).toBe('eph:c1:product:s:x%2Fy');
     host.store.set(productCacheKey('s', 'a'), 'garbage');
     expect(await cache.getProduct('s', 'a')).toBeNull();
+  });
+
+  it('reconciles concurrent cache indexes across independent tabs and recovers after a storage error', async () => {
+    const host = fakeHost();
+    const tabA = new LruCache(host.storage, 1);
+    const tabB = new LruCache(host.storage, 1);
+    const entry = { datasetVersion: 'v', storedAt: host.clock, body: null };
+    await Promise.all([tabA.putProduct('s', 'A', entry), tabB.putProduct('s', 'B', entry)]);
+    await tabB.putProduct('s', 'C', entry);
+    const bodies = [...host.store.keys()].filter((key) => key.startsWith('eph:c1:product:'));
+    const index = await tabA.index();
+    expect(bodies.length).toBeLessThanOrEqual(1);
+    expect(bodies.every((key) => index.includes(key))).toBe(true);
+
+    let failOnce = true;
+    const flakyStorage = {
+      ...host.storage,
+      remove: async (key: string) => {
+        if (failOnce) { failOnce = false; throw new Error('storage busy'); }
+        await host.storage.remove(key);
+      },
+    };
+    const flaky = new LruCache(flakyStorage, 1);
+    await expect(flaky.putProduct('s', 'D', entry)).rejects.toThrow('storage busy');
+    await flaky.putProduct('s', 'E', entry);
+    const recoveredBodies = [...host.store.keys()].filter((key) => key.startsWith('eph:c1:product:'));
+    const recoveredIndex = await flaky.index();
+    expect(recoveredBodies.length).toBeLessThanOrEqual(1);
+    expect(recoveredBodies.every((key) => recoveredIndex.includes(key))).toBe(true);
   });
 });

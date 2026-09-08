@@ -216,8 +216,11 @@ jobs:
         run: |
           set -euo pipefail
           for store in $(jq -r '.stores | to_entries[] | select(.value.runCount > 0) | .key' site/state/state.json); do
-            if [ -f "site/data/v1/stores/$store/manifest.json" ]; then continue; fi
-            echo "::warning title=$store restored::Republishing its dataset from the published history."
+            if [ -f "site/data/v1/stores/$store/manifest.json" ] \
+              && node --import tsx src/cli/main.ts verify --config "config/$store.json" --site site >/dev/null; then
+              continue
+            fi
+            echo "::warning title=$store restored::Republishing its missing or state-mismatched dataset from the published history."
             node --import tsx src/cli/main.ts pipeline --config "config/$store.json" --republish --previous-dir site/state 2>&1 | tee -a "pipeline-$store.md"
           done
 
