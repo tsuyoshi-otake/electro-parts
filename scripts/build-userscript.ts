@@ -32,6 +32,7 @@ export function userscriptHeader(baseUrl: string): string {
     ['@grant', 'GM_getValue'],
     ['@grant', 'GM_setValue'],
     ['@grant', 'GM_deleteValue'],
+    ['@grant', 'GM_listValues'],
     ['@run-at', 'document-idle'],
     ['@noframes', ''],
     ['@downloadURL', `${baseUrl}/${USERSCRIPT_FILE_NAME}`],

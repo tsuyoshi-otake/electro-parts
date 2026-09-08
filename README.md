@@ -190,7 +190,7 @@ npm run pipeline -- --config config/akizuki.json --bootstrap
 ```
 
 - `--bootstrap` は**公開済み状態が無いときだけ**許可されます。状態があるのに付けると失敗します。既に公開されているサイトに 2 店舗目を足すのはブートストラップ**ではありません**(`--bootstrap` なしの通常 run で、その店舗の run 数 0 から始まります)。
-- 2 回目以降は `--bootstrap` なし。`config/<store>.json` の `previousStateUrl` から `state.json` と SQLite を取得し、SHA-256・サイズ・`integrity_check`・スキーマ版を検証してから使います。取得できなければ失敗します(履歴の巻き戻しを防ぐため)。
+- 2 回目以降は `--bootstrap` なし。`config/<store>.json` の `previousStateUrl` から `state.json` と SQLite を `previousStateTimeoutMs`(既定60秒)以内に取得し、SHA-256・サイズ・`integrity_check`・スキーマ版を検証してから使います。取得できなければ失敗します(履歴の巻き戻しを防ぐため)。
 - ローカルで前回状態を渡すときは `--previous-dir site/state`。
 - 保存済みスナップショットを取り込むときは `--snapshot snapshots/akizuki-….json.gz`(クロールをスキップ)。
 
@@ -226,7 +226,7 @@ npm run verify -- --config config/akizuki.json --site site
 npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.io/electro-parts
 ```
 
-設定は `config/<storeId>.json`。共通のキーは `collector.userAgent`(識別可能な UA、連絡先入り)、`collector.minIntervalMs` / `jitterMs`(既定 1500 ms + 0〜750 ms)、`maxAttempts`、`timeoutMs`、`maxRequests`(1 回の上限)、`collector.maxUncoveredProducts`(サイトマップにあって本体の巡回に出なかった商品の許容数 → ADR-0012)、`sanity.*`(隔離しきい値)、`inventory.retentionDays` / `pointLimit`、`paths.*`、`previousStateUrl`。
+設定は `config/<storeId>.json`。共通のキーは `collector.userAgent`(識別可能な UA、連絡先入り)、`collector.minIntervalMs` / `jitterMs`(既定 1500 ms + 0〜750 ms)、`maxAttempts`、`timeoutMs`、`maxRequests`(1 回の上限)、`collector.maxUncoveredProducts`(サイトマップにあって本体の巡回に出なかった商品の許容数 → ADR-0012)、`sanity.*`(隔離しきい値)、`inventory.retentionDays` / `pointLimit`、`paths.*`、`previousStateUrl`、`previousStateTimeoutMs`。
 
 店舗固有:
 

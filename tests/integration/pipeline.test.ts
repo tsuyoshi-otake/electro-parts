@@ -8,6 +8,7 @@ import { parsePipelineConfig, type PipelineConfig } from '../../src/pipeline/con
 import { downloadState, PreviousStateUnavailableError, type FetchLike } from '../../src/pipeline/previousState.ts';
 import { reportToMarkdown } from '../../src/pipeline/report.ts';
 import { runPipeline, SITE_STATE_DIR, type RunResult } from '../../src/pipeline/run.ts';
+import { verifyPublication } from '../../src/pipeline/verifyPublication.ts';
 import { isProductFileV1, validateManifestV1 } from '../../src/publisher/contract.ts';
 import { syntheticItem, type SyntheticListing } from '../helpers/akizukiHtml.ts';
 import { addListing, FAKE_BASE, fakeSite, resetSite, transportFor, type FakeSite } from '../helpers/fakeAkizukiSite.ts';
@@ -21,6 +22,7 @@ describe('pipeline state machine', () => {
   let root: string;
   let pagesDir: string;
   let config: PipelineConfig;
+  let bootstrapStateDir: string;
   const site: FakeSite = fakeSite();
   const clock = (() => {
     let t = Date.parse('2026-09-07T03:00:00.000Z');
@@ -50,6 +52,7 @@ describe('pipeline state machine', () => {
   beforeAll(async () => {
     root = await mkdtemp(path.join(os.tmpdir(), 'ep-pipeline-'));
     pagesDir = path.join(root, 'published-state');
+    bootstrapStateDir = path.join(root, 'bootstrap-state');
     config = parsePipelineConfig({
       storeId: 'akizuki',
       collector: { userAgent: 'electro-parts test agent', baseUrl: FAKE_BASE, listingKinds: ['r'], minIntervalMs: 500, jitterMs: 0 },
@@ -109,6 +112,8 @@ describe('pipeline state machine', () => {
     const md = reportToMarkdown(r.report);
     expect(md).toContain('| verify | ✅ ok |');
     expect(md).toContain('datasetVersion');
+    const { cp } = await import('node:fs/promises');
+    await cp(path.join(root, 'site', SITE_STATE_DIR), bootstrapStateDir, { recursive: true });
     await deploy();
   });
 
@@ -128,7 +133,7 @@ describe('pipeline state machine', () => {
     const r = await run(false);
     expect(r.report.outcome).toBe('published');
     expect(r.report.mode).toBe('incremental');
-    expect(r.report.stages[0]!.details).toMatchObject({ previousRuns: 1, schema: '1→1' });
+    expect(r.report.stages[0]!.details).toMatchObject({ previousRuns: 1, schema: '2→2' });
     expect(r.report.stages[2]!.details).toMatchObject({ missingProducts: 1, newProducts: 1, primaryPriceChanges: 1, sanityErrors: 0 });
     expect(r.report.stages[3]!.details).toMatchObject({ status: 'imported', productsTotal: 42, productsNew: 1, productsAbsent: 1, changedPricePoints: 2 });
     const product = JSON.parse(await readFile(path.join(root, 'site', 'data', 'v1', 'stores', 'akizuki', 'products', '100003.json'), 'utf8'));
@@ -136,6 +141,17 @@ describe('pipeline state machine', () => {
     expect(points.map((p) => p[2])).toEqual([130, 999]);
     const state = await verifyStateDir(path.join(root, 'site', SITE_STATE_DIR));
     expect(state.stores['akizuki']!.runCount).toBe(2);
+    // A structurally valid dataset and state must still be rejected when they
+    // came from different publications.
+    const currentStateDir = path.join(root, 'current-state');
+    const siteStateDir = path.join(root, 'site', SITE_STATE_DIR);
+    const { cp } = await import('node:fs/promises');
+    await cp(siteStateDir, currentStateDir, { recursive: true });
+    await rm(siteStateDir, { recursive: true, force: true });
+    await cp(bootstrapStateDir, siteStateDir, { recursive: true });
+    await expect(verifyPublication(path.join(root, 'site'), config)).rejects.toThrow(/does not match bundled state/);
+    await rm(siteStateDir, { recursive: true, force: true });
+    await cp(currentStateDir, siteStateDir, { recursive: true });
     await deploy();
   });
 
@@ -255,6 +271,36 @@ describe('previous state download', () => {
       expect(await downloadState('https://pages.test/nowhere', dir, fetchImpl)).toBe(false);
       const flaky: FetchLike = async () => ({ status: 503, arrayBuffer: async () => new ArrayBuffer(0) });
       await expect(downloadState('https://pages.test/state', dir, flaky)).rejects.toBeInstanceOf(PreviousStateUnavailableError);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('applies one deadline to response bodies and aborts the active request', async () => {
+    const dir = await mkdtemp(path.join(os.tmpdir(), 'ep-state-timeout-'));
+    let aborted = false;
+    const hanging: FetchLike = async (_url, init) => ({
+      status: 200,
+      arrayBuffer: () => new Promise<ArrayBuffer>((_resolve, reject) => {
+        init?.signal?.addEventListener('abort', () => {
+          aborted = true;
+          reject(init.signal?.reason);
+        }, { once: true });
+      }),
+    });
+    try {
+      await expect(downloadState('https://pages.test/state', dir, hanging, 20)).rejects.toThrow(/timed out after 20 ms/);
+      expect(aborted).toBe(true);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('times out while waiting for response headers even if a transport ignores abort', async () => {
+    const dir = await mkdtemp(path.join(os.tmpdir(), 'ep-state-header-timeout-'));
+    const hanging: FetchLike = () => new Promise(() => undefined);
+    try {
+      await expect(downloadState('https://pages.test/state', dir, hanging, 20)).rejects.toThrow(/timed out after 20 ms/);
     } finally {
       await rm(dir, { recursive: true, force: true });
     }

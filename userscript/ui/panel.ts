@@ -2,7 +2,7 @@ import type { CaveatKey, ManifestV1, OfferV1, ProductFileV1, SegmentV1 } from '.
 import type { LoadState } from '../core/dataClient.ts';
 import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatPercent, formatPriceValue, formatSignedMoney } from '../core/format.ts';
 import { buildStepChart, buildComparisonChart, type ComparisonSeries } from './chart.ts';
-import { comparisonEligibility, type RelatedEntry } from '../core/relations.ts';
+import { comparisonEligibility, currentOffer, type RelatedEntry } from '../core/relations.ts';
 import { RELATED_CSS, renderRelatedGroups, renderStorePrices } from './related.ts';
 
 /**
@@ -396,10 +396,10 @@ function renderPanelContent(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   if (!product.product.listed) badge('最新の観測では未掲載', 'stale');
   head.appendChild(text(doc, 'span', '', 'spacer'));
 
-  const offer = product.offers[0];
-  const picked = offer === undefined ? null : pickSegment(offer, selectedSegment);
+  const offer = currentOffer(product);
+  const picked = offer === null ? null : pickSegment(offer, selectedSegment);
   const tail = doc.createElement('div');
-  if (offer === undefined || picked === null) {
+  if (offer === null || picked === null) {
     root.appendChild(text(doc, 'p', '価格の記録がありません。', 'muted'));
     root.appendChild(tail);
   } else {

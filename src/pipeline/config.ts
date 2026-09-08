@@ -21,6 +21,8 @@ export interface PipelineConfig {
   paths: { snapshots: string; work: string; site: string; reports: string };
   /** Base URL of the published `state/` directory (previous run), if deployed. */
   previousStateUrl: string | null;
+  /** Total deadline for downloading state.json and its database. */
+  previousStateTimeoutMs: number;
 }
 
 export const DEFAULT_PATHS: PipelineConfig['paths'] = { snapshots: 'snapshots', work: 'state/work', site: 'site', reports: 'reports' };
@@ -87,6 +89,7 @@ export function parsePipelineConfig(value: unknown): PipelineConfig {
       reports: optionalString(paths['reports'], 'paths.reports', DEFAULT_PATHS.reports),
     },
     previousStateUrl: typeof previous === 'string' ? previous.replace(/\/+$/, '') : null,
+    previousStateTimeoutMs: positiveInt(value['previousStateTimeoutMs'], 'previousStateTimeoutMs', 60_000),
   };
 }
 

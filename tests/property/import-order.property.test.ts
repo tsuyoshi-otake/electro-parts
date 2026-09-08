@@ -129,4 +129,22 @@ describe('SQLite import is order independent', () => {
       params,
     );
   });
+
+  it('keeps offer attributes from the newest observation in every import permutation', () => {
+    fc.assert(
+      fc.property(permutationArb(3), (order) => {
+        const snapshots = [
+          syntheticSnapshot(day(0), [{ id: 'p1', sku: 'old', variantName: 'Old name' }]),
+          syntheticSnapshot(day(1), [{ id: 'p1', sku: null, variantName: null }]),
+          syntheticSnapshot(day(2), [{ id: 'p1', sku: 'new', variantName: 'New name' }]),
+        ];
+        const db = openInMemory();
+        migrate(db);
+        for (const index of order) importSnapshot(db, snapshots[index]!, { capabilities: SYNTHETIC_CAPABILITIES });
+        const offer = readStoreHistory(db, 'synthetic').products[0]!.offers[0]!;
+        expect(offer).toMatchObject({ sku: 'new', variantName: 'New name' });
+      }),
+      params,
+    );
+  });
 });

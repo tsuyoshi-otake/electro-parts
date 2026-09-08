@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PRODUCT_RELATIONS } from '../../userscript/adapters/productRelations.ts';
 import { PAGE_ADAPTERS } from '../../userscript/adapters/registry.ts';
-import { comparisonEligibility, indexRelations, matchesRelationProduct, relatedEntries, relationProductKey, MAX_RELATED_HISTORY_LOADS } from '../../userscript/core/relations.ts';
+import { comparisonEligibility, currentOffer, indexRelations, matchesRelationProduct, primaryQuote, relatedEntries, relationProductKey, MAX_RELATED_HISTORY_LOADS } from '../../userscript/core/relations.ts';
 import { comparisonFixture } from './comparison-fixtures.ts';
 
 describe('curated relation catalogue', () => {
@@ -58,6 +58,18 @@ describe('curated relation catalogue', () => {
 });
 
 describe('comparison eligibility', () => {
+  it('selects the currently present offer when a retired offer appears first', () => {
+    const f = comparisonFixture();
+    const active = f.current.offers[0]!;
+    const retired = structuredClone(active);
+    retired.externalOfferId = 'retired';
+    retired.presence = [[f.current.product.firstSeenAt, 1], [f.current.product.lastSeenAt, 0]];
+    f.current.offers = [retired, active];
+    expect(currentOffer(f.current)).toBe(active);
+    expect(primaryQuote(f.current)?.offer).toBe(active);
+    expect(comparisonEligibility(f.current, active.segments[0]!, f.entry)).toMatchObject({ comparable: true });
+  });
+
   it('permits reviewed primary quotes and reverses the signed difference on the other store', () => {
     const f = comparisonFixture();
     expect(comparisonEligibility(f.current, f.segment, f.entry)).toMatchObject({ comparable: true, differenceMinor: 300 });

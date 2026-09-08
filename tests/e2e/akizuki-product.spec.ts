@@ -20,6 +20,7 @@ const GM_SHIMS = `
   window.GM_getValue = (k, d) => (mem.has(k) ? mem.get(k) : d);
   window.GM_setValue = (k, v) => { mem.set(k, v); persist(); };
   window.GM_deleteValue = (k) => { mem.delete(k); persist(); };
+  window.GM_listValues = () => [...mem.keys()];
   window.__gmRequests = [];
   window.GM_xmlhttpRequest = (d) => {
     window.__gmRequests.push(d.url);

@@ -26,13 +26,34 @@ export class PreviousStateUnavailableError extends Error {
   }
 }
 
-export type FetchLike = (url: string) => Promise<{ status: number; arrayBuffer(): Promise<ArrayBuffer> }>;
+export type FetchLike = (url: string, init?: { signal?: AbortSignal }) => Promise<{ status: number; arrayBuffer(): Promise<ArrayBuffer> }>;
 
-const defaultFetch: FetchLike = (url) => fetch(url, { redirect: 'follow', cache: 'no-store', credentials: 'omit' });
+const defaultFetch: FetchLike = (url, init) => fetch(url, {
+  redirect: 'follow',
+  cache: 'no-store',
+  credentials: 'omit',
+  ...(init?.signal === undefined ? {} : { signal: init.signal }),
+});
 
 /** Downloads `state.json` and the database it names into `dir`; null when the state does not exist (404). */
-export async function downloadState(baseUrl: string, dir: string, fetchImpl: FetchLike = defaultFetch): Promise<boolean> {
-  const metaRes = await fetchImpl(`${baseUrl}/${STATE_META_FILE_NAME}`);
+export async function downloadState(baseUrl: string, dir: string, fetchImpl: FetchLike = defaultFetch, timeoutMs = 60_000): Promise<boolean> {
+  const controller = new AbortController();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timedOut = new Promise<never>((_resolve, reject) => {
+    timer = setTimeout(() => {
+      reject(new PreviousStateUnavailableError(`previous state download timed out after ${timeoutMs} ms`));
+      controller.abort(new Error('previous state download timed out'));
+    }, timeoutMs);
+  });
+  try {
+    return await Promise.race([downloadStateWithinDeadline(baseUrl, dir, fetchImpl, controller.signal), timedOut]);
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
+  }
+}
+
+async function downloadStateWithinDeadline(baseUrl: string, dir: string, fetchImpl: FetchLike, signal: AbortSignal): Promise<boolean> {
+  const metaRes = await fetchImpl(`${baseUrl}/${STATE_META_FILE_NAME}`, { signal });
   if (metaRes.status === 404) return false;
   if (metaRes.status !== 200) throw new PreviousStateUnavailableError(`GET ${baseUrl}/${STATE_META_FILE_NAME}: HTTP ${metaRes.status}`);
   const metaBytes = Buffer.from(await metaRes.arrayBuffer());
@@ -44,7 +65,7 @@ export async function downloadState(baseUrl: string, dir: string, fetchImpl: Fet
   }
   const fileName = typeof meta.fileName === 'string' ? meta.fileName : STATE_DB_FILE_NAME;
   if (!/^[A-Za-z0-9._-]+$/.test(fileName)) throw new PreviousStateUnavailableError(`unsafe state file name ${fileName}`);
-  const dbRes = await fetchImpl(`${baseUrl}/${fileName}`);
+  const dbRes = await fetchImpl(`${baseUrl}/${fileName}`, { signal });
   if (dbRes.status !== 200) throw new PreviousStateUnavailableError(`GET ${baseUrl}/${fileName}: HTTP ${dbRes.status}`);
   await mkdir(dir, { recursive: true });
   await writeFile(path.join(dir, STATE_META_FILE_NAME), metaBytes);
@@ -66,6 +87,7 @@ export async function acquirePreviousState(
   workDir: string,
   bootstrap: boolean,
   fetchImpl: FetchLike = defaultFetch,
+  timeoutMs = 60_000,
 ): Promise<PreviousStateResult> {
   await mkdir(workDir, { recursive: true });
   const workingDbPath = path.join(workDir, STATE_DB_FILE_NAME);
@@ -78,7 +100,7 @@ export async function acquirePreviousState(
   } else if (source.url !== undefined) {
     const downloadDir = path.join(workDir, 'previous');
     await rm(downloadDir, { recursive: true, force: true });
-    if (await downloadState(source.url, downloadDir, fetchImpl)) stateDir = downloadDir;
+    if (await downloadState(source.url, downloadDir, fetchImpl, timeoutMs)) stateDir = downloadDir;
   }
   if (stateDir === null) {
     if (!bootstrap) {

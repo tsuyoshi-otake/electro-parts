@@ -37,22 +37,35 @@ export interface StoreDataset {
 }
 
 export const DEFAULT_INVENTORY_POINT_LIMIT = 730;
+/** Bump whenever unchanged history/config would produce meaningfully different payloads. */
+export const DATASET_GENERATOR_VERSION = 1;
 
 const DAY_MS = 86_400_000;
 
 /**
- * Identifies one publication. Derived from the imported runs only, so two
- * generations from the same database agree and any new run changes it.
+ * Identifies one publication. Imported runs and output-semantic inputs are
+ * included, while timestamps that do not affect payload meaning are excluded.
  */
-export function datasetVersionOf(history: Pick<StoreHistory, 'storeId' | 'runs'>): string {
+export function datasetVersionOf(
+  history: Pick<StoreHistory, 'storeId' | 'runs'>,
+  options: Omit<GenerateOptions, 'generatedAt'> = { sqliteSchemaVersion: 0, sourceSchemaVersion: null },
+): string {
   const runs = history.runs.map((r) => [r.observedAt, r.normalizedHash]);
-  return sha256Hex(canonicalJson({ contract: CONTRACT_VERSION, storeId: history.storeId, runs })).slice(0, 16);
+  const output = {
+    generator: DATASET_GENERATOR_VERSION,
+    sqliteSchemaVersion: options.sqliteSchemaVersion,
+    sourceSchemaVersion: options.sourceSchemaVersion,
+    inventoryPointLimit: options.inventoryPointLimit ?? DEFAULT_INVENTORY_POINT_LIMIT,
+    observationCadence: options.observationCadence ?? 'monthly',
+  };
+  return sha256Hex(canonicalJson({ contract: CONTRACT_VERSION, storeId: history.storeId, runs, output })).slice(0, 16);
 }
 
 /** Pure, deterministic transformation of a store history into contract v1 files. */
 export function generateStoreDataset(history: StoreHistory, options: GenerateOptions): StoreDataset {
   const limit = options.inventoryPointLimit ?? DEFAULT_INVENTORY_POINT_LIMIT;
-  const datasetVersion = datasetVersionOf(history);
+  const { generatedAt: _generatedAt, ...versionOptions } = options;
+  const datasetVersion = datasetVersionOf(history, versionOptions);
   const runs = history.runs;
   const first = runs[0];
   const latest = runs[runs.length - 1];

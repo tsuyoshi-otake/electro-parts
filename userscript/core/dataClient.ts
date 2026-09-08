@@ -6,7 +6,7 @@ import {
   type ManifestV1,
   type ProductFileV1,
 } from '../../src/publisher/contract.ts';
-import { LruCache } from './cache.ts';
+import { cacheNamespace, LruCache, normalizeBaseUrl } from './cache.ts';
 import type { HostEnv } from './types.ts';
 
 /**
@@ -58,12 +58,13 @@ export class DataClient {
     private readonly host: HostEnv,
     options: DataClientOptions,
   ) {
-    this.baseUrl = options.baseUrl.replace(/\/+$/, '');
+    const namespace = cacheNamespace(options.baseUrl);
+    this.baseUrl = normalizeBaseUrl(options.baseUrl);
     this.manifestTtlMs = options.manifestTtlMs ?? 30 * 60_000;
     this.productFreshMs = options.productFreshMs ?? 6 * 3_600_000;
     this.productMaxAgeMs = options.productMaxAgeMs ?? 30 * 86_400_000;
     this.timeoutMs = options.timeoutMs ?? 15_000;
-    this.cache = new LruCache(host.storage, options.maxEntries ?? 200);
+    this.cache = new LruCache(host.storage, options.maxEntries ?? 200, namespace);
   }
 
   async load(storeId: string, pageKey: string, emit: (state: LoadState) => void): Promise<void> {

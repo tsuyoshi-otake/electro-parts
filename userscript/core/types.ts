@@ -38,6 +38,8 @@ export interface HostStorage {
   get(key: string): Promise<string | null>;
   set(key: string, value: string): Promise<void>;
   remove(key: string): Promise<void>;
+  /** Lists keys with a prefix so cache indexes can recover after concurrent tabs race. */
+  keys(prefix: string): Promise<string[]>;
 }
 
 export interface HostEnv {

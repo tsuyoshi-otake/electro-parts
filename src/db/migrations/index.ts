@@ -1,6 +1,7 @@
 import type { Db } from '../connection.ts';
 import { transaction } from '../connection.ts';
 import { MIGRATION_0001_INITIAL } from './0001_initial.ts';
+import { MIGRATION_0002_OFFER_METADATA_OBSERVATION } from './0002_offer_metadata_observation.ts';
 
 export interface Migration {
   version: number;
@@ -9,7 +10,10 @@ export interface Migration {
 }
 
 /** Ordered list; append only. Never edit an applied migration. */
-export const MIGRATIONS: readonly Migration[] = [{ version: 1, name: 'initial', sql: MIGRATION_0001_INITIAL }];
+export const MIGRATIONS: readonly Migration[] = [
+  { version: 1, name: 'initial', sql: MIGRATION_0001_INITIAL },
+  { version: 2, name: 'offer_metadata_observation', sql: MIGRATION_0002_OFFER_METADATA_OBSERVATION },
+];
 
 export const SQLITE_SCHEMA_VERSION = MIGRATIONS[MIGRATIONS.length - 1]?.version ?? 0;
 

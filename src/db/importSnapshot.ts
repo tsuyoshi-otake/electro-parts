@@ -146,7 +146,11 @@ export function importSnapshot(db: Db, snapshot: NormalizedSnapshot, options: Im
        ON CONFLICT(product_id, kind, value) DO UPDATE SET first_seen_at = MIN(first_seen_at, excluded.first_seen_at), last_seen_at = MAX(last_seen_at, excluded.last_seen_at)`,
     );
     const insertOffer = db.prepare(
-      'INSERT INTO offers(product_id, external_offer_id, offer_kind, sku, variant_name) VALUES (?, ?, ?, ?, ?) RETURNING offer_id',
+      'INSERT INTO offers(product_id, external_offer_id, offer_kind, sku, variant_name, metadata_observed_at) VALUES (?, ?, ?, ?, ?, ?) RETURNING offer_id',
+    );
+    const updateOfferMetadata = db.prepare(
+      `UPDATE offers SET offer_kind = ?, sku = ?, variant_name = ?, metadata_observed_at = ?
+       WHERE offer_id = ? AND (metadata_observed_at IS NULL OR metadata_observed_at <= ?)`,
     );
     const insertBasis = db.prepare(
       'INSERT INTO price_bases(offer_id, basis_key, quote_kind, tax_treatment, currency, unit_label) VALUES (?, ?, ?, ?, ?, ?) RETURNING price_basis_id',
@@ -198,13 +202,14 @@ export function importSnapshot(db: Db, snapshot: NormalizedSnapshot, options: Im
         let offerRow = productOffers.get(offer.externalOfferId);
         let offerId: number;
         if (offerRow === undefined) {
-          offerId = (insertOffer.get(productId, offer.externalOfferId, offer.offerKind, offer.sku, offer.variantName) as {
+          offerId = (insertOffer.get(productId, offer.externalOfferId, offer.offerKind, offer.sku, offer.variantName, observedAt) as {
             offer_id: number;
           }).offer_id;
           offerRow = { offer_id: offerId, product_id: productId, external_offer_id: offer.externalOfferId };
           productOffers.set(offer.externalOfferId, offerRow);
         } else {
           offerId = offerRow.offer_id;
+          updateOfferMetadata.run(offer.offerKind, offer.sku, offer.variantName, observedAt, offerId, observedAt);
         }
         const offerPresence = presence.insert(presenceKey('offer', offerId), { t: observedAt, state: true }, productRuns);
         if (offerPresence.plan.changed) stats.changedPresence += 1;
