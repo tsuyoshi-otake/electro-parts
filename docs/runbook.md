@@ -20,9 +20,9 @@
 
 ## 定期 run(月次と週次)
 
-- schedule は 2 本。`17 20 1 * *`(UTC)= 毎月 2 日 05:17 JST と、`17 20 * * 0`(UTC)= 毎週月曜 05:17 JST(ADR-0013、ADR-0016)。
-- **どちらの schedule がどの店舗を観測するかは cron には書いていない。** 起動した cron の周期と `config/<store>.json` の `observation.cadence`(`weekly` / `monthly`)が一致する店舗だけを観測し、残りは `--republish` で維持する。現在は秋月電子通商 = `monthly`、スイッチサイエンス = `weekly`。選んだ結果は Actions の notice(`Schedule`)に出る。
-- 日曜と 1 日が重なる月は 2 本が同じ日に走る。`pages-publish` の concurrency で直列化されるので、後から来たほうが待つ。
+- schedule は `0 20 * * *`(UTC)で毎朝05:00 JSTに起動し、2026-09-11を基準に2日に1回だけ収集する。中間日はcrawl/deployをスキップし、手動実行は日付判定を通過する。両店舗を順次収集する。
+- **どの店舗を観測するかは cron には書いていない。** `config/<store>.json` の `observation.cadence` が `every_two_days` の店舗を観測し、残りは `--republish` で維持する。現在は両店舗とも `every_two_days`。選んだ結果は Actions の notice(`Schedule`)に出る。未知の cron はエラーで停止する。
+- 定期実行と手動実行が重なる場合も、`pages-publish` の concurrency で直列化する。
 - 頻度が低いぶん、秋月は 1 回失敗すると次の自動 run まで 1 か月空く(スイッチサイエンスは 1 週間)。**失敗・隔離が出たら、直してから `workflow_dispatch` で回し直す**のが通常の運用。特定の店舗だけ直したいときは `stores` にその店舗を書く(他店舗は公開済みデータセットのまま維持される)。
 - Actions summary に**店舗ごとに**、結果(`published` / `unchanged` / `quarantined` / `failed`)、run 時間、リクエスト数、件数、価格変更数、隔離理由が出る。最後に `### Site` として、サイトに載った店舗と `datasetVersion`、サイトサイズが出る。
 - 終了コード(店舗ごと): 0 = 公開または変化なし、3 = 隔離(公開は続く、warning)、1 = 失敗。
@@ -100,10 +100,10 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 
 ## 頻度を変える / 止める
 
-- 止める: workflow の schedule を(2 本とも)コメントアウトしてコミット。公開データはそのまま残る。
-- 店舗の頻度を変える: `config/<store>.json` の `observation.cadence` を `weekly` / `monthly` に変えるだけ。**注意書き(`caveats.sampling_interval` / `sampling_interval_weekly`)は cadence から決まるので、手で直さない。** その周期の cron が workflow に無ければ `tests/integration/observation-cadence.test.ts` が落ちる。
-- 新しい周期を足す: `src/publisher/contract.ts`(`ObservationCadence` と `CAVEAT_KEYS`)、`userscript/core/format.ts`(利用者に見える文言)、workflow の cron と選択ロジック、そして上のテストを一緒に更新する(ADR-0016)。
-- **上げるときはサイズではなく相手サイトへの負荷で判断する**(サイズの実測は README)。秋月の HTML 巡回は 1 run 約 2,700 リクエスト・約 85 分で、週 1 にすると相手からは毎週 85 分走るクローラーに見える。
+- 止める: workflow の schedule をコメントアウトしてコミット。公開データはそのまま残る。
+- 店舗の頻度は `config/<store>.json` の `observation.cadence` (`every_two_days` / `weekly` / `monthly`)で指定する。**注意書きは cadence から決まるので、手で直さない。** 現在の workflow は隔日のみ。周期を追加する際は cron・選択分岐・`tests/integration/observation-cadence.test.ts` も変更する。
+- 新しい周期を足す: `src/publisher/contract.ts`(`ObservationCadence` と省略可能な観測間隔フィールド。旧版が未知のcaveatキーを拒否することに注意)、`userscript/core/format.ts`(利用者に見える文言)、workflow の cron と選択ロジック、そして上のテストを一緒に更新する(ADR-0016)。
+- 隔日化後もアクセス間隔・ジッター・再試行上限は維持する。秋月の HTML 巡回は 1 run 約 2,700 リクエスト・約 85 分。公開データとは別に、90日保存するスナップショットと状態バックアップの Actions artifact 容量をジョブごとに確認する。
 
 ## サイト運営者から連絡があった場合
 

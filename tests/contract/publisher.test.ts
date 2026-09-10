@@ -56,6 +56,15 @@ describe('generateStoreDataset', () => {
     expect(validateManifestV1(weekly.manifest)).toEqual([]);
     expect(weekly.manifest.caveats).toEqual(['observation_window', 'sampling_interval_weekly', 'absence_not_discontinued', 'site_reported_quantity']);
     expect(weekly.manifest.datasetVersion).not.toBe(ds.manifest.datasetVersion);
+    const alternate = generateStoreDataset(readStoreHistory(db, 'synthetic'), { ...gen, observationCadence: 'every_two_days' });
+    expect(validateManifestV1(alternate.manifest)).toEqual([]);
+    expect(alternate.manifest.observation.samplingIntervalDays).toBe(2);
+    expect(alternate.manifest.caveats).toEqual(['observation_window', 'absence_not_discontinued', 'site_reported_quantity']);
+    for (const days of [0, -1, 1.5, '2']) {
+      expect(validateManifestV1({ ...alternate.manifest, observation: { ...alternate.manifest.observation, samplingIntervalDays: days } }).length).toBeGreaterThan(0);
+    }
+    expect(alternate.manifest.caveats).not.toContain('sampling_interval_weekly');
+    expect(alternate.manifest.datasetVersion).not.toBe(weekly.manifest.datasetVersion);
     expect(ds.products.map((p) => p.pageKey)).toEqual(['a', 'b']);
 
     const a = product(ds.products, 'a');

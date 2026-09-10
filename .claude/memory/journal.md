@@ -299,3 +299,20 @@
 - キャッシュを正規化済み配信元URLで分離し、共有storageの実キー列挙で孤立本体を次回更新時に回収する。Tampermonkeyには `GM_listValues` grantが必要。
 - `Retry-After` がローカル待機上限を超えたら早期再試行せず終了し、同じfetcherの待機キューにもnot-before時刻を適用する。前回state取得はヘッダーと本文を合わせた総時間上限でabortする。
 - 検証: `npm test` 440件、Playwright 11件、型検査、`matching:check`、両配布ビルド、`npm audit`、actionlint 1.7.12がすべて成功。
+
+## 2026-09-10 - 日次収集と短期間グラフ
+
+- 日次化は設定だけでなく、ObservationCadence、公開caveat、画面文言、cronの選択分岐を揃える必要がある。未知のcronは明示的に失敗させる。
+- 比較グラフの短期間表示では日付だけの中間目盛りが終了目盛りを隠していた。3日未満は両端の日時を優先し、幅280/350/640で回帰検証した。単一観測は点のみ、未観測期間の延長はしない。
+- 全443テスト、最終調整後の比較18テスト、3対象の型検査、actionlint、両配布ビルド成功。nodeのテストプロセス残存なし。実ブラウザ表示・本番公開は未確認。
+
+- 同日の追加指示で日次案を撤回し、両店舗とも毎週金曜05:00 JST（cron: 0 20 * * 4）へ変更。日次専用の契約拡張は取り除き、週次caveatを使用。
+
+- 最終指示: 両店舗を2日に1回・05:00 JSTに変更。2026-09-11を基準に経過日数の偶奇で判定し、月日cronの */2 による月末の連日実行を避ける。非収集日は独立scheduleジョブでcrawl/deployをスキップ。手動起動は通過する。800日分と5時間遅延の回帰テスト成功。
+- テーマ初期値はライト。保存済みのライト/ダーク選択は尊重する。全446テスト、3対象の型検査、actionlint、両ビルド成功。テストプロセス残存なし。本番反映は未実施。
+
+## 2026-09-10 - v0.4.3 submission preparation (#8)
+
+- Legacy 0.4.2 validators reject new caveat keys. Before publication, changed the two-day cadence to contract 1.1's optional observation.samplingIntervalDays; new clients derive the label, old clients ignore the optional field. Verified with the actual validator from commit 0d63bb1 and both published manifests; the new-key counterexample fails as expected.
+- Final local verification after the compatibility fix: 447 tests passed, root typecheck passed, npm audit reported zero vulnerabilities. Store listing and public page now describe the two-day interval; privacy/listing includes saved theme preferences.
+- Browser submission endpoint was rejected by the available Computer Use channel with code -32000 Not allowed. No store submission or account switch has occurred.

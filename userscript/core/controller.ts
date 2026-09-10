@@ -104,12 +104,12 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
     let cleanup = () => undefined as void;
     handle.destroy = () => { destroyed = true; cleanup(); hostEl.remove(); };
 
-    let theme: 'light' | 'dark' = doc.defaultView?.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    let theme: 'light' | 'dark' = 'light';
     try {
       const saved = await host.storage.get(THEME_STORAGE_KEY);
       if (saved === 'light' || saved === 'dark') theme = saved;
     } catch {
-      host.log('warn', 'display preference unavailable; using system theme');
+      host.log('warn', 'display preference unavailable; using light theme');
     }
     // Serialize writes so a slow earlier save cannot overwrite a later click.
     let themeSave = Promise.resolve();
