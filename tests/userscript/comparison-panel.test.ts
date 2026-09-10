@@ -117,4 +117,15 @@ describe('cross-store comparison panel', () => {
     expect(b.querySelector('circle')!.getAttribute('aria-label')).toContain('2026-09-03');
     expect(b.querySelector('circle')!.getAttribute('tabindex')).toBe('0');
   });
+
+  it.each([280, 350, 640])('labels both ends with times for a short history at width %i', (width) => {
+    const start = new Date(2026, 8, 6, 20, 0).getTime();
+    const end = new Date(2026, 8, 7, 10, 42).getTime();
+    const svg = buildComparisonChart(document, [
+      { id: 'a', label: 'A', start, end, points: [[start, 'exact', 3500, 3500]], presence: [[start, 1]] },
+    ], { width, height: 220, currency: 'JPY' });
+    const labels = [...svg.querySelectorAll('text.eph-axis')].map((node) => node.textContent);
+    expect(labels).toContain('09-06 20:00');
+    expect(labels).toContain('09-07 10:42');
+  });
 });

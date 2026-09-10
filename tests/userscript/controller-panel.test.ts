@@ -50,6 +50,17 @@ async function mount(host: FakeHost, options: Partial<Parameters<typeof mountHis
 }
 
 describe('history panel controller', () => {
+  it('shows the optional two-day interval without requiring a new published caveat key', async () => {
+    page(); const host = hostWithData();
+    const manifest = sampleManifest();
+    manifest.observation.samplingIntervalDays = 2;
+    manifest.caveats = ['observation_window'];
+    host.routes.set(`${BASE}/${manifestPath('teststore')}`, json(manifest));
+    const handle = await mount(host);
+    expect(shadowText()).toContain('おおむね2日に1回');
+    expect(shadowText()).not.toContain('取得できません');
+    handle.destroy();
+  });
   it('limits total related history work but retains every link and a terminal reference-only state', async () => {
     page(); const host = hostWithData(); const { relation, other } = comparisonFixture();
     const relations = Array.from({length: 12}, (_, i) => ({ ...relation, id: `pair-${String(i).padStart(2, '0')}`, kind: 'similar_product' as const,
@@ -152,7 +163,7 @@ describe('history panel controller', () => {
     expect(document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!.querySelector('section')?.dataset['theme']).toBe('light');
   });
 
-  it('uses the system theme initially but honors an explicit light preference on a dark system', async () => {
+  it('defaults to light even on a dark system and honors a saved dark preference', async () => {
     page();
     const previous = window.matchMedia;
     window.matchMedia = (query) => ({
@@ -164,11 +175,11 @@ describe('history panel controller', () => {
     try {
       const host = hostWithData();
       let handle = await mount(host);
-      expect(document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!.querySelector('section')?.dataset['theme']).toBe('dark');
-      handle.destroy();
-      host.store.set(THEME_STORAGE_KEY, 'light');
-      handle = await mount(host);
       expect(document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!.querySelector('section')?.dataset['theme']).toBe('light');
+      handle.destroy();
+      host.store.set(THEME_STORAGE_KEY, 'dark');
+      handle = await mount(host);
+      expect(document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!.querySelector('section')?.dataset['theme']).toBe('dark');
       handle.destroy();
     } finally { window.matchMedia = previous; }
   });

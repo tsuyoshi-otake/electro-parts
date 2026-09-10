@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parsePipelineConfig, type PipelineConfig } from '../../src/pipeline/config.ts';
+import { observationDue } from '../../scripts/observation-schedule.ts';
 
 /**
  * The crawl schedule and the published sampling caveat are two statements of
@@ -21,6 +22,8 @@ const workflow = readFileSync(workflowPath, 'utf8');
 
 const crons = [...workflow.matchAll(/^\s*- cron: '([^']+)'/gm)].map((m) => m[1] as string);
 const weeklyCron = /^\s*WEEKLY_CRON: '([^']+)'/m.exec(workflow)?.[1] ?? null;
+const twoDayCron = /^\s*EVERY_TWO_DAYS_CRON: '([^']+)'/m.exec(workflow)?.[1] ?? null;
+
 const declaredStores = (/^\s*STORES: (.+)$/m.exec(workflow)?.[1] ?? '').trim().split(/\s+/).filter(Boolean);
 
 function configs(): { store: string; config: PipelineConfig }[] {
@@ -37,6 +40,26 @@ function configs(): { store: string; config: PipelineConfig }[] {
 const isEvery = (field: string): boolean => field === '*';
 
 describe('observation cadence', () => {
+  it('observes both stores every two days through a gated daily wake-up', () => {
+    expect(configs().every(({ config }) => config.observation.cadence === 'every_two_days')).toBe(true);
+    expect(twoDayCron).toBe('0 20 * * *');
+    expect(crons).toContain(twoDayCron);
+    expect(workflow).toContain('"$EVERY_TWO_DAYS_CRON") wanted=every_two_days ;;');
+    expect(workflow).toContain("if: needs.schedule.outputs.due == 'true'");
+    expect(workflow).toContain('run: node scripts/observation-schedule.ts');
+    expect(workflow).toContain('unknown schedule');
+  });
+  it('alternates through month/year boundaries and leap day, including delayed starts', () => {
+    const anchor = Date.parse('2026-09-10T20:00:00Z');
+    for (let day = 0; day < 800; day++) {
+      for (const delay of [0, 5 * 3_600_000]) {
+        expect(observationDue('schedule', twoDayCron!, anchor + day * 86_400_000 + delay)).toBe(day % 2 === 0);
+      }
+    }
+    expect(observationDue('workflow_dispatch', undefined, anchor + 86_400_000)).toBe(true);
+    expect(() => observationDue('schedule', '0 20 */2 * *', anchor)).toThrow('Unknown');
+    expect(() => observationDue('schedule', twoDayCron!, NaN)).toThrow('Invalid');
+  });
   it('gives every store config a place in the workflow', () => {
     const stores = configs().map((c) => c.store).sort();
     expect(stores.length).toBeGreaterThan(0);
@@ -57,7 +80,7 @@ describe('observation cadence', () => {
   it('schedules a monthly cron that is actually monthly', () => {
     const monthlyStores = configs().filter((c) => c.config.observation.cadence === 'monthly');
     if (monthlyStores.length === 0) return;
-    const monthly = crons.filter((c) => c !== weeklyCron);
+    const monthly = crons.filter((c) => c !== weeklyCron && c !== twoDayCron);
     expect(monthly.length, 'exactly one monthly schedule').toBe(1);
     const [, , dayOfMonth, month] = (monthly[0] as string).split(/\s+/);
     expect(isEvery(dayOfMonth as string), 'a monthly cron must pin a day of the month').toBe(false);

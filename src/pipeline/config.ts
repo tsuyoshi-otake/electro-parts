@@ -45,7 +45,7 @@ function positiveInt(v: unknown, name: string, fallback: number): number {
 
 function cadence(v: unknown): ObservationCadence {
   if (v === undefined) return 'monthly';
-  if (v !== 'weekly' && v !== 'monthly') throw new Error("config: observation.cadence must be 'weekly' or 'monthly'");
+  if (v !== 'every_two_days' && v !== 'weekly' && v !== 'monthly') throw new Error("config: observation.cadence must be 'every_two_days', 'weekly' or 'monthly'");
   return v;
 }
 

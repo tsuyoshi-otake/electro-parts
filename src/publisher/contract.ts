@@ -12,7 +12,7 @@ import type { PriceBasis } from '../core/price.ts';
  * new userscripts never read each other's files. Minor bumps only add
  * optional fields.
  */
-export const CONTRACT_VERSION = '1.0.0';
+export const CONTRACT_VERSION = '1.1.0';
 export const CONTRACT_MAJOR = 1;
 
 export const DATA_ROOT = `data/v${CONTRACT_MAJOR}`;
@@ -110,6 +110,7 @@ export const CAVEAT_KEYS = [
   'observation_window',
   'sampling_interval',
   'sampling_interval_weekly',
+  'sampling_interval_every_two_days',
   'absence_not_discontinued',
   'site_reported_quantity',
   'quantity_semantics_unknown',
@@ -122,7 +123,7 @@ export type CaveatKey = (typeof CAVEAT_KEYS)[number];
  * a JSON catalogue costs ~54 requests, an HTML crawl ~2,700 -- so the
  * sampling caveat is per store, not per project.
  */
-export type ObservationCadence = 'weekly' | 'monthly';
+export type ObservationCadence = 'every_two_days' | 'weekly' | 'monthly';
 
 export interface ObservationWindowV1 {
   runCount: number;
@@ -137,7 +138,7 @@ export interface ManifestV1 {
   datasetVersion: string;
   generatedAt: string;
   capabilities: StoreCapabilities;
-  observation: ObservationWindowV1 & { latestCoverageId: string | null };
+  observation: ObservationWindowV1 & { latestCoverageId: string | null; samplingIntervalDays?: number };
   productCount: number;
   productPathTemplate: string;
   versions: { contract: string; sqliteSchema: number; sourceSchema: string | null };
@@ -430,6 +431,10 @@ export function validateManifestV1(value: unknown): string[] {
   checkCapabilities(c, value['capabilities'], '$.capabilities');
   checkObservation(c, value['observation'], '$.observation');
   if (c.obj(value['observation'], '$.observation')) c.strOrNull(value['observation']['latestCoverageId'], '$.observation.latestCoverageId');
+  if (c.obj(value['observation'], '$.observation') && value['observation']['samplingIntervalDays'] !== undefined) {
+    const days = value['observation']['samplingIntervalDays'];
+    if (c.int(days, '$.observation.samplingIntervalDays') && days <= 0) c.fail('$.observation.samplingIntervalDays', 'expected positive days');
+  }
   c.int(value['productCount'], '$.productCount');
   if (value['productPathTemplate'] !== PRODUCT_PATH_TEMPLATE) c.fail('$.productPathTemplate', 'unexpected template');
   if (c.obj(value['versions'], '$.versions')) {

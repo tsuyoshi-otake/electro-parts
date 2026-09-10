@@ -56,7 +56,7 @@ describe('Akizuki real snapshots published as contract v1', () => {
     expect(dataset.manifest.observation).toEqual({ runCount: 2, firstObservedAt: augAt, latestObservedAt: sepAt, latestCoverageId: dataset.manifest.observation.latestCoverageId });
     expect(dataset.manifest.observation.latestCoverageId).toMatch(/^rai\+rbatt\+/);
     expect(dataset.manifest.capabilities).toEqual(AKIZUKI_CAPABILITIES);
-    expect(dataset.manifest.versions).toEqual({ contract: '1.0.0', sqliteSchema: SQLITE_SCHEMA_VERSION, sourceSchema: String(AKIZUKI_RAW_SCHEMA_VERSION) });
+    expect(dataset.manifest.versions).toEqual({ contract: '1.1.0', sqliteSchema: SQLITE_SCHEMA_VERSION, sourceSchema: String(AKIZUKI_RAW_SCHEMA_VERSION) });
     expect(new Set(dataset.products.map((p) => p.pageKey)).size).toBe(dataset.products.length);
     // Generation of ~8.8k product files stays well inside the pipeline budget.
     expect(generateMs).toBeLessThan(30_000);

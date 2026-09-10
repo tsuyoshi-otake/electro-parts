@@ -107,7 +107,9 @@ export function generateStoreDataset(history: StoreHistory, options: GenerateOpt
     datasetVersion,
     generatedAt: options.generatedAt,
     capabilities: history.capabilities,
-    observation: { ...observation, latestCoverageId: latest?.coverageId ?? null },
+    observation: { ...observation, latestCoverageId: latest?.coverageId ?? null,
+      ...(options.observationCadence === 'every_two_days' ? { samplingIntervalDays: 2 } : {}),
+    },
     productCount: products.length,
     productPathTemplate: PRODUCT_PATH_TEMPLATE,
     versions: { contract: CONTRACT_VERSION, sqliteSchema: options.sqliteSchemaVersion, sourceSchema: options.sourceSchemaVersion },
@@ -129,7 +131,9 @@ interface ProductContext {
 function storeLevelCaveats(capabilities: StoreCapabilities, cadence: ObservationCadence): CaveatKey[] {
   const caveats: CaveatKey[] = [
     'observation_window',
-    cadence === 'weekly' ? 'sampling_interval_weekly' : 'sampling_interval',
+    // Older v1 clients reject unknown caveat keys but ignore optional fields.
+    // The new interval is carried by observation.samplingIntervalDays instead.
+    ...(cadence === 'every_two_days' ? [] : [cadence === 'weekly' ? 'sampling_interval_weekly' as const : 'sampling_interval' as const]),
     'absence_not_discontinued',
   ];
   if (capabilities.supportsInventoryQuantity) {

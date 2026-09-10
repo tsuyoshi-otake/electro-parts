@@ -169,7 +169,7 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
         const swatch = text(doc, 'span', '', 'series-swatch'); swatch.setAttribute('aria-hidden', 'true');
         label.append(input, swatch, doc.createTextNode(s.label)); controls.appendChild(label); update();
       });
-      box.append(controls, svg, message, text(doc, 'div', '各店舗の最終観測までを表示。点にフォーカスすると日時と価格を確認できます。', 'related-meta'));
+      box.append(controls, svg, message, text(doc, 'div', '各店舗の最終観測までを表示。観測が1回だけの店舗は点のみです。最終観測より後の価格は未確認です。点にフォーカスすると日時と価格を確認できます。', 'related-meta'));
       // Resize only the SVG, not the controls or data. This keeps axis text
       // readable on narrow screens and avoids refetching or losing checkboxes.
       if (doc.defaultView && typeof doc.defaultView.ResizeObserver === 'function') {
@@ -288,6 +288,12 @@ function renderChangeTable(doc: Document, parent: HTMLElement, segment: SegmentV
   parent.appendChild(details);
 }
 
+function manifestCaveats(manifest: ManifestV1 | null): CaveatKey[] {
+  const keys = [...(manifest?.caveats ?? [])];
+  if (manifest?.observation.samplingIntervalDays === 2) keys.push('sampling_interval_every_two_days');
+  return keys;
+}
+
 function renderCaveats(doc: Document, root: HTMLElement, keys: Iterable<CaveatKey>): void {
   const list = doc.createElement('ul');
   list.className = 'caveats';
@@ -384,7 +390,7 @@ function renderPanelContent(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
     case 'missing':
       badge(state.freshness === 'stale' ? '記録なし(キャッシュ)' : '記録なし', state.freshness === 'stale' ? 'stale' : undefined);
       root.appendChild(text(doc, 'p', 'この商品はまだ観測データに含まれていません。次回の観測以降に表示されます。', 'muted'));
-      if (state.manifest !== null) renderCaveats(doc, root, state.manifest.caveats);
+      if (state.manifest !== null) renderCaveats(doc, root, manifestCaveats(state.manifest));
       renderFooter(ctx, root, state.manifest, null, state);
       return;
     case 'ready':
@@ -432,7 +438,7 @@ function renderPanelContent(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
 
   renderRelatedGroups(doc, tail, ctx.related ?? [], ctx.storeLabel ?? ((id: string) => id));
 
-  const caveats: CaveatKey[] = [...(state.manifest?.caveats ?? []), ...product.caveats];
+  const caveats: CaveatKey[] = [...manifestCaveats(state.manifest), ...product.caveats];
   if (product.product.metadata.some((m) => m.suspicious)) caveats.push('suspicious_identity');
   renderCaveats(doc, tail, caveats);
   renderFooter(ctx, tail, state.manifest, product, state);

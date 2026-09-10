@@ -1,5 +1,5 @@
 import type { PresencePointV1, PricePointV1 } from '../../src/publisher/contract.ts';
-import { formatDate, formatMoney } from '../core/format.ts';
+import { formatDate, formatDateTime, formatMoney } from '../core/format.ts';
 
 /**
  * Dependency-free SVG step chart of one price segment. A price stays in
@@ -108,14 +108,18 @@ export function buildComparisonChart(doc: Document, series: readonly ComparisonS
   }
   let right = -Infinity;
   let previous = '';
-  for (const t of [start, start + (end - start) / 2, end]) {
-    const content = formatDate(t);
+  const shortWindow = end - start < 3 * 86_400_000;
+  const labelWidth = shortWindow ? 90 : X_LABEL_WIDTH;
+  // Give the endpoints priority; a middle date must not hide the final time.
+  const ticks = shortWindow ? [start, end] : [start, start + (end - start) / 2, end];
+  for (const t of ticks) {
+    const content = shortWindow ? formatDateTime(t).slice(5) : formatDate(t);
     const anchor = t === start ? 'start' : t === end ? 'end' : 'middle';
-    const left = x(t) - (anchor === 'end' ? X_LABEL_WIDTH : anchor === 'middle' ? X_LABEL_WIDTH / 2 : 0);
+    const left = x(t) - (anchor === 'end' ? labelWidth : anchor === 'middle' ? labelWidth / 2 : 0);
     if (content === previous || left < right + X_LABEL_GAP) continue;
     const label = el(doc, 'text', { x: x(t), y: height - 6, 'text-anchor': anchor, class: 'eph-axis' });
     label.textContent = content; svg.appendChild(label);
-    right = left + X_LABEL_WIDTH; previous = content;
+    right = left + labelWidth; previous = content;
   }
   prepared.forEach((s, i) => {
     const group = el(doc, 'g', { 'data-series': s.id, 'data-series-index': i, 'aria-label': s.label });
