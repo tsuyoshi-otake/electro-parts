@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { generate, parseCatalog, serializeCatalog, serializeRelations } from '../../scripts/matching/generate.ts';
-import { discover, fingerprint, type Catalog, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
+import { endpoint, generate, parseCatalog, serializeCatalog, serializeRelations } from '../../scripts/matching/generate.ts';
+import { discover, discoverCatalog, fingerprint, type Catalog, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
 import { identityCodes } from '../../scripts/matching/catalogs.ts';
 import type { ProductRelation } from '../../userscript/core/relations.ts';
 
@@ -14,19 +14,47 @@ const result = generate(catalog, legacy, reviews, families);
 const byId = new Map(result.relations.map(r => [r.id, r]));
 
 describe('reproducible reviewed matching pipeline', () => {
+  it('rejects another existing variant even when it belongs to the same page', () => {
+    const candidate = result.candidates.find(c => c.products[0].storeId === 'switch-science' && c.products[0].pageKey === '5208' && c.products[1].storeId === 'm5stack')!;
+    const review = structuredClone(reviews.find(r => r.id === candidate.id)!);
+    review.offerIds![1] = candidate.products[1].variants!.find(v => v.offerId !== review.offerIds![1])!.offerId;
+    expect(() => generate(catalog, [], [review], [])).toThrow(/variant must match candidate code/);
+  });
+  it('searches all three pairs and preserves distinct variants on a shared official product page', () => {
+    expect(result.report.byStorePair).toEqual({
+      'akizuki/switch-science': { candidates: 309, verified: 293, unresolved: 6, pending: 0 },
+      'akizuki/m5stack': { candidates: 18, verified: 18, unresolved: 0, pending: 0 },
+      'switch-science/m5stack': { candidates: 503, verified: 499, unresolved: 2, pending: 0 },
+    });
+    const strips = result.relations.filter(r => r.products[0].storeId === 'switch-science' && ['5208','5209'].includes(r.products[0].pageKey) && r.products[1].storeId === 'm5stack');
+    expect(strips).toHaveLength(2);
+    expect(strips[0]!.products[1].pageKey).toBe(strips[1]!.products[1].pageKey);
+    expect(new Set(strips.map(r => r.products[1].offer!.id)).size).toBe(2);
+    for (const r of strips) {
+      expect(new URL(r.products[1].url).searchParams.get('variant')).toBe(r.products[1].offer!.id);
+      expect(r.pricePolicy).toBeNull();
+    }
+    const official = catalog.listings.find(p => p.pageKey === strips[0]!.products[1].pageKey)!;
+    expect(() => endpoint(official)).toThrow(/variant required/);
+    expect(() => endpoint(official, 'missing')).toThrow(/variant required/);
+    const changed = structuredClone(catalog);
+    changed.listings.find(p => p.pageKey === official.pageKey)!.variants![0]!.sku += '-V2';
+    expect(() => generate(changed, legacy, reviews, families)).toThrow(/stale/);
+    expect(discoverCatalog({...catalog, listings: [...catalog.listings].reverse()}).map(c => c.id)).toEqual(result.candidates.map(c => c.id));
+  });
   it('searches every pinned listing and accounts for every candidate without automatic promotion', () => {
-    expect(catalog.listings).toHaveLength(19020);
-    expect(result.candidates).toHaveLength(309);
+    expect(catalog.listings).toHaveLength(19684);
+    expect(result.candidates).toHaveLength(830);
     expect(result.report.pending).toEqual([]);
-    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(10);
-    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(6);
-    expect(result.report).toMatchObject({ sameVerified: 293, similarVerified: 108, pricePolicies: 2 });
-    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(309);
+    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(12);
+    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(8);
+    expect(result.report).toMatchObject({ sameVerified: 810, similarVerified: 108, pricePolicies: 2 });
+    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(830);
     expect(result.report.byBrand['Seeed']!.accepted).toBeGreaterThan(30);
     expect(result.report.byBrand['Raspberry Pi Trading']!.accepted).toBeGreaterThan(40);
     expect(result.report.byBrand['Arduino']!.accepted).toBeGreaterThan(25);
     expect(generate(catalog, [], [], []).relations).toEqual([]);
-    expect(generate(catalog, [], [], []).report.pending).toHaveLength(309);
+    expect(generate(catalog, [], [], []).report.pending).toHaveLength(830);
   });
 
   it('produces byte-identical artifacts and a lossless, price-free evidence projection', () => {

@@ -46,7 +46,9 @@ function productLink(doc: Document, entry: RelatedEntry): HTMLElement {
     const url = new URL(entry.target.url);
     if (url.protocol !== 'https:' || url.username || url.password) throw new Error('unsafe URL');
     const link = doc.createElement('a'); link.href = url.href; link.target = '_blank'; link.rel = 'noopener noreferrer';
-    link.textContent = entry.target.name; link.dataset['focusKey'] = `product-${entry.relation.id}`; return link;
+    const offer = entry.target.offer;
+    link.textContent = entry.target.name + (offer ? ` · ${offer.name === 'Default Title' ? offer.sku : `${offer.name} (${offer.sku})`}` : '');
+    link.dataset['focusKey'] = `product-${entry.relation.id}`; return link;
   } catch { return node(doc, 'span', entry.target.name); }
 }
 
@@ -91,7 +93,7 @@ function price(doc: Document, parent: HTMLElement, entry: RelatedEntry): void {
     parent.appendChild(node(doc, 'div', state.kind === 'loading' ? '記録価格を読み込み中…' : state.kind === 'missing' ? '他店の履歴はまだ記録されていません' : '他店データを取得できませんでした', 'related-meta'));
     return;
   }
-  const quote = primaryQuote(state.product);
+  const quote = primaryQuote(state.product, entry.target);
   if (!quote) parent.appendChild(node(doc, 'div', '価格の記録なし', 'related-meta'));
   else {
     parent.appendChild(node(doc, 'div', formatPriceValue(quote.segment.stats.current, quote.segment.basis.currency), 'hero-value'));

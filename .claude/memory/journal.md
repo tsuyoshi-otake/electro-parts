@@ -332,3 +332,10 @@
 - **M5Stackの履歴は`.product-wrapper`の外へ挿入する。** 実ページのscroll handlerがwrapperの高さで`.product-info.fixed`を切り替えるため、appendすると購入欄が履歴に重なる。保存HTMLだけでは検知できず、ZIPの実ページスクリーンショットで発見。afterへ変更し、実ブラウザーでfixed解除と画像を確認した。
 - **新店舗の追加は既存stateへincremental importする。** 新店舗の履歴が空でも、共有stateがある環境の`--bootstrap`は拒否される。ローカル出力でも公開stateを読む設定なら同じ。既存履歴を捨てる設定変更で回避しない。
 - 通常456テスト、Playwright12テストと修正箇所の追加再検証、3プロジェクト型検査、監査0件。実ZIP0.4.4、3店舗の実ページ13チェック成功、プロセス残存0。公開前M5Stackのみローカル実データ、既存店は公開データ。詳細・SHA256・証跡は`.codex/goal-loop/m5stack/journal.md`。この時点ではWeb Store未申請。
+
+## 2026-09-12 - Three-store reviewed mapping (#23)
+
+- 既存小売カタログ18,020行を変更せず公式664商品706variantを追加。新規521候補を全件確認し、同一517、要確認2、除外2。実行時943組、同一確認済み810組。USD/JPYの価格比較承認は増やしていない。
+- **生成テーブルの端点キーにoffer IDを含める。** 商品ページだけをキーにすると同じページの10cm/20cm LEDテープが上書きされる。対象SKUと一致するofferをレビューで固定し、消失・変更時は別variantへフォールバックしない。generator/relations/UIテストと公式実ページの切替で確認。
+- フィンガープリントはJSONのキー順も含む。完全スナップショットの再importと正本がバイト一致することを検査し、vendorの配置を一致させた。指紋の一括再承認はしていない。
+- 配布ZIP0.4.5をローカルPlaywrightに展開・読み込み、3店舗実ページと公開データで他2店の記録価格・日時、テーマ保存、円系列、variantリンクを確認。画像を閲覧しプロセス残存0。実行ID・SHA256は`.codex/goal-loop/three-store-mapping/journal.md`。

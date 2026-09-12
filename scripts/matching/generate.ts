@@ -3,12 +3,15 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import type { ProductRelation, RelationProduct } from '../../userscript/core/relations.ts';
-import { assertCatalog, discover, fingerprint, listingKey, pairId, type Catalog, type Family, type Listing, type Review } from './model.ts';
-import { importCatalogs } from './catalogs.ts';
+import { assertCatalog, discover, discoverCatalog, fingerprint, listingKey, pairId, type Catalog, type Family, type Listing, type Review } from './model.ts';
+import { importCatalogs, appendM5Stack, identityCodes } from './catalogs.ts';
 
-export function endpoint(p: Listing): RelationProduct {
+export function endpoint(p: Listing, offerId?: string | null): RelationProduct {
+  const variant = offerId ? p.variants?.find(v => v.offerId === offerId) : undefined;
+  if ((offerId && !variant) || (p.variants && !variant)) throw new Error(`reviewed variant required: ${listingKey(p)}`);
   return { storeId: p.storeId, pageKey: p.pageKey, name: p.name, modelNumber: p.modelNumber, url: p.url,
-    observedAt: p.observedAt, expectedNames: [p.name], expectedModels: p.expectedModels };
+    observedAt: p.observedAt, expectedNames: [p.name], expectedModels: p.expectedModels,
+    ...(variant ? { url: `${p.url}?variant=${encodeURIComponent(variant.offerId)}`, offer: { id: variant.offerId, sku: variant.sku, name: variant.name } } : {}) };
 }
 const order = (a: { id: string }, b: { id: string }): number => a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 
@@ -17,7 +20,7 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
   const listings = new Map(catalog.listings.map(p => [listingKey(p), p]));
   const [left, right] = catalog.sources;
   if (!left || !right) throw new Error('two sources required');
-  const candidates = discover(catalog.listings.filter(p => p.storeId === left.storeId), catalog.listings.filter(p => p.storeId === right.storeId));
+  const candidates = discoverCatalog(catalog);
   const candidateIndex = new Map(candidates.map(p => [p.id, p]));
   const reviewIndex = new Map<string, Review>();
   const relations = new Map<string, ProductRelation>();
@@ -37,14 +40,22 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     if (!['same_product', 'unresolved', 'rejected'].includes(review.decision) || review.evidence.length < 20 || !Number.isFinite(Date.parse(review.reviewedAt))) throw new Error(`review evidence required: ${review.id}`);
     if (review.decision === 'unresolved' && !review.missingEvidence.length) throw new Error(`unresolved review needs missing evidence: ${review.id}`);
     if (review.decision === 'rejected') { relations.delete(review.id); continue; }
+    for (const [i, product] of candidate.products.entries()) {
+      if (!product.variants) continue;
+      const variant = product.variants.find(v => v.offerId === review.offerIds?.[i]);
+      if (!variant || !identityCodes(product.storeId, product.manufacturer, [variant.sku]).some(code => candidate.codes.includes(code))) {
+        throw new Error(`reviewed variant must match candidate code: ${review.id}`);
+      }
+    }
     const old = relations.get(review.id);
     if (old?.pricePolicy && review.decision !== 'same_product') throw new Error(`price policy conflicts with review ${review.id}`);
     relations.set(review.id, {
       id: review.id, kind: review.decision, reviewStatus: review.decision === 'same_product' ? 'verified' : 'needs_review',
-      products: old?.products ?? [endpoint(candidate.products[0]), endpoint(candidate.products[1])],
+      products: old?.products ?? [endpoint(candidate.products[0], review.offerIds?.[0]), endpoint(candidate.products[1], review.offerIds?.[1])],
       evidence: review.evidence, differences: review.differences, missingEvidence: review.missingEvidence,
-      reviewedAt: review.reviewedAt, provenance: old?.provenance ?? { method: 'catalog', model: null, originalClassification: 'same_product_candidate', originalReason: `indexed exact code: ${candidate.codes.join(', ')}` },
+      reviewedAt: review.reviewedAt, provenance: old?.provenance ?? { method: 'catalog', model: review.reviewerModel ?? null, originalClassification: review.decision, originalReason: `indexed exact code: ${candidate.codes.join(', ')}` },
       pricePolicy: old?.pricePolicy ?? null,
+      ...(!old ? { evidenceUrls: candidate.products.map(p => p.url) } : {}),
     });
   }
   const familyIds = new Set<string>();
@@ -85,20 +96,24 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
   }
   const result = [...relations.values()].sort(order);
   const byBrand: Record<string, { candidates: number; accepted: number; unresolved: number; rejected: number; pending: number; sourceListings: number; unmatchedListings: number }> = {};
-  for (const p of catalog.listings.filter(p => p.storeId === right.storeId)) {
+  for (const p of catalog.listings) {
     const brand = p.manufacturer || '(unknown)';
     byBrand[brand] ??= { candidates: 0, accepted: 0, unresolved: 0, rejected: 0, pending: 0, sourceListings: 0, unmatchedListings: 0 };
     byBrand[brand]!.sourceListings++;
   }
-  const candidateListings = new Set(candidates.map(c => listingKey(c.products[1])));
   const allCandidateListings = new Set(candidates.flatMap(c => c.products.map(listingKey)));
-  for (const p of catalog.listings.filter(p => p.storeId === right.storeId && !candidateListings.has(listingKey(p)))) byBrand[p.manufacturer || '(unknown)']!.unmatchedListings++;
+  for (const p of catalog.listings.filter(p => !allCandidateListings.has(listingKey(p)))) byBrand[p.manufacturer || '(unknown)']!.unmatchedListings++;
   for (const c of candidates) {
     const row = byBrand[c.products[1].manufacturer || '(unknown)']!; row.candidates++;
     const decision = reviewIndex.get(c.id)?.decision;
     if (!decision) row.pending++; else if (decision === 'same_product') row.accepted++; else row[decision]++;
   }
   const report = { sources: catalog.sources, candidateCount: candidates.length, reviewedCount: reviews.length,
+    byStorePair: Object.fromEntries(catalog.sources.flatMap((a, i) => catalog.sources.slice(i + 1).map(b => {
+      const pairs = candidates.filter(c => c.products[0].storeId === a.storeId && c.products[1].storeId === b.storeId);
+      return [`${a.storeId}/${b.storeId}`, { candidates: pairs.length, verified: pairs.filter(c => reviewIndex.get(c.id)?.decision === 'same_product').length,
+        unresolved: pairs.filter(c => reviewIndex.get(c.id)?.decision === 'unresolved').length, pending: pairs.filter(c => !reviewIndex.has(c.id)).length }];
+    }))),
     pending: candidates.filter(c => !reviewIndex.has(c.id)).map(c => c.id),
     legacyCount: legacy.length, relations: result.length,
     sameVerified: result.filter(r => r.kind === 'same_product' && r.reviewStatus === 'verified').length,
@@ -108,24 +123,25 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     familyCounts, byBrand: Object.fromEntries(Object.entries(byBrand).sort(([a], [b]) => a < b ? -1 : 1)),
     unmatchedByStore: Object.fromEntries(catalog.sources.map(source => [source.storeId,
       catalog.listings.filter(p => p.storeId === source.storeId && !allCandidateListings.has(listingKey(p))).length])),
-    limitations: ['Only the two pinned saved catalogues are searched; other stores and missing catalogue entries are not covered.', 'Codes must contain a digit and have at least four characters. Numeric storefront SKUs are excluded; numeric manufacturer codes still require review for collisions.', 'Unmatched does not mean unrelated. Aliases and descriptions not present in these sources need further review.', 'Review is saved-catalogue identity review, not a live stock, compatibility or sales-condition assertion.'],
+    limitations: ['All pairs of the pinned saved catalogues are searched; later retailer additions and missing catalogue entries are not covered.', 'Codes must contain a digit and have at least four characters. Numeric storefront SKUs are excluded; numeric manufacturer codes still require review for collisions.', 'Unmatched does not mean unrelated. Aliases and descriptions not present in these sources need further review.', 'Review is saved-catalogue identity review, not a live stock, compatibility or sales-condition assertion.'],
   };
   return { relations: result, candidates, report };
 }
 
 export function serializeRelations(relations: readonly ProductRelation[]): string {
+  const endpointKey = (p: RelationProduct): string => JSON.stringify([listingKey(p), p.offer?.id ?? null]);
   const products = new Map<string, RelationProduct>();
   for (const r of relations) for (const p of r.products) {
-    const key = listingKey(p);
+    const key = endpointKey(p);
     const previous = products.get(key);
     // A listing can have additional already-reviewed spellings in a legacy price policy.
     products.set(key, previous ? { ...p, expectedNames: [...new Set([...previous.expectedNames, ...p.expectedNames])], expectedModels: [...new Set([...previous.expectedModels, ...p.expectedModels])] } : p);
   }
   const rows = relations.map(r => {
     const { products: endpoints, ...rest } = r;
-    return `  { ...${JSON.stringify(rest)}, products: [p[${JSON.stringify(listingKey(endpoints[0]))}]!, p[${JSON.stringify(listingKey(endpoints[1]))}]!] },`;
+    return `  { ...${JSON.stringify(rest)}, products: [p[${JSON.stringify(endpointKey(endpoints[0]))}]!, p[${JSON.stringify(endpointKey(endpoints[1]))}]!] },`;
   });
-  return `// Generated by npm run matching:build. Edit data/matching reviews/families, not this file.\nimport type { ProductRelation, RelationProduct } from '../core/relations.ts';\n\nexport const STORE_LABELS: Readonly<Record<string, string>> = { 'akizuki': '秋月電子', 'switch-science': 'スイッチサイエンス' };\nconst p: Record<string, RelationProduct> = {\n${[...products].sort(([a], [b]) => a < b ? -1 : 1).map(([key, value]) => `  ${JSON.stringify(key)}: ${JSON.stringify(value)},`).join('\n')}\n};\nexport const PRODUCT_RELATIONS: readonly ProductRelation[] = [\n${rows.join('\n')}\n];\n`;
+  return `// Generated by npm run matching:build. Edit data/matching reviews/families, not this file.\nimport type { ProductRelation, RelationProduct } from '../core/relations.ts';\n\nexport const STORE_LABELS: Readonly<Record<string, string>> = { 'akizuki': '秋月電子', 'switch-science': 'スイッチサイエンス', 'm5stack': 'M5Stack公式' };\nconst p: Record<string, RelationProduct> = {\n${[...products].sort(([a], [b]) => a < b ? -1 : 1).map(([key, value]) => `  ${JSON.stringify(key)}: ${JSON.stringify(value)},`).join('\n')}\n};\nexport const PRODUCT_RELATIONS: readonly ProductRelation[] = [\n${rows.join('\n')}\n];\n`;
 }
 
 export const serializeCatalog = (catalog: Catalog): string => JSON.stringify({ schemaVersion: catalog.schemaVersion, sources: catalog.sources }) + '\n' + catalog.listings.map(p => JSON.stringify(p)).join('\n') + '\n';
@@ -135,7 +151,7 @@ export function parseCatalog(text: string): Catalog {
 }
 
 async function main(): Promise<void> {
-  const { values } = parseArgs({ options: { check: { type: 'boolean' }, discover: { type: 'boolean' }, 'import-left': { type: 'string' }, 'import-right': { type: 'string' } } });
+  const { values } = parseArgs({ options: { check: { type: 'boolean' }, discover: { type: 'boolean' }, 'import-left': { type: 'string' }, 'import-right': { type: 'string' }, 'import-m5stack': { type: 'string' } } });
   const dir = 'data/matching';
   if (values['import-left'] || values['import-right']) {
     if (!values['import-left'] || !values['import-right'] || values.check || values.discover) throw new Error('import requires both files and cannot use --check/--discover');
@@ -145,10 +161,15 @@ async function main(): Promise<void> {
   }
   const read = async <T>(file: string): Promise<T> => JSON.parse(await readFile(`${dir}/${file}`, 'utf8')) as T;
   const catalog = parseCatalog(await readFile(`${dir}/catalog.jsonl`, 'utf8'));
+  if (values['import-m5stack']) {
+    if (values.check || values.discover) throw new Error('import cannot use --check/--discover');
+    await writeFile(`${dir}/catalog.jsonl`, serializeCatalog(await appendM5Stack(catalog, values['import-m5stack'])));
+    return;
+  }
   if (values.discover) {
     if (values.check) throw new Error('--discover and --check are separate operations');
     assertCatalog(catalog);
-    const candidates = discover(catalog.listings.filter(p => p.storeId === catalog.sources[0]!.storeId), catalog.listings.filter(p => p.storeId === catalog.sources[1]!.storeId));
+    const candidates = discoverCatalog(catalog);
     await writeFile(`${dir}/candidates.jsonl`, serializeCandidates(candidates));
     console.log(`Discovered ${candidates.length} candidates from ${catalog.listings.length} listings. No reviews or runtime mappings were changed.`); return;
   }

@@ -1,0 +1,60 @@
+[
+  {
+    "kind": "unresolved",
+    "reviewStatus": "needs_review",
+    "priceComparable": false,
+    "products": [
+      {
+        "key": "akizuki/117217",
+        "name": "M5Stack用光センサーユニット",
+        "modelNumber": "M5STACK-LIGHT-UNIT",
+        "url": "https://akizukidenshi.com/catalog/g/g117217/",
+        "observedAt": "2026-09-06T09:54:15.029Z",
+        "fingerprint": "037bba8c6f266d30c1b961297bb03d74dcdd48dfa372b057920c2249aa3ec7bb"
+      },
+      {
+        "key": "m5stack/h-light-sensor-unit",
+        "name": "Light Sensor Unit with Photo-resistance",
+        "modelNumber": "U021",
+        "url": "https://shop.m5stack.com/products/light-sensor-unit",
+        "observedAt": "2026-09-12T08:13:12.892Z",
+        "fingerprint": "37c6bcb24a784c5fd41ff3e57cbccbfad391508141977b95974c67d95e83f4b9"
+      }
+    ],
+    "evidence": "M5Stack製品の名称・用途から残した別名候補。型番が一致せず同一性は未承認。",
+    "missingEvidence": [
+      "小売側のメーカー製品コード・リビジョン・仕様・付属品を一次資料で確認"
+    ],
+    "reviewedAt": "2026-09-12",
+    "reviewerModel": "GPT-6 (Codex)"
+  },
+  {
+    "kind": "unresolved",
+    "reviewStatus": "needs_review",
+    "priceComparable": false,
+    "products": [
+      {
+        "key": "akizuki/117218",
+        "name": "M5Stack用電池モジュール",
+        "modelNumber": "M5STACK-BATTERY",
+        "url": "https://akizukidenshi.com/catalog/g/g117218/",
+        "observedAt": "2026-09-06T09:54:15.029Z",
+        "fingerprint": "a8d05b532e10c8b8d599d4b2bbad4a1fa593722297a279f9d88a8ce060779f5c"
+      },
+      {
+        "key": "m5stack/h-battery-module",
+        "name": "Battery Module for ESP32 Core Development Kit",
+        "modelNumber": "M002",
+        "url": "https://shop.m5stack.com/products/battery-module",
+        "observedAt": "2026-09-12T08:13:12.892Z",
+        "fingerprint": "78791658ed789d9c0df95cd85a7c60f9459e5e5f0443e0e2bee8299e93ef2060"
+      }
+    ],
+    "evidence": "M5Stack製品の名称・用途から残した別名候補。型番が一致せず同一性は未承認。",
+    "missingEvidence": [
+      "小売側のメーカー製品コード・リビジョン・仕様・付属品を一次資料で確認"
+    ],
+    "reviewedAt": "2026-09-12",
+    "reviewerModel": "GPT-6 (Codex)"
+  }
+]

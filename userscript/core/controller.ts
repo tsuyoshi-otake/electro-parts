@@ -20,7 +20,7 @@ export interface ControllerOptions {
   host: HostEnv;
   client: DataClient;
   doc: Document;
-  location: Pick<Location, 'hostname' | 'pathname'>;
+  location: Pick<Location, 'hostname' | 'pathname'> & Partial<Pick<Location, 'search'>>;
   dataBaseUrl: string;
   /** How long to watch the DOM for a late mount point before giving up. */
   mountTimeoutMs?: number;
@@ -124,6 +124,8 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
         });
       },
     };
+    const initialOffer = adapter.initialOfferId?.(options.location);
+    if (initialOffer) ctx.selectedOfferId = initialOffer;
     cleanup = () => ctx.cleanup?.();
     let current: LoadState = { kind: 'loading' };
     let selected: number | null = null;

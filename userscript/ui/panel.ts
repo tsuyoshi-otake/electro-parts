@@ -465,7 +465,16 @@ export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   const disclosures = new Map([...shadow.querySelectorAll<HTMLDetailsElement>('details[data-state-key]')].map((d) => [d.dataset['stateKey'], d.open]));
   const focused = shadow.activeElement?.getAttribute('data-focus-key');
   ctx.cleanup?.(); delete ctx.cleanup;
-  renderPanelContent(ctx, shadow, state, selectedSegment, onSelectSegment);
+  const allRelated = ctx.related;
+  if (state.kind === 'ready') {
+    const offer = state.product.offers.find(o => o.externalOfferId === ctx.selectedOfferId) ?? currentOffer(state.product);
+    ctx.related = (allRelated ?? []).filter(entry => {
+      const selected = entry.relation.products[entry.sourceIndex].offer;
+      return !selected || (selected.id === offer?.externalOfferId && selected.sku === offer.sku);
+    });
+  }
+  try { renderPanelContent(ctx, shadow, state, selectedSegment, onSelectSegment); }
+  finally { if (allRelated === undefined) delete ctx.related; else ctx.related = allRelated; }
   for (const d of shadow.querySelectorAll<HTMLDetailsElement>('details[data-state-key]')) {
     const open = disclosures.get(d.dataset['stateKey']); if (open !== undefined) d.open = open;
   }

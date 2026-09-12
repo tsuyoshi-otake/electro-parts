@@ -27,6 +27,7 @@ export interface StorePageAdapter {
   /** The page key of the product shown, or null when the page is not a product page. */
   extractPageKey(doc: Document, location: Pick<Location, 'hostname' | 'pathname'>): string | null;
   findMountPoint(doc: Document): MountPoint | null;
+  initialOfferId?(location: { search?: string }): string | undefined;
 }
 
 export interface HostResponse {

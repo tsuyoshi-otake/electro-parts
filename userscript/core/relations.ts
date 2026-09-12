@@ -12,6 +12,8 @@ export interface RelationProduct {
   /** Exact known metadata spellings. Never strip revision/configuration suffixes. */
   expectedNames: readonly string[];
   expectedModels: readonly string[];
+  /** Reviewed selling variant; an absent or changed variant never falls back. */
+  offer?: { id: string; sku: string; name: string };
 }
 
 export interface ProductRelation {
@@ -91,11 +93,12 @@ export function matchesRelationProduct(ref: RelationProduct, product: ProductFil
   return product.storeId === ref.storeId && product.pageKey === ref.pageKey
     && ref.expectedNames.some((name) => normalized(name) === normalized(current.name))
     && ref.expectedModels.some((model) => normalized(model) === normalized(current.modelNumber ?? ''))
-    && !product.product.metadata.some((point) => point.suspicious);
+    && !product.product.metadata.some((point) => point.suspicious)
+    && (!ref.offer || product.offers.some(o => o.externalOfferId === ref.offer!.id && o.sku === ref.offer!.sku));
 }
 
-export function primaryQuote(product: ProductFileV1): { offer: OfferV1; segment: SegmentV1 } | null {
-  const offer = currentOffer(product);
+export function primaryQuote(product: ProductFileV1, ref?: RelationProduct): { offer: OfferV1; segment: SegmentV1 } | null {
+  const offer = ref?.offer ? product.offers.find(o => o.externalOfferId === ref.offer!.id && o.sku === ref.offer!.sku) : currentOffer(product);
   const segment = offer?.segments.find((s) => s.primary) ?? offer?.segments[0];
   return offer && segment ? { offer, segment } : null;
 }
