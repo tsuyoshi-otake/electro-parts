@@ -7,9 +7,9 @@
 - 静的 JSON(契約 v1)として GitHub Pages に公開し、
 - **Electronics Price History** が商品ページにパネルを差し込みます。Tampermonkey ユーザースクリプトと Chrome 拡張の 2 つの形があり、中身は同じバンドルです([ADR-0019](docs/adr/0019-chrome-extension-second-host.md))。
 
-対象は **秋月電子通商**(`akizuki`、一覧ページの HTML)と **スイッチサイエンス**(`switch-science`、Shopify のカタログ JSON → [ADR-0014](docs/adr/0014-shopify-catalog-api-over-html.md))の 2 店舗です。aitendo は設計上の拡張点だけを用意し、実装していません([docs/roadmap/roadmap.md](docs/roadmap/roadmap.md))。
+対象は **秋月電子通商**(`akizuki`、一覧HTML)、**スイッチサイエンス**(`switch-science`、Shopifyカタログ)、**M5Stack公式ショップ**(`m5stack`、Shopifyカタログ)の3店舗です。M5Stackの収集・USD・バリエーションの扱いは [対応仕様](docs/roadmap/m5stack-support.md) を参照してください。aitendoは未実装です。
 
-> データについて: 表示される値はこのプロジェクトが観測した時点の店頭表示の記録で、店舗の公式データではありません。観測間隔(秋月電子通商は約 1 か月、スイッチサイエンスは約 1 週間)の間の変化は記録されません。詳しくは [データの注意点](#データの注意点) を読んでください。
+> データについて: 表示される値はこのプロジェクトが観測した時点の店頭表示の記録で、店舗の公式データではありません。3店舗とも2日ごとの観測設定で、観測間の変化は記録されません。M5StackはUSDのまま表示し、税・送料・関税込みの支払額や円換算価格を表しません。詳しくは [データの注意点](#データの注意点) を読んでください。
 
 ## 目次
 

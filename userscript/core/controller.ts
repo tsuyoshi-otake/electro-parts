@@ -127,6 +127,11 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
     cleanup = () => ctx.cleanup?.();
     let current: LoadState = { kind: 'loading' };
     let selected: number | null = null;
+    ctx.onSelectOffer = (id) => {
+      ctx.selectedOfferId = id;
+      selected = null;
+      render();
+    };
     const render = () => {
       if (destroyed) return;
       try {

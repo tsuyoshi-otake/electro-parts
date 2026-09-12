@@ -53,7 +53,7 @@ jobs:
           set -euo pipefail
           # Store knowledge lives in adapters/collectors only. Comments are allowed
           # (they document the shape of the opaque id); code is not.
-          hits=$(grep -rniE 'akizuki|aitendo|switch[-_ ]?science|akizukidenshi' src/core src/db src/publisher src/pipeline userscript/core userscript/ui \
+          hits=$(grep -rniE 'akizuki|aitendo|switch[-_ ]?science|akizukidenshi|m5stack' src/core src/db src/publisher src/pipeline userscript/core userscript/ui \
             | grep -vE ':[0-9]+:\s*(//|\*|/\*)' || true)
           if [ -n "$hits" ]; then
             echo "$hits"

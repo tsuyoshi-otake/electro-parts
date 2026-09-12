@@ -64,7 +64,7 @@ env:
   # Every store the site publishes, in run order. Adding one means adding
   # `config/<store>.json`, a collector, an adapter, and the upload step that
   # names its snapshot artifact.
-  STORES: akizuki switch-science
+  STORES: akizuki switch-science m5stack
   # Daily wake-up; observation-schedule.ts gates alternate days.
   EVERY_TWO_DAYS_CRON: '0 20 * * *'
   NODE_OPTIONS: --max-old-space-size=2048
@@ -323,6 +323,15 @@ jobs:
         with:
           name: snapshot-switch-science-${{ github.run_id }}
           path: snapshots/switch-science-*
+          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
+          if-no-files-found: ignore
+
+      - name: Upload raw snapshot (m5stack)
+        if: always() && hashFiles('snapshots/m5stack-*') != ''
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: snapshot-m5stack-${{ github.run_id }}
+          path: snapshots/m5stack-*
           retention-days: ${{ inputs.snapshot_retention_days || 90 }}
           if-no-files-found: ignore
 

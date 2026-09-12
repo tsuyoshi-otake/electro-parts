@@ -1,0 +1,17 @@
+{
+  "storeId": "m5stack",
+  "collector": {
+    "userAgent": "electro-parts-price-history/0.4.4 (+https://github.com/tsuyoshi-otake/electro-parts; research)",
+    "pageLimit": 250, "maxPages": 40, "maxSubSitemaps": 16,
+    "minIntervalMs": 1500, "jitterMs": 750, "maxAttempts": 4,
+    "timeoutMs": 30000, "maxRequests": 100
+  },
+  "sanity": {
+    "maxItemCountDropRatio": 0.1, "maxMissingProductRatio": 0.1,
+    "maxPriceChangeRatio": 0.3, "maxUnavailablePriceRatio": 0.02
+  },
+  "observation": { "cadence": "every_two_days" },
+  "inventory": { "retentionDays": 400, "pointLimit": 730 },
+  "paths": { "snapshots": "snapshots", "work": "state/work", "site": "site", "reports": "reports" },
+  "previousStateUrl": "https://tsuyoshi-otake.github.io/electro-parts/state"
+}

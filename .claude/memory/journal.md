@@ -316,3 +316,19 @@
 - Legacy 0.4.2 validators reject new caveat keys. Before publication, changed the two-day cadence to contract 1.1's optional observation.samplingIntervalDays; new clients derive the label, old clients ignore the optional field. Verified with the actual validator from commit 0d63bb1 and both published manifests; the new-key counterexample fails as expected.
 - Final local verification after the compatibility fix: 447 tests passed, root typecheck passed, npm audit reported zero vulnerabilities. Store listing and public page now describe the two-day interval; privacy/listing includes saved theme preferences.
 - Browser submission endpoint was rejected by the available Computer Use channel with code -32000 Not allowed. No store submission or account switch has occurred.
+
+- 2026-09-10: 申請ZIP 0.4.3をローカルPlaywright Chromiumへ展開・読み込み、実ページ（秋月118114 / SS9000）と公開データでMV3版確認、表示、ライト初期値、テーマ再読込保存、系列切替、時刻軸を確認。SSのProductDetails._updatePriceのinnerHTML例外は拡張なしでも同じ店舗CDN empire.jsから再現した。ページ例外は拡張の有無で切り分けて帰属する。検証終了後の該当node/chrome残存0件。証跡は ~/tmp/electro-local043/verification.md。
+
+## 2026-09-12 - Eleshop feasibility research
+
+- 全13サイトマップ中の商品URLは489,531件（重複除外）。商品10ファイルを保存データで再検査するとXML要素はurlset/url/locのみ、lastmodは0件。サイトマップの更新日を価格・在庫の更新時刻とみなせない。全商品ページ取得は未実施。
+- 公開API・CSV・フィードの案内は今回の公開調査では確認できず。不存在とは断定しない。ユーザーは一括提供元の調査を優先。調査結果と未送信の問い合わせ文案をdocs/roadmap/eleshop-*.mdに保存。
+
+- 同日、ユーザーが対象をM5Stack公式ショップへ変更。公開products.json全3ページで664商品706variants、サイトマップと全件一致。Unicode handle（✖）とサイトマップのパーセントエンコードを正規化しないと偽の欠落1件が生じる。USDを確認。SSの円パーサー・ASCII限定handle検証を無条件に再利用しない。詳細はdocs/roadmap/m5stack-feasibility.md。店舗実装は未着手。
+
+## 2026-09-12 - M5Stack implementation and local ZIP verification (#21)
+
+- 全664商品706variantの収集・正規化・公開形式生成とUSD表示を実装。サイトマップ照合5リクエストにホームページでの通貨確認1件を加え、実収集6件・再試行0・欠落0。USDは整数セント、税unknown、数量not_exposed。
+- **M5Stackの履歴は`.product-wrapper`の外へ挿入する。** 実ページのscroll handlerがwrapperの高さで`.product-info.fixed`を切り替えるため、appendすると購入欄が履歴に重なる。保存HTMLだけでは検知できず、ZIPの実ページスクリーンショットで発見。afterへ変更し、実ブラウザーでfixed解除と画像を確認した。
+- **新店舗の追加は既存stateへincremental importする。** 新店舗の履歴が空でも、共有stateがある環境の`--bootstrap`は拒否される。ローカル出力でも公開stateを読む設定なら同じ。既存履歴を捨てる設定変更で回避しない。
+- 通常456テスト、Playwright12テストと修正箇所の追加再検証、3プロジェクト型検査、監査0件。実ZIP0.4.4、3店舗の実ページ13チェック成功、プロセス残存0。公開前M5Stackのみローカル実データ、既存店は公開データ。詳細・SHA256・証跡は`.codex/goal-loop/m5stack/journal.md`。この時点ではWeb Store未申請。

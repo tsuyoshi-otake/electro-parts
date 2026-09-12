@@ -23,7 +23,7 @@ export function userscriptHeader(baseUrl: string): string {
     ['@name', 'Electronics Price History'],
     ['@namespace', 'https://github.com/tsuyoshi-otake/electro-parts'],
     ['@version', USERSCRIPT_VERSION],
-    ['@description', 'Shows the observed price, stock and listing history on Akizuki Denshi and Switch Science product pages.'],
+    ['@description', 'Shows observed price, stock and listing history on Akizuki Denshi, Switch Science and M5Stack product pages.'],
     ['@author', 'tsuyoshi-otake'],
     ['@license', 'MIT'],
     ...PAGE_ADAPTERS.flatMap((a) => a.matchPatterns.map((p) => ['@match', p])),

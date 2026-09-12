@@ -17,7 +17,7 @@
     Chrome 拡張または Tampermonkey 用ユーザースクリプトを入れると、対応サイトの商品ページに履歴パネルが表示されます。</p>
   <h2>インストール</h2>
   <p>どちらか一方で足ります。表示されるパネルも取得するデータも同じで、同じソースからビルドしています。
-    対応サイト(秋月電子通商・スイッチサイエンス)の商品ページを開くと、購入エリアの下に「Electronics Price History」パネルが出ます。</p>
+    対応サイト(秋月電子通商・スイッチサイエンス・M5Stack公式ショップ)の商品ページを開くと、購入エリアの下に「Electronics Price History」パネルが出ます。</p>
   <h3>Chrome 拡張</h3>
   <ol>
     <li><a href="electronics-price-history-extension.zip">electronics-price-history-extension.zip</a> を落として展開する。</li>
@@ -42,12 +42,13 @@
   <ul>
     <li>マニフェスト: <a href="data/v1/stores/akizuki/manifest.json"><code>data/v1/stores/akizuki/manifest.json</code></a></li>
     <li>マニフェスト: <a href="data/v1/stores/switch-science/manifest.json"><code>data/v1/stores/switch-science/manifest.json</code></a></li>
+    <li>マニフェスト: <a href="data/v1/stores/m5stack/manifest.json"><code>data/v1/stores/m5stack/manifest.json</code></a></li>
     <li>商品ごと: <code>data/v1/stores/akizuki/products/&lt;pageKey&gt;.json</code></li>
     <li>最終化済み履歴 DB(SQLite、次回クロールの入力): <a href="state/state.json"><code>state/state.json</code></a></li>
   </ul>
   <div class="note">
     <p><strong>データについて</strong>: 表示される値は、このプロジェクトが観測した時点の店頭表示の記録であり、店舗の公式データではありません。
-      両店舗とも約2日に1回の観測で、観測の間に起きた変化は記録されません。価格は記録した販売単位・条件によるもので、在庫数は店舗が表示した数値そのものです。
+      3店舗とも約2日に1回の観測で、観測の間に起きた変化は記録されません。価格は記録した販売単位・条件によるもので、在庫数は店舗が表示した数値そのものです。M5StackはUSDのまま表示し、税区分は不明です。送料・関税込み総額や円換算を表しません。
       ユーザースクリプトも Chrome 拡張も Cookie を使わず、閲覧履歴を送信しません。データ取得先は GitHub Pages のこのサイトだけです(<a href="privacy.html">プライバシーポリシー</a>)。</p>
   </div>
   <p>ソースコード・仕様・ロードマップ: <a href="https://github.com/tsuyoshi-otake/electro-parts">github.com/tsuyoshi-otake/electro-parts</a></p>
