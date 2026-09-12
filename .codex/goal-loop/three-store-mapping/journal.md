@@ -17,3 +17,13 @@
 - ZIP: 200,267 bytes; SHA-256 a4031db4653e5ca87914406789478f97c7c86725ffb95391a5ee5cb6286f758a. Scripts, result JSON and viewed images: C:/Users/developer/tmp/electro-local045/. Owned node/chrome processes enumerated after completion: 0 survivors.
 - README, Pages source and Web Store description source updated. Dashboard was not modified or submitted; available gallery automation is blocked. CI, merge and republish verification remain before terminal pass.
 - Verification performed directly by the implementing agent; no independent agent review requested or used.
+
+## 2026-09-12 / iteration 3: public release evidence
+
+- PR #24 merged as 1e7bd6d after CI 34685200131 passed. Republish-only workflow 34685308595 succeeded; no crawl, import or bootstrap was requested.
+- C5 pass: served ZIP is byte-identical to the locally loaded 200,267-byte ZIP above. Served userscript is byte-identical to the local 1,700,070-byte build and advertises 0.4.5. Served Pages text contains 0.4.5 / 943 relations / 810 verified identities. Evidence: C:/Users/developer/tmp/electro-mapping3/after.json.
+- Initial publication check incorrectly expected identical physical SQLite hashes after VACUUM INTO. Investigated before relaxing the check: recovered the exact previous state artifact from run 34683471118 and verified its hash against the pre-deploy state. New/old files differ only at byte offset 43 (schema cookie); all 14 tables and 291,156 sorted rows have identical hashes, schemas match and integrity checks pass. No implementation change required. Evidence: state-comparison.json and compare-state.mjs in the same temporary directory.
+- All store manifests match apart from generatedAt. Dataset versions remain akizuki 4fb9736320fdcbe3, switch-science c62e8a7c84c1b95e, m5stack 0f055c6b255ffe1e. Observation counts remain 3 / 2 / 1 and dates unchanged. State size remains 18,210,816 bytes.
+- Web Store description is prepared at C:/Users/developer/tmp/electro-local045/description-ja.txt. Dashboard transfer/upload/submission is not complete; the available browser gallery automation is blocked. This is separate from the published mapping release.
+- C4 pass: main CI 34685302052 succeeded. 460 tests / 40 files, 12 Playwright E2E, all typechecks and matching:check, audit 0 vulnerabilities. Core mutation score 89.60%, above the configured threshold 70. Final local owned-runner/browser process inventory is empty.
+- Terminal state: **pass**, 3 iterations. C1–C5 passed with the evidence above. Mapping implementation, PR merge and Pages release are complete. Web Store dashboard submission is explicitly outside this completed publication state. The final evidence-only documentation commit does not change tested or published code.
