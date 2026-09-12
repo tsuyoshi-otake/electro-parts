@@ -250,7 +250,7 @@ npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.
 - 公開は `pages-publish` の concurrency グループで**単一ライター**。実行中の公開はキャンセルされず、後続はキューに入ります。
 - 店舗は 1 つの job の中で**直列**に回ります。共有するのは 1 つの SQLite と 1 つの `state/` なので、並行にすると後から最終化したほうが他方の run を捨てます。ワークフローは 1 店舗目のあと `--previous-dir site/state` を足して連結します。
 - **1 店舗が失敗しても、走った店舗の公開は止めません。** ただしデプロイはサイト全体の差し替えなので、失敗した店舗をそのままにすると公開データが消えます。そこで、履歴に run がある(`state.json` の `stores.<id>.runCount > 0`)のにサイトにマニフェストが無い店舗を `--republish` で作り直し、それでも欠けていればゲートがデプロイを**拒否**します(fail-closed)。ジョブ自体は失敗した店舗があれば最後に失敗します。
-- **どの店舗を観測するかは cron には書いてありません。** 毎朝05:00 JSTに起動し、2026-09-11を基準に隔日のみ収集します。各 `config/<store>.json` の `observation.cadence` が `every_two_days` の店舗が対象です。現在は両店舗とも隔日です。収集日の対象外店舗は `--republish` で維持し、中間日はクロールも公開も行いません。手動実行は隔日判定を通過します。
+- **どの店舗を観測するかは cron には書いてありません。** 毎朝05:00 JSTに起動し、2026-09-11を基準に隔日のみ収集します。各 `config/<store>.json` の `observation.cadence` が `every_two_days` の店舗が対象です。現在は3店舗とも隔日です。収集日の対象外店舗は `--republish` で維持し、中間日はクロールも公開も行いません。手動実行は隔日判定を通過します。
 - Pages への反映は 1 つのアーティファクト(データ + 状態 + ユーザースクリプト + 拡張 zip)で行うので、読者が中途半端なデータセットを見ることはありません(原子的公開)。
 - SQLite は git にコミットしません。最終化した DB は Pages の `state/` に公開し、次回の入力になります。バックアップは Actions の成果物(90 日)。ロールバックは「該当 run の `state-<run id>` 成果物を `--previous-dir` で読み直して公開する」手順([docs/runbook.md](docs/runbook.md))。
 - 権限は最小(`contents: read`、デプロイジョブだけ `pages: write` + `id-token: write`)。アクションはコミット SHA でピン留め。シークレットは使いません。
