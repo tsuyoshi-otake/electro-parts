@@ -125,6 +125,16 @@ test('generated Pico family shows concrete differences and retains the native pr
   await page.keyboard.press('Enter');
   await expect(panel(page).locator('.related-card').first()).toBeVisible();
   await expect(summary).toBeFocused();
+  const chart = panel(page).locator('svg.eph-chart');
+  await chart.scrollIntoViewIfNeeded();
+  const expectReadableAxis = async () => {
+    await expect.poll(() => chart.evaluate(svg => {
+      const el = svg as SVGSVGElement;
+      return el.getBoundingClientRect().width / el.viewBox.baseVal.width;
+    })).toBeGreaterThan(0.95);
+  };
+  await expectReadableAxis();
+  const settledRequests = requests.length;
   await panel(page).screenshot({path: 'test-results/e2e/pico-family-mobile.png'});
   const overflow = await panel(page).evaluate(el => {const section=el.shadowRoot!.querySelector('section')!; return section.scrollWidth-section.clientWidth;});
   expect(overflow).toBeLessThanOrEqual(1);
@@ -138,6 +148,15 @@ test('generated Pico family shows concrete differences and retains the native pr
   })).toBeGreaterThan(340);
   const embeddedOverflow = await panel(page).evaluate(el => {const section=el.shadowRoot!.querySelector('section')!; return section.scrollWidth-section.clientWidth;});
   expect(embeddedOverflow).toBeLessThanOrEqual(1);
+  await expectReadableAxis();
+  await expect(chart).toHaveAttribute('viewBox', / 220$/);
+  // Resizing redraws locally and theme rerenders retain cleanup ownership.
+  await panel(page).evaluate(el => { (el as HTMLElement).style.width = '800px'; });
+  await expect(chart).toHaveAttribute('viewBox', / 280$/);
+  await panel(page).evaluate(el => { (el as HTMLElement).style.width = '390px'; });
+  await expectReadableAxis();
+  await expect(chart).toHaveAttribute('viewBox', / 220$/);
+  expect(requests.length).toBe(settledRequests);
   await panel(page).screenshot({path: 'test-results/e2e/pico-family-narrow-container.png'});
 });
 

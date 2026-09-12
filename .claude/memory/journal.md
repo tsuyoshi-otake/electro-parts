@@ -339,3 +339,7 @@
 - **生成テーブルの端点キーにoffer IDを含める。** 商品ページだけをキーにすると同じページの10cm/20cm LEDテープが上書きされる。対象SKUと一致するofferをレビューで固定し、消失・変更時は別variantへフォールバックしない。generator/relations/UIテストと公式実ページの切替で確認。
 - フィンガープリントはJSONのキー順も含む。完全スナップショットの再importと正本がバイト一致することを検査し、vendorの配置を一致させた。指紋の一括再承認はしていない。
 - 配布ZIP0.4.5をローカルPlaywrightに展開・読み込み、3店舗実ページと公開データで他2店の記録価格・日時、テーマ保存、円系列、variantリンクを確認。画像を閲覧しプロセス残存0。実行ID・SHA256は`.codex/goal-loop/three-store-mapping/journal.md`。
+
+## 2026-09-12: Single-store chart readability (#25)
+Live ZIP verification found fixed SVG scaling reduced 11px labels to 4.69px at a 390px viewport. Container-sized rendering plus ResizeObserver restores 11px without more network requests. Verified initial narrow and resize paths, 460 tests and 12 E2E tests; details: docs/verification/2026-09-12-display.md.
+

@@ -17,7 +17,7 @@ import { RELATED_CSS, renderRelatedGroups, renderStorePrices } from './related.t
 
 export const PANEL_TITLE = 'Electronics Price History';
 
-/** Chart viewBox. The SVG scales to its column, so this only fixes the aspect ratio. */
+/** Maximum chart dimensions; narrow columns keep a readable viewBox. */
 const CHART_SIZE = { width: 760, height: 280 };
 
 export interface PanelContext {
@@ -151,8 +151,8 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
     start: Math.max(start, segment.stats.segmentStartAt), end: product.product.lastSeenAt }, ...others];
   const draw = () => {
     if (box.childNodes.length > 0) return;
+    const chartWidth = () => Math.max(280, Math.min(CHART_SIZE.width, box.clientWidth || CHART_SIZE.width));
     if (others.length) {
-      const chartWidth = () => Math.max(280, Math.min(CHART_SIZE.width, box.clientWidth || CHART_SIZE.width));
       let width = chartWidth();
       const makeSvg = () => buildComparisonChart(doc, series, { width, height: width < 450 ? 220 : CHART_SIZE.height, currency: segment.basis.currency });
       let svg = makeSvg();
@@ -187,15 +187,25 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
       }
       return;
     }
-    box.appendChild(
-      buildStepChart(doc, segment.points, segment.presence, {
-        ...CHART_SIZE,
-        start,
-        end,
-        currency: segment.basis.currency,
-        label: basisLabel(segment.basis),
-      }),
-    );
+    let width = chartWidth();
+    const makeSvg = () => buildStepChart(doc, segment.points, segment.presence, {
+      width, height: width < 450 ? 220 : CHART_SIZE.height,
+      start,
+      end,
+      currency: segment.basis.currency,
+      label: basisLabel(segment.basis),
+    });
+    let svg = makeSvg();
+    box.appendChild(svg);
+    if (doc.defaultView && typeof doc.defaultView.ResizeObserver === 'function') {
+      const resize = new doc.defaultView.ResizeObserver(() => {
+        const nextWidth = chartWidth(); if (nextWidth === width) return; width = nextWidth;
+        const next = makeSvg(); svg.replaceWith(next); svg = next;
+      });
+      resize.observe(box);
+      const previousCleanup = ctx.cleanup;
+      ctx.cleanup = () => { previousCleanup?.(); resize.disconnect(); };
+    }
   };
   const view = doc.defaultView;
   if (ctx.lazyChart && view !== null && typeof view.IntersectionObserver === 'function') {
