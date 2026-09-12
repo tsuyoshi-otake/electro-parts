@@ -19,6 +19,12 @@ async function setup(page: Page, source: 0 | 1, failure = false, selected = rela
     const p = sampleProduct({ storeId: ref.storeId, pageKey: ref.pageKey, externalProductId: ref.pageKey });
     p.product.current = { ...p.product.current, name: ref.name, modelNumber: ref.expectedModels.at(-1)!, canonicalUrl: ref.url };
     p.product.metadata = [{ ...p.product.current, t: p.product.firstSeenAt, suspicious: false }];
+    if (ref.offer) {
+      p.offers[0]!.externalOfferId = ref.offer.id; p.offers[0]!.sku = ref.offer.sku;
+      const s = p.offers[0]!.segments[0]!;
+      s.basis.currency = 'USD'; s.basis.taxTreatment = 'unknown';
+      s.stats.current = { state: 'exact', minAmountMinor: 750, maxAmountMinor: 750 };
+    }
     if (i !== -1 && selected.pricePolicy) {
       p.offers[0]!.externalOfferId = selected.pricePolicy.offerIds[i]!;
       p.offers[0]!.segments[0]!.basis.unitLabel = selected.pricePolicy.units[i]![0]!;
@@ -81,14 +87,16 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(checkbox).not.toBeChecked();
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
   await expect(checkbox).toBeFocused();
-  expect(requests).toHaveLength(6);
+  await expect(panel(page).locator('.store-price')).toHaveCount(2);
+  await expect(panel(page)).toContainText('$7.50');
+  expect(requests).toHaveLength(8);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(panel(page).locator('.eph-comparison-chart')).toHaveAttribute('viewBox', /^0 0 3\d{2} 220$/);
   await expect(checkbox).not.toBeChecked();
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
   await checkbox.check();
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeVisible();
-  expect(requests).toHaveLength(6);
+  expect(requests).toHaveLength(8);
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-mobile.png' });
   const overflow = await panel(page).evaluate((el) => {
     const section = el.shadowRoot!.querySelector('section')!;
@@ -138,7 +146,8 @@ test('other-store 429 keeps the own history and product link without arithmetic 
   await expect(panel(page)).toContainText('他店データを取得できませんでした');
   await expect(panel(page)).toContainText('￥1,200');
   await expect(panel(page)).not.toContainText('記録価格差');
-  await expect(panel(page).locator('.store-price a')).toHaveAttribute('href', relation.products[1].url);
+  await expect(panel(page).locator(`[data-focus-key="product-${relation.id}"]`)).toHaveAttribute('href', relation.products[1].url);
   await panel(page).getByRole('button', { name: 'ダーク', exact: true }).click();
-  expect(requests).toHaveLength(3);
+  await expect(panel(page)).not.toContainText('読み込み中');
+  expect(requests).toHaveLength(4);
 });

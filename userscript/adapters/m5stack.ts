@@ -8,6 +8,10 @@ function handle(path:string):string|null {
 export const m5stackPageAdapter:StorePageAdapter={
   storeId:'m5stack',matchPatterns:['https://shop.m5stack.com/products/*','https://shop.m5stack.com/collections/*/products/*'],
   matches:location=>location.hostname==='shop.m5stack.com'&&PATH.test(location.pathname),
+  initialOfferId(location) {
+    const variant = new URLSearchParams(location.search ?? '').get('variant');
+    return variant && /^[1-9]\d*$/.test(variant) ? variant : undefined;
+  },
   extractPageKey(doc,location) {
     if(location.hostname!=='shop.m5stack.com') return null;
     const fromPath=handle(location.pathname);

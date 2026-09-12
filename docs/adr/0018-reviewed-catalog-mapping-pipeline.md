@@ -44,5 +44,9 @@
 3. Verify: `npm run matching:discover`。Expect: 全候補を再生成し、レビューと実行時表は変えない。メーカー別母数・未照合範囲を調べ、数行の表示を全候補と扱わない。
 4. 根拠を再確認して `reviews.json` / `families.json` を編集する。フィンガープリントを一括で追認しない。`legacy.json` も原判定・モデル情報を保持して明示的に再評価する。販売条件を別途確認できなければ価格承認は加えない。
 5. Verify: `npm run matching:build`、`npm run matching:check`、`node node_modules/vitest/vitest.mjs run --maxWorkers 2`、`npm run typecheck`、`npm run build:userscript`、`npm audit`。Expect: 全成功、欠落・重複・数字衝突・変更された根拠・周辺部品・負荷上限の回帰テスト成功。テストプロセスが終了したことも確認する。他リポジトリのテストは終了しない。
-6. Verify: CIの保存ページE2EとChromeでのUI確認。Expect: 両方向の差分、ライト/ダーク、キーボード開閉、狭いviewportと広いviewport内の狭い欄で横溢れなし。ローカルで独立headlessを起動しない。
-7. バンドル更新時は版を上げてCI成功後 `gh workflow run crawl-publish.yml -f republish=true`。Verify: 公開バンドルと検証済みローカルビルドの版・バイト列、および公開前後の両店manifest/state。Expect: 新版一致、観測回数・データ版は不変。再クロールやbootstrapで履歴を作り直さない。
+6. Verify: CIの保存ページE2Eと、AGENTS.mdの申請前確認に従った配布ZIPのローカルPlaywright確認。Expect: 実ページで両方向の差分、ライト/ダーク、系列・バリエーション切替が動作し、画像を確認済み。起動時間を制限し、終了後の対象プロセス残存0件を確認する。
+7. バンドル更新時は版を上げてCI成功後 `gh workflow run crawl-publish.yml -f republish=true`。Verify: 公開バンドルと検証済みローカルビルドの版・バイト列、および公開前後の全店舗manifest/state。Expect: 新版一致、観測回数・データ版は不変。再クロールやbootstrapで履歴を作り直さない。
+
+## 0.4.5: 3店舗と対象バリエーションへの拡張
+
+M5Stack公式の完全スナップショットを既存の小売資料へ追記し、全店舗ペアを検索する。既存資料の自動更新は行わない。対象offer IDとSKUをレビューに記録し、同じページの異なる構成を生成時・表示時とも区別する。型番候補と異なるSKUを指定したレビューも拒否する。件数、要確認範囲、資料日付、更新手順は[3店舗の照合範囲](../roadmap/three-store-mapping.md)を参照。

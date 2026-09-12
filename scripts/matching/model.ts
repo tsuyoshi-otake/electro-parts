@@ -5,6 +5,8 @@ export interface Listing {
   storeId: string; pageKey: string; name: string; modelNumber: string; url: string;
   manufacturer: string; manufacturerProductName: string; manufacturerProductCode: string; productCode: string; sku: string; codes: string[];
   expectedModels: string[]; observedAt: string;
+  variants?: { offerId: string; sku: string; name: string }[];
+  vendor?: string;
 }
 export interface Catalog {
   schemaVersion: 1;
@@ -15,6 +17,9 @@ export interface Candidate { id: string; products: [Listing, Listing]; codes: st
 export interface Review {
   id: string; fingerprint: string; decision: 'same_product' | 'unresolved' | 'rejected';
   evidence: string; differences: string[]; missingEvidence: string[]; reviewedAt: string;
+  offerIds?: [string | null, string | null];
+  reviewerModel?: string;
+  detailEvidence?: { url: string; sourceFile: string; sha256: string; finding: string };
 }
 export interface Family {
   id: string; label: string; purpose: string; reviewedAt: string;
@@ -26,7 +31,8 @@ export const normalizeCode = (value: string): string => value.normalize('NFKC').
 export const listingKey = (p: Pick<Listing, 'storeId' | 'pageKey'>): string => `${p.storeId}/${p.pageKey}`;
 export const hash = (value: string): string => createHash('sha256').update(value).digest('hex');
 export const fingerprint = (p: Listing): string => hash(JSON.stringify(p));
-export const pairId = (a: Listing, b: Listing): string => `a${a.pageKey}-s${b.pageKey}`;
+export const pairId = (a: Listing, b: Listing): string => a.storeId === 'akizuki' && b.storeId === 'switch-science'
+  ? `a${a.pageKey}-s${b.pageKey}` : JSON.stringify([a.storeId, a.pageKey, b.storeId, b.pageKey]);
 export const usefulCode = (code: string): boolean => code.length >= 4 && /\d/.test(code);
 
 /** O(N + K) lookup plus O(R log R) output ordering. Never an N x M cross join. */
@@ -53,9 +59,9 @@ export function discover(left: readonly Listing[], right: readonly Listing[]): C
 }
 
 export function assertCatalog(catalog: Catalog): void {
-  if (catalog.schemaVersion !== 1 || catalog.sources.length !== 2) throw new Error('unsupported mapping catalogue');
+  if (catalog.schemaVersion !== 1 || catalog.sources.length < 2) throw new Error('unsupported mapping catalogue');
   const sourceIds = new Set(catalog.sources.map(source => source.storeId));
-  if (sourceIds.size !== 2 || catalog.sources.some(source => !source.storeId || !source.file || !/^[a-f0-9]{64}$/.test(source.sha256)
+  if (sourceIds.size !== catalog.sources.length || catalog.sources.some(source => !source.storeId || !source.file || !/^[a-f0-9]{64}$/.test(source.sha256)
     || !Number.isFinite(Date.parse(source.observedAt)) || !Number.isSafeInteger(source.count) || source.count < 1)) throw new Error('invalid/duplicate source');
   const seen = new Set<string>();
   for (const p of catalog.listings) {
@@ -63,8 +69,22 @@ export function assertCatalog(catalog: Catalog): void {
     if (!sourceIds.has(p.storeId)) throw new Error(`unknown source ${key}`);
     if (seen.has(key) || !p.name || !p.pageKey || !Number.isFinite(Date.parse(p.observedAt))) throw new Error(`invalid/duplicate listing ${key}`);
     seen.add(key);
+    if (p.variants && (!p.variants.length || new Set(p.variants.map(v => v.offerId)).size !== p.variants.length
+      || p.variants.some(v => !v.offerId || !v.name))) throw new Error(`invalid variants ${key}`);
     const url = new URL(p.url);
     if (url.protocol !== 'https:' || url.username || url.password) throw new Error(`unsafe listing ${key}`);
   }
   for (const source of catalog.sources) if (catalog.listings.filter(p => p.storeId === source.storeId).length !== source.count) throw new Error(`incomplete source ${source.storeId}`);
+}
+
+/** Each store is indexed once. Earlier sources retain their historical pair orientation. */
+export function discoverCatalog(catalog: Catalog): Candidate[] {
+  const previous: Listing[] = [];
+  const result: Candidate[] = [];
+  for (const source of catalog.sources) {
+    const current = catalog.listings.filter(p => p.storeId === source.storeId);
+    result.push(...discover(previous, current));
+    previous.push(...current);
+  }
+  return result.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 }

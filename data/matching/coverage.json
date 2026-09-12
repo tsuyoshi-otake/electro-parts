@@ -13,16 +13,43 @@
       "sha256": "52604f8a347625dd051f6ac928a1129ed88d5147e9d5705f2cca1dd99477f997",
       "observedAt": "2026-08-02T07:25:56.929Z",
       "count": 10343
+    },
+    {
+      "storeId": "m5stack",
+      "file": "m5stack-2026-09-12T08-13-12-892Z.json.gz",
+      "sha256": "ebba3dec5edeea90e3fe83ad9d45eedada82dc80f161fa720397c09153d6d8d4",
+      "observedAt": "2026-09-12T08:13:12.892Z",
+      "count": 664
     }
   ],
-  "candidateCount": 309,
-  "reviewedCount": 309,
+  "candidateCount": 830,
+  "reviewedCount": 830,
+  "byStorePair": {
+    "akizuki/switch-science": {
+      "candidates": 309,
+      "verified": 293,
+      "unresolved": 6,
+      "pending": 0
+    },
+    "akizuki/m5stack": {
+      "candidates": 18,
+      "verified": 18,
+      "unresolved": 0,
+      "pending": 0
+    },
+    "switch-science/m5stack": {
+      "candidates": 503,
+      "verified": 499,
+      "unresolved": 2,
+      "pending": 0
+    }
+  },
   "pending": [],
   "legacyCount": 80,
-  "relations": 424,
-  "sameVerified": 293,
+  "relations": 943,
+  "sameVerified": 810,
   "similarVerified": 108,
-  "unresolved": 14,
+  "unresolved": 16,
   "pricePolicies": 2,
   "familyCounts": {
     "pico": 56,
@@ -40,6 +67,15 @@
     "poe-camera": 4
   },
   "byBrand": {
+    "(unknown)": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 8657,
+      "unmatchedListings": 8376
+    },
     "AB Circle Japan": {
       "candidates": 0,
       "accepted": 0,
@@ -446,13 +482,13 @@
       "unmatchedListings": 29
     },
     "M5Stack": {
-      "candidates": 18,
-      "accepted": 18,
-      "unresolved": 0,
-      "rejected": 0,
+      "candidates": 539,
+      "accepted": 535,
+      "unresolved": 2,
+      "rejected": 2,
       "pending": 0,
-      "sourceListings": 506,
-      "unmatchedListings": 488
+      "sourceListings": 1190,
+      "unmatchedListings": 190
     },
     "MAD Components": {
       "candidates": 0,
@@ -821,7 +857,7 @@
       "rejected": 0,
       "pending": 0,
       "sourceListings": 1,
-      "unmatchedListings": 1
+      "unmatchedListings": 0
     },
     "myactuator": {
       "candidates": 0,
@@ -1141,10 +1177,11 @@
   },
   "unmatchedByStore": {
     "akizuki": 8378,
-    "switch-science": 10037
+    "switch-science": 9554,
+    "m5stack": 182
   },
   "limitations": [
-    "Only the two pinned saved catalogues are searched; other stores and missing catalogue entries are not covered.",
+    "All pairs of the pinned saved catalogues are searched; later retailer additions and missing catalogue entries are not covered.",
     "Codes must contain a digit and have at least four characters. Numeric storefront SKUs are excluded; numeric manufacturer codes still require review for collisions.",
     "Unmatched does not mean unrelated. Aliases and descriptions not present in these sources need further review.",
     "Review is saved-catalogue identity review, not a live stock, compatibility or sales-condition assertion."

@@ -17,6 +17,19 @@ function setup() {
 }
 
 describe('cross-store comparison panel', () => {
+  it('filters related products by the displayed variant and restores them when switching back', () => {
+    const f = setup();
+    const first = f.current.offers[0]!;
+    const other = structuredClone(first); other.externalOfferId = 'different'; other.sku = 'OTHER';
+    f.current.offers.push(other);
+    f.relation.products[0].offer = { id: first.externalOfferId, sku: first.sku!, name: 'selected' };
+    f.draw(); expect(f.shadow.querySelector('.store-price')).not.toBeNull();
+    f.ctx.selectedOfferId = other.externalOfferId; f.draw();
+    expect(f.shadow.querySelector('.store-price')).toBeNull();
+    expect(f.ctx.related).toHaveLength(1);
+    f.ctx.selectedOfferId = first.externalOfferId; f.draw();
+    expect(f.shadow.querySelector('.store-price')).not.toBeNull();
+  });
   it('renders the present offer instead of an earlier retired offer', () => {
     const f = setup();
     const active = f.current.offers[0]!;

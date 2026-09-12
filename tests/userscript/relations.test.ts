@@ -26,6 +26,9 @@ describe('curated relation catalogue', () => {
         expect(Number.isFinite(Date.parse(p.observedAt))).toBe(true);
         const url = new URL(p.url); expect(url.protocol).toBe('https:');
         const adapter = PAGE_ADAPTERS.find((a) => a.storeId === p.storeId)!;
+        document.head.replaceChildren();
+        const canonical = document.createElement('link'); canonical.rel = 'canonical'; canonical.href = p.url;
+        document.head.appendChild(canonical);
         expect(adapter.matches(url)).toBe(true);
         expect(adapter.extractPageKey(document, url)).toBe(p.pageKey);
       }
@@ -58,6 +61,20 @@ describe('curated relation catalogue', () => {
 });
 
 describe('comparison eligibility', () => {
+  it('binds reference prices to reviewed variants and never falls back after removal or SKU drift', () => {
+    const f = comparisonFixture();
+    const first = f.other.offers[0]!;
+    const selected = structuredClone(first); selected.externalOfferId = 'selected'; selected.sku = 'REV2';
+    f.other.offers.push(selected);
+    f.entry.target.offer = { id: 'selected', sku: 'REV2', name: '20cm' };
+    expect(primaryQuote(f.other, f.entry.target)?.offer).toBe(selected);
+    expect(matchesRelationProduct(f.entry.target, f.other)).toBe(true);
+    selected.sku = 'REV3';
+    expect(primaryQuote(f.other, f.entry.target)).toBeNull();
+    expect(matchesRelationProduct(f.entry.target, f.other)).toBe(false);
+    f.other.offers.pop();
+    expect(primaryQuote(f.other, f.entry.target)).toBeNull();
+  });
   it('selects the currently present offer when a retired offer appears first', () => {
     const f = comparisonFixture();
     const active = f.current.offers[0]!;
