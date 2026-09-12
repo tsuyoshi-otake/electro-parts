@@ -1,6 +1,6 @@
 # electro-parts
 
-電子部品 EC の価格・在庫・掲載履歴を集めて GitHub Pages に静的公開し、Tampermonkey で商品ページに履歴を出すプロジェクト。Phase 1 は秋月電子通商のみ。
+電子部品 EC の価格・在庫・掲載履歴を集めて GitHub Pages に静的公開し、TampermonkeyとChrome拡張で商品ページに履歴を出すプロジェクト。対応店舗は秋月電子通商・スイッチサイエンス・M5Stack公式ショップ。
 
 - 全体像と実行方法: [README.md](README.md)
 - 設計判断: [docs/adr/](docs/adr/README.md)
@@ -12,8 +12,17 @@
 - 共通コア(`src/core`、`src/db`、`src/publisher`、`src/pipeline`、`userscript/core`、`userscript/ui`)に店舗名を書かない。店舗固有の知識は `src/adapters/<store>`、`src/collectors/<store>`、`userscript/adapters` に置く。CI が検査する。
 - ユーザースクリプトで `innerHTML` 等の HTML 文字列シンクと CDN を使わない。CI が検査する。
 - `.claude/memory/rules.md` を作業開始時に読む。学びは `journal.md` に追記する。
-- テストは `npm test`(vitest)、`npm run test:e2e`(Playwright、保存済みページ)、`npm run test:mutation`(Stryker、コアのみ)。ライブサイトへのアクセスはテストに含めない。
+- テストは `npm test`(vitest)、`npm run test:e2e`(Playwright、保存済みページ)、`npm run test:mutation`(Stryker、コアのみ)。ライブサイトへのアクセスは通常のテストスイートに含めず、下記の申請前確認として別途実施する。
 - 依存の追加は公開後 7 日以上経った版のみ。lockfile をコミットする。
+
+## Chrome Web Store 申請前のローカル確認
+
+- **申請前に、提出するZIPそのものを展開し、ローカルのPlaywrightで拡張機能として読み込んで確認する。** CIの保存済みページE2Eや、既存Chromeに入っている旧版の表示確認だけで申請準備完了としない。この確認にはローカルPlaywrightを使用する。
+- `chromium.launchPersistentContext` の `channel: 'chromium'` と専用の空プロファイルを使い、展開した拡張を読み込む。コンテンツスクリプトの直接注入で代用しない。service workerから `chrome.runtime.getManifest().version` を読み、提出版と一致することを確認する。
+- 各対応店舗の実商品ページを最低1ページずつ開き、実際の公開データで確認する。店舗ページ・データ通信をfixtureへ差し替えない。確認用アクセスはこの少数ページに限定し、クロールを行わない。
+- Verify: 価格・在庫・比較グラフを表示し、初期テーマ、テーマ変更後の再読込、店舗系列の切替、変更箇所を操作する。Expect: 記録価格と観測日時が表示され、取得エラーや読み込み中が残らず、初期ライト・保存テーマ優先・系列切替が機能する。初期値の確認には保存設定のないプロファイルを使う。
+- スクリーンショットを保存して実際に見て、表示崩れや欠落を確認する。ページ例外を検知したらスタックを記録し、必要なら拡張なしでも再現するか調べ、店舗側と拡張側の問題を切り分ける。
+- ブラウザーの実行時間に上限を設け、`finally` で閉じる。終了後に起動したプロファイル・スクリプトに対応するプロセスを列挙し、残存0件を確認する。検証手順・結果・画像を保存し、CI、ローカルChromium、通常Chrome、審査提出のどこまで完了したかを区別して報告する。
 
 ## 店舗横断の商品照合・比較候補
 

@@ -29,7 +29,7 @@ export const ICON_SIZES = [16, 32, 48, 128] as const;
 /** Listing name. The Web Store rejects names longer than 45 characters. */
 export const EXTENSION_NAME = 'Electronics Price History';
 /** Manifest description. The Web Store rejects descriptions longer than 132 characters. */
-export const EXTENSION_DESCRIPTION = '秋月電子通商とスイッチサイエンスの商品ページに、観測した価格・在庫・掲載状況の履歴を表示します。';
+export const EXTENSION_DESCRIPTION = '秋月電子通商・スイッチサイエンス・M5Stack公式ショップの商品ページに、観測した価格・在庫・掲載状況の履歴を表示します。';
 export const SOURCE_URL = 'https://github.com/tsuyoshi-otake/electro-parts';
 export const PRIVACY_POLICY_URL = `${DEFAULT_DATA_BASE_URL}/privacy.html`;
 

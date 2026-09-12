@@ -1,5 +1,6 @@
 import type { StorePageAdapter } from '../core/types.ts';
 import { akizukiPageAdapter } from './akizuki.ts';
+import { m5stackPageAdapter } from './m5stack.ts';
 import { switchSciencePageAdapter } from './switch-science.ts';
 
 /**
@@ -7,4 +8,4 @@ import { switchSciencePageAdapter } from './switch-science.ts';
  * `@match` header lines from this list, so a store is supported exactly
  * when its adapter is registered here.
  */
-export const PAGE_ADAPTERS: readonly StorePageAdapter[] = [akizukiPageAdapter, switchSciencePageAdapter];
+export const PAGE_ADAPTERS: readonly StorePageAdapter[] = [akizukiPageAdapter, switchSciencePageAdapter, m5stackPageAdapter];

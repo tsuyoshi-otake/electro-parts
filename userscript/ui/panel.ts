@@ -32,6 +32,8 @@ export interface PanelContext {
   related?: RelatedEntry[];
   hiddenSeries?: Set<string>;
   cleanup?: () => void;
+  selectedOfferId?: string;
+  onSelectOffer?: (id: string) => void;
 }
 
 export const PANEL_CSS = `
@@ -67,7 +69,7 @@ export const PANEL_CSS = `
 @media (pointer: coarse) { .theme-controls button { min-height: 44px; } }
 .spacer { flex: 1 1 auto; }
 .basis { font-size: 12px; color: var(--muted); }
-.eph select { font: inherit; font-size: 12px; padding: 2px 4px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
+.eph select { font: inherit; font-size: 12px; max-width: 100%; min-width: 0; padding: 2px 4px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
 
 .body { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(250px, 1fr); gap: 4px 26px; align-items: start; padding-top: 12px; }
 @media (max-width: 900px) { .body { grid-template-columns: 1fr; } }
@@ -402,7 +404,21 @@ function renderPanelContent(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   if (!product.product.listed) badge('最新の観測では未掲載', 'stale');
   head.appendChild(text(doc, 'span', '', 'spacer'));
 
-  const offer = currentOffer(product);
+  const offer = product.offers.find((item) => item.externalOfferId === ctx.selectedOfferId) ?? currentOffer(product);
+  if (product.offers.length > 1 && ctx.onSelectOffer) {
+    const select = doc.createElement('select');
+    select.setAttribute('aria-label', 'バリエーション');
+    select.dataset['focusKey'] = 'offer';
+    for (const item of product.offers) {
+      const option = doc.createElement('option');
+      option.value = item.externalOfferId;
+      option.textContent = [item.variantName, item.sku].filter(Boolean).join(' / ') || item.externalOfferId;
+      option.selected = item === offer;
+      select.appendChild(option);
+    }
+    select.addEventListener('change', () => ctx.onSelectOffer?.(select.value));
+    head.appendChild(select);
+  }
   const picked = offer === null ? null : pickSegment(offer, selectedSegment);
   const tail = doc.createElement('div');
   if (offer === null || picked === null) {
