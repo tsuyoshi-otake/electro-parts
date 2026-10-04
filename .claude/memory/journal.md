@@ -425,3 +425,8 @@ Symptom found after publishing: the public changelog in public/index.html had no
 Root cause: the 0.4.9 change touched only matching data, docs and the version; the changelog is a separate place every release must update, and neither the rubric nor any test checks it.
 Fix: added the 0.4.9 entry after the release (needs a commit and another republish).
 Learning: a release rubric must include the public changelog heading for the new version (`grep -n "<h2>X.Y.Z" public/index.html`), even for data-only releases.
+
+## 2026-10-04: 0.4.9 changelog republish and cleanup (#30)
+
+59eb7fd added the 0.4.9 changelog entry; republish run 37182692401 succeeded. Pages now shows the 0.4.9 heading; the ZIP SHA256 is still 395a2f12…57990937f, the userscript 0.4.9, and the three store manifests are unchanged (datasetVersion, productCount, runCount). The user submitted the verified ZIP to CWS and it is under review. Deleted: `~/tmp/electro-049` (snapshots, live-check script, evidence, ZIP copies), the session scratchpad files, repo `test-results/`, and the empty E2E temp dirs `~/tmp/electro-early-theme`, `electro-m5stack-tests`, `electro-page-theme-scope`. No runner or browser processes remain. Left untouched (older, not from this task): repo `reports/` (2026-09-07) and `.claude/worktrees/ec-price-history-tracker-p1-d862f6` (2026-09-06, not a registered worktree).
+Learning: `rm -rf` on temp paths is blocked by this machine's permission rules, but `[IO.Directory]::Delete($p, $true)` via `pwsh -NoProfile` works, as CLAUDE.md prescribes.
