@@ -375,3 +375,11 @@ Learning: the shadow host's innerText is empty, so read the shadow `<section>`; 
 ## 2026-10-04: Commit of #27 and #28
 
 The 0.4.7 page-theme work (#27) and the 0.4.8 yen reference (#28) were committed together as 02ed630 on `codex/page-theme-and-price-layout`, because shared files (version, panel, controller, README, privacy, listing, package files) carry hunks of both. Not pushed. Not done: push/PR, normal Chrome reload, Pages deploy, CWS submission of 0.4.8 (verified ZIP: `C:/Users/developer/tmp/electro-fx048/fx048.zip`, SHA256 f57053ec…c2f680).
+
+## 2026-10-04: PR #29 CI audit failure (#27, #28)
+
+Symptom: PR #29 first showed CONFLICTING, then CI "Typecheck and tests" failed at `npm audit --audit-level=high`.
+Root cause: (1) main's only new commit ffa399d was the squash of #25 with a tree identical to this branch's base 96d9d8b, so the conflicts were the same change landing twice; (2) high advisories published after the last green run for transitive dev deps undici 8.10.0 (jsdom), fast-uri 3.1.6 and brace-expansion 5.0.9 (@stryker-mutator/core). The PR changed only the package version.
+Fix: `git merge -s ours origin/main` after proving the trees equal (c419ab7, no force push); `npm audit fix --before=<now - 7 days>` → undici 8.11.2 (9.8 d), fast-uri 3.1.8 (18.8 d), brace-expansion 5.0.12 (19.3 d), only those lockfile entries changed (9efa43f).
+Verification: npm audit 0 high; typecheck 0; matching:check ok; npm test 535 passed; test:e2e 15 passed; no runner processes.
+Learning: `npm audit fix --before=<date 7 days ago>` keeps an audit fix inside the 7-day release-age rule; when a squash-merged base conflicts, compare trees before resolving by hand.
