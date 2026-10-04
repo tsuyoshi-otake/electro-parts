@@ -30,6 +30,6 @@ The first live run reported five failures: three came from reading `innerText` o
 
 Updated `dist/chrome-local-0.4.7-181818` from the verified extracted ZIP (the folder name is kept so Chrome's registered path stays valid); per-file SHA256 list digests match (`0cc42d60793b46f14a58c51fea13ad235941c662736c7202a996766e8330379f`). Reloading it in normal Chrome is a user action.
 
-Kept outside the repository: the verified ZIP `C:/Users/developer/tmp/electro-fx048/fx048.zip`, the scripts `live-check.cjs`, `live-check-2.cjs`, `live-check-3.cjs` and `evidence/` (results JSON and screenshots) in the same folder. The extracted extension, build output, browser profiles and baseline profiles were deleted after the runs.
+The temporary folder `C:/Users/developer/tmp/electro-fx048/` was deleted on 2026-10-04 after the release, including the live-check scripts, results JSON and screenshots. The results above are the record. The verified ZIP is the same file Pages serves: `https://tsuyoshi-otake.github.io/electro-parts/electronics-price-history-extension.zip`, published by run 37176548713, has the same SHA256 `f57053ec…c2f680`. A fresh `npm run build:extension` from main `c21aa29` produced identical files.
 
 Completed: CI-equivalent local suites, local Chromium with the ZIP. Not done: normal Chrome reload, Pages deployment, store submission.
