@@ -1,20 +1,20 @@
-import { isDataOrigin } from './dataOrigin.ts';
+import { isAllowedFetchUrl } from './dataOrigin.ts';
 import { FETCH_TEXT, isFetchTextRequest, MAX_TIMEOUT_MS, type FetchTextResponse } from './messages.ts';
 
 /**
- * MV3 service worker. It exists for one reason: the dataset is fetched from
- * here rather than from the content script, so the store's page never issues
- * the request and never sees it. That is the property `GM_xmlhttpRequest`
+ * MV3 service worker. It exists for one reason: the dataset (and the daily
+ * exchange rate) is fetched from here rather than from the content script, so
+ * the store's page never issues the request and never sees it. That is the property `GM_xmlhttpRequest`
  * with `anonymous: true` gives the userscript, kept.
  *
  * It is also the only code in the extension that can reach the network, so it
- * is written as a closed door: one message type, one allowed origin, no
- * cookies, and a bounded wait. A page that manages to talk to it cannot use
+ * is written as a closed door: one message type, the data origin plus one
+ * exact rate URL, no cookies, and a bounded wait. A page that manages to talk to it cannot use
  * it as a proxy to somewhere else.
  */
 
-export async function fetchTextFromDataOrigin(url: string, timeoutMs: number): Promise<FetchTextResponse> {
-  if (!isDataOrigin(url)) return { ok: false, error: 'refused: url is not the data origin' };
+export async function fetchAllowedText(url: string, timeoutMs: number): Promise<FetchTextResponse> {
+  if (!isAllowedFetchUrl(url)) return { ok: false, error: 'refused: url is not allowed' };
   const controller = new AbortController();
   const bounded = Math.min(Math.max(timeoutMs, 1), MAX_TIMEOUT_MS);
   const timer = setTimeout(() => controller.abort(), bounded);
@@ -45,7 +45,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // arrives with its own id, and a page cannot send one at all.
   if (sender.id !== chrome.runtime.id) return undefined;
   if (!isFetchTextRequest(message)) return undefined;
-  void fetchTextFromDataOrigin(message.url, message.timeoutMs).then(sendResponse);
+  void fetchAllowedText(message.url, message.timeoutMs).then(sendResponse);
   return true; // answered asynchronously
 });
 

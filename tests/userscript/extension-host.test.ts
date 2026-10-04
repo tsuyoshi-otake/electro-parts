@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { chromeHost, readDataBaseUrl, start } from '../../extension/host.ts';
 import { FETCH_TEXT, isFetchTextRequest } from '../../extension/messages.ts';
 import { manifestPath, productPath } from '../../src/publisher/contract.ts';
-import { HOST_ELEMENT_ID } from '../../userscript/core/controller.ts';
+import { HOST_ELEMENT_ID, OWNER_ATTRIBUTE } from '../../userscript/core/controller.ts';
 import { PANEL_TITLE } from '../../userscript/ui/panel.ts';
 import { DEFAULT_DATA_BASE_URL } from '../../userscript/version.ts';
 import { json, loadHtml, readFixtureHtml, sampleManifest, sampleProduct } from './helpers.ts';
@@ -36,7 +36,7 @@ function stubChrome(overrides: Partial<ChromeStub['storage']['local']> = {}, ans
         requests.push(message.url);
         if (answer !== undefined) return answer(message.url);
         const route = routes.get(message.url.replace(/\?.*$/, ''));
-        return route === undefined ? { ok: false, error: 'refused: url is not the data origin' } : { ok: true, ...route };
+        return route === undefined ? { ok: false, error: 'refused: url is not allowed' } : { ok: true, ...route };
       },
       onMessage: { addListener: () => undefined },
     },
@@ -67,6 +67,7 @@ beforeEach(() => {
 afterEach(() => {
   vi.unstubAllGlobals();
   document.getElementById(HOST_ELEMENT_ID)?.remove();
+  document.documentElement.removeAttribute(OWNER_ATTRIBUTE);
 });
 
 describe('extension storage binding', () => {
@@ -90,7 +91,7 @@ describe('extension network binding', () => {
   });
 
   it('turns a refusal and a silent worker into a rejection the client can retry', async () => {
-    await expect(chromeHost().fetchText('https://evil.example/x', 1_000)).rejects.toThrow('refused: url is not the data origin');
+    await expect(chromeHost().fetchText('https://evil.example/x', 1_000)).rejects.toThrow('refused: url is not allowed');
     stubChrome({}, () => undefined);
     await expect(chromeHost().fetchText(`${DEFAULT_DATA_BASE_URL}/x.json`, 1_000)).rejects.toThrow('did not answer');
   });

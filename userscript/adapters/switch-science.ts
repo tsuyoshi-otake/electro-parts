@@ -1,4 +1,5 @@
 import type { MountPoint, StorePageAdapter } from '../core/types.ts';
+import { pageThemeCss } from '../ui/pageTheme.ts';
 
 /**
  * Switch Science product pages: `https://www.switch-science.com/products/<handle>`.
@@ -37,10 +38,28 @@ export function pageKeyFromPath(pathname: string): string | null {
 
 export const switchSciencePageAdapter: StorePageAdapter = {
   storeId: 'switch-science',
+  // Browsing pages only. Cart, checkout and account pages stay in the store's
+  // own colors.
   matchPatterns: [
+    'https://www.switch-science.com/',
+    'https://www.switch-science.com/?*',
     'https://www.switch-science.com/products/*',
-    'https://www.switch-science.com/collections/*/products/*',
+    'https://www.switch-science.com/collections/*',
+    'https://www.switch-science.com/search*',
+    'https://www.switch-science.com/pages/*',
+    'https://www.switch-science.com/blogs/*',
   ],
+  pageThemeCss: pageThemeCss('header, footer, nav, .site-header-main, [class*="site-navigation"], .mobile-nav-panel, .navmenu-submenu, .site-footer-wrapper, .product--outer, .live-search-results, .modal, .product-tags, .skip-to-main, .productitem, .productitem--info, .productitem--image > div, .pf-anchor, [class*="pf-color-scheme"], .pf-bg-lazy',
+    `html[data-eph-page-theme="dark"] { --eph-preserved-color: #1d1d1d; }
+html[data-eph-page-theme="dark"] .quantity-selector__wrapper { background: #343434 !important; border: 1px solid #777 !important; border-radius: 4px; }
+html[data-eph-page-theme="dark"] body .quantity-selector__wrapper :is(input.quantity-selector__input, button.quantity-selector__button):not(.site-header *) { background: transparent !important; border: 0 !important; border-radius: 0; box-shadow: none !important; }
+html[data-eph-page-theme="dark"] .quantity-selector__wrapper .quantity-selector__button-wrapper:not(.quantity-selector__button-wrapper--disabled) button:hover { background: #505050 !important; }
+html[data-eph-page-theme="dark"] .quantity-selector__wrapper .quantity-selector__button-wrapper:not(.quantity-selector__button-wrapper--disabled) button:active { background: #292929 !important; }
+html[data-eph-page-theme="dark"] .quantity-selector__wrapper :is(button, input):focus-visible { outline-offset: -3px !important; }
+/* Quantity discounts are highlighted in red-orange inline styles. */
+html[data-eph-page-theme="dark"] .product-block .discount-table :is(p, td):not(.site-header *) { color: #ff9a8a !important; }
+html[data-eph-page-theme="dark"] .product-block .discount-table p > span:not(.site-header *) { color: #b8c0c8 !important; }
+`,'header, .site-header, .site-navigation, .mobile-nav-panel, .navmenu-submenu'),
 
   matches(location) {
     return (

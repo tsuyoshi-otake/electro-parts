@@ -2,6 +2,7 @@ import { PAGE_ADAPTERS } from '../userscript/adapters/registry.ts';
 import { PRODUCT_RELATIONS, STORE_LABELS } from '../userscript/adapters/productRelations.ts';
 import { mountHistoryPanel } from '../userscript/core/controller.ts';
 import { DataClient } from '../userscript/core/dataClient.ts';
+import { ExchangeRateClient } from '../userscript/core/exchangeRate.ts';
 import { indexRelations } from '../userscript/core/relations.ts';
 import type { HostEnv } from '../userscript/core/types.ts';
 import { resolveDataBaseUrl } from './dataOrigin.ts';
@@ -15,7 +16,8 @@ import { FETCH_TEXT, type FetchTextResponse } from './messages.ts';
  *
  * Network goes through the service worker (see background.ts) so the store's
  * page never issues the request; storage is `chrome.storage.local`, scoped to
- * this extension. Nothing is sent anywhere: there is no telemetry.
+ * this extension. Nothing is sent anywhere: there is no telemetry. The only
+ * other read is the daily exchange rate for prices recorded in USD.
  */
 
 const LOG_PREFIX = '[Electronics Price History]';
@@ -69,6 +71,7 @@ export async function start(doc: Document = document, loc: Location = window.loc
     dataBaseUrl,
     relationIndex: indexRelations(PRODUCT_RELATIONS),
     storeLabels: STORE_LABELS,
+    exchangeRates: new ExchangeRateClient(host),
   });
 }
 

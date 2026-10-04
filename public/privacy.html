@@ -16,7 +16,7 @@
 <body>
   <h1>プライバシーポリシー</h1>
   <p>対象: Chrome 拡張機能およびユーザースクリプト <strong>Electronics Price History</strong>(以下「本ソフトウェア」)。
-    最終更新: 2026-09-12。</p>
+    最終更新: 2026-10-04。</p>
 
   <h2>要点</h2>
   <p>本ソフトウェアは利用者の個人情報を<strong>収集しません</strong>。閲覧履歴・入力内容・識別子を送信せず、解析ツールも広告も入れていません。
@@ -44,6 +44,12 @@
       <td>同上(1 項目)</td>
     </tr>
     <tr>
+      <td>米ドルから円への為替レート 1 件(レート値・提供元の更新日時)と、再取得の時期を決める状態(取得日時・失敗回数・次に試す時刻)</td>
+      <td>USD 表示の商品で、記録価格の円換算の参考値を表示し、取得を 1 日 1 回までに抑えるため</td>
+      <td>—</td>
+      <td>利用者の端末内のみ(1 項目)。レートは再配布しません</td>
+    </tr>
+    <tr>
       <td>表示テーマ(ライト / ダーク)</td>
       <td>利用者が選んだパネル表示を維持するため</td>
       <td>送信しません</td>
@@ -52,18 +58,28 @@
   </table>
 
   <h2>通信</h2>
-  <p>本ソフトウェアが行う通信は、履歴データの取得のみです。取得先は <code>tsuyoshi-otake.github.io</code>(GitHub Pages)に限定しており、
-    拡張機能では取得先ホストをコードで固定したうえで、サービスワーカーが <code>credentials: 'omit'</code>(Cookie を送らない)で取得します。
-    商品ページを開いた店舗のサーバーに対して、本ソフトウェアが追加のリクエストを送ることはありません。</p>
+  <p>本ソフトウェアが行う通信は、次の 2 種類だけです。いずれも拡張機能では取得先をコードで固定したうえで、サービスワーカーが
+    <code>credentials: 'omit'</code>(Cookie を送らない)で取得します。</p>
+  <ul>
+    <li><strong>履歴データの取得</strong>: <code>tsuyoshi-otake.github.io</code>(GitHub Pages)の公開済み静的 JSON。</li>
+    <li><strong>為替レートの取得</strong>: <a href="https://www.exchangerate-api.com" rel="noopener">ExchangeRate-API</a> の
+      <code>https://open.er-api.com/v6/latest/USD</code>(固定の 1 URL、API キーなし)。米ドル表示の商品ページを開いたときだけ、
+      1 つのブラウザーにつき原則 1 日 1 回まで取得します(取得に失敗した場合は 1 時間から 24 時間までの間隔を空けて再試行します)。
+      この URL は商品・ページ・利用者のいずれも含まない固定値で、閲覧中のページの情報は送りません。
+      提供元の規約でレートの再配布が禁止されているため、本プロジェクトのサーバーを経由せず、各ブラウザーが直接取得します。</li>
+  </ul>
+  <p>商品ページを開いた店舗のサーバーに対して、本ソフトウェアが追加のリクエストを送ることはありません。</p>
   <p>取得先である GitHub Pages には、通常の Web サーバーと同様にアクセスログ(IP アドレスなど)が
     <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener">GitHub のプライバシーステートメント</a>のもとで記録され得ます。
-    これは GitHub による運用であり、本プロジェクトはそのログを取得も利用もしていません。</p>
+    これは GitHub による運用であり、本プロジェクトはそのログを取得も利用もしていません。
+    為替レートの取得先である ExchangeRate-API にも、同様にアクセスログ(IP アドレスなど)が提供元の方針のもとで記録され得ます。本プロジェクトはそのログも取得・利用していません。</p>
 
   <h2>権限</h2>
   <ul>
-    <li><code>storage</code>: 上記のキャッシュと設定 1 項目の保存にのみ使います。</li>
+    <li><code>storage</code>: 上記のキャッシュ・為替レート・設定の保存にのみ使います。</li>
     <li><code>https://tsuyoshi-otake.github.io/*</code>: 履歴データの取得にのみ使います。</li>
-    <li>コンテンツスクリプトの実行対象は、対応する商品ページ(秋月電子通商・スイッチサイエンス・M5Stack公式ショップの商品ページ URL)に限定しています。</li>
+    <li>為替レートの取得先は、Cookie なしの読み取りを誰にでも許可している公開 API のため、追加の権限を要求しません。</li>
+    <li>コンテンツスクリプトは、秋月電子通商・スイッチサイエンス・M5Stack公式ショップのトップ・カテゴリ・検索・商品などの閲覧ページで実行します。保存したテーマを閲覧ページへ適用するためです。カート・購入手続き・会員(アカウント)ページでは実行しません。価格履歴の取得とパネル表示は商品ページに限定します。</li>
     <li>タブ・Cookie・閲覧履歴・ダウンロード・任意サイトへのアクセス権限は要求しません。リモートコードの読み込みや実行もありません。</li>
   </ul>
 
@@ -83,12 +99,16 @@
   <p><strong>Electronics Price History</strong> collects no personal data. It does not transmit browsing history, page content,
     keystrokes or identifiers, and contains no analytics, advertising or tracking. It reads the URL and the product
     number of the product page you are viewing, in the page, to decide which history to show; that never leaves your browser.</p>
-  <p>Its only network access is a read of the published static JSON dataset at
-    <code>https://tsuyoshi-otake.github.io/electro-parts</code>, performed by the extension's service worker with
-    <code>credentials: 'omit'</code>. Fetched data and one setting are cached in <code>chrome.storage.local</code>
-    on your own device (up to 200 products, LRU) and are removed when you uninstall the extension. GitHub may record
-    standard server logs for that hosting; this project neither receives nor uses them. Permissions are limited to
-    <code>storage</code> and that one origin. No remote code is loaded or executed. No data is sold or shared.</p>
+  <p>It makes two kinds of network request, both from the extension's service worker with
+    <code>credentials: 'omit'</code> and both to fixed addresses: a read of the published static JSON dataset at
+    <code>https://tsuyoshi-otake.github.io/electro-parts</code>, and, on product pages with US dollar prices, a read of
+    one fixed URL, <code>https://open.er-api.com/v6/latest/USD</code> (ExchangeRate-API, no key), at most about once a
+    day per browser, to show a yen reference value. That URL carries nothing about you or the page. The provider's terms
+    forbid redistributing its rates, so each browser fetches them directly. Fetched data, the last rate and settings are
+    cached in <code>chrome.storage.local</code> on your own device (up to 200 products, LRU) and are removed when you
+    uninstall the extension. GitHub and ExchangeRate-API may record standard server logs; this project neither receives
+    nor uses them. Permissions are limited to <code>storage</code> and the dataset origin; the rate API allows
+    cookie-less reads from any origin and needs no permission. No remote code is loaded or executed. No data is sold or shared.</p>
 
   <p><a href="./">← Electronics Price History</a></p>
 </body>

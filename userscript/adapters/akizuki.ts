@@ -1,4 +1,5 @@
 import type { MountPoint, StorePageAdapter } from '../core/types.ts';
+import { pageThemeCss } from '../ui/pageTheme.ts';
 
 /**
  * Akizuki Denshi product pages: `https://akizukidenshi.com/catalog/g/g<salesCode>/`.
@@ -22,7 +23,31 @@ export function pageKeyFromPath(pathname: string): string | null {
 
 export const akizukiPageAdapter: StorePageAdapter = {
   storeId: 'akizuki',
-  matchPatterns: ['https://akizukidenshi.com/catalog/g/*'],
+  // Browsing pages only. Cart (/catalog/cart/), member (/catalog/customer/),
+  // quick order and contact forms stay in the store's own colors.
+  matchPatterns: [
+    'https://akizukidenshi.com/',
+    'https://akizukidenshi.com/?*',
+    'https://akizukidenshi.com/catalog/default.aspx*',
+    'https://akizukidenshi.com/catalog/g/*',
+    'https://akizukidenshi.com/catalog/c/*',
+    'https://akizukidenshi.com/catalog/r/*',
+    'https://akizukidenshi.com/catalog/e/*',
+    'https://akizukidenshi.com/catalog/goods/*',
+    'https://akizukidenshi.com/catalog/pages/*',
+    'https://akizukidenshi.com/catalog/faq/*',
+  ],
+  pageThemeCss: pageThemeCss('.wrapper, header, footer, nav, [class*="pane-"], [class*="block-goods-"], [class*="block-bulk-"], [class*="block-accessory-"], .block-variation--item-term, .block-search-box, [class*="block-left-menu"], [class*="block-top-event--header"], .block-footer-store-list li, .wrapper li[style*="background"], .wrapper div[style*="background-color"]',
+    `
+/* Stock status is color-coded in lists and on product pages. */
+html[data-eph-page-theme="dark"] :is(.block-cart-i--stock-info-green, .block-goods-detail--stock-info-green) { color: #7bd8a0 !important; }
+html[data-eph-page-theme="dark"] :is(.block-cart-i--stock-info-orange, .block-goods-detail--stock-info-orange) { color: #ffb366 !important; }
+html[data-eph-page-theme="dark"] :is(.block-cart-i--stock-info-gray, .block-goods-detail--stock-info-gray) { color: #b8c0c8 !important; }
+html[data-eph-page-theme="dark"] :is(.block-cart-i--stock-info-purple, .block-goods-detail--stock-info-purple) { color: #d0a8ff !important; }
+html[data-eph-page-theme="dark"] :is(.block-cart-i--stock-info-blue, .block-goods-detail--stock-info-blue) { color: #91bdff !important; }
+html[data-eph-page-theme="dark"] :is(.block-goods-favorite--btn, .block-add-cart--btn) { background-image: none !important; background-color: #253c59 !important; color: #e6edf3 !important; }
+html[data-eph-page-theme="dark"] :is(.block-goods-favorite--btn, .block-add-cart--btn):hover { background-color: #345278 !important; }
+`),
 
   matches(location) {
     return (location.hostname === 'akizukidenshi.com' || location.hostname === 'www.akizukidenshi.com') && location.pathname.startsWith('/catalog/g/');

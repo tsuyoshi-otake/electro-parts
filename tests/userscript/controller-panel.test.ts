@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { manifestPath, productPath } from '../../src/publisher/contract.ts';
-import { HOST_ELEMENT_ID, THEME_STORAGE_KEY, mountHistoryPanel } from '../../userscript/core/controller.ts';
+import { HOST_ELEMENT_ID, OWNER_ATTRIBUTE, THEME_STORAGE_KEY, mountHistoryPanel } from '../../userscript/core/controller.ts';
 import { DataClient } from '../../userscript/core/dataClient.ts';
 import { PANEL_TITLE } from '../../userscript/ui/panel.ts';
 import { indexRelations } from '../../userscript/core/relations.ts';
@@ -10,7 +10,11 @@ import { fakeHost, json, sampleManifest, sampleProduct, testAdapter, type FakeHo
 const BASE = 'https://data.example.test';
 const LOC = { hostname: 'example.test', pathname: '/p/P1' };
 
+/** A freshly loaded document: no owner from an earlier test, no theme, the given content. */
 function page(withMount = true): void {
+  document.documentElement.removeAttribute(OWNER_ATTRIBUTE);
+  document.documentElement.removeAttribute('data-eph-page-theme');
+  for (const style of document.querySelectorAll('style[data-eph-page-theme]')) style.remove();
   document.body.replaceChildren();
   const h1 = document.createElement('h1');
   h1.textContent = 'Test Part';
@@ -250,8 +254,7 @@ describe('history panel controller', () => {
   it('shows the stale badge and note when only the cache is available', async () => {
     page();
     const host = hostWithData();
-    await mount(host);
-    document.getElementById(HOST_ELEMENT_ID)?.remove();
+    (await mount(host)).destroy(); // the previous page view
     host.clock += 3_600_000;
     host.routes.set(`${BASE}/${manifestPath('teststore')}`, new Error('offline'));
     await mount(host);
@@ -265,9 +268,9 @@ describe('history panel controller', () => {
     page();
     const host = fakeHost();
     host.routes.set(`${BASE}/${manifestPath('teststore')}`, json(sampleManifest()));
-    await mount(host);
+    const missing = await mount(host);
     expect(shadowText()).toContain('まだ観測データに含まれていません');
-    document.getElementById(HOST_ELEMENT_ID)?.remove();
+    missing.destroy();
 
     const broken = fakeHost();
     broken.routes.set(`${BASE}/${manifestPath('teststore')}`, new Error('offline'));
@@ -280,8 +283,10 @@ describe('history panel controller', () => {
     page();
     const host = hostWithData();
     expect((await mount(host, { location: { hostname: 'other.test', pathname: '/p/P1' } })).mounted).toBe(false);
-    expect((await mount(host, { location: { hostname: 'example.test', pathname: '/p/' } })).mounted).toBe(false);
+    const nonProduct = await mount(host, { location: { hostname: 'example.test', pathname: '/p/' } });
+    expect(nonProduct.mounted).toBe(false);
     expect(document.getElementById(HOST_ELEMENT_ID)).toBeNull();
+    nonProduct.destroy(); // the next page view
     expect((await mount(host)).mounted).toBe(true);
     expect((await mount(host)).mounted).toBe(false);
     expect(document.querySelectorAll(`#${HOST_ELEMENT_ID}`)).toHaveLength(1);

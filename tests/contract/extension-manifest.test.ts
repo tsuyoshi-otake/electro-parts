@@ -32,7 +32,7 @@ describe('extension manifest', () => {
     const content = manifest.content_scripts[0];
     expect(manifest.content_scripts).toHaveLength(1);
     expect(content?.matches).toEqual(PAGE_ADAPTERS.flatMap((a) => [...a.matchPatterns]));
-    expect(content?.run_at).toBe('document_idle');
+    expect(content?.run_at).toBe('document_start');
     expect(content?.all_frames).toBe(false);
   });
 
@@ -45,6 +45,9 @@ describe('extension manifest', () => {
       expect(stores).not.toContain(new URL(permission).hostname);
     }
     expect(manifest.host_permissions).not.toContain('<all_urls>');
+    // The daily exchange rate is read under CORS (the provider allows any
+    // origin), so it adds no permission and no install warning.
+    expect(manifest.host_permissions.some((p) => p.includes('er-api.com'))).toBe(false);
   });
 
   it('references only files the build produces', async () => {

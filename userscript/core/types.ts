@@ -21,9 +21,17 @@ export interface MountPoint {
 
 export interface StorePageAdapter {
   readonly storeId: string;
-  /** Tampermonkey `@match` patterns; the build script copies them into the header. */
+  /**
+   * Every page the script may run on: product pages plus browsing pages that
+   * receive the saved page theme. Never cart, checkout or account pages. The
+   * builds copy the list into `@match` and the extension's `matches`, and the
+   * controller applies the same list (`urlPattern.ts` documents the subset).
+   */
   readonly matchPatterns: readonly string[];
+  /** Whether this is a product page, which gets the history panel. */
   matches(location: Pick<Location, 'hostname' | 'pathname'>): boolean;
+  /** Page-wide dark styles scoped to `html[data-eph-page-theme="dark"]`; see `pageThemeCss()`. */
+  pageThemeCss?: string;
   /** The page key of the product shown, or null when the page is not a product page. */
   extractPageKey(doc: Document, location: Pick<Location, 'hostname' | 'pathname'>): string | null;
   findMountPoint(doc: Document): MountPoint | null;

@@ -12,11 +12,10 @@ describe('page adapter registry', () => {
     // The build script turns this list into the userscript's `@match` headers,
     // so a pattern added here is a page the script is allowed to run on.
     expect(PAGE_ADAPTERS.flatMap((a) => a.matchPatterns)).toEqual([
-      'https://akizukidenshi.com/catalog/g/*',
-      'https://www.switch-science.com/products/*',
-      'https://www.switch-science.com/collections/*/products/*',
-      'https://shop.m5stack.com/products/*',
-      'https://shop.m5stack.com/collections/*/products/*',
+      ...['/', '/?*', '/catalog/default.aspx*', '/catalog/g/*', '/catalog/c/*', '/catalog/r/*', '/catalog/e/*', '/catalog/goods/*', '/catalog/pages/*', '/catalog/faq/*']
+        .map((path) => `https://akizukidenshi.com${path}`),
+      ...['https://www.switch-science.com', 'https://shop.m5stack.com'].flatMap((origin) =>
+        ['/', '/?*', '/products/*', '/collections/*', '/search*', '/pages/*', '/blogs/*'].map((path) => origin + path)),
     ]);
     const locations = [AT('/catalog/g/g109951/', 'akizukidenshi.com'), AT('/products/9381'), AT('/collections/all/products/9381')];
     for (const l of locations) {
