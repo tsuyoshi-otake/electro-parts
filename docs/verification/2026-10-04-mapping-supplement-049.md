@@ -36,3 +36,6 @@ Updated `dist/chrome-local-0.4.7-181818` from the verified extracted ZIP (the fo
 Independent rubric verifier (`.claude/goal-loop/mapping-supplement-049/rubric.md`, fresh context): 9/9 pass in iteration 1. It reran the suites and the catalogue invariants itself. The source SHA-256 values in `catalog.jsonl` hash the decompressed snapshot text, not the `.json.gz` bytes.
 
 Completed: local suites, local Chromium with the ZIP. Not done: CI, normal Chrome reload, Pages deployment, store submission.
+
+Update after the release: PR #31 CI "Typecheck and tests" passed and the PR was squash-merged as `4d8aff5` (tree identical to the verified `821e0a6`). Pages was republished by "Crawl and publish" with `republish=true` (run 37182529022: schedule, generate and deploy succeeded). The Pages ZIP has SHA256 `395a2f12…57990937f`, the same as the verified ZIP; the userscript serves `@version 0.4.9`. The three store manifests kept their dataset versions, product counts, run counts and latest observation times (akizuki `656ba41853907f43` 12,813 / 14, switch-science `82b28269bdf48607` 10,442 / 13, m5stack `3fbd7fd0a3441e7f` 672 / 12). The 0.4.9 changelog entry in `public/index.html` was missing from #31 and was added afterwards. Normal Chrome reload and store submission are user actions.
+

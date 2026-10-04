@@ -417,3 +417,11 @@ Verification: matching:check ok; typecheck 0; `npm test` 45 files / 539 passed; 
 Independent rubric-verifier: 9/9 pass in iteration 1.
 Not done: CI, normal Chrome reload, merge, Pages republish, CWS submission.
 Learning: count relation cards by `[data-relation-id]` (same-product cards are `.store-price`); wait for `.fx-value` before an M5Stack screenshot; TKW from Git Bash needs a Windows executable path (`cygpath -w`); `build:extension --zip` needs a file argument.
+
+## 2026-10-04: 0.4.9 merge and Pages republish (#30, #31)
+
+PR #31 CI passed (Codex review: no findings; CodeRabbit still running and not a gate) and was squash-merged as 4d8aff5, tree identical to the verified 821e0a6. Issue #30 closed by the PR. Local main was reset to origin/main after checking that a61796f was contained; the feature branch was deleted locally and remotely. Pages republish run 37182529022 succeeded; the Pages ZIP SHA256 395a2f12…57990937f equals the verified ZIP, the userscript serves 0.4.9, and all three store manifests kept datasetVersion, productCount, runCount and latestObservedAt. The user received the verified ZIP for CWS before the merge (rebuilt from 821e0a6, per-file digests identical).
+Symptom found after publishing: the public changelog in public/index.html had no 0.4.9 entry.
+Root cause: the 0.4.9 change touched only matching data, docs and the version; the changelog is a separate place every release must update, and neither the rubric nor any test checks it.
+Fix: added the 0.4.9 entry after the release (needs a commit and another republish).
+Learning: a release rubric must include the public changelog heading for the new version (`grep -n "<h2>X.Y.Z" public/index.html`), even for data-only releases.
