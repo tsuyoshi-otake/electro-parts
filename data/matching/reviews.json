@@ -55,6 +55,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a107034-s4019",
+    "fingerprint": "88e32c20217a04d46e08851b8c30d2766a78c8f8e8bb0c03df750938cd8a497c",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 DFR0023 / DFR0023 とメーカー品番 DFR0023 を突合。名称「温度センサーモジュール(LM35 Linear Temperature Sensor)」と「Gravity - LM35搭載アナログ温度センサ」（メーカー製品名: Gravity - LM35搭載アナログ温度センサ）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: DFRobot。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a107035-s4020",
     "fingerprint": "323be4394bb852f3d8a397728e227d32d58813adf052e2b984a6308e01705b50",
     "decision": "same_product",
@@ -198,6 +210,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a109161-s1626",
+    "fingerprint": "8c7bca87243850e333855ec0178e8e409af86e3f060fb3b9bf27c4fb44336381",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 101020000 / 101020000 とメーカー品番 101020000 を突合。名称「Grove-シリアルカメラキット」と「GROVE - シリアルカメラモジュールキット--販売終了」の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a109283-s1629",
     "fingerprint": "578f8f9eef48b3a04e3fbf04c4be245b0cb1af7b02f0818ebf6ed7c3181c152c",
     "decision": "same_product",
@@ -229,6 +253,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a110065-s2564",
+    "fingerprint": "951e0f5257f5c03151bcfd069ecb676d38c37d473e97122a9e3b083007b174c6",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 PIM122 / PIM122 とメーカー品番 PIM122 を突合。名称「ラズパイ公式ディスプレイ用フレーム(黒)」と「Raspberry Pi用 7インチ タッチスクリーン付き液晶ディスプレイ用ケース（黒）」（メーカー製品名: Pibow Touchscreen Frame – Noir）の製品本体/用途・記載された構成が対応することを確認。相手説明は7インチ公式タッチスクリーン用のディスプレイフレームで、黒（Noir）。メーカー記載: Pimoroni。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a110069-s2612",
@@ -286,6 +322,19 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a110757-s8123",
+    "fingerprint": "0940357c3a61569609ff14506d6b1de313188d6b06fd21d016158b6702995370",
+    "decision": "unresolved",
+    "evidence": "相手は製造元品番906-4665と商品コードRS-193-5380を併記し、説明はRaspberry Pi 4対応のOKdo製ケース。秋月名は「Raspberry Pi 7インチタッチスクリーン用ケース ブラック」で対応するRaspberry Pi世代と製造元を記載しない。品番と対応世代の対応が未確定。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月掲載品の製造元・対応Raspberry Pi世代",
+      "相手の品番906-4665と商品コードRS-193-5380の対応"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a111530-s3092",
     "fingerprint": "9049ed30230886f3041814c4ba7fee56ad6c4b654ae43258dcce71076b771555",
     "decision": "same_product",
@@ -295,6 +344,32 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a112450-s4971",
+    "fingerprint": "42329e9847f87564a99bc55a87c43becd50abc03d1fc598887a21dd0d8428bc8",
+    "decision": "unresolved",
+    "evidence": "同一品番SEN0001だが秋月名は「超音波センサー URM37 V4.0」、相手名とメーカー製品系統はURM37 V5.0。品番は一致しても版の食い違いを解消できない。",
+    "differences": [
+      "秋月はURM37 V4.0、相手はURM37 V5.0"
+    ],
+    "missingEvidence": [
+      "各店の現行出荷版（V4.0かV5.0か）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a112516-s3389",
+    "fingerprint": "689c6280de30870f7aeb8bf652b74b1ef2552bb884b45dd286e033c24ca0a4cf",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 110060762 / 110060762 とメーカー品番 110060762 を突合。名称「Grove Inventor Kit for micro:bit」と「micro:bit用 GROVE Inventor Kit」（メーカー製品名: Grove Inventor Kit for micro:bit）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a112544-s4291",
@@ -328,6 +403,19 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a112550-s3638",
+    "fingerprint": "38014629d641a9c0ec8f06be0ebb976c512ed0768640ff9c7a3da9b3e35f8495",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 FIT0506 / FIT0506 とメーカー品番 FIT0506 を突合。名称「LATTEPANDA ラテパンダ ヒートシンク」と「LattePanda用純銅製ヒートシンク（5個入り）--在庫限り」（メーカー製品名: Pure Copper Heatsink Pack x 5）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: DFRobot。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月の販売数量（相手は5個入りと明記、メーカー製品名もPure Copper Heatsink Pack x 5）",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a112551-s4817",
@@ -447,6 +535,30 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a112836-s3181",
+    "fingerprint": "85f1aaaeac0fd80e2ea94b501d798c4b9094a334183ed7650407cf0ab1c89553",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 5601B / 5601B とメーカー品番 5601B を突合。名称「micro:bit マイクロビット用コネクターブレークアウトボード 完成品」と「micro:bit用エッジコネクタピッチ変換基板」（メーカー製品名: Edge Connector Breakout Board for BBC micro:bit - Pre-built）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Kitronik。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a112855-s5442",
+    "fingerprint": "ea1962bfad9880c1a6f67ed3038e906f3d263f67c6d3662203e0defce9b49f2d",
+    "decision": "unresolved",
+    "evidence": "同一品番102991024だが、相手は名称とメーカー製品名にv1.3を明記し、説明で旧版から電源制御IC（MP2617）や充電回路を改良した新版と記載。秋月名「Wio LTE JP Version」には版表記がなく、旧版かv1.3か確定できない。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月掲載品の版（旧版かv1.3か）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a112958-s3646",
     "fingerprint": "fb3310150a4d7be8a11e2575ed905e54b754b05edd77e8bfb0e0ace04c182846",
     "decision": "same_product",
@@ -478,6 +590,19 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a113199-s3780",
+    "fingerprint": "a3a66e3a0ebdf8ac6db5b5dffc921ceb84d4d7554fc8f831972c41b69015fc17",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 B0067 / B0067 とメーカー品番 B0067 を突合。名称「OV2640使用200万画素カメラ フレームバッファー付き M12ピンホール B0067」と「Arducam Miniモジュール（2メガピクセル）--販売終了」（メーカー製品名: Arducam Mini Module Camera Shield with OV2640 2 Megapixels Lens for Arduino UNO Mega2560 Board & Raspberry Pi Pico）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: ArduCAM。",
+    "differences": [],
+    "missingEvidence": [
+      "付属レンズの種類（秋月はM12ピンホールと記載、相手は別売レンズ用M12/CSマウントホルダーと記載）",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a113200-s3781",
@@ -513,6 +638,32 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a113353-s3885",
+    "fingerprint": "fb20575072937a020e21e3679480ac25222cfd2882a14e8100a2c845c583d1c6",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 103030216 / 103030216 とメーカー品番 103030216 を突合。名称「ReSpeaker 4-Mic Array for Raspberry Pi」と「ReSpeaker 4-Mic Array for Raspberry Pi--販売終了」（メーカー製品名: ReSpeaker 4-Mic Array for Raspberry Pi）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a113361-s3851",
+    "fingerprint": "fcf47025605591d6ce8d7f53fb41655c635208e7871ea65e897433819ecd39f4",
+    "decision": "unresolved",
+    "evidence": "同一品番107990053だが秋月名はReSpeaker Mic Array v2.0、相手名はv3.0。相手説明は同一SKUのままv2.0からv3.0へ更新され、オーディオアンプがWM8960からTLV320AIC3104に変わったと記載。秋月の現行出荷版が確定できない。",
+    "differences": [
+      "秋月はv2.0、相手はv3.0（オーディオアンプ変更）"
+    ],
+    "missingEvidence": [
+      "秋月の現行出荷版（v2.0かv3.0か）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a113550-s4024",
     "fingerprint": "c69d73fe346d2ace616bdc1664e71ca8621e598672c4d2b1bebc2db5679ca751",
     "decision": "same_product",
@@ -522,6 +673,30 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a113642-s3956",
+    "fingerprint": "e53ca235528744ae3d7f268206f74734f7de029e8c5b9e79515bb56676a8bd5d",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 102990883 / 102990883 とメーカー品番 102990883 を突合。名称「ReSpeaker Core v2」と「ReSpeaker Core v2.0--販売終了」の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a113689-s3997",
+    "fingerprint": "eb04c28874c6901eab0a436a3ae8be6df391132eff3ef18e0c3ed3c2dae20348",
+    "decision": "unresolved",
+    "evidence": "型番ESP32-WROVER-Bは一致し、相手は4 MBフラッシュ・8 MB PSRAM搭載と記載。秋月名「Wi-Fiモジュール ESP32-WROVER-B」は容量を記載せず、同型番にはフラッシュ容量違いの製品があるため容量の対応が未確定。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月掲載品のフラッシュ容量・PSRAM容量"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a113736-s4426",
@@ -555,6 +730,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a113879-s5443",
+    "fingerprint": "13d8818c8995e52c2ab3f98ffe310fc857c586845cea2934c7b132993b77ff80",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 103030276 / 103030276 とメーカー品番 103030276 を突合。名称「Grove Base HAT for Raspberry Pi Zero」と「GROVE - ベースHAT for Raspberry Pi Zero」（メーカー製品名: Grove Base Hat for Raspberry Pi Zero）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a113931-s5312",
@@ -601,6 +788,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a114390-s6232",
+    "fingerprint": "9f9126bf183973840c38c455cc8bbcc9fbce48746bdb966dead1abc19895a42f",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 PIM355 / PIM355 とメーカー品番 PIM355 を突合。名称「ENVIRO:BIT」と「enviro:bit--在庫限り」（メーカー製品名: enviro:bit）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Pimoroni。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a114392-s6123",
     "fingerprint": "06fba3b2e6f1382a5e759fa3f79080f8b1df188c2290367a58d8e935c83e5e20",
     "decision": "same_product",
@@ -612,6 +811,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a114473-s5749",
+    "fingerprint": "dedb96bb041734ebc7345b6ab4dfe581f0eb906b795c1fb324277d9812236751",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 105030027 / 105030027 とメーカー品番 105030027 を突合。名称「ブラシレスモーターシールド」と「TB6605FTG搭載 ブラシレスモータードライバシールド」（メーカー製品名: Brushless Motor Shield (TB6605FTG)）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a114585-s3901",
     "fingerprint": "e54ad8283527b00adf9c31153b443e600a1788b7801c3e11cb301b81b4d3857b",
     "decision": "same_product",
@@ -621,6 +832,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a114586-s4119",
+    "fingerprint": "d860184c7bc71e8f8b32c6a848ce779a27f3b45927b2790665414b6fb0258fc5",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 CXD5602PWBCAM1 / CXD5602PWBCAM1 とメーカー品番 CXD5602PWBCAM1 を突合。名称「SONY SPRESENSE カメラモジュール」と「SPRESENSEカメラボード [CXD5602PWBCAM1]」（メーカー製品名: SPRESENSE カメラモジュール）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: ソニー。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a114651-s4089",
@@ -643,6 +866,31 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a114785-s7001",
+    "fingerprint": "6e52fc0e97b158dbd791c26c289f98ba38e43ab5ed3ae7bfda3d8bbcc6092dcc",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 102991310 / 102991310 とメーカー品番 102991310 を突合。名称「Wio Lite RISC-V(GD32VF103)」と「Wio Lite RISC-V（GD32VF103/ESP8266搭載）」（メーカー製品名: Wio Lite RISC-V (GD32VF103)）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a114792-s8991",
+    "fingerprint": "abca1c7a57aa4356ec7b9d297589c989ae4d272da11413948db989c45ecfe45e",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 4761 / 4761 とメーカー品番 4761 を突合。名称「ギヤモーター用磁気エンコーダー外付けパーツセット」と「超小型メタルギアドモーター用磁気エンコーダペアキット（サイド型）」（メーカー製品名: Magnetic Encoder Pair Kit with Side-Entry Connector for Micro Metal Gearmotors 12 CPR 2.7-18V）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Pololu。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月名にサイド型コネクタ・2組入りの記載なし（構成はPololu品番4761による）",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a114793-s1092",
@@ -687,6 +935,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a114946-s6461",
+    "fingerprint": "7bec6344afc4e93c75c44a574343115b44d3d1bccff2bd4e06361715f31d57b1",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 2867 / 2867 とメーカー品番 2867 を突合。名称「LPS25HB使用気圧センサーモジュールキット」と「LPS25HB搭載 電圧レギュレータ付き気圧センサモジュール--在庫限り」（メーカー製品名: LPS25HB Pressure/Altitude Sensor Carrier with Voltage Regulator）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Pololu。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a115136-s4090",
@@ -788,6 +1048,31 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a115734-s6687",
+    "fingerprint": "c82aa8e4a082f38d66bca3fb2adeb6b6b29ad1efd437c53af50eff8142ee5713",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 103020312 / 103020312 とメーカー品番 103020312 を突合。名称「Seeeduino Xiao用Groveシールド」と「Seeed Studio XIAO Groveシールド」（メーカー製品名: Grove Base for XIAO）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a115896-s7156",
+    "fingerprint": "8f860bbbdd3ccb2e44e49fbf75b1fd7c6b4447c305ae3cc02d33181840025b6b",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 110991565 / 110991565 とメーカー品番 110991565 を突合。名称「ODYSSEY Blue ミニPC」と「J4125搭載 Odyssey Blue Mini PC--販売終了」（メーカー製品名: Odyssey Blue J4125 Mini PC(TELEC)）の製品本体/用途・記載された構成が対応することを確認。相手説明ではJ4105搭載機は別モデル。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側のストレージ・OSプリインストール状態（相手は128 GB SSD・Windows 10 Enterprise未アクティベートと記載）",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a115920-s6425",
     "fingerprint": "64880018de3fe6c1cd085b8e541398e2e94dcd250dee4c0fbddf6a8fd7a4ed23",
     "decision": "same_product",
@@ -821,6 +1106,30 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a115956-s9100",
+    "fingerprint": "cb5785d1942126e91a21613ca955eccc843f1756757ca21250cc0cf1727b1c24",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 103030375 / 103030375 とメーカー品番 103030375 を突合。名称「Arduino Sensor Kit - Base」と「Arduino用センサキット（ベースシールド付）」（メーカー製品名: Arduino Sensor Kit - Base）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a116011-s6470",
+    "fingerprint": "9e0d00427627e70dc56e6f5b289849cb2266ad33fca408a7e04bd628f653a7b4",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 M5STACK-K016-P / K016-P とメーカー品番 K016-P を突合。名称「M5StickC Plus」と「M5StickC Plus--在庫限り」（メーカー製品名: M5StickC Plus ESP32-PICO Mini IoT Development Kit）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: M5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a116079-s6588",
     "fingerprint": "8a00a57f94d3593fab05bf82d982e9521aa7e5de075404c052d8fe4fc6987e2e",
     "decision": "same_product",
@@ -841,6 +1150,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a116099-s7099",
+    "fingerprint": "9688a68b0a1b2cea4111c8a72d59b91f335143f9cd2c6964fc1058226cde674f",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 110010024 / 110010024 とメーカー品番 110010024 を突合。名称「SeeeduinoXIAO拡張ボード用アクリルケース」と「Seeed Studio XIAO 拡張ボード用アクリルケース」（メーカー製品名: Acrylic Case for XIAO Expansion Base）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a116132-s6900",
@@ -944,6 +1265,32 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a116335-s2975",
+    "fingerprint": "e79e8948fd8df1c26ed3c4ec37d33bc15ab86cd48ae509368fc6731b7122f00d",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 3251 / 3251 とメーカー品番 3251 を突合。名称「Si7021使用温湿度センサーモジュール」と「Si7021搭載 温湿度センサモジュール」（メーカー製品名: Adafruit Si7021 Temperature & Humidity Sensor Breakout Board (STEMMA QT)）の製品本体/用途・記載された構成が対応することを確認。相手説明では同一品番のまま2020年9月入荷分からSTEMMA QTコネクタ採用、2024年5月入荷分からシルク刷新。メーカー記載: Adafruit。",
+    "differences": [],
+    "missingEvidence": [
+      "入荷ロットによるリビジョン（STEMMA QT有無）は各店の在庫次第",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a116336-s7109",
+    "fingerprint": "0122f1ec4b264d6d3fa3f07a29e0f03529d0c18cec009f0af5c88bd8f5085d4a",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 103100142 / 103100142 とメーカー品番 103100142 を突合。名称「Grove Shield for Pi Pico」と「Pi Pico v1.0用Grove シールド」（メーカー製品名: Grove Shield for Pi Pico v1.0）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月名に版表記なし（メーカー製品名はv1.0）",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a116337-s9107",
     "fingerprint": "88a1fdcbd4cce37421d1ea13f7d1afe85ecbf5bd5f201674e1910a94cd6a8eaa",
     "decision": "same_product",
@@ -975,6 +1322,16 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a116346-s2424",
+    "fingerprint": "1bf444eaa9c6c8adab734c1838e314011c3b01f56555894dd1a7032105734842",
+    "decision": "rejected",
+    "evidence": "数字品番が偶然一致する別メーカー/別用途の製品。名称「Teensy 3.2 + header」と「MC33926搭載デュアルモータードライバ for Raspberry Pi」は対応しないため除外。",
+    "differences": [],
+    "missingEvidence": [],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a116348-s2751",
@@ -1070,6 +1427,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a116360-s7025",
+    "fingerprint": "8ba98f7a884367b688b74de6fbf0d3e084b0cec67322e05d3fba16e2017cf535",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 4600 / 4600 とメーカー品番 4600 を突合。名称「Adafruit QT Py - SAMD21 Dev Board withSTEMMA QT」と「Adafruit QT Py - SAMD21開発ボード」（メーカー製品名: Adafruit QT Py - SAMD21 Dev Board with STEMMA QT）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Adafruit。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a116361-s6450",
@@ -1215,6 +1584,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a116714-s8002",
+    "fingerprint": "e6db4d39e425136ec86f7bf30043172ed04172c8d529a2464e8e7efe7afb99f2",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 B0302 / B0302 とメーカー品番 B0302 を突合。名称「Arducam Pico4ML TinyML開発キット(RP2040ボード) QVGAカメラ付 B0302」と「Arducam Pico4ML TinyML開発キット--在庫限り」（メーカー製品名: Arducam Pico4ML TinyML Dev Kit）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: ArduCAM。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a116733-s7386",
     "fingerprint": "03219dc4295d52e3f476cd73883e5550a30427825479e22a14e025f2849de40e",
     "decision": "same_product",
@@ -1259,6 +1640,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a116769-s7946",
+    "fingerprint": "2cddc1019e795c5b656cad496a02d69a7270943d4e7ebadf21217cb980f5dbc3",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 101020932 / 101020932 とメーカー品番 101020932 を突合。名称「Grove Temperature & Humidity Sensor V2.0(DHT20)」と「GROVE - デジタル温度・湿度センサ（DHT20）」（メーカー製品名: Grove - Temperature & Humidity Sensor V2.0 (DHT20)）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a116770-s3933",
     "fingerprint": "2a38f88bbd26b74d9f7bd0522b77d58050f6f2ea6c840db62305a83d85dc6667",
     "decision": "same_product",
@@ -1292,6 +1685,43 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a116774-s5335",
+    "fingerprint": "c657c64b5a060fa58bf9af6a952097818306c0ab85804bfe8c64921637b83a97",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 103030278 / 103030278 とメーカー品番 103030278 を突合。名称「High Accuracy RTC(DS3231)」と「Raspberry Pi用高精度RTC（DS3231）」（メーカー製品名: High Accuracy Pi RTC(DS3231)）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a116775-s8527",
+    "fingerprint": "6f9ec1d01ad4b141f1b952d2813db074d6cd6de4c855752a83cde4783b23c292",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 110991327 / 110991327 とメーカー品番 110991327 を突合。名称「Heat Sink Kit for Raspberry Pi 4B」と「Raspberry Pi 4B用ヒートシンクキット - シルバーアルミニウム」（メーカー製品名: Heat Sink Kit for Raspberry Pi 4B - Silver Aluminum）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a116776-s1246",
+    "fingerprint": "7d68307e2e465259faa9a35eccaf7f0a3a3a1ebc7483b479a6665de94a0ce174",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 111020000 / 111020000 とメーカー品番 111020000 を突合。名称「Grove Button」と「GROVE - ボタン(パネルタイプ)」（メーカー製品名: Grove - Button(P)）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月名にパネルタイプの記載なし（構成は品番111020000のメーカー製品名「Grove - Button(P)」による）",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a116777-s7512",
     "fingerprint": "0f031408c88f2604428250a191aa7451a58ca92b61bef7a37d3a422c05900270",
     "decision": "same_product",
@@ -1303,6 +1733,42 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a116779-s6367",
+    "fingerprint": "a5ba3d029b20463ed89b2d183902f38ef3f880972f96d0673727afbbbd7b2aef",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 101020820 / 101020820 とメーカー品番 101020820 を突合。名称「Grove - Multichannel Gas Sensor v2」と「Grove - マルチチャンネルガスセンサ V2」（メーカー製品名: Grove - Multichannel Gas Sensor v2）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a116780-s7437",
+    "fingerprint": "3f5a7d468bef4ee9e9f64e729585966c76e8124513c8a8574af3b6cb7dc7229e",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 113020111 / 113020111 とメーカー品番 113020111 を突合。名称「I2C CAN-BUS Module based on MCP2551 and MCP2515」と「MCP2551/MCP2515I2Cベース I2C CAN-BUSモジュール」（メーカー製品名: I2C CAN Bus Module）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a116862-s5337",
+    "fingerprint": "45782dd5270e6fba06990e7d96cb0dcc200d8c1318d94fe95df1b18f43871807",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 101020592 / 101020592 とメーカー品番 101020592 を突合。名称「Grove - I2C High Accuracy Temperature&Humidity Sensor(SHT35)」と「GROVE - I2C 高精度温湿度センサ（SHT35）」（メーカー製品名: Grove - I2C High Accuracy Temp&Humi Sensor(SHT35)）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a116904-s7435",
     "fingerprint": "916027153df9dd08288cfe2fd8840a17def5dc47d4d1b6d9f354d808e2486db4",
     "decision": "same_product",
@@ -1312,6 +1778,42 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a116925-s2510",
+    "fingerprint": "99002755936e8d94d64bec53c54c2776ed4c2ac8be68ba2ebb4158c153388950",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 105020010 / 105020010 とメーカー品番 105020010 を突合。名称「Grove - I2C Mini Motor Driver」と「GROVE - I2C ミニモータードライバ」（メーカー製品名: Grove - I2C Mini Motor Driver）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a116955-s7172",
+    "fingerprint": "bc2f24f1bdf0640d5a1dd8fc21b260cae07b1e6b3a2bfcb5326d9768f04b8997",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 SC0468 / SC0468 とメーカー品番 SC0468 を突合。名称「Raspberry Pi PoE+ HAT」と「Raspberry Pi PoE+ HAT」（メーカー製品名: POE+ HAT）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Raspberry Pi Trading。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a116956-s5843",
+    "fingerprint": "81bfd49f386d5e3ee2a96ff65b431fc5f30f48a4f11310bac034b8f4feb7c359",
+    "decision": "unresolved",
+    "evidence": "型番RP-VC1は一致するが、秋月名は「Piカメラ VR220 広角レンズセット」。相手はRaspberry Pi カメラモジュールV2にRP-L220レンズを取り付けた組立済カメラで、レンズ改造キットは別商品と記載。秋月掲載品がカメラモジュールを含む組立済品か確定できない。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月掲載品の構成（カメラモジュール同梱の組立済品か、レンズのみか）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a116997-s9315",
@@ -1345,6 +1847,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a117106-s7580",
+    "fingerprint": "a2a68f06404e753828de0c4e54d9104d85ec18f39de2db65f06b9aa5e5c7d879",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 CEBB-CXM1501GR-02 / CXM1501GR とメーカー品番 CXM1501GR を突合。名称「SPRESENSE用ELTRESアドオンボード」と「SPRESENSE用ELTRESアドオンボード」（メーカー製品名: SPRESENSE用ELTRESアドオンボード）の製品本体/用途・記載された構成が対応することを確認。秋月の原型番CEBB-CXM1501GR-02と相手の商品コードCEBB-CXM1501GR-02が一致し、相手のメーカー品番欄CXM1501GRは搭載ELTRESモジュール名。メーカー記載: クリエイティブジャパン。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a117107-s7908",
@@ -1411,6 +1925,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a117211-s7231",
+    "fingerprint": "af6abbd56f44b2c376de830cc3eea2f3942205a93b48f7973fbec4e1bf641152",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 M5STACK-U109 / U109 とメーカー品番 U109 を突合。名称「OV2640搭載 Unit Cam Wi-Fi Camera」と「OV2640搭載 Unit Cam Wi-Fi Camera--在庫限り」（メーカー製品名: Unit Cam Wi-fi Camera (OV2640)）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: M5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a117213-s7254",
     "fingerprint": "95ad93abb4042a1466fa8f3515c5a5cb24ea6cd593bde56ce7e0424952fe2d80",
     "decision": "same_product",
@@ -1455,6 +1981,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a117235-s7950",
+    "fingerprint": "5dd4b7f39ea990ba10b2b168175e7793f71f1e8241e040bc9751d96e90855489",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 978-4-87311-967-0 / 978-4-87311-967-0 とメーカー品番 978-4-87311-967-0 を突合。名称「【書籍】SPRESENSEではじめるローパワーエッジAI」と「SPRESENSEではじめるローパワーエッジAI」（メーカー製品名: SPRESENSEではじめるローパワーエッジAI）の製品本体/用途・記載された構成が対応することを確認。ISBN 978-4-87311-967-0と書名が一致。メーカー記載: オライリー・ジャパン。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a117240-s7471",
     "fingerprint": "d93ef5276153fbad084023f4925500460a664b5cb1554f8ce8b78c173eff6794",
     "decision": "same_product",
@@ -1484,6 +2022,18 @@
     "differences": [],
     "missingEvidence": [],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a117313-s2641",
+    "fingerprint": "f58d1cddbe55928786601a2162a9973378a684cf0bf54e4845034a32b8ab597b",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 2461 / 2461 とメーカー品番 2461 を突合。名称「Passive GPS Antenna uFL - 15mm x 15mm 1 dBi gain」と「uFL接続 15mm GPS用アンテナ」（メーカー製品名: Passive GPS Antenna uFL - 15mm x 15mm 1 dBi gain）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Adafruit。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a117314-s7216",
@@ -1662,6 +2212,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a117616-s8672",
+    "fingerprint": "be1156de8f6b91ddb60ab58711fece9f1a12613cc7f9c20382693e2b9102e24d",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 E220-900T22S(JP)-EV1 / E220-900T22S(JP)-EV1 とメーカー品番 E220-900T22S(JP)-EV1 を突合。名称「LoRaモジュール評価ボード E220-900T22S(JP)-EV1」と「LoRa通信モジュール（E220-900T22S）用評価ボード--在庫限り」（メーカー製品名: E220-900T22S(JP)-EV1 LoRaモジュール評価ボード）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: クレアリンクテクノロジー。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a117627-s8883",
@@ -1849,6 +2411,30 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a117968-s8704",
+    "fingerprint": "f84d6856f08610966a7f7cc304c18d147e24edd84f6c99c0c91ab2117adf20cf",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 SC0870 / SC0870 とメーカー品番 SC0870 を突合。名称「Piカメラ HQ(M12マウントカメラボディ)」と「Raspberry Pi HQ Camera - M12マウント」（メーカー製品名: M12 HQ Camera）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Raspberry Pi Trading。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a117969-s8700",
+    "fingerprint": "951b4d56ac44e94661ae0c2e8a2802d565d569af6145e2eaf49e7fb6be05e76b",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 SC0872 / SC0872 とメーカー品番 SC0872 を突合。名称「Raspberry Pi カメラモジュール3」と「Raspberry Pi カメラモジュール V3--販売終了」（メーカー製品名: Camera Module 3）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Raspberry Pi Trading。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a117971-s8708",
     "fingerprint": "14d46de4d2a6136202898f71371d404e3ecddcbc798963fcc99d90b3df063a05",
     "decision": "same_product",
@@ -1858,6 +2444,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a117972-s8706",
+    "fingerprint": "d47ea88b8a9b1e0dd9726dceb07d0e96314fc8eaa77903ea6f52c69b2b46e86b",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 SC0947 / SC0947 とメーカー品番 SC0947 を突合。名称「M12マウントレンズ 超広角(対角線魚眼・フィッシュアイ) 2.7mm for Piカメラ HQ」と「Raspberry Pi HQ Camera（M12マウント）用 2.7mm超広角（魚眼）レンズ」（メーカー製品名: M12 Lens 12 Megapixel 2.7mm wide angle）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Raspberry Pi Trading。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a117973-s8707",
@@ -1926,6 +2524,42 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a118035-s8970",
+    "fingerprint": "f20152d55e84e57ba1b12aef9357c483157ccc0195a3164500f7470ef252ca57",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 104030087 / 104030087 とメーカー品番 104030087 を突合。名称「Round Display for XIAO」と「Seeed Studio XIAO用円形ディスプレイ - 1.28インチ」（メーカー製品名: Round Display for XIAO）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a118036-s9384",
+    "fingerprint": "78d601715ef3a5fa7bc2fbb5dbe4b3a96d7923f7110432b104a5c0c78a08fc49",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 114993088 / 114993088 とメーカー品番 114993088 を突合。名称「SenseCAP M2 Multi-Platform LoRaWAN Gateway AS923」と「SenseCAP マルチプラットフォーム LoRaWAN 屋内ゲートウェイ（SX1302） - AS923 (Japan)」（メーカー製品名: SenseCAP Multi-Platform LoRaWAN Indoor Gateway(SX1302) - AS923 (Japan)）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a118037-s8943",
+    "fingerprint": "fa5473493af6758ffc6d6b4aa74b149f575a7d198784e3042b3900c142c5c6d3",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 B0401 / B0401 とメーカー品番 B0401 を突合。名称「500万画素オートフォーカスSPIカメラモジュール」と「Arducam Mega 5MP SPIカメラモジュール（オートフォーカス）」（メーカー製品名: Mega 5MP SPI Camera Module with Autofocus Lens for Any Microcontroller）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: ArduCAM。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a118038-s8951",
     "fingerprint": "ae77c39d10eb183d1f168fa4858b7d073d7ac2508e9bba814d506e57b6c30dc2",
     "decision": "same_product",
@@ -1957,6 +2591,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a118077-s8872",
+    "fingerprint": "1f87f36a46ffe2e661af5b42f91660a6b76d76389785cfb12005dc420437d3f1",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 101991041 / 101991041 とメーカー品番 101991041 を突合。名称「RS485 750cm Ultrasonic Level Sensor」と「超音波距離センサ (28～750cm / RS485)」（メーカー製品名: RS485 750cm Ultrasonic Level Sensor）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a118078-s8968",
@@ -2056,6 +2702,43 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a118122-s9229",
+    "fingerprint": "c3d9e14921c59ee58f550b25372ad0f946d90a913e3e7efb105b0c0631cb5e56",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 110991904 / 110991904 とメーカー品番 110991904 を突合。名称「Jetson Orin NX/Orin Nano/Xavier NXモジュール用アルミヒートシンク」と「Jetson Orin NX/Orin Nano/Xavier NX モジュール用 ファン付きアルミヒートシンク」（メーカー製品名: Aluminum Heatsink with Fan for Jetson Orin NX/Orin Nano/Xavier NX Module）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月名にファンの記載なし（構成は同一品番110991904のメーカー製品名「Aluminum Heatsink with Fan」による）",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a118123-s7433",
+    "fingerprint": "c962002b822aab34d1d4ecffbfb6bb179142970c4a20695faac75fb591532b99",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 114992686 / 114992686 とメーカー品番 114992686 を突合。名称「Jetson Nanoモジュール用ヒートシンク」と「Jetson Nanoモジュール用 アルミヒートシンク」（メーカー製品名: Jetson Nano Module Heatsink）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a118133-s7669",
+    "fingerprint": "9fcdae4afd4dd33daa72c29cd1d097db463702c884ddb07f03831e7f7da12163",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 ABX00034 / ABX00034 とメーカー品番 ABX00034 を突合。名称「Arduino Nano 33 BLE(ピンヘッダー実装済)」と「Arduino Nano 33 BLE（ピンヘッダ実装済）--販売終了」（メーカー製品名: Arduino Nano 33 BLE with headers）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Arduino。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a118135-s8701",
     "fingerprint": "0af29e6e1719536fb3d8c26f45f5de763b3d23d83b8c77bae1f31138c531ab85",
     "decision": "same_product",
@@ -2111,6 +2794,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a118194-s8777",
+    "fingerprint": "d8610bb1b41442bab0461c72f0f7aff059e94e4e1c81dde393c89cd8e8d3c631",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 M5STACK-S007 / S007 とメーカー品番 S007 を突合。名称「M5Stamp S3」と「M5StampS3--在庫限り」（メーカー製品名: M5Stamp ESP32S3 Module）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: M5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a118238-s3531",
     "fingerprint": "d2c6fe4e59a04ef424ee9b00b833a2d528dd029c716ef930a632ad12fc2c0410",
     "decision": "same_product",
@@ -2133,6 +2828,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a118253-s9670",
+    "fingerprint": "ecd7fb58cc1ec4a1d906bebca6d323ae6d7b5b0d8ea3b39da47ef567d7d3b456",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 317990687 / 317990687 とメーカー品番 317990687 を突合。名称「Wio-E5 Wireless Module (Bulk)」と「Wio-E5（STM32WLE5JC）LoRa無線モジュール」（メーカー製品名: Wio-E5 Wireless Module (Bulk)-28P）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a118306-s9414",
     "fingerprint": "fd1df324ccf9862eab65718e71246d1329093c77c0e1c3a5664e9ae4bd8079b3",
     "decision": "same_product",
@@ -2142,6 +2849,43 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a118307-s9404",
+    "fingerprint": "73d4370eef377829869dfe5a1b9d1a520b4cc9f8f107b041a65b17ba710bbf18",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 114993186 / 114993186 とメーカー品番 114993186 を突合。名称「Wio Tracker 1110 Dev Board」と「Wio Tracker 1110開発ボード」（メーカー製品名: Wio Tracker 1110 Dev Board）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a118338-s9350",
+    "fingerprint": "5c71daee3bf3f3ee2794d45eb9c149f6dd76f288331056dc4251ad1ec6608694",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 M5STACK-K016-P2 / K016-P2 とメーカー品番 K016-P2 を突合。名称「M5StickC Plus2」と「M5StickC Plus2--在庫限り」（メーカー製品名: M5StickC Plus2）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: M5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a118381-s9476",
+    "fingerprint": "178755964ad002e9988e25f6d431de0c3e24f148d734dfbb1a992c9a47743090",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 101021112 / 101021112 とメーカー品番 101021112 を突合。名称「Grove Vision AI Module V2」と「Grove -Vision AI Module V2（カメラなし）」（メーカー製品名: Grove - Vision AI Module V2）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側のカメラ同梱有無（相手はカメラなしと明記）",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a118382-s9558",
@@ -2309,6 +3053,43 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a129537-s9695",
+    "fingerprint": "35e2c813eb3f84b88575c7781fbd9c97104e671b9847fc82580a3c6c0217caf9",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 SC1438 / SC1438 とメーカー品番 SC1438 を突合。名称「Raspberry Pi AI Kit」と「Raspberry Pi AI Kit（Hailo 8L搭載）--在庫限り」（メーカー製品名: Raspberry Pi AI Kit）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Raspberry Pi Trading。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a129578-s8841",
+    "fingerprint": "086e100dac044b096633bc2f03b7cff7eb57a6bae756663bb2d607b785e14cb7",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 102110764 / 102110764 とメーカー品番 102110764 を突合。名称「ODYSSEY X86J4125864 v2(TELEC)」と「J4125搭載 Odyssey X86J4125864 v2--販売終了」（メーカー製品名: ODYSSEY - X86J4125864 v2(TELEC)）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側のOSプリインストール状態（相手はWindows 11 Pro未アクティベート、アクティベート済みは別商品と記載）",
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a129579-s9750",
+    "fingerprint": "88b068761babe3931750e5bc822feae54780d25ca97960b07d20f3c2ee307ca1",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 SDM18 / SDM18 とメーカー品番 SDM18 を突合。名称「LIDARユニット SDM18」と「YDLIDAR SDM18--在庫限り」（メーカー製品名: SDM18）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: YDLIDAR。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a129604-s9809",
     "fingerprint": "ba5ec49e1009e1c6e04eed5ea23ca16cf27ede4a6e172dac9f33c483fd8da0a8",
     "decision": "same_product",
@@ -2452,6 +3233,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a130169-s9942",
+    "fingerprint": "f9488c726eefcc52693079d799f0ee4054c554a43bdbbae4ab83c557a1fb4877",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 SC1675 / SC1675 とメーカー品番 SC1675 を突合。名称「Raspberry Pi SSD Kit 256GB」と「Raspberry Pi SSD Kit 256GB」（メーカー製品名: Raspberry Pi SSD kit - 256GB）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Raspberry Pi Trading。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a130170-s9940",
     "fingerprint": "fa058164f3c35d335644dbbb4c45d49835557cd8264f207c2cef36ad6aef2b9e",
     "decision": "same_product",
@@ -2461,6 +3254,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a130182-s9828",
+    "fingerprint": "5f8e7d49dbf56b0c25bc915530d36274eb8f89c9d08e94d56f120fd0f433d717",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 MOTION-2350-PRO / MOTION-2350-PRO とメーカー品番 MOTION-2350-PRO を突合。名称「MOTION 2350 Pro」と「MOTION 2350 Pro」（メーカー製品名: MOTION 2350 Pro - Advanced Robotics Controller for Beginners）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Cytron。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a130199-s10055",
@@ -2604,6 +3409,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a130250-s9945",
+    "fingerprint": "cb465740dccc77108c9f28001ae077228640c75d6367226d366d4d300e6e9ce8",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 SC1440 / SC1440 とメーカー品番 SC1440 を突合。名称「Raspberry Pi SSD 512GB」と「Raspberry Pi SSD 512GB」（メーカー製品名: Raspberry Pi SSD 512GB）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Raspberry Pi Trading。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a130251-s10001",
@@ -3343,6 +4160,18 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a131976-s11327",
+    "fingerprint": "014f6ae38e25021bb08eaece468757d8b3d52c2fb277f7ff128bfbc120bf4040",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 EL15 / EL15 とメーカー品番 EL15 を突合。名称「直流電子負荷 EL15」と「EL15 小型直流電子負荷」（メーカー製品名: EL15 DC Electronic Load）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: ALIENTEK。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "a131977-s10086",
     "fingerprint": "55bda3823ec72fd8f5077570060d4f86ed303f00dcb261ff44fbf4cf791e0167",
     "decision": "same_product",
@@ -3352,6 +4181,18 @@
       "販売数量・付属品・販売店サービス（価格比較は未承認）"
     ],
     "reviewedAt": "2026-09-07"
+  },
+  {
+    "id": "a131978-s11326",
+    "fingerprint": "951ddcd618bc66943a0cfdb2f7b707167087a731daf0420650fa7e1246b66ebf",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 HP20 / HP20 とメーカー品番 HP20 を突合。名称「はんだ付け用ミニホットプレート HP20」と「HP20 USB-PD ハンダづけ用プリヒーター」（メーカー製品名: HP20 Heating Plate）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: ALIENTEK。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "a132013-s11193",
@@ -3387,6 +4228,34 @@
     "reviewedAt": "2026-09-07"
   },
   {
+    "id": "a132110-s9975",
+    "fingerprint": "d0463ff5b6524e68172032a9bcd9fb9e9aeafbce45fe053225cfab2016995392",
+    "decision": "same_product",
+    "evidence": "保存カタログの原型番 103110063 / 103110063 とメーカー品番 103110063 を突合。名称「PCIe to M.2 hat for Raspberry Pi 5」と「SeeedStudio Raspberry Pi 5用 PCIe to M.2 HAT+基板」（メーカー製品名: PCIe to M.2 hat for Raspberry Pi 5）の製品本体/用途・記載された構成が対応することを確認。メーカー記載: Seeed。",
+    "differences": [],
+    "missingEvidence": [
+      "販売数量・付属品・販売店サービス（価格比較は未承認）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116011\",\"m5stack\",\"h-m5stickc-plus-esp32-pico-mini-iot-development-kit\"]",
+    "fingerprint": "03818bb458656c616c918fd835c86dbc197688daaea0a0ebd64164c0ffaaca16",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードK016-P（末尾を保持、秋月原型番M5STACK-K016-Pの接頭辞を正規化）、小売「M5StickC Plus」と公式「M5StickC PLUS ESP32-PICO Mini IoT Development Kit」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "43983456764161"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "[\"akizuki\",\"116170\",\"m5stack\",\"h-m5stack-core2-esp32-iot-development-kit-v1-3\"]",
     "fingerprint": "12e23b0b40900fab771ce9f502203ca31365323f085f0ac91426f49791adbe8b",
     "decision": "same_product",
@@ -3417,6 +4286,24 @@
       "37687799251116"
     ],
     "reviewerModel": "GPT-6 (Codex)"
+  },
+  {
+    "id": "[\"akizuki\",\"117206\",\"m5stack\",\"h-m5paper-esp32-development-kit-960x540-4-7-eink-display-235-ppi\"]",
+    "fingerprint": "44daa4e5fd6de33214bbb39f048c85c057e78cafaf0c4eed5dbaebe3dbbd73a7",
+    "decision": "unresolved",
+    "evidence": "秋月名は「M5Paper V1.1」だが原型番はM5STACK-K049。公式とスイッチサイエンスではV1.1はK049-Bとして別掲載され、公式K049は初代M5Paper。秋月の名称と型番が矛盾し、どちらの版か確定できない。",
+    "differences": [
+      "秋月名はV1.1、公式K049は初代（V1.1は公式K049-Bとして別掲載）"
+    ],
+    "missingEvidence": [
+      "秋月掲載品の版（初代K049かV1.1のK049-Bか）"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "37595977908396"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "[\"akizuki\",\"117207\",\"m5stack\",\"h-unitv2-ai-camera-gc2145\"]",
@@ -3481,6 +4368,22 @@
       "40279458840748"
     ],
     "reviewerModel": "GPT-6 (Codex)"
+  },
+  {
+    "id": "[\"akizuki\",\"117211\",\"m5stack\",\"h-unit-cam-wi-fi-camera-ov2640\"]",
+    "fingerprint": "af61dc3fff981c2fbdcd0341a9510f9dfba551422c45c9d316e931d8e29b1ef9",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードU109（末尾を保持、秋月原型番M5STACK-U109の接頭辞を正規化）、小売「OV2640搭載 Unit Cam Wi-Fi Camera」と公式「[EOL] Unit Cam Wi-Fi Camera (OV2640)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "39607138222252"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "[\"akizuki\",\"117213\",\"m5stack\",\"h-env-iii-unit-with-temperature-humidity-air-pressure-sensor-sht30-qmp6988\"]",
@@ -3609,6 +4512,38 @@
       "43525300584705"
     ],
     "reviewerModel": "GPT-6 (Codex)"
+  },
+  {
+    "id": "[\"akizuki\",\"118194\",\"m5stack\",\"h-m5stamp-esp32s3-module\"]",
+    "fingerprint": "b6ba65c18dbc7e5af0c639ebebb4404500af45e39b03a0e3ffb57223ff3ebbae",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードS007（末尾を保持、秋月原型番M5STACK-S007の接頭辞を正規化）、小売「M5Stamp S3」と公式「[EOL] M5Stamp ESP32S3 Module」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "43749131649281"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118338\",\"m5stack\",\"h-m5stickc-plus2-esp32-mini-iot-development-kit\"]",
+    "fingerprint": "bc8edb8fe59b3bca1365819df6bcb3e935ad83b8ab6672f359f3ac2125d3c7f7",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードK016-P2（末尾を保持、秋月原型番M5STACK-K016-P2の接頭辞を正規化）、小売「M5StickC Plus2」と公式「[EOL] M5StickC PLUS2 ESP32 Mini IoT Development Kit」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "44269818216705"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "[\"akizuki\",\"129456\",\"m5stack\",\"h-m5stack-nanoc6-dev-kit\"]",
@@ -5021,6 +5956,22 @@
     "reviewerModel": "GPT-6 (Codex)"
   },
   {
+    "id": "[\"switch-science\",\"11009\",\"m5stack\",\"h-ai-8850-llm-acceleration-m-2-kit-4gb-version-ax8850\"]",
+    "fingerprint": "903714c57189c0580d47ceb4a7a6fa7de0f13792b499c20a7d3bcbaf0f22eb35",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードAI-002-4G（末尾を保持）、小売「M5Stack AI-8850 LLMアクセラレーション M.2キット 4GB（AX8850）」と公式「AI-8850 LLM Acceleration M.2 Kit 4GB Version (AX8850)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49249291206913"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "[\"switch-science\",\"11010\",\"m5stack\",\"h-ai-pyramid-computing-box-4gb-version-ax8850\"]",
     "fingerprint": "2594f550a8ae0501e9d2f7e9e4bbee592f8577e422fcd6a349e772b9784a2d8a",
     "decision": "same_product",
@@ -5437,6 +6388,38 @@
     "reviewerModel": "GPT-6 (Codex)"
   },
   {
+    "id": "[\"switch-science\",\"11253\",\"m5stack\",\"h-stackchan-core-esp32-s3\"]",
+    "fingerprint": "0d3b445fa779f8a8e9c4973e26bccdab1c9435e24b4cb0cbec355623e096e9a8",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードC156（末尾を保持）、小売「M5StackChan Core」と公式「StackChan Core (ESP32-S3)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49323992580353"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11254\",\"m5stack\",\"h-stackchan-body\"]",
+    "fingerprint": "96946813c195c6c33c09e980e5c71a189fa0ba22d2cdb30aa1de2b3176efa3a8",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードA180（末尾を保持）、小売「M5StackChan Body」と公式「StackChan Body」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49324101107969"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
     "id": "[\"switch-science\",\"11255\",\"m5stack\",\"h-chain-rgb-matrix-with-8x8-leds\"]",
     "fingerprint": "fd1fb1831ab758eb5c2653295689c5e393533c37e8c3a6b4f40c780bae82cca4",
     "decision": "same_product",
@@ -5499,6 +6482,198 @@
       "49231351480577"
     ],
     "reviewerModel": "GPT-6 (Codex)"
+  },
+  {
+    "id": "[\"switch-science\",\"11346\",\"m5stack\",\"h-base-dual-16340-1400-mah\"]",
+    "fingerprint": "5125df8a8076eb0a440e8685f2bd5d599ddfb066ba0c68ec7a7b3291d6393402",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードA179（末尾を保持）、小売「M5Stack デュアル16340バッテリーベース（1400mAh）」と公式「Base Dual 16340 (1400 mAh)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49324475842817"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11347\",\"m5stack\",\"h-m5stampc5-module-esp32-c5\"]",
+    "fingerprint": "cf1951a1a147622504df2ea60932afa38e43873ca768e2d57070d16f549e487a",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードS016（末尾を保持）、小売「M5StampC5（ESP32-C5）」と公式「M5StampC5 Module (ESP32-C5)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49613777338625"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11348\",\"m5stack\",\"h-add-on-display-out-for-poe-p4-lt8912b\"]",
+    "fingerprint": "b9b8fb3f3bd4841f261ef60c2d6839a6828805d318fd65c6af9d9007e2717f31",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードU221（末尾を保持）、小売「M5Stack PoE-P4用ディスプレイ出力追加ボード（LT8912B）」と公式「Add-on Display Out for PoE-P4 (LT8912B)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49507087417601"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11349\",\"m5stack\",\"h-m5stickc-plus-se-mini-iot-dev-kit-esp32-pico\"]",
+    "fingerprint": "265f96222b45a656e8e5f299664157a09dc512e7a85ea1e47b59797b85cb0842",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードK016-P-SE（末尾を保持）、小売「M5StickC Plus SE」と公式「M5StickC PLUS SE Mini IoT Dev Kit (ESP32-PICO)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49847501357313"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11350\",\"m5stack\",\"h-io-module-for-stamplc-ina226aidgsr\"]",
+    "fingerprint": "9083f1e825fc1dc4086777d6960015c79935c5e4f596eeccda91b562fc2b43bf",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードA176（末尾を保持）、小売「M5StampPLCコントローラー用 I/Oモジュール（INA226AIDGSR）」と公式「IO Module for StamPLC (INA226AIDGSR)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49847498637569"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11351\",\"m5stack\",\"h-chain-buzzer\"]",
+    "fingerprint": "024a4829b9c5613229b3eb0eaaa1c6eb1d1471ec43ed7cb52d0ffffa1ecdf63f",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードU224（末尾を保持）、小売「M5Stack Chain Buzzer」と公式「Chain Buzzer」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49897523413249"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11352\",\"m5stack\",\"h-m5stampc5-module-with-2-54-header-pin\"]",
+    "fingerprint": "4451ce5777f5a7f4681819125b330bbad35634e4c947a9e58c24387911ed68b8",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードS016-DIP（末尾を保持）、小売「M5StampC5 DIP（ESP32-C5）」と公式「M5StampC5 Module with 2.54 Header Pin」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49613596754177"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11371\",\"m5stack\",\"h-add-on-display-in-for-poe-p4-lt6911d\"]",
+    "fingerprint": "07eae7f5f5a40f2ab40492d5049e93cb364fc0e13e6b6da93acdc57d6cf8ef39",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードU220（末尾を保持）、小売「M5Stack PoE-P4用HDMIビデオ入力追加ボード（LT6911D）」と公式「Add-on Display In for PoE-P4 (LT6911D)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "50158996914433"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11372\",\"m5stack\",\"h-chain-pir-stm32g031\"]",
+    "fingerprint": "834d94cdbff54160e1cdf9e2c8ad6e858bbeee24abf064e333e25b12b2899db7",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードU225（末尾を保持）、小売「M5Stack Chain PIR（AS312搭載）」と公式「Chain PIR (STM32G031)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "49937660248321"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11374\",\"m5stack\",\"h-m5stamp-uwb-module-qm33120w\"]",
+    "fingerprint": "bb241f6c601da1a924d1275f08bf4c4fc811bc3485ead5b52bb68e0d8945488a",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードS017（末尾を保持）、小売「M5Stamp UWBモジュール」と公式「M5Stamp UWB Module (QM33120W)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "50187306139905"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11375\",\"m5stack\",\"h-m5stamp-uwb-module-with-fpc-qm33120w\"]",
+    "fingerprint": "7fa6f65c1cd3851c4b18b5845b91014d3208709b26f7c6bbafc4c7180a137155",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードS017-F（末尾を保持）、小売「M5Stamp UWBモジュール（FPCコネクタ、FPCケーブル付き）」と公式「M5Stamp UWB Module with FPC (QM33120W)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "50187584962817"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11376\",\"m5stack\",\"h-m5go-battery-bottom2-for-core2-only-v1-3\"]",
+    "fingerprint": "cc0a81baf01668e53f62416cba11f53d6fe136c8528244bd2a2140f68210050a",
+    "decision": "same_product",
+    "evidence": "メーカーM5Stack、製品コードA014-C-V13（末尾を保持）、小売「M5GO Bottom2 V1.3 - M5Stack Core2用バッテリーボトム」と公式「M5GO Battery Bottom2 (for Core2 only) V1.3」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-04",
+    "offerIds": [
+      null,
+      "50248043921665"
+    ],
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "[\"switch-science\",\"3647\",\"m5stack\",\"h-basic-core-iot-development-kit\"]",
@@ -6830,19 +8005,19 @@
   },
   {
     "id": "[\"switch-science\",\"6470\",\"m5stack\",\"h-m5stickc-plus-esp32-pico-mini-iot-development-kit\"]",
-    "fingerprint": "7ba8756463149bf82eeb548f9528666786605b98408b5799bad207671b6299b9",
+    "fingerprint": "8120b19ab84b9c41a88315851f331521978a8e0bcc841b76881f06a5288a5da4",
     "decision": "same_product",
-    "evidence": "メーカーM5Stack、製品コードK016-P（末尾を保持）、小売「M5StickC Plus--在庫限り」と公式「[EOL] M5StickC PLUS ESP32-PICO Mini IoT Development Kit」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "evidence": "メーカーM5Stack、製品コードK016-P（末尾を保持）、小売「M5StickC Plus--在庫限り」と公式「M5StickC PLUS ESP32-PICO Mini IoT Development Kit」の製品系統・記載構成を対照確認。2026-10-03の公式掲載で[EOL]表記が外れたため再確認。対象variantはDefault Title。",
     "differences": [],
     "missingEvidence": [
       "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
     ],
-    "reviewedAt": "2026-09-12",
+    "reviewedAt": "2026-10-04",
     "offerIds": [
       null,
       "43983456764161"
     ],
-    "reviewerModel": "GPT-6 (Codex)"
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "[\"switch-science\",\"6471\",\"m5stack\",\"h-atom-hub-switch-kit\"]",
@@ -7678,19 +8853,19 @@
   },
   {
     "id": "[\"switch-science\",\"6785\",\"m5stack\",\"h-m5go-battery-bottom2-for-core2-only\"]",
-    "fingerprint": "867e5faa0bfe1aa174b4b9dacd7f5f1a20063c50bdc56cc8c0ae8186a2f53717",
+    "fingerprint": "48e2dc0bdddfcbf2d32228a90314ab5af7bfe56a39cdd926e618fe11e5bcc39e",
     "decision": "same_product",
-    "evidence": "メーカーM5Stack、製品コードA014-C（末尾を保持）、小売「M5GO Bottom2 - M5Stack Core2用バッテリーボトム」と公式「M5GO Battery Bottom2 (for Core2 only)」の製品系統・記載構成を対照確認。対象variantはDefault Title。",
+    "evidence": "メーカーM5Stack、製品コードA014-C（末尾を保持）、小売「M5GO Bottom2 - M5Stack Core2用バッテリーボトム--在庫限り」と公式「M5GO Battery Bottom2 (for Core2 only)」の製品系統・記載構成を対照確認。小売名に在庫限りが付いたため再確認。後継V1.3は別コードA014-C-V13として別途対応。対象variantはDefault Title。",
     "differences": [],
     "missingEvidence": [
       "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
     ],
-    "reviewedAt": "2026-09-12",
+    "reviewedAt": "2026-10-04",
     "offerIds": [
       null,
       "37525141815468"
     ],
-    "reviewerModel": "GPT-6 (Codex)"
+    "reviewerModel": "Claude Opus 5.5"
   },
   {
     "id": "[\"switch-science\",\"6786\",\"m5stack\",\"h-esp32-psram-timer-camera-fisheye-ov3660\"]",

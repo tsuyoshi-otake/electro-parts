@@ -48,10 +48,12 @@ describe('curated relation catalogue', () => {
     }
   });
 
-  it('covers all 20 scoped M5Stack products, preserves revision alternatives, and does not relabel uncertainty as similarity', () => {
+  it('covers all 25 scoped M5Stack products, preserves revision alternatives, and does not relabel uncertainty as similarity', () => {
     const ids = new Set(PRODUCT_RELATIONS.flatMap((r) => r.products.filter((p) => p.storeId === 'akizuki' && p.modelNumber.startsWith('M5STACK-')).map((p) => p.pageKey)));
-    expect(ids.size).toBe(20);
-    for (const id of ['117375', '117209', '117215', '116170', '131822', '129456', '117217', '117218']) expect(ids.has(id)).toBe(true);
+    expect(ids.size).toBe(25);
+    for (const id of ['117375', '117209', '117215', '116170', '131822', '129456', '117217', '117218', '116011', '117211', '118194', '118338', '117206']) expect(ids.has(id)).toBe(true);
+    // Name says V1.1, model says K049 (the original); the official V1.1 is K049-B, so it stays unresolved.
+    expect(PRODUCT_RELATIONS.find((r) => r.products.some((p) => p.storeId === 'akizuki' && p.pageKey === '117206'))!.kind).toBe('unresolved');
     expect(PRODUCT_RELATIONS.find((r) => r.id === 'a117215-s6260')!.kind).toBe('same_product');
     expect(PRODUCT_RELATIONS.find((r) => r.id === 'a117215-s11175')!.kind).toBe('similar_product');
     expect(PRODUCT_RELATIONS.find((r) => r.id === 'a117217-s4051')!.kind).toBe('unresolved');
