@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { endpoint, generate, parseCatalog, serializeCatalog, serializeRelations } from '../../scripts/matching/generate.ts';
-import { discover, discoverCatalog, fingerprint, type Catalog, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
-import { identityCodes } from '../../scripts/matching/catalogs.ts';
+import { catalogStores, discover, discoverCatalog, fingerprint, listingKey, type Catalog, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
+import { appendSupplement, applySupplements, identityCodes, type SnapshotListings } from '../../scripts/matching/catalogs.ts';
 import type { ProductRelation } from '../../userscript/core/relations.ts';
 
 const read = (file: string): string => readFileSync(`data/matching/${file}`, 'utf8');
@@ -22,9 +22,9 @@ describe('reproducible reviewed matching pipeline', () => {
   });
   it('searches all three pairs and preserves distinct variants on a shared official product page', () => {
     expect(result.report.byStorePair).toEqual({
-      'akizuki/switch-science': { candidates: 309, verified: 293, unresolved: 6, pending: 0 },
-      'akizuki/m5stack': { candidates: 18, verified: 18, unresolved: 0, pending: 0 },
-      'switch-science/m5stack': { candidates: 503, verified: 499, unresolved: 2, pending: 0 },
+      'akizuki/switch-science': { candidates: 379, verified: 356, unresolved: 12, pending: 0 },
+      'akizuki/m5stack': { candidates: 23, verified: 22, unresolved: 1, pending: 0 },
+      'switch-science/m5stack': { candidates: 518, verified: 514, unresolved: 2, pending: 0 },
     });
     const strips = result.relations.filter(r => r.products[0].storeId === 'switch-science' && ['5208','5209'].includes(r.products[0].pageKey) && r.products[1].storeId === 'm5stack');
     expect(strips).toHaveLength(2);
@@ -43,18 +43,18 @@ describe('reproducible reviewed matching pipeline', () => {
     expect(discoverCatalog({...catalog, listings: [...catalog.listings].reverse()}).map(c => c.id)).toEqual(result.candidates.map(c => c.id));
   });
   it('searches every pinned listing and accounts for every candidate without automatic promotion', () => {
-    expect(catalog.listings).toHaveLength(19684);
-    expect(result.candidates).toHaveLength(830);
+    expect(catalog.listings).toHaveLength(23922);
+    expect(result.candidates).toHaveLength(920);
     expect(result.report.pending).toEqual([]);
-    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(12);
-    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(8);
-    expect(result.report).toMatchObject({ sameVerified: 810, similarVerified: 108, pricePolicies: 2 });
-    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(830);
+    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(13);
+    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(15);
+    expect(result.report).toMatchObject({ sameVerified: 892, similarVerified: 108, pricePolicies: 2 });
+    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(920);
     expect(result.report.byBrand['Seeed']!.accepted).toBeGreaterThan(30);
     expect(result.report.byBrand['Raspberry Pi Trading']!.accepted).toBeGreaterThan(40);
     expect(result.report.byBrand['Arduino']!.accepted).toBeGreaterThan(25);
     expect(generate(catalog, [], [], []).relations).toEqual([]);
-    expect(generate(catalog, [], [], []).report.pending).toHaveLength(830);
+    expect(generate(catalog, [], [], []).report.pending).toHaveLength(920);
   });
 
   it('produces byte-identical artifacts and a lossless, price-free evidence projection', () => {
@@ -79,6 +79,11 @@ describe('reproducible reviewed matching pipeline', () => {
     expect(byId.get('a116286-s3605')!.kind).toBe('unresolved');
     expect(byId.get('a117928-s5529')!.kind).toBe('unresolved');
     expect(byId.get('a130369-s10244')).toMatchObject({ kind: 'same_product', pricePolicy: null }); // 500-piece reel is NOT unit pricing.
+    // 2026-10-04: same code but a stated version/capacity/build the other listing does not pin stays unresolved.
+    for (const id of ['a112450-s4971', 'a112855-s5442', 'a113361-s3851', 'a113689-s3997', 'a116956-s5843', 'a110757-s8123', JSON.stringify(['akizuki', '117206', 'm5stack', 'h-m5paper-esp32-development-kit-960x540-4-7-eink-display-235-ppi'])]) {
+      expect(byId.get(id)).toMatchObject({ kind: 'unresolved', reviewStatus: 'needs_review', pricePolicy: null });
+    }
+    expect(byId.has('a116346-s2424')).toBe(false);
   });
 
   it('stops on changed source evidence, duplicate reviews, orphaned reviews and invalid family members', () => {
@@ -153,8 +158,67 @@ describe('indexed candidate discovery', () => {
     expect(() => generate(bad, [], [], [])).toThrow(/duplicate listing/);
     const short: Catalog = {...catalog, listings: catalog.listings.slice(1)};
     expect(() => generate(short, [], [], [])).toThrow(/incomplete source/);
-    expect(() => generate({...catalog, sources: [catalog.sources[0]!, catalog.sources[0]!]}, [], [], [])).toThrow(/duplicate source/);
+    expect(() => generate({...catalog, sources: [...catalog.sources, catalog.sources[0]!]}, [], [], [])).toThrow(/duplicate source/);
     const unknown = structuredClone(catalog); unknown.listings[0]!.storeId = 'unknown';
     expect(() => generate(unknown, [], [], [])).toThrow(/unknown source/);
+  });
+});
+
+describe('catalogue supplements', () => {
+  const m5 = catalog.listings.filter(p => p.storeId === 'm5stack');
+  const target = result.candidates.find(c => c.products[1].storeId === 'm5stack' && byId.has(c.id))!.products[1];
+  const later = '2026-11-01T00:00:00.000Z';
+  const fresh: Listing = {...structuredClone(m5[0]!), pageKey: 'synthetic-new', name: 'Synthetic unit', codes: ['ZZZQ-0001'], expectedModels: ['ZZZQ-0001'], url: 'https://shop.m5stack.com/products/synthetic-new'};
+  const snapshot = (rows: Listing[]): SnapshotListings => ({ text: JSON.stringify(rows), observedAt: later, listings: rows.map(p => ({...structuredClone(p), observedAt: later})) });
+  const renamed = m5.map(p => listingKey(p) === listingKey(target) ? {...p, name: `${p.name} (renamed)`} : p);
+
+  it('records the pinned sources, the 2026-10-03 supplements and the two re-reviewed rows', () => {
+    expect(catalogStores(catalog)).toEqual(['akizuki', 'switch-science', 'm5stack']);
+    expect(catalog.sources.filter(s => s.supplement).map(s => [s.storeId, s.observedAt.slice(0, 10), s.count, s.supplement!.snapshotCount]))
+      .toEqual([['akizuki', '2026-10-03', 4130, 12800], ['switch-science', '2026-10-03', 101, 10442], ['m5stack', '2026-10-03', 9, 672]]);
+    const retired = catalog.sources.flatMap(s => (s.retired ?? []).map(key => [s.storeId, s.observedAt.slice(0, 10), key]));
+    expect(retired).toEqual([['switch-science', '2026-08-02', 'switch-science/6785'], ['m5stack', '2026-09-12', 'm5stack/h-m5stickc-plus-esp32-pico-mini-iot-development-kit']]);
+    for (const [, , key] of retired) expect(catalog.listings.find(p => listingKey(p) === key)!.observedAt.slice(0, 10)).toBe('2026-10-03');
+    // The projection collapses storefront whitespace, so a re-spaced title is not an identity change.
+    for (const p of catalog.listings.filter(p => p.storeId === 'switch-science')) expect(p.name).not.toMatch(/\s{2,}/);
+  });
+
+  it('adds only absent rows and keeps a changed pinned row with its reviewed evidence', () => {
+    const { catalog: next, report } = appendSupplement(catalog, 'm5stack', 'm5stack-synthetic.json', snapshot([...renamed, fresh]), new Set());
+    expect(report).toMatchObject({ added: 1, replaced: [], keptPinned: m5.length, keptPinnedWithChanges: 1, absentFromSnapshot: [], snapshotCount: m5.length + 1 });
+    expect(next.sources.at(-1)).toMatchObject({ storeId: 'm5stack', observedAt: later, count: 1, supplement: { snapshotCount: m5.length + 1 } });
+    expect(next.listings.slice(0, catalog.listings.length)).toEqual(catalog.listings);
+    expect(next.listings.at(-1)).toMatchObject({ pageKey: 'synthetic-new', observedAt: later });
+    expect(serializeRelations(generate(next, legacy, reviews, families).relations)).toBe(serializeRelations(result.relations));
+    const shrunk = appendSupplement(catalog, 'm5stack', 'm5stack-synthetic.json', snapshot([fresh]), new Set()).report;
+    expect(shrunk.absentFromSnapshot).toHaveLength(m5.length);
+  });
+
+  it('replaces a pinned row only when named, retires it on its source and makes citing reviews stale', () => {
+    const key = listingKey(target);
+    const { catalog: next, report } = appendSupplement(catalog, 'm5stack', 'm5stack-synthetic.json', snapshot(renamed), new Set([key]));
+    expect(report.replaced).toEqual([{ key, changed: { name: [target.name, `${target.name} (renamed)`] } }]);
+    expect(next.listings.findIndex(p => listingKey(p) === key)).toBe(catalog.listings.findIndex(p => listingKey(p) === key));
+    expect(next.sources.find(s => s.storeId === 'm5stack' && s.observedAt === target.observedAt)!.retired).toContain(key);
+    expect(() => generate(next, legacy, reviews, families)).toThrow(/stale/);
+    expect(() => appendSupplement(catalog, 'm5stack', 'x.json', snapshot(m5), new Set([key]))).toThrow(/without an identity change/);
+    expect(() => appendSupplement(catalog, 'm5stack', 'x.json', snapshot(renamed.filter(p => listingKey(p) !== key).concat(fresh)), new Set([key]))).toThrow(/both catalogues/);
+    expect(() => appendSupplement(catalog, 'm5stack', 'x.json', snapshot(m5), new Set())).toThrow(/adds nothing/);
+    expect(() => appendSupplement(catalog, 'm5stack', 'x.json', snapshot([fresh, fresh]), new Set())).toThrow(/duplicate listing in m5stack snapshot/);
+    expect(() => applySupplements(catalog, [{ storeId: 'm5stack', file: 'x.json', snapshot: snapshot([fresh]) }], new Set(['akizuki/absent']))).toThrow(/no supplement replaced: akizuki\/absent/);
+  });
+
+  it('rejects supplements out of order, undercounted snapshots and invalid retired rows', () => {
+    const supplement = catalog.sources.findIndex(s => s.storeId === 'm5stack' && s.supplement);
+    const first = {...catalog, sources: [catalog.sources[supplement]!, ...catalog.sources.filter((_, i) => i !== supplement)]};
+    expect(() => generate(first, [], [], [])).toThrow(/invalid supplement order m5stack/);
+    const older = structuredClone(catalog); older.sources[supplement]!.observedAt = '2026-09-01T00:00:00.000Z';
+    expect(() => generate(older, [], [], [])).toThrow(/invalid supplement order m5stack/);
+    const under = structuredClone(catalog); under.sources[supplement]!.supplement!.snapshotCount = under.sources[supplement]!.count - 1;
+    expect(() => generate(under, [], [], [])).toThrow(/invalid supplement order m5stack/);
+    const absent = structuredClone(catalog); absent.sources.find(s => s.storeId === 'm5stack' && !s.supplement)!.retired!.push('m5stack/absent');
+    expect(() => generate(absent, [], [], [])).toThrow(/invalid retired rows m5stack/);
+    const notLater = structuredClone(catalog); notLater.sources[supplement]!.retired = [listingKey(m5.find(p => !p.observedAt.startsWith('2026-10-03'))!)];
+    expect(() => generate(notLater, [], [], [])).toThrow(/invalid retired rows m5stack/);
   });
 });

@@ -3,8 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import type { ProductRelation, RelationProduct } from '../../userscript/core/relations.ts';
-import { assertCatalog, discover, discoverCatalog, fingerprint, listingKey, pairId, type Catalog, type Family, type Listing, type Review } from './model.ts';
-import { importCatalogs, appendM5Stack, identityCodes } from './catalogs.ts';
+import { assertCatalog, catalogStores, discover, discoverCatalog, fingerprint, listingKey, pairId, type Catalog, type Family, type Listing, type Review } from './model.ts';
+import { importCatalogs, appendM5Stack, applySupplements, identityCodes, snapshotListings } from './catalogs.ts';
 
 export function endpoint(p: Listing, offerId?: string | null): RelationProduct {
   const variant = offerId ? p.variants?.find(v => v.offerId === offerId) : undefined;
@@ -18,7 +18,8 @@ const order = (a: { id: string }, b: { id: string }): number => a.id < b.id ? -1
 export function generate(catalog: Catalog, legacy: readonly ProductRelation[], reviews: readonly Review[], families: readonly Family[]) {
   assertCatalog(catalog);
   const listings = new Map(catalog.listings.map(p => [listingKey(p), p]));
-  const [left, right] = catalog.sources;
+  const stores = catalogStores(catalog);
+  const [left, right] = stores;
   if (!left || !right) throw new Error('two sources required');
   const candidates = discoverCatalog(catalog);
   const candidateIndex = new Map(candidates.map(p => [p.id, p]));
@@ -76,7 +77,7 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     });
     familyCounts[family.id] = 0;
     // Bounded reviewed family blocks, not a catalogue-wide similarity cross join.
-    for (const a of resolved.filter(m => m.listing.storeId === left.storeId)) for (const b of resolved.filter(m => m.listing.storeId === right.storeId)) {
+    for (const a of resolved.filter(m => m.listing.storeId === left)) for (const b of resolved.filter(m => m.listing.storeId === right)) {
       if (a.variant === b.variant) continue;
       const id = pairId(a.listing, b.listing);
       if (relations.has(id) || reviewIndex.get(id)?.decision === 'rejected') continue;
@@ -109,9 +110,9 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     if (!decision) row.pending++; else if (decision === 'same_product') row.accepted++; else row[decision]++;
   }
   const report = { sources: catalog.sources, candidateCount: candidates.length, reviewedCount: reviews.length,
-    byStorePair: Object.fromEntries(catalog.sources.flatMap((a, i) => catalog.sources.slice(i + 1).map(b => {
-      const pairs = candidates.filter(c => c.products[0].storeId === a.storeId && c.products[1].storeId === b.storeId);
-      return [`${a.storeId}/${b.storeId}`, { candidates: pairs.length, verified: pairs.filter(c => reviewIndex.get(c.id)?.decision === 'same_product').length,
+    byStorePair: Object.fromEntries(stores.flatMap((a, i) => stores.slice(i + 1).map(b => {
+      const pairs = candidates.filter(c => c.products[0].storeId === a && c.products[1].storeId === b);
+      return [`${a}/${b}`, { candidates: pairs.length, verified: pairs.filter(c => reviewIndex.get(c.id)?.decision === 'same_product').length,
         unresolved: pairs.filter(c => reviewIndex.get(c.id)?.decision === 'unresolved').length, pending: pairs.filter(c => !reviewIndex.has(c.id)).length }];
     }))),
     pending: candidates.filter(c => !reviewIndex.has(c.id)).map(c => c.id),
@@ -121,9 +122,9 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     unresolved: result.filter(r => r.kind === 'unresolved').length,
     pricePolicies: result.filter(r => r.pricePolicy).length,
     familyCounts, byBrand: Object.fromEntries(Object.entries(byBrand).sort(([a], [b]) => a < b ? -1 : 1)),
-    unmatchedByStore: Object.fromEntries(catalog.sources.map(source => [source.storeId,
-      catalog.listings.filter(p => p.storeId === source.storeId && !allCandidateListings.has(listingKey(p))).length])),
-    limitations: ['All pairs of the pinned saved catalogues are searched; later retailer additions and missing catalogue entries are not covered.', 'Codes must contain a digit and have at least four characters. Numeric storefront SKUs are excluded; numeric manufacturer codes still require review for collisions.', 'Unmatched does not mean unrelated. Aliases and descriptions not present in these sources need further review.', 'Review is saved-catalogue identity review, not a live stock, compatibility or sales-condition assertion.'],
+    unmatchedByStore: Object.fromEntries(stores.map(storeId => [storeId,
+      catalog.listings.filter(p => p.storeId === storeId && !allCandidateListings.has(listingKey(p))).length])),
+    limitations: ['All pairs of the pinned saved catalogues and their supplements are searched; listings added after the latest supplement and missing catalogue entries are not covered. Pinned rows keep their reviewed evidence unless a supplement replaced them after review.', 'Codes must contain a digit and have at least four characters. Numeric storefront SKUs are excluded; numeric manufacturer codes still require review for collisions.', 'Unmatched does not mean unrelated. Aliases and descriptions not present in these sources need further review.', 'Review is saved-catalogue identity review, not a live stock, compatibility or sales-condition assertion.'],
   };
   return { relations: result, candidates, report };
 }
@@ -151,10 +152,11 @@ export function parseCatalog(text: string): Catalog {
 }
 
 async function main(): Promise<void> {
-  const { values } = parseArgs({ options: { check: { type: 'boolean' }, discover: { type: 'boolean' }, 'import-left': { type: 'string' }, 'import-right': { type: 'string' }, 'import-m5stack': { type: 'string' } } });
+  const { values } = parseArgs({ options: { check: { type: 'boolean' }, discover: { type: 'boolean' }, 'import-left': { type: 'string' }, 'import-right': { type: 'string' }, 'import-m5stack': { type: 'string' },
+    supplement: { type: 'string', multiple: true }, replace: { type: 'string', multiple: true } } });
   const dir = 'data/matching';
   if (values['import-left'] || values['import-right']) {
-    if (!values['import-left'] || !values['import-right'] || values.check || values.discover) throw new Error('import requires both files and cannot use --check/--discover');
+    if (!values['import-left'] || !values['import-right'] || values.check || values.discover || values.supplement) throw new Error('import requires both files and cannot use --check/--discover');
     const catalog = await importCatalogs([values['import-left'], values['import-right']]);
     await mkdir(dir, { recursive: true }); await writeFile(`${dir}/catalog.jsonl`, serializeCatalog(catalog));
     console.log(`Imported ${catalog.listings.length} source listings. Existing reviews must be revalidated before build.`); return;
@@ -162,8 +164,24 @@ async function main(): Promise<void> {
   const read = async <T>(file: string): Promise<T> => JSON.parse(await readFile(`${dir}/${file}`, 'utf8')) as T;
   const catalog = parseCatalog(await readFile(`${dir}/catalog.jsonl`, 'utf8'));
   if (values['import-m5stack']) {
-    if (values.check || values.discover) throw new Error('import cannot use --check/--discover');
+    if (values.check || values.discover || values.supplement) throw new Error('import cannot use --check/--discover');
     await writeFile(`${dir}/catalog.jsonl`, serializeCatalog(await appendM5Stack(catalog, values['import-m5stack'])));
+    return;
+  }
+  if (values.supplement) {
+    // --supplement <storeId>=<complete snapshot> (repeatable) [--replace <storeId>/<pageKey> ...]
+    if (values.check || values.discover) throw new Error('supplement cannot use --check/--discover');
+    const steps = [];
+    for (const arg of values.supplement) {
+      const at = arg.indexOf('=');
+      if (at < 1) throw new Error(`--supplement expects <storeId>=<file>: ${arg}`);
+      const [storeId, file] = [arg.slice(0, at), arg.slice(at + 1)];
+      steps.push({ storeId, file, snapshot: await snapshotListings(storeId, file) });
+    }
+    const { catalog: next, reports } = applySupplements(catalog, steps, new Set(values.replace ?? []));
+    await writeFile(`${dir}/catalog.jsonl`, serializeCatalog(next));
+    console.log(JSON.stringify(reports.map(r => ({ ...r, absentFromSnapshot: { count: r.absentFromSnapshot.length, keys: r.absentFromSnapshot } })), null, 2));
+    console.log('Reviews that cite a replaced row are now stale; re-review them before build.');
     return;
   }
   if (values.discover) {

@@ -8,9 +8,22 @@ export interface Listing {
   variants?: { offerId: string; sku: string; name: string }[];
   vendor?: string;
 }
+/**
+ * One complete snapshot file. A listing belongs to the source with its storeId and observedAt.
+ * A store's first source is its pinned catalogue; a later `supplement` adds only listings absent from earlier
+ * sources plus rows the operator named explicitly, so reviewed rows keep their fingerprints.
+ */
+export interface Source {
+  storeId: string; file: string; sha256: string; observedAt: string;
+  /** Rows taken from the file (all of them for a pinned catalogue). */
+  count: number;
+  supplement?: { snapshotCount: number };
+  /** Keys of this source's rows that a later supplement replaced after explicit review. */
+  retired?: string[];
+}
 export interface Catalog {
   schemaVersion: 1;
-  sources: { storeId: string; file: string; sha256: string; observedAt: string; count: number }[];
+  sources: Source[];
   listings: Listing[];
 }
 export interface Candidate { id: string; products: [Listing, Listing]; codes: string[]; fingerprint: string }
@@ -58,31 +71,55 @@ export function discover(left: readonly Listing[], right: readonly Listing[]): C
   return [...candidates.values()].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 }
 
+/** Stores in first-source order; pair orientation follows it. */
+export const catalogStores = (catalog: Pick<Catalog, 'sources'>): string[] => [...new Set(catalog.sources.map(source => source.storeId))];
+const sourceKey = (storeId: string, observedAt: string): string => `${storeId}\n${observedAt}`;
+
 export function assertCatalog(catalog: Catalog): void {
-  if (catalog.schemaVersion !== 1 || catalog.sources.length < 2) throw new Error('unsupported mapping catalogue');
-  const sourceIds = new Set(catalog.sources.map(source => source.storeId));
-  if (sourceIds.size !== catalog.sources.length || catalog.sources.some(source => !source.storeId || !source.file || !/^[a-f0-9]{64}$/.test(source.sha256)
-    || !Number.isFinite(Date.parse(source.observedAt)) || !Number.isSafeInteger(source.count) || source.count < 1)) throw new Error('invalid/duplicate source');
-  const seen = new Set<string>();
+  if (catalog.schemaVersion !== 1 || catalogStores(catalog).length < 2) throw new Error('unsupported mapping catalogue');
+  const sources = new Map<string, Source>();
+  const latest = new Map<string, number>();
+  for (const source of catalog.sources) {
+    const key = sourceKey(source.storeId, source.observedAt);
+    const at = Date.parse(source.observedAt);
+    if (sources.has(key) || !source.storeId || !source.file || !/^[a-f0-9]{64}$/.test(source.sha256)
+      || !Number.isFinite(at) || !Number.isSafeInteger(source.count) || source.count < 1) throw new Error('invalid/duplicate source');
+    // A supplement follows an earlier, older source of the same store; a pinned catalogue comes first.
+    if (Boolean(source.supplement) !== latest.has(source.storeId) || (latest.has(source.storeId) && at <= latest.get(source.storeId)!)
+      || (source.supplement && (!Number.isSafeInteger(source.supplement.snapshotCount) || source.supplement.snapshotCount < source.count))) throw new Error(`invalid supplement order ${source.storeId}`);
+    sources.set(key, source); latest.set(source.storeId, at);
+  }
+  const seen = new Map<string, Listing>();
+  const attributed = new Map<string, number>();
   for (const p of catalog.listings) {
     const key = listingKey(p);
-    if (!sourceIds.has(p.storeId)) throw new Error(`unknown source ${key}`);
+    const source = sources.get(sourceKey(p.storeId, p.observedAt));
+    if (!source) throw new Error(`unknown source ${key}`);
     if (seen.has(key) || !p.name || !p.pageKey || !Number.isFinite(Date.parse(p.observedAt))) throw new Error(`invalid/duplicate listing ${key}`);
-    seen.add(key);
+    seen.set(key, p);
+    attributed.set(sourceKey(p.storeId, p.observedAt), (attributed.get(sourceKey(p.storeId, p.observedAt)) ?? 0) + 1);
     if (p.variants && (!p.variants.length || new Set(p.variants.map(v => v.offerId)).size !== p.variants.length
       || p.variants.some(v => !v.offerId || !v.name))) throw new Error(`invalid variants ${key}`);
     const url = new URL(p.url);
     if (url.protocol !== 'https:' || url.username || url.password) throw new Error(`unsafe listing ${key}`);
   }
-  for (const source of catalog.sources) if (catalog.listings.filter(p => p.storeId === source.storeId).length !== source.count) throw new Error(`incomplete source ${source.storeId}`);
+  for (const [key, source] of sources) {
+    const retired = source.retired ?? [];
+    // A retired row was replaced by a later source of the same store, never deleted.
+    if (new Set(retired).size !== retired.length || retired.some(k => {
+      const row = seen.get(k);
+      return !row || row.storeId !== source.storeId || !(Date.parse(row.observedAt) > Date.parse(source.observedAt));
+    })) throw new Error(`invalid retired rows ${source.storeId}`);
+    if ((attributed.get(key) ?? 0) + retired.length !== source.count) throw new Error(`incomplete source ${source.storeId}`);
+  }
 }
 
 /** Each store is indexed once. Earlier sources retain their historical pair orientation. */
 export function discoverCatalog(catalog: Catalog): Candidate[] {
   const previous: Listing[] = [];
   const result: Candidate[] = [];
-  for (const source of catalog.sources) {
-    const current = catalog.listings.filter(p => p.storeId === source.storeId);
+  for (const storeId of catalogStores(catalog)) {
+    const current = catalog.listings.filter(p => p.storeId === storeId);
     result.push(...discover(previous, current));
     previous.push(...current);
   }
