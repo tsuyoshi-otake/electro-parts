@@ -22,5 +22,7 @@
 | 0018 | [保存カタログの候補探索と承認済み対応表の再生成を分離する](0018-reviewed-catalog-mapping-pipeline.md) | 採用 |
 | 0019 | [Chrome 拡張はユーザースクリプトの第 2 のホスト束縛として出す](0019-chrome-extension-second-host.md) | 採用(配布方法は 0020 が置換) |
 | 0020 | [審査に通る形をテストで固定し、Chrome ウェブストアに出す](0020-chrome-web-store-submission.md) | 採用 |
+| 0021 | [店舗ページのテーマは閲覧ページだけに、1 つの実行体だけが掛ける](0021-page-theme-scope-and-ownership.md) | 採用 |
+| 0022 | [USD の記録価格に、各ブラウザーが 1 日 1 回取得したレートで円の参考値を添える](0022-yen-reference-from-daily-exchange-rate.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。

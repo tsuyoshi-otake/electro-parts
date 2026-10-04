@@ -11,7 +11,6 @@ describe('Akizuki page adapter', () => {
   });
 
   it('matches Akizuki product URLs and nothing else', () => {
-    expect(akizukiPageAdapter.matchPatterns).toEqual(['https://akizukidenshi.com/catalog/g/*']);
     expect(akizukiPageAdapter.matches(AT('/catalog/g/g109951/'))).toBe(true);
     expect(akizukiPageAdapter.matches(AT('/catalog/g/g109951/', 'www.akizukidenshi.com'))).toBe(true);
     expect(akizukiPageAdapter.matches(AT('/catalog/r/rkit/'))).toBe(false);

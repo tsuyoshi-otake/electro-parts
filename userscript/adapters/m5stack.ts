@@ -1,12 +1,32 @@
 import { M5STACK_ORIGIN, m5stackPageKey } from '../../src/adapters/m5stack/identity.ts';
 import type { StorePageAdapter } from '../core/types.ts';
+import { pageThemeCss } from '../ui/pageTheme.ts';
 
 const PATH=/^\/(?:collections\/[^/]+\/)?products\/([^/]+)\/?$/;
 function handle(path:string):string|null {
   try {const m=PATH.exec(path);return m?decodeURIComponent(m[1]!):null;} catch{return null;}
 }
 export const m5stackPageAdapter:StorePageAdapter={
-  storeId:'m5stack',matchPatterns:['https://shop.m5stack.com/products/*','https://shop.m5stack.com/collections/*/products/*'],
+  // Browsing pages only. Cart, checkout and account pages stay in the store's own colors.
+  storeId:'m5stack',matchPatterns:[
+    'https://shop.m5stack.com/',
+    'https://shop.m5stack.com/?*',
+    'https://shop.m5stack.com/products/*',
+    'https://shop.m5stack.com/collections/*',
+    'https://shop.m5stack.com/search*',
+    'https://shop.m5stack.com/pages/*',
+    'https://shop.m5stack.com/blogs/*',
+  ],
+  pageThemeCss: pageThemeCss('header, footer, .product-template, .product-wrapper, .product-info, .m5-col-search-wrapper, .footer-container, .footer-bottom, .footer-nav, #eb-preload-mask, .m5chatbox-bubble, .shopify-section > div[style*="background-color"], .col-vertical-nav-wrapper, .col-filter-title, .product-card-out', `
+html[data-eph-page-theme="dark"] { --eph-preserved-color: #343434; --eph-page-border: #626262; }
+html[data-eph-page-theme="dark"] :is(.col-vertical-nav-wrapper, .col-vertical-nav-wrapper div, .col-list, .col-list div, .col-list-top, .product-main div, .product-info, .jdgm-rev-widg, .jdgm-rev, hr):not(header *) { border-color: #626262 !important; }
+html[data-eph-page-theme="dark"] button svg:not(header *) :is(path,ellipse,polygon) { fill: #e6edf3 !important; }
+/* The shop absolutely positions these icons outside the static buttons. Keep
+   them in the button's own paint order when its background becomes opaque. */
+html[data-eph-page-theme="dark"] .product-info button:is(.minus,.plus) { position: relative !important; }
+html[data-eph-page-theme="dark"] .product-info button:is(.minus,.plus) svg { position: static !important; width: 16px !important; height: 16px !important; margin: auto !important; }
+html[data-eph-page-theme="dark"] .m5product-detail * { box-shadow: none !important; }
+`, 'header'),
   matches:location=>location.hostname==='shop.m5stack.com'&&PATH.test(location.pathname),
   initialOfferId(location) {
     const variant = new URLSearchParams(location.search ?? '').get('variant');

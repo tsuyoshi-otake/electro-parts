@@ -91,7 +91,7 @@ export function extensionManifest(): ExtensionManifest {
       {
         matches: PAGE_ADAPTERS.flatMap((a) => [...a.matchPatterns]),
         js: ['content.js'],
-        run_at: 'document_idle',
+        run_at: 'document_start',
         all_frames: false,
       },
     ],

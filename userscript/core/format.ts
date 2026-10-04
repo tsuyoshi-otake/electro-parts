@@ -5,8 +5,12 @@ import type { CaveatKey, PriceValueV1 } from '../../src/publisher/contract.ts';
 /** Minor units per major unit; anything unknown is treated as two decimals. */
 const MINOR_DIGITS: Record<string, number> = { JPY: 0, KRW: 0, USD: 2, EUR: 2 };
 
+export function minorDigits(currency: string): number {
+  return MINOR_DIGITS[currency] ?? 2;
+}
+
 export function formatMoney(minor: number, currency: string): string {
-  const digits = MINOR_DIGITS[currency] ?? 2;
+  const digits = minorDigits(currency);
   const major = minor / 10 ** digits;
   try {
     return new Intl.NumberFormat('ja-JP', { style: 'currency', currency, minimumFractionDigits: digits, maximumFractionDigits: digits }).format(major);

@@ -1,7 +1,8 @@
 /**
  * Bundles the userscript with esbuild and prepends the Tampermonkey header.
  * `@match` lines come from the adapter registry, `@connect` hosts from the
- * data origin, so the header can never advertise a store without an adapter.
+ * data origin and the exchange rate URL, so the header can never advertise a
+ * store without an adapter or a host the bundle does not request.
  *
  *   node --import tsx scripts/build-userscript.ts [--out DIR] [--base-url URL]
  */
@@ -11,6 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { PAGE_ADAPTERS } from '../userscript/adapters/registry.ts';
+import { EXCHANGE_RATE_URL } from '../userscript/core/exchangeRate.ts';
 import { DATA_HOSTS, DEFAULT_DATA_BASE_URL, USERSCRIPT_VERSION } from '../userscript/version.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -28,12 +30,13 @@ export function userscriptHeader(baseUrl: string): string {
     ['@license', 'MIT'],
     ...PAGE_ADAPTERS.flatMap((a) => a.matchPatterns.map((p) => ['@match', p])),
     ...DATA_HOSTS.map((h) => ['@connect', h]),
+    ['@connect', new URL(EXCHANGE_RATE_URL).hostname],
     ['@grant', 'GM_xmlhttpRequest'],
     ['@grant', 'GM_getValue'],
     ['@grant', 'GM_setValue'],
     ['@grant', 'GM_deleteValue'],
     ['@grant', 'GM_listValues'],
-    ['@run-at', 'document-idle'],
+    ['@run-at', 'document-start'],
     ['@noframes', ''],
     ['@downloadURL', `${baseUrl}/${USERSCRIPT_FILE_NAME}`],
     ['@updateURL', `${baseUrl}/${USERSCRIPT_FILE_NAME}`],

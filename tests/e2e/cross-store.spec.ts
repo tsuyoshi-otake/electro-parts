@@ -88,9 +88,15 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
   await expect(checkbox).toBeFocused();
   await expect(panel(page).locator('.store-price')).toHaveCount(2);
+  const cardBounds = await panel(page).locator('.store-price').evaluateAll(cards => cards.map(card => {
+    const r = card.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width };
+  }));
+  expect(Math.abs(cardBounds[0]!.y - cardBounds[1]!.y)).toBeLessThan(2);
+  expect(cardBounds[1]!.x).toBeGreaterThan(cardBounds[0]!.x + cardBounds[0]!.width);
   await expect(panel(page)).toContainText('$7.50');
   expect(requests).toHaveLength(8);
   await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(() => panel(page).locator('.store-prices').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(1);
   await expect(panel(page).locator('.eph-comparison-chart')).toHaveAttribute('viewBox', /^0 0 3\d{2} 220$/);
   await expect(checkbox).not.toBeChecked();
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
@@ -151,7 +157,7 @@ test('generated Pico family shows concrete differences and retains the native pr
   await expectReadableAxis();
   await expect(chart).toHaveAttribute('viewBox', / 220$/);
   // Resizing redraws locally and theme rerenders retain cleanup ownership.
-  await panel(page).evaluate(el => { (el as HTMLElement).style.width = '800px'; });
+  await panel(page).evaluate(el => { (el as HTMLElement).style.width = '1080px'; });
   await expect(chart).toHaveAttribute('viewBox', / 280$/);
   await panel(page).evaluate(el => { (el as HTMLElement).style.width = '390px'; });
   await expectReadableAxis();

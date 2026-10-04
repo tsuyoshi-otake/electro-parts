@@ -8,7 +8,7 @@ import { E2E_EXTENSION_DIR, E2E_SITE_DIR } from './global-setup.ts';
 /**
  * The unpacked Chrome extension, loaded into a real browser, on the same saved
  * Akizuki page the userscript spec uses. It proves the part jsdom cannot: the
- * manifest loads, the content script runs at document_idle, and the panel is
+ * manifest loads, the content script runs at document_start, and the panel is
  * drawn from data the *service worker* fetched.
  *
  * No request leaves the browser: the store page and the data origin are both

@@ -4,7 +4,13 @@ import { availabilityLabel, formatDateTime, formatPriceValue, formatSignedMoney 
 
 export const RELATED_CSS = `
 .eph .comparison-heading { margin: 0 0 8px; font-size: 12px; font-weight: 700; }
-.eph .store-price { border-top: 1px solid var(--line-soft); margin-top: 10px; padding-top: 10px; }
+.eph .body.has-comparison { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; }
+.eph .stats-col { min-width: 0; container: store-summary / inline-size; }
+.eph .store-prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 12px; }
+.eph .store-price { min-width: 0; border-top: 1px solid var(--line); padding-top: 10px; overflow-wrap: anywhere; }
+.eph .store-price > a { display: block; font-size: 12px; line-height: 1.5; margin-bottom: 6px; }
+.eph .store-price .related-meta, .eph .store-price .comparison-note { line-height: 1.5; }
+@container store-summary (max-width: 399px) { .eph .store-prices { grid-template-columns: 1fr; } }
 .eph .store-price .hero-value { font-size: 22px; margin: 3px 0; }
 .eph .related-name { font-size: 12px; overflow-wrap: anywhere; }
 .eph .related-meta, .eph .comparison-note { font-size: 11px; color: var(--muted); }
@@ -33,8 +39,8 @@ export const RELATED_CSS = `
 .eph circle:focus-visible { stroke: var(--fg); stroke-width: 2px; }
 .eph .series-controls input { accent-color: var(--accent); }
 @media (pointer: coarse) { .eph .series-controls label, .eph summary, .eph .related-card a { min-height: 44px; } }
-@media (max-width: 900px) { .eph .body.has-comparison .stats-col { grid-row: 1; } }
-@container (max-width: 700px) { .eph .body.has-comparison .stats-col { grid-row: 1; } }
+@media (max-width: 900px) { .eph .body.has-comparison { grid-template-columns: 1fr; } .eph .body.has-comparison .stats-col { grid-row: 1; } }
+@container (max-width: 700px) { .eph .body.has-comparison { grid-template-columns: 1fr; } .eph .body.has-comparison .stats-col { grid-row: 1; } }
 `;
 
 function node(doc: Document, tag: string, content: string, className = ''): HTMLElement {
@@ -108,6 +114,7 @@ function price(doc: Document, parent: HTMLElement, entry: RelatedEntry): void {
 
 /** Verified identity rows beside the current price. Eligibility still controls subtraction. */
 export function renderStorePrices(doc: Document, parent: HTMLElement, current: ProductFileV1, segment: SegmentV1, entries: readonly RelatedEntry[], label: (id: string) => string, ownFresh: boolean): void {
+  const grid = node(doc, 'div', '', 'store-prices');
   for (const entry of entries.filter((e) => e.relation.kind === 'same_product' && e.relation.reviewStatus === 'verified')) {
     const row = node(doc, 'div', '', 'store-price'); row.dataset['relationId'] = entry.relation.id;
     row.appendChild(node(doc, 'div', label(entry.target.storeId), 'comparison-heading'));
@@ -119,8 +126,9 @@ export function renderStorePrices(doc: Document, parent: HTMLElement, current: P
       if (eligibility.differenceMinor !== null) row.appendChild(node(doc, 'div', `記録価格差（他店 − 閲覧中） ${formatSignedMoney(eligibility.differenceMinor, segment.basis.currency)}`, 'comparison-difference'));
       row.appendChild(node(doc, 'div', '観測日時は店舗ごとに異なります。現在の最安価格を示すものではありません。', 'comparison-note'));
     } else row.appendChild(node(doc, 'div', `参考記録価格 · ${eligibility.comparable ? '閲覧中店舗の更新確認ができません' : eligibility.reason}`, 'comparison-note'));
-    row.appendChild(evidence(doc, entry)); parent.appendChild(row);
+    row.appendChild(evidence(doc, entry)); grid.appendChild(row);
   }
+  if (grid.childElementCount) parent.appendChild(grid);
 }
 
 /** Unconfirmed identity and alternatives never enter the normal price chart. */

@@ -1,6 +1,7 @@
-import type { CaveatKey, ManifestV1, OfferV1, ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
+import type { CaveatKey, ManifestV1, OfferV1, PriceValueV1, ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
 import type { LoadState } from '../core/dataClient.ts';
-import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatPercent, formatPriceValue, formatSignedMoney } from '../core/format.ts';
+import { EXCHANGE_RATE_ATTRIBUTION, yenFromMinor, type JpyRate } from '../core/exchangeRate.ts';
+import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatMoney, formatPercent, formatPriceValue, formatSignedMoney } from '../core/format.ts';
 import { buildStepChart, buildComparisonChart, type ComparisonSeries } from './chart.ts';
 import { comparisonEligibility, currentOffer, type RelatedEntry } from '../core/relations.ts';
 import { RELATED_CSS, renderRelatedGroups, renderStorePrices } from './related.ts';
@@ -34,6 +35,8 @@ export interface PanelContext {
   cleanup?: () => void;
   selectedOfferId?: string;
   onSelectOffer?: (id: string) => void;
+  /** Shown as a yen reference under the current price when its currency matches. */
+  exchangeRate?: JpyRate;
 }
 
 export const PANEL_CSS = `
@@ -48,8 +51,8 @@ export const PANEL_CSS = `
 }
 .eph[data-theme="dark"] {
     color-scheme: dark;
-    --bg: #161b22; --fg: #e6edf3; --muted: #9aa7b4; --line: #2b3440; --line-soft: #232c36;
-    --accent: #6ea8ff; --up: #ff8078; --down: #5ed6a4; --chip: #232c36; --chip-fg: #b6c2ce;
+    --bg: #3e3e3e; --fg: #e6edf3; --muted: #a7b3bf; --line: #626262; --line-soft: #525252;
+    --accent: #7db2ff; --up: #ff8f87; --down: #5ed6a4; --chip: #232c36; --chip-fg: #b6c2ce;
 }
 .eph * { box-sizing: border-box; }
 
@@ -88,6 +91,8 @@ export const PANEL_CSS = `
 .hero-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
 .delta { font-size: 13px; font-weight: 700; margin-left: 8px; white-space: nowrap; }
 .delta.up { color: var(--up); } .delta.down { color: var(--down); }
+.fx { margin-top: 4px; }
+.fx-value { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
 
 .rows { margin: 12px 0 0; }
 .rows > div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 5px 0; border-top: 1px solid var(--line-soft); }
@@ -222,6 +227,30 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
   }
 }
 
+/**
+ * The current recorded price read in yen. Only this one figure is converted:
+ * deltas, statistics, the chart and other stores keep their recorded currency,
+ * so the reference never becomes a comparison or a cheapest flag.
+ */
+function renderYenReference(doc: Document, parent: HTMLElement, value: PriceValueV1, rate: JpyRate): void {
+  if (value.state === 'unavailable' || value.minAmountMinor === null || value.maxAmountMinor === null) return;
+  const yen = (minor: number) => formatMoney(yenFromMinor(minor, rate), 'JPY');
+  const amount = value.state === 'range' && value.minAmountMinor !== value.maxAmountMinor
+    ? `${yen(value.minAmountMinor)}〜${yen(value.maxAmountMinor)}` : yen(value.minAmountMinor);
+  const wrap = doc.createElement('div');
+  wrap.className = 'fx';
+  wrap.appendChild(text(doc, 'div', `約 ${amount}（円換算の参考値）`, 'fx-value'));
+  const meta = text(doc, 'div', `1 ${rate.base} = ${rate.jpyPerUnit.toFixed(2)}円（${formatDateTime(rate.updatedAt)} 更新）· 税・送料・関税・決済時の換算を含みません · `, 'hero-meta');
+  const link = doc.createElement('a');
+  link.href = EXCHANGE_RATE_ATTRIBUTION.href;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.textContent = EXCHANGE_RATE_ATTRIBUTION.label;
+  meta.appendChild(link);
+  wrap.appendChild(meta);
+  parent.appendChild(wrap);
+}
+
 /** Summary column: the current price as the headline, then the comparison figures. */
 function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, offer: OfferV1, segment: SegmentV1, ownFresh: boolean): void {
   const doc = ctx.doc;
@@ -242,6 +271,7 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
     hero.appendChild(text(doc, 'span', delta, `delta${dir === 'up' || dir === 'down' ? ` ${dir}` : ''}`));
   }
   col.appendChild(hero);
+  if (ctx.exchangeRate !== undefined && ctx.exchangeRate.base === currency) renderYenReference(doc, col, s.current, ctx.exchangeRate);
   col.appendChild(text(doc, 'div', `${formatDate(s.currentSinceAt)} から${s.previousDistinct === null ? '(初回観測)' : ''}`, 'hero-meta'));
   const lastAvail = offer.availability[offer.availability.length - 1];
   if (related.length) {
