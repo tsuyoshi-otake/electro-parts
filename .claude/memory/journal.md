@@ -446,3 +446,11 @@ Verification: 35 changed lockfile entries, youngest 7.5 days (rolldown 1.2.15, c
 Independent rubric-verifier (`.claude/goal-loop/npm-audit-2026-10/rubric.md`): 7/7 pass in iteration 1 (it wrote its own lockfile age check and matched the built bundles against the 0.4.9 bundles on Pages).
 Ordering: the KSY change (#32) is committed locally on `feat/ksy-store` (6a4931d, not pushed). Both branches touch package.json/package-lock.json and append to this journal, so whichever merges second needs a rebase.
 Learning: `npm audit fix` leaves exact direct pins and `overrides` alone; bump them in package.json first. `npm audit fix --dry-run` with `--json` prints `change` lines before the JSON. A Stryker `--dryRunOnly` run checks the mutation runner after a vitest or Stryker dependency update in about 1 minute; the full job runs only on main.
+
+## 2026-10-29: Review response on PR #34 (#33)
+
+Symptom: Codex review on 45a4373 found two P2 issues in `.claude/goal-loop/npm-audit-2026-10/rubric.md`: C2 required that only package.json and package-lock.json differ from main although the same commit adds the rubric and appends to the journal, and C6 piped the runners into `tail`, so `$?` was tail's status and a runner exiting nonzero after printing a success summary would pass.
+Root cause: the rubric was written for the uncommitted state the verifier graded, not for the committed branch; and Git Bash runs without `pipefail`.
+Fix: 91b84dd. C2 allows exactly the rubric and an append-only journal (0 removed lines); C6 reports `${PIPESTATUS[0]}` for every piped runner and requires every EXIT=0.
+Verification: ran the corrected commands: 4 files differ from main, 0 journal lines removed; typecheck, matching:check, npm test 45/539, test:e2e 15/15 and the Stryker dry run each EXIT=0. Both threads answered and resolved.
+Open: `.claude/goal-loop/ksy-store/rubric.md` on the local `feat/ksy-store` (6a4931d) pipes runners the same way; fix it when that branch is rebased onto main.
