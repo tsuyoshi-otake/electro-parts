@@ -56,10 +56,17 @@
       "supplement": {
         "snapshotCount": 672
       }
+    },
+    {
+      "storeId": "ksy",
+      "file": "ksy-2026-10-29T11-05-00-000Z.json.gz",
+      "sha256": "90dff1f2c1f5cc1d6d915c02d2d05abbe7b82e982bf893bd85f726595e349940",
+      "observedAt": "2026-10-29T11:05:00.000Z",
+      "count": 776
     }
   ],
-  "candidateCount": 920,
-  "reviewedCount": 920,
+  "candidateCount": 1244,
+  "reviewedCount": 1244,
   "byStorePair": {
     "akizuki/switch-science": {
       "candidates": 379,
@@ -73,19 +80,37 @@
       "unresolved": 1,
       "pending": 0
     },
+    "akizuki/ksy": {
+      "candidates": 116,
+      "verified": 115,
+      "unresolved": 1,
+      "pending": 0
+    },
     "switch-science/m5stack": {
       "candidates": 518,
       "verified": 514,
       "unresolved": 2,
       "pending": 0
+    },
+    "switch-science/ksy": {
+      "candidates": 199,
+      "verified": 196,
+      "unresolved": 3,
+      "pending": 0
+    },
+    "m5stack/ksy": {
+      "candidates": 9,
+      "verified": 9,
+      "unresolved": 0,
+      "pending": 0
     }
   },
   "pending": [],
   "legacyCount": 80,
-  "relations": 1032,
-  "sameVerified": 892,
+  "relations": 1356,
+  "sameVerified": 1212,
   "similarVerified": 108,
-  "unresolved": 23,
+  "unresolved": 27,
   "pricePolicies": 2,
   "familyCounts": {
     "pico": 56,
@@ -110,7 +135,16 @@
       "rejected": 0,
       "pending": 0,
       "sourceListings": 12781,
-      "unmatchedListings": 12434
+      "unmatchedListings": 12405
+    },
+    "52Pi": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
     },
     "AB Circle Japan": {
       "candidates": 0,
@@ -163,8 +197,8 @@
       "unresolved": 1,
       "rejected": 7,
       "pending": 0,
-      "sourceListings": 562,
-      "unmatchedListings": 530
+      "sourceListings": 563,
+      "unmatchedListings": 531
     },
     "AgIC": {
       "candidates": 0,
@@ -184,6 +218,15 @@
       "sourceListings": 1,
       "unmatchedListings": 1
     },
+    "Apacer": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 2,
+      "unmatchedListings": 2
+    },
     "ArduCAM": {
       "candidates": 8,
       "accepted": 8,
@@ -191,7 +234,16 @@
       "rejected": 0,
       "pending": 0,
       "sourceListings": 98,
-      "unmatchedListings": 90
+      "unmatchedListings": 77
+    },
+    "Arducam": {
+      "candidates": 18,
+      "accepted": 18,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 30,
+      "unmatchedListings": 14
     },
     "Arduino": {
       "candidates": 39,
@@ -211,14 +263,23 @@
       "sourceListings": 19,
       "unmatchedListings": 19
     },
+    "BBC": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 4,
+      "unmatchedListings": 4
+    },
     "Bare Conductive": {
       "candidates": 0,
       "accepted": 0,
       "unresolved": 0,
       "rejected": 0,
       "pending": 0,
-      "sourceListings": 1,
-      "unmatchedListings": 1
+      "sourceListings": 3,
+      "unmatchedListings": 3
     },
     "Bend Labs": {
       "candidates": 0,
@@ -238,6 +299,15 @@
       "sourceListings": 24,
       "unmatchedListings": 24
     },
+    "BitTradeOne.": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 3,
+      "unmatchedListings": 3
+    },
     "Booster Robotics": {
       "candidates": 0,
       "accepted": 0,
@@ -246,6 +316,42 @@
       "pending": 0,
       "sourceListings": 3,
       "unmatchedListings": 3
+    },
+    "CANDY LINE": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "CQ出版": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "Cable Power": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "Cables Direct": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
     },
     "CambrianRobotics": {
       "candidates": 0,
@@ -290,7 +396,7 @@
       "rejected": 0,
       "pending": 0,
       "sourceListings": 2,
-      "unmatchedListings": 2
+      "unmatchedListings": 0
     },
     "DFRobot": {
       "candidates": 28,
@@ -308,6 +414,15 @@
       "rejected": 0,
       "pending": 0,
       "sourceListings": 2,
+      "unmatchedListings": 2
+    },
+    "Data Power Technology": {
+      "candidates": 2,
+      "accepted": 2,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 4,
       "unmatchedListings": 2
     },
     "Digi International": {
@@ -328,6 +443,15 @@
       "sourceListings": 8,
       "unmatchedListings": 8
     },
+    "Dragino": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
     "E-LINE": {
       "candidates": 0,
       "accepted": 0,
@@ -346,6 +470,15 @@
       "sourceListings": 14,
       "unmatchedListings": 14
     },
+    "EDA technology": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 4,
+      "unmatchedListings": 4
+    },
     "EEMB": {
       "candidates": 0,
       "accepted": 0,
@@ -355,6 +488,15 @@
       "sourceListings": 1,
       "unmatchedListings": 1
     },
+    "ELECOM": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 5,
+      "unmatchedListings": 5
+    },
     "ELT SENSOR": {
       "candidates": 0,
       "accepted": 0,
@@ -363,6 +505,24 @@
       "pending": 0,
       "sourceListings": 3,
       "unmatchedListings": 3
+    },
+    "Element14": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "Elephant Robotics": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 5,
+      "unmatchedListings": 5
     },
     "ElephantRobotics": {
       "candidates": 0,
@@ -374,13 +534,13 @@
       "unmatchedListings": 37
     },
     "Entaniya": {
-      "candidates": 1,
-      "accepted": 0,
+      "candidates": 4,
+      "accepted": 3,
       "unresolved": 1,
       "rejected": 0,
       "pending": 0,
-      "sourceListings": 20,
-      "unmatchedListings": 19
+      "sourceListings": 36,
+      "unmatchedListings": 32
     },
     "FEETECH": {
       "candidates": 0,
@@ -400,6 +560,15 @@
       "sourceListings": 11,
       "unmatchedListings": 11
     },
+    "FOSTER": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
     "Freescale Semiconductor": {
       "candidates": 0,
       "accepted": 0,
@@ -410,6 +579,24 @@
       "unmatchedListings": 3
     },
     "Google": {
+      "candidates": 1,
+      "accepted": 1,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 4,
+      "unmatchedListings": 3
+    },
+    "Google 他": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "HAKKO": {
       "candidates": 0,
       "accepted": 0,
       "unresolved": 0,
@@ -427,7 +614,25 @@
       "sourceListings": 1,
       "unmatchedListings": 1
     },
+    "HOZAN": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 3,
+      "unmatchedListings": 3
+    },
     "HiLetgo E-commerce Co. Ltd": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "Hiksemi": {
       "candidates": 0,
       "accepted": 0,
       "unresolved": 0,
@@ -444,6 +649,15 @@
       "pending": 0,
       "sourceListings": 24,
       "unmatchedListings": 24
+    },
+    "Identiv": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 6,
+      "unmatchedListings": 6
     },
     "InstaChord": {
       "candidates": 0,
@@ -481,6 +695,15 @@
       "sourceListings": 1,
       "unmatchedListings": 1
     },
+    "JustBoom": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 3,
+      "unmatchedListings": 3
+    },
     "KHADAS": {
       "candidates": 0,
       "accepted": 0,
@@ -489,6 +712,33 @@
       "pending": 0,
       "sourceListings": 1,
       "unmatchedListings": 1
+    },
+    "KKSB": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 2,
+      "unmatchedListings": 2
+    },
+    "KSY": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 94,
+      "unmatchedListings": 94
+    },
+    "KSY 他": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 5,
+      "unmatchedListings": 5
     },
     "Kitronik": {
       "candidates": 9,
@@ -518,12 +768,12 @@
       "unmatchedListings": 29
     },
     "M5Stack": {
-      "candidates": 563,
-      "accepted": 558,
+      "candidates": 582,
+      "accepted": 577,
       "unresolved": 3,
       "rejected": 2,
       "pending": 0,
-      "sourceListings": 1219,
+      "sourceListings": 1228,
       "unmatchedListings": 183
     },
     "MAD Components": {
@@ -543,6 +793,15 @@
       "pending": 0,
       "sourceListings": 26,
       "unmatchedListings": 26
+    },
+    "MECHATRAX": {
+      "candidates": 2,
+      "accepted": 2,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 6,
+      "unmatchedListings": 4
     },
     "MURATAPS": {
       "candidates": 0,
@@ -580,6 +839,24 @@
       "sourceListings": 1,
       "unmatchedListings": 0
     },
+    "Micron": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 6,
+      "unmatchedListings": 6
+    },
+    "ModMyPi": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 3,
+      "unmatchedListings": 3
+    },
     "NECトーキン": {
       "candidates": 0,
       "accepted": 0,
@@ -590,13 +867,22 @@
       "unmatchedListings": 1
     },
     "NVIDIA": {
+      "candidates": 2,
+      "accepted": 2,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 20,
+      "unmatchedListings": 16
+    },
+    "OKdo": {
       "candidates": 0,
       "accepted": 0,
       "unresolved": 0,
       "rejected": 0,
       "pending": 0,
-      "sourceListings": 15,
-      "unmatchedListings": 15
+      "sourceListings": 7,
+      "unmatchedListings": 7
     },
     "OMRON": {
       "candidates": 0,
@@ -634,6 +920,33 @@
       "sourceListings": 4,
       "unmatchedListings": 4
     },
+    "PI 400": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "PI4_ACCESSORY": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "PI4_CASE": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
     "PONO": {
       "candidates": 3,
       "accepted": 3,
@@ -652,14 +965,41 @@
       "sourceListings": 1,
       "unmatchedListings": 1
     },
-    "Pimoroni": {
-      "candidates": 17,
-      "accepted": 17,
+    "Philips": {
+      "candidates": 0,
+      "accepted": 0,
       "unresolved": 0,
       "rejected": 0,
       "pending": 0,
-      "sourceListings": 133,
-      "unmatchedListings": 116
+      "sourceListings": 15,
+      "unmatchedListings": 15
+    },
+    "Pi Supply": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 8,
+      "unmatchedListings": 8
+    },
+    "PiBorg": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "Pimoroni": {
+      "candidates": 67,
+      "accepted": 66,
+      "unresolved": 1,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 213,
+      "unmatchedListings": 133
     },
     "Pokit": {
       "candidates": 0,
@@ -679,6 +1019,15 @@
       "sourceListings": 382,
       "unmatchedListings": 370
     },
+    "ROHM": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
     "RS": {
       "candidates": 1,
       "accepted": 0,
@@ -686,7 +1035,52 @@
       "rejected": 0,
       "pending": 0,
       "sourceListings": 16,
-      "unmatchedListings": 15
+      "unmatchedListings": 13
+    },
+    "RS Components": {
+      "candidates": 3,
+      "accepted": 1,
+      "unresolved": 2,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 12,
+      "unmatchedListings": 10
+    },
+    "RS PRO": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 30,
+      "unmatchedListings": 30
+    },
+    "RS Pro": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "RasPiO": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "Raspberry Pi Ltd": {
+      "candidates": 9,
+      "accepted": 9,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 13,
+      "unmatchedListings": 6
     },
     "Raspberry Pi Trading": {
       "candidates": 65,
@@ -695,7 +1089,7 @@
       "rejected": 0,
       "pending": 0,
       "sourceListings": 126,
-      "unmatchedListings": 62
+      "unmatchedListings": 34
     },
     "Raytac": {
       "candidates": 1,
@@ -715,6 +1109,24 @@
       "sourceListings": 19,
       "unmatchedListings": 19
     },
+    "SONY": {
+      "candidates": 13,
+      "accepted": 13,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 9,
+      "unmatchedListings": 2
+    },
+    "SONY / KSY": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
     "STMicroelectronics": {
       "candidates": 0,
       "accepted": 0,
@@ -724,6 +1136,15 @@
       "sourceListings": 19,
       "unmatchedListings": 19
     },
+    "SanDisk": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 4,
+      "unmatchedListings": 4
+    },
     "Seeed": {
       "candidates": 95,
       "accepted": 93,
@@ -731,7 +1152,7 @@
       "rejected": 0,
       "pending": 0,
       "sourceListings": 459,
-      "unmatchedListings": 364
+      "unmatchedListings": 341
     },
     "Silverstone": {
       "candidates": 0,
@@ -741,6 +1162,15 @@
       "pending": 0,
       "sourceListings": 2,
       "unmatchedListings": 2
+    },
+    "SmartiPi": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
     },
     "SparkFun": {
       "candidates": 0,
@@ -814,7 +1244,43 @@
       "sourceListings": 2,
       "unmatchedListings": 2
     },
+    "UCtronics": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
     "UNIFIVE": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "Ultimems": {
+      "candidates": 3,
+      "accepted": 3,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 6,
+      "unmatchedListings": 3
+    },
+    "UnitedAu-Vi (ULTIMAX)": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "Vizmonet": {
       "candidates": 0,
       "accepted": 0,
       "unresolved": 0,
@@ -833,13 +1299,13 @@
       "unmatchedListings": 20
     },
     "Waveshare": {
-      "candidates": 3,
-      "accepted": 3,
+      "candidates": 9,
+      "accepted": 9,
       "unresolved": 0,
       "rejected": 0,
       "pending": 0,
-      "sourceListings": 300,
-      "unmatchedListings": 297
+      "sourceListings": 353,
+      "unmatchedListings": 338
     },
     "YDLIDAR": {
       "candidates": 1,
@@ -858,6 +1324,15 @@
       "pending": 0,
       "sourceListings": 4,
       "unmatchedListings": 4
+    },
+    "e-con Systems": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 3,
+      "unmatchedListings": 3
     },
     "e-radionica": {
       "candidates": 0,
@@ -886,6 +1361,15 @@
       "sourceListings": 1,
       "unmatchedListings": 1
     },
+    "goot": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 3,
+      "unmatchedListings": 3
+    },
     "m5stack": {
       "candidates": 0,
       "accepted": 0,
@@ -903,6 +1387,24 @@
       "pending": 0,
       "sourceListings": 18,
       "unmatchedListings": 18
+    },
+    "pimoroni": {
+      "candidates": 1,
+      "accepted": 1,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 0
+    },
+    "seeed": {
+      "candidates": 49,
+      "accepted": 49,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 43,
+      "unmatchedListings": 6
     },
     "u­blox": {
       "candidates": 0,
@@ -939,6 +1441,15 @@
       "pending": 0,
       "sourceListings": 2,
       "unmatchedListings": 2
+    },
+    "アットマークテクノ": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 4,
+      "unmatchedListings": 4
     },
     "アポロ技研": {
       "candidates": 0,
@@ -1003,14 +1514,32 @@
       "sourceListings": 1,
       "unmatchedListings": 1
     },
+    "コロナ社": {
+      "candidates": 1,
+      "accepted": 1,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 0
+    },
     "サンハヤト": {
       "candidates": 0,
       "accepted": 0,
       "unresolved": 0,
       "rejected": 0,
       "pending": 0,
-      "sourceListings": 5,
-      "unmatchedListings": 5
+      "sourceListings": 6,
+      "unmatchedListings": 6
+    },
+    "サンワサプライ": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 2,
+      "unmatchedListings": 2
     },
     "スイッチエデュケーション": {
       "candidates": 0,
@@ -1075,6 +1604,24 @@
       "sourceListings": 4,
       "unmatchedListings": 4
     },
+    "ヒロセ電機": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 2,
+      "unmatchedListings": 2
+    },
+    "ビット・トレード・ワン": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
     "プラネックス": {
       "candidates": 0,
       "accepted": 0,
@@ -1117,8 +1664,8 @@
       "unresolved": 0,
       "rejected": 0,
       "pending": 0,
-      "sourceListings": 5,
-      "unmatchedListings": 5
+      "sourceListings": 6,
+      "unmatchedListings": 4
     },
     "ユカイ工学": {
       "candidates": 0,
@@ -1128,6 +1675,33 @@
       "pending": 0,
       "sourceListings": 2,
       "unmatchedListings": 2
+    },
+    "ラズベリーパイ財団": {
+      "candidates": 139,
+      "accepted": 138,
+      "unresolved": 1,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 184,
+      "unmatchedListings": 97
+    },
+    "ラズベリーパイ財団 他": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 25,
+      "unmatchedListings": 25
+    },
+    "ラズベリーパイ財団(RS)": {
+      "candidates": 1,
+      "accepted": 1,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 8,
+      "unmatchedListings": 7
     },
     "ラトルズ": {
       "candidates": 0,
@@ -1165,6 +1739,24 @@
       "sourceListings": 2,
       "unmatchedListings": 2
     },
+    "千住金属": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
+    },
+    "堀内電機製作所": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 3,
+      "unmatchedListings": 3
+    },
     "工房Emerge＋": {
       "candidates": 0,
       "accepted": 0,
@@ -1183,6 +1775,15 @@
       "sourceListings": 1,
       "unmatchedListings": 0
     },
+    "日経BP社": {
+      "candidates": 2,
+      "accepted": 2,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 11,
+      "unmatchedListings": 9
+    },
     "秋月電子通商": {
       "candidates": 0,
       "accepted": 0,
@@ -1191,6 +1792,15 @@
       "pending": 0,
       "sourceListings": 5,
       "unmatchedListings": 5
+    },
+    "誠文堂新光社": {
+      "candidates": 0,
+      "accepted": 0,
+      "unresolved": 0,
+      "rejected": 0,
+      "pending": 0,
+      "sourceListings": 1,
+      "unmatchedListings": 1
     },
     "近藤科学": {
       "candidates": 0,
@@ -1212,9 +1822,10 @@
     }
   },
   "unmatchedByStore": {
-    "akizuki": 12437,
-    "switch-science": 9574,
-    "m5stack": 174
+    "akizuki": 12408,
+    "switch-science": 9471,
+    "m5stack": 174,
+    "ksy": 549
   },
   "limitations": [
     "All pairs of the pinned saved catalogues and their supplements are searched; listings added after the latest supplement and missing catalogue entries are not covered. Pinned rows keep their reviewed evidence unless a supplement replaced them after review.",

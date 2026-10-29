@@ -1,9 +1,14 @@
-import { readFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { endpoint, generate, parseCatalog, serializeCatalog, serializeRelations } from '../../scripts/matching/generate.ts';
-import { catalogStores, discover, discoverCatalog, fingerprint, listingKey, type Catalog, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
-import { appendSupplement, applySupplements, identityCodes, type SnapshotListings } from '../../scripts/matching/catalogs.ts';
+import { catalogStores, discover, discoverCatalog, fingerprint, hash, listingKey, type Catalog, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
+import { appendStore, appendSupplement, applySupplements, identityCodes, snapshotListings, type SnapshotListings } from '../../scripts/matching/catalogs.ts';
+import { normalizeKsyItem } from '../../src/adapters/ksy/snapshotAdapter.ts';
 import type { ProductRelation } from '../../userscript/core/relations.ts';
+import { collectKsyFixture } from '../helpers/ksy.ts';
 
 const read = (file: string): string => readFileSync(`data/matching/${file}`, 'utf8');
 const catalog = parseCatalog(read('catalog.jsonl'));
@@ -20,11 +25,14 @@ describe('reproducible reviewed matching pipeline', () => {
     review.offerIds![1] = candidate.products[1].variants!.find(v => v.offerId !== review.offerIds![1])!.offerId;
     expect(() => generate(catalog, [], [review], [])).toThrow(/variant must match candidate code/);
   });
-  it('searches all three pairs and preserves distinct variants on a shared official product page', () => {
+  it('searches every store pair and preserves distinct variants on a shared official product page', () => {
     expect(result.report.byStorePair).toEqual({
       'akizuki/switch-science': { candidates: 379, verified: 356, unresolved: 12, pending: 0 },
       'akizuki/m5stack': { candidates: 23, verified: 22, unresolved: 1, pending: 0 },
+      'akizuki/ksy': { candidates: 116, verified: 115, unresolved: 1, pending: 0 },
       'switch-science/m5stack': { candidates: 518, verified: 514, unresolved: 2, pending: 0 },
+      'switch-science/ksy': { candidates: 199, verified: 196, unresolved: 3, pending: 0 },
+      'm5stack/ksy': { candidates: 9, verified: 9, unresolved: 0, pending: 0 },
     });
     const strips = result.relations.filter(r => r.products[0].storeId === 'switch-science' && ['5208','5209'].includes(r.products[0].pageKey) && r.products[1].storeId === 'm5stack');
     expect(strips).toHaveLength(2);
@@ -43,18 +51,18 @@ describe('reproducible reviewed matching pipeline', () => {
     expect(discoverCatalog({...catalog, listings: [...catalog.listings].reverse()}).map(c => c.id)).toEqual(result.candidates.map(c => c.id));
   });
   it('searches every pinned listing and accounts for every candidate without automatic promotion', () => {
-    expect(catalog.listings).toHaveLength(23922);
-    expect(result.candidates).toHaveLength(920);
+    expect(catalog.listings).toHaveLength(24698);
+    expect(result.candidates).toHaveLength(1244);
     expect(result.report.pending).toEqual([]);
     expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(13);
-    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(15);
-    expect(result.report).toMatchObject({ sameVerified: 892, similarVerified: 108, pricePolicies: 2 });
-    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(920);
+    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(19);
+    expect(result.report).toMatchObject({ sameVerified: 1212, similarVerified: 108, pricePolicies: 2 });
+    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(1244);
     expect(result.report.byBrand['Seeed']!.accepted).toBeGreaterThan(30);
     expect(result.report.byBrand['Raspberry Pi Trading']!.accepted).toBeGreaterThan(40);
     expect(result.report.byBrand['Arduino']!.accepted).toBeGreaterThan(25);
     expect(generate(catalog, [], [], []).relations).toEqual([]);
-    expect(generate(catalog, [], [], []).report.pending).toHaveLength(920);
+    expect(generate(catalog, [], [], []).report.pending).toHaveLength(1244);
   });
 
   it('produces byte-identical artifacts and a lossless, price-free evidence projection', () => {
@@ -173,7 +181,7 @@ describe('catalogue supplements', () => {
   const renamed = m5.map(p => listingKey(p) === listingKey(target) ? {...p, name: `${p.name} (renamed)`} : p);
 
   it('records the pinned sources, the 2026-10-03 supplements and the two re-reviewed rows', () => {
-    expect(catalogStores(catalog)).toEqual(['akizuki', 'switch-science', 'm5stack']);
+    expect(catalogStores(catalog)).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy']);
     expect(catalog.sources.filter(s => s.supplement).map(s => [s.storeId, s.observedAt.slice(0, 10), s.count, s.supplement!.snapshotCount]))
       .toEqual([['akizuki', '2026-10-03', 4130, 12800], ['switch-science', '2026-10-03', 101, 10442], ['m5stack', '2026-10-03', 9, 672]]);
     const retired = catalog.sources.flatMap(s => (s.retired ?? []).map(key => [s.storeId, s.observedAt.slice(0, 10), key]));
@@ -220,5 +228,67 @@ describe('catalogue supplements', () => {
     expect(() => generate(absent, [], [], [])).toThrow(/invalid retired rows m5stack/);
     const notLater = structuredClone(catalog); notLater.sources[supplement]!.retired = [listingKey(m5.find(p => !p.observedAt.startsWith('2026-10-03'))!)];
     expect(() => generate(notLater, [], [], [])).toThrow(/invalid retired rows m5stack/);
+  });
+});
+
+describe('KSY source', () => {
+  /** The 2026-10-29 public list (the saved response bodies) through the real collector, as the catalogue's KSY source was made. */
+  async function ksySnapshotFile(edit?: (raw: Record<string, unknown>) => void): Promise<{ file: string; cleanup: () => void }> {
+    const { raw } = await collectKsyFixture();
+    edit?.(raw as unknown as Record<string, unknown>);
+    const dir = mkdtempSync(path.join(tmpdir(), 'ksy-catalog-'));
+    const file = path.join(dir, `ksy-${raw.retrievedAt.replace(/[:.]/g, '-')}.json.gz`);
+    writeFileSync(file, gzipSync(JSON.stringify(raw)));
+    return { file, cleanup: () => rmSync(dir, { recursive: true, force: true }) };
+  }
+  const withoutKsy: Catalog = { ...catalog, sources: catalog.sources.filter(s => s.storeId !== 'ksy'), listings: catalog.listings.filter(p => p.storeId !== 'ksy') };
+
+  it('is the reproducible projection of the saved public list, appended as the store\'s first source', async () => {
+    const { file, cleanup } = await ksySnapshotFile();
+    try {
+      const snapshot = await snapshotListings('ksy', file);
+      expect(snapshot.listings).toHaveLength(776);
+      expect(catalog.sources.find(s => s.storeId === 'ksy')).toEqual({ storeId: 'ksy', file: path.basename(file), sha256: hash(snapshot.text), observedAt: snapshot.observedAt, count: 776 });
+      expect(appendStore(withoutKsy, 'ksy', file, snapshot)).toEqual(catalog);
+      expect(() => appendStore(catalog, 'ksy', file, snapshot)).toThrow(/ksy source already exists/);
+    } finally { cleanup(); }
+  });
+
+  it('keeps the shop\'s maker label as vendor, models as text and the names the published history carries', async () => {
+    const { raw } = await collectKsyFixture();
+    const ksy = catalog.listings.filter(p => p.storeId === 'ksy');
+    for (const item of raw.items) {
+      const p = ksy.find(l => l.pageKey === String(item.id))!;
+      const { metadata } = normalizeKsyItem(item);
+      expect(p).toMatchObject({ name: metadata.name, modelNumber: metadata.modelNumber ?? '', url: metadata.canonicalUrl, manufacturer: '', vendor: item.make.trim(), expectedModels: [metadata.modelNumber ?? ''] });
+    }
+    const digitOnly = raw.items.find(i => typeof i.model === 'number')!;
+    expect(ksy.find(p => p.pageKey === String(digitOnly.id))!.codes).toEqual([String(digitOnly.model)]);
+    // A differently written maker label does not rule a pair out; the review decides.
+    const official = ksy.find(p => p.vendor === 'ラズベリーパイ財団' && p.codes.includes('SC0364'))!;
+    const ss = catalog.listings.find(p => p.storeId === 'switch-science' && p.manufacturer === 'Raspberry Pi Trading' && p.codes.includes('SC0364'))!;
+    expect(discover([ss], [official])).toHaveLength(1);
+  });
+
+  it('joins the reviewed KSY pairs as identities only and keeps the Pi 5 SC1110 contradiction unresolved', () => {
+    const ksy = result.relations.filter(r => r.products.some(p => p.storeId === 'ksy'));
+    expect(ksy).toHaveLength(324);
+    for (const r of ksy) expect(r.pricePolicy).toBeNull();
+    const id = (...key: string[]): string => JSON.stringify(key);
+    // Same precedent as a129606-s10908: the code says 2GB on one side, the other side's name says 1GB.
+    expect(byId.get(id('switch-science', '10908', 'ksy', '1095'))).toMatchObject({ kind: 'unresolved', reviewStatus: 'needs_review', provenance: { model: 'Claude Opus 5.5', originalClassification: 'unresolved' } });
+    expect(byId.get(id('switch-science', '10908', 'ksy', '1095'))!.evidence).toContain('初回判定（Claude Sonnet 5.5）はRAM容量の相違を理由にrejected');
+    expect(byId.get(id('switch-science', '10908', 'ksy', '1272'))).toMatchObject({ kind: 'same_product', reviewStatus: 'verified' });
+    expect(byId.get(id('akizuki', '129606', 'ksy', '1095'))).toMatchObject({ kind: 'same_product', reviewStatus: 'verified' });
+    expect(byId.get(id('switch-science', '10244', 'ksy', '1184'))!.differences.join()).toContain('500個'); // a reel, not unit pricing.
+  });
+
+  it('refuses an incomplete or unknown snapshot', async () => {
+    const short = await ksySnapshotFile(raw => { (raw['items'] as unknown[]).pop(); });
+    const unknown = await ksySnapshotFile();
+    try {
+      await expect(snapshotListings('ksy', short.file)).rejects.toThrow(/incomplete ksy snapshot/);
+      await expect(snapshotListings('elsewhere', unknown.file)).rejects.toThrow(/unknown store elsewhere/);
+    } finally { short.cleanup(); unknown.cleanup(); }
   });
 });

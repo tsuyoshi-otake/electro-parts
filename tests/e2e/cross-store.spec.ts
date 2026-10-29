@@ -118,7 +118,9 @@ test('generated Pico family shows concrete differences and retains the native pr
   await page.setViewportSize({width: 390, height: 844});
   const selected = PRODUCT_RELATIONS.find(r => r.id === 'a116132-s6900')!;
   const requests = await setup(page, 0, false, selected);
-  await expect(panel(page).locator('.store-price')).toContainText('Raspberry Pi Pico');
+  await expect(panel(page).locator('.store-price[data-relation-id="a116132-s6900"]')).toContainText('Raspberry Pi Pico');
+  // The same Pico at KSY (0.5.1) is a second identity card; it adds no family difference.
+  await expect(panel(page).locator(`.store-price[data-relation-id='${JSON.stringify(['akizuki', '116132', 'ksy', '634'])}']`)).toContainText('KSY');
   await expect(panel(page)).not.toContainText('読み込み中');
   await expect(panel(page).locator('.related-card')).toHaveCount(7);
   await expect(panel(page)).toContainText('無線: なし → Wi-Fi/Bluetooth');

@@ -12926,5 +12926,4046 @@
       "45552171221249"
     ],
     "reviewerModel": "GPT-6 (Codex)"
+  },
+  {
+    "id": "[\"akizuki\",\"109164\",\"ksy\",\"776\"]",
+    "fingerprint": "1d69c200ae7784ff762accd1a3797da97422d83af8746991e23c707d74006417",
+    "decision": "same_product",
+    "evidence": "共通コード103010002（Seeedの9桁製品コード）。秋月「GrovePi+」とKSY「Grove Pi+」は「Grove」と「Pi+」の間の空白の有無だけの表記差で、同一製品名に対応する。KSYのメーカー表記はseeed。名称上の矛盾はない。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"109193\",\"ksy\",\"62\"]",
+    "fingerprint": "05cb280470a1fe47bc1fe0380872cb7039eee99e6ab9a28cd3741c5cbbda5f60",
+    "decision": "same_product",
+    "evidence": "共有コードは841-2631（RS品番）。秋月「Raspberry Pi A+用ケース」とKSY「RS Raspberry Pi A+専用ケース（カーボン）」はいずれもRaspberry Pi A+向けのケースで対応する。メーカーはKSYの店舗ラベルでRS Components、秋月側にメーカー表記はない。型番欄の一致と対象機種の一致を確認。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月名称に色・素材（カーボン）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"110091\",\"ksy\",\"138\"]",
+    "fingerprint": "7a2ec9351b0029e63ab3196047ed65e213ff64ba1b4ed2232bb83b0f206b9b8f",
+    "decision": "same_product",
+    "evidence": "共有コードはISBN 978-4-8222-3609-0。「ラズパイマガジン2016年春号」が両名称で一致し、KSYの出版社ラベルは日経BP社（秋月に出版社表記なし）。ISBN・誌名・年・号が一致する同一書籍。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"110757\",\"ksy\",\"151\"]",
+    "fingerprint": "96c070fb000223be188d2070177d283827851e2b6ed3956487081eb8557b6604",
+    "decision": "unresolved",
+    "evidence": "共有コードは906-4665（RS品番）。秋月「Raspberry Pi 7インチタッチスクリーン用ケース ブラック」とKSY「Pi 7\" Displayケース RS for B+/2/3 黒」は7インチ画面用の黒ケースとして対応するが、対象機種をB+/2/3と明記するのはKSYのみ。同じ906-4665をスイッチサイエンス側はRaspberry Pi 4用LCDタッチスクリーンケース（OKdo）と記載しており、コードと対象Pi世代の対応が店舗間で一貫しない。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側が対象とするRaspberry Piモデル（B+/2/3か4か）の記載",
+      "RS品番906-4665が対応する本体世代の根拠（スイッチサイエンス側はPi 4用と記載、KSYはB+/2/3用と記載）"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"111530\",\"ksy\",\"496\"]",
+    "fingerprint": "3907367f5375f243a64dfa752d30a35aa4714a4962d2df55b5d158e4f480c37d",
+    "decision": "same_product",
+    "evidence": "共通コード110060482。秋月「GrovePi+ スターターキット IoT based on Raspberry Pi」とKSY「Grove IoT スターター キット for Pi」はともにRaspberry Pi向けIoTスターターキットで、同コードのスイッチサイエンス掲載メーカー製品名「Grove Starter Kit for IoT based on Raspberry Pi」とも対応する。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "キット同梱内容（センサー・ケーブル等）の両店での一致は保存データでは未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"112191\",\"ksy\",\"259\"]",
+    "fingerprint": "81c3260c8f04a74aa8f2995d156022fe225c9555c7743f35f864193f9c586ca7",
+    "decision": "same_product",
+    "evidence": "共有コードはISBN 978-4-8222-5906-8。「ラズパイマガジン2017年8月号」が両名称で一致し、KSYの出版社ラベルは日経BP社（秋月に出版社表記なし）。ISBN・誌名・年月号が一致する同一書籍。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"112275\",\"ksy\",\"352\"]",
+    "fingerprint": "b3ec9cb54acb2429f36d13c660674529ecfd7d89a3a8b0942f885764ce484f39",
+    "decision": "same_product",
+    "evidence": "共有コードPIM213（Pimoroniの製品コード）。秋月「Automation HAT」とKSY「オートメーションボード Automation HAT for Pi」は同名のHAT製品で、Raspberry Pi用という記載も対応する。秋月側はメーカー未記載だが、PIM213のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"112634\",\"ksy\",\"824\"]",
+    "fingerprint": "f5d47ecf12f46d5356df02184bce0c12b223efae9d8c2723d879377e45267a89",
+    "decision": "same_product",
+    "evidence": "共通コード110990037。秋月「Groveコネクター L型 スルーホール」のL型は、KSY「Grove ユニバーサル 4ピン コネクタ 90° 10個入」の90°（直角）に対応し、同コードのスイッチサイエンス掲載メーカー製品名「Grove - Universal 4 pin connector 90°(10 PCS)」とも整合する。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "秋月側の販売数量（10個入か否か）は名称に記載がなく未確認（KSYは10個入と明記）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"113761\",\"ksy\",\"790\"]",
+    "fingerprint": "71c64eb72621f4c38abe1022fbe785cd836f6a2a139a1b25f2ab3948ee9b5549",
+    "decision": "same_product",
+    "evidence": "共通コード111020049。秋月「Grove Mech Keycap」とKSY「Grove メカ キーキャップ モジュール」は英語名とカナ名の違いだけで同一製品に対応する。同コードのスイッチサイエンス掲載メーカー製品名も「Grove - Mech Keycap」で一致。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114389\",\"ksy\",\"649\"]",
+    "fingerprint": "41072f3b10db3b76b3ce35390b17b12bda80591afd4f16634953684fee0ddc34",
+    "decision": "same_product",
+    "evidence": "共有コードPIM353（Pimoroniの製品コード）。秋月「SCROLL:BIT」とKSY「scroll:bit スクロール機能拡張ボード for micro:bit」は同名のmicro:bit用拡張ボードで対応する。秋月側はメーカー未記載だが、PIM353のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114390\",\"ksy\",\"650\"]",
+    "fingerprint": "af74c99c60aef692106ca823e6e83813102b9b32c3e43931187157471c94c1b9",
+    "decision": "same_product",
+    "evidence": "共有コードPIM355（Pimoroniの製品コード）。秋月「ENVIRO:BIT」とKSY「enviro:bit マルチ センサー ボード for micro:bit」は同名のmicro:bit用センサーボードで対応する。秋月側はメーカー未記載だが、PIM355のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114391\",\"ksy\",\"651\"]",
+    "fingerprint": "1d41b33529d49861594c904b2550ba5b031400814f075fbc726221b592409a4c",
+    "decision": "same_product",
+    "evidence": "共有コードPIM356（Pimoroniの製品コード）。秋月「NOISE:BIT」とKSY「noise:bit アンプ・スピーカー搭載拡張ボード for micro:bit」は同名のmicro:bit用拡張ボードで対応する。秋月側はメーカー未記載だが、PIM356のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114392\",\"ksy\",\"653\"]",
+    "fingerprint": "93d7ea2b3f755fa3fc776f71a3c7984beb81f0176af5f250878805c3585a3e07",
+    "decision": "same_product",
+    "evidence": "共有コードPIM371（Pimoroniの製品コード）。秋月「AUTOMATION:BIT」とKSY「automation:bit 制御モジュール for micro:bit」は同名のmicro:bit用制御ボードで対応する。秋月側はメーカー未記載だが、PIM371のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114493\",\"ksy\",\"341\"]",
+    "fingerprint": "ceb2fe6efc79f0f55db11d738fb42bf36869765141fad4472cf7f0f75a64a111",
+    "decision": "same_product",
+    "evidence": "共有コードはISBN 978-4-339-00901-9。秋月「【書籍】Raspberry Pi ZeroによるIoT入門 -Zero W 対応-」とKSY「Raspberry Pi ZeroによるIoT入門（Zero W 対応）」は書名とZero W対応の記載が一致。KSYの出版社ラベルはコロナ社。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114507\",\"ksy\",\"481\"]",
+    "fingerprint": "136174a29ca42172c85d98b283e7222d99bc696a2f39bea8ccff74002a236367",
+    "decision": "same_product",
+    "evidence": "共有コードはG950-01456-01。秋月「Google Coral Edge TPU USB Accelerator G950-01456-01」とKSY「Google Coral Edge TPU USB Accelerator」は製品名が一致し、メーカーはKSYの店舗ラベルでGoogle（秋月は名称にGoogle Coralと明記）。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114584\",\"ksy\",\"490\"]",
+    "fingerprint": "df6f25b0eb7f934d063f9c8f7ca0d0fece9617fbdf5eab3e66cd2e0c0e0f98e8",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBMAIN1JE。秋月「SONY SPRESENSE メインボード」とKSY「SPRESENSE メインボード」は製品名が一致し、メーカーはKSYの店舗ラベルでSONY、秋月も名称にSONYと明記。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114585\",\"ksy\",\"491\"]",
+    "fingerprint": "e09021c7c521bc7f1459f13f4ce36ae99708bf9ebd9814edc9760776faf3a4e6",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBEXT1。秋月「SONY SPRESENSE 拡張ボード」とKSY「SPRESENSE 拡張ボード」は製品名が一致し、メーカーはKSYの店舗ラベルでSONY、秋月も名称にSONYと明記。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114586\",\"ksy\",\"492\"]",
+    "fingerprint": "8314d93ab28b4df50a277eed3b5994c2f63071d5b1dc310bfc4eb47e11a167ed",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBCAM1。秋月「SPRESENSE カメラモジュール」とKSY「SPRESENSE カメラボード」は「モジュール」と「ボード」の表記差のみで、同一のSPRESENSE用カメラ。メーカーはKSYの店舗ラベルでSONY（秋月側にメーカー表記なし）。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114779\",\"ksy\",\"504\"]",
+    "fingerprint": "20444501303329a30b96f7c61c55fa11b9a66ed1f9511e3cc830f1b2849aed58",
+    "decision": "same_product",
+    "evidence": "共通コードSC0229。「Pi4Case (Red/White) (ラズパイ4公式ケース)」(akizuki/114779)と「Piケース 公式 for 4B 赤/白」(ksy/504)は、Raspberry Pi 4用公式ケース・赤/白で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114879\",\"ksy\",\"513\"]",
+    "fingerprint": "2d5d1f142bf1b5abbf33e9d96a549d67e22e806e1f32c68097a7d9026ded408f",
+    "decision": "same_product",
+    "evidence": "共通コードRASCSRW1833486。「Raspberry Pi 3 Model A+ 公式ケース 赤/白」(akizuki/114879)と「Piケース 公式 for 3A+ 赤/白」(ksy/513)は、Raspberry Pi 3 Model A+用公式ケース・赤/白で対応（型番も完全一致）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114884\",\"ksy\",\"944\"]",
+    "fingerprint": "0ede496a159af06d22f10f165bce55396f5ee2bf3b028322263aabe3367cf790",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBLM1JUL。秋月「SONY SPRESENSE LTE BOARD (LTE拡張ボード)」とKSY「SPRESENSE LTE 拡張ボード」はLTE拡張ボードとして対応。メーカーはKSYの店舗ラベルでSONY、秋月も名称にSONYと明記。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115076\",\"ksy\",\"397\"]",
+    "fingerprint": "1ce37749bebac54f654f1dc08e89d067eaa403f6381551441cffff9d2ddb78ab",
+    "decision": "same_product",
+    "evidence": "共有コードはB0102。秋月「800万画素カメラモジュール CSマウントレンズ付き B0102」とKSY「Piカメラ (CSマウントレンズ搭載)」はいずれもCSマウントレンズ付きカメラモジュールで対応する。メーカーはKSYの店舗ラベルでArducam、秋月側にメーカー表記はない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称に画素数（800万画素）の記載なし",
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115145\",\"ksy\",\"755\"]",
+    "fingerprint": "3b394b3be17796188a30ae1247df4021b88447b4abb04933adc9b4b67e03512c",
+    "decision": "same_product",
+    "evidence": "共有コードPIM482（Pimoroniの製品コード）。秋月「Headphone Amp for Raspberry Pi」とKSY「オーディオ拡張ボード Pirate Audio:Headphone Amp for Pi」はヘッドホンアンプ搭載の同一系統で対応する（秋月側はシリーズ名Pirate Audioを省略）。秋月側はメーカー未記載だが、PIM482のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115146\",\"ksy\",\"754\"]",
+    "fingerprint": "ab47f1637994f8bddac8e2fd9642a51903f0fcebf0f88ba8b9a8e29a346033a9",
+    "decision": "same_product",
+    "evidence": "共有コードPIM484（Pimoroniの製品コード）。秋月「3W Amp for Raspberry Pi」とKSY「オーディオ拡張ボード Pirate Audio:3W Stereo Amp for Pi」は3Wアンプ搭載の同一系統で対応する（秋月側はシリーズ名Pirate Audioを省略）。秋月側はメーカー未記載だが、PIM484のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115318\",\"ksy\",\"545\"]",
+    "fingerprint": "6ff75899b2aabfbe59c1ee6c3c4493687f3cf39dee6d11295f6691e3da5ed1d7",
+    "decision": "same_product",
+    "evidence": "共通コードRASCMHQSC0261。「Piカメラ HQ(CSマウントカメラボディ)」(akizuki/115318)と「Piカメラ 公式 HQ」(ksy/545)は、HQカメラのCSマウント版で対応（KSYはマウント未記載だが、M12版は別コードSC0870として別掲されており矛盾しない）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY側の名称にCSマウントの明記がない（M12版は別コードSC0870で別掲）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115319\",\"ksy\",\"546\"]",
+    "fingerprint": "824f3c8192175d0d76b7359298c3ebd8031e27cef25cd917b37b4b6f03aaba16",
+    "decision": "same_product",
+    "evidence": "共通コードRASCMLSSC0123。「Cマウントレンズ 望遠 16mm for Piカメラ HQ」(akizuki/115319)と「レンズ 望遠 16mm for Piカメラ 公式 HQ」(ksy/546)は、HQカメラ用16mm望遠レンズで焦点距離・用途が対応（KSY名称にCマウントの明記はない）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY側の名称にCマウントの明記がない",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115320\",\"ksy\",\"547\"]",
+    "fingerprint": "176ddde00d8b44a59dc7f6a093256140fd164dd913e563ba5f6ba8f674357bfc",
+    "decision": "same_product",
+    "evidence": "共通コードRASCMLSSC0124。「CSマウントレンズ 広角 6mm for Piカメラ HQ」(akizuki/115320)と「レンズ 広角 6mm for Piカメラ 公式 HQ」(ksy/547)は、HQカメラ用6mm広角レンズで焦点距離・用途が対応（KSY名称にCSマウントの明記はない）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY側の名称にCSマウントの明記がない",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115920\",\"ksy\",\"576\"]",
+    "fingerprint": "255d0dbd299e8a851c347b4af9c6904cb2125dc4f5eb401db934dd6502637194",
+    "decision": "same_product",
+    "evidence": "共通コードSC0354。「Raspberry Pi 公式キーボード USBハブ付き 日本語配列」(akizuki/115920)と「キーボード 公式 日本語配列 USB 赤/白」(ksy/576)は、日本語配列の公式キーボードで対応。色は秋月側に記載がないが、黒/灰は別コードSC0364として両店で別掲されており、SC0354が赤/白であることと整合。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の名称に色（赤/白）の明記がない（黒/灰は別コードSC0364で別掲）",
+      "KSY側の名称にUSBハブ付きの明記がない",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116079\",\"ksy\",\"632\"]",
+    "fingerprint": "dec7409e3810eccfb387e8f0276f4ecd8afcaa3679a432ab62973842e1a4dcfb",
+    "decision": "same_product",
+    "evidence": "共通コードSC0364。「Raspberry Pi公式キーボード(ブラック/グレー) USBハブ付き 日本語配列」(akizuki/116079)と「キーボード 公式 日本語配列 USB 黒/灰」(ksy/632)は、日本語配列・公式キーボードで、色もブラック/グレーと黒/灰で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY側の名称にUSBハブ付きの明記がない",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116132\",\"ksy\",\"634\"]",
+    "fingerprint": "8db383318b86aa35a7443fac6b8fcb9d28708bbe870ee04f16a51e5ad70ee2a5",
+    "decision": "same_product",
+    "evidence": "共通コードSC0915。「Raspberry Pi Pico ラズベリーパイピコ」(akizuki/116132)と「Raspberry Pi Pico」(ksy/634)は、無印のRaspberry Pi Picoで対応。W/H/WHの接尾辞は双方になく、別コードSC0918(W)・SC0917(H)・SC0919(WH)が別掲されていることと整合。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116238\",\"ksy\",\"676\"]",
+    "fingerprint": "ec85eaae6d34fa813b8ff2d2d9d63814bb3d0f61278851c271edbef5582d608b",
+    "decision": "same_product",
+    "evidence": "共有コードPIM543（Pimoroniの製品コード）。秋月「Pico Display Pack」とKSY「LCDモジュール Pico Display Pack 1.14\" IPS for Pico」は同名のPico用ディスプレイで対応する（秋月側はサイズ表記なしだがコードPIM543が一致）。秋月側はメーカー未記載だが、PIM543のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116239\",\"ksy\",\"678\"]",
+    "fingerprint": "2278e962abd4996e328483c94336b3b20587ddce033bbe300e4dc787ade59b83",
+    "decision": "same_product",
+    "evidence": "共有コードPIM550（Pimoroniの製品コード）。秋月「Pico Explorer Base」とKSY「LCD付多機能プロトボード Pico Explorer Base for Pico」は同名のPico用ベースボードで対応する。秋月側はメーカー未記載だが、PIM550のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116240\",\"ksy\",\"722\"]",
+    "fingerprint": "0c0e560b210de9cd2e8ac25054c62bb8edc8655dc16f9361bfc57cb28cd40a52",
+    "decision": "same_product",
+    "evidence": "共有コードPIM556（Pimoroniの製品コード）。秋月「Pico Omnibus(Dual Expander)」とKSY「マルチGPIOボード Pico Omnibus Dual Expander」は同名で、Dual Expanderの記載も一致する。秋月側はメーカー未記載だが、PIM556のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116244\",\"ksy\",\"683\"]",
+    "fingerprint": "1d6e43ca3d3831e7e9c018806a2f8cb6ef09fee87ff2a71dee582dac7b882ed2",
+    "decision": "same_product",
+    "evidence": "共有コードPIM554（Pimoroniの製品コード）。秋月「Raspberry Pi Pico用ユニバーサル基板」とKSY「ユニバーサル ボード Pico Proto for Pico」はPico向けユニバーサル（プロト）基板として対応する（秋月側は商品名Pico Protoを記載しないがコードPIM554が一致）。秋月側はメーカー未記載だが、PIM554のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116245\",\"ksy\",\"677\"]",
+    "fingerprint": "a61cf369b829786a8b2338f19e6f94d7dbfaa114a4c9de6ea217a9365f0a0667",
+    "decision": "same_product",
+    "evidence": "共有コードPIM551（Pimoroniの製品コード）。秋月「Pico RGB Keypad Base」とKSY「キーボード Pico RGB Keypad Base LED内蔵4×4 for Pico」は同名のPico用RGBキーパッドで対応する。秋月側はメーカー未記載だが、PIM551のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116541\",\"ksy\",\"798\"]",
+    "fingerprint": "38953d3c2d26c6e9701dc6a0edb1885ee988c49a527a2a9bae0a4fc429221eba",
+    "decision": "same_product",
+    "evidence": "共通コード101020617。秋月「Grove PIRモーションセンサー」とKSY「Grove PIRモーション センサー モジュール」は「モジュール」の付記と空白位置の違いだけで、PIRモーションセンサーという製品系統が一致する。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116570\",\"ksy\",\"744\"]",
+    "fingerprint": "2be49abb8fc9b42c495b12dc7a13f6020f3f785a2e754fcfa63e3485c1bdd9f3",
+    "decision": "same_product",
+    "evidence": "共通コード101020634。秋月「Grove - CO2 & Temperature & Humidity Sensor (SCD30)」とKSY「Grove CO2&温湿度センサー モジュール SCD30搭載」はCO2・温湿度・SCD30搭載の点で対応し、同コードのスイッチサイエンス掲載メーカー製品名とも一致する。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116615\",\"ksy\",\"630\"]",
+    "fingerprint": "350395c85a7f5dbc703fc10fead099ef882f3ed22ab93ca34700f002be96b0f8",
+    "decision": "same_product",
+    "evidence": "共通コードSC0366。「IQaudio Codec Zero」(akizuki/116615)と「Raspberry Pi Codec Zero」(ksy/630)は、製品名Codec Zeroが一致し、ブランド表記のみ異なる（秋月はIQaudio、KSYはRaspberry Pi）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "IQaudioブランド名とRaspberry Pi Codec Zeroが同一製品であることをメーカー資料で直接確認した記載はない（コードと製品名のCodec Zeroで照合）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116666\",\"ksy\",\"751\"]",
+    "fingerprint": "0d291808f08072f9132ed844e29eb16828b01bf195a978e86a36e22e59e3f04a",
+    "decision": "same_product",
+    "evidence": "共通コード103100063。秋月「Grove Shield for micro:bit V2」とKSY「Grove シールド V2.0 for micro:bit」はmicro:bit用Groveシールドの第2版として対応する（V2とV2.0の表記差）。同コードのスイッチサイエンス掲載メーカー製品名「Grove Shield for micro:bit v2.0」と整合する。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116761\",\"ksy\",\"717\"]",
+    "fingerprint": "1ec4b87eb4452c7ef5869fb714ee2a1fd43b079bcb8494ed96b33ac90ff12198",
+    "decision": "same_product",
+    "evidence": "共有コードPIM558（Pimoroniの製品コード）。秋月「Tiny 2040」とKSY「Tiny2040 RP2040 開発ボード」は表記違いの同名RP2040ボードで対応する。両側とも容量の記載はないが、容量・仕様はメーカーコードPIM558が決める。秋月側はメーカー未記載だが、PIM558のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116762\",\"ksy\",\"753\"]",
+    "fingerprint": "ee229fd5869f14accdb65914d7a39a29e4544af5e0a7b58ab22465a011aae528",
+    "decision": "same_product",
+    "evidence": "共有コードPIM577（Pimoroniの製品コード）。秋月「PGA2040」とKSY「開発ボード PGA2040 RP2040搭載」は同名のRP2040搭載ボードで対応する。秋月側はメーカー未記載だが、PIM577のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116766\",\"ksy\",\"893\"]",
+    "fingerprint": "cea9545b17b991b06276bdc1deb02eaeccf3a569fc40b12b1525336f528e2f88",
+    "decision": "same_product",
+    "evidence": "共通コード101020016。秋月「Grove Infrared Receiver」とKSY「Grove 赤外線レシーバー」は英語名とカナ名の違いで、同コードのスイッチサイエンス掲載メーカー製品名「Grove - Infrared Receiver」とも一致する。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116769\",\"ksy\",\"745\"]",
+    "fingerprint": "66229ecfe553027e3688123436b5973c3fc7a44b01497caa4464cced724d045f",
+    "decision": "same_product",
+    "evidence": "共通コード101020932。秋月「Grove Temperature & Humidity Sensor V2.0(DHT20)」とKSY「Grove 温湿度センサー モジュール V2.0 DHT20搭載」はV2.0とDHT20搭載の両方が一致する。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116772\",\"ksy\",\"797\"]",
+    "fingerprint": "38c0a4145989344d2e2fe9164286be386da5398734bf277064163c342b6b3113",
+    "decision": "same_product",
+    "evidence": "共通コード103020272。秋月「Grove I2C Hub(6 Port)」とKSY「Grove ハブ拡張ユニット 6ポート」は6ポートのGroveハブとして対応し、同コードのスイッチサイエンス掲載メーカー製品名「Grove - I2C Hub (6 Port)」とも整合する。KSY名称にI2Cの記載はないが矛盾ではない。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116904\",\"ksy\",\"804\"]",
+    "fingerprint": "20713a6cc8b4027cb581557a0cc172b239f68322a2955def08ea2f3198a949e5",
+    "decision": "same_product",
+    "evidence": "共通コード110070048。秋月「reTerminal」とKSY「reTerminal CM4104032 5インチ CM4一体型モニター」は同名の製品で、同コードのスイッチサイエンス7435は4GB RAMモデルのreTerminal、KSYのCM4104032（CM4の型番表記）とも整合する。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "秋月名称にはRAM・eMMC容量・無線有無の記載がない（KSYはCM4104032と明記）が、メーカー製品コードの共通により同一製品と判断",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116955\",\"ksy\",\"719\"]",
+    "fingerprint": "8831e0805659fa9ee9aa869518501fe9bd7752995cebabd50d39f71b3d603ccd",
+    "decision": "same_product",
+    "evidence": "共通コードSC0468。「Raspberry Pi PoE+ HAT」(akizuki/116955)と「Raspberry Pi PoE+ HAT」(ksy/719)は、名称がRaspberry Pi PoE+ HATで完全一致。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116956\",\"ksy\",\"469\"]",
+    "fingerprint": "fadd1f2c5f13d8800c2c3f989b6c744fddb2b207a881f7b8c96d909fd688e6b2",
+    "decision": "same_product",
+    "evidence": "共有コードはRP-VC1。両店舗の名称が「Piカメラ VR220 広角レンズセット」で完全に一致し、メーカーはKSYの店舗ラベルでEntaniya。末尾なしのRP-VC1（IRフィルタ無しのRP-VC1Nとは別）で一致。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116997\",\"ksy\",\"989\"]",
+    "fingerprint": "bc60b20a180ae35d7e27f151a4f7d54a63d52e3699f23cb5a9a674c1e16c147d",
+    "decision": "same_product",
+    "evidence": "共有コードPIM560（Pimoroniの製品コード）。秋月「Pimoroni Pico LiPo - 16MB」とKSY「Pico LiPo RP2040搭載 16MB」はPico LiPoと16MBのフラッシュ容量まで一致する。秋月側はメーカー未記載だが、PIM560のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117207\",\"ksy\",\"772\"]",
+    "fingerprint": "8f44550b32f2cc8126d0530046d883c30807cce66a059f2049503c505c22177b",
+    "decision": "same_product",
+    "evidence": "共有コードはU078-D。秋月の型番M5STACK-U078-Dは接頭辞を正規化し、末尾の-Dを保持してKSYのU078-Dと一致。「M5Stack UnitV2 AI カメラ(SSD202D)」と「M5Stack AIカメラ モジュール UnitV2」は同じUnitV2で、メーカーは秋月がM5Stack、KSY店舗ラベルもM5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117318\",\"ksy\",\"943\"]",
+    "fingerprint": "659c89a165c37e951eddc02c60e09af7947d9b87914f591b22c07049d115e4f6",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBCAM2W。秋月「SPRESENSE HDRカメラボード」とKSY「SPRESENSE HDR カメラボード」は名称が一致し、メーカーはKSYの店舗ラベルでSONY（秋月側にメーカー表記なし）。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117341\",\"ksy\",\"876\"]",
+    "fingerprint": "3d4cb00a26b04192bc897e579e5149138a28317ae8edc99f5d7c7b6cabd06bc4",
+    "decision": "same_product",
+    "evidence": "共通コード102010448。秋月「Seeed XIAO BLE nRF52840」とKSY「seeed XIAO BLE nRF52840」は大文字小文字の違いだけで、Sense版ではない基本モデル同士で一致する。同コードのスイッチサイエンスは「Seeed Studio XIAO nRF52840」と記載し、BLEの有無は呼称の違い。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117342\",\"ksy\",\"877\"]",
+    "fingerprint": "bd9ca0a7077d6e27f47f71a2724e1b7fc61f6b013fca1e5a0cc9ae0be16b1445",
+    "decision": "same_product",
+    "evidence": "共通コード102010469。秋月「Seeed XIAO BLE Sense nRF52840」とKSY「seeed XIAO BLE nRF52840 Sense」は語順の違いだけで、ともにSense版。基本モデル（コード102010448）とは別コードで区別されている。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117586\",\"ksy\",\"968\"]",
+    "fingerprint": "d3e5b85cd0491055a7695e0ff8dd219c9e15c1cbd02a8a5cec0a9ce28f88c7bc",
+    "decision": "same_product",
+    "evidence": "共有コードはB0410。秋月「Raspberry Pi 高解像度ToFカメラモジュール」とKSY「Piカメラ (ToF機能搭載)」はいずれもRaspberry Pi用ToFカメラとして対応。メーカーはKSYの店舗ラベルでArducam、秋月側にメーカー表記はない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称に「高解像度」の記載なし",
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117947\",\"ksy\",\"863\"]",
+    "fingerprint": "84d84eb4c8918a6c3d7b27f8d2f5689eae9ee27fdf87aec5b78742861e97b82c",
+    "decision": "same_product",
+    "evidence": "共通コードSC0918。「Raspberry Pi Pico W」(akizuki/117947)と「Raspberry Pi Pico W」(ksy/863)は、名称がRaspberry Pi Pico Wで完全一致（W付き）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117967\",\"ksy\",\"918\"]",
+    "fingerprint": "77cea8c5394b3486b47613b972ce0407c23f3cb11460a0a0b44ec0c0f4257ac9",
+    "decision": "same_product",
+    "evidence": "共通コードSC0861。「M12マウントレンズ 望遠 25mm for Piカメラ HQ」(akizuki/117967)と「レンズ 望遠 25mm M12マウント」(ksy/918)は、M12マウント・望遠・25mmのHQカメラ用レンズで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117968\",\"ksy\",\"912\"]",
+    "fingerprint": "4866d3db03a14c60fbd1c27a830bb19399ec5ecc2cb0d8d211b9d58169330fca",
+    "decision": "same_product",
+    "evidence": "共通コードSC0870。「Piカメラ HQ(M12マウントカメラボディ)」(akizuki/117968)と「Piカメラ 公式 HQ M12マウント」(ksy/912)は、HQカメラのM12マウント版で対応（CSマウント版は別コードRASCMHQSC0261）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117969\",\"ksy\",\"908\"]",
+    "fingerprint": "c1f0149457a0bf2bd7b8618798ad637b4f7b7c9a1049e34a02817d1f496b930f",
+    "decision": "same_product",
+    "evidence": "共通コードSC0872。「Raspberry Pi カメラモジュール3」(akizuki/117969)と「Piカメラ 公式 V3 可視光」(ksy/908)は、Camera Module 3の標準・可視光版で対応。NoIR版は別コードSC0873、ワイドNoIR版は別コードSC0875として別掲され、双方ともNoIR・ワイドの表記がない。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "双方とも標準画角であることの明示はない（ワイド版は名称に「ワイド/Wide」が付く）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117971\",\"ksy\",\"933\"]",
+    "fingerprint": "ab3844c2cbf9457db9cd2a8708215ea401c9b1b1d6043d05bf06d0a037837cd2",
+    "decision": "same_product",
+    "evidence": "共通コードSC0889。「Raspberry Pi デバッグプローブ」(akizuki/117971)と「Raspberry Pi デバッグ プローブ 公式」(ksy/933)は、Raspberry Pi デバッグプローブで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117972\",\"ksy\",\"919\"]",
+    "fingerprint": "29950e82a6fd51d254bd27a16d43cf3e08a240241a36ad5ce0a3bad0f88564a4",
+    "decision": "same_product",
+    "evidence": "共通コードSC0947。「M12マウントレンズ 超広角(対角線魚眼・フィッシュアイ) 2.7mm for Piカメラ HQ」(akizuki/117972)と「レンズ 広角 2.7mm M12マウント」(ksy/919)は、M12マウント・2.7mmの広角（超広角/魚眼）レンズで対応（秋月は超広角、KSYは広角の表記差のみ）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117973\",\"ksy\",\"920\"]",
+    "fingerprint": "147a58493d3717334721245e0c82e43590a69743653d1d9fd466442484f79df7",
+    "decision": "same_product",
+    "evidence": "共通コードSC0949。「M12マウントレンズ 標準 8mm for Piカメラ HQ」(akizuki/117973)と「レンズ 標準 8mm M12マウント」(ksy/920)は、M12マウント・標準・8mmのHQカメラ用レンズで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118037\",\"ksy\",\"1265\"]",
+    "fingerprint": "794eb0cd2129e0445fb955c9b3b1a8bb07456d1bdc2701282d784a58134b784c",
+    "decision": "same_product",
+    "evidence": "共有コードはB0401。秋月「500万画素オートフォーカスSPIカメラモジュール」とKSY「SPIカメラ 5MP オートフォーカス」は500万画素・SPI・オートフォーカスが一致。メーカーはKSYの店舗ラベルでArducam、秋月側にメーカー表記はない。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118085\",\"ksy\",\"864\"]",
+    "fingerprint": "d63ef286b786a0d19f56f89f9d135f99f1a3458f36e9fae27e7dc20bb3fc0736",
+    "decision": "same_product",
+    "evidence": "共通コードSC0917。「Raspberry Pi Pico H(完成品)」(akizuki/118085)と「Raspberry Pi Pico H」(ksy/864)は、Raspberry Pi Pico H（ヘッダー実装品）で対応。秋月の「完成品」はヘッダー実装済みの注記。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118086\",\"ksy\",\"865\"]",
+    "fingerprint": "f5ecda420ee71122be8b6d0e0ddb960666d9507cec7581424b5f4afb17092b91",
+    "decision": "same_product",
+    "evidence": "共通コードSC0919。「Raspberry Pi Pico WH(完成品)」(akizuki/118086)と「Raspberry Pi Pico WH」(ksy/865)は、Raspberry Pi Pico WH（無線＋ヘッダー実装品）で対応。秋月の「完成品」はヘッダー実装済みの注記。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118135\",\"ksy\",\"909\"]",
+    "fingerprint": "23c5b92780fef9e090e0e0159b79e1c54170abf97c776f3a71710ec58a4a0503",
+    "decision": "same_product",
+    "evidence": "共通コードSC0873。「Raspberry Pi カメラモジュール3 NoIR」(akizuki/118135)と「Piカメラ 公式 V3 NoIR 赤外線」(ksy/909)は、Camera Module 3 NoIR（赤外線）版で対応（ワイドNoIRは別コードSC0875）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118136\",\"ksy\",\"911\"]",
+    "fingerprint": "4aeee89f73bce579c2ee2b2357552c7febbd5c5121d869cfea97b995ceadfc87",
+    "decision": "same_product",
+    "evidence": "共通コードSC0875。「Raspberry Pi カメラモジュール3 ワイド NoIR」(akizuki/118136)と「Piカメラ 公式 V3 Wide NoIR 赤外線」(ksy/911)は、Camera Module 3 ワイド NoIR版で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118171\",\"ksy\",\"1010\"]",
+    "fingerprint": "a3b933676a707fcce42695292270e3771fcb9c8a048c370701d10a3c57e989ac",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBGNSS1W。秋月・KSYともに「SPRESENSE GNSSアドオンボード」で名称が一致し、メーカーはKSYの店舗ラベルでSONY（秋月側にメーカー表記なし）。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129325\",\"ksy\",\"1015\"]",
+    "fingerprint": "bdd6d748c92085b0654d7a7e6200f6a0736652c2e3950e0ee0c397694eafc9fb",
+    "decision": "same_product",
+    "evidence": "共通コードSC1111。「Raspberry Pi 5 4GB」(akizuki/129325)と「SC1111 Raspberry Pi 5/4GB」(ksy/1015)は、Raspberry Pi 5の4GBモデルで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129326\",\"ksy\",\"1016\"]",
+    "fingerprint": "31434f19bc1918460f2dba9f80cd137297bd687d9ee2bcce564afdbab011e2a9",
+    "decision": "same_product",
+    "evidence": "共通コードSC1112。「Raspberry Pi 5 8GB」(akizuki/129326)と「SC1112 Raspberry Pi 5/8GB」(ksy/1016)は、Raspberry Pi 5の8GBモデルで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129327\",\"ksy\",\"1025\"]",
+    "fingerprint": "121009750da6509cafd15b4cb70ff334e7e5ea1c426ea019cb8e0159bcf4fd6e",
+    "decision": "same_product",
+    "evidence": "共通コードSC1148。「Raspberry Pi 5用公式アクティブクーラー」(akizuki/129327)と「アクティブ クーラー 公式 for Pi5」(ksy/1025)は、Raspberry Pi 5用公式アクティブクーラーで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129328\",\"ksy\",\"1017\"]",
+    "fingerprint": "f462816a5d091726dcda696da7bf6f910dea0d4c01bfde971f54de9be6f78e13",
+    "decision": "same_product",
+    "evidence": "共通コードSC1159。「Raspberry Pi 5用公式ケース(赤/白)」(akizuki/129328)と「Piケース 公式 for Pi5 赤/白」(ksy/1017)は、Raspberry Pi 5用公式ケース・赤/白で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129329\",\"ksy\",\"1018\"]",
+    "fingerprint": "765ed89b14fd317e2bc6ddec7d290063c02476c042002439082c427c2d62deed",
+    "decision": "same_product",
+    "evidence": "共通コードSC1160。「Raspberry Pi 5用公式ケース(黒)」(akizuki/129329)と「Piケース 公式 for Pi5 黒/灰」(ksy/1018)は、Raspberry Pi 5用公式ケース・黒（KSYは黒/灰）で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129330\",\"ksy\",\"1026\"]",
+    "fingerprint": "5f82bf45e7cff199da5a85e6a59a5676a32e135be9a66260e76dc63646006532",
+    "decision": "same_product",
+    "evidence": "共通コードSC1163。「Raspberry Pi 5用 RTCバッテリー」(akizuki/129330)と「RTC用バッテリー for Pi5」(ksy/1026)は、Raspberry Pi 5用RTCバッテリーで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129332\",\"ksy\",\"1020\"]",
+    "fingerprint": "4e9ad6a866f66525688f2f262d4214117c5b70ce90657294d665513093b58441",
+    "decision": "same_product",
+    "evidence": "共通コードSC1129。「Raspberry Pi 5・Zero用CSIケーブル(カメラ用) FPC 15-22pin 300mm」(akizuki/129332)と「CSIケーブル 公式 カメラ用 FPC 15-22pin 300mm」(ksy/1020)は、CSIカメラ用FPC 15-22pin 300mmケーブルで長さ・コネクタが対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129333\",\"ksy\",\"1021\"]",
+    "fingerprint": "9951213763a63b432e621e073de7ec8d5d63e1538db5c62c4892a506f0dd17f6",
+    "decision": "same_product",
+    "evidence": "共通コードSC1130。「Raspberry Pi 5・Zero用CSIケーブル(カメラ用) FPC 15-22pin 500mm」(akizuki/129333)と「CSIケーブル 公式 カメラ用 FPC 15-22pin 500mm」(ksy/1021)は、CSIカメラ用FPC 15-22pin 500mmケーブルで長さ・コネクタが対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129334\",\"ksy\",\"1022\"]",
+    "fingerprint": "bb0c6724a2b357272ec7eea83237d925961492479e22a1c0222b7e445c407454",
+    "decision": "same_product",
+    "evidence": "共通コードSC1131。「Raspberry Pi 5・Zero用DSIケーブル(ディスプレイ用) FPC 15-22pin 200mm」(akizuki/129334)と「DSIケーブル 公式 ディスプレイ用 FPC 15-22pin 200mm」(ksy/1022)は、DSIディスプレイ用FPC 15-22pin 200mmケーブルで長さ・コネクタが対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129535\",\"ksy\",\"1053\"]",
+    "fingerprint": "4115b52b68c31fed23eb6478b3def27e1272626309595d0d34775eebfba0cd88",
+    "decision": "same_product",
+    "evidence": "共有コードはHD309D1-C1（末尾C1が両側一致）。秋月「MEMS スキャニング プロジェクション モジュール (TypeC変換ボード・メタルベース付)」とKSY「HDMEMS スキャニング プロジェクション モジュール （ピコ プロジェクター）」は同じMEMSスキャニングプロジェクションモジュールで、メーカーはKSYの店舗ラベルでUltimems。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にTypeC変換ボード・メタルベースの同梱有無の記載なし",
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129536\",\"ksy\",\"1029\"]",
+    "fingerprint": "937934cf351c7f170056114001131d5d23eeb8922314b0bfffbe6e7c658ee8ce",
+    "decision": "same_product",
+    "evidence": "共通コードSC1166。「Raspberry Pi M.2 HAT+」(akizuki/129536)と「M.2 HAT+ 公式」(ksy/1029)は、Raspberry Pi M.2 HAT+で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129604\",\"ksy\",\"1094\"]",
+    "fingerprint": "afcd58aac65abb94001b9de33f191db45915c963d63e4892925b07fccafbbb54",
+    "decision": "same_product",
+    "evidence": "共通コードSC1631。「Raspberry Pi Pico 2」(akizuki/129604)と「Raspberry Pi Pico 2」(ksy/1094)は、名称がRaspberry Pi Pico 2で完全一致（W/H接尾辞なし）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129606\",\"ksy\",\"1095\"]",
+    "fingerprint": "e205892948e36c5551ce47dbe4548cfb50a259ba2d541f193cffa046d76b0063",
+    "decision": "same_product",
+    "evidence": "共通コードSC1110。「Raspberry Pi 5 2GB」(akizuki/129606)と「Raspberry Pi 5 /2GB」(ksy/1095)は、Raspberry Pi 5の2GBモデルで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129607\",\"ksy\",\"1097\"]",
+    "fingerprint": "23252fe44546c97a26c6a9aee4e7be891585088cfe04a5d91ba27fd73feb20d7",
+    "decision": "same_product",
+    "evidence": "共通コードSC0721。「Raspberry Pi Zero 2 WH(完成品)」(akizuki/129607)と「Raspberry Pi Zero 2 WH」(ksy/1097)は、Raspberry Pi Zero 2 WH（無線＋ヘッダー実装品）で対応。秋月の「完成品」はヘッダー実装済みの注記。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130062\",\"ksy\",\"1098\"]",
+    "fingerprint": "427e506350dfbdeab774ca9674b50d5825669d564317230a97575c356fe996d0",
+    "decision": "same_product",
+    "evidence": "共通コードSC1174。「Raspberry Pi AI Camera」(akizuki/130062)と「Raspberry Pi 公式 AIカメラ IMX500」(ksy/1098)は、Raspberry Pi AI Camera（IMX500搭載）で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130092\",\"ksy\",\"1114\"]",
+    "fingerprint": "70f21403c62b141de268dadbed02f672ddb54fd99a8391fae2276e97a3d90824",
+    "decision": "same_product",
+    "evidence": "共通コードSC1785。「Raspberry Pi AI HAT+ 13TOPS」(akizuki/130092)と「Raspberry Pi AI HAT+ 13TOPS」(ksy/1114)は、Raspberry Pi AI HAT+ 13TOPSで名称が完全一致。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130093\",\"ksy\",\"1115\"]",
+    "fingerprint": "189c6ef147a3b1df101d5927cf9c4b1d47da1c9f5b9f673ad60708ffb28621c0",
+    "decision": "same_product",
+    "evidence": "共通コードSC1791。「Raspberry Pi AI HAT+ 26TOPS」(akizuki/130093)と「Raspberry Pi AI HAT+ 26TOPS」(ksy/1115)は、Raspberry Pi AI HAT+ 26TOPSで名称が完全一致。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130169\",\"ksy\",\"1106\"]",
+    "fingerprint": "43589c01a04c0264227bd324efe4de6c7d9f55232526760fc19bee4389137782",
+    "decision": "same_product",
+    "evidence": "共通コードSC1675。「Raspberry Pi SSD Kit 256GB」(akizuki/130169)と「Raspberry Pi SSD キット 256GB for Pi5」(ksy/1106)は、Raspberry Pi SSD Kit 256GBで対応（KSYはPi5用の注記付き）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130170\",\"ksy\",\"1104\"]",
+    "fingerprint": "286fb7e0fe232d9de931b6274e691ace9b149aa822fe615cd6e26ecf82505fc3",
+    "decision": "same_product",
+    "evidence": "共通コードSC1635。「Raspberry Pi Touch Display 2 (7インチ)」(akizuki/130170)と「Raspberry Pi 7\" Touch Screen LCD V2」(ksy/1104)は、7インチのTouch Display 2で対応（KSYは7\" Touch Screen LCD V2の表記で、型番SC1635と7インチが一致）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "Touch Display 2とTouch Screen LCD V2が同一製品であることをメーカー資料で直接確認した記載はない（コードと7インチで照合）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130199\",\"ksy\",\"1157\"]",
+    "fingerprint": "0e9205486c95a4d4d4c3daf9f8ae16232edbd86b1600325106862018780bbdcf",
+    "decision": "same_product",
+    "evidence": "共通コードSC1113。「Raspberry Pi 5 16GB」(akizuki/130199)と「SC1113 Raspberry Pi 5/16GB」(ksy/1157)は、Raspberry Pi 5の16GBモデルで対応（KSYは先頭に型番SC1113を併記）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130200\",\"ksy\",\"1156\"]",
+    "fingerprint": "bd173a9a9b297c4a49586bf110fdf65783ff0e7bddbb75ff54fe5b8e3dc1f764",
+    "decision": "same_product",
+    "evidence": "共通コードSC1282。「Raspberry Pi 500 日本語配列」(akizuki/130200)と「Raspberry Pi 500（Pi500）日本版」(ksy/1156)は、Raspberry Pi 500の日本語配列で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130206\",\"ksy\",\"646\"]",
+    "fingerprint": "e16bdea5c2137245fc2570d01c1904ca0e70a2b1142295805fe15e07459a9066",
+    "decision": "same_product",
+    "evidence": "共有コードPIM534（Pimoroniの製品コード）。秋月「Inky Impression 5.7\" 7色ePaper/eInk HAT」とKSY「電子ペーパー 5.7\" Inky Impression」は5.7インチのInky Impressionで一致する。秋月側はメーカー未記載だが、PIM534のPIM接頭辞はPimoroniの製品コード体系で、KSYのメーカー表記Pimoroni（店舗ラベル）と整合する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130210\",\"ksy\",\"1107\"]",
+    "fingerprint": "e438cb2dcb8c31c124c3b69f805c06fb89038fc3174634cb822814002d1dedfb",
+    "decision": "same_product",
+    "evidence": "共通コードSC1676。「Raspberry Pi SSD Kit 512GB」(akizuki/130210)と「Raspberry Pi SSD キット 512GB for Pi5」(ksy/1107)は、Raspberry Pi SSD Kit 512GBで対応（KSYはPi5用の注記付き）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130246\",\"ksy\",\"998\"]",
+    "fingerprint": "35462d78afb554498757b7c864d374babfa3d8e66691a2a22489031df56da599",
+    "decision": "same_product",
+    "evidence": "共通コードSC0480。「Raspberry Pi Compute Module 4/5用アンテナ」(akizuki/130246)と「CM4/5 アンテナ キット」(ksy/998)は、Compute Module 4/5用アンテナで対応（KSYはキット表記）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSYはアンテナ キット表記で、秋月側に同梱内容（アンテナ・ケーブル等）の記載がない",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130249\",\"ksy\",\"665\"]",
+    "fingerprint": "2683426914d30303b315c505d1b954348335973560044c06555bc2cac2755e92",
+    "decision": "same_product",
+    "evidence": "共通コードSC0326。「Raspberry Pi Compute Module 4 I/O Board」(akizuki/130249)と「RPi CM4 I/Oボード」(ksy/665)は、Raspberry Pi Compute Module 4 I/Oボードで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130250\",\"ksy\",\"1109\"]",
+    "fingerprint": "491860a3efb0e69e3b38021441c096010998392b395b55624238fcac0da5119c",
+    "decision": "same_product",
+    "evidence": "共通コードSC1440。「Raspberry Pi SSD 512GB」(akizuki/130250)と「Raspberry Pi SSD 512GB」(ksy/1109)は、Raspberry Pi SSD 512GBで名称が完全一致。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130251\",\"ksy\",\"1154\"]",
+    "fingerprint": "5275fca25725434253b5cf2aa064bf958ec531d9eee38680c52a9c5da2adb579",
+    "decision": "same_product",
+    "evidence": "共通コードSC0940。「Raspberry Piモニター 15.6 inch Full HD 赤/白」(akizuki/130251)と「RPi モニター 15.6\" FHD 赤/白」(ksy/1154)は、Raspberry Piモニター 15.6インチ FHD・赤/白で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130296\",\"ksy\",\"1158\"]",
+    "fingerprint": "1f7b6f1b09b709b2e3ad5759f3c98574adbb40f85195a8d460d25616c4034b84",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBIMU1J。秋月「SONY SPRESENSE マルチIMU Add-onボード」とKSY「SPRESENSE マルチIMUアドオンボード」は名称が対応し、メーカーはKSYの店舗ラベルでSONY、秋月も名称にSONYと明記。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130315\",\"ksy\",\"1155\"]",
+    "fingerprint": "6d5e3067ee88e4a0c6fb9782a7e100f8eb2d67c28f90646fcd2ee1545819e3e2",
+    "decision": "same_product",
+    "evidence": "共通コードSC1228。「Raspberry Piモニター 15.6 inch Full HD 黒」(akizuki/130315)と「RPi モニター 15.6\" FHD 黒」(ksy/1155)は、Raspberry Piモニター 15.6インチ FHD・黒で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130330\",\"ksy\",\"1178\"]",
+    "fingerprint": "41c6e63d45eaaba3ea9c5009cc231e9ec2d63a0368bade8db99ab699137ec286",
+    "decision": "same_product",
+    "evidence": "共通コードSC1633。「Raspberry Pi Pico 2 W」(akizuki/130330)と「Raspberry Pi Pico 2W」(ksy/1178)は、Raspberry Pi Pico 2 Wで対応（KSYはPico 2Wと空白なしの表記差のみ）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130369\",\"ksy\",\"1184\"]",
+    "fingerprint": "5fa76f1ae2fb372ca8896ebc264c0651ec9fc1d12578d9f4176efcce38455fc3",
+    "decision": "same_product",
+    "evidence": "共通コードSC1509。「RP2350A」(akizuki/130369)と「Raspberry Pi RP2350A マイコン チップ」(ksy/1184)は、RP2350AマイコンチップでICの型名が対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月・KSYとも販売数量（1個売りか500個リール売りか）が未記載",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130370\",\"ksy\",\"1185\"]",
+    "fingerprint": "71ae3b8a0266cf2b42d24f0691914cd31a24f562560444ad53af42a63281a2ea",
+    "decision": "same_product",
+    "evidence": "共通コードSC1510。「RP2350B」(akizuki/130370)と「Raspberry Pi RP2350B マイコン チップ」(ksy/1185)は、RP2350BマイコンチップでICの型名が対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月・KSYとも販売数量（1個売りか500個リール売りか）が未記載",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130398\",\"ksy\",\"1207\"]",
+    "fingerprint": "354463b2f0b3a3ef4e5af4d9e38329cf66ea6173b15144a85c8c950212bb74c2",
+    "decision": "same_product",
+    "evidence": "共有コードはHD309D1-H1（末尾H1が両側一致、HD309D1-C1とは別コード）。秋月「MEMS スキャニング プロジェクション モジュール (本体・デジタルビデオインターフェイス変換ボードのみ)」とKSY「MEMS スキャニング プロジェクション モジュール 組込向けキット」は同じMEMSモジュールで、メーカーはKSYの店舗ラベルでUltimems。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY「組込向けキット」の同梱内容（秋月は本体とデジタルビデオインターフェイス変換ボードのみ）",
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130399\",\"ksy\",\"1202\"]",
+    "fingerprint": "5f72208dac898c1400586b0d0f8eeac4c1551ef517439d9c4ceb27e5f9f65418",
+    "decision": "same_product",
+    "evidence": "共通コードSC1634。「Raspberry Pi Pico 2 WH(完成品)」(akizuki/130399)と「Raspberry Pi Pico 2 WH」(ksy/1202)は、Raspberry Pi Pico 2 WH（無線＋ヘッダー実装品）で対応。秋月の「完成品」はヘッダー実装済みの注記。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130982\",\"ksy\",\"1201\"]",
+    "fingerprint": "30a946eafe5aba176786dfca576d94fbf175f3589ae931bde3a3ab6f348ae9ee",
+    "decision": "same_product",
+    "evidence": "共通コードSC1632。「Raspberry Pi Pico 2 H(完成品)」(akizuki/130982)と「Raspberry Pi Pico 2 H」(ksy/1201)は、Raspberry Pi Pico 2 H（ヘッダー実装品）で対応。秋月の「完成品」はヘッダー実装済みの注記。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131074\",\"ksy\",\"823\"]",
+    "fingerprint": "479cc1f1e80409a6b2e77a9c9b1a1752c5e6580606a0afbbfe8e2a7a5e7a6f1b",
+    "decision": "same_product",
+    "evidence": "共通コード110990030。秋月「GROVE 4ピンコネクター」とKSY「Grove ユニバーサル 4ピン コネクタ 10個入」はユニバーサル4ピンコネクタとして対応し、同コードのスイッチサイエンス掲載メーカー製品名「Grove - Universal 4 pin connector」と整合する。KSYのメーカー表記はseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側の保存データにはメーカー名がない（共通のSeeed製品コードとKSYのメーカー表記seeedによる判断）",
+      "秋月側の販売数量（10個入か否か）は名称に記載がなく未確認（KSYは10個入と明記）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131223\",\"ksy\",\"1212\"]",
+    "fingerprint": "0224dc5897dbbd8a83cdda8066e73fd16a2cd9e6f47403ccf6f865f27930f426",
+    "decision": "same_product",
+    "evidence": "共通コードSC1169。「Raspberry Pi無線モジュール RMC20452T」(akizuki/131223)と「RMC20452T Raspberry Pi 無線モジュール」(ksy/1212)は、Raspberry Pi 無線モジュール RMC20452Tで語順のみ異なり対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「Raspberry Pi Ltd」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131294\",\"ksy\",\"1235\"]",
+    "fingerprint": "adf9b7a9a00bc7ba9c03aac9128528cf33e5b2cb740bff7db4dc4d45ebf9645f",
+    "decision": "same_product",
+    "evidence": "共有コードはDC30501-00。秋月「ベクタースキャンモジュール」とKSY「MEMS ベクタースキャン モジュール」はベクタースキャンモジュールとして対応し、メーカーはKSYの店舗ラベルでUltimems（秋月側にメーカー表記なし）。",
+    "differences": [],
+    "missingEvidence": [
+      "秋月側のメーカー表記",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131395\",\"ksy\",\"1121\"]",
+    "fingerprint": "2aba240f7dc9d8a17d068e7f61f788c8f2a33f4b0b1fe3171d4d7efc3d8a9026",
+    "decision": "same_product",
+    "evidence": "共通コードSC1564。「Raspberry Pi Compute Module 5 (RAM:4GB eMMC:16GB)」(akizuki/131395)と「RPi Compute Module 5 4GB/16GB CM5004016」(ksy/1121)は、Compute Module 5のRAM 4GB・eMMC 16GB・無線なし（KSY型番CM5004016）で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131396\",\"ksy\",\"1137\"]",
+    "fingerprint": "99095f153fd8c063f8de1d5451b8f11c70faece914d5baf4696c52cdb9664fec",
+    "decision": "same_product",
+    "evidence": "共通コードSC1594。「Raspberry Pi Compute Module 5 (RAM:4GB eMMC:16GB 無線機能搭載)」(akizuki/131396)と「RPi Compute Module 5 4GB/16GB W CM5104016」(ksy/1137)は、Compute Module 5のRAM 4GB・eMMC 16GB・無線搭載（KSY型番CM5104016）で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131397\",\"ksy\",\"1142\"]",
+    "fingerprint": "ca313a3bb49d6ad339858b2942e2d90a0e985811f530f343552d12a2a90ec3fc",
+    "decision": "same_product",
+    "evidence": "共通コードSC1601。「Raspberry Pi Compute Module 5 (RAM:8GB eMMC:32GB 無線機能搭載)」(akizuki/131397)と「RPi Compute Module 5 8GB/32GB W CM5108032」(ksy/1142)は、Compute Module 5のRAM 8GB・eMMC 32GB・無線搭載（KSY型番CM5108032）で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131398\",\"ksy\",\"1147\"]",
+    "fingerprint": "251a1cc76228f26154d92b20a6a93a786c681638bc62010304a6f561ebb961ae",
+    "decision": "same_product",
+    "evidence": "共通コードSC1608。「Raspberry Pi Compute Module 5 (RAM:16GB eMMC:64GB 無線機能搭載)」(akizuki/131398)と「RPi Compute Module 5 16GB/64GB W CM5116064」(ksy/1147)は、Compute Module 5のRAM 16GB・eMMC 64GB・無線搭載（KSY型番CM5116064）で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131436\",\"ksy\",\"1150\"]",
+    "fingerprint": "cc6d90cf45d2323456a1f26e1174107fc8a057d8971d42d1e94ea4f153acfc23",
+    "decision": "same_product",
+    "evidence": "共通コードSC1967。「Raspberry Pi Compute Module 5用IOボード」(akizuki/131436)と「RPi CM5 I/Oボード」(ksy/1150)は、Compute Module 5用I/Oボードで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131437\",\"ksy\",\"1218\"]",
+    "fingerprint": "fd89960c76bc2da6e69772c3ece9943c0efe2b8a436e2c8a77ffd5f3c1b92dd4",
+    "decision": "same_product",
+    "evidence": "共通コードSC1975。「Raspberry Pi Touch Display 2 (5インチ)」(akizuki/131437)と「RPi 5\" タッチスクリーン LCD」(ksy/1218)は、5インチのTouch Display 2で対応（KSYは5\" タッチスクリーン LCDの表記で、型番SC1975と5インチが一致）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「Raspberry Pi Ltd」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "Touch Display 2とタッチスクリーン LCDが同一製品であることをメーカー資料で直接確認した記載はない（コードと5インチで照合）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131519\",\"ksy\",\"1272\"]",
+    "fingerprint": "b175dc5d3b44596880efb6644c7c067742cb570c089e9130f4a71115bd82628f",
+    "decision": "same_product",
+    "evidence": "共通コードSC2162。「Raspberry Pi 5 1GB」(akizuki/131519)と「Raspberry Pi 5/1GB」(ksy/1272)は、Raspberry Pi 5の1GBモデルで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131520\",\"ksy\",\"1221\"]",
+    "fingerprint": "ae2fecae08206c04c9246a9875447d8e49106e29809b35f5022383c63d6de1a3",
+    "decision": "same_product",
+    "evidence": "共通コードSC1283。「Raspberry Pi 500+ 日本語配列」(akizuki/131520)と「Raspberry Pi 500+（Pi500+）日本版」(ksy/1221)は、Raspberry Pi 500+の日本語配列で対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「Raspberry Pi Ltd」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131618\",\"ksy\",\"1257\"]",
+    "fingerprint": "541a59775ae936cc7c607095ef4e3f2092b8562aeb351e390b1e43e10b7d026a",
+    "decision": "same_product",
+    "evidence": "共通コードSC2166。「Raspberry Pi AI HAT+ 2」(akizuki/131618)と「Raspberry Pi AI HAT+ 2」(ksy/1257)は、Raspberry Pi AI HAT+ 2で名称が完全一致。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131619\",\"ksy\",\"1259\"]",
+    "fingerprint": "91cf163035802eef7702df2c43998dbb55fb5190282e9b1b5ea845ae94b03890",
+    "decision": "same_product",
+    "evidence": "共通コードSC2140。「Raspberry Pi Flash Drive 128GB」(akizuki/131619)と「Raspberry Pi Flash Drive 128GB USB 3.0」(ksy/1259)は、Raspberry Pi Flash Drive 128GBで対応（KSYはUSB 3.0の注記付き）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131620\",\"ksy\",\"1258\"]",
+    "fingerprint": "dd63d52b423eb6b59c1dc352d11828c98ff4c47b0eb5f3db0a6c42d8796b1b31",
+    "decision": "same_product",
+    "evidence": "共通コードSC2141。「Raspberry Pi Flash Drive 256GB」(akizuki/131620)と「Raspberry Pi Flash Drive 256GB USB 3.0」(ksy/1258)は、Raspberry Pi Flash Drive 256GBで対応（KSYはUSB 3.0の注記付き）。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"132017\",\"ksy\",\"1276\"]",
+    "fingerprint": "c17d81fdf2599f58126e1f5b749c9fbb4184606a6034016cbec7a9db98cba406",
+    "decision": "same_product",
+    "evidence": "共通コードSC2337。「Raspberry Pi 4 Model B 3GB(ラズベリーパイフォーモデルビー)」(akizuki/132017)と「Raspberry Pi 4 Model B/3GB」(ksy/1276)は、Raspberry Pi 4 Model Bの3GBモデルで対応。秋月側はメーカー欄が空で、SC系コードと名称中のRaspberry Pi/公式表記で補う。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"m5stack\",\"h-basic-core-iot-development-kit\",\"ksy\",\"766\"]",
+    "fingerprint": "325b1f8febb3c79b004f71ce957d76a425823818a17358467ef066237c009caf",
+    "decision": "same_product",
+    "evidence": "共有コードはK001（-V27等の改版サフィックスなし）。M5Stack公式「[EOL] ESP32 Basic Core IoT Development Kit」（SKU K001）とKSY「M5Stack BASIC」はBasicコアとして対応。メーカーは公式がM5Stack、KSY店舗ラベルもM5Stack。[EOL]表示は販売状態でありここでは差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "offerIds": [
+      "16804801937498",
+      null
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"m5stack\",\"h-battery-module\",\"ksy\",\"771\"]",
+    "fingerprint": "0cecf5a3fc0a1f51a59411d4a6cdef36d663d93b5488c5bffacf2219cb88fb0d",
+    "decision": "same_product",
+    "evidence": "共有コードはM002。M5Stack公式「Battery Module for ESP32 Core Development Kit」（SKU M002）とKSY「バッテリー拡張モジュール for M5Stack」はコア用バッテリーモジュールとして対応。メーカーは公式がM5Stack、KSY店舗ラベルもM5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "offerIds": [
+      "16804775395418",
+      null
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"m5stack\",\"h-grey-development-core\",\"ksy\",\"767\"]",
+    "fingerprint": "4eea012e31c30536cd5be68ae52961fbfc4544701983272502238ebe95764af1",
+    "decision": "same_product",
+    "evidence": "共有コードはK002。M5Stack公式「[EOL] ESP32 GRAY Development Kit with 9-Axis Sensor」（SKU K002）とKSY「M5Stack GRAY」はGRAYコアとして対応。メーカーは公式がM5Stack、KSY店舗ラベルもM5Stack。[EOL]表示は販売状態でありここでは差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "offerIds": [
+      "16804796006490",
+      null
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"m5stack\",\"h-m5stack-core2-esp32-iot-development-kit\",\"ksy\",\"770\"]",
+    "fingerprint": "a0eaa53a5265b10c1587f042455bb077e73c56b3b57c18ba0f4e80127a27a3cf",
+    "decision": "same_product",
+    "evidence": "共有コードはK010（-V11等の改版サフィックスなし）。M5Stack公式「[EOL] M5Stack Core2 ESP32 IoT Development Kit」（SKU K010）とKSY「M5Stack Core2」はCore2として対応。メーカーは公式がM5Stack、KSY店舗ラベルもM5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "offerIds": [
+      "35960244109476",
+      null
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"m5stack\",\"h-pahub-unit\",\"ksy\",\"775\"]",
+    "fingerprint": "7955bcdbe2d005b7d8b383d935099603685d23ea822538a1d674f1bdc8d4927f",
+    "decision": "same_product",
+    "evidence": "共有コードはU040。M5Stack公式「[EOL] I2C Hub 1 to 6 Expansion Unit (TCA9548A)」（SKU U040）とKSY「Grove ハブ拡張ユニット I2Cマルチ チャンネル スイッチ 6ポート for M5Stack」は6ポートのI2Cマルチプレクサユニットとして対応。メーカーは公式がM5Stack、KSY店舗ラベルもM5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "offerIds": [
+      "16804803412058",
+      null
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"m5stack\",\"h-pir-module\",\"ksy\",\"777\"]",
+    "fingerprint": "d3e17b9c3a7ef4f6baf2198e2e7cf2fe37bcb5fc276d1db7cd854388669c0087",
+    "decision": "same_product",
+    "evidence": "共有コードはU004。M5Stack公式「PIR Motion Sensor (AS312)」（SKU U004）とKSY「PIR モーション センサー モジュール for M5Stack」はPIR人感センサーユニットとして対応。メーカーは公式がM5Stack、KSY店舗ラベルもM5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にセンサーIC（AS312）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "offerIds": [
+      "16804756553818",
+      null
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"m5stack\",\"h-proto-module\",\"ksy\",\"769\"]",
+    "fingerprint": "9fb807b678287aad05e3833ced7aa42abaef0a63460a8bd47c86bf0163f4cfa7",
+    "decision": "same_product",
+    "evidence": "共有コードはM001。M5Stack公式「Proto Module with Extension & Bus Socket」（SKU M001）とKSY「ユニバーサルボード for M5Stack」はコア用のプロト（ユニバーサル）基板モジュールとして対応。メーカーは公式がM5Stack、KSY店舗ラベルもM5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "offerIds": [
+      "16804775198810",
+      null
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"m5stack\",\"h-tof-sensor-unit\",\"ksy\",\"773\"]",
+    "fingerprint": "dc7902e9a80af53e58b4a14f09e68b0aafee10d4d9d06b8a0bd9e6f4487fc29c",
+    "decision": "same_product",
+    "evidence": "共有コードはU010。M5Stack公式「Time-of-Flight Distance Ranging Sensor Unit (VL53L0X)」（SKU U010）とKSY「ToFセンサー モジュール　for M5Stack」はToF測距センサーユニットとして対応。メーカーは公式がM5Stack、KSY店舗ラベルもM5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にセンサーIC（VL53L0X）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "offerIds": [
+      "16804759076954",
+      null
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"m5stack\",\"h-unitv2-ai-camera-gc2145\",\"ksy\",\"772\"]",
+    "fingerprint": "88b7d04fb4a1bb77a7ae6f9c14326bb170a62fbefbd8b307fae2d6b7b1adc2e5",
+    "decision": "same_product",
+    "evidence": "共有コードはU078-D（末尾-Dを保持）。M5Stack公式「M5Stack UnitV2 - The standalone AI Camera for Edge Computing (SSD202D) TinyML」（SKU U078-D）とKSY「M5Stack AIカメラ モジュール UnitV2」はUnitV2として対応。メーカーは公式がM5Stack、KSY店舗ラベルもM5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "offerIds": [
+      "39509561770156",
+      null
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10001\",\"ksy\",\"1154\"]",
+    "fingerprint": "e429a3c8d31249b048ac7c6e8c6f22de0f03ffde530ffa040b47d6d96abf0fbc",
+    "decision": "same_product",
+    "evidence": "共通コードSC0940。「Raspberry Pi モニター 15.6インチ」(switch-science/10001)と「RPi モニター 15.6\" FHD 赤/白」(ksy/1154)は、Raspberry Piモニター 15.6インチで対応。スイッチサイエンスは色の記載がないが、黒は別コードSC1228で別掲され、SC0940が赤/白であることと整合。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "スイッチサイエンス側の名称に色（赤/白）の明記がない（黒は別コードSC1228）",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10053\",\"ksy\",\"1178\"]",
+    "fingerprint": "fa560cbc915f0a7525d547b7bc38e25b0651a2c4cd43691011d4d9530086a28b",
+    "decision": "same_product",
+    "evidence": "共通コードSC1633。「Raspberry Pi Pico 2 W」(switch-science/10053)と「Raspberry Pi Pico 2W」(ksy/1178)は、Raspberry Pi Pico 2 Wで対応（KSYはPico 2Wと空白なしの表記差のみ）。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10054\",\"ksy\",\"1156\"]",
+    "fingerprint": "b357f80598a7d4f24b42596186f4625164b33620dcfff86205ab3bfeabad4f07",
+    "decision": "same_product",
+    "evidence": "共通コードSC1282。「Raspberry Pi 500 日本語キーボード」(switch-science/10054)と「Raspberry Pi 500（Pi500）日本版」(ksy/1156)は、Raspberry Pi 500の日本語配列で対応（SSは型番RPI-SC1282、正規化コードはSC1282）。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10055\",\"ksy\",\"1157\"]",
+    "fingerprint": "ce40693c01c660eb03f6f75e8a879c6989c88817a33a694bad54403a4c25dc78",
+    "decision": "same_product",
+    "evidence": "共通コードSC1113。「Raspberry Pi 5 / 16GB」(switch-science/10055)と「SC1113 Raspberry Pi 5/16GB」(ksy/1157)は、Raspberry Pi 5の16GBモデルで対応（KSYは先頭に型番SC1113を併記）。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10119\",\"ksy\",\"1274\"]",
+    "fingerprint": "87b20afea7e628783f139efcaa817167159898917199c956edd3355bb2036b95",
+    "decision": "same_product",
+    "evidence": "共通コードSC1231。「Raspberry Pi 500 USキーボード」(switch-science/10119)と「Raspberry Pi 500（Pi500） US版」(ksy/1274)は、Raspberry Pi 500のUS配列で対応（SSの公式名はRaspberry Pi 500 US、KSYはUS版）。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「Raspberry Pi Ltd」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10181\",\"ksy\",\"1158\"]",
+    "fingerprint": "988c1fc887c5706f5fb528c81f6e9d8f4065f96d7d6070d3a6a8244112d9c535",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBIMU1J。スイッチサイエンス「SPRESENSE向けマルチIMU Add-onボード」（メーカーソニー）とKSY「SPRESENSE マルチIMUアドオンボード」（店舗ラベルSONY）は名称が対応し、メーカーも一致。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10244\",\"ksy\",\"1184\"]",
+    "fingerprint": "fef9aeebe5d31a9ec3e0240508b0f029032d5ac16570772601fa2396a0f92116",
+    "decision": "same_product",
+    "evidence": "共通コードSC1509。「Raspberryシリコン - RP2350A QFN-60（7インチリール/500個）」(switch-science/10244)と「Raspberry Pi RP2350A マイコン チップ」(ksy/1184)は、RP2350Aマイコンチップで対応。SSは「QFN-60（7インチリール/500個）」と明記、KSYはチップ名のみ。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [
+      "スイッチサイエンスは7インチリール500個入りと明記、KSY側は販売数量の記載がない"
+    ],
+    "missingEvidence": [
+      "KSY側の販売数量（1個売りか500個リール売りか）が未記載",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10247\",\"ksy\",\"1185\"]",
+    "fingerprint": "8c426e3f269dd01ca8538c7c08356f6cd580f0c2ef8b55e065dd08e05c1e8bcf",
+    "decision": "same_product",
+    "evidence": "共通コードSC1510。「Raspberryシリコン - RP2350B QFN-80（7インチリール/500個）」(switch-science/10247)と「Raspberry Pi RP2350B マイコン チップ」(ksy/1185)は、RP2350Bマイコンチップで対応。SSは「QFN-80（7インチリール/500個）」と明記、KSYはチップ名のみ。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [
+      "スイッチサイエンスは7インチリール500個入りと明記、KSY側は販売数量の記載がない"
+    ],
+    "missingEvidence": [
+      "KSY側の販売数量（1個売りか500個リール売りか）が未記載",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10256\",\"ksy\",\"1186\"]",
+    "fingerprint": "059f38c759a71efc760517fa906cbf2c2986356d90dfaa5024983542b889f0d6",
+    "decision": "same_product",
+    "evidence": "共通コードSC1677。「Raspberry Pi PoE+インジェクタ」(switch-science/10256)と「Raspberry Pi PoE+ インジェクター 公式」(ksy/1186)は、Raspberry Pi PoE+ Injectorで対応（SSの公式名Raspberry Pi PoE+ Injector）。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10257\",\"ksy\",\"1201\"]",
+    "fingerprint": "a330fe7c3d10d2b640056b351b431a1128049c569d7e5eb4c6d581b6f0640d5e",
+    "decision": "same_product",
+    "evidence": "共通コードSC1632。「Raspberry Pi Pico 2 H」(switch-science/10257)と「Raspberry Pi Pico 2 H」(ksy/1201)は、Raspberry Pi Pico 2 H（ヘッダー付き、公式名Pico 2 with Header）で対応。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10258\",\"ksy\",\"1202\"]",
+    "fingerprint": "de3430b9500d5d04e4a28988a05dbcf73897656844e19f777560762585220ee7",
+    "decision": "same_product",
+    "evidence": "共通コードSC1634。「Raspberry Pi Pico 2 WH」(switch-science/10258)と「Raspberry Pi Pico 2 WH」(ksy/1202)は、Raspberry Pi Pico 2 WH（無線＋ヘッダー付き、公式名Pico 2 W with Header）で対応。スイッチサイエンス側はメーカー表記「Raspberry Pi Trading」（manufacturer）。KSY側は店舗メーカー表記「ラズベリーパイ財団」で、Raspberry Piの別表記として矛盾しない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10309\",\"ksy\",\"914\"]",
+    "fingerprint": "b2a2b45f7bccd6023ab5ec00e4c715c168f9ef9185df41de4184940b3bbc0897",
+    "decision": "same_product",
+    "evidence": "共有コードSC0820（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSは「miniHDMI（プラグ）－標準HDMI（ソケット）」（メーカー製品名 Mini HDMI male to HDMI female adaptor）、KSYは「mini HDMI -> HDMI アダプター 白」で、変換方向と用途が対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称の「白」に対応する色の記載がSS側にないため、色の一致は未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10343\",\"ksy\",\"894\"]",
+    "fingerprint": "4d3f96814982e4bf8ae50e41212dcf67b260dc4b2b72f8d5cb274e27cd9c4241",
+    "decision": "same_product",
+    "evidence": "共通コード101020613。スイッチサイエンス「Grove - HM3301搭載 レーザーPM2.5センサ」（メーカー製品名 Grove - Laser PM2.5 Sensor (HM3301)）とKSY「Grove レーザー PM2.5 センサー (HM3301)」は、レーザー式PM2.5センサーとHM3301搭載の両方が一致。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10362\",\"ksy\",\"1122\"]",
+    "fingerprint": "ad3b4b763f3b8618c48cff3ce0ee6bdab0839ba70d8031cb60edab9bd0453d0d",
+    "decision": "same_product",
+    "evidence": "共有コードSC1565（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Wi-Fiなし / 4GB RAM / 32GB eMMC [CM5004032]」とKSYの「4GB/32GB CM5004032」で、メーカー型番CM5004032・RAM 4GB・eMMC 32GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10364\",\"ksy\",\"1152\"]",
+    "fingerprint": "4d80d4c2c2ceec180f6f128983a430e9b4f377f0e748f87b9d0d5846bfadd999",
+    "decision": "same_product",
+    "evidence": "共有コードSC1752（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSは「Compute Module 5 パッシブクーラー」（Compute Module 5 Passive Cooler）、KSYは「アルミ ヒートシンク for CM5」で、いずれもCM5用の受動冷却部品として用途が対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称の「アルミ」という材質はSS側に記載がなく、材質の一致は未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10365\",\"ksy\",\"1151\"]",
+    "fingerprint": "119d76fb2fbd641c46a63dda9b51e0ba612fce4c53f954c5b18f1e3656ac78cf",
+    "decision": "same_product",
+    "evidence": "共有コードSC1753（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSは「Compute Module 5 IOケース」（Compute Module 5 IO Case）、KSYは「CM5 ケース 公式I/Oボード専用」で、CM5用IOボード向けケースとして対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10467\",\"ksy\",\"713\"]",
+    "fingerprint": "5079c9a0c1159bd872a0d1d4d446b46b4e518f7216a60d4016e839b703d2f6b4",
+    "decision": "same_product",
+    "evidence": "共有コードは19623（Waveshareの5桁番号）。スイッチサイエンス「Waveshare Raspberry Pi Compute Module 4用ヒートシンク」（製品名Dedicated Aluminum Heatsink for CM4）とKSY「アルミ ヒートシンク for CM4」はCM4用アルミヒートシンクとして対応し、メーカーは双方Waveshare。数字コードだが名称が対応するため偶然一致ではない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10485\",\"ksy\",\"1131\"]",
+    "fingerprint": "a9d34431d737288d695d4c8035164cee9b16be8d369f37585cb7d26c2498a557",
+    "decision": "same_product",
+    "evidence": "共有コードSC1578（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Wi-Fiなし / 16GB RAM / 64GB eMMC[CM5016064]」とKSYの「16GB/64GB CM5016064」で、メーカー型番CM5016064・RAM 16GB・eMMC 64GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10496\",\"ksy\",\"1126\"]",
+    "fingerprint": "c7a4943ff25243320d3d5e368421fe0918c7e2ec19b70cb86aaf6f045f381fb9",
+    "decision": "same_product",
+    "evidence": "共有コードSC1571（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Wi-Fiなし / 8GB RAM / 32GB eMMC[CM5008032]」とKSYの「8GB/32GB CM5008032」で、メーカー型番CM5008032・RAM 8GB・eMMC 32GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10594\",\"ksy\",\"1138\"]",
+    "fingerprint": "c2745a2e9fb32775406a4498db4b964f08eb52eec759b0ebb483a8884f6770b0",
+    "decision": "same_product",
+    "evidence": "共有コードSC1595（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Wi-Fiあり / 4GB RAM / 32GB eMMC[CM5104032]」とKSYの「4GB/32GB W CM5104032」で、メーカー型番CM5104032・RAM・eMMC容量が一致し、KSYの「W」がWi-Fiありに対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10595\",\"ksy\",\"1142\"]",
+    "fingerprint": "eda7e9ef78bcf8991d62825c0877d14f98608d53f5970bfc1ed4b87505eae17c",
+    "decision": "same_product",
+    "evidence": "共有コードSC1601（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Wi-Fiあり / 8GB RAM / 32GB eMMC[CM5108032]」とKSYの「8GB/32GB W CM5108032」で、メーカー型番CM5108032・RAM・eMMC容量が一致し、KSYの「W」がWi-Fiありに対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10596\",\"ksy\",\"1147\"]",
+    "fingerprint": "00298ca427a46ef4a3348fa8590c21242ac445d11db008309b611c00720aed72",
+    "decision": "same_product",
+    "evidence": "共有コードSC1608（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Wi-Fiあり / 16GB RAM / 64GB eMMC[CM5116064]」とKSYの「16GB/64GB W CM5116064」で、メーカー型番CM5116064・RAM・eMMC容量が一致し、KSYの「W」がWi-Fiありに対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10598\",\"ksy\",\"859\"]",
+    "fingerprint": "69bac83dd2694ac9667cc98152ed1e0df7c986c8a5818673e396aa4d0ed315d4",
+    "decision": "same_product",
+    "evidence": "共有コードPIM438（Pimoroniの製品コード）。SS「Pimoroni MAX30101搭載 心拍数/オキシメーター/煙検知モジュール」（メーカー製品名 MAX30101 Breakout - Heart Rate Oximeter Smoke Sensor）とKSY「心拍数 オキシメーター 煙センサー モジュール MAX30101搭載」は搭載チップと機能が一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM438とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10672\",\"ksy\",\"1218\"]",
+    "fingerprint": "6a2674735639c7e88cac2d6bdf7ffd9e382b906fce1891c9551b117bcb57966c",
+    "decision": "same_product",
+    "evidence": "共有コードSC1975（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSは「Touch Display 2（5インチ）」（Raspberry Pi Touch Display 2 (5” Portrait)）、KSYは「5\" タッチスクリーン LCD」で、5インチのタッチディスプレイとしてサイズと用途が対応し、同一SKU型番SC1975を共有する。メーカー欄はSS「Raspberry Pi Trading」、KSY「Raspberry Pi Ltd」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にDisplay 2（世代）の明記がなく、世代の一致はメーカー型番SC1975の一致に依拠している",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10673\",\"ksy\",\"1222\"]",
+    "fingerprint": "62f433327262ebc6d5dcfb2aa7dca2277455aca28fcc02784bdb9d04cc75e8cc",
+    "decision": "same_product",
+    "evidence": "共有コードSC1984（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi SSD 1TB」で一致し、容量1TBの製品として対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「Raspberry Pi Ltd」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10696\",\"ksy\",\"1221\"]",
+    "fingerprint": "df70ac36dd0a3bf87a9d971526a07f8583f4a500610aac2b0e6052d48bcdcbaf",
+    "decision": "same_product",
+    "evidence": "共有コードSC1283（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSは「Raspberry Pi 500+ 日本語キーボード」（Pi500+ JP unit only white）、KSYは「Raspberry Pi 500+（Pi500+）日本版」で、機種Pi 500+と日本語配列が対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「Raspberry Pi Ltd」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "SS側のメーカー製品名にある本体のみ(unit only)・白の記載がKSY名称になく、同梱品・色の一致は未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10697\",\"ksy\",\"1239\"]",
+    "fingerprint": "68b0f17424d2e88c8adb4edb0b991f03b57024b2c1898af3df2d08bbc1b4a2fa",
+    "decision": "same_product",
+    "evidence": "共有コードSC1237（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSは「Raspberry Pi 500+ USキーボード」（Pi500+ US unit only white）、KSYは「Raspberry Pi 500+（Pi500+）US版」で、機種Pi 500+とUS配列が対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「Raspberry Pi Ltd」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "SS側のメーカー製品名にある本体のみ(unit only)・白の記載がKSY名称になく、同梱品・色の一致は未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10712\",\"ksy\",\"1217\"]",
+    "fingerprint": "fcdf0170d1d7add320d8f77f91614d079e0e6c98dc93f7155cee373dec99310d",
+    "decision": "same_product",
+    "evidence": "共有コードSC1771（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi M.2 HAT+ Compact」とKSYの「M.2 HAT+ コンパクト版」で、製品系統とCompact（コンパクト版）の派生が対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「Raspberry Pi Ltd」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10815\",\"ksy\",\"1243\"]",
+    "fingerprint": "f42dac813d0932195ef24e7a199c3fb6aba9ff7cd8dd570f3462eec78b4134ee",
+    "decision": "same_product",
+    "evidence": "共有コードはB0581。スイッチサイエンス「Arducam IMX500搭載 オールインワン Raspberry Pi AIカメラキット（CM5内蔵、PoE /USB給電）」とKSY「オールインワン Raspberry Pi AIカメラ キット CM5内蔵」はCM5内蔵のオールインワンAIカメラキットとして対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にIMX500・PoE/USB給電の記載なし",
+      "両側ともCM5のRAM・ストレージ構成の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10816\",\"ksy\",\"1244\"]",
+    "fingerprint": "c9ac8eea843875aa3c7e5da6ffb70d965146253522940ded7fac014d70e20d0f",
+    "decision": "same_product",
+    "evidence": "共有コードはB0566。スイッチサイエンス「Arducam IMX500搭載 UVC AIカメラモジュール」とKSY「USB AIカメラ モジュール UVC対応」はUVC対応AIカメラモジュールとして対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にIMX500の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10886\",\"ksy\",\"1264\"]",
+    "fingerprint": "6890e32b879eee876e471ab189640bf3a8ed86f1350a7afdd3d55052503a64ff",
+    "decision": "same_product",
+    "evidence": "共有コードはB0590。スイッチサイエンス「Arducam 2MP デイ＆ナイトビジョン USBカメラモジュール」（製品名にMetal Housing）とKSY「USBカメラ 2MP デイナイト対応 ケース内蔵」は2MPのデイナイト対応USBカメラ（金属ケース入り）として対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10908\",\"ksy\",\"1095\"]",
+    "fingerprint": "8e6ec8e1a132dcb4132452fce058d156ebc904fff14ffb7bfb322aae787e2aa5",
+    "decision": "unresolved",
+    "evidence": "型番SC1110は一致するが、KSY名はPi 5 2GB、スイッチサイエンス名とメーカー製品名はPi 5 1GB（同店の商品コードはRPI-SC2162）。容量と型番が矛盾するため、秋月129606との前例(a129606-s10908)と同じく型番一致では承認せず要確認に残す。初回判定（Claude Sonnet 5.5）はRAM容量の相違を理由にrejected。統合確認（Claude Opus 5.5）で前例に合わせunresolvedへ変更した。",
+    "differences": [
+      "RAM容量の記載が異なる（スイッチサイエンス 10908: 1GB、KSY 1095: 2GB）"
+    ],
+    "missingEvidence": [
+      "スイッチサイエンス 10908 の型番SC1110と名称1GB（SC2162相当）の矛盾が未解消"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10908\",\"ksy\",\"1272\"]",
+    "fingerprint": "e6f71e76627557ceb4e42e4087601541159fb1eb3a3e69e703eaaf983ced331e",
+    "decision": "same_product",
+    "evidence": "共有コードSC2162（KSY側は型番、SS側はコード欄でSC1110に続く2番目の併記コード）。SSの「Raspberry Pi 5 / 1GB」（Raspberry Pi 5 1 GB）とKSYの「Raspberry Pi 5/1GB」でRAM 1GBが一致する。SS 10908の主コードSC1110は別ページ（9810、2GB）でも使われており、併記コードの位置づけだけが保存データでは不明。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "SS 10908の主コードSC1110（SS 9810では2GB版）とSC2162が併記されている理由は保存データでは未確認で、名称の1GBとSC2162の一致に依拠している",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10916\",\"ksy\",\"1257\"]",
+    "fingerprint": "cb59981e803c3e8247ab62296056c19ff48b6c6881b366359646496752ce12e7",
+    "decision": "same_product",
+    "evidence": "共有コードSC2166（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi AI HAT+ 2」で一致し、製品名・世代表記が対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10917\",\"ksy\",\"1259\"]",
+    "fingerprint": "3e4d0198f0ed58fe2746b6aa9429e7dcba8ebf6d99d58ad2359e10484eeb3a38",
+    "decision": "same_product",
+    "evidence": "共有コードSC2140（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「USB3.0 フラッシュドライブ（128GB）」（Raspberry Pi Flash Drive 128GB USB 3.0）とKSYの「Raspberry Pi Flash Drive 128GB USB 3.0」で、容量128GBとUSB 3.0が一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10918\",\"ksy\",\"1258\"]",
+    "fingerprint": "2bab3561751f973872aa393013a54c3b2dacf2d33bfd7e73375c593bf4bc7865",
+    "decision": "same_product",
+    "evidence": "共有コードSC2141（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「USB3.0 フラッシュドライブ（256GB）」（Raspberry Pi Flash Drive 256GB USB 3.0）とKSYの「Raspberry Pi Flash Drive 256GB USB 3.0」で、容量256GBとUSB 3.0が一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11130\",\"ksy\",\"1276\"]",
+    "fingerprint": "c7f2834be4aa6c16b8b786cd11186069a313ef17525b62912cb59e4abfbe9620",
+    "decision": "same_product",
+    "evidence": "共有コードSC2337（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 4 Model B / 3GB」（Pi4/3GB）とKSYの「Raspberry Pi 4 Model B/3GB」で、機種Pi 4 Model BとRAM 3GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"1122\",\"ksy\",\"823\"]",
+    "fingerprint": "d8843f79a5f2ecb3ccf09cf50f32f82e56c3d15b5ede639862c6ff807dadf441",
+    "decision": "same_product",
+    "evidence": "共通コード110990030。スイッチサイエンス「GROVE - ユニバーサル4ピンコネクタ(10個入りパック)」とKSY「Grove ユニバーサル 4ピン コネクタ 10個入」は、製品名・10個入の数量表記が一致。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"1123\",\"ksy\",\"824\"]",
+    "fingerprint": "40e0a92fc8ed9f4db3f66ded47e412764f9ff8eaa2fa7e04f7eb79a3c61c2591",
+    "decision": "same_product",
+    "evidence": "共通コード110990037。スイッチサイエンス「GROVE - ユニバーサル4ピンコネクタ 90°(10個入りパック)」とKSY「Grove ユニバーサル 4ピン コネクタ 90° 10個入」は、90°形状と10個入の両方が一致。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"1174\",\"ksy\",\"884\"]",
+    "fingerprint": "13171ebb20afe9c6b32232fa5b390f89af7b47d5eb3e585386e97797630d4670",
+    "decision": "same_product",
+    "evidence": "共通コード101020030。スイッチサイエンス「GROVE - I2C デジタル光センサ」（メーカー製品名 Grove - Digital Light Sensor）とKSY「Grove デジタルライトセンサー」はデジタル光センサーとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"1251\",\"ksy\",\"788\"]",
+    "fingerprint": "d3a726194bfd8eb2ee8e4d9201f8ef02f0292dbd7434b9c47be7b7267f4781bf",
+    "decision": "same_product",
+    "evidence": "共通コード104030010。スイッチサイエンス「GROVE - LED 青」（メーカー製品名 Grove - Blue LED）とKSY「Grove LED モジュール 青」はLEDモジュールで色（青）が一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"1254\",\"ksy\",\"883\"]",
+    "fingerprint": "0ca2227877390c65e4727bbcd672fb6c81308dffd712e27e81010a86b91ec013",
+    "decision": "same_product",
+    "evidence": "共通コード104030005。スイッチサイエンス「GROVE - LED 赤」（メーカー製品名 Grove - Red LED）とKSY「Grove LED モジュール 赤」はLEDモジュールで色（赤）が一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"2511\",\"ksy\",\"896\"]",
+    "fingerprint": "53b14d4a89d29f2bf0aaa524e46efbc8faf26459cdf37182189415bdfa0fcaed",
+    "decision": "same_product",
+    "evidence": "共通コード104020006。スイッチサイエンス「GROVE - LEDバー v2.0」（メーカー製品名 Grove LED Bar v2.0）とKSY「Grove LED バー v2.0」は製品名とv2.0のリビジョンが一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"2645\",\"ksy\",\"897\"]",
+    "fingerprint": "3e6c79d3684f9ae0737385bd623a438499298bd304a9f2fe9131d2558526a3d4",
+    "decision": "same_product",
+    "evidence": "共通コード101020083。スイッチサイエンス「GROVE - ジェスチャー」（メーカー製品名 Grove - Gesture）とKSY「Grove ジェスチャー センサー モジュール」はジェスチャーセンサーとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"2647\",\"ksy\",\"131\"]",
+    "fingerprint": "e3980ff1e59d33abef3fe363ed08a17b5db225d004335aee04b31f1c04beddd6",
+    "decision": "same_product",
+    "evidence": "共有コード909-8132（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSは「Raspberry Pi 3/2/B+ 用オフィシャルケース 赤/白」（Piケース Official for Pi 3/2/B+ 赤/白）、KSYは「Piケース 公式 for Pi3B+/3 赤/白」で、公式Piケースの赤/白として対応する。KSY名称は対象機種からPi 2を省略しているだけで矛盾しない。メーカー欄はSS「RS」（RSコード909-8132）、KSY「ラズベリーパイ財団(RS)」で、RSの製品コード909-8132を介して対応し公式Raspberry Pi製品として矛盾しない。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称に対象機種Pi 2の記載がなく、対応機種の範囲は名称だけでは未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"2713\",\"ksy\",\"144\"]",
+    "fingerprint": "b048cb677966f9a0ee3d7ad0f912346690c5926e59731c30794f388c285b10fe",
+    "decision": "same_product",
+    "evidence": "共有コード913-2664（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSは「Raspberry Pi カメラモジュール V2.1」（Raspberry Pi Camera V2.1、「販売終了」は状態注記）、KSYは「Piカメラ 公式 V2」で、Camera Module V2系の公式カメラとして対応し、同一RSコード913-2664を共有する。メーカー欄はSS「RS」（RSコード913-2664）、KSY「ラズベリーパイ財団」で、RSの製品コード913-2664を介して対応し公式Raspberry Pi製品として矛盾しない。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にV2.1の明記がなく、リビジョンの一致は同一RS型番913-2664の一致に依拠している",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"2854\",\"ksy\",\"792\"]",
+    "fingerprint": "eed902b4ebd5f7707f2cf4d73984deb6e1f886ffda27d1203d1cddec8364d316",
+    "decision": "same_product",
+    "evidence": "共通コード101020173。スイッチサイエンス「GROVE - 光センサ（パネルタイプ） v1.1」（メーカー製品名 Grove - Light Sensor(P) v1.1）とKSY「Grove 光センサー モジュール LS06-S搭載」は光センサーモジュールとして対応する。KSY名称にv1.1・パネルタイプの記載はないが、リビジョンを含むSeeed製品コードが共通で、別リビジョン（101020132のv1.2）はKSYで別商品として掲載されている。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にはv1.1・パネルタイプの記載がなく、リビジョンは共通のSeeed製品コードによる判断",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3092\",\"ksy\",\"496\"]",
+    "fingerprint": "0c6474e35ff1519a81477bdbab9c0046b09037ebdb37ee16fcb378bb9a6c6539",
+    "decision": "same_product",
+    "evidence": "共通コード110060482。スイッチサイエンス「GROVE - Raspberry Pi用IoTスターターキット--在庫限り」（メーカー製品名 Grove Starter Kit for IoT based on Raspberry Pi）とKSY「Grove IoT スターター キット for Pi」はIoTスターターキットとして対応する。「在庫限り」は販売状況の付記で差異ではない。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "キット同梱内容の両店での一致は保存データでは未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3118\",\"ksy\",\"326\"]",
+    "fingerprint": "bb10ba6e6c94c0ed4762a052013e912dfc06a813e2393006e57cbf68b24491ba",
+    "decision": "same_product",
+    "evidence": "共有コードはDTP502535(PHR)（コネクタ表記PHRを含む）。スイッチサイエンス「リチウムイオンポリマー電池 400mAh」とKSY「リチウムイオンポリマー電池 400mAh 2C」は容量400mAhが一致。メーカーはData Power Technologyで双方一致。",
+    "differences": [],
+    "missingEvidence": [
+      "スイッチサイエンス名称に放電レート（2C）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3166\",\"ksy\",\"325\"]",
+    "fingerprint": "9fae0c276640b4e1c63405a5679452701f974af858eaa0e0809cf03c1e99037c",
+    "decision": "same_product",
+    "evidence": "共有コードはDTP401525(PHR)（コネクタ表記PHRを含む）。スイッチサイエンス「リチウムイオンポリマー電池110mAh」とKSY「リチウムイオンポリマー電池 110mAh 1C」は容量110mAhが一致。メーカーはData Power Technologyで双方一致。",
+    "differences": [],
+    "missingEvidence": [
+      "スイッチサイエンス名称に放電レート（1C）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3216\",\"ksy\",\"343\"]",
+    "fingerprint": "bfa426fd9b04004247b9ba4716dd0fd79f34ab4ac2415533d4df3f97f0db8693",
+    "decision": "same_product",
+    "evidence": "共有コードPIM185（Pimoroniの製品コード）。SS「LiPo SHIM （旧商品名：Zero LiPo）」（メーカー製品名 LiPo SHIM for Raspberry Pi）とKSY「LiPo SHIM LiB昇圧コンバーター」は同名のLiPo SHIMで対応する（旧商品名は状態注記で相違ではない）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM185とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3220\",\"ksy\",\"250\"]",
+    "fingerprint": "ac9ea0a9ffe3436f3bb0d013fff6e05809ac9616eacdefd5dac74b89693cccf3",
+    "decision": "same_product",
+    "evidence": "共有コードPIM186（Pimoroniの製品コード）。SS「Micro Dot pHAT（赤）--販売終了」とKSY「Micro Dot Red pHAT Kit」は赤色のMicro Dot pHATとして一致する（販売終了は状態注記）。KSYのKit表記に対しSS名称にはキット表記がないが、同系列のSS PIM187のメーカー製品名がFull kitで、キット構成はコードに含まれると判断できる。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM186とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "SS側の名称にキット/組立済みの表記がなく、KSYのKit表記との半田付け要否の一致は名称上は未確認（同系列PIM187のメーカー製品名はFull kit）"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3221\",\"ksy\",\"249\"]",
+    "fingerprint": "6416a0db91e356fe2f1a5a395db2fa6899802d5e38bdb746036b1d9a5af6e7a8",
+    "decision": "same_product",
+    "evidence": "共有コードPIM187（Pimoroniの製品コード）。SS「Micro Dot pHAT（緑）--販売終了」（メーカー製品名 Micro Dot pHAT - Full kit - Green）とKSY「Micro Dot Green pHAT Kit」は緑色・キット構成まで一致する（販売終了は状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM187とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3227\",\"ksy\",\"321\"]",
+    "fingerprint": "5a44d684ac7f39face14ef0a49108a3d61ee63b54f422f30e73903d2ec5bc4c5",
+    "decision": "same_product",
+    "evidence": "共有コードはCOM1105。スイッチサイエンス「GPIO Hammer Header用ピンソケット」（製品名GPIO Hammer Header (Solderless) – Female）とKSY「GPIO ハンマー ヘッダー 40pin メス」はハンマーヘッダーのメス（ソケット）として対応。メーカーは双方Pimoroni。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3284\",\"ksy\",\"868\"]",
+    "fingerprint": "902e7cc29601a52c89c19ffdc487020cd94935dc465e2344971d5a5b18df3faf",
+    "decision": "same_product",
+    "evidence": "共通コード101020132。スイッチサイエンス「GROVE - 光センサ v1.2」（メーカー製品名 Grove - Light Sensor v1.2）とKSY「Grove 光センサー V1.2」は製品名とv1.2のリビジョンが一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3295\",\"ksy\",\"347\"]",
+    "fingerprint": "57063e8aaba13fa6c7c588c1d767c8af59b2510da10aa3b0779b5c9f2584fa6a",
+    "decision": "same_product",
+    "evidence": "共有コードPIM269（Pimoroniの製品コード）。SS「OnOff SHIM」（メーカー製品名 OnOff SHIM (micro-USB)）とKSY「OnOff SHIM 電源管理基板」は同名の電源管理SHIMで対応する。micro-USB表記はSSのみだが、同一メーカーコードPIM269が仕様を決める。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM269とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSY側の名称にmicro-USB等の接続端子の記載がなく、SSのメーカー製品名にあるmicro-USBとの対応は名称上は未確認（メーカーコードは一致）"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3313\",\"ksy\",\"895\"]",
+    "fingerprint": "72bf28938aa302469dac6a109d52a969c051a56d0041b8c216d84903951aedb1",
+    "decision": "same_product",
+    "evidence": "共通コード101020232。スイッチサイエンス「GROVE - 発話認識モジュール」（メーカー製品名 Grove - Speech Recognizer v1.0）とKSY「Grove 音声認識モジュール」は発話認識と音声認識の訳語差で、同じ音声認識モジュールに対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にはv1.0の記載がなく、リビジョンは共通のSeeed製品コードによる判断",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3317\",\"ksy\",\"349\"]",
+    "fingerprint": "adb98265dfcd66bb414bc7aa62e0251c258383878fcce92e654fed556d03acac",
+    "decision": "same_product",
+    "evidence": "共有コードPIM183（Pimoroniの製品コード）。SS「Pan-Tilt HAT--在庫限り」（メーカー製品名 Pan-Tilt HAT – Full kit）とKSY「Pan-Tilt HAT Full kit」はFull kit構成まで一致する（在庫限りは状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM183とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3335\",\"ksy\",\"251\"]",
+    "fingerprint": "48b3672fcad84f5551bb9931e0603d77cff8ed74288149a4853bb38c08f07c0b",
+    "decision": "same_product",
+    "evidence": "共有コードPIM272（Pimoroniの製品コード）。SS「Touch pHAT--販売終了」とKSY「Touch 静電容量式タッチセンサー pHAT Kit」は同名のTouch pHATで対応する（販売終了は状態注記）。KSYのKit表記に対しSS側は名称・メーカー製品名ともキット表記を持たない。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM272とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "SS側の名称・メーカー製品名にキット/組立済みの表記がなく、KSYのKit表記との構成一致は名称上は未確認（メーカーコードは一致）"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3336\",\"ksy\",\"354\"]",
+    "fingerprint": "4ed53054428c6f76103788f0ec971faa2883a59eeefc71500ca1726413636513",
+    "decision": "same_product",
+    "evidence": "共有コードPIM273（Pimoroniの製品コード）。SS「Unicorn HAT HD--在庫限り」とKSY「LEDマトリックス Unicorn HAT HD」は同名で、メーカー製品名Unicorn HAT HDとも一致する（在庫限りは状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM273とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3339\",\"ksy\",\"789\"]",
+    "fingerprint": "040276f20c58699bbf4c37c0b6c4a645341b972168aa42a5695a27e35efb10bc",
+    "decision": "same_product",
+    "evidence": "共通コード101020174。スイッチサイエンス「GROVE - 赤外線反射センサ v1.2」（メーカー製品名 Grove - Infrared Reflective Sensor v1.2）とKSY「Grove 赤外線反射センサー モジュール」は赤外線反射センサーとして対応する。KSY名称にv1.2の記載はないが、Seeed製品コードが共通。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にはv1.2の記載がなく、リビジョンは共通のSeeed製品コードによる判断",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3374\",\"ksy\",\"801\"]",
+    "fingerprint": "c5f264272272e2c74729380dcde8af173936b0a10348d592b7ce18674f2dd986",
+    "decision": "same_product",
+    "evidence": "共通コード101020193。スイッチサイエンス「GROVE - 温湿度・気圧センサ（BME280）」（メーカー製品名 Grove - Barometer Sensor(BME280)）とKSY「Grove 環境センサーモジュール BME280搭載」は、BME280搭載の環境センサーとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3411\",\"ksy\",\"277\"]",
+    "fingerprint": "6571fa8669a4edf4ef6b0d76dce5e11632abe09b65aa73ef4458bb9b5a4c1e63",
+    "decision": "unresolved",
+    "evidence": "共有コードPIM258、メーカーPimoroni（SSはmanufacturer、KSYは店舗ラベル）。SS「Raspberry Pi Zero W用 Pibow Zero Wケース」とKSY「Piケース Pibow for Zero W 赤」はPibow Zero W用ケースという製品系統は一致するが、KSYだけが色（赤）を明記し、SSの名称とメーカー製品名には色の記載がない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称の「赤」がPIM258の本体色・パーツ色を指すのか、SS側のPIM258が同じ色構成なのかが、保存名称・メーカー製品名から確認できない"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3490\",\"ksy\",\"239\"]",
+    "fingerprint": "29100db8ddf3d90824164e598468d16636c664de85b03b02b838f7bc8e2a5f14",
+    "decision": "same_product",
+    "evidence": "共有コードPIM184（Pimoroniの製品コード）。SS「Blinkt!」とKSY「Blinkt!」は名称・メーカー製品名とも完全に一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM184とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3599\",\"ksy\",\"937\"]",
+    "fingerprint": "ac05038cbe7e412104fb4e675616c69ce2ac67b626e923b19e0225a405b8e1d0",
+    "decision": "same_product",
+    "evidence": "共有コードはMTADPP000X01。スイッチサイエンス「ADPi Pro - Raspberry Pi専用 高精度A/D変換モジュール」とKSY「高精度A/D変換モジュール ADPi Pro for Pi」は製品名ADPi Proが一致。メーカーはメカトラックス（KSY表記MECHATRAX）で一致。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3647\",\"ksy\",\"766\"]",
+    "fingerprint": "450de084c0bf337259ee1e3cb05e8a77ebb5bee85bf4d4bafd25cfb468751081",
+    "decision": "same_product",
+    "evidence": "共有コードはK001（-V27等の改版サフィックスなし）。スイッチサイエンス「M5Stack Basic--販売終了」（製品名ESP32 Basic Core IoT Development Kit）とKSY「M5Stack BASIC」はBasicコアとして対応。メーカーは双方M5Stack。「販売終了」は販売状態でありここでは差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3648\",\"ksy\",\"767\"]",
+    "fingerprint": "ad238f3e82dee9b71c115288f33b75514e273eea1cba3fcbba1fb3b2071c4e0d",
+    "decision": "same_product",
+    "evidence": "共有コードはK002。スイッチサイエンス「M5Stack Gray（9軸IMU搭載）--販売終了」（製品名ESP32 GREY Development Kit with 9Axis Sensor）とKSY「M5Stack GRAY」はGRAYコアとして対応。メーカーは双方M5Stack。「販売終了」は販売状態でありここでは差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3650\",\"ksy\",\"769\"]",
+    "fingerprint": "26a0c60020a3ed5e2b6a245eb19bece5bfde0f918ad235101a8f9ad5c0d0c6d7",
+    "decision": "same_product",
+    "evidence": "共有コードはM001。スイッチサイエンス「M5Stack用プロトモジュール [M001]」（製品名Proto Module with Extension & Bus Socket）とKSY「ユニバーサルボード for M5Stack」はコア用のプロト（ユニバーサル）基板モジュールとして対応。メーカーは双方M5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3653\",\"ksy\",\"771\"]",
+    "fingerprint": "29e36e9be2bff090cb3b4b3568193a28aeb4ff31a35fe12f9782d516a631af1c",
+    "decision": "same_product",
+    "evidence": "共有コードはM002。スイッチサイエンス「M5Stack用電池モジュール [M002]」（製品名Battery Module for Arduino ESP32 Core Development Kit）とKSY「バッテリー拡張モジュール for M5Stack」はコア用バッテリーモジュールとして対応。メーカーは双方M5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3669\",\"ksy\",\"348\"]",
+    "fingerprint": "b9a57331bad45afee07c24b4ca6f561e36a051a1b7f47b910e7155d3c2039985",
+    "decision": "same_product",
+    "evidence": "共有コードPIM301（Pimoroniの製品コード）。SS「Button SHIM--販売終了」とKSY「Button SHIM」は名称・メーカー製品名とも一致する（販売終了は状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM301とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3901\",\"ksy\",\"491\"]",
+    "fingerprint": "9ac7563ff5900ae370b3cef8cad410982e3372d9bb99a519b70826ce37aa59c4",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBEXT1。スイッチサイエンス「SPRESENSE拡張ボード[CXD5602PWBEXT1]」（メーカーソニー）とKSY「SPRESENSE 拡張ボード」（店舗ラベルSONY）は名称が一致し、メーカーも一致。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"4032\",\"ksy\",\"652\"]",
+    "fingerprint": "9edc8e6fad1cc4fc1c1804d1ce6e383603f58b018a64244fef556f2ea426fb0b",
+    "decision": "same_product",
+    "evidence": "共有コードPIM401（Pimoroniの製品コード）。SS「touch:bit--在庫限り」とKSY「touch:bit タッチ パッド LED拡張ボード for micro:bit」は同名のmicro:bit用拡張ボードで対応する（在庫限りは状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM401とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"4119\",\"ksy\",\"492\"]",
+    "fingerprint": "bedfd9dd04ecf5e2e2c6c9e88cc011c38a746b90b0af72d85c432ad0297872b1",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBCAM1。スイッチサイエンス「SPRESENSEカメラボード [CXD5602PWBCAM1]」（製品名はカメラモジュール）とKSY「SPRESENSE カメラボード」は名称が対応し、メーカーはソニー／SONYで一致。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5219\",\"ksy\",\"773\"]",
+    "fingerprint": "e80655c900f445e08b499436a9a9e650ed13315b2ce6c4c91a21849f49fed1df",
+    "decision": "same_product",
+    "evidence": "共有コードはU010。スイッチサイエンス「M5Stack用ToF測距センサユニット [U010]」（製品名Time-of-Flight Ranging Unit (VL53L0X)）とKSY「ToFセンサー モジュール　for M5Stack」はToF測距センサーユニットとして対応。メーカーは双方M5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にセンサーIC（VL53L0X）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5334\",\"ksy\",\"805\"]",
+    "fingerprint": "bbe6591a67bbe011f3645adf96fa33a70a769fa89081e1abe916242ccf3e39db",
+    "decision": "same_product",
+    "evidence": "共通コード103030277。スイッチサイエンス「Raspberry Pi用RTC（DS1307）」（メーカー製品名 Pi RTC (DS1307)）とKSY「RTC モジュール DS1307搭載 for Pi」は、DS1307搭載のRaspberry Pi用RTCとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5336\",\"ksy\",\"768\"]",
+    "fingerprint": "4bdc20f14bfe11cc0206ae462a11959332991d854841872a86e8940fcc46e3cd",
+    "decision": "same_product",
+    "evidence": "共通コード103030275。スイッチサイエンス「GROVE - ベースHAT for Raspberry Pi」（メーカー製品名 Grove Base Hat for Raspberry Pi）とKSY「Grove Base HAT」はGroveベースHATとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5340\",\"ksy\",\"749\"]",
+    "fingerprint": "60952f91647b2258866685fb79fb6a349587c481c05a3d2c10e02428a31724b7",
+    "decision": "same_product",
+    "evidence": "共通コード104020111。スイッチサイエンス「GROVE - 16 x 2 LCD（青背景・白文字）」（メーカー製品名 Grove - 16 x 2 LCD (White on Blue)）とKSY「Grove LCDモジュール 16×2（青背景・白文字）」は、16x2表示と青背景・白文字の色構成が一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5352\",\"ksy\",\"790\"]",
+    "fingerprint": "6cdd9153a6c356d205feb113dc8e60ba0ef9dfd52291d23a6c799d41a67f9c20",
+    "decision": "same_product",
+    "evidence": "共通コード111020049。スイッチサイエンス「GROVE - キートップ付きメカニカルキー」（メーカー製品名 Grove - Mech Keycap）とKSY「Grove メカ キーキャップ モジュール」はキーキャップ付きメカニカルキーモジュールとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5434\",\"ksy\",\"751\"]",
+    "fingerprint": "a17dfe95bdbaeed2c32603991094442c86c3cf9531ab3685a3e2faaf3c37f6e3",
+    "decision": "same_product",
+    "evidence": "共通コード103100063。スイッチサイエンス「micro:bit用GROVEシールド v2.0」（メーカー製品名 Grove Shield for micro:bit v2.0）とKSY「Grove シールド V2.0 for micro:bit」は、micro:bit用Groveシールドのv2.0として一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5697\",\"ksy\",\"777\"]",
+    "fingerprint": "e8edcac643bf7790d6c0832b1c7211ce52f6b7be82cb00ff088746734f5227fa",
+    "decision": "same_product",
+    "evidence": "共有コードはU004。スイッチサイエンス「M5Stack用PIRセンサユニット（AS312搭載） [U004]」とKSY「PIR モーション センサー モジュール for M5Stack」はPIR人感センサーユニットとして対応。メーカーは双方M5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にセンサーIC（AS312）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5698\",\"ksy\",\"775\"]",
+    "fingerprint": "33cef422675c40aa2394e0a67698e2160b5f30eaa970baa265a991523f1cc2ad",
+    "decision": "same_product",
+    "evidence": "共有コードはU040。スイッチサイエンス「M5Stack用Port A（I2C）拡張ハブユニット--販売終了」（製品名I2C Hub 1 to 6 Expansion Unit (TCA9548A)）とKSY「Grove ハブ拡張ユニット I2Cマルチ チャンネル スイッチ 6ポート for M5Stack」は6ポートI2Cハブユニットとして対応。メーカーは双方M5Stack。「販売終了」は販売状態であり差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5843\",\"ksy\",\"469\"]",
+    "fingerprint": "c0189bb429264d55d7d3b11dfc621397bf3fea5a224c9ecac1ef345abf07253b",
+    "decision": "same_product",
+    "evidence": "共有コードはRP-VC1（IRフィルタ無しのRP-VC1Nとは別）。スイッチサイエンス「VR 220 Camera［組み立て済］」とKSY「Piカメラ VR220 広角レンズセット」はVR220カメラとして対応し、メーカーは双方Entaniya。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY側が組み立て済みかどうかの記載",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5844\",\"ksy\",\"477\"]",
+    "fingerprint": "3ce037d65108fe2bd4e403c200e27ffbf9d31143869d8e4c129d325302f39b4d",
+    "decision": "same_product",
+    "evidence": "共有コードはRP-VC1N（Nを保持）。スイッチサイエンス「VR 220 Camera IRフィルタ無し[組み立て済]」（製品名NoIr VR 220 Camera）とKSY「Piカメラ VR220 赤外線 広角レンズセット」はIRフィルタ無し（赤外線対応）のVR220として対応。メーカーは双方Entaniya。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY側が組み立て済みかどうかの記載",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5959\",\"ksy\",\"504\"]",
+    "fingerprint": "716fb2be9f8ac3333189b7ac24c4b66a420008c44b5615d68a05d2286ec8ef98",
+    "decision": "same_product",
+    "evidence": "共有コードSC0229（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 4 用オフィシャルケース 赤/白」（Official Raspberry Pi 4 case [red/white]）とKSYの「Piケース 公式 for 4B 赤/白」で、Pi 4用公式ケースと配色が一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5999\",\"ksy\",\"944\"]",
+    "fingerprint": "5e29e0a68014a000c230b610a6d6d5c4cf9a2fcfd6180940ed3e8caba50ffaa0",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBLM1JUL。スイッチサイエンス「SPRESENSE LTE拡張ボード [CXD5602PWBLM1JUL]」（メーカーソニー）とKSY「SPRESENSE LTE 拡張ボード」（店舗ラベルSONY）は名称が一致し、メーカーも一致。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6123\",\"ksy\",\"653\"]",
+    "fingerprint": "fa31a03666353a06928f9735c4eaf0a77db21d95d878b352749264113a18501c",
+    "decision": "same_product",
+    "evidence": "共有コードPIM371（Pimoroniの製品コード）。SS「automation:bit--在庫限り」とKSY「automation:bit 制御モジュール for micro:bit」は同名のmicro:bit用制御ボードで対応する（在庫限りは状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM371とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6124\",\"ksy\",\"649\"]",
+    "fingerprint": "98b8db1edfa731e1555e560e96e4fa1187f886038ae67d9872d5b7daf86126a5",
+    "decision": "same_product",
+    "evidence": "共有コードPIM353（Pimoroniの製品コード）。SS「scroll:bit--販売終了」（メーカー製品名 scroll:bit）とKSY「scroll:bit スクロール機能拡張ボード for micro:bit」は同名で対応する（販売終了は状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM353とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6170\",\"ksy\",\"797\"]",
+    "fingerprint": "0b9d7b369b898d386931a873e45fc46dbe24a6c326e76606a409c1b2c850eb5e",
+    "decision": "same_product",
+    "evidence": "共通コード103020272。スイッチサイエンス「Grove - I2C ハブ（6ポート）」（メーカー製品名 Grove - I2C Hub (6 Port)）とKSY「Grove ハブ拡張ユニット 6ポート」は6ポートのGroveハブとして対応する。KSY名称にI2Cの記載はないが矛盾ではない。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6232\",\"ksy\",\"650\"]",
+    "fingerprint": "e0bd6913e2a1d809d936cb60841c2268c044bfb683e53c19d37e0b3d76c754ca",
+    "decision": "same_product",
+    "evidence": "共有コードPIM355（Pimoroniの製品コード）。SS「enviro:bit--在庫限り」（メーカー製品名 enviro:bit）とKSY「enviro:bit マルチ センサー ボード for micro:bit」は同名で対応する（在庫限りは状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM355とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6234\",\"ksy\",\"755\"]",
+    "fingerprint": "7022bcb38dc396a591f189caff571e16f558e374b0082ca2dc928f85654fb4c2",
+    "decision": "same_product",
+    "evidence": "共有コードPIM482（Pimoroniの製品コード）。SS「Pirate Audio Headphone Amp for Raspberry Pi」（メーカー製品名 Pirate Audio: Headphone Amp for Raspberry Pi）とKSY「オーディオ拡張ボード Pirate Audio:Headphone Amp for Pi」はPirate Audioのヘッドホンアンプで一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM482とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6235\",\"ksy\",\"756\"]",
+    "fingerprint": "17a2af2be6e7467c34d1e6314f0e16b49f4fd1b391f3e46282d8ba77b3c8e689",
+    "decision": "same_product",
+    "evidence": "共有コードPIM483（Pimoroniの製品コード）。SS「Pirate Audio Line-out for Raspberry Pi--販売終了」とKSY「オーディオ拡張ボード Pirate Audio:Line-out for Pi」はPirate AudioのLine-outで一致する（販売終了は状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM483とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6236\",\"ksy\",\"754\"]",
+    "fingerprint": "bf747262b18a70b3c86fab8ef26a7f67aa829f22f4542e095a385bede713a558",
+    "decision": "same_product",
+    "evidence": "共有コードPIM484（Pimoroniの製品コード）。SS「Pirate Audio 3W Stereo Amp for Raspberry Pi」（メーカー製品名 Pirate Audio: 3W Stereo Amp for Raspberry Pi）とKSY「オーディオ拡張ボード Pirate Audio:3W Stereo Amp for Pi」は3W Stereo Ampで一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM484とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6237\",\"ksy\",\"757\"]",
+    "fingerprint": "1ad08424c36690f0e9f5cb0d12f2d4fa7e033ad637ba6544bc4963a6a490f9de",
+    "decision": "same_product",
+    "evidence": "共有コードPIM485（Pimoroniの製品コード）。SS「Pirate Audio Speaker for Raspberry Pi」（メーカー製品名 Pirate Audio: Speaker for Raspberry Pi）とKSY「オーディオ拡張ボード Pirate Audio:Speaker for Pi」はPirate AudioのSpeakerで一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM485とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6286\",\"ksy\",\"746\"]",
+    "fingerprint": "2310e56a057ca4476f800bc87ae8e18b1c33a132da5eac6bae21564b2ce7d3f2",
+    "decision": "same_product",
+    "evidence": "共通コード101020812。スイッチサイエンス「Grove - 高精度気圧センサ（DPS310）」（メーカー製品名 Grove - High Precision Barometer Sensor (DPS310)）とKSY「Grove 高精度気圧センサー モジュール DPS310搭載」は、高精度気圧センサーとDPS310搭載が一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6370\",\"ksy\",\"552\"]",
+    "fingerprint": "95d899feb3090bed47d0468819f901356e5a65d2a48925aaf9b94b1dd001a3ad",
+    "decision": "same_product",
+    "evidence": "共有コードSC0195（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 4 Model B / 8GB」（Pi4/8GB）とKSYの「Raspberry Pi 4 Model B/8GB element14」で、機種Pi 4 Model BとRAM 8GBが一致する。KSY名称末尾の「element14」は流通元の表記で、SS側にはない。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [
+      "KSY名称末尾に流通元表記「element14」があり、SS名称には記載がない"
+    ],
+    "missingEvidence": [
+      "KSYの「element14」表記が示す仕入元・梱包の違いの有無は保存データでは未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6425\",\"ksy\",\"576\"]",
+    "fingerprint": "64115483c192e63fa71687f241aa938386a4a43dac0683fb9cdd9de313bf57f1",
+    "decision": "same_product",
+    "evidence": "共有コードSC0354（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Piオフィシャルキーボード日本語レイアウト 赤/白」（RPi-KYB JP (Red/White)）とKSYの「キーボード 公式 日本語配列 USB 赤/白」で、公式キーボード・日本語配列・赤/白が一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6503\",\"ksy\",\"889\"]",
+    "fingerprint": "c709f9e068a7fbb4930b7a9e180f827725cc33dd248141b3f9138112c57b2e5b",
+    "decision": "same_product",
+    "evidence": "共有コードはMTSLP3N00X01。スイッチサイエンス「slee-Pi 3」とKSY「slee-Pi3 電源管理/死活監視モジュール for Pi」は製品名slee-Pi 3が一致。メーカーはメカトラックス（KSY表記MECHATRAX）で一致。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6530\",\"ksy\",\"770\"]",
+    "fingerprint": "c0685cda12c0863b18a447b22988126f895aaa2b1beaa3f60e730ce2fa26bcd2",
+    "decision": "same_product",
+    "evidence": "共有コードはK010（-V11等の改版サフィックスなし）。スイッチサイエンス「M5Stack Core2 IoT開発キット--在庫限り」（製品名M5Stack Core2 IoT Development Kit）とKSY「M5Stack Core2」はCore2として対応。メーカーは双方M5Stack。「在庫限り」は販売状態であり差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6588\",\"ksy\",\"632\"]",
+    "fingerprint": "1d03450875a06ee0a3d1f18ae3112a32932017ded3dfae25548d279222d79548",
+    "decision": "same_product",
+    "evidence": "共有コードSC0364（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Piオフィシャルキーボード日本語レイアウト 黒/グレー」（RPI-KYB JP (Black/Grey)）とKSYの「キーボード 公式 日本語配列 USB 黒/灰」で、公式キーボード・日本語配列・黒/グレーが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6637\",\"ksy\",\"663\"]",
+    "fingerprint": "180364c93c480a10c2e9457582cf302a6cb33aaa2da3dc71a39f6120d85b0b31",
+    "decision": "same_product",
+    "evidence": "共有コードPIM511（Pimoroniの製品コード）。SS「HAT Hacker HAT--販売終了」とKSY「HAT Hacker HAT」は名称・メーカー製品名とも一致する（販売終了は状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM511とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6701\",\"ksy\",\"596\"]",
+    "fingerprint": "dfb827d748cd743a45bf8b7cc31f10672fd18f9ed6ae2532205ca17e8a800062",
+    "decision": "same_product",
+    "evidence": "共有コードCM4002032（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Compute Module 4 メモリ2GB / eMMC 32GB」（Raspberry Pi Compute Module 4 with 2GB RAM 32GB eMMC）とKSYの「RPi CM4 RAM:2GB eMMC:32GB」で、メーカー型番CM4002032・RAM 2GB・eMMC 32GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6750\",\"ksy\",\"667\"]",
+    "fingerprint": "c3f16ea30876ce7873420cdf14de345305f1ac401ced9ccd3f58fae170f5c6cd",
+    "decision": "same_product",
+    "evidence": "共有コードSC0382（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 400 日本語キーボード」（Pi400JP unit only）とKSYの「Raspberry Pi 400 日本版」で、機種Pi 400と日本語配列が対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "SS側のメーカー製品名にある本体のみ(unit only)の記載がKSY名称になく、同梱品の一致は未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6827\",\"ksy\",\"578\"]",
+    "fingerprint": "0f3e54184f80e66c208bf892ebcbdc326b9a3bcc650533b4f6d805ecea0583b8",
+    "decision": "same_product",
+    "evidence": "共有コードSC0448（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 4 用ケースファン」（Case Fan & heatsink for Raspberry Pi 4 case）とKSYの「FANキット 公式 Piケース for 4B」で、Pi 4公式ケース用ファンとして対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6900\",\"ksy\",\"634\"]",
+    "fingerprint": "6b3875483f603ca67b5aa45f350e5777bc29c40e35f3ee9db217404159276016",
+    "decision": "same_product",
+    "evidence": "共有コードSC0915（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi Pico」で一致する。いずれもH/W/WHなどの派生表記はなく、ヘッダー・無線なしの基本形と対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6929\",\"ksy\",\"699\"]",
+    "fingerprint": "722d95c3fd67647f44669cff2b92ffc8ead51ed993af3c8c42f194e3bec1ede1",
+    "decision": "same_product",
+    "evidence": "共有コードはB012001。スイッチサイエンス「Raspberry Pi用マルチカメラアダプタ V2.2」とKSY「マルチカメラアダプター V2.2 for Pi」は製品名とリビジョンV2.2が一致。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7000\",\"ksy\",\"744\"]",
+    "fingerprint": "f27a93e4a84e67e66790341b53c7468fe94f60531dbe4bd7b3673d6141f865f3",
+    "decision": "same_product",
+    "evidence": "共通コード101020634。スイッチサイエンス「Grove - SCD30搭載 CO2・温湿度センサ（Arduino用）」（メーカー製品名 Grove - CO2 & Temperature & Humidity Sensor (SCD30)）とKSY「Grove CO2&温湿度センサー モジュール SCD30搭載」は、CO2・温湿度・SCD30搭載が一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7005\",\"ksy\",\"885\"]",
+    "fingerprint": "55cc2b2ebb4b52f997fe81b248049190c9cd01662618897350a14a58d8b02667",
+    "decision": "same_product",
+    "evidence": "共通コード101020089。スイッチサイエンス「Grove - SI1151搭載 太陽光センサ（紫外線/可視光/赤外線）」（メーカー製品名 Grove - Sunlight Sensor）とKSY「Grove 日光センサー モジュール」は、太陽光（日光）センサーとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にはSI1151の記載がなく、搭載センサーICはSeeed製品コードの共通による判断",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7103\",\"ksy\",\"800\"]",
+    "fingerprint": "0f2d16bd6eb32553ee99ea1f802b791d577d4f4b0b050867161e0e8ccbb6817e",
+    "decision": "same_product",
+    "evidence": "共通コード110061283。スイッチサイエンス「Groveスターターキット（Raspberry Pi Pico用）」（メーカー製品名 Grove Starter Kit for Raspberry Pi Pico）とKSY「Grove スターターキット for Pico」は、Raspberry Pi Pico用のGroveスターターキットとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "キット同梱内容（Pico本体の有無を含む）の両店での一致は保存データでは未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7160\",\"ksy\",\"772\"]",
+    "fingerprint": "f363d9d608cd54f80e0aa9955ebfe19c14194ab7b4c1abc4647eebd71eb561df",
+    "decision": "same_product",
+    "evidence": "共有コードはU078-D（末尾-Dを保持）。スイッチサイエンス「M5Stack UnitV2 AI カメラ（SSD202D）」とKSY「M5Stack AIカメラ モジュール UnitV2」はUnitV2として対応。メーカーは双方M5Stack。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7172\",\"ksy\",\"719\"]",
+    "fingerprint": "cbcc5d97fe5e9724a62dfeaff8b656cbc5448cd7d1ee3fd3a1228d9079b23c39",
+    "decision": "same_product",
+    "evidence": "共有コードSC0468（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi PoE+ HAT」で一致し、製品名が対応する（SSメーカー製品名 POE+ HAT）。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7321\",\"ksy\",\"710\"]",
+    "fingerprint": "4f36be2f9b5b03c4db03392685dae3b0be72b739bfc1575b8014fae22e0ba00d",
+    "decision": "same_product",
+    "evidence": "共有コードは19406（Waveshareの5桁番号）。スイッチサイエンス「Raspberry Pi Pico用 2.13インチ e-Paper ディスプレイ（白黒） 250×122」（製品名Pico-ePaper-2.13）とKSY「電子ペーパー 2.13\" 250×122 SPI for Pico」は2.13インチ・250×122・Pico用で対応。メーカーは双方Waveshare。数字コードだが名称が対応するため偶然一致ではない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称に表示色（白黒）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7335\",\"ksy\",\"709\"]",
+    "fingerprint": "eafb6dcd9ca2f032da169f5bef97b16c2f40e561bdfb39d653e0c0c5ebf96331",
+    "decision": "same_product",
+    "evidence": "共有コードは19426（Waveshareの5桁番号）。スイッチサイエンス「Raspberry Pi Pico用DS3231 高精度リアルタイムクロックモジュール」（製品名Pico-RTC-DS3231）とKSY「RTCモジュール 高精度 for Pico」はPico用の高精度RTCとして対応。メーカーは双方Waveshare。数字コードだが名称が対応するため偶然一致ではない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にRTC IC（DS3231）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7336\",\"ksy\",\"706\"]",
+    "fingerprint": "8335c78209cbb6445f8c3a0f6480898eaa6c2b81b9517d7a59d492da2c980c7c",
+    "decision": "same_product",
+    "evidence": "共有コードは19358（Waveshareの5桁番号）。スイッチサイエンス「Raspberry Pi Pico用10-DOF IMU センサ ICM20948 + LPS22HB--販売終了」（製品名Pico-10DOF-IMU）とKSY「10-DOF IMU センサー モジュール for Pico」はPico用10-DOF IMUとして対応。メーカーは双方Waveshare。「販売終了」は販売状態であり差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にセンサーIC（ICM20948・LPS22HB）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7373\",\"ksy\",\"678\"]",
+    "fingerprint": "85d97688a4eb525183be46f46e8bf9832a5f551b6f6a33fbddbb31e95e5944b6",
+    "decision": "same_product",
+    "evidence": "共有コードPIM550（Pimoroniの製品コード）。SS「Pico Explorer Base」とKSY「LCD付多機能プロトボード Pico Explorer Base for Pico」は同名のPico用ベースボードで対応する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM550とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7374\",\"ksy\",\"742\"]",
+    "fingerprint": "ffc5df8a99165a556e1717e6480db2df84a356af7fee37548f1034ad867c12b9",
+    "decision": "same_product",
+    "evidence": "共有コードPIM557（Pimoroniの製品コード）。SS「Raspberry Pi Pico用 薄型LiPoバッテリーモジュール」（メーカー製品名 LiPo SHIM for Pico）とKSY「電源基板 LiPo SHIM for Pico」はメーカー製品名どおりLiPo SHIM for Picoで対応する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM557とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7375\",\"ksy\",\"683\"]",
+    "fingerprint": "5ec491541cce924cce981417dcce479c821a6258e345a0660079666492ac12cd",
+    "decision": "same_product",
+    "evidence": "共有コードPIM554（Pimoroniの製品コード）。SS「Pico Proto」とKSY「ユニバーサル ボード Pico Proto for Pico」は同名のPico用ユニバーサル基板で対応する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM554とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7377\",\"ksy\",\"722\"]",
+    "fingerprint": "8a0b4ef6a103ec0fa07e70bdeeed3ed4fa74c3fbb3c2a3c3f2679a0630a58f56",
+    "decision": "same_product",
+    "evidence": "共有コードPIM556（Pimoroniの製品コード）。SS「Pico Omnibus（Dual Expander）」とKSY「マルチGPIOボード Pico Omnibus Dual Expander」は同名で、Dual Expanderの記載も一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM556とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7378\",\"ksy\",\"680\"]",
+    "fingerprint": "686d37149e95d1493d6201bb73185f830c5105ce355f20a1e15997fa1211477c",
+    "decision": "same_product",
+    "evidence": "共有コードPIM555（Pimoroniの製品コード）。SS「Pico Decker (Quad Expander)」とKSY「マルチGPIOボード Pico Decker Quad Expander for Pico」は同名で、Quad Expanderの記載も一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM555とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7382\",\"ksy\",\"764\"]",
+    "fingerprint": "e8a56062ee929b41b4c31411a0c81ca042939ce3db09de509d4b37fe46f7e1c8",
+    "decision": "same_product",
+    "evidence": "共有コードPIM569（Pimoroniの製品コード）。SS「MICS6814搭載 3種ガスセンサモジュール（CO/NO2/NH3）」（メーカー製品名 MICS6814 3-in-1 Gas Sensor Breakout）とKSY「ガス センサー モジュール MICS6814搭載」は搭載チップが一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM569とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7383\",\"ksy\",\"762\"]",
+    "fingerprint": "135a089a56dc5084fdc0772c625fce8fe057c502ecf73cf3b0b3c7094abbd9af",
+    "decision": "same_product",
+    "evidence": "共有コードPIM575（Pimoroniの製品コード）。SS「BME688搭載 4種空気質センサモジュール（ガス/温度/気圧/湿度）」（メーカー製品名 BME688 4-in-1 Air Quality Breakout）とKSY「空気環境センサー モジュール BME688搭載」は搭載チップと用途が一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM575とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7419\",\"ksy\",\"826\"]",
+    "fingerprint": "94f17ca17c4d4aadebd9fc07b5dbedfcd1c3ac54311576ff84577f5fe5ce0bf5",
+    "decision": "same_product",
+    "evidence": "共有コードはB0323。スイッチサイエンス「IMX298搭載 Arducam Pivariety 16MP カラーカメラモジュール（RPi 4B 3B+ 3A+ CM3/CM4用）--在庫限り」とKSY「Piカメラ 16MP オートフォーカス」は16MPのRaspberry Pi用カメラモジュールとして対応。メーカーは双方Arducam。「在庫限り」は販売状態であり差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "スイッチサイエンス名称・製品名にオートフォーカスの記載なし",
+      "KSY名称にセンサー（IMX298）・カラーの記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7435\",\"ksy\",\"804\"]",
+    "fingerprint": "3f17420dad35724e51944a74a6504e98f8bf45b81061e7b1949675d16b39e661",
+    "decision": "same_product",
+    "evidence": "共通コード110070048。スイッチサイエンス「reTerminal（4GB RAMモデル）- 5インチタッチスクリーン付き Raspberry Pi CM4搭載デバイス」とKSY「reTerminal CM4104032 5インチ CM4一体型モニター」は、5インチ画面のCM4搭載reTerminalで、CM4104032は4GB RAMのCM4型番としてスイッチサイエンスの4GB RAMモデルと整合する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7539\",\"ksy\",\"363\"]",
+    "fingerprint": "23a6787a6fc41182ff068d45ee167e681d381a483465376537d1f58e0f1e6171",
+    "decision": "same_product",
+    "evidence": "共有コードは11010（Waveshareの5桁番号）。スイッチサイエンス「Raspberry Pi用 高精度AD/DA」（製品名High-Precision AD/DA Board）とKSY「AD/DAコンバーター 拡張ボード 高精細 for Pi」はRaspberry Pi用高精度AD/DAボードとして対応。メーカーは双方Waveshare。数字コードだが名称が対応するため偶然一致ではない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7544\",\"ksy\",\"821\"]",
+    "fingerprint": "f56be12f0f47de8cf40df8cec5fb0c5a125f9e63cd4dfd87a12cd3a8c041f7e5",
+    "decision": "same_product",
+    "evidence": "共有コードは20410（Waveshareの5桁番号）。スイッチサイエンス「Raspberry Pi Pico用 イーサネット基板」（製品名Ethernet to UART Converter for Raspberry Pi Pico）とKSY「イーサネット UART変換基板　for Pico」はPico用イーサネットUART変換基板として対応。メーカーは双方Waveshare。数字コードだが名称が対応するため偶然一致ではない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7565\",\"ksy\",\"784\"]",
+    "fingerprint": "23137565523d2e9ac0f714af699752d6d38649c034a850c4cc23fdc54dac55f7",
+    "decision": "same_product",
+    "evidence": "共有コードSC0622（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi Build HAT」で一致し、製品名が対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7600\",\"ksy\",\"849\"]",
+    "fingerprint": "b1034321dfa586ccc3e5c9e1e54b8e72e374460cb36669fb281212b28cf70ff6",
+    "decision": "same_product",
+    "evidence": "共有コードSC0510（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi Zero 2 W」で一致し、機種・無線ありの表記が対応する。ヘッダー実装品（WH）の表記はどちらにもない。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7615\",\"ksy\",\"717\"]",
+    "fingerprint": "694cd574a2ced6d92c459097baaa7efcaa441d9a9320bc5b03d4d20d104f3a70",
+    "decision": "same_product",
+    "evidence": "共有コードPIM558（Pimoroniの製品コード）。SS「Tiny 2040」（メーカー製品名 Tiny 2040 – 8MB）とKSY「Tiny2040 RP2040 開発ボード」は表記違いの同名RP2040ボードで対応する。8MBの容量表記はSSのみだが、同一メーカーコードPIM558がその容量の製品を指す。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM558とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSY側の名称にフラッシュ容量の記載がなく、SSのメーカー製品名にある8MBとの対応は名称上は未確認（メーカーコードは一致）"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7665\",\"ksy\",\"913\"]",
+    "fingerprint": "c6ba23592ce4e4364affe1701b6caf627a37faaa8638e74209d55eee02051399",
+    "decision": "same_product",
+    "evidence": "共有コードは900-13448-0020-000（NVIDIA製品番号）。スイッチサイエンス「Jetson Nanoモジュール」（製品名Jetson Nano module）とKSY「Jetson Nano Module」はJetson Nanoモジュールとして対応。メーカーは双方NVIDIA。",
+    "differences": [],
+    "missingEvidence": [
+      "両側ともメモリ容量の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7666\",\"ksy\",\"915\"]",
+    "fingerprint": "3569c259c94fa320f724b96b81c8521f143a44a8d261c9ebbaa7966493d78080",
+    "decision": "same_product",
+    "evidence": "共有コードは900-83668-0000-000（NVIDIA製品番号）。スイッチサイエンス「Jetson Xavier NXモジュール--在庫限り」（製品名Jetson Xavier NX module）とKSY「Jetson Xavier NX Module 8GB」はJetson Xavier NXモジュールとして対応。メーカーは双方NVIDIA。「在庫限り」は販売状態であり差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "スイッチサイエンス名称・製品名にメモリ容量（KSYの8GB）の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7681\",\"ksy\",\"840\"]",
+    "fingerprint": "e9172780724ab3ab42d31c4f351b20eb847d22455e10409ff71e3dbfa4f632b7",
+    "decision": "same_product",
+    "evidence": "共有コードはB0371。スイッチサイエンス「Raspberry Pi / Jetson Orin用高解像度オートフォーカスカメラモジュール（16 MP）」（製品名にIMX519 PDAF&CDAF）とKSY「Piカメラ 16MP IMX519搭載 オート フォーカス」は16MP・IMX519・オートフォーカスで対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7946\",\"ksy\",\"745\"]",
+    "fingerprint": "cb4ff344963ee3253d35573395375c7a20724dc7a24234eefbee15667efe22c3",
+    "decision": "same_product",
+    "evidence": "共通コード101020932。スイッチサイエンス「GROVE - デジタル温度・湿度センサ（DHT20）」（メーカー製品名 Grove - Temperature & Humidity Sensor V2.0 (DHT20)）とKSY「Grove 温湿度センサー モジュール V2.0 DHT20搭載」は、V2.0とDHT20搭載がメーカー製品名の上で一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"797\",\"ksy\",\"765\"]",
+    "fingerprint": "055620114dedece2f78ba4ee15a1f9593a4ee56963db08d3c8e7121764027542",
+    "decision": "same_product",
+    "evidence": "共通コード110990038。スイッチサイエンス「GROVE - 4ピンケーブル 50cm (5本セット)」（メーカー製品名 Grove - Universal 4 Pin Buckled 50cm Cable (5 PCs Pack)）とKSY「Grove 4ピン ケーブル 50cm×5本」は、50cmと5本入りの両方が一致する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"801\",\"ksy\",\"752\"]",
+    "fingerprint": "da91e5084281fb706d30f83ef751ec7c6904af98189a6c6fc5f6d808aa679c17",
+    "decision": "same_product",
+    "evidence": "共通コード101020003。スイッチサイエンス「GROVE - ボタン」（メーカー製品名 Grove - Button）とKSY「Grove ボタン モジュール」は、Groveボタンモジュールとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8030\",\"ksy\",\"670\"]",
+    "fingerprint": "044350c8afd39a32083f4259f90e0d4af7b8c3efc268fc56b6500eeda3f2fc4a",
+    "decision": "same_product",
+    "evidence": "共有コードMAG44（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi ビギナーズガイド（第4版）日本語版」（The Official Raspberry Pi Beginner's Guide 4th Ed JP）とKSYの「Raspberry Pi 公式 ビギナーズガイド 4th 日本語版」で、書名・第4版・日本語版が一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"804\",\"ksy\",\"747\"]",
+    "fingerprint": "bd037453d4d6cefd122f4936f82e24631e2239be512e2c5bea53fcbadd0989b1",
+    "decision": "same_product",
+    "evidence": "共通コード107020000。スイッチサイエンス「GROVE - ブザー」（メーカー製品名 Grove - Buzzer）とKSY「Grove ピエゾ ブザー モジュール」は、Groveブザーモジュールとして対応する。KSY名称の「ピエゾ」は方式の補足で、スイッチサイエンス側の名称と矛盾しない。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "スイッチサイエンス名称にはピエゾ方式の記載がなく、方式はSeeed製品コードの共通による判断",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"806\",\"ksy\",\"786\"]",
+    "fingerprint": "06e53273135752ff1edb860ee3cb54fd9820de0b2ce9db88b393f7ccca2972cf",
+    "decision": "same_product",
+    "evidence": "共通コード101020015。スイッチサイエンス「GROVE - 温度センサ」（メーカー製品名 Grove - Temperature Sensor）とKSY「Grove 温度センサー モジュール V1.2」は温度センサーモジュールとして対応する。KSY名称にあるV1.2はスイッチサイエンス側にないが、リビジョンを含むSeeed製品コードが共通。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "スイッチサイエンス名称・メーカー製品名にはV1.2の記載がなく、リビジョンは共通のSeeed製品コードによる判断",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8080\",\"ksy\",\"943\"]",
+    "fingerprint": "9b7442596b3b35e8b8b5038ad05257d023c3d2e670c7ac0615e8bbeb3afa03af",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBCAM2W。スイッチサイエンス「SPRESENSE HDRカメラボード[CXD5602PWBCAM2W]」（メーカーソニー）とKSY「SPRESENSE HDR カメラボード」（店舗ラベルSONY）は名称が一致し、メーカーも一致。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8123\",\"ksy\",\"151\"]",
+    "fingerprint": "fc4cb96b198d4ae3c17e969815cc5f2f4f6039226bd3c542e2de2b02d7ff55bd",
+    "decision": "unresolved",
+    "evidence": "共有コードは906-4665。スイッチサイエンス「Raspberry Pi 4 LCDタッチスクリーンケース 黒」（製品名OKdo Raspberry Pi 4 LCD Touch Screen Case Black、別のRS品番193-5380も併記）とKSY「Pi 7\" Displayケース RS for B+/2/3 黒」は黒のタッチスクリーンケースだが、対象機種がPi 4とB+/2/3で食い違う。ケース形状は本体世代で異なるため、同一コードでも同一製品と確定できない。",
+    "differences": [
+      "対象機種の記載が異なる（スイッチサイエンス: Raspberry Pi 4用、KSY: B+/2/3用）"
+    ],
+    "missingEvidence": [
+      "RS品番906-4665が実際に対応する本体世代（Pi 4かB+/2/3か）の根拠",
+      "スイッチサイエンスが併記するRS品番193-5380との関係（別製品か同一製品の別品番か）",
+      "OKdo製品とRS品番906-4665の対応関係"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"813\",\"ksy\",\"787\"]",
+    "fingerprint": "c5e2b1e98661009b09b893e6da0789fcccfee32942983351f5a152de74f3924f",
+    "decision": "same_product",
+    "evidence": "共通コード101020027。スイッチサイエンス「GROVE - 電流センサ」（メーカー製品名 Grove - Electricity Sensor）とKSY「Grove 電流センサー モジュール」は、電流センサーモジュールとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8145\",\"ksy\",\"876\"]",
+    "fingerprint": "0c76de7c7b72ff7b891d4adbc0ccece07d819ba0289b015452d7590098df5e04",
+    "decision": "same_product",
+    "evidence": "共通コード102010448。スイッチサイエンス「Seeed Studio XIAO nRF52840」とKSY「seeed XIAO BLE nRF52840」は、XIAO nRF52840の基本モデル（Senseなし）として対応する。名称中のBLEの有無は呼称の違いで、両方ともSenseを含まない。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8146\",\"ksy\",\"877\"]",
+    "fingerprint": "df32482e721d3226a92d7b956187710d8f6735e9650bd5923dde93aa982e2375",
+    "decision": "same_product",
+    "evidence": "共通コード102010469。スイッチサイエンス「Seeed Studio XIAO nRF52840 Sense」とKSY「seeed XIAO BLE nRF52840 Sense」は、ともにXIAO nRF52840のSense版で、語順・呼称の差のみ。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8170\",\"ksy\",\"864\"]",
+    "fingerprint": "60dcbe3bbfc109905561fca87e97222d87b9b3971180ec0dcdd94ebe8c35d890",
+    "decision": "same_product",
+    "evidence": "共有コードSC0917（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi Pico H」で一致する。SSのメーカー製品コードはRPI-SC0917で、接頭辞RPI-を正規化するとKSYの型番SC0917と一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8171\",\"ksy\",\"863\"]",
+    "fingerprint": "901299aaaa82eeaeb01ba2e09f35924599faad08a9c7649745b8a39a73ed3f77",
+    "decision": "same_product",
+    "evidence": "共有コードSC0918（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi Pico W」で一致する。SSのメーカー製品コードはRPI-SC0918で、接頭辞RPI-を正規化するとKSYの型番SC0918と一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8172\",\"ksy\",\"865\"]",
+    "fingerprint": "db312ee01e2fa9a2a1408ce9ed848a707cd2b017595f7e3bb0b42fdd761d33f1",
+    "decision": "same_product",
+    "evidence": "共有コードSC0919（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi Pico WH」で一致する。Pico H（SC0917）・Pico W（SC0918）とは別コードで、両者ともWH（無線＋ヘッダー）の表記が揃っている。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8254\",\"ksy\",\"395\"]",
+    "fingerprint": "ecabae70e599e8e3f1a1dc3291a64f1082e06e2ad6fce3be6b3ce1f0d4ae62c9",
+    "decision": "same_product",
+    "evidence": "共有コードはB0091。スイッチサイエンス「Arducam Raspberry Piカメラ専用 CSI - HDMI ケーブル延長モジュール（15ピン 60mm FPCケーブル）」とKSY「CSI-HDMI ケーブル変換基板 for Piカメラ」はCSI-HDMI延長基板として対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "スイッチサイエンスの製品名にPack of 2 1 Set（2枚1組）とあるが、KSY側の枚数・セット内容の記載なし",
+      "KSY側にFPCケーブル（15ピン60mm）の同梱有無の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8255\",\"ksy\",\"874\"]",
+    "fingerprint": "14abfb93dd3641671ac2b0940d5c252d434138835586f785e61669952ce9661f",
+    "decision": "same_product",
+    "evidence": "共有コードはB0399。スイッチサイエンス「Raspberry Pi用超高解像度オートフォーカスカメラモジュール（64 MP）」とKSY「Piカメラ 64MP Hawk-Eye」は64MPのRaspberry Pi用カメラとして対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にオートフォーカスの記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8256\",\"ksy\",\"967\"]",
+    "fingerprint": "b6509f3c45d0c329da24d43a94fa6768c53abed9cdf385ac091d635f5c79040a",
+    "decision": "same_product",
+    "evidence": "共有コードはU6270。スイッチサイエンス「Raspberry Pi用カメラモジュールケース（白）--販売終了」とKSY「Piカメラ ケース for B0371 白」はいずれも白色のカメラ用ケースで対応。メーカーは双方Arducam。「販売終了」は販売状態であり差異として扱わない。",
+    "differences": [
+      "対象カメラの記載範囲が異なる（スイッチサイエンス: Raspberry Pi V1/V2・Arducam 16MP/64MP、KSY: B0371向け）"
+    ],
+    "missingEvidence": [
+      "KSYの対象カメラはB0371のみ、スイッチサイエンスの製品名はV1/V2とArducam 16MP/64MPと記載があり、対象機種範囲の詳細",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8293\",\"ksy\",\"986\"]",
+    "fingerprint": "541d6f7b779a33ed3dc2ca6362b6fb7e306d6b4a720999e4a562b73e98c753b0",
+    "decision": "same_product",
+    "evidence": "共有コードPIM622（Pimoroniの製品コード）。SS「STEMMA QT / Qwiic 互換 - VL53L5CX 8x8 ToF アレイセンサボード」とKSY「ToF センサー モジュール VL53L5CX搭載」は搭載センサーVL53L5CXで一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM622とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8294\",\"ksy\",\"991\"]",
+    "fingerprint": "a55598f1b7655e8442d4f3ba41d066f2000b74da0f4e363e48241ce14b66ac22",
+    "decision": "same_product",
+    "evidence": "共有コードPIM624（Pimoroniの製品コード）。SS「Tufty 2040--在庫限り」とKSY「Tufty 2040 RP2040搭載」は同名のTufty 2040で一致する（在庫限りは状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM624とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8419\",\"ksy\",\"852\"]",
+    "fingerprint": "1ecd67685d9386df116d0529a9fef034bad4d5083a134d123999dd06a0877ae4",
+    "decision": "same_product",
+    "evidence": "共有コードPIM445（Pimoroniの製品コード）。SS「Raspberry Pi用Breakout Garden （I2C + SPI）--在庫限り」（メーカー製品名 Breakout Garden for Raspberry Pi (I2C + SPI)）とKSY「ブレークアウト ボード Breakout Garden HAT (I2C + SPI)」はI2C+SPI構成のBreakout Gardenで一致する（在庫限りは状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM445とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8700\",\"ksy\",\"908\"]",
+    "fingerprint": "dafdea7d653c87da30b20d733bb2112fad6f0e6d2e17035be8f641f4f724bc88",
+    "decision": "same_product",
+    "evidence": "共有コードSC0872（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi カメラモジュール V3」（Camera Module 3、「販売終了」は状態注記）とKSYの「Piカメラ 公式 V3 可視光」で、V3の標準（NoIRではない可視光）モデルとして対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "SS名称には可視光/NoIR/広角の区別が明記されておらず、標準画角の可視光モデルであることは姉妹コード（SC0873/0874/0875）との区別から推定",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8701\",\"ksy\",\"909\"]",
+    "fingerprint": "868952bad9227892be019186a9d9db71dc00a6dc84aa528de3c8c99012285df9",
+    "decision": "same_product",
+    "evidence": "共有コードSC0873（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi カメラモジュール V3（NoIR）」（Camera Module 3 NoIR）とKSYの「Piカメラ 公式 V3 NoIR 赤外線」で、V3のNoIR（赤外線）モデルとして一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8702\",\"ksy\",\"910\"]",
+    "fingerprint": "a7614e9aa5f7181973a9239efc19b16f9380c7d25faac02ef500732e44b09d95",
+    "decision": "same_product",
+    "evidence": "共有コードSC0874（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi カメラモジュール V3（広角）」（Camera Module 3 Wide）とKSYの「Piカメラ 公式 V3 Wide 可視光」で、V3の広角・可視光モデルとして一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8703\",\"ksy\",\"911\"]",
+    "fingerprint": "87a2d30c0e819189d825110067fa747e4d59a7f4b2cb0a8a730f24088e58e914",
+    "decision": "same_product",
+    "evidence": "共有コードSC0875（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi カメラモジュール V3（NoIR/広角）」（Camera Module 3 Wide NoIR）とKSYの「Piカメラ 公式 V3 Wide NoIR 赤外線」で、V3の広角・NoIRモデルとして一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8704\",\"ksy\",\"912\"]",
+    "fingerprint": "d63780a61d2d66278477bf9fd6ce67cff849653e15c7f6181619dbe3f4287b04",
+    "decision": "same_product",
+    "evidence": "共有コードSC0870（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi HQ Camera - M12マウント」（M12 HQ Camera）とKSYの「Piカメラ 公式 HQ M12マウント」で、HQカメラとM12マウントが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "レンズ別売り・付属の有無はどちらの名称にも記載がなく未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8705\",\"ksy\",\"918\"]",
+    "fingerprint": "bcdee402546f78549358c37b3c487161f172286345d0e5757c6c474c059e9a3f",
+    "decision": "same_product",
+    "evidence": "共有コードSC0861（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「HQ Camera（M12マウント）用 25mm望遠レンズ」（M12 Lens 5 Megapixel 25mm telephoto）とKSYの「レンズ 望遠 25mm M12マウント」で、焦点距離25mm・望遠・M12マウントが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8706\",\"ksy\",\"919\"]",
+    "fingerprint": "249a521927da2a47847a49e2e0d48ee20689b90ed8cba1c737ddccdd08b3ce14",
+    "decision": "same_product",
+    "evidence": "共有コードSC0947（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「HQ Camera（M12マウント）用 2.7mm超広角（魚眼）レンズ」（M12 Lens 12 Megapixel 2.7mm wide angle）とKSYの「レンズ 広角 2.7mm M12マウント」で、焦点距離2.7mm・広角・M12マウントが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8707\",\"ksy\",\"920\"]",
+    "fingerprint": "818869bca6eb5ef90acbd6df1c042a6682bbd8b1aa56bd0c8c652ccfaaba2d18",
+    "decision": "same_product",
+    "evidence": "共有コードSC0949（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「HQ Camera（M12マウント）用 8mmポートレートレンズ」（M12 Lens 12 Megapixel 8mm portrait lens）とKSYの「レンズ 標準 8mm M12マウント」で、焦点距離8mmとM12マウントが一致する。種別語はSSがポートレート、KSYが標準と異なるが、同一メーカー型番SC0949を共有する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [
+      "レンズの種別語がSSは「ポートレート」、KSYは「標準」と異なる（焦点距離8mmは一致）"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8708\",\"ksy\",\"933\"]",
+    "fingerprint": "ef1164f8b2e5246ac5a3f73ec6a6bbd020c9dc1c1c8bc32773efce7fb5560dfe",
+    "decision": "same_product",
+    "evidence": "共有コードSC0889（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi デバッグプローブ」（Debug Probe）とKSYの「Raspberry Pi デバッグ プローブ 公式」で、製品名が対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8730\",\"ksy\",\"969\"]",
+    "fingerprint": "c1f748d08dcb2ba6c3195ed359fddbedc9e686be7f9c9213de0f99a00a5f6003",
+    "decision": "same_product",
+    "evidence": "共有コードはB0428。スイッチサイエンス「Raspberry Pi用魚眼レンズ付カメラモジュール（5MP / OV5647）」とKSY「Piカメラ 5MP OV5647搭載 魚眼レンズ」は5MP・OV5647・魚眼レンズで対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8731\",\"ksy\",\"968\"]",
+    "fingerprint": "fe5fbb233874204c7189ff908a21dbd85c14c5f47236da37334065d5c35b8b9a",
+    "decision": "same_product",
+    "evidence": "共有コードはB0410。スイッチサイエンス「Raspberry Pi用ToFカメラ」（製品名Time of Flight Camera for Raspberry Pi and NVIDIA Jetson）とKSY「Piカメラ (ToF機能搭載)」はToFカメラとして対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8736\",\"ksy\",\"970\"]",
+    "fingerprint": "abbeb6b51ea4439a4a814e6dd8048e253144e27ac74be0272fe031743f64bd59",
+    "decision": "same_product",
+    "evidence": "共有コードはB0429。スイッチサイエンス「AR0234搭載 Arducam 2.3MP グローバルシャッターカメラ（Nvidia Jetson Nano/NX用）」とKSY「Arducam 2.3MP AR0234搭載 グローバル シャッター カメラ for NVIDIA Jetson Nano/NX and Jetson Orin NX」は2.3MP・AR0234・グローバルシャッターで対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "スイッチサイエンスの対応Jetson記載（Nano/NX、製品名はOrin系）とKSY記載の範囲差の詳細",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8942\",\"ksy\",\"1266\"]",
+    "fingerprint": "438574348714ea1408d8b20138db525223fd60fa044fe21c80310a6a58bf26f7",
+    "decision": "same_product",
+    "evidence": "共有コードはB0434。スイッチサイエンス「Arducam Mega 3MP SPIカメラモジュール (M12 レンズ)--在庫限り」とKSY「SPIカメラ 3MP M12レンズ搭載」は3MP・SPI・M12レンズで対応。メーカーは双方Arducam。「在庫限り」は販売状態であり差異として扱わない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8943\",\"ksy\",\"1265\"]",
+    "fingerprint": "ad08d589cd9672a6820f57835fae63f4bea7f69c9f05494c09d91ef183e1e832",
+    "decision": "same_product",
+    "evidence": "共有コードはB0401。スイッチサイエンス「Arducam Mega 5MP SPIカメラモジュール（オートフォーカス）」とKSY「SPIカメラ 5MP オートフォーカス」は5MP・SPI・オートフォーカスで対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"910\",\"ksy\",\"893\"]",
+    "fingerprint": "894b8bd4079aeedfbfe2435d85eb0508be24c2065a2edbab4edccf9f77e31f72",
+    "decision": "same_product",
+    "evidence": "共通コード101020016。スイッチサイエンス「GROVE - 赤外線受信器」（メーカー製品名 Grove - Infrared Receiver）とKSY「Grove 赤外線レシーバー」は、受信器とレシーバーの訳語差で同じ赤外線受信モジュールに対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9133\",\"ksy\",\"1010\"]",
+    "fingerprint": "5d8b0ac2c726c97adfabc388493164fc1826d21425443bc97d35ce3800185863",
+    "decision": "same_product",
+    "evidence": "共有コードはCXD5602PWBGNSS1W。スイッチサイエンス「SPRESENSE GNSS Add-onボード [CXD5602PWBGNSS1W]」（メーカーソニー）とKSY「SPRESENSE GNSSアドオンボード」（店舗ラベルSONY）は名称が対応し、メーカーも一致。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9184\",\"ksy\",\"998\"]",
+    "fingerprint": "a0a00a0b6262d54115598dfadb470c11722e6c525f147bca72866a24bbec528c",
+    "decision": "same_product",
+    "evidence": "共有コードSC0480（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi Compute Module 4 / 5 用アンテナ」（CM4 Antenna Kit）とKSYの「CM4/5 アンテナ キット」で、CM4/CM5用アンテナキットとして対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9248\",\"ksy\",\"1029\"]",
+    "fingerprint": "72092abee2536faf84aafbf4c9572fe4c3c2874c526b3e948d67fced36f099ba",
+    "decision": "same_product",
+    "evidence": "共有コードSC1166（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi M.2 HAT+」とKSYの「M.2 HAT+ 公式」で、製品名が対応する。Compact派生の表記はどちらにもない。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9249\",\"ksy\",\"1015\"]",
+    "fingerprint": "14a94429d4e0c93bf90f222c6dc334d4d64abbd7c19a78b1f67e6f91ffdd24c8",
+    "decision": "same_product",
+    "evidence": "共有コードSC1111（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5 / 4GB」とKSYの「SC1111 Raspberry Pi 5/4GB」で、機種Raspberry Pi 5とRAM 4GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9250\",\"ksy\",\"1016\"]",
+    "fingerprint": "9a9f3059a748095c727b1295a2a005ac2d8a4b66d60177cddc0e0124ca925644",
+    "decision": "same_product",
+    "evidence": "共有コードSC1112（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5 / 8GB」とKSYの「SC1112 Raspberry Pi 5/8GB」で、機種Raspberry Pi 5とRAM 8GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9251\",\"ksy\",\"1017\"]",
+    "fingerprint": "84449b792386df1be2756b9169b53baeb7630f5ff0e116dd2b33d8ad864c4f2b",
+    "decision": "same_product",
+    "evidence": "共有コードSC1159（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5用公式ケース Red/White」（Raspberry Pi Case for Pi 5 Red/White）とKSYの「Piケース 公式 for Pi5 赤/白」で、Pi 5公式ケースと赤/白が一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9253\",\"ksy\",\"1025\"]",
+    "fingerprint": "5139a13592879c0b6dd507fc257138f3d0b2b722acf615047ee765528445a8d5",
+    "decision": "same_product",
+    "evidence": "共有コードSC1148（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5用アクティブクーラー」（Raspberry Pi Active Cooler）とKSYの「アクティブ クーラー 公式 for Pi5」で、Pi 5用アクティブクーラーとして対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9254\",\"ksy\",\"1026\"]",
+    "fingerprint": "3379491970f57623f56490938d048f24702e01da6ca18ff9517bf08912db192f",
+    "decision": "same_product",
+    "evidence": "共有コードSC1163（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5用 RTC電池パック」（RTC Battery for Raspberry Pi 5）とKSYの「RTC用バッテリー for Pi5」で、Pi 5用RTCバッテリーとして対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9255\",\"ksy\",\"1019\"]",
+    "fingerprint": "1420a41a743be4bab1dbb611ce915a064c502a7fe9b8356f6941f6393f24f89e",
+    "decision": "same_product",
+    "evidence": "共有コードSC1128（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5 FPCカメラケーブル（200mm）」（Camera Cable Standard - Mini - 200mm）とKSYの「CSIケーブル 公式 カメラ用 FPC 15-22pin 200mm」で、カメラ用FPCケーブル・長さ200mmが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9256\",\"ksy\",\"1020\"]",
+    "fingerprint": "ab788af237d05c73cea98961dc038517642297a67cebc0951ee759d941af94f1",
+    "decision": "same_product",
+    "evidence": "共有コードSC1129（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5 FPCカメラケーブル（300mm）」（Camera Cable Standard - Mini - 300mm）とKSYの「CSIケーブル 公式 カメラ用 FPC 15-22pin 300mm」で、カメラ用FPCケーブル・長さ300mmが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9257\",\"ksy\",\"1021\"]",
+    "fingerprint": "46a30edb55560deeab919716337b71132090661c46d2c38da6c5b272a9edc688",
+    "decision": "same_product",
+    "evidence": "共有コードSC1130（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5 FPCカメラケーブル（500mm）」（Camera Cable Standard Mini 500mm）とKSYの「CSIケーブル 公式 カメラ用 FPC 15-22pin 500mm」で、カメラ用FPCケーブル・長さ500mmが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9258\",\"ksy\",\"1022\"]",
+    "fingerprint": "627600db722740ed357d204de73143463dd9514a8ac4f25f79e456f15c86133c",
+    "decision": "same_product",
+    "evidence": "共有コードSC1131（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5 FPCディスプレイケーブル（200mm）」（Display Cable Standard - Mini - 200mm）とKSYの「DSIケーブル 公式 ディスプレイ用 FPC 15-22pin 200mm」で、ディスプレイ用FPCケーブル・長さ200mmが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9259\",\"ksy\",\"1023\"]",
+    "fingerprint": "50ec08d0cc2b7e7fe625600b7cd0973991e9d63070438313e7a59d1cbcb1af02",
+    "decision": "same_product",
+    "evidence": "共有コードSC1132（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5 FPCディスプレイケーブル（300mm）」（Display Cable Standard Mini 300mm）とKSYの「DSIケーブル 公式 ディスプレイ用 FPC 15-22pin 300mm」で、ディスプレイ用FPCケーブル・長さ300mmが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9260\",\"ksy\",\"1024\"]",
+    "fingerprint": "7e73e96919aefec886ed4ccaabe5234942128e68c4b8911761dd02bd1071a9c2",
+    "decision": "same_product",
+    "evidence": "共有コードSC1133（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5 FPCディスプレイケーブル（500mm）」（メーカー製品名は綴り誤り Displau Cable Standard Mini 500mm）とKSYの「DSIケーブル 公式 ディスプレイ用 FPC 15-22pin 500mm」で、ディスプレイ用FPCケーブル・長さ500mmが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9314\",\"ksy\",\"741\"]",
+    "fingerprint": "22572082d9e3c252d49fa8c7de1e7cbe9556474ed7f8b6fa4b739363d2772c1f",
+    "decision": "same_product",
+    "evidence": "共有コードPIM536（Pimoroniの製品コード）。SS「Raspberry Pi 400用 Flat HAT Hacker--在庫限り」（メーカー製品名 Flat HAT Hacker）とKSY「Flat HAT Hacker for Pi 400」はPi 400用Flat HAT Hackerで一致する（在庫限りは状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM536とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9315\",\"ksy\",\"989\"]",
+    "fingerprint": "b0c52a6b677bef77510da3e09cfa8e4b093a426b27bd9ec632bf90c61f1f1466",
+    "decision": "same_product",
+    "evidence": "共有コードPIM560（Pimoroniの製品コード）。SS「Pimoroni Pico LiPo （16 MBバージョン）」（メーカー製品名 Pimoroni Pico LiPo – 16MB）とKSY「Pico LiPo RP2040搭載 16MB」は16MBのフラッシュ容量まで一致する。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM560とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9316\",\"ksy\",\"753\"]",
+    "fingerprint": "3a0733d7c158079116653967637c94134c2a2e4db79c936a22a59e12347325e3",
+    "decision": "same_product",
+    "evidence": "共有コードPIM577（Pimoroniの製品コード）。SS「PGA2040--販売終了」とKSY「開発ボード PGA2040 RP2040搭載」は同名のRP2040搭載ボードで対応する（販売終了は状態注記）。SSのメーカーPimoroni（manufacturer）・メーカー製品コードPIM577とKSYのメーカー表記Pimoroni（店舗ラベル）が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9328\",\"ksy\",\"886\"]",
+    "fingerprint": "4ab37da9670295d11ab71d8d799a9470ca49691945b16d5c7723c5ae6059009c",
+    "decision": "same_product",
+    "evidence": "共有コードSC0224（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「HDMI（メス） - Micro-HDMI（オス）変換ケーブル [SC0224]」（Micro-HDMI to HDMI-A (F) Cable (235mm) White）とKSYの「HDMI 変換ｹｰﾌﾞﾙ micro-A(F)」で、Micro-HDMIからHDMI（メス）への変換ケーブルとして対応し、型番SC0224を共有する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称には長さ（235mm）と色（白）の記載がなく、これらの一致は未確認",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"972\",\"ksy\",\"791\"]",
+    "fingerprint": "225dc39f667f3762836925644804b5aa60396b1d4dd55f098b8efa84c055071e",
+    "decision": "same_product",
+    "evidence": "共通コード101020054。スイッチサイエンス「GROVE - I2C 三軸加速度センサ ADXL345搭載」（メーカー製品名 Grove - 3-Axis Digital Accelerometer(±16g)）とKSY「Grove 3軸デジタル加速度センサー モジュール」は、3軸デジタル加速度センサーとして対応する。メーカーはSeeedとseeed。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にはADXL345・測定範囲±16gの記載がなく、これらはSeeed製品コードの共通による判断",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9809\",\"ksy\",\"1094\"]",
+    "fingerprint": "73d05715e180224dabe966463cb45a611b1a4e45e5a31c65a6bcb05df80e1c31",
+    "decision": "same_product",
+    "evidence": "共有コードSC1631（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi Pico 2」で一致し、世代表記が対応する。W/Hなどの派生表記はどちらにもない。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9810\",\"ksy\",\"1095\"]",
+    "fingerprint": "e15f2b09933e29ea2fd3967f01b45b6cad51f2ead0fe2b262c23b7f4db4a5c8f",
+    "decision": "same_product",
+    "evidence": "共有コードSC1110（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi 5 / 2GB」（メーカー製品名の記載なし、製品コードSC1110）とKSYの「Raspberry Pi 5 /2GB」で、機種Raspberry Pi 5とRAM 2GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9812\",\"ksy\",\"1097\"]",
+    "fingerprint": "df33b43ae787acd0e8ce844a5dd5e46ef879d234e9a3266d3a43aadaa4c3c47d",
+    "decision": "same_product",
+    "evidence": "共有コードSC0721（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi Zero 2 WH」で一致し、ヘッダー実装済みの派生（WH）の表記が揃っている。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9813\",\"ksy\",\"1098\"]",
+    "fingerprint": "b063d1c0dd9936ca4a0cee13ef3f978d00ec1b31d36808afc1135073b93b228d",
+    "decision": "same_product",
+    "evidence": "共有コードSC1174（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi AI Camera - Sony IMX500搭載 12.3MP」とKSYの「Raspberry Pi 公式 AIカメラ IMX500」で、AIカメラとセンサーIMX500が一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9814\",\"ksy\",\"1110\"]",
+    "fingerprint": "91ea6956bc6ccf5d6bb0a76460da3ca4a3efa9802167766e1cb3c4d8119121ab",
+    "decision": "same_product",
+    "evidence": "共有コードSC1636（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi USB 3.0 Hub」で一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9840\",\"ksy\",\"93\"]",
+    "fingerprint": "5d96de4f6c2626e419f488a42b07549b366be6e4db5020e3b3bdca0677dfa144",
+    "decision": "same_product",
+    "evidence": "共有コードSC0329（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi Sense HAT rev.2」とKSYの「Raspberry Pi Sense HAT」で製品名が対応し、同一メーカー型番SC0329を共有する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にrev.2の明記がなく、リビジョンの一致はメーカー型番SC0329の一致に依拠している",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9940\",\"ksy\",\"1104\"]",
+    "fingerprint": "a166cf9585ec6e796b93f9f9b635a3b19babdc035f12f323ec179079774f7598",
+    "decision": "same_product",
+    "evidence": "共有コードSC1635（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi Touch Display 2（7インチ）」とKSYの「Raspberry Pi 7\" Touch Screen LCD V2」で、7インチのタッチディスプレイと第2世代（Display 2 / V2）が一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9941\",\"ksy\",\"1105\"]",
+    "fingerprint": "5e62161059b939d8641a6d10188eba34952a73bdcf481fc67abc4ee7d24e2e73",
+    "decision": "same_product",
+    "evidence": "共有コードSC1655（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi Bumper」（Raspberry Pi 5 Bumper Case）とKSYの「Raspberry Pi バンパー ケース for Pi5」で、Pi 5用バンパーとして対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9942\",\"ksy\",\"1106\"]",
+    "fingerprint": "524ed2a81b6135aa1ac3cc40a75714e5073d0da12f1d32bf01075925720875be",
+    "decision": "same_product",
+    "evidence": "共有コードSC1675（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi SSD Kit 256GB」（Raspberry Pi SSD kit - 256GB）とKSYの「Raspberry Pi SSD キット 256GB for Pi5」で、SSDキット・容量256GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9943\",\"ksy\",\"1107\"]",
+    "fingerprint": "0cf6f493e65246a224ad3bebc2f91e4a728670e5c21b7570115cf781d242394e",
+    "decision": "same_product",
+    "evidence": "共有コードSC1676（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi SSD Kit 512GB」（Raspberry Pi SSD kit - 512GB）とKSYの「Raspberry Pi SSD キット 512GB for Pi5」で、SSDキット・容量512GBが一致する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9944\",\"ksy\",\"1108\"]",
+    "fingerprint": "40222e4c98118e9c9520ef49ad80be5c6c360253df266b2f62f7f6b0752c5e30",
+    "decision": "same_product",
+    "evidence": "共有コードSC1439（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi SSD 256GB」で一致し、SSD単体・容量256GBが対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9945\",\"ksy\",\"1109\"]",
+    "fingerprint": "4dd19d0d9cd5c1ec556c354236483ff498f7a2045c380744ba49a779b3181143",
+    "decision": "same_product",
+    "evidence": "共有コードSC1440（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SS・KSYとも名称が「Raspberry Pi SSD 512GB」で一致し、SSD単体・容量512GBが対応する。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9985\",\"ksy\",\"1254\"]",
+    "fingerprint": "0025b3fc6746353d60d59de62af3e38c156ed713d44766d8781aac73b75019ac",
+    "decision": "same_product",
+    "evidence": "共有コードはB0444。スイッチサイエンス「Arducam IMX462搭載 Raspberry Pi用低照度カメラ（IRカットフィルタ内蔵）」（製品名に2MP・カラー・141度広角M12レンズ）とKSY「Piカメラ 2MP 超低照度カラー 広角」は2MP・超低照度・カラー・広角で対応。メーカーは双方Arducam。",
+    "differences": [],
+    "missingEvidence": [
+      "KSY名称にIRカットフィルタ内蔵・IMX462の記載なし",
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9998\",\"ksy\",\"1114\"]",
+    "fingerprint": "69d5490d1ee44839735b475d356c1e530173c20b92b2bc87724c2dae86b8272e",
+    "decision": "same_product",
+    "evidence": "共有コードSC1785（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi AI HAT+（13TOPS版）」（Raspberry Pi AI HAT+ (13T)）とKSYの「Raspberry Pi AI HAT+ 13TOPS」で、AI HAT+と13TOPS版が一致する。SSのコード欄にある別コードSC1430は共有コードではない。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9999\",\"ksy\",\"1115\"]",
+    "fingerprint": "7c680c5b2800b1992fdd71431f3c978a9982757f6c7c5759ea999135d6afe041",
+    "decision": "same_product",
+    "evidence": "共有コードSC1791（SS側の型番・メーカー製品コードとKSY側の型番が正規化後に一致）。SSの「Raspberry Pi AI HAT+（26TOPS版）」（Raspberry Pi AI HAT+ (26T)）とKSYの「Raspberry Pi AI HAT+ 26TOPS」で、AI HAT+と26TOPS版が一致する。SSのコード欄にある別コードSC1468は共有コードではない。メーカー欄はSS「Raspberry Pi Trading」、KSY「ラズベリーパイ財団」（店舗側の表記差でありRaspberry Pi系列として矛盾しない）。保存データのみで判定。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-10-29",
+    "reviewerModel": "Claude Sonnet 5.5"
   }
 ]

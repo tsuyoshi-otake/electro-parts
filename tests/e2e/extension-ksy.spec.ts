@@ -34,7 +34,9 @@ test('KSY extension follows the product dialog without navigation and keeps the 
       const u = new URL(route.request().url());
       if (u.hostname === 'tsuyoshi-otake.github.io') {
         requests.push(u.pathname);
-        await route.fulfill({ contentType: 'application/json', body: await readFile(path.join(E2E_SITE_DIR, u.pathname.replace(/^\/electro-parts\//, ''))) });
+        // Pages answers 404 for a product it has not published; the saved site holds only the fixture histories.
+        const body = await readFile(path.join(E2E_SITE_DIR, u.pathname.replace(/^\/electro-parts\//, ''))).catch(() => null);
+        await route.fulfill(body === null ? { status: 404, body: 'Not Found' } : { contentType: 'application/json', body });
       } else if (u.origin === ORIGIN && (u.pathname === '/main/index' || u.pathname.startsWith('/main/index/pdp.id/'))) {
         await route.fulfill({ contentType: 'text/html', body: html });
       } else await route.fulfill({ status: 204, body: '' });
@@ -56,6 +58,11 @@ test('KSY extension follows the product dialog without navigation and keeps the 
     await expect(panel).toContainText('税込');
     await expect(panel).not.toContainText('取得できませんでした');
     await expect(panel.locator('section')).toHaveAttribute('data-theme', 'light');
+    // 0.5.1: the reviewed same product at the other stores. The saved site has the Akizuki Pico 2, not the Switch Science one.
+    const related = (id: string[]) => panel.locator(`.store-price[data-relation-id='${JSON.stringify(id)}']`);
+    await expect(related(['akizuki', '129604', 'ksy', '1094'])).toContainText('秋月電子');
+    await expect(related(['switch-science', '9809', 'ksy', '1094'])).toContainText('他店の履歴はまだ記録されていません');
+    await expect(panel).not.toContainText('読み込み中');
 
     await openProduct(page, '483');
     await expect(panel).toHaveAttribute('data-page-key', '483');
@@ -82,8 +89,11 @@ test('KSY extension follows the product dialog without navigation and keeps the 
     await openProduct(page, '483');
     await expect(panel).toContainText('￥6,930');
     await expect(reset).toHaveCount(0);
-    expect(requests).toEqual(['/electro-parts/data/v1/stores/ksy/manifest.json',
+    expect(requests.filter((p) => p.includes('/stores/ksy/'))).toEqual(['/electro-parts/data/v1/stores/ksy/manifest.json',
       '/electro-parts/data/v1/stores/ksy/products/1094.json', '/electro-parts/data/v1/stores/ksy/products/483.json']);
+    expect(requests.filter((p) => !p.includes('/stores/ksy/')).sort()).toEqual(['/electro-parts/data/v1/stores/akizuki/manifest.json',
+      '/electro-parts/data/v1/stores/akizuki/products/129604.json', '/electro-parts/data/v1/stores/switch-science/manifest.json',
+      '/electro-parts/data/v1/stores/switch-science/products/9809.json']);
 
     await page.reload();
     await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(62, 62, 62)');

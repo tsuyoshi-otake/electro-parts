@@ -19,6 +19,13 @@ export function ksyProductPageHtml(): string {
   return gunzipSync(readFileSync('tests/fixtures/ksy/product-page.html.gz')).toString();
 }
 
+/** What the shop's own script does when it opens a product in the dialog of the saved page (`ksyProductPageHtml`). */
+export function openKsyProduct(doc: Document, id: string, permalink: string): void {
+  doc.getElementById('dt_id')!.textContent = id;
+  doc.getElementById('dt_Permalink')!.setAttribute('href', permalink);
+  doc.getElementById('detail')!.style.display = 'block';
+}
+
 /** The `offset` a list URL asks for, as the shop reads it. */
 export function requestedOffset(url: string): number {
   const args = JSON.parse(new URL(url).searchParams.get('argumentCollection') ?? '{}') as { args?: { conditions?: { offset?: number } } };
