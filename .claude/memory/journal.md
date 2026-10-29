@@ -466,3 +466,13 @@ Independent rubric-verifier (`.claude/goal-loop/ksy-store/rubric.md`): 9/9 pass 
 Open: `npm audit --audit-level=high` fails with 9 findings (4 high: source-map-js, undici, vite, zod). The lockfile differs from `main` only in the version lines, so CI fails at the audit step until a separate dependency update. One E2E globalSetup run failed once at `rename(stagingDir, finalDir)` (`src/publisher/write.ts:77`, transient Windows lock); the rerun passed, not investigated further.
 Not done: commit, PR, CI, normal Chrome reload, Pages (KSY data appears only after the crawl workflow runs post-merge), CWS submission.
 Learning: rules.md entries on KSY offset paging, never enumerating ids, ColdFusion numeric models, hidden dialogs, dialog animations, transparent headers, and diffing the lockfile against main before blaming a branch for audit failures.
+
+## 2026-10-29: Merge #34, rebase the KSY branch and re-verify (#32, #33)
+
+Done: PR #34 squash-merged as a512daf after CI "Typecheck and tests" passed on 55dcf07 (mutation is skipped on PRs); Issue #33 closed; `fix/npm-audit-2026-10` deleted locally and on origin. The Codex summary comment still pointed at 45a4373, but both of its threads had been answered and resolved.
+Symptom on the way: `gh pr merge 34 --match-head-commit 55dcf07cb` failed with "Could not coerce value ... to GitObjectID"; the flag needs the full 40-character oid (`gh pr view --json headRefOid`).
+Rebase: `feat/ksy-store` onto a512daf (now 2cca265, 34e62a1). Conflicts only in `.claude/memory/journal.md` and `rules.md`, where both sides append; kept main's lines first, then the KSY ones, 0 lines removed against main. package.json and package-lock.json merged cleanly; the diff against main is only the 0.5.0 version lines.
+Rubric: C8 pointed at `~/tmp/electro-ksy/live/`, which had become `~/tmp/electro-ksy-050/` during the earlier cleanup; fixed, and C8 now also compares the ZIP file by file with a fresh build. C9 now expects the audit to pass.
+Verification: `npm ci`; typecheck, matching:check, npm test 47/583, test:e2e 16/16 and `npm audit --audit-level=high` (0) each by the runner's own exit code; CI guards replayed with no hits; a fresh extension build is byte-identical to the live-checked `ext050.zip` (7 files), so the live check still covers the rebased branch; no runner survivors. Independent rubric-verifier: 9/9 pass in iteration 1.
+Not done: push, PR and CI for #32, normal Chrome reload, Pages, CWS submission.
+Learning: `gh pr merge --match-head-commit` needs the full SHA. When cleanup renames a kept scratch path, update every rubric that names it.
