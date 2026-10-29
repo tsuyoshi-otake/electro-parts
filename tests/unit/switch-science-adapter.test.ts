@@ -295,7 +295,7 @@ describe('Switch Science normalization', () => {
   });
 
   it('is registered next to the other stores', () => {
-    expect(listStoreIds()).toEqual(['akizuki', 'switch-science', 'm5stack']);
+    expect(listStoreIds()).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy']);
     expect(getStoreAdapter('switch-science')).toBe(switchScienceSnapshotAdapter);
     expect(switchScienceSnapshotAdapter.capabilities).toMatchObject({
       supportsVariants: true,

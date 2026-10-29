@@ -8,7 +8,7 @@ const AT = (pathname: string, hostname = 'www.switch-science.com') => ({ hostnam
 
 describe('page adapter registry', () => {
   it('supports exactly the stores that are registered, and each URL belongs to one of them', () => {
-    expect(PAGE_ADAPTERS.map((a) => a.storeId)).toEqual(['akizuki', 'switch-science', 'm5stack']);
+    expect(PAGE_ADAPTERS.map((a) => a.storeId)).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy']);
     // The build script turns this list into the userscript's `@match` headers,
     // so a pattern added here is a page the script is allowed to run on.
     expect(PAGE_ADAPTERS.flatMap((a) => a.matchPatterns)).toEqual([
@@ -16,8 +16,10 @@ describe('page adapter registry', () => {
         .map((path) => `https://akizukidenshi.com${path}`),
       ...['https://www.switch-science.com', 'https://shop.m5stack.com'].flatMap((origin) =>
         ['/', '/?*', '/products/*', '/collections/*', '/search*', '/pages/*', '/blogs/*'].map((path) => origin + path)),
+      ...['/', '/?*', '/main/index*', '/news/*', '/page/*', '/forcustomer/*'].map((path) => `https://raspberry-pi.ksyic.com${path}`),
     ]);
-    const locations = [AT('/catalog/g/g109951/', 'akizukidenshi.com'), AT('/products/9381'), AT('/collections/all/products/9381')];
+    const locations = [AT('/catalog/g/g109951/', 'akizukidenshi.com'), AT('/products/9381'), AT('/collections/all/products/9381'),
+      AT('/main/index/pdp.id/1094/pdp.open/1094', 'raspberry-pi.ksyic.com')];
     for (const l of locations) {
       expect(PAGE_ADAPTERS.filter((a) => a.matches(l)).length, l.pathname).toBe(1);
     }
