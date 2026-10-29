@@ -65,6 +65,9 @@ describe('page theme lifecycle', () => {
     expect(control()).toBeNull();
     expect(onLight).not.toHaveBeenCalled();
     theme.set('dark'); theme.offerLightReset(onLight);
+    theme.withdrawLightReset();
+    expect(control()).toBeNull();
+    theme.offerLightReset(onLight);
     control()!.shadowRoot!.querySelector('button')!.click();
     expect(onLight).toHaveBeenCalledTimes(1);
     expect(control()).toBeNull();

@@ -2,8 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 import { manifestPath, productPath } from '../../src/publisher/contract.ts';
 import { HOST_ELEMENT_ID, OWNER_ATTRIBUTE, THEME_STORAGE_KEY, mountHistoryPanel } from '../../userscript/core/controller.ts';
 import { DataClient } from '../../userscript/core/dataClient.ts';
+import { PAGE_THEME_CONTROL_ID } from '../../userscript/ui/pageTheme.ts';
 import { PANEL_TITLE } from '../../userscript/ui/panel.ts';
 import { indexRelations } from '../../userscript/core/relations.ts';
+import type { StorePageAdapter } from '../../userscript/core/types.ts';
 import { comparisonFixture } from './comparison-fixtures.ts';
 import { fakeHost, json, sampleManifest, sampleProduct, testAdapter, type FakeHost } from './helpers.ts';
 
@@ -338,5 +340,154 @@ describe('history panel controller', () => {
     select.dispatchEvent(new Event('change'));
     expect(root.querySelector('section')?.textContent).toContain('￥1,046');
     expect(root.querySelector('section')?.textContent).toContain('税抜');
+  });
+});
+
+/** A page that swaps the product it shows without navigating, driven by the test. */
+function inPlacePage() {
+  let shown: string | null = null;
+  let listener: ((pageKey: string | null) => void) | null = null;
+  const adapter: StorePageAdapter = {
+    ...testAdapter,
+    pageThemeCss: 'html[data-eph-page-theme="dark"] body { color: white; }',
+    extractPageKey: () => shown,
+    watchPageKey: (_doc, onChange) => {
+      listener = onChange;
+      return () => { listener = null; };
+    },
+  };
+  return {
+    adapter,
+    show(pageKey: string | null) {
+      shown = pageKey;
+      listener?.(pageKey);
+    },
+    watching: () => listener !== null,
+  };
+}
+
+const panelHosts = () => [...document.querySelectorAll<HTMLElement>(`#${HOST_ELEMENT_ID}`)];
+const shownKey = () => panelHosts().map((el) => el.dataset['pageKey']);
+
+function hostWithTwoProducts(): FakeHost {
+  const host = hostWithData();
+  host.routes.set(`${BASE}/${productPath('teststore', 'P2')}`, json(sampleProduct({ pageKey: 'P2', externalProductId: 'P2' })));
+  return host;
+}
+
+describe('history panel controller on pages that change the product in place', () => {
+  it('follows the product shown with one panel at a time, and none while no product is shown', async () => {
+    page();
+    const host = hostWithTwoProducts();
+    const p = inPlacePage();
+    const handle = await mount(host, { adapters: [p.adapter] });
+    expect(handle).toMatchObject({ mounted: false, storeId: 'teststore', pageKey: null });
+    expect(host.logs).toContain('debug: no product shown yet');
+    expect(panelHosts()).toEqual([]);
+
+    p.show('P1');
+    await vi.waitFor(() => expect(shadowText()).toContain('￥1,200'));
+    expect(shownKey()).toEqual(['P1']);
+    expect(handle).toMatchObject({ mounted: true, pageKey: 'P1' });
+
+    p.show('P2');
+    await vi.waitFor(() => expect(shownKey()).toEqual(['P2']));
+    await vi.waitFor(() => expect(shadowText()).toContain('￥1,200'));
+    expect(handle).toMatchObject({ mounted: true, pageKey: 'P2' });
+
+    p.show(null);
+    expect(panelHosts()).toEqual([]);
+    expect(handle).toMatchObject({ mounted: false, pageKey: null });
+
+    p.show('P1');
+    await vi.waitFor(() => expect(shownKey()).toEqual(['P1']));
+    await vi.waitFor(() => expect(shadowText()).toContain('￥1,200'));
+    handle.destroy();
+    expect(panelHosts()).toEqual([]);
+    expect(p.watching()).toBe(false);
+    expect(document.documentElement.hasAttribute(OWNER_ATTRIBUTE)).toBe(false);
+  });
+
+  it('keeps the panel for a product reported again, and replaces one the page removed', async () => {
+    page();
+    const host = hostWithTwoProducts();
+    const p = inPlacePage();
+    p.show('P1');
+    await mount(host, { adapters: [p.adapter] });
+    const first = panelHosts()[0]!;
+    p.show('P1');
+    expect(panelHosts()).toEqual([first]);
+
+    first.remove(); // the page rebuilt its dialog
+    p.show('P1');
+    await vi.waitFor(() => expect(shadowText()).toContain('￥1,200'));
+    expect(shownKey()).toEqual(['P1']);
+    expect(panelHosts()[0]).not.toBe(first);
+  });
+
+  it('never mounts a product the page moved away from while its panel waited for a place', async () => {
+    page(false);
+    const host = hostWithTwoProducts();
+    const p = inPlacePage();
+    const handle = await mount(host, { adapters: [p.adapter], mountTimeoutMs: 500 });
+    p.show('P1');
+    p.show('P2');
+    const buy = document.createElement('div');
+    buy.id = 'buy';
+    document.body.appendChild(buy);
+    await vi.waitFor(() => expect(shownKey()).toEqual(['P2']));
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(shownKey()).toEqual(['P2']);
+    expect(host.requests.some((u) => u.endsWith(productPath('teststore', 'P1')))).toBe(false);
+    expect(handle.pageKey).toBe('P2');
+  });
+
+  it('carries the display chosen in one panel over to the next product', async () => {
+    page();
+    const host = hostWithTwoProducts();
+    const p = inPlacePage();
+    p.show('P1');
+    await mount(host, { adapters: [p.adapter] });
+    document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!.querySelectorAll('button')[1]!.click();
+    expect(document.documentElement.getAttribute('data-eph-page-theme')).toBe('dark');
+
+    p.show('P2');
+    await vi.waitFor(() => expect(shownKey()).toEqual(['P2']));
+    await vi.waitFor(() => expect(document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!.querySelector('section')?.dataset['theme']).toBe('dark'));
+    expect(document.documentElement.getAttribute('data-eph-page-theme')).toBe('dark');
+  });
+
+  it('offers the light reset only while no panel with its own theme switch is shown', async () => {
+    page();
+    const host = hostWithTwoProducts();
+    host.store.set(THEME_STORAGE_KEY, 'dark');
+    const p = inPlacePage();
+    await mount(host, { adapters: [p.adapter] });
+    const reset = () => document.querySelectorAll(`#${PAGE_THEME_CONTROL_ID}`).length;
+    expect(reset()).toBe(1);
+    p.show('P1');
+    await vi.waitFor(() => expect(shownKey()).toEqual(['P1']));
+    expect(reset()).toBe(0);
+    p.show(null);
+    expect(reset()).toBe(1);
+    p.show('P2');
+    await vi.waitFor(() => expect(shownKey()).toEqual(['P2']));
+    expect(reset()).toBe(0);
+    // A product whose panel finds no place leaves the way back to light.
+    document.getElementById('buy')!.remove();
+    p.show('P1');
+    await vi.waitFor(() => expect(host.logs).toContain('warn: mount point not found'));
+    await vi.waitFor(() => expect(reset()).toBe(1));
+  });
+
+  it('logs instead of throwing when a product shown later fails to load', async () => {
+    page();
+    const host = hostWithData();
+    const p = inPlacePage();
+    await mount(host, { adapters: [p.adapter] });
+    host.routes.set(`${BASE}/${manifestPath('teststore')}`, new Error('offline'));
+    p.show('P1');
+    await vi.waitFor(() => expect(shadowText()).toContain('取得できませんでした'));
+    expect(document.querySelector('h1')?.textContent).toBe('Test Part');
   });
 });

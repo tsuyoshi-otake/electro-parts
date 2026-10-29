@@ -24,5 +24,6 @@
 | 0020 | [審査に通る形をテストで固定し、Chrome ウェブストアに出す](0020-chrome-web-store-submission.md) | 採用 |
 | 0021 | [店舗ページのテーマは閲覧ページだけに、1 つの実行体だけが掛ける](0021-page-theme-scope-and-ownership.md) | 採用 |
 | 0022 | [USD の記録価格に、各ブラウザーが 1 日 1 回取得したレートで円の参考値を添える](0022-yen-reference-from-daily-exchange-rate.md) | 採用 |
+| 0023 | [Raspberry Pi Shop by KSY は公開一覧の JSON を offset で読み、ページ遷移のない商品ダイアログを追う](0023-ksy-public-list-and-in-place-product-dialog.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。

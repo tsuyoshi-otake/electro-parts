@@ -47,6 +47,12 @@ describe('page scope of the registered stores', () => {
     'https://shop.m5stack.com/checkout',
     'https://shop.m5stack.com/checkouts/abc',
     'https://shop.m5stack.com/account/register',
+    'https://raspberry-pi.ksyic.com/transaction',
+    'https://raspberry-pi.ksyic.com/transaction/index',
+    'https://raspberry-pi.ksyic.com/main/login',
+    'https://raspberry-pi.ksyic.com/user/register',
+    'https://raspberry-pi.ksyic.com/manager',
+    'https://raspberry-pi.ksyic.com/info',
   ])('leaves %s alone', (url) => {
     expect(owners(url)).toEqual([]);
   });
@@ -64,13 +70,18 @@ describe('page scope of the registered stores', () => {
     ['https://shop.m5stack.com/?ref=x', 'm5stack'],
     ['https://shop.m5stack.com/products/atom-lite-esp32-development-kit?variant=1', 'm5stack'],
     ['https://shop.m5stack.com/collections/m5-atom', 'm5stack'],
+    ['https://raspberry-pi.ksyic.com/', 'ksy'],
+    ['https://raspberry-pi.ksyic.com/main/index', 'ksy'],
+    ['https://raspberry-pi.ksyic.com/main/index/pdp.id/1094/pdp.open/1094', 'ksy'],
+    ['https://raspberry-pi.ksyic.com/news/index', 'ksy'],
   ])('themes %s for %s', (url, storeId) => {
     expect(owners(url)).toEqual([storeId]);
   });
 
   it('keeps every product page an adapter recognizes inside its own scope', () => {
     for (const url of ['https://akizukidenshi.com/catalog/g/g109951/', 'https://www.switch-science.com/products/9381',
-      'https://www.switch-science.com/collections/all/products/9381', 'https://shop.m5stack.com/collections/atom/products/atom-lite']) {
+      'https://www.switch-science.com/collections/all/products/9381', 'https://shop.m5stack.com/collections/atom/products/atom-lite',
+      'https://raspberry-pi.ksyic.com/main/index/pdp.id/1094/pdp.open/1094']) {
       const product = PAGE_ADAPTERS.filter((a) => a.matches(at(url))).map((a) => a.storeId);
       expect(product, url).toHaveLength(1);
       expect(owners(url), url).toEqual(product);

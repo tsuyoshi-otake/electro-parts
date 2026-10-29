@@ -34,6 +34,14 @@ export interface StorePageAdapter {
   pageThemeCss?: string;
   /** The page key of the product shown, or null when the page is not a product page. */
   extractPageKey(doc: Document, location: Pick<Location, 'hostname' | 'pathname'>): string | null;
+  /**
+   * For pages that swap the product shown without navigating, such as a
+   * product dialog over a list: reports the page key whenever the product
+   * shown changes (`null` while none is shown), never for the state already
+   * returned by `extractPageKey`. Returns the unsubscribe. Without it the
+   * page key is read once and the page shows at most one product.
+   */
+  watchPageKey?(doc: Document, onChange: (pageKey: string | null) => void): () => void;
   findMountPoint(doc: Document): MountPoint | null;
   initialOfferId?(location: { search?: string }): string | undefined;
 }

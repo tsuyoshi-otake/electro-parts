@@ -1,6 +1,6 @@
 # ロードマップ
 
-秋月電子通商・スイッチサイエンス・M5Stack公式ショップが**実装済み**、aitendo が**未実装**です。M5StackのUSD・全商品収集・バリエーション対応は [対応仕様](m5stack-support.md) を参照してください。エレショップは収集規模と一括提供元が課題のため保留です。
+秋月電子通商・スイッチサイエンス・M5Stack公式ショップ・Raspberry Pi Shop by KSYが**実装済み**、aitendo が**未実装**です。M5StackのUSD・全商品収集・バリエーション対応は [対応仕様](m5stack-support.md)、KSYの公開一覧の収集と商品ダイアログの扱いは [ADR-0023](../adr/0023-ksy-public-list-and-in-place-product-dialog.md) を参照してください。エレショップは収集規模と一括提供元が課題のため保留です。
 
 ## 拡張点(すでに用意されているもの)
 
@@ -10,7 +10,7 @@
 | Store Snapshot Adapter | `src/adapters/<store>/snapshotAdapter.ts` | `RawSnapshot` → 共通 `NormalizedSnapshot`。`StoreCapabilities` の宣言 |
 | Config | `config/<store>.json` | 収集パラメータ、健全性しきい値、`previousStateUrl` |
 | Workflow | `.github/workflows/crawl-publish.yml` | `env.STORES` に店舗 ID を足し、スナップショット成果物の upload step を 1 つ足すだけ。店舗は 1 つの job の中で**直列**に回る(共有する SQLite と `state/` を並行に書けないため) |
-| Userscript adapter | `userscript/adapters/<store>.ts` | `StorePageAdapter`(`matches`、`pageKey`、`mountPoint`、`storeId`)。`@match` の追加 |
+| Userscript adapter | `userscript/adapters/<store>.ts` | `StorePageAdapter`(`matches`、`pageKey`、`mountPoint`、`storeId`)。`@match` の追加。ページ遷移なしで表示中の商品が変わる店舗は `watchPageKey` も書く(ADR-0023) |
 | 静的契約 | `data/v1/stores/<store>/` | 変更不要。`manifest.json` の `capabilities` と `caveats` で店舗の性質を伝える |
 
 共通コア(`src/core`、`src/db`、`src/publisher`、`src/pipeline`、`userscript/core`、`userscript/ui`)に店舗名を書かないことを CI が検査します。
@@ -33,6 +33,15 @@
 - 在庫数は `quantitySemantics: 'not_displayed'` ではなく **`'not_exposed'`**。一括カタログ API が返すのは `available` の真偽値だけで、数は「表示されていない」のではなく最初から無い。パネルは在庫数の行そのものを出さない。
 - バリアント: 現在は全商品が 1 variant だが、オファー ID は `__default__` ではなく **variant ID** にした。2 つ目の variant が付いた日に唯一のオファーが消えて履歴が振り出しに戻るのを避けるため。集約 `range` オファーは未使用(型と DB には残っている)。
 - ユーザースクリプト: `MutationObserver` の待ちは要らなかった。商品ページはサーバー描画で、canonical link も差し込み先も初回 HTML にある。`/collections/<コレクション>/products/<handle>` も同じ商品として扱い、canonical link とパスが食い違う画面は商品ページとして扱わない。
+
+## Raspberry Pi Shop by KSY(実装済み)
+
+共通コア・DB・静的契約は変えずに入りました。ユーザースクリプトの契約に、ページ遷移なしで商品が変わる画面のための省略可能な `watchPageKey` を足しました。
+
+- 取得: 店舗の画面が使う公開一覧の JSON を、Cookie なしの GET で `offset` ごとに読みます(`page` は無視されます)。応答の `size` を全件の基準にし、ずれたら fail-closed で止めます。
+- 範囲: 公開一覧(`onlist: 1`)だけです。ID は走査しません。一覧に出ない商品には顧客別の決済用商品が含まれるためです。
+- 写像: 税込の円、表示された在庫数(`site_reported`)、`価格未定` とシリーズ一覧用の項目は価格なし。店舗間の対応表にはまだ入れていません。
+- 詳細: [ADR-0023](../adr/0023-ksy-public-list-and-in-place-product-dialog.md)
 
 ## 店舗横断の商品照合(実装済み)
 

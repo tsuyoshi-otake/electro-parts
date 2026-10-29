@@ -29,6 +29,8 @@ export interface PageTheme {
    * history panel (and therefore no theme switch) is shown.
    */
   offerLightReset(onLight: () => void): void;
+  /** Removes the offered button, for when a panel with its own theme switch is shown. */
+  withdrawLightReset(): void;
   destroy(): void;
 }
 
@@ -74,6 +76,10 @@ export function createPageTheme(doc: Document, css: string): PageTheme {
       shadow.append(controlStyle, button);
       doc.body.appendChild(toggleHost);
       control = toggleHost;
+    },
+    withdrawLightReset() {
+      control?.remove();
+      control = null;
     },
     destroy() { destroyed = true; restore(); },
   };
