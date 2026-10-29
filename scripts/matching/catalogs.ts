@@ -3,11 +3,14 @@ import path from 'node:path';
 import { gunzipSync } from 'node:zlib';
 import { validateAkizukiRaw } from '../../src/adapters/akizuki/snapshotAdapter.ts';
 import type { AkizukiRawSnapshot } from '../../src/adapters/akizuki/rawSchema.ts';
+import { normalizeKsyItem, validateKsyRaw } from '../../src/adapters/ksy/snapshotAdapter.ts';
+import type { KsyItem, KsySnapshot } from '../../src/adapters/ksy/rawSchema.ts';
 import { validateM5StackRaw } from '../../src/adapters/m5stack/snapshotAdapter.ts';
 import { m5stackPageKey, m5stackProductUrl } from '../../src/adapters/m5stack/identity.ts';
 import type { M5StackItem, M5StackSnapshot } from '../../src/adapters/m5stack/rawSchema.ts';
 import { validateSwitchScienceRaw } from '../../src/adapters/switch-science/snapshotAdapter.ts';
 import type { SwitchScienceRawItem, SwitchScienceRawSnapshot } from '../../src/adapters/switch-science/rawSchema.ts';
+import type { ValidationResult } from '../../src/core/validation.ts';
 import { assertCatalog, hash, listingKey, normalizeCode, type Catalog, type Listing } from './model.ts';
 
 type RetailerStore = 'akizuki' | 'switch-science';
@@ -39,6 +42,20 @@ function m5stackListing(p: M5StackItem, observedAt: string): Listing {
 }
 
 /**
+ * KSY public-list item through the store's own normalization, so the expected name and model are the ones its
+ * published history carries. `make` is the shop's own maker label (「ラズベリーパイ財団」 where Switch Science says
+ * Raspberry Pi Trading), not a manufacturer name of the other sources: it is kept as `vendor` for review and never
+ * rules a pair out. Digit-only models arrive as JSON numbers and are compared as text, without lost leading zeros.
+ */
+function ksyListing(i: KsyItem, observedAt: string): Listing {
+  const { pageKey, metadata } = normalizeKsyItem(i);
+  const model = metadata.modelNumber ?? '';
+  return { storeId: 'ksy', pageKey, name: metadata.name, modelNumber: model, url: metadata.canonicalUrl, manufacturer: '',
+    manufacturerProductName: '', manufacturerProductCode: '', productCode: '', sku: '', codes: identityCodes('ksy', '', [model]),
+    expectedModels: [model], observedAt, vendor: i.make.trim() };
+}
+
+/**
  * Current Switch Science collector item → the old saved-catalogue fields. The store's Shopify tags carry the
  * manufacturer evidence (`mfr:name:`, `mfr:prod:code:`, `mfr:prod:name:`, `code:`); `code:prefix:` is a grouping tag.
  * The old catalogue's modelNumber is the manufacturer code, or the store's code when the manufacturer code is empty,
@@ -51,16 +68,12 @@ function switchScienceItem(i: SwitchScienceRawItem): Record<string, unknown> {
     manufacturerName: tag('mfr:name:'), manufacturerProductCode: tag('mfr:prod:code:'), manufacturerProductName: tag('mfr:prod:name:'), sku: i.variants[0]?.sku ?? '' };
 }
 
-/** Append complete manufacturer evidence without silently refreshing reviewed retailer rows. */
-export async function appendM5Stack(catalog: Catalog, file: string): Promise<Catalog> {
+/** A store's first source: its complete snapshot, appended without refreshing the reviewed rows of other stores. */
+export function appendStore(catalog: Catalog, storeId: string, file: string, snapshot: SnapshotListings): Catalog {
   assertCatalog(catalog);
-  if (catalog.sources.some(s => s.storeId === 'm5stack')) throw new Error('M5Stack source already exists; explicit re-review required');
-  const text = gunzipSync(await readFile(file)).toString('utf8');
-  const raw = JSON.parse(text) as M5StackSnapshot;
-  const validation = validateM5StackRaw(raw);
-  if (validation.errors.length) throw new Error(`incomplete M5Stack catalogue: ${JSON.stringify(validation)}`);
-  const listings = raw.items.map(p => m5stackListing(p, raw.retrievedAt)).sort(order);
-  const result: Catalog = { ...catalog, sources: [...catalog.sources, { storeId: 'm5stack', file: path.basename(file), sha256: hash(text), observedAt: raw.retrievedAt, count: listings.length }], listings: [...catalog.listings, ...listings] };
+  if (catalog.sources.some(s => s.storeId === storeId)) throw new Error(`${storeId} source already exists; a newer snapshot is a --supplement`);
+  const listings = [...snapshot.listings].sort(order);
+  const result: Catalog = { ...catalog, sources: [...catalog.sources, { storeId, file: path.basename(file), sha256: hash(snapshot.text), observedAt: snapshot.observedAt, count: listings.length }], listings: [...catalog.listings, ...listings] };
   assertCatalog(result); return result;
 }
 
@@ -100,16 +113,22 @@ export async function snapshotListings(storeId: string, file: string): Promise<S
   const bytes = await readFile(file);
   const text = (file.endsWith('.gz') ? gunzipSync(bytes) : bytes).toString('utf8');
   const raw = JSON.parse(text) as { retrievedAt: string };
-  const errors = (storeId === 'akizuki' ? validateAkizukiRaw(raw) : storeId === 'switch-science' ? validateSwitchScienceRaw(raw)
-    : storeId === 'm5stack' ? validateM5StackRaw(raw) : { errors: [`unknown store ${storeId}`] }).errors;
-  if (errors.length) throw new Error(`incomplete ${storeId} snapshot: ${errors.slice(0, 3).join('; ')}`);
-  const listings = storeId === 'akizuki'
-    ? (raw as AkizukiRawSnapshot).items.map(i => retailerListing('akizuki', { salesCode: i.salesCode, modelNumber: i.modelNumber, name: i.name, url: i.url }, raw.retrievedAt))
-    : storeId === 'switch-science'
-      ? (raw as SwitchScienceRawSnapshot).items.map(i => retailerListing('switch-science', switchScienceItem(i), raw.retrievedAt))
-      : (raw as M5StackSnapshot).items.map(p => m5stackListing(p, raw.retrievedAt));
-  return { text, observedAt: raw.retrievedAt, listings };
+  const projection = PROJECTIONS[storeId];
+  if (!projection) throw new Error(`unknown store ${storeId}`);
+  const { errors } = projection.validate(raw);
+  if (errors.length) throw new Error(`incomplete ${storeId} snapshot: ${errors.slice(0, 3).map(e => `${e.code}: ${e.message}`).join('; ')}`);
+  return { text, observedAt: raw.retrievedAt, listings: projection.listings(raw as never) };
 }
+
+/** Each store's own completeness validation, then its projection to listings. */
+const PROJECTIONS: Readonly<Record<string, { validate: (raw: unknown) => ValidationResult; listings: (raw: never) => Listing[] }>> = {
+  'akizuki': { validate: validateAkizukiRaw, listings: (raw: AkizukiRawSnapshot) =>
+    raw.items.map(i => retailerListing('akizuki', { salesCode: i.salesCode, modelNumber: i.modelNumber, name: i.name, url: i.url }, raw.retrievedAt)) },
+  'switch-science': { validate: validateSwitchScienceRaw, listings: (raw: SwitchScienceRawSnapshot) =>
+    raw.items.map(i => retailerListing('switch-science', switchScienceItem(i), raw.retrievedAt)) },
+  'm5stack': { validate: validateM5StackRaw, listings: (raw: M5StackSnapshot) => raw.items.map(p => m5stackListing(p, raw.retrievedAt)) },
+  'ksy': { validate: validateKsyRaw, listings: (raw: KsySnapshot) => raw.items.map(i => ksyListing(i, raw.retrievedAt)) },
+};
 
 export interface SupplementReport {
   storeId: string; file: string; observedAt: string; snapshotCount: number;

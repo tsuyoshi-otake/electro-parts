@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { PRODUCT_RELATIONS } from '../../userscript/adapters/productRelations.ts';
 import { PAGE_ADAPTERS } from '../../userscript/adapters/registry.ts';
 import { comparisonEligibility, currentOffer, indexRelations, matchesRelationProduct, primaryQuote, relatedEntries, relationProductKey, MAX_RELATED_HISTORY_LOADS } from '../../userscript/core/relations.ts';
+import type { RelationProduct } from '../../userscript/core/relations.ts';
+import { ksyProductPageHtml, openKsyProduct } from '../helpers/ksy.ts';
 import { comparisonFixture } from './comparison-fixtures.ts';
+import { loadHtml } from './helpers.ts';
 
 describe('curated relation catalogue', () => {
   it('ranks identity first and closest reviewed family differences next without dropping links', () => {
@@ -16,6 +19,7 @@ describe('curated relation catalogue', () => {
   it('contains unique, reversible store-scoped pairs with source evidence and safe endpoint URLs', () => {
     document.head.replaceChildren(); document.body.replaceChildren();
     const seen = new Set<string>();
+    const inDialog: RelationProduct[] = [];
     for (const r of PRODUCT_RELATIONS) {
       expect(seen.has(r.id)).toBe(false); seen.add(r.id);
       expect(r.evidence.length).toBeGreaterThan(10);
@@ -26,10 +30,12 @@ describe('curated relation catalogue', () => {
         expect(Number.isFinite(Date.parse(p.observedAt))).toBe(true);
         const url = new URL(p.url); expect(url.protocol).toBe('https:');
         const adapter = PAGE_ADAPTERS.find((a) => a.storeId === p.storeId)!;
+        expect(adapter.matches(url)).toBe(true);
+        // KSY names the product only in the dialog its permalink opens; checked below on the saved page.
+        if (p.storeId === 'ksy') { inDialog.push(p); continue; }
         document.head.replaceChildren();
         const canonical = document.createElement('link'); canonical.rel = 'canonical'; canonical.href = p.url;
         document.head.appendChild(canonical);
-        expect(adapter.matches(url)).toBe(true);
         expect(adapter.extractPageKey(document, url)).toBe(p.pageKey);
       }
       if (r.kind === 'similar_product') { expect(r.differences.length).toBeGreaterThan(0); expect(r.pricePolicy).toBeNull(); }
@@ -45,6 +51,13 @@ describe('curated relation catalogue', () => {
         expect(entries).toHaveLength(1); expect(entries[0]!.sourceIndex).toBe(i);
         expect(entries[0]!.target).toBe(r.products[i === 0 ? 1 : 0]);
       }
+    }
+    expect(inDialog.length).toBeGreaterThan(0);
+    loadHtml(document, ksyProductPageHtml());
+    const ksy = PAGE_ADAPTERS.find((a) => a.storeId === 'ksy')!;
+    for (const p of inDialog) {
+      openKsyProduct(document, p.pageKey, p.url);
+      expect(ksy.extractPageKey(document, new URL(p.url))).toBe(p.pageKey);
     }
   });
 

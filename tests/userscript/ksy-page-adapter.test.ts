@@ -3,7 +3,7 @@ import { manifestPath, productPath } from '../../src/publisher/contract.ts';
 import { ksyPageAdapter } from '../../userscript/adapters/ksy.ts';
 import { HOST_ELEMENT_ID, OWNER_ATTRIBUTE, mountHistoryPanel } from '../../userscript/core/controller.ts';
 import { DataClient } from '../../userscript/core/dataClient.ts';
-import { ksyProductPageHtml } from '../helpers/ksy.ts';
+import { ksyProductPageHtml, openKsyProduct } from '../helpers/ksy.ts';
 import { fakeHost, json, loadHtml, sampleManifest, sampleProduct } from './helpers.ts';
 
 const HOST = 'raspberry-pi.ksyic.com';
@@ -11,11 +11,8 @@ const AT = (pathname: string, hostname = HOST) => ({ hostname, pathname });
 const PERMALINK = (id: string) => `https://${HOST}/main/index/pdp.id/${id}/pdp.open/${id}`;
 const BASE = 'https://data.example.test';
 
-/** What the shop's own script does when it opens a product in the dialog. */
 function openProduct(id: string, permalink = PERMALINK(id)): void {
-  document.getElementById('dt_id')!.textContent = id;
-  document.getElementById('dt_Permalink')!.setAttribute('href', permalink);
-  document.getElementById('detail')!.style.display = 'block';
+  openKsyProduct(document, id, permalink);
 }
 
 /** Closing hides the dialog and leaves its fields as they were. */
