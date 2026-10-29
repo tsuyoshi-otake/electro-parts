@@ -476,3 +476,9 @@ Rubric: C8 pointed at `~/tmp/electro-ksy/live/`, which had become `~/tmp/electro
 Verification: `npm ci`; typecheck, matching:check, npm test 47/583, test:e2e 16/16 and `npm audit --audit-level=high` (0) each by the runner's own exit code; CI guards replayed with no hits; a fresh extension build is byte-identical to the live-checked `ext050.zip` (7 files), so the live check still covers the rebased branch; no runner survivors. Independent rubric-verifier: 9/9 pass in iteration 1.
 Not done: push, PR and CI for #32, normal Chrome reload, Pages, CWS submission.
 Learning: `gh pr merge --match-head-commit` needs the full SHA. When cleanup renames a kept scratch path, update every rubric that names it.
+
+## 2026-10-29: 0.5.0 merge (#32, #35)
+
+PR #35 CI "Typecheck and tests" passed on d244ed9 (mutation skipped on PRs; Codex review: no findings, 0 threads) and was squash-merged as a400039 with `--match-head-commit` set to the full head oid, which equalled the verified local HEAD. Issue #32 closed by the PR; `feat/ksy-store` deleted locally and on origin; local main is a400039 = origin/main, no worktrees besides the main checkout.
+After merge: CI on main started (the mutation job runs only there). The crawl does not run on merge: KSY declares `every_two_days`, so the next schedule picks it up, or per the runbook a manual "Crawl and publish" with `stores: ksy` and no `bootstrap` observes KSY alone and republishes the other stores unchanged.
+Not done: main CI result, first KSY publish to Pages, checking the Pages ZIP SHA256 against the verified `f32fdfee…57269ef` and the other stores' unchanged datasetVersion, normal Chrome reload, CWS submission. Kept: `~/tmp/electro-ksy-050` (verified ZIP and live-check evidence) for the CWS submission.
