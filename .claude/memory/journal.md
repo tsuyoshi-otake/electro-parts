@@ -508,3 +508,9 @@ Investigation: the two published histories differ only in inventory (SS `not_exp
 Root cause: the chart is drawn when `.chart-box` first intersects the viewport (`renderChart`, `ctx.lazyChart`). The live script scrolled the host, which left the chart box above the viewport, and the element screenshot does not scroll it in. Readers who scroll to the panel get the chart.
 Fix: no code change. Corrected `docs/verification/2026-10-29-ksy-matching-051.md` and updated the live-check rule in rules.md (scroll `.chart-box` itself and wait for its `svg`).
 Learning: before calling an empty lazy element a bug, check whether it ever intersected the viewport during the check.
+
+## 2026-10-30: 0.5.1 merge (#36, #37)
+
+PR #37 CI "Typecheck and tests" passed on 3463838 (mutation skipped on PRs); the Codex review completed with no findings and no threads. Squash-merged as 689393e with `--match-head-commit` set to the full head oid, which equalled the verified local HEAD; the squash body keeps the commit's details and notes the included 35fb6c2 (0.5.0 merge journal). Issue #36 closed by #37; `feat/ksy-matching` deleted locally and on origin; local main = origin/main = 689393e, no worktrees besides the main checkout.
+After merge: CI run 40968634417 on main started (the mutation job runs only there). Pages does not rebuild on merge: "Crawl and publish" runs daily at 05:00 JST (cron `0 20 * * *` UTC) or by hand, and the 0.5.1 userscript, extension ZIP and relations reach Pages with that run.
+Not done: main CI result, the 0.5.1 Pages publish and checking the Pages ZIP against the verified `ddb459bc…e9b1`, normal Chrome reload, CWS submission. Kept: `~/tmp/electro-ksy-051` (verified 0.5.1 ZIP and live-check evidence) for the CWS submission; `~/tmp/electro-ksy-050` is superseded by it.
