@@ -20,6 +20,7 @@
     "build:userscript": "node --import tsx scripts/build-userscript.ts",
     "build:extension": "node --import tsx scripts/build-extension.ts",
     "build:store-assets": "node --import tsx scripts/build-store-assets.ts",
+    "cws:dashboard": "node --import tsx scripts/cws-dashboard.ts",
     "matching:build": "node --import tsx scripts/matching/generate.ts",
     "matching:check": "node --import tsx scripts/matching/generate.ts --check",
     "matching:discover": "node --import tsx scripts/matching/generate.ts --discover",

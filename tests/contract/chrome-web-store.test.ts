@@ -9,6 +9,7 @@ import {
   PRIVACY_POLICY_URL,
   SOURCE_URL,
 } from '../../scripts/build-extension.ts';
+import { readStoreListingTexts, STORE_LISTING_DOC } from '../../scripts/lib/store-listing.ts';
 import { DEFAULT_DATA_BASE_URL } from '../../userscript/version.ts';
 
 /**
@@ -152,5 +153,47 @@ describe('Chrome Web Store package requirements', () => {
     expect(page).toContain('収集しません');
     expect(page).toContain('chrome.storage.local');
     expect(page).toContain(new URL(DEFAULT_DATA_BASE_URL).host);
+  });
+});
+
+/**
+ * `scripts/cws-dashboard.ts fill` pastes these texts from the listing document.
+ * The 0.5.1 dashboard still named two of the four stores, because the texts
+ * were pasted by hand once and never compared again; a site the content script
+ * runs on but the texts leave out is what review calls a mismatch.
+ */
+describe('Chrome Web Store dashboard texts', () => {
+  const contentScriptHosts = [...new Set(extensionManifest().content_scripts
+    .flatMap((c) => c.matches)
+    .map((pattern) => new URL(pattern.replace(/\*/g, 'x')).host))];
+
+  async function texts() {
+    return readStoreListingTexts(await readFile(path.resolve(process.cwd(), STORE_LISTING_DOC), 'utf8'));
+  }
+
+  it('reads all four pasted texts inside the dashboard limits', async () => {
+    const { description, singlePurpose, storageReason, hostReason } = await texts();
+    // Counted in code points, as the dashboard counter does for Japanese.
+    expect([...description].length).toBeGreaterThan(0);
+    expect([...description].length).toBeLessThanOrEqual(16_000);
+    for (const [name, text] of Object.entries({ singlePurpose, storageReason, hostReason })) {
+      expect([...text].length, name).toBeGreaterThan(0);
+      expect([...text].length, name).toBeLessThanOrEqual(1_000);
+    }
+  });
+
+  it('names every site the content script runs on', async () => {
+    const { description, hostReason } = await texts();
+    expect(contentScriptHosts.length).toBeGreaterThan(0);
+    for (const host of contentScriptHosts) {
+      expect(description, `description: ${host}`).toContain(host);
+      expect(hostReason, `host permission reason: ${host}`).toContain(host);
+    }
+  });
+
+  it('refuses a document whose pasted text cannot be found', async () => {
+    const doc = await readFile(path.resolve(process.cwd(), STORE_LISTING_DOC), 'utf8');
+    expect(() => readStoreListingTexts(doc.replace('### 説明(そのまま貼る)', '### 説明'))).toThrow(/heading not found/);
+    expect(() => readStoreListingTexts(doc.replace(/^\| `storage` \|.*$/m, ''))).toThrow(/storage/);
   });
 });

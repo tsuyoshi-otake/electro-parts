@@ -78,7 +78,7 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 4. 公開は「サイトだけ差し替える」と同じ(`republish`)。zip は `site/electronics-price-history-extension.zip` として同じアーティファクトに入る。
 5. Verify: 公開後に zip を落として `manifest.json` の `version` を見る。Expect: 上げた版。
 6. **zip で入れた利用者は自動更新されない。** 取り直して読み込み直してもらう必要がある。版を上げたら README とランディングページの案内も合わせる。
-7. ウェブストアに掲載している場合は、同じ zip をダッシュボードにもアップロードする。**ストアは同じ版を 2 回受け付けない**ので、版を上げずに出し直すことはできない。貼る文言と手順は `docs/chrome-web-store-listing.md`(ADR-0020)。プライバシーポリシー(`/privacy.html`)が 404 だと審査に出せないので、Pages の更新を先に済ませる。
+7. ウェブストアに掲載している場合は、同じ zip をダッシュボードにもアップロードする。**ストアは同じ版を 2 回受け付けない**ので、版を上げずに出し直すことはできない。貼る文言と手順は `docs/chrome-web-store-listing.md`(ADR-0020)。ダッシュボードへの転記は `npm run cws:dashboard` で行い、「審査のため送信」は人が押す。プライバシーポリシー(`/privacy.html`)が 404 だと審査に出せないので、Pages の更新を先に済ませる。
 
 ## ロールバック
 
