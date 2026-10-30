@@ -234,6 +234,8 @@ describe('Sengoku normalization', () => {
     // Seen on 2026-10-30 (EEHD-538N): two prices for the same 【数量1個〜】単価.
     expect(quote([{ minQuantity: 1, quantityUnit: '個', label: '単価', amountYen: 284 }, { minQuantity: 1, quantityUnit: '個', label: '単価', amountYen: 255 }]))
       .toMatchObject({ state: 'range', minAmountMinor: 255, maxAmountMinor: 284, unitLabel: '1個' });
+    // The published manifest declares what the product data can hold, so it declares ranges.
+    expect(SENGOKU_CAPABILITIES.supportsPriceRange).toBe(true);
     expect(quote([{ minQuantity: null, quantityUnit: null, label: '特価', amountYen: 500 }])).toMatchObject({ state: 'exact', minAmountMinor: 500, unitLabel: '特価' });
     expect(quote([])).toMatchObject({ state: 'unavailable', minAmountMinor: null, maxAmountMinor: null, unitLabel: null });
     expect(quote([{ minQuantity: 1, quantityUnit: '個', label: '価格お見積り', amountYen: null }]))
