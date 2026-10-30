@@ -11,7 +11,7 @@ import {
 } from './rawSchema.ts';
 
 export const SENGOKU_CAPABILITIES: StoreCapabilities = {
-  supportsExactPrice: true, supportsPriceRange: false, supportsVariants: false, supportsCompareAtPrice: false,
+  supportsExactPrice: true, supportsPriceRange: true, supportsVariants: false, supportsCompareAtPrice: false,
   supportsTaxIncluded: true, supportsTaxExcluded: false, supportsAvailability: true,
   supportsInventoryQuantity: false, inventoryQuantitySemantics: 'not_exposed',
   primaryQuote: { quoteKind: 'selling', taxTreatment: 'tax_included' },
