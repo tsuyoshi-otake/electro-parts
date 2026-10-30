@@ -1,6 +1,6 @@
 # electro-parts
 
-電子部品 EC の価格・在庫・掲載履歴を集めて GitHub Pages に静的公開し、TampermonkeyとChrome拡張で商品ページに履歴を出すプロジェクト。対応店舗は秋月電子通商・スイッチサイエンス・M5Stack公式ショップ・Raspberry Pi Shop by KSY。
+電子部品 EC の価格・在庫・掲載履歴を集めて GitHub Pages に静的公開し、TampermonkeyとChrome拡張で商品ページに履歴を出すプロジェクト。対応店舗は秋月電子通商・スイッチサイエンス・M5Stack公式ショップ・Raspberry Pi Shop by KSY・せんごくネット通販(電子工作部品のみ)。
 
 - 全体像と実行方法: [README.md](README.md)
 - 設計判断: [docs/adr/](docs/adr/README.md)

@@ -16,6 +16,8 @@ import { loadM5StackNormalized } from '../helpers/m5stack.ts';
 import { M5STACK_CAPABILITIES } from '../../src/adapters/m5stack/snapshotAdapter.ts';
 import { loadKsyNormalized } from '../helpers/ksy.ts';
 import { KSY_CAPABILITIES } from '../../src/adapters/ksy/snapshotAdapter.ts';
+import { loadSengokuNormalized } from '../helpers/sengoku.ts';
+import { SENGOKU_CAPABILITIES } from '../../src/adapters/sengoku/snapshotAdapter.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const E2E_SITE_DIR = path.resolve(here, '..', '..', 'test-results', 'e2e-site');
@@ -40,22 +42,24 @@ export default async function globalSetup(): Promise<void> {
   importSnapshot(db, await loadSwitchScienceNormalized(), { capabilities: SWITCH_SCIENCE_CAPABILITIES });
   importSnapshot(db, await loadM5StackNormalized(), { capabilities: M5STACK_CAPABILITIES });
   importSnapshot(db, await loadKsyNormalized(), { capabilities: KSY_CAPABILITIES });
+  importSnapshot(db, await loadSengokuNormalized(), { capabilities: SENGOKU_CAPABILITIES });
   const generatedAt = new Date().toISOString();
   const options = { generatedAt, sqliteSchemaVersion: SQLITE_SCHEMA_VERSION };
   const akizuki = generateStoreDataset(readStoreHistory(db, 'akizuki'), { ...options, sourceSchemaVersion: '2' });
   const switchScience = generateStoreDataset(readStoreHistory(db, 'switch-science'), { ...options, sourceSchemaVersion: '1' });
   const m5stack = generateStoreDataset(readStoreHistory(db, 'm5stack'), { ...options, sourceSchemaVersion: '1' });
   const ksy = generateStoreDataset(readStoreHistory(db, 'ksy'), { ...options, sourceSchemaVersion: '1' });
+  const sengoku = generateStoreDataset(readStoreHistory(db, 'sengoku'), { ...options, sourceSchemaVersion: '1' });
   db.close();
   const summaries = [await writeStoreDataset(E2E_SITE_DIR, akizuki), await writeStoreDataset(E2E_SITE_DIR, switchScience), await writeStoreDataset(E2E_SITE_DIR, m5stack),
-    await writeStoreDataset(E2E_SITE_DIR, ksy)];
+    await writeStoreDataset(E2E_SITE_DIR, ksy), await writeStoreDataset(E2E_SITE_DIR, sengoku)];
   const built = await buildUserscript(E2E_SITE_DIR);
   await rm(E2E_EXTENSION_DIR, { recursive: true, force: true });
   await buildExtension(E2E_EXTENSION_DIR);
   await writeFile(
     path.join(E2E_SITE_DIR, 'e2e-setup.json'),
     JSON.stringify({
-      stores: summaries.map((s, i) => ({ storeId: [akizuki, switchScience, m5stack, ksy][i]!.manifest.storeId, products: s.productCount })),
+      stores: summaries.map((s, i) => ({ storeId: [akizuki, switchScience, m5stack, ksy, sengoku][i]!.manifest.storeId, products: s.productCount })),
       datasetVersion: akizuki.manifest.datasetVersion,
       userscriptBytes: built.bytes,
     }),
