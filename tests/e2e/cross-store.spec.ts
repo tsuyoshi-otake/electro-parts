@@ -87,14 +87,16 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(checkbox).not.toBeChecked();
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
   await expect(checkbox).toBeFocused();
-  await expect(panel(page).locator('.store-price')).toHaveCount(2);
+  // The same ATOM Lite at せんごく (0.6.1) is a third identity card, a reference price without arithmetic.
+  await expect(panel(page).locator('.store-price')).toHaveCount(3);
+  await expect(panel(page).locator(`.store-price[data-relation-id='${JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU'])}']`)).toContainText('せんごく');
   const cardBounds = await panel(page).locator('.store-price').evaluateAll(cards => cards.map(card => {
     const r = card.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width };
   }));
   expect(Math.abs(cardBounds[0]!.y - cardBounds[1]!.y)).toBeLessThan(2);
   expect(cardBounds[1]!.x).toBeGreaterThan(cardBounds[0]!.x + cardBounds[0]!.width);
   await expect(panel(page)).toContainText('$7.50');
-  expect(requests).toHaveLength(8);
+  expect(requests).toHaveLength(10);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect.poll(() => panel(page).locator('.store-prices').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(1);
   await expect(panel(page).locator('.eph-comparison-chart')).toHaveAttribute('viewBox', /^0 0 3\d{2} 220$/);
@@ -102,7 +104,7 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
   await checkbox.check();
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeVisible();
-  expect(requests).toHaveLength(8);
+  expect(requests).toHaveLength(10);
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-mobile.png' });
   const overflow = await panel(page).evaluate((el) => {
     const section = el.shadowRoot!.querySelector('section')!;
@@ -176,5 +178,5 @@ test('other-store 429 keeps the own history and product link without arithmetic 
   await expect(panel(page).locator(`[data-focus-key="product-${relation.id}"]`)).toHaveAttribute('href', relation.products[1].url);
   await panel(page).getByRole('button', { name: 'ダーク', exact: true }).click();
   await expect(panel(page)).not.toContainText('読み込み中');
-  expect(requests).toHaveLength(4);
+  expect(requests).toHaveLength(5);
 });

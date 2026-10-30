@@ -586,3 +586,44 @@ Kept:
 - `~/tmp/electro-sengoku-060/` (ZIP and evidence)
 
 Not done: commit, PR, CI, merge, the first production run (`stores: sengoku`, no bootstrap), Pages, CWS. The 0.6.1 mapping has not started. Estimate from the local snapshot: 1,511 exact model-code pairs (1,275 Sengoku products: 764 with Akizuki, 638 with SS, 108 with KSY, 1 with M5Stack), before maker handling and the M5STACK- prefix rule.
+
+## 2026-10-30 0.6.1 せんごく mapping, catalogue and discovery (#39, branch feat/sengoku-matching, uncommitted)
+
+Symptom: Sengoku needs to join the reviewed mapping (ADR-0018) like KSY in 0.5.1.
+
+Decisions:
+- `scripts/matching/catalogs.ts` projects each row through `normalizeSengokuItem` (name, model, URL as the published history carries them). The shop's maker line goes to `vendor` with `manufacturer: ''`, as for KSY, so a differently written label never rules a pair out.
+- Four maker labels map to manufacturers the prefix rules already know, for the rules only: `M5STACK`→M5Stack, `Raspberry Pi`→Raspberry Pi Trading, `Arduino`, `DFROBOT`→DFRobot. Prefixed models without a label (3 `DFROBOT-`, 2 `ARDUINO-`) and `RPI-` models of タカチ電機工業 (4) keep their prefix. Colour suffixes stay (`RPI-SC1419-WH` is not stripped; the rule needs `^RPI-SC\d+$`).
+- A leading `【N】` in a name is not a discovery key. 600 names start with it; 597 numbers exist as SS pageKeys, 523 of those already share a code, and 35 are unrelated SS products (Sengoku's own cables and connectors carry the same numbers).
+
+Result: `--import-store sengoku=<2026-10-30 snapshot>` appended 19,706 listings (catalogue 24,698 → 44,404, `catalog.jsonl` 10.4 MB → about 18 MB). Discovery: 3,592 candidates, 2,348 of them new with Sengoku, over 1,689 Sengoku products.
+- By pair: SS 1,053, Akizuki 790, M5Stack official 395, KSY 110.
+- By Sengoku label: M5STACK 811, SparkFun 179, Seeed Studio 176, none 136, Raspberry Pi 97, JST 95, マル信無線電機 85 (78 labels).
+- 79 Sengoku product × store combinations have more than one candidate (161 candidates). 680 candidates rest on codes of at most 5 characters; a seeded sample shows those carry most of the plain collisions (6258 voltmeter vs Adafruit DAC, ST-27 transformer vs soldering stand).
+
+Verification: typecheck 0. Matching tests: the two new Sengoku tests pass; the prefix test fails when the mapping is removed (fail-before) and passes with it. The KSY reproduction test now compares with the catalogue before Sengoku. Still failing by design until the reviews exist: the per-pair table, `pending` (2,348) and the generated-artifact equality.
+
+Next: review all 2,348 (user decision on scope pending). Working dir `~/tmp/electro-sengoku-061/` (breakdown.mjs, sample.mjs).
+
+## 2026-10-30 0.6.1 せんごく reviews, integrating review, tests and live ZIP check (#39, branch feat/sengoku-matching, uncommitted)
+
+Symptom: 2,348 Sengoku candidates needed a recorded decision each (user: all of them, maker batches on Claude Sonnet 5.5, integrating review on Claude Opus 5.5).
+
+Process and result:
+- 36 maker batches, one Sonnet subagent each, with `REVIEW-RULES.md`; `merge.mjs` checked id, fingerprint, enum, evidence ≥ 40 chars, the price-condition note, missing evidence on unresolved, M5Stack offerIds and the `項目: 他店「…」 ↔ せんごく「…」` difference form. First decisions: same 2,282 / unresolved 20 / rejected 46.
+- Integrating review: the table split in 8 parts, one Opus reader each (`INTEGRATION-RULES.md`), 19 flags; with the 10 one-to-many conflicts from `integrate.mts`, ruled in `integration/own.json` and `rulings.json` (one flag declined: SS 3263 ↔ 53PN stays unresolved). `adjudicate.mjs` refuses a flag ruled zero or two times. 23 changes: unresolved→same 9, same→unresolved 10, unresolved→rejected 3, text-only 1; each carries reviewer Opus and the first decision in its evidence. Final same 2,281 / unresolved 18 / rejected 49, 0 conflicts, 74 fan-outs (all Akizuki pack-size pages). Runtime table 3,655 relations, 2,299 of them Sengoku.
+- Rulings: a rating or form contradiction on one maker part number → unresolved (NJM78xxFA 1.5A vs 1A); a maker-numbered version → rejected (A145 vs A145-V033); coincidental 4-digit codes → rejected (MCX connectors 2305/2307); one store's wrong maker name with matching names and models → same, the error in missingEvidence.
+
+Found by the suites and fixed:
+- cross-store E2E: Akizuki 117209 gained a Sengoku identity card; expectations moved to 3 cards and 10 requests (5 under 429).
+- Sengoku extension E2E: a page whose own history is missing shows 「記録なし」 and no relation cards, so the new 5LAU check borrows the saved 6N43 history; the card has two links to the same page, so select by `data-focus-key`.
+
+Verification: matching:check ok (3,592 / 0 pending / 3,655); typecheck 0; `npm test` 49 files / 636; `test:e2e` 17/17; audit 0; CI guards replayed, no hits. Live check of the extracted ZIP (665,336 bytes, SHA256 4fd7e947…ed8d6d): 14/14 in 31 s on real pages of all five stores, Sengoku data routed from the local run because it is not on Pages yet; page errors only SS empire.js and M5Stack Goaffpro, both reproduced without the extension; 8 screenshots inspected. Startup offline on the saved page, 9 loads each: panel root at median 19 ms (0.6.1) vs 16 ms (0.6.0), used JS heap 24.0 vs 15.5 MB. Record: docs/verification/2026-10-30-sengoku-matching-061.md.
+
+Learning:
+- A live-check locator on a details group must name its own summary (`summary[data-focus-key="group-…"]`): the cards inside carry their own evidence `<summary>`, so `details >> summary` is a strict-mode violation.
+- The relation table is the bundle: 2,299 Sengoku rows took the content script from 2.45 MB to 5.98 MB and the heap per store tab by about 8.5 MB. Measure startup and heap when a store pair adds thousands of rows.
+
+Not done: CI on the 0.6.1 branch, Pages deployment of Sengoku data (needs PR #40 merged and the production run), the same live check without routing, store submission. Evidence kept in `~/tmp/electro-sengoku-061/`.
+
+Graded: independent rubric-verifier (Claude Sonnet 5.5, `.claude/goal-loop/sengoku-matching/rubric.md`, C1–C9: catalogue and coverage, reviews, typecheck and unit tests, E2E, CI guards and audit, ZIP equal to a fresh build, live evidence and screenshots, docs and version, no leftover processes) — 9/9 pass on the first iteration.

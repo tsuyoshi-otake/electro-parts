@@ -5,6 +5,8 @@ import { validateAkizukiRaw } from '../../src/adapters/akizuki/snapshotAdapter.t
 import type { AkizukiRawSnapshot } from '../../src/adapters/akizuki/rawSchema.ts';
 import { normalizeKsyItem, validateKsyRaw } from '../../src/adapters/ksy/snapshotAdapter.ts';
 import type { KsyItem, KsySnapshot } from '../../src/adapters/ksy/rawSchema.ts';
+import { normalizeSengokuItem, validateSengokuRaw } from '../../src/adapters/sengoku/snapshotAdapter.ts';
+import type { SengokuItem, SengokuSnapshot } from '../../src/adapters/sengoku/rawSchema.ts';
 import { validateM5StackRaw } from '../../src/adapters/m5stack/snapshotAdapter.ts';
 import { m5stackPageKey, m5stackProductUrl } from '../../src/adapters/m5stack/identity.ts';
 import type { M5StackItem, M5StackSnapshot } from '../../src/adapters/m5stack/rawSchema.ts';
@@ -53,6 +55,28 @@ function ksyListing(i: KsyItem, observedAt: string): Listing {
   return { storeId: 'ksy', pageKey, name: metadata.name, modelNumber: model, url: metadata.canonicalUrl, manufacturer: '',
     manufacturerProductName: '', manufacturerProductCode: '', productCode: '', sku: '', codes: identityCodes('ksy', '', [model]),
     expectedModels: [model], observedAt, vendor: i.make.trim() };
+}
+
+/**
+ * せんごく's maker labels whose model codes carry a shop prefix that `identityCodes` already strips for that
+ * manufacturer (`M5STACK-U061`, `RPI-SC1677`, `ARDUINO-ABX00162`, `DFROBOT-DFR0…`). Seen on 2026-10-30. Used for
+ * the prefix rules only.
+ */
+const SENGOKU_PREFIX_MAKERS: Readonly<Record<string, string>> = { 'M5STACK': 'M5Stack', 'Raspberry Pi': 'Raspberry Pi Trading', 'Arduino': 'Arduino', 'DFROBOT': 'DFRobot' };
+
+/**
+ * せんごく listing row through the store's own normalization, as for KSY. The maker line is the shop's label
+ * (「日本圧着端子製造 (JST)」, 「omron(オムロン)」), so it is kept as `vendor` and never rules a pair out. The model
+ * is the product image's alt text; a leading 【N】 in a name is left alone. It is not always a Switch Science
+ * product number.
+ */
+function sengokuListing(i: SengokuItem, observedAt: string): Listing {
+  const { pageKey, metadata } = normalizeSengokuItem(i);
+  const model = metadata.modelNumber ?? '';
+  const vendor = i.maker?.trim() ?? '';
+  return { storeId: 'sengoku', pageKey, name: metadata.name, modelNumber: model, url: metadata.canonicalUrl, manufacturer: '',
+    manufacturerProductName: '', manufacturerProductCode: '', productCode: '', sku: '', codes: identityCodes('sengoku', SENGOKU_PREFIX_MAKERS[vendor] ?? '', [model]),
+    expectedModels: [model], observedAt, vendor };
 }
 
 /**
@@ -128,6 +152,7 @@ const PROJECTIONS: Readonly<Record<string, { validate: (raw: unknown) => Validat
     raw.items.map(i => retailerListing('switch-science', switchScienceItem(i), raw.retrievedAt)) },
   'm5stack': { validate: validateM5StackRaw, listings: (raw: M5StackSnapshot) => raw.items.map(p => m5stackListing(p, raw.retrievedAt)) },
   'ksy': { validate: validateKsyRaw, listings: (raw: KsySnapshot) => raw.items.map(i => ksyListing(i, raw.retrievedAt)) },
+  'sengoku': { validate: validateSengokuRaw, listings: (raw: SengokuSnapshot) => raw.items.map(i => sengokuListing(i, raw.retrievedAt)) },
 };
 
 export interface SupplementReport {
