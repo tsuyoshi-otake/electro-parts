@@ -81,7 +81,13 @@ html[data-eph-page-theme="dark"] .product-block .discount-table p > span:not(.si
   },
 
   findMountPoint(doc): MountPoint | null {
-    // Below the gallery/details columns and inside the container that gives the
+    // In the details column, directly below the purchase form and above the
+    // description, as near the top as Akizuki's panel.
+    const description = doc.querySelector('.product-details > .product-block--description');
+    if (description !== null) return { anchor: description, position: 'before' };
+    const form = doc.querySelector('.product-details > .product-block--form');
+    if (form !== null) return { anchor: form, position: 'after' };
+    // Otherwise below the gallery/details columns and inside the container that gives the
     // page its gutters: full content width for the chart, and the panel reads
     // as its own section rather than as an extra product column.
     //

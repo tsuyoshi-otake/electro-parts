@@ -50,8 +50,20 @@ do not pass `--bootstrap`. Locally, `node --import tsx src/cli/main.ts pipeline
 --config config/m5stack.json` follows that incremental path. For an isolated local
 check, copy the config and point all four output paths to a task directory first.
 
-The history panel is mounted **after** `.product-wrapper`, since the live shop
-uses that wrapper's height to control its fixed purchase sidebar. Appending the
-panel inside the wrapper can make the purchase controls cover the history while
-scrolling. The saved-page test pins the insertion boundary, and local live ZIP
-verification checks that `.product-info` is not fixed over the panel.
+Since 0.6.2 (#42) the history panel is mounted in the left column, **before**
+`.product-main > .product-description`: directly below the image gallery and
+above the description, as near the top as on Akizuki. The purchase column
+(`.product-info-wrapper`) is absolutely positioned beside it at 1024 px and wider
+and comes earlier in DOM order, so the insertion does not move it, and while the
+shop fixes `.product-info` during scrolling it stays in its own column. Below
+1024 px `.product-info` is a left float inside a zero-height wrapper; the
+description's text flows under it, but a block would sit beneath it, so the
+panel host carries `clear: both`.
+
+Without a description the panel falls back to **after** `.product-wrapper`
+(the 0.4.4 position). It never goes at the end of the wrapper: the live shop
+uses that wrapper's height to control its fixed purchase sidebar, and a panel
+appended inside it was covered by the purchase controls while scrolling. The
+saved-page tests pin both anchors, and local live ZIP verification checks at
+1440, 1024 and 390 px that `.product-info` never overlaps the panel while
+scrolling through it.

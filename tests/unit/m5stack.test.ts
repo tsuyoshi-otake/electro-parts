@@ -44,6 +44,16 @@ describe('M5Stack full public catalogue',()=>{
     const dom=new JSDOM(gunzipSync(readFileSync('tests/fixtures/m5stack/product.html.gz')).toString(),{url});
     try {
       expect(m5stackPageAdapter.extractPageKey(dom.window.document,dom.window.location)).toBe('h-m5stamp-lora-module-sx1262');
+      // Left column, below the gallery and above the description; clear the purchase
+      // column, which floats left below 1024 px.
+      const mount=m5stackPageAdapter.findMountPoint(dom.window.document);
+      expect(mount?.anchor.classList.contains('product-description')).toBe(true);
+      expect(mount?.anchor.parentElement?.classList.contains('product-main')).toBe(true);
+      expect(mount?.position).toBe('before');
+      expect(mount?.hostStyle).toEqual({clear:'both'});
+      // Without a description, below the whole product section, outside the wrapper
+      // whose height drives the fixed purchase column.
+      dom.window.document.querySelector('.product-main > .product-description')!.remove();
       expect(m5stackPageAdapter.findMountPoint(dom.window.document)?.anchor.classList.contains('product-wrapper')).toBe(true);
       expect(m5stackPageAdapter.findMountPoint(dom.window.document)?.position).toBe('after');
       dom.window.document.querySelector('link[rel=canonical]')!.setAttribute('href',url+'-different');

@@ -45,6 +45,15 @@ html[data-eph-page-theme="dark"] .m5product-detail * { box-shadow: none !importa
     } catch{return null;}
   },
   findMountPoint(doc) {
+    // Left column, directly below the image gallery and above the description,
+    // as near the top as Akizuki's panel. The purchase column beside it is
+    // absolutely positioned and comes earlier in DOM order, so inserting here
+    // does not move it, and its fixed state while scrolling stays in its own column.
+    // Below 1024 px the purchase column is a left float inside a zero-height wrapper:
+    // the description's text flows under it, but a block would sit beneath it, so
+    // the panel clears the float.
+    const description=doc.querySelector('.m5product-detail .product-main > .product-description');
+    if(description) return {anchor:description,position:'before',hostStyle:{clear:'both'}};
     const block=doc.querySelector('.product-block-list');
     if(block) return {anchor:block,position:'after'};
     const product=doc.querySelector('[data-section-type="product"] .product-wrapper');

@@ -699,3 +699,33 @@ Learning: a dashboard script must treat a control that is absent in the good sta
 
 Cleanup: deleted `~/tmp/electro-sengoku/pipeline` (172 MB local run, superseded by the production run) and `~/tmp/electro-ksy-051` (kept until 0.5.1 passed review; it has). Kept: `~/tmp/electro-sengoku-061` (the submitted 0.6.1 ZIP, live-check evidence, Pages before/after copies) until 0.6.1 passes review; `~/tmp/electro-sengoku/snapshots` (the catalogue source snapshot, sha 850717e5…). Still waiting for the user's OK: `~/tmp/electro-ksy-050`; `~/tmp/electro-sengoku-060` (0.6.0 evidence named in docs/verification/2026-10-30-sengoku.md) is kept.
 Republish run 41159736911 on 261c68a: success. Live index.html is identical to public/index.html and carries the store link; the ZIP is still 4fd7e947…; runCount unchanged (akizuki 27, switch-science 26, m5stack 25, ksy 3, sengoku 1); Sengoku dataset 1251305172c54ad7 / 19,724 unchanged.
+
+## 2026-10-31 panel-near-top (#42, 0.6.2, uncommitted on feat/panel-near-top)
+
+Request: on M5Stack, put the panel in the left column under the image gallery and above the video/description. On Switch Science, put it under 「カートに追加」 and above the description. Both should sit as near the top as on Akizuki, and narrow widths must not break.
+
+Change:
+- M5Stack mounts before `.m5product-detail .product-main > .product-description` with host `clear: both`. It falls back to `.product-block-list`, then after `.product-wrapper`.
+- Switch Science mounts before `.product-details > .product-block--description`. It falls back to after `.product-block--form`, then the old chain.
+- Version bumped to 0.6.2. Updated the README, the landing-page intro and changelog, and the roadmap mount paragraph.
+
+Symptom on the first live run: at 390 px, the M5Stack purchase controls covered the panel in 25 scroll steps.
+- Root cause: below 1024 px, `.product-info` is `float: left` inside a zero-height relative wrapper. The description's text flows under the float, but a block element sits beneath it.
+- Fix: `clear: both` on the host. 0 overlapping steps after the fix.
+- At 1024 px and wider, the purchase column is absolutely positioned and earlier in the DOM, so the insertion does not move it. The shop's fixed state was observed and stays in its column.
+
+Verification:
+- Fail-before: 3 mount tests failed on HEAD's adapters.
+- typecheck 0; npm test 49 files / 636; e2e 17/17.
+- Live run of the unpacked 0.6.2 ZIP in Playwright Chromium on a fresh profile, against real pages and the published data:
+  - `shots.mjs` 9/9. M5 widths 860/664/370, SS 776/560/370, no horizontal overflow.
+  - `published.mjs` with EXPECT_VERSION=0.6.2: 14/14. The other stores are unchanged.
+  - Page errors were store-side only (known).
+- Independent rubric verifier: 8/8 in iteration 1 ([record](../../docs/verification/2026-10-31-panel-near-top.md)).
+- Runners: 0 survivors.
+
+Learning: before mounting beside a shop's purchase column, find out whether that column is absolute, fixed or floated at each breakpoint. A float leaks over a following block. Measure overlap while scrolling at every width, because a static screenshot at the top can look fine.
+
+Not done: commit/PR (awaiting the user), Pages, and a CWS submission (0.6.1 is in review).
+
+Cleanup: `~/tmp/electro-mount` was reduced to its evidence (4 MB): `shots.mjs`, `shots-062/`, `published.mjs` and `published-062/`. The evidence was moved out of `~/tmp/electro-sengoku-061/live`, so the 0.6.1 folder is as it was apart from the parameterised `published.mjs`.
