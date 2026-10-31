@@ -627,3 +627,75 @@ Learning:
 Not done: CI on the 0.6.1 branch, Pages deployment of Sengoku data (needs PR #40 merged and the production run), the same live check without routing, store submission. Evidence kept in `~/tmp/electro-sengoku-061/`.
 
 Graded: independent rubric-verifier (Claude Sonnet 5.5, `.claude/goal-loop/sengoku-matching/rubric.md`, C1–C9: catalogue and coverage, reviews, typecheck and unit tests, E2E, CI guards and audit, ZIP equal to a fresh build, live evidence and screenshots, docs and version, no leftover processes) — 9/9 pass on the first iteration.
+
+Committed: 6c35de1 on `feat/sengoku-matching` (2026-10-31), PR #41 https://github.com/tsuyoshi-otake/electro-parts/pull/41, base `main`. It is stacked on PR #40: the branch carries 07f4cbf (0.6.0). Merge #40 first, then merge `main` into this branch so #41's diff is 6c35de1 only. CI on #41 was pending when it opened. This note stays uncommitted for the post-merge docs commit.
+
+## 2026-10-31 Sengoku capabilities declared no price ranges (#39, PR #41 review, 9fd658c)
+
+Symptom: the automated review on PR #41 pointed out that `SENGOKU_CAPABILITIES.supportsPriceRange` was false.
+
+Root cause: in 0.6.0 (07f4cbf, PR #40), `normalizePrice` records `state: 'range'` when another price line repeats the first line's basis with a different amount (EEHD-538N), as ADR-0024 states. The capabilities were never updated to match, so the published manifest would have said a price state cannot occur that the product data can hold.
+
+Fix: `supportsPriceRange: true`. The range test now asserts it next to the EEHD-538N case.
+
+Verification:
+- The test failed before the fix (expected false to be true) and passed after (26/26).
+- typecheck 0; npm test 49 files / 636; test:e2e 17/17; no runner left.
+- Reply posted on the review thread, which is now resolved.
+- No Sengoku manifest was on Pages yet.
+
+Learning: when an adapter emits a price state, the store's capabilities must declare it. The test that covers the emitting case should assert the declaration too.
+
+Open: PR #40's branch still has the old value. The fix reaches main through #41 (merge #40, then main into #41, then #41).
+
+Update (user: 「#40にも入れる」): cherry-picked onto `feat/sengoku-store` as e0a75a2 and pushed to PR #40, so 0.6.0 publishes the right capabilities even if it is merged and run alone. The branch switch used `git stash` for the uncommitted journal, with no worktree.
+
+Verification on that branch:
+- typecheck 0; npm test 49 files / 633.
+- test:e2e passed 17/17 on the third run.
+  - Run 1 stopped in global setup: `EPERM` on `rename` of `test-results/e2e-site/data/v1/stores/switch-science.staging-*` (src/publisher/write.ts:77).
+  - Run 2 had `extension-m5stack.spec.ts` stuck on 読み込み中 (52.5 s for the suite against about 34 s normally).
+  - That spec then passed twice alone, and the full suite passed.
+- No runner process was left; nothing held `test-results`.
+
+Neither failure touches the capabilities. Root cause not established: a short-lived lock on freshly written files right after a branch switch that rewrote the 2–5 MB generated table is the leading guess, unproven. Recorded here only, not as a rule. If the EPERM recurs, look at what holds the staging directory before retrying.
+
+## 2026-10-31 0.6.0 and 0.6.1 merged, Sengoku's first production run (#39, PR #40 ec367a0, PR #41 7ea6981)
+
+User: 「じゃあ、リリースして、マーケットの審査出しといて」.
+
+Merges:
+- PR #40 squash-merged as ec367a0 (CI "Typecheck and tests" passed on e0a75a2); branch deleted.
+- `main` merged into #41 as c375147. Before resolving, checked that ec367a0's tree equals e0a75a2, the merge base is a9d3419 (the base of both PRs) and e0a75a2 / 9fd658c share a stable patch id. All 11 conflicts (0.6.0 vs 0.6.1 versions; files 07f4cbf added and 6c35de1 extended, which conflict add/add) were taken from #41's side, and the merged tree was identical to 9fd658c's tree, which CI had passed.
+- PR #41 squash-merged as 7ea6981 with a body made of 6c35de1 and 9fd658c only (0.6.0's message is already in ec367a0). `gh pr merge --delete-branch` merged remotely, then failed to switch locally because the journal was uncommitted; the branch switch and both branch deletions were done by hand.
+- The extension ZIP built from 7ea6981 is byte-identical to the live-checked 0.6.1 ZIP (SHA256 4fd7e947…ed8d6d, 665,336 bytes).
+
+Before the run, Pages served the 0.5.1 ZIP (ddb459bc…e9b1); Sengoku's manifest was 404; akizuki 02ba6e7058514150/12838, switch-science 289c562da87a83a9/10502, m5stack f012f1e27abcf62c/682, ksy 45a1d01c219ea8fe/776; state runCount akizuki 27, switch-science 26, m5stack 25, ksy 3. Copies in `~/tmp/electro-sengoku-061/pages-before/`.
+
+Production run: "Crawl and publish" dispatched on 7ea6981 with `stores: sengoku`, no bootstrap: run 41156911724.
+Result: success (check day, crawl/import/generate, deploy). Sengoku `published (incremental)`: dataset 1251305172c54ad7, 19,724 products, runs 1, crawl 01:46–02:09 UTC. The other four were republished unchanged.
+
+Pages after the run, against the before-copies: akizuki, switch-science, m5stack and ksy keep datasetVersion and productCount; state.json runCount akizuki 27, switch-science 26, m5stack 25, ksy 3, sengoku 1. The Sengoku manifest declares `supportsPriceRange: true`. ZIP SHA256 4fd7e947…ed8d6d (byte-identical to the live-checked 0.6.1 ZIP); userscript `@version 0.6.1`; index.html leads with the 0.6.1 and 0.6.0 headings; privacy.html 200. `products/EEHD-5LAU.json`: 【6262】ATOM Lite M5STACK-C008, ¥2380 / 1個, in_stock, observed 02:09:32Z.
+
+Facts-only check (user reconfirmed terms article 7 the same day): all 19,706 local product files hold name, model number, the URL from the management code, tax-included price lines with unit labels, availability (quantity not exposed) and listing presence; 0 files match image extensions, `<img>` or description words. The maker goes to the matching catalogue's `vendor` only. The eight 「説明」 in the 2,348 Sengoku review evidences all describe wording inside product names, none quotes a description.
+
+Live check of the Pages ZIP, extracted fresh, Playwright `channel: 'chromium'`, fresh profile, nothing routed (`~/tmp/electro-sengoku-061/live/published.mjs`): 14/14 in 27 s. The service worker read 0.6.1. Sengoku EEHD-5LAU showed ¥2,380 observed 2026-10-31 11:09 with the Akizuki, Switch Science and official cards; the theme started light, dark survived a reload, the SS series toggled, and the change list opened. The six Sengoku data requests were all served 200 by Pages. The two page errors (SS `empire.js` innerHTML on null; M5Stack Goaffpro "already loaded") are the store scripts' own and reproduced without the extension on 2026-10-30 (`noext-results.json`). I looked at all eight screenshots (`shots-published/`): no breakage. No runner or browser process remained, and the profile was deleted.
+
+## 2026-10-31 0.6.1 sent to CWS review; store links on README and Pages (#38, #39, 726e264, 261c68a)
+
+CWS (`npm run cws:dashboard`, user signed in to the launched profile):
+- `status` before: 公開済み - 一般公開, draft 0.5.1, published 0.5.1 (0.5.1 had passed review; nothing pending).
+- `upload` of the live-checked ZIP (4fd7e947…ed8d6d) stopped: `waitForURL(/\/edit\/listing/)` timed out because the dashboard went to `/edit`. A read-only `status` then showed draft 0.6.1, so the package had landed.
+- `fill`: listing and privacy saved; `same` ×4 (説明 2605, 単一用途 220, storage 109, ホスト権限 369 chars).
+- `blockers` stopped: no visible 「送信できない理由」. A read-only CDP peek (no clicks) listed the header buttons 下書きとして保存する and an enabled 審査のため送信; the screenshot showed the privacy tab with the usual host-permission notice. Nothing blocked.
+- The user pressed 審査のため送信. `status` after: 審査待ち, draft 0.6.1, published 0.5.1. `close` deleted the profile; 0 Chrome processes on it; `~/tmp/electro-cws` removed.
+- The peek printed the signed-in account's label; it was not saved anywhere and the peek script and screenshot were deleted.
+
+Fix 261c68a: upload waits for `/edit` or `/edit/listing`; blockers waits for either header button and prints `no blockers` (with whether 審査のため送信 is enabled, read only) when 「送信できない理由」 is absent. Listing doc step 7 updated. typecheck 0; npm test 49 files / 636. Not exercised against the dashboard after the fix (item in review, profile deleted); the next version's upload is the first real run.
+
+Store links 726e264 (user: 「ストアのURLをGitHubのREADMEとPagesに貼っておいてよ、インストールしにくいからさ」): README has an install line at the top and the store URL first in the Chrome extension section; the landing page leads its Chrome section with the store link and keeps the zip for the latest Pages build. Both say the store version trails until review passes. The canonical URL https://chromewebstore.google.com/detail/electronics-price-history/jklcjijjlombfgmagcbmfkjglomaiipj answered 200. Pages republish (site only, no observation) dispatched as run 41159736911.
+
+Learning: a dashboard script must treat a control that is absent in the good state as a state to report, not a timeout; and a URL a SaaS UI navigates to after an action is not a stable contract, so the check that matters is the state read back (`status`).
+
+Cleanup: deleted `~/tmp/electro-sengoku/pipeline` (172 MB local run, superseded by the production run) and `~/tmp/electro-ksy-051` (kept until 0.5.1 passed review; it has). Kept: `~/tmp/electro-sengoku-061` (the submitted 0.6.1 ZIP, live-check evidence, Pages before/after copies) until 0.6.1 passes review; `~/tmp/electro-sengoku/snapshots` (the catalogue source snapshot, sha 850717e5…). Still waiting for the user's OK: `~/tmp/electro-ksy-050`; `~/tmp/electro-sengoku-060` (0.6.0 evidence named in docs/verification/2026-10-30-sengoku.md) is kept.
+Republish run 41159736911 on 261c68a: success. Live index.html is identical to public/index.html and carries the store link; the ZIP is still 4fd7e947…; runCount unchanged (akizuki 27, switch-science 26, m5stack 25, ksy 3, sengoku 1); Sengoku dataset 1251305172c54ad7 / 19,724 unchanged.
