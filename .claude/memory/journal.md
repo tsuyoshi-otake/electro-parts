@@ -541,3 +541,48 @@ Deleted: `~/tmp/electro-cws-051` (ad hoc script, read-back files, screenshots, t
 Kept: `~/tmp/electro-ksy-051` (the submitted ZIP) until CWS approves.
 Pending the user's OK: deleting `~/tmp/electro-ksy-050`.
 Learning: a document that a person pastes from drifts unless something compares it with the copy. `check` and the content-script-host test are that comparison.
+
+## 2026-10-30: せんごくネット通販 (電子工作部品 only) as the fifth store, 0.6.0 (#39, uncommitted on feat/sengoku-store)
+
+Design: [ADR-0024](../../docs/adr/0024-sengoku-electronic-parts-category-listings.md). The collector reads the category tree from `category.php?cid=3000` on every run. It then reads each top listing in pages of 40, and reads a listing that reports the 4000 search cap through its subcategories. Only facts are kept: code, name, maker, model (the image alt) and the tax-included price lines. Descriptions are cut from the markup before any row is read; images and stock locations never enter. This follows the user's 2026-10-30 decision on terms article 7.
+
+Fail-closed findings during the first collection:
+- The first live run stopped at request 20 on 「在庫限り特価 ¥4100」 (`complete: false`).
+- Instead of retrying live, every page the collector reads was cached once: 548 requests, 0 retries, 12:59–13:22 JST. The real collector was replayed offline from the cache.
+- Each stop became a parser change with a test:
+  - no-quantity lines (特価, 5枚綴り, 1リール)
+  - packs that make the cell no ascending scale (about 680 products; the ascending check was removed and "tiers" renamed "price lines")
+  - one basis at two amounts (a range)
+  - 価格お見積り with no amount or ¥0 (`unavailable`)
+  - an empty price block
+  - 【数量0個〜】
+- Final: `complete: true`, 55 listings (3137 and 3369 split), 19,706 products, 0 validation errors. Local pipeline dataset `02c8e7fedf6639df`.
+
+Counter quirk: the shop prints an exactly full last page after the first as S–(S−1), for example 「241件～240件(全280件)」 on listing 3503 at 240. The collector accepts that one case only; the page must still hold 40 rows. A test covers it.
+
+Live check of the ZIP (Playwright, `channel: 'chromium'`, fresh profile, real pages):
+- The first run passed 14/16 because my script expected 「最終観測」, which the panel prints only beside a cross-store comparison. The check now reads the change list's 「観測日時」.
+- The screenshots showed low-contrast dark pages. A contrast audit counted 16 / 64 / 1,278 / 16 elements under 3:1 (product, top, category, listing pages). Causes:
+  - my rule painted the shop's blue `.header_bar` white under its yellow greeting
+  - the pale boxes stayed light
+  - the colored headings lost their white text
+- Fix in `userscript/adapters/sengoku.ts`: only `#header` gets white, `.header_bar` and the colored headings keep the shop's colors, and the pale boxes join the dark surfaces. After the fix: 0 / 2 / 0 / 0. The 2 are the teal heading the shop itself draws at 2.3:1.
+- The E2E and the unit test failed against the old rule and pass with the fix.
+- Final live check: 16/16 on ZIP `0e41389a…573c` (284,990 bytes, identical to a fresh build). The 2 page errors (SS `empire.js`, M5Stack Goaffpro) occur without the extension too.
+
+Verification:
+- typecheck 0; `npm test` 49 files / 633 tests; E2E 17/17; `matching:check` unchanged; `npm audit` 0
+- CI guards replayed: no hits
+- no runner left
+- independent rubric verifier 9/9 in iteration 1 ([record](../../docs/verification/2026-10-30-sengoku.md))
+
+Rules added: cache-then-replay for a new store's first crawl; read a price cell as lines; count low-contrast text per page kind before calling dark mode done.
+
+Deleted: the page cache (it held the shop's descriptions), probes, guard builds, scratch scripts.
+
+Kept:
+- `~/tmp/electro-sengoku/snapshots/` (raw snapshot, input for the 0.6.1 mapping)
+- `~/tmp/electro-sengoku/pipeline/` (local dataset for live checks until Sengoku is on Pages)
+- `~/tmp/electro-sengoku-060/` (ZIP and evidence)
+
+Not done: commit, PR, CI, merge, the first production run (`stores: sengoku`, no bootstrap), Pages, CWS. The 0.6.1 mapping has not started. Estimate from the local snapshot: 1,511 exact model-code pairs (1,275 Sengoku products: 764 with Akizuki, 638 with SS, 108 with KSY, 1 with M5Stack), before maker handling and the M5STACK- prefix rule.

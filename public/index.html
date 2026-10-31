@@ -17,7 +17,7 @@
     Chrome 拡張または Tampermonkey 用ユーザースクリプトを入れると、対応サイトの商品ページに履歴パネルが表示されます。</p>
   <h2>インストール</h2>
   <p>どちらか一方で足ります。表示されるパネルも取得するデータも同じで、同じソースからビルドしています。
-    対応サイト(秋月電子通商・スイッチサイエンス・M5Stack公式ショップ・Raspberry Pi Shop by KSY)の商品ページを開くと、購入エリアの下に「Electronics Price History」パネルが出ます。Raspberry Pi Shop by KSYでは、一覧や固定リンクから開いた商品の詳細に出ます。</p>
+    対応サイト(秋月電子通商・スイッチサイエンス・M5Stack公式ショップ・Raspberry Pi Shop by KSY・せんごくネット通販)の商品ページを開くと、購入エリアの下に「Electronics Price History」パネルが出ます。Raspberry Pi Shop by KSYでは、一覧や固定リンクから開いた商品の詳細に出ます。</p>
   <h3>Chrome 拡張</h3>
   <ol>
     <li><a href="electronics-price-history-extension.zip">electronics-price-history-extension.zip</a> を落として展開する。</li>
@@ -34,6 +34,8 @@
     <li><a href="electronics-price-history.user.js">electronics-price-history.user.js</a> を開き、Tampermonkey の確認画面でインストールする。</li>
   </ol>
   <p>こちらは <code>@updateURL</code> 経由で自動更新されます。</p>
+  <h2>0.6.0: せんごくネット通販(電子工作部品)に対応</h2>
+  <p><a href="https://www.sengoku.co.jp/" rel="noopener">せんごくネット通販</a>の分類「電子工作部品」に載っている商品の価格・在庫状態・掲載状況の記録を始めます。他店と同じく約2日に1回観測します。価格は価格欄の1行目(店舗が最初に示す売り方)の税込価格で、2行目以降の数量割引や包装違いは表示しません。「価格お見積り」の商品は価格なしとして記録します。在庫は在庫あり・在庫なし(欠品中)だけで、数量は出ません。商品説明と画像は記録しません。パネルは商品詳細ページの商品欄の下に出ます。履歴はこの版の公開後の初回観測から始まります。他店との対応表にはまだ含めていません。</p>
   <h2>0.5.1: Raspberry Pi Shop by KSYを対応表に追加</h2>
   <p>KSYの公開一覧776商品（2026-10-29）を他の3店舗と照合し、型番が一致した324組を1組ずつ確認しました。同一商品320組を対応表に加え、容量・色・対応機種を確定できない4組は要確認としています。KSYの商品を開くと他店の同一商品の記録価格と商品リンクを、他店の商品ページではKSYの記録価格とリンクを表示します。対応表は1,356組（同一商品 照合済み1,212組・候補3組、類似商品 照合済み108組・候補6組、要確認27組）です。価格比較の承認は増やしておらず、KSYとの組は参考記録価格として表示します。</p>
   <h2>0.5.0: Raspberry Pi Shop by KSYに対応</h2>
@@ -56,12 +58,13 @@
     <li>マニフェスト: <a href="data/v1/stores/switch-science/manifest.json"><code>data/v1/stores/switch-science/manifest.json</code></a></li>
     <li>マニフェスト: <a href="data/v1/stores/m5stack/manifest.json"><code>data/v1/stores/m5stack/manifest.json</code></a></li>
     <li>マニフェスト: <a href="data/v1/stores/ksy/manifest.json"><code>data/v1/stores/ksy/manifest.json</code></a></li>
+    <li>マニフェスト: <a href="data/v1/stores/sengoku/manifest.json"><code>data/v1/stores/sengoku/manifest.json</code></a></li>
     <li>商品ごと: <code>data/v1/stores/akizuki/products/&lt;pageKey&gt;.json</code></li>
     <li>最終化済み履歴 DB(SQLite、次回クロールの入力): <a href="state/state.json"><code>state/state.json</code></a></li>
   </ul>
   <div class="note">
     <p><strong>データについて</strong>: 表示される値は、このプロジェクトが観測した時点の店頭表示の記録であり、店舗の公式データではありません。
-      4店舗とも約2日に1回の観測で、観測の間に起きた変化は記録されません。価格は記録した販売単位・条件によるもので、在庫数は店舗が表示した数値そのものです。M5StackはUSDのまま記録・表示し、税区分は不明です。送料・関税込み総額を表しません。現在の記録価格に添える円換算は、1日1回取得した為替レートによる参考値です。
+      5店舗とも約2日に1回の観測で、観測の間に起きた変化は記録されません。価格は記録した販売単位・条件によるもので、在庫数は店舗が表示した数値そのものです。M5StackはUSDのまま記録・表示し、税区分は不明です。送料・関税込み総額を表しません。現在の記録価格に添える円換算は、1日1回取得した為替レートによる参考値です。
       ユーザースクリプトも Chrome 拡張も Cookie を使わず、閲覧履歴を送信しません。データ取得先は GitHub Pages のこのサイトと、USD表示の商品での為替レート(open.er-api.com、1日1回まで)だけです(<a href="privacy.html">プライバシーポリシー</a>)。</p>
   </div>
   <p>ソースコード・仕様・ロードマップ: <a href="https://github.com/tsuyoshi-otake/electro-parts">github.com/tsuyoshi-otake/electro-parts</a></p>

@@ -47,7 +47,7 @@ async function withDarkExtension(run: (context: BrowserContext, worker: Worker) 
 }
 
 async function serve(page: Page, pages: Record<string, string>): Promise<void> {
-  await page.route(/^https:\/\/(akizukidenshi\.com|www\.switch-science\.com|shop\.m5stack\.com|raspberry-pi\.ksyic\.com)\//, async (route) => {
+  await page.route(/^https:\/\/(akizukidenshi\.com|www\.switch-science\.com|shop\.m5stack\.com|raspberry-pi\.ksyic\.com|www\.sengoku\.co\.jp)\//, async (route) => {
     const body = pages[route.request().url()];
     if (body === undefined) await route.fulfill({ status: 204, body: '' }); // images, css, fonts
     else await route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body });
@@ -60,10 +60,12 @@ test('the dark page theme stays off cart, checkout and account pages', async () 
   await withDarkExtension(async (context) => {
     const page = await context.newPage();
     // Chrome matches the path plus the query, so the home page needs both `/` and `/?*`.
-    const inScope = ['https://shop.m5stack.com/', 'https://shop.m5stack.com/?ref=x', 'https://raspberry-pi.ksyic.com/main/index'];
+    const inScope = ['https://shop.m5stack.com/', 'https://shop.m5stack.com/?ref=x', 'https://raspberry-pi.ksyic.com/main/index',
+      'https://www.sengoku.co.jp/mod/sgk_cart/search.php?cid=3000'];
     const outOfScope = ['https://akizukidenshi.com/catalog/cart/cart.aspx', 'https://akizukidenshi.com/catalog/customer/menu.aspx',
       'https://www.switch-science.com/cart', 'https://www.switch-science.com/account/login', 'https://shop.m5stack.com/checkout',
-      'https://raspberry-pi.ksyic.com/transaction', 'https://raspberry-pi.ksyic.com/main/login'];
+      'https://raspberry-pi.ksyic.com/transaction', 'https://raspberry-pi.ksyic.com/main/login',
+      'https://www.sengoku.co.jp/mod/sgk_cart/cart.php', 'https://www.sengoku.co.jp/mod/sgk_cart/inquiry.php'];
     await serve(page, Object.fromEntries([...inScope, ...outOfScope].map((url) => [url, PLAIN])));
     // The control: the same plain page inside the scope turns dark.
     for (const url of inScope) {

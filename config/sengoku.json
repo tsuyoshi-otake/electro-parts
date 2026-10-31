@@ -1,0 +1,16 @@
+{
+  "storeId": "sengoku",
+  "collector": {
+    "userAgent": "electro-parts-price-history/0.6.0 (+https://github.com/tsuyoshi-otake/electro-parts; research)",
+    "minIntervalMs": 2000, "jitterMs": 1000, "maxAttempts": 4,
+    "timeoutMs": 30000, "maxRequests": 2000
+  },
+  "sanity": {
+    "maxItemCountDropRatio": 0.1, "maxMissingProductRatio": 0.1,
+    "maxPriceChangeRatio": 0.3, "maxUnavailablePriceRatio": 0.15
+  },
+  "observation": { "cadence": "every_two_days" },
+  "inventory": { "retentionDays": 400, "pointLimit": 730 },
+  "paths": { "snapshots": "snapshots", "work": "state/work", "site": "site", "reports": "reports" },
+  "previousStateUrl": "https://tsuyoshi-otake.github.io/electro-parts/state"
+}

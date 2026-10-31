@@ -13,7 +13,7 @@ test('saved theme applies while parsing is blocked, before DOMContentLoaded on a
   try {
     const worker = context.serviceWorkers()[0] ?? await context.waitForEvent('serviceworker');
     await worker.evaluate(() => chrome.storage.local.set({ 'eph:theme': 'dark' }));
-    for (const origin of ['https://shop.m5stack.com', 'https://www.switch-science.com', 'https://akizukidenshi.com', 'https://raspberry-pi.ksyic.com']) {
+    for (const origin of ['https://shop.m5stack.com', 'https://www.switch-science.com', 'https://akizukidenshi.com', 'https://raspberry-pi.ksyic.com', 'https://www.sengoku.co.jp']) {
       const page = await context.newPage();
       const blocked = new Promise<void>(resolve => { release = resolve; });
       await page.route('**/*', async route => {

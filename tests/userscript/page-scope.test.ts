@@ -53,6 +53,11 @@ describe('page scope of the registered stores', () => {
     'https://raspberry-pi.ksyic.com/user/register',
     'https://raspberry-pi.ksyic.com/manager',
     'https://raspberry-pi.ksyic.com/info',
+    'https://www.sengoku.co.jp/mod/sgk_cart/cart.php',
+    'https://www.sengoku.co.jp/mod/sgk_cart/inquiry.php',
+    'https://www.sengoku.co.jp/mod/sgk_cart/login.php',
+    'https://www.sengoku.co.jp/mod/sgk_cart/mypage.php',
+    'https://www.sengoku.co.jp/guide.html',
   ])('leaves %s alone', (url) => {
     expect(owners(url)).toEqual([]);
   });
@@ -74,6 +79,11 @@ describe('page scope of the registered stores', () => {
     ['https://raspberry-pi.ksyic.com/main/index', 'ksy'],
     ['https://raspberry-pi.ksyic.com/main/index/pdp.id/1094/pdp.open/1094', 'ksy'],
     ['https://raspberry-pi.ksyic.com/news/index', 'ksy'],
+    ['https://www.sengoku.co.jp/', 'sengoku'],
+    ['https://www.sengoku.co.jp/index.php', 'sengoku'],
+    ['https://www.sengoku.co.jp/mod/sgk_cart/category.php?cid=3000', 'sengoku'],
+    ['https://www.sengoku.co.jp/mod/sgk_cart/search.php?cid=3013&st=40', 'sengoku'],
+    ['https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6N43', 'sengoku'],
   ])('themes %s for %s', (url, storeId) => {
     expect(owners(url)).toEqual([storeId]);
   });
@@ -81,7 +91,7 @@ describe('page scope of the registered stores', () => {
   it('keeps every product page an adapter recognizes inside its own scope', () => {
     for (const url of ['https://akizukidenshi.com/catalog/g/g109951/', 'https://www.switch-science.com/products/9381',
       'https://www.switch-science.com/collections/all/products/9381', 'https://shop.m5stack.com/collections/atom/products/atom-lite',
-      'https://raspberry-pi.ksyic.com/main/index/pdp.id/1094/pdp.open/1094']) {
+      'https://raspberry-pi.ksyic.com/main/index/pdp.id/1094/pdp.open/1094', 'https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6N43']) {
       const product = PAGE_ADAPTERS.filter((a) => a.matches(at(url))).map((a) => a.storeId);
       expect(product, url).toHaveLength(1);
       expect(owners(url), url).toEqual(product);
