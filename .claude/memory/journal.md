@@ -747,3 +747,13 @@ Fail in iteration 1 (independent verifier, C3): the new summary said 「価格�
 Learning: check each listing claim against the rendering code, not against the previous listing.
 - Iteration 2: the independent verifier passed 7/7 (rubric `.claude/goal-loop/store-listing-copy/rubric.md`). Afterwards, 「1日1回まで」 became 「原則1日1回まで」 to match privacy.html, since a failed fetch retries after an hour or more. The contract test still passes 13/13.
 - Ships with 0.6.2. The dashboard text is pasted by `cws:dashboard fill` at the next submission, after 0.6.1's review.
+
+## 2026-10-31 merge of #43 (0.6.2: #42 panel position, #44 listing copy)
+
+- The user said 「通ったらマージ」. Repo auto-merge is off and `main` is unprotected, so GitHub auto-merge would not have waited for CI. Instead, one `gh run watch` on run 41173105066 (head 9c70c44) waited for it: success, typecheck and tests in 1m58s.
+- The Codex review on a75d6fd had no findings, and there were no inline comments.
+- Squash-merged as e2bba11. #42 and #44 closed. The branch was deleted locally and on origin.
+- Not done:
+  - Pages still serves 0.6.1. The next "Crawl and publish" run builds 0.6.2 from main.
+  - Chrome Web Store: 0.6.1 is in review. 0.6.2, with the new listing text, is submitted after that review, following the pre-submission check on the Pages ZIP.
+- Kept: `~/tmp/electro-mount` (4 MB: `shots.mjs`, `shots-062/`, `published.mjs`, `published-062/`), named in docs/verification/2026-10-31-panel-near-top.md.
