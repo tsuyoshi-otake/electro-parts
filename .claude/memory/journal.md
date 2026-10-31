@@ -757,3 +757,19 @@ Learning: check each listing claim against the rendering code, not against the p
   - Pages still serves 0.6.1. The next "Crawl and publish" run builds 0.6.2 from main.
   - Chrome Web Store: 0.6.1 is in review. 0.6.2, with the new listing text, is submitted after that review, following the pre-submission check on the Pages ZIP.
 - Kept: `~/tmp/electro-mount` (4 MB: `shots.mjs`, `shots-062/`, `published.mjs`, `published-062/`), named in docs/verification/2026-10-31-panel-near-top.md.
+
+## 2026-10-31 Pages republish of 0.6.2; store submission deferred
+
+- User request: 「うん、よろしく。パッケージは次回の改修時でいいや」. Publish 0.6.2 to Pages now; send the Chrome Web Store package with the next change.
+- Ran "Crawl and publish" with `republish=true` on daaa0ad (run 41173403193): success, no new observation.
+- Live Pages checks:
+  - ZIP SHA-256 e7d9ad2d…, byte-identical to a local `build:extension` of main; manifest 0.6.2.
+  - Userscript `@version` 0.6.2.
+  - index.html identical to public/index.html.
+  - Datasets unchanged: akizuki 27, switch-science 26, m5stack 25, ksy 3, sengoku 1 run (dataset 1251305172c54ad7).
+- Since the live real-page check (a75d6fd build), the only shipped code change is the manifest description in `scripts/build-extension.ts`. So the 9/9 and 14/14 results still cover the panel. The CLAUDE.md pre-submission check runs again on the ZIP of whichever version is actually submitted.
+- Store status: 0.6.1 is in review; 0.5.1 is published. The 0.6.2 panel position and listing text ship with the next change's version. That submission must also paste the new 「説明」 (`cws:dashboard fill`).
+- Deleted `~/tmp/electro-mount/main-062`.
+  - Its first deletion failed with "Device or resource busy" because the shell's cwd was inside it, and the `&&` chain then skipped this entry.
+  - Learning: never `cd` into a directory a later step of the same chain deletes.
+- Still kept until 0.6.1 review passes: the `~/tmp/electro-mount` evidence (4 MB) and `~/tmp/electro-sengoku-061`.
