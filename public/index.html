@@ -19,13 +19,15 @@
   <p>どちらか一方で足ります。表示されるパネルも取得するデータも同じで、同じソースからビルドしています。
     対応サイト(秋月電子通商・スイッチサイエンス・M5Stack公式ショップ・Raspberry Pi Shop by KSY・せんごくネット通販)の商品ページを開くと、購入エリアの下に「Electronics Price History」パネルが出ます。Raspberry Pi Shop by KSYでは、一覧や固定リンクから開いた商品の詳細に出ます。</p>
   <h3>Chrome 拡張</h3>
+  <p><a href="https://chromewebstore.google.com/detail/electronics-price-history/jklcjijjlombfgmagcbmfkjglomaiipj" rel="noopener">Chrome ウェブストア</a>を開き、「Chrome に追加」を押すだけで入ります。ストア経由で自動更新されます。
+    ストアの版は審査を通ってから切り替わるので、下の zip より遅れることがあります。</p>
+  <p>ストアを使わずに、このページの最新版を入れる場合:</p>
   <ol>
     <li><a href="electronics-price-history-extension.zip">electronics-price-history-extension.zip</a> を落として展開する。</li>
     <li>Chrome で <code>chrome://extensions</code> を開き、右上の「デベロッパーモード」を入れる。</li>
     <li>「パッケージ化されていない拡張機能を読み込む」で、展開したフォルダを選ぶ。</li>
   </ol>
-  <p>この方法で入れた場合、自動更新はありません。版が上がったら zip を取り直してください(デベロッパーモードの拡張機能に関する Chrome の警告も毎回出ます)。
-    Chrome ウェブストアへの掲載を準備中で、掲載後はストア経由で自動更新されます。
+  <p>zip で入れた場合、自動更新はありません。版が上がったら zip を取り直してください(デベロッパーモードの拡張機能に関する Chrome の警告も毎回出ます)。
     権限は設定 1 個の保存と、このサイトからのデータ取得だけです。USD表示の商品では為替レートも1日1回まで取得します(追加の権限は使いません)。閲覧履歴・タブ・Cookie にはアクセスしません。
     詳細は<a href="privacy.html">プライバシーポリシー</a>をご覧ください。</p>
   <h3>Tampermonkey ユーザースクリプト</h3>

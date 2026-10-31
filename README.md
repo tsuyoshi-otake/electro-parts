@@ -7,6 +7,8 @@
 - 静的 JSON(契約 v1)として GitHub Pages に公開し、
 - **Electronics Price History** が商品ページにパネルを差し込みます。Tampermonkey ユーザースクリプトと Chrome 拡張の 2 つの形があり、中身は同じバンドルです([ADR-0019](docs/adr/0019-chrome-extension-second-host.md))。
 
+**インストール**: Chrome は [Chrome ウェブストア](https://chromewebstore.google.com/detail/electronics-price-history/jklcjijjlombfgmagcbmfkjglomaiipj) から入れるのがいちばん簡単です(ストア経由で自動更新)。Tampermonkey の場合は [ユーザースクリプト](https://tsuyoshi-otake.github.io/electro-parts/electronics-price-history.user.js) を開きます。詳しくは [Chrome 拡張のインストール](#chrome-拡張のインストール) と [ユーザースクリプトのインストール](#ユーザースクリプトのインストール)。
+
 対象は **秋月電子通商**(`akizuki`、一覧HTML)、**スイッチサイエンス**(`switch-science`、Shopifyカタログ)、**M5Stack公式ショップ**(`m5stack`、Shopifyカタログ)、**Raspberry Pi Shop by KSY**(`ksy`、公開一覧のJSON)、**せんごくネット通販**(`sengoku`、「電子工作部品」の分類一覧HTML)の5店舗です。M5Stackの収集・USD・バリエーションの扱いは [対応仕様](docs/roadmap/m5stack-support.md)、KSYの収集範囲と商品ダイアログの扱いは [ADR-0023](docs/adr/0023-ksy-public-list-and-in-place-product-dialog.md)、せんごくの収集範囲と記録しないものは [ADR-0024](docs/adr/0024-sengoku-electronic-parts-category-listings.md) を参照してください。aitendoは未実装です。
 
 > データについて: 表示される値はこのプロジェクトが観測した時点の店頭表示の記録で、店舗の公式データではありません。5店舗とも2日ごとの観測設定で、観測間の変化は記録されません。M5StackはUSDのまま記録・表示し、税・送料・関税込みの支払額を表しません。現在の記録価格に添える円換算は、1日1回取得した為替レートによる参考値です。詳しくは [データの注意点](#データの注意点) を読んでください。
@@ -64,14 +66,16 @@ M5Stack公式などUSDで記録した商品では、現在の記録価格の下�
 
 Tampermonkey を入れずに使う場合はこちらです。表示されるパネル・取得するデータ・観測頻度はユーザースクリプトとまったく同じで、ソースも同じものをビルドしています。
 
-Chrome ウェブストアに出すための準備は済んでいます。提出する文言(掲載情報・単一用途・権限の理由・データ使用の回答)と手順は [docs/chrome-web-store-listing.md](docs/chrome-web-store-listing.md) が原本です。掲載されるまでは、下の zip をデベロッパーモードで読み込んでください。
+**Chrome ウェブストア: <https://chromewebstore.google.com/detail/electronics-price-history/jklcjijjlombfgmagcbmfkjglomaiipj>**。「Chrome に追加」で入り、ストア経由で自動更新されます。ストアの版は審査を通ってから切り替わるので、Pages の zip より遅れることがあります。提出する文言(掲載情報・単一用途・権限の理由・データ使用の回答)と手順は [docs/chrome-web-store-listing.md](docs/chrome-web-store-listing.md) が原本です。
+
+ストアを使わずに Pages の最新版を入れる場合は、zip をデベロッパーモードで読み込みます。
 
 1. `https://tsuyoshi-otake.github.io/electro-parts/electronics-price-history-extension.zip` を落として展開する。
 2. Chrome の `chrome://extensions` を開き、右上の「デベロッパーモード」を入れる。
 3. 「パッケージ化されていない拡張機能を読み込む」で展開したフォルダを選ぶ。
 4. 対応店舗の商品ページを開くとパネルが出ます(表示モードの切り替えも同じです)。
 
-- **zip で入れた場合、自動更新はありません。** 版を上げたときは取り直してください(ユーザースクリプトは `@updateURL` で自動更新されます)。デベロッパーモードの拡張機能に関する Chrome の警告も毎回出ます。ストアに掲載されたあとは、ストア経由で自動更新されます。
+- **zip で入れた場合、自動更新はありません。** 版を上げたときは取り直してください(ユーザースクリプトは `@updateURL` で自動更新されます)。デベロッパーモードの拡張機能に関する Chrome の警告も毎回出ます。ストアから入れた場合は、ストア経由で自動更新されます。
 - 権限は `storage`(設定 1 個)とデータ取得先 `https://tsuyoshi-otake.github.io/*` だけです。閲覧履歴・タブ・Cookie にはアクセスしません。
 - データの取得はサービスワーカーが `credentials: 'omit'` で行い、URL は上記データオリジンだけを許可します。店舗のページから中継として使うことはできません。
 - 取得先を変えたいとき(自分でホストする場合)は `chrome.storage.local` の `dataBaseUrl` に `https://` の URL を入れます。データオリジン以外を入れた場合は既定値に戻ります。
