@@ -10,6 +10,12 @@ export function sengokuFixture(name: string): string {
   return readFileSync(`tests/fixtures/sengoku/${name}`, 'utf8');
 }
 
+/** The saved detail page (`detail-EEHD-6N43.html`) as the shop shows another product: its management code and its address. */
+export function showSengokuProduct(doc: Document, code: string): void {
+  doc.querySelector('#productno02 > span')!.textContent = code;
+  doc.defaultView!.history.replaceState(null, '', `/mod/sgk_cart/detail.php?code=${encodeURIComponent(code)}`);
+}
+
 /** The product rows of a saved listing page, as the shop printed them (the heading row left out). */
 export function sengokuRows(name: string): string[] {
   return [...sengokuFixture(name).matchAll(/<tr\b[^>]*\bclass="item_list_row"[^>]*>[\s\S]*?<\/tr>/g)]

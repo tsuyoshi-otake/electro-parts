@@ -21,8 +21,11 @@ test('Sengoku extension shows the history below the product block and keeps the 
       const u = new URL(route.request().url());
       if (u.hostname === 'tsuyoshi-otake.github.io') {
         requests.push(u.pathname);
-        const body = await readFile(path.join(E2E_SITE_DIR, u.pathname.replace(/^\/electro-parts\//, ''))).catch(() => null);
-        await route.fulfill(body === null ? { status: 404, body: 'Not Found' } : { contentType: 'application/json', body });
+        // EEHD-5LAU (checked last) borrows the saved EEHD-6N43 history, so its page has a history to show the related cards under.
+        const borrowed = u.pathname.endsWith('/stores/sengoku/products/EEHD-5LAU.json');
+        const file = borrowed ? u.pathname.replace('EEHD-5LAU', 'EEHD-6N43') : u.pathname;
+        const body = await readFile(path.join(E2E_SITE_DIR, file.replace(/^\/electro-parts\//, '')), 'utf8').catch(() => null);
+        await route.fulfill(body === null ? { status: 404, body: 'Not Found' } : { contentType: 'application/json', body: borrowed ? body.replaceAll('EEHD-6N43', 'EEHD-5LAU') : body });
       } else if (`${u.origin}${u.pathname}` === DETAIL) {
         // The saved page answers for any code, as the shop's page does for the code it shows.
         const code = u.searchParams.get('code') ?? '';
@@ -68,6 +71,19 @@ test('Sengoku extension shows the history below the product block and keeps the 
     await expect(panel).not.toContainText('読み込み中');
     expect([...new Set(requests)].filter((p) => p.includes('/stores/sengoku/')).sort()).toEqual(['/electro-parts/data/v1/stores/sengoku/manifest.json',
       '/electro-parts/data/v1/stores/sengoku/products/EEHD-6N43.json', '/electro-parts/data/v1/stores/sengoku/products/ZZZZ-0000.json'].sort());
+
+    // 0.6.1: the ATOM Lite (M5STACK-C008) carries the reviewed same products of the other stores as cards with their links.
+    requests.length = 0;
+    await page.goto(`${DETAIL}?code=EEHD-5LAU`);
+    await expect(panel).toHaveAttribute('data-page-key', 'EEHD-5LAU');
+    const akizuki = panel.locator(`.store-price[data-relation-id='${JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU'])}']`);
+    await expect(akizuki).toContainText('秋月電子');
+    await expect(panel.locator(`[data-focus-key='product-${JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU'])}']`)).toHaveAttribute('href', 'https://akizukidenshi.com/catalog/g/g117209/');
+    await expect(panel).not.toContainText('読み込み中');
+    await expect(panel).not.toContainText('記録価格差');
+    const related = requests.filter((p) => p.includes('/products/') && !p.includes('/stores/sengoku/'));
+    expect(related.length).toBeGreaterThan(0);
+    expect(related.length).toBeLessThanOrEqual(8);
     expect(errors).toEqual([]);
   } finally {
     await context.close();

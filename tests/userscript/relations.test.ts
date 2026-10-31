@@ -4,6 +4,7 @@ import { PAGE_ADAPTERS } from '../../userscript/adapters/registry.ts';
 import { comparisonEligibility, currentOffer, indexRelations, matchesRelationProduct, primaryQuote, relatedEntries, relationProductKey, MAX_RELATED_HISTORY_LOADS } from '../../userscript/core/relations.ts';
 import type { RelationProduct } from '../../userscript/core/relations.ts';
 import { ksyProductPageHtml, openKsyProduct } from '../helpers/ksy.ts';
+import { sengokuFixture, showSengokuProduct } from '../helpers/sengoku.ts';
 import { comparisonFixture } from './comparison-fixtures.ts';
 import { loadHtml } from './helpers.ts';
 
@@ -20,6 +21,7 @@ describe('curated relation catalogue', () => {
     document.head.replaceChildren(); document.body.replaceChildren();
     const seen = new Set<string>();
     const inDialog: RelationProduct[] = [];
+    const onDetailPage: RelationProduct[] = [];
     for (const r of PRODUCT_RELATIONS) {
       expect(seen.has(r.id)).toBe(false); seen.add(r.id);
       expect(r.evidence.length).toBeGreaterThan(10);
@@ -33,6 +35,8 @@ describe('curated relation catalogue', () => {
         expect(adapter.matches(url)).toBe(true);
         // KSY names the product only in the dialog its permalink opens; checked below on the saved page.
         if (p.storeId === 'ksy') { inDialog.push(p); continue; }
+        // Sengoku names the product by the management code its detail page prints; checked below on the saved page.
+        if (p.storeId === 'sengoku') { onDetailPage.push(p); continue; }
         document.head.replaceChildren();
         const canonical = document.createElement('link'); canonical.rel = 'canonical'; canonical.href = p.url;
         document.head.appendChild(canonical);
@@ -59,6 +63,16 @@ describe('curated relation catalogue', () => {
       openKsyProduct(document, p.pageKey, p.url);
       expect(ksy.extractPageKey(document, new URL(p.url))).toBe(p.pageKey);
     }
+    expect(onDetailPage.length).toBeGreaterThan(0);
+    loadHtml(document, sengokuFixture('detail-EEHD-6N43.html'));
+    const sengoku = PAGE_ADAPTERS.find((a) => a.storeId === 'sengoku')!;
+    const address = location.href;
+    try {
+      for (const p of onDetailPage) {
+        showSengokuProduct(document, p.pageKey);
+        expect(sengoku.extractPageKey(document, new URL(p.url))).toBe(p.pageKey);
+      }
+    } finally { history.replaceState(null, '', address); }
   });
 
   it('covers all 25 scoped M5Stack products, preserves revision alternatives, and does not relabel uncertainty as similarity', () => {
