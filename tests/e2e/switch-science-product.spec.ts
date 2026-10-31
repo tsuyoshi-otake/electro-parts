@@ -85,9 +85,9 @@ test('shows the ¥165 camera cable on the saved Switch Science page, reading onl
   await expect(page.locator('#electronics-price-history-root svg circle')).toHaveCount(1);
   await panel(page).screenshot({ path: path.resolve(process.cwd(), 'test-results', 'e2e', 'panel-9381.png') });
 
-  // The page itself is untouched, and the panel sits after the two-column block.
+  // The page itself is untouched, and the panel sits in the details column above the description.
   await expect(page.locator('h1.product-title')).toContainText('0.5 mmピッチ22ピン to 22ピンカメラケーブル');
-  expect(await page.locator('.product--outer + #electronics-price-history-root').count()).toBe(1);
+  expect(await page.locator('.product-details > #electronics-price-history-root + .product-block--description').count()).toBe(1);
 
   const requests = await gmRequests(page);
   // The manifest carries a cache-buster so a stale CDN copy cannot pin the panel

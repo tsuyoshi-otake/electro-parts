@@ -30,7 +30,7 @@ test('M5Stack extension selects USD variants, shows a daily yen reference and pr
     const page=await context.newPage();
     await page.goto('https://shop.m5stack.com/products/m5stamp-lora-module-sx1262');
     const panel=page.locator('#electronics-price-history-root');
-    await expect(page.locator('.product-wrapper + #electronics-price-history-root')).toBeAttached();
+    await expect(page.locator('.product-main > #electronics-price-history-root + .product-description')).toBeAttached();
     await expect(panel).toContainText('$5.50');await expect(panel).toContainText('USD');
     await expect(panel.locator('.fx-value')).toHaveText('約 ￥868（円換算の参考値）');
     await expect(panel.locator('.fx a')).toHaveAttribute('href','https://www.exchangerate-api.com');

@@ -64,15 +64,14 @@ describe('Switch Science page adapter', () => {
     expect(pageKeyFromPath('/blogs/news/products/9381')).toBeNull();
   });
 
-  it('takes the identity from the saved product page and mounts below the two-column layout', () => {
+  it('takes the identity from the saved product page and mounts below the purchase form', () => {
     loadHtml(document, html);
     expect(switchSciencePageAdapter.extractPageKey(document, AT('/products/9381'))).toBe('9381');
     const mount = switchSciencePageAdapter.findMountPoint(document);
-    // `.product--outer` *is* the gallery/details two-column grid, so the panel
-    // goes after it — appended inside, it would become a third column.
-    expect(mount?.anchor.className).toContain('product--outer');
-    expect(mount?.anchor.tagName).toBe('ARTICLE');
-    expect(mount?.position).toBe('after');
+    // In the details column, between the purchase form and the description.
+    expect(mount?.anchor.className).toContain('product-block--description');
+    expect(mount?.anchor.parentElement?.className).toContain('product-details');
+    expect(mount?.position).toBe('before');
     expect(mount?.hostStyle).toBeUndefined();
   });
 
@@ -98,6 +97,16 @@ describe('Switch Science page adapter', () => {
 
   it('degrades through the container chain down to the product heading, then gives up', () => {
     loadHtml(document, html);
+    document.querySelector('.product-details > .product-block--description')!.remove();
+    expect(switchSciencePageAdapter.findMountPoint(document)).toMatchObject({ position: 'after' });
+    expect(switchSciencePageAdapter.findMountPoint(document)?.anchor.className).toContain('product-block--form');
+
+    document.querySelector('.product-details > .product-block--form')!.remove();
+    // `.product--outer` *is* the gallery/details two-column grid, so the panel
+    // goes after it — appended inside, it would become a third column.
+    expect(switchSciencePageAdapter.findMountPoint(document)).toMatchObject({ position: 'after' });
+    expect(switchSciencePageAdapter.findMountPoint(document)?.anchor.tagName).toBe('ARTICLE');
+
     document.querySelector('.product--outer')!.remove();
     expect(switchSciencePageAdapter.findMountPoint(document)).toMatchObject({ position: 'append' });
     expect(switchSciencePageAdapter.findMountPoint(document)?.anchor.className).toContain('product__container');
