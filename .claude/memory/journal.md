@@ -729,3 +729,21 @@ Learning: before mounting beside a shop's purchase column, find out whether that
 Not done: commit/PR (awaiting the user), Pages, and a CWS submission (0.6.1 is in review).
 
 Cleanup: `~/tmp/electro-mount` was reduced to its evidence (4 MB): `shots.mjs`, `shots-062/`, `published.mjs` and `published-062/`. The evidence was moved out of `~/tmp/electro-sengoku-061/live`, so the 0.6.1 folder is as it was apart from the parameterised `published.mjs`.
+
+## 2026-10-31 store-listing-copy (#44)
+
+Fail in iteration 1 (independent verifier, C3): the new summary said 「価格と在庫の推移グラフ」, and the description listed 「在庫表示の変化、掲載開始・終了の記録」. The panel draws no stock series and lists no stock changes.
+- What it does render (`userscript/ui/panel.ts`, `chart.ts`):
+  - 観測時の在庫 / 最新の在庫表示 (latest only)
+  - 前回価格からの変化 and 前回の記録価格
+  - 価格変更の一覧 (date and price)
+  - 現在掲載中 / 最新の観測では未掲載
+  - dotted chart gaps for unlisted stretches
+- The 「在庫表示の変化」 bullet came from the live 0.5.1 text, so it was already overstated there.
+- Fix:
+  - summary 「価格の推移グラフと観測時の在庫を表示。」 (129 code points)
+  - bullets 「前回の記録価格からの値上がり・値下がり(金額と率)と、価格変更の一覧」 and 「最新の在庫表示と、いま掲載されているかどうか」
+
+Learning: check each listing claim against the rendering code, not against the previous listing.
+- Iteration 2: the independent verifier passed 7/7 (rubric `.claude/goal-loop/store-listing-copy/rubric.md`). Afterwards, 「1日1回まで」 became 「原則1日1回まで」 to match privacy.html, since a failed fetch retries after an hour or more. The contract test still passes 13/13.
+- Ships with 0.6.2. The dashboard text is pasted by `cws:dashboard fill` at the next submission, after 0.6.1's review.
