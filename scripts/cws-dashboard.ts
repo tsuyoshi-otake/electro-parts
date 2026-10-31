@@ -97,8 +97,9 @@ async function upload(page: Page, zip: string): Promise<void> {
   await openTab(page, 'package');
   await press(page, '新しいパッケージをアップロード');
   await page.locator('input[type=file]').first().setInputFiles(zip);
-  // The dashboard moves to the listing tab once the package is read.
-  await page.waitForURL(/\/edit\/listing/, { timeout: 60_000 });
+  // The dashboard leaves the package tab once the package is read: to /edit/listing
+  // until 0.5.1, to /edit for 0.6.1 (2026-10-31). status then reads the draft version.
+  await page.waitForURL((url) => /\/edit(?:\/listing)?$/.test(url.pathname), { timeout: 60_000 });
   await status(page);
 }
 
@@ -139,6 +140,15 @@ async function check(page: Page): Promise<void> {
 
 async function blockers(page: Page): Promise<void> {
   await openTab(page, 'privacy');
+  // With nothing blocking, the header shows no 「送信できない理由」 and an enabled
+  // 「審査のため送信」 instead (0.6.1, 2026-10-31). That button is only read, never pressed.
+  const why = page.getByRole('button', { name: '送信できない理由' }).filter({ visible: true });
+  const submit = page.getByRole('button', { name: '審査のため送信' }).filter({ visible: true });
+  await why.or(submit).first().waitFor({ timeout: 30_000 });
+  if ((await why.count()) === 0) {
+    console.log(`no blockers: 「送信できない理由」 is not shown; 「審査のため送信」 is ${(await submit.first().isEnabled()) ? 'enabled' : 'disabled'}`);
+    return;
+  }
   await press(page, '送信できない理由');
   const dialog = page.getByRole('dialog').filter({ hasText: '公開できません' }).filter({ visible: true }).first();
   await dialog.waitFor({ timeout: 15_000 });
