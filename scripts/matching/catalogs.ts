@@ -13,7 +13,7 @@ import type { M5StackItem, M5StackSnapshot } from '../../src/adapters/m5stack/ra
 import { validateSwitchScienceRaw } from '../../src/adapters/switch-science/snapshotAdapter.ts';
 import type { SwitchScienceRawItem, SwitchScienceRawSnapshot } from '../../src/adapters/switch-science/rawSchema.ts';
 import type { ValidationResult } from '../../src/core/validation.ts';
-import { assertCatalog, hash, listingKey, normalizeCode, type Catalog, type Listing } from './model.ts';
+import { assertCatalog, hash, listingKey, normalizeCode, type Alias, type Catalog, type ExtraKeys, type Listing } from './model.ts';
 
 type RetailerStore = 'akizuki' | 'switch-science';
 const order = (a: Listing, b: Listing): number => listingKey(a) < listingKey(b) ? -1 : 1;
@@ -112,6 +112,52 @@ export function identityCodes(storeId: string, manufacturer: string, values: str
     if (storeId === 'akizuki' && /^SKU:?\d+$/.test(code)) return code.replace(/^SKU:?/, '');
     return code;
   }))].sort();
+}
+
+/**
+ * せんごく maker labels whose bracketed model number (`【19635】 PoE/ETH/USB HUB HAT`) is the Waveshare part number,
+ * which Switch Science and KSY print bare. Argon and LUCKFOX boards reach the shop through Waveshare. Seen on 2026-10-30.
+ * Other labels use the bracket for the shop's own running number (`【002】SMASP-SMALP-2M`, `【009】RPI-ZERO-W`).
+ */
+const SENGOKU_WAVESHARE_LABELS: ReadonlySet<string> = new Set(['Waveshare', 'Argon', 'LUCKFOX']);
+
+/**
+ * Match keys read at discovery time from a listing's own fields, in forms seen in the catalogue. The stored `codes`
+ * (and so every fingerprint) stay as imported; these keys only add candidates, and each pair is still reviewed.
+ * Revision and configuration suffixes stay: a production suffix only adds the plain code next to the stored one.
+ */
+export function derivedCodes(p: Listing): string[] {
+  const keys: string[] = [];
+  const bracketed = p.storeId === 'sengoku' ? p.modelNumber.match(/^【([^】]+)】\s*(.*)$/) : null;
+  if (bracketed) {
+    const [, inner = '', rest = ''] = bracketed;
+    const vendor = p.vendor ?? '';
+    if (SENGOKU_WAVESHARE_LABELS.has(vendor) && /^\d{4,6}$/.test(inner)) keys.push(inner);
+    if (rest) keys.push(...identityCodes('sengoku', SENGOKU_PREFIX_MAKERS[vendor] ?? '', [rest]));
+    // `【019】RPi5-8GB-SC1112`, `【014】RPi3B-SC0073`: the shop's name for the board around the official code.
+    if (vendor === 'Raspberry Pi') keys.push(...(normalizeCode(rest).match(/SC\d{4}/g) ?? []));
+  }
+  for (const code of p.codes) {
+    // Seeed's 9-digit SKU behind a shop prefix (`SEEED-113990234`). The prefix names the maker: Switch Science's older
+    // rows give itself as manufacturer, and Sengoku gives none.
+    if (/^SEEED-\d{9}$/.test(code)) keys.push(code.slice(6));
+    // Akizuki's older Seeed rows: the SKU with Seeed's former part number or a second number (`104030003(LED05291P)`),
+    // behind `SKU-`, or alternatives joined by `/` (`114020161/114020163`). A `+` joins a set and is left to an alias.
+    if (p.storeId === 'akizuki') {
+      const sku = code.match(/^(?:SKU-)?(\d{9})(?:\([0-9A-Z]+\))?$/); if (sku) keys.push(sku[1]!);
+      if (/^\d{9}(?:\/\d{9})+$/.test(code)) keys.push(...code.split('/'));
+    }
+    // A Raspberry Pi product code with a production suffix (`SC0194(9)`, `SC0130(J)`); the review decides whether it matters.
+    const suffixed = code.match(/^(SC\d{4})\([0-9A-Z]{1,2}\)$/);
+    if (suffixed) keys.push(suffixed[1]!);
+  }
+  return [...new Set(keys)].filter(key => !p.codes.includes(key));
+}
+
+/** Discovery keys besides the stored codes: the derived forms above plus the reviewed aliases of the listing. */
+export function extraKeys(aliases: readonly Alias[]): ExtraKeys {
+  const byKey = new Map(aliases.map(a => [a.key, a.codes.map(normalizeCode)]));
+  return p => [...new Set([...derivedCodes(p), ...(byKey.get(listingKey(p)) ?? [])])];
 }
 
 /** Explicit import command, not part of a crawl or build. Full snapshots stay local. */

@@ -56,6 +56,33 @@ describe('cross-store comparison panel', () => {
     renderRelatedGroups(document, parent, relatedEntries([relation], 'switch-science', '8171'), id => id);
     expect(parent.querySelector('.related-name')?.textContent).toBe('無線: Wi-Fi/Bluetooth → なし');
   });
+
+  it('shows one similar card per variant with a row for each store, closest variants first', () => {
+    const parent = document.createElement('div');
+    const relations = PRODUCT_RELATIONS.filter(r => r.products.some(p => p.storeId === 'akizuki' && p.pageKey === '116132'));
+    renderRelatedGroups(document, parent, relatedEntries(relations, 'akizuki', '116132'), id => id);
+    const section = parent.querySelector('details[data-state-key="group-similar"]')!;
+    expect(section.querySelector('summary')!.textContent).toBe('類似商品 (21件・7種類)');
+    const cards = [...section.querySelectorAll('.related-card')];
+    expect(cards.map(card => card.querySelector('.related-title')!.textContent)).toEqual([
+      'Raspberry Pi Pico 2', 'Raspberry Pi Pico W', 'Raspberry Pi Pico H',
+      'Raspberry Pi Pico 2W', 'Raspberry Pi Pico 2 H', 'Raspberry Pi Pico WH', 'Raspberry Pi Pico 2 WH',
+    ]);
+    for (const card of cards) {
+      const rows = [...card.querySelectorAll<HTMLElement>('.related-offer')];
+      expect(rows.map(row => row.querySelector('.related-store div')!.textContent).sort()).toEqual(['ksy', 'sengoku', 'switch-science']);
+      // Every row's own relation states the differences the card shows once.
+      const shown = [...card.querySelectorAll(':scope > .related-name')].map(p => p.textContent).sort();
+      for (const row of rows) {
+        expect([...row.querySelectorAll('.related-evidence p')].map(p => p.textContent!).filter(t => t.startsWith('相違点: ')).map(t => t.slice(5)).sort()).toEqual(shown);
+      }
+    }
+    expect(cards[3]!.textContent).toContain('MCU: RP2040 → RP2350');
+    expect(cards[3]!.textContent).toContain('無線: なし → Wi-Fi/Bluetooth');
+    // 16 rows are beyond the history-load cap; each card explains that once instead of every row.
+    expect(section.querySelectorAll('.related-offer')).toHaveLength(21);
+    expect(section.textContent!.split('履歴の自動取得は上位候補のみ').length - 1).toBe(7);
+  });
   it('shows independent store timestamps, labelled statistics, safe links, two series and a signed recorded-price difference', () => {
     const f = setup(); f.draw();
     expect(f.text()).toContain('店舗別の記録価格'); expect(f.text()).toContain('Store A（閲覧中）'); expect(f.text()).toContain('Store Aの価格履歴・統計');

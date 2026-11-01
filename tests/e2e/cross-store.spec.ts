@@ -124,7 +124,10 @@ test('generated Pico family shows concrete differences and retains the native pr
   // The same Pico at KSY (0.5.1) is a second identity card; it adds no family difference.
   await expect(panel(page).locator(`.store-price[data-relation-id='${JSON.stringify(['akizuki', '116132', 'ksy', '634'])}']`)).toContainText('KSY');
   await expect(panel(page)).not.toContainText('読み込み中');
+  // 0.6.3: the family reaches KSY and Sengoku too. Each of the 7 variants is one card with a row per store; the loads stay capped below.
+  await expect(panel(page).locator('summary[data-focus-key="group-similar"]')).toHaveText('類似商品 (21件・7種類)');
   await expect(panel(page).locator('.related-card')).toHaveCount(7);
+  await expect(panel(page).locator('.related-offer')).toHaveCount(21);
   await expect(panel(page)).toContainText('無線: なし → Wi-Fi/Bluetooth');
   await expect(panel(page)).toContainText('MCU: RP2040 → RP2350');
   await expect(panel(page)).not.toContainText('記録価格差');

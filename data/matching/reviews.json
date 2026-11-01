@@ -48148,5 +48148,3599 @@
     ],
     "reviewedAt": "2026-10-30",
     "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"112958\",\"ksy\",\"406\"]",
+    "fingerprint": "433bb2f36998a3d18943ef7a7fa39d658aef3e74ae0d0ade4ab8b80e4994ba75",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0065(秋月電子の型番欄の記載、KSYは店舗コードRASPIZWHSC0065の末尾にSC0065を含むためalias)。秋月電子「Raspberry Pi Zero WH (ラズベリーパイゼロ ダブルエイチ) ケース付き」とKSY「Raspberry Pi Zero WH」は機種Zero WHが一致し、秋月電子側のみ商品名にケース付きとある。",
+    "differences": [
+      "付属品: 秋月電子「ケース付き」 ↔ KSY「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYの型番欄に単独の公式コードSC0065がなく、aliasに依存している",
+      "KSY側の同梱物(ケースの有無)が商品名にない",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"112958\",\"sengoku\",\"EEHD-57LT\"]",
+    "fingerprint": "dd1ecdd68614b4352854a823eecf1e0615fadc5db8bf8d7b8e25bc39dccb06b6",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0065(秋月電子の型番欄の記載、せんごくは型番【010】RPI-ZERO-WHに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi Zero WH (ラズベリーパイゼロ ダブルエイチ) ケース付き」とせんごく「Raspberry Pi Zero WH【ピンヘッダ実装済】　【010】RPI-ZERO-WH」は機種Zero WHが一致し、秋月電子側のみ商品名にケース付きとある。",
+    "differences": [
+      "付属品: 秋月電子「ケース付き」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくの型番欄に単独の公式コードSC0065がなく、aliasに依存している",
+      "せんごく側の同梱物(ケースの有無)が商品名にない",
+      "秋月電子側の商品名にピンヘッダ実装の明記がない",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"112961\",\"ksy\",\"406\"]",
+    "fingerprint": "0eef9a3b4aa6a309e3888f36e3280d182b3b4fab609076f025ea71053d4a92f3",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0065(秋月電子は型番欄が商品名のみで、同名のスイッチサイエンス3646の型番SC0065を根拠にしたalias、KSYは店舗コードRASPIZWHSC0065の末尾にSC0065を含むためalias)。秋月電子「Raspberry Pi Zero WH (ラズベリーパイゼロ ダブルエイチ) 本体」とKSY「Raspberry Pi Zero WH」は機種Zero WHが一致し、秋月電子側は商品名に本体とある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の型番欄に単独の公式コードSC0065がなく、aliasに依存している",
+      "KSYの型番欄に単独の公式コードSC0065がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"112961\",\"sengoku\",\"EEHD-57LT\"]",
+    "fingerprint": "60283a2c1a42d6fd9898cd09dc555d994f8989a1c138f864d708437c337c7233",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0065(秋月電子は型番欄が商品名のみで、同名のスイッチサイエンス3646の型番SC0065を根拠にしたalias、せんごくは型番【010】RPI-ZERO-WHに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi Zero WH (ラズベリーパイゼロ ダブルエイチ) 本体」とせんごく「Raspberry Pi Zero WH【ピンヘッダ実装済】　【010】RPI-ZERO-WH」は機種Zero WHが一致し、秋月電子側は商品名に本体、せんごく側はピンヘッダ実装済とある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の型番欄に単独の公式コードSC0065がなく、aliasに依存している",
+      "せんごくの型番欄に単独の公式コードSC0065がなく、aliasに依存している",
+      "秋月電子側の商品名にピンヘッダ実装の明記がない",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"113470\",\"ksy\",\"435\"]",
+    "fingerprint": "1af273b3e3d66a64cbff898cc0da5566d2b8e74ecb69c82fbacb52d710a1da21",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0073(秋月電子の型番欄の記載、KSYは店舗コードRASPI3PSC0073の末尾にSC0073を含むためalias)。秋月電子「Raspberry Pi 3 Model B+ (ラズベリーパイスリーモデルビープラス)」とKSY「Raspberry Pi 3 Model B+」は機種Raspberry Pi 3 Model B+が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYの型番欄に単独の公式コードSC0073がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"113470\",\"sengoku\",\"EEHD-6RCT\"]",
+    "fingerprint": "66577d373f9440637c54054c2afbd5ac117cd5e34d701474911c30fafe8a3cff",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0073(秋月電子の型番欄の記載、せんごくの型番【014】RPi3B-SC0073に含まれるコードSC0073(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi 3 Model B+ (ラズベリーパイスリーモデルビープラス)」とせんごく「【本体】Raspberry Pi 3 Model B+　【014】RPi3B-SC0073」は機種Raspberry Pi 3 Model B+が一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114778\",\"ksy\",\"723\"]",
+    "fingerprint": "17499def00eb45dcd135de0a9b3e46d830753be01bc32fddaee2805bfa92afbb",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0194(秋月電子は型番「Pi 4 Model B/4GB」に公式コードがなく、同じ4GB版のSC0194を根拠にしたalias、KSYの型番欄の記載)。秋月電子「Raspberry Pi 4 Model B 4GB (ラズベリーパイフォーモデルビー)」とKSY「Raspberry Pi 4 Model B/4GB element14」は機種Pi 4 Model Bと容量4GBが一致し、KSYのみ商品名にelement14とある。",
+    "differences": [
+      "流通ブランド: 秋月電子「記載なし」 ↔ KSY「element14」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の型番欄に単独の公式コードSC0194がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114778\",\"sengoku\",\"EEHD-655P\"]",
+    "fingerprint": "777b6bf87ee437e160d394e920ef523de4a562ad933ef7f2d8d534d38103bc27",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0194(秋月電子は型番「Pi 4 Model B/4GB」に公式コードがなく、同じ4GB版のSC0194を根拠にしたalias、せんごくは型番【016】RPi4B-4GBに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi 4 Model B 4GB (ラズベリーパイフォーモデルビー)」とせんごく「【本体】Raspberry Pi 4 Model B - 4GB　【016】RPi4B-4GB」は機種Pi 4 Model Bと容量4GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の型番欄に単独の公式コードSC0194がなく、aliasに依存している",
+      "せんごくの型番欄に単独の公式コードSC0194がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114839\",\"ksy\",\"497\"]",
+    "fingerprint": "b069bbd6fd322b662360de83883a3ab7d4e66e0706886b2e4334607db921866b",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0193(秋月電子の型番SC0193(9)から製造記号(9)を除いたコード、KSYの型番欄の記載)。秋月電子「Raspberry Pi 4 Model B 2GB(ラズベリーパイフォーモデルビー)」とKSY「Raspberry Pi 4 Model B/2GB」は機種Pi 4 Model Bと容量2GBが一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSY側に製造記号(9)の記載がなく、秋月電子のSC0193(9)との一致は未確認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114839\",\"sengoku\",\"EEHD-6YSS\"]",
+    "fingerprint": "54bddfed02167f8fd4103839ee155de374e00a0b164d893e78f3af51c0fcb4ed",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0193(秋月電子の型番SC0193(9)から製造記号(9)を除いたコード、せんごくは型番【015】RPi4B-2GBに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi 4 Model B 2GB(ラズベリーパイフォーモデルビー)」とせんごく「【本体】Raspberry Pi 4 Model B - 2GB　【015】RPi4B-2GB」は機種Pi 4 Model Bと容量2GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側に製造記号(9)の記載がなく、秋月電子のSC0193(9)との一致は未確認",
+      "せんごくの型番欄に単独の公式コードSC0193がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"114878\",\"sengoku\",\"EEHD-5JEN\"]",
+    "fingerprint": "09e1cb7ab1fc1ac3ec39e42ef2a9de081abb5ee532944a7d4e5c65f9c61325f9",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0130(秋月電子は型番欄が商品名のみで、同名のスイッチサイエンス4110のSC0130(J)から製造記号を除いて付けたalias、せんごくは型番【013】Pi3A+に単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi 3 Model A+ (ラズベリーパイスリーモデルエープラス)」とせんごく「【本体】Raspberry Pi 3 Model A+　【013】Pi3A+」は機種Raspberry Pi 3 Model A+が一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の型番欄に単独の公式コードSC0130がなく、aliasに依存している",
+      "せんごくの型番欄に単独の公式コードSC0130がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115359\",\"ksy\",\"552\"]",
+    "fingerprint": "5a1ea62d6f6f55ba6c4070e64834bb3005e5cc23a9a5815db0249ebcfbc98c07",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0195(秋月電子は型番がelement14の注文コード3369505のため、KSY552等の8GB版SC0195を根拠にしたalias、KSYの型番欄の記載)。秋月電子「Raspberry Pi 4 Model B 8GB(ラズベリーパイフォーモデルビー) element14版」とKSY「Raspberry Pi 4 Model B/8GB element14」は機種Pi 4 Model Bと容量8GBが一致し、両店とも商品名にelement14とある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の型番欄に単独の公式コードSC0195がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115359\",\"sengoku\",\"EEHD-655N\"]",
+    "fingerprint": "834c417965bd4e7f5b64586eb4e5ac045fe9bde6a5a1c496d5e22b9f27aeadc6",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0195(秋月電子は型番がelement14の注文コード3369505のため、KSY552等の8GB版SC0195を根拠にしたalias、せんごくは型番【017】RPi4B-8GBに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi 4 Model B 8GB(ラズベリーパイフォーモデルビー) element14版」とせんごく「【本体】Raspberry Pi 4 Model B - 8GB　【017】RPi4B-8GB」は機種Pi 4 Model Bと容量8GBが一致し、秋月電子のみ商品名にelement14版とある。",
+    "differences": [
+      "流通ブランド: 秋月電子「element14版」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の型番欄に単独の公式コードSC0195がなく、aliasに依存している",
+      "せんごくの型番欄に単独の公式コードSC0195がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115450\",\"ksy\",\"552\"]",
+    "fingerprint": "956977644415833d237b88e309524eae03b5d5e1e61a22513e464d4b214ca8fa",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0195(秋月電子の型番SC0195(9)から製造記号(9)を除いたコード、KSYの型番欄の記載)。秋月電子「Raspberry Pi 4 Model B 8GB(ラズベリーパイフォーモデルビー)」とKSY「Raspberry Pi 4 Model B/8GB element14」は機種Pi 4 Model Bと容量8GBが一致し、KSYのみ商品名にelement14とある。",
+    "differences": [
+      "流通ブランド: 秋月電子「記載なし」 ↔ KSY「element14」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSY側に製造記号(9)の記載がなく、秋月電子のSC0195(9)との一致は未確認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115450\",\"sengoku\",\"EEHD-655N\"]",
+    "fingerprint": "23d3237b355132573a943a3ff0e96fc787f6ae83a6b60b0f5315ea11c7e4815e",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0195(秋月電子の型番SC0195(9)から製造記号(9)を除いたコード、せんごくは型番【017】RPi4B-8GBに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi 4 Model B 8GB(ラズベリーパイフォーモデルビー)」とせんごく「【本体】Raspberry Pi 4 Model B - 8GB　【017】RPi4B-8GB」は機種Pi 4 Model Bと容量8GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側に製造記号(9)の記載がなく、秋月電子のSC0195(9)との一致は未確認",
+      "せんごくの型番欄に単独の公式コードSC0195がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"115955\",\"sengoku\",\"EEHD-6ZDT\"]",
+    "fingerprint": "82ccca023bbfb1474e335ef19c80dd23f11a53f84b7d651e64151359fce5b53f",
+    "decision": "same_product",
+    "evidence": "共有コードは103030356(両店の型番欄に記載)。秋月電子「Seeeduino Xiao用拡張ボード」とせんごく「Expansion Base for XIAO　103030356」はXIAO用の拡張ボードという名称・用途が対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側のmanufacturer欄が空欄でSeeedの記載なし(せんごくのvendorはSeeed Studio)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116132\",\"sengoku\",\"EEHD-5S4T\"]",
+    "fingerprint": "2e29075ebde6f792ada15925e962b3cc4b912b5ff7d79c35b264755dba901999",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0915(秋月電子の型番欄の記載、せんごくは型番【001】RPI-PICOに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi Pico ラズベリーパイピコ」とせんごく「Raspberry Pi Pico　【001】RPI-PICO」は機種名Raspberry Pi Picoが一致し、H・W等の付かない無印の名称である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくの型番欄に単独の公式コードSC0915がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116739\",\"ksy\",\"667\"]",
+    "fingerprint": "6ede76d014f110027c5d43bbfc6fe5678e0502b07f04bcdf629f589faf7883dd",
+    "decision": "unresolved",
+    "evidence": "共有コードはSC0382(秋月電子は型番SC0382SDの末尾SDを除き、KSY667の同名商品の型番SC0382を根拠にしたalias、KSYの型番欄の記載)。秋月電子「Raspberry Pi 400 日本版」とKSY「Raspberry Pi 400 日本版」は商品名は同一だが、秋月電子の型番にだけ末尾SDが付いており、その意味(SDカード等の同梱物か別構成か)が不明である。",
+    "differences": [
+      "型番: 秋月電子「SC0382SD」 ↔ KSY「SC0382」"
+    ],
+    "missingEvidence": [
+      "秋月電子の型番欄に単独の公式コードSC0382がなく、aliasに依存している",
+      "秋月電子の型番末尾SDの意味(SDカード等の同梱物か別構成か)を示す商品説明",
+      "KSY側の商品にSD相当の付属品が含まれるかの記載",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116739\",\"sengoku\",\"EEHD-5UJW\"]",
+    "fingerprint": "b53a9a5683f6df0357c6622813cd40eca728930a36520061a4453e761e058db0",
+    "decision": "unresolved",
+    "evidence": "共有コードはSC0382(秋月電子は型番SC0382SDの末尾SDを除き、KSY667の同名商品の型番SC0382を根拠にしたalias、せんごくは型番RPI400JPに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi 400 日本版」とせんごく「Raspberry Pi 400 日本版　RPI400JP」は商品名の機種は一致するが、秋月電子の型番にだけ末尾SDが付き、せんごくの型番RPI400JPには公式コードがないため、SDの意味と構成の一致を確認できない。",
+    "differences": [
+      "型番: 秋月電子「SC0382SD」 ↔ せんごく「RPI400JP」"
+    ],
+    "missingEvidence": [
+      "秋月電子の型番欄に単独の公式コードSC0382がなく、aliasに依存している",
+      "せんごくの型番欄に単独の公式コードSC0382がなく、aliasに依存している",
+      "秋月電子の型番末尾SDの意味(SDカード等の同梱物か別構成か)を示す商品説明",
+      "せんごく側の商品にSD相当の付属品が含まれるかの記載",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116834\",\"ksy\",\"723\"]",
+    "fingerprint": "9cd355c8a34482d186bfbd5375ee349a0bd090692cfbbb35036faa09594633da",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0194(秋月電子の型番SC0194(9)から製造記号(9)を除いたコード、KSYの型番欄の記載)。秋月電子「Raspberry Pi 4 Model B 4GB」とKSY「Raspberry Pi 4 Model B/4GB element14」は機種Pi 4 Model Bと容量4GBが一致し、KSYのみ商品名にelement14とある。",
+    "differences": [
+      "流通ブランド: 秋月電子「記載なし」 ↔ KSY「element14」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSY側に製造記号(9)の記載がなく、秋月電子のSC0194(9)との一致は未確認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"116834\",\"sengoku\",\"EEHD-655P\"]",
+    "fingerprint": "3e6596a8622da9949b89473d3de4453fac3dec999e4150e4868b7b31394eb4b4",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0194(秋月電子の型番SC0194(9)から製造記号(9)を除いたコード、せんごくは型番【016】RPi4B-4GBに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi 4 Model B 4GB」とせんごく「【本体】Raspberry Pi 4 Model B - 4GB　【016】RPi4B-4GB」は機種Pi 4 Model Bと容量4GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側に製造記号(9)の記載がなく、秋月電子のSC0194(9)との一致は未確認",
+      "せんごくの型番欄に単独の公式コードSC0194がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117398\",\"ksy\",\"849\"]",
+    "fingerprint": "7d446d34b88f5832d09f984384de5aed78322089086b8c311180124a88728d00",
+    "decision": "unresolved",
+    "evidence": "共有コードはSC0510(秋月電子は型番がSC1176のため、同名商品の型番SC0510を根拠に候補化だけ行ったalias、KSYの型番欄の記載)。秋月電子「Raspberry Pi Zero 2 W」とKSY「Raspberry Pi Zero 2 W」は商品名は同一だが、公式コードが秋月電子SC1176とKSY SC0510で食い違い、同一製品かを判断できない。",
+    "differences": [
+      "型番: 秋月電子「SC1176」 ↔ KSY「SC0510」"
+    ],
+    "missingEvidence": [
+      "秋月電子の型番欄に単独の公式コードSC0510がなく、aliasに依存している",
+      "SC1176とSC0510が同一製品の別表記か別構成かを示すメーカー資料または秋月電子の商品仕様",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117398\",\"sengoku\",\"EEHD-6CEA\"]",
+    "fingerprint": "8c9ad7617607949390ee6c166c42374a8d926b5f30b651209de38c7d692f7772",
+    "decision": "unresolved",
+    "evidence": "共有コードはSC0510(秋月電子は型番がSC1176のため、同名商品の型番SC0510を根拠に候補化だけ行ったalias、せんごくの型番【011】SC0510に含まれるコードSC0510(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi Zero 2 W」とせんごく「Raspberry Pi Zero 2 W　【011】SC0510」は商品名は同一だが、公式コードが秋月電子SC1176とせんごくSC0510で食い違い、同一製品かを判断できない。",
+    "differences": [
+      "型番: 秋月電子「SC1176」 ↔ せんごく「SC0510」"
+    ],
+    "missingEvidence": [
+      "秋月電子の型番欄に単独の公式コードSC0510がなく、aliasに依存している",
+      "SC1176とSC0510が同一製品の別表記か別構成かを示すメーカー資料または秋月電子の商品仕様",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"117947\",\"sengoku\",\"EEHD-65C4\"]",
+    "fingerprint": "45ce139da6e4ec68f79430d531b94a34d3f8f0ff8284b729654a07049f3083c6",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0918(秋月電子の型番欄の記載、せんごくは型番【003】RPI-PICO-Wに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi Pico W」とせんごく「Raspberry Pi Pico W　【003】RPI-PICO-W」は機種Raspberry Pi Pico Wが一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくの型番欄に単独の公式コードSC0918がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118048\",\"sengoku\",\"EEHD-5SJD\"]",
+    "fingerprint": "62702a7e029cc34eb849313217a51a4df7cf5d9877c8ee86634bf06fc2679694",
+    "decision": "same_product",
+    "evidence": "共有コードは19192(せんごくの型番【19192】の括弧内で、秋月電子側は型番欄「SKU:19192」に同じ番号)。秋月電子「1.28インチ丸型液晶モジュール」とせんごく「1.28インチ丸型 240×240 LCDディスプレイモジュール (65K RGB)　【19192】 1.28inch LCD Module」はいずれも1.28インチの丸型液晶モジュールで、サイズと形状が一致するが、せんごく側のみ240×240画素と65K RGBの記載がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄は空欄で、Waveshare製と確認できる記載がない",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "秋月電子の商品名に解像度・表示色数の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118085\",\"sengoku\",\"EEHD-5YEC\"]",
+    "fingerprint": "4210b16f510d2265b61d98a55d240111d7cb8f325359be6c51b2770add653df9",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0917(秋月電子の型番欄の記載、せんごくは型番【002】RPI-PICO-Hに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi Pico H(完成品)」とせんごく「Raspberry Pi Pico H【ピンヘッダ実装済】　【002】RPI-PICO-H」は機種Raspberry Pi Pico Hが一致し、秋月電子の「完成品」とせんごくの「ピンヘッダ実装済」は表記が異なるがいずれも実装済みの完成形を示す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくの型番欄に単独の公式コードSC0917がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118086\",\"sengoku\",\"EEHD-65YB\"]",
+    "fingerprint": "7c56b017898525bffa5c89270a09aafb4fab4fc8655622fbb5bdcd56f98f9bd4",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0919(秋月電子の型番欄の記載、せんごくは型番【004】RPI-PICO-WHに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi Pico WH(完成品)」とせんごく「Raspberry Pi Pico WH【ピンヘッダ実装済】　【004】RPI-PICO-WH」は機種Raspberry Pi Pico WHが一致し、秋月電子の「完成品」とせんごくの「ピンヘッダ実装済」は表記が異なるがいずれも実装済みの完成形を示す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくの型番欄に単独の公式コードSC0919がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118180\",\"ksy\",\"219\"]",
+    "fingerprint": "d3b6838caf12761490dceeec9706ed586db109b892b5a677b69b78f9110b754f",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0020(秋月電子は型番欄が商品名のみで、スイッチサイエンス3200の型番SC0020を根拠にしたalias、KSYは店舗コードRASPI0W11に公式コードがなく、スイッチサイエンス3200の型番SC0020を根拠にしたalias)。秋月電子「Raspberry Pi Zero W」とKSY「Raspberry Pi Zero W」は機種Raspberry Pi Zero Wが一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の型番欄に単独の公式コードSC0020がなく、aliasに依存している",
+      "KSYの型番欄に単独の公式コードSC0020がなく、aliasに依存している",
+      "両店の商品名に版(V1.1等)の記載がない",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"118180\",\"sengoku\",\"EEHD-66P8\"]",
+    "fingerprint": "a4d3515ddf9f3d52c5ca7893ab21559d9793f883ae13e828df44998be4b3680a",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0020(秋月電子は型番欄が商品名のみで、スイッチサイエンス3200の型番SC0020を根拠にしたalias、せんごくは型番【009】RPI-ZERO-Wに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi Zero W」とせんごく「Raspberry Pi Zero W (V1.1)　【009】RPI-ZERO-W」は機種Raspberry Pi Zero Wが一致し、せんごくのみ商品名に版(V1.1)の記載がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の型番欄に単独の公式コードSC0020がなく、aliasに依存している",
+      "せんごくの型番欄に単独の公式コードSC0020がなく、aliasに依存している",
+      "秋月電子側の商品名に版(V1.1)の記載がない",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129325\",\"sengoku\",\"EEHD-6A5U\"]",
+    "fingerprint": "8cb73d921694c3124c8de9884b9c3e7688de86214d3f9f218290cf056b3535b9",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1111(秋月電子の型番欄の記載、せんごくの型番【018】RPi5-4GB-SC1111に含まれるコードSC1111(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi 5 4GB」とせんごく「【本体】Raspberry Pi 5 - 4GB　【018】RPi5-4GB-SC1111」は機種Raspberry Pi 5と容量4GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129326\",\"sengoku\",\"EEHD-6A5V\"]",
+    "fingerprint": "95a5231179d14057e4ab61cc0ec46602f6866c4aff909d84f3ea3357ec1e67b9",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1112(秋月電子の型番欄の記載、せんごくの型番【019】RPi5-8GB-SC1112に含まれるコードSC1112(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi 5 8GB」とせんごく「【本体】Raspberry Pi 5 - 8GB　【019】RPi5-8GB-SC1112」は機種Raspberry Pi 5と容量8GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129604\",\"sengoku\",\"EEHD-6HEU\"]",
+    "fingerprint": "0488f7b1410938b4c6877de25c2e02277b4de211c9addd693d4f881f0129b4b1",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1631(秋月電子の型番欄の記載、せんごくの型番【005】SC1631に含まれるコードSC1631(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi Pico 2」とせんごく「Raspberry Pi Pico 2　【005】SC1631」は機種Raspberry Pi Pico 2が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129605\",\"ksy\",\"222\"]",
+    "fingerprint": "5b1cf5559c3d8096f108eb89b305f0e411086cc82b10daf39b1d221a930bfad0",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0019(秋月電子の型番欄の記載、KSYは店舗コードRASPIZERO13に公式コードがなく、秋月129605の型番SC0019を根拠にしたalias)。秋月電子「Raspberry Pi Zero v1.3」とKSY「Raspberry Pi Zero V1.3」は機種Raspberry Pi Zeroと版V1.3が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYの型番欄に単独の公式コードSC0019がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129605\",\"sengoku\",\"EEHD-6YP3\"]",
+    "fingerprint": "ef5bb906c2e4f814205b6a6cfb15cab60dc36e4b9ab5a8dd4f01ce048dcb8804",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0019(秋月電子の型番欄の記載、せんごくは型番【023】RPI-ZERO-1.3に単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。秋月電子「Raspberry Pi Zero v1.3」とせんごく「Raspberry Pi Zero (V1.3)　【023】RPI-ZERO-1.3」は機種Raspberry Pi Zeroと版V1.3が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくの型番欄に単独の公式コードSC0019がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129606\",\"sengoku\",\"EEHD-6UGR\"]",
+    "fingerprint": "663ffd68d58754b72a18ea5dc545ecca7e13223d19d13a5e1fbbc8e7205b229a",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1110(秋月電子の型番欄の記載、せんごくの型番【021】RPi5-2GB-SC1110に含まれるコードSC1110(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi 5 2GB」とせんごく「【本体】Raspberry Pi 5 - 2GB　【021】RPi5-2GB-SC1110」は機種Raspberry Pi 5と容量2GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"129607\",\"sengoku\",\"EEHD-6JRZ\"]",
+    "fingerprint": "0d07666d3d01abee865c1356347b0c087c53b76a162364a748d4ef82167db5bf",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0721(秋月電子の型番欄の記載、せんごくの型番【012】SC0721に含まれるコードSC0721(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi Zero 2 WH(完成品)」とせんごく「Raspberry Pi Zero 2 WH　【012】SC0721」は機種Raspberry Pi Zero 2 WHが一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130198\",\"ksy\",\"483\"]",
+    "fingerprint": "11c93a1caa92d32bb2e84a86a3020b772ff976fb652ba42ba4b900a6d788940e",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0192(秋月電子の型番SC0192(11)から製造記号(11)を除いたコード、KSYの型番欄の記載)。秋月電子「Raspberry Pi 4 Model B 1GB(ラズベリーパイフォーモデルビー)」とKSY「Raspberry Pi 4 Model B RAM:1GB」は機種Pi 4 Model Bと容量1GBが一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSY側に製造記号(11)の記載がなく、秋月電子のSC0192(11)との一致は未確認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130199\",\"sengoku\",\"EEHD-6MF6\"]",
+    "fingerprint": "ad92cd168c5a09980efe343ac8e7396cea94e8ee424dec9fa097606d73ddfbe4",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1113(秋月電子の型番欄の記載、せんごくの型番【020】RPi5-16GB-SC1113に含まれるコードSC1113(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi 5 16GB」とせんごく「【本体】Raspberry Pi 5 - 16GB　【020】RPi5-16GB-SC1113」は機種Raspberry Pi 5と容量16GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130330\",\"sengoku\",\"EEHD-6MG3\"]",
+    "fingerprint": "76c954eda9ec2b17f8f3ff4941e74faac2b321db79a2f153a4f33bd4d125ccc7",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1633(秋月電子の型番欄の記載、せんごくの型番【007】SC1633に含まれるコードSC1633(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi Pico 2 W」とせんごく「Raspberry Pi Pico 2 W　【007】SC1633」は機種Raspberry Pi Pico 2 Wが一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130399\",\"sengoku\",\"EEHD-6NYK\"]",
+    "fingerprint": "e1d12d6951c576480324f22d0e7dfedf2e3c921a85845f50c38db9b1d43f9f83",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1634(秋月電子の型番欄の記載、せんごくの型番【008】SC1634に含まれるコードSC1634(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi Pico 2 WH(完成品)」とせんごく「Raspberry Pi Pico 2 WH【ピンヘッダ実装済】　【008】SC1634」は機種Raspberry Pi Pico 2 WHが一致し、秋月電子の「完成品」とせんごくの「ピンヘッダ実装済」は表記が異なるがいずれも実装済みの完成形を示す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"130982\",\"sengoku\",\"EEHD-6RNR\"]",
+    "fingerprint": "78df53050bf12d0e2b4b6bb7c9fd2b617b8091e7b16fccdd037ca1a28277080e",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1632(秋月電子の型番欄の記載、せんごくの型番【006】SC1632に含まれるコードSC1632(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi Pico 2 H(完成品)」とせんごく「Raspberry Pi Pico 2 H【ピンヘッダ実装済】　【006】SC1632」は機種Raspberry Pi Pico 2 Hが一致し、秋月電子の「完成品」とせんごくの「ピンヘッダ実装済」は表記が異なるがいずれも実装済みの完成形を示す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131168\",\"sengoku\",\"EEHD-6ZEM\"]",
+    "fingerprint": "2fadbe8bea36d2faf9837d15ec634c390d9f51f34203cd30993792d6c022671c",
+    "decision": "same_product",
+    "evidence": "共有コードは105100021(両店の型番欄に記載)。秋月電子「LEDドライバーボード for Seeed Studio XIAO」とせんごく「LED Driver Board for XIAO　105100021」はXIAO用LEDドライバーボードとして名称が対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "両店のmanufacturer欄が空欄(秋月電子は商品名にSeeed Studio、せんごくはvendor欄にSeeed Studio)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131297\",\"sengoku\",\"EEHD-5AXV\"]",
+    "fingerprint": "2e37d3e3a257a77b59cbfc6721ada987e5baa575196f745bee625aff171c46b7",
+    "decision": "same_product",
+    "evidence": "共有コードは10684(せんごくの型番【10684】の括弧内で、秋月電子側は型番欄「10684」に同じ番号)。秋月電子「2.8インチタッチディスプレイシールド For Arduino(R)」とせんごく「2.8インチ 抵抗膜方式(RTP) タッチパネルシールド for Arduino　【10684】 2.8inch TFT Touch Shield」はいずれも2.8インチのArduino用タッチディスプレイシールドで、サイズと用途が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄は空欄で、Waveshare製と確認できる記載がない",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "秋月電子の商品名にタッチ方式(せんごくは抵抗膜方式)の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131519\",\"sengoku\",\"EEHD-6WSZ\"]",
+    "fingerprint": "8eb9a01e95c8cd7d2d49df86ce6ce4a400a3c3a82e058d620c25131f8c116a93",
+    "decision": "same_product",
+    "evidence": "共有コードはSC2162(秋月電子の型番欄の記載、せんごくの型番【022】RPi5-1GB-SC2162に含まれるコードSC2162(【】内の数字は店舗の通し番号))。秋月電子「Raspberry Pi 5 1GB」とせんごく「【本体】Raspberry Pi 5 - 1GB　【022】RPi5-1GB-SC2162」は機種Raspberry Pi 5と容量1GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131540\",\"sengoku\",\"EEHD-6ZDS\"]",
+    "fingerprint": "4b89b5228b3f675baaf0578dccafe4d73d95b2e9088e8928b5a33a32251d49c3",
+    "decision": "same_product",
+    "evidence": "共有コードは105990190(両店の型番欄に記載)。秋月電子「シリアルバスサーボドライバーボード for XIAO」とせんごく「Bus Servo Driver Board for XIAO　105990190」はXIAO用バスサーボドライバーボードとして名称が対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側のmanufacturer欄が空欄でSeeedの記載なし(せんごくのvendorはSeeed Studio)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"131742\",\"sengoku\",\"EEHD-6ZDV\"]",
+    "fingerprint": "de764c8e64ce53348413315cd75561ed8d7287bd2324947fdc5aa8c54c4fbd44",
+    "decision": "same_product",
+    "evidence": "共有コードは109990585(両店の型番欄に記載)。秋月電子「Seeed Studio XIAO デバッグメイト」とせんごく「Seeed Studio XIAO Debug Mate　109990585」はデバッグメイトの日英表記で、メーカー名も商品名に含まれ一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "両店のmanufacturer欄が空欄(商品名にSeeed Studioの記載あり)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1015\",\"sengoku\",\"EEHD-6A5U\"]",
+    "fingerprint": "4220e12f5dadf9ea34ce4607839f2038c071e5578766249cc118663960a32f73",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1111(KSYの型番欄の記載、せんごくの型番【018】RPi5-4GB-SC1111に含まれるコードSC1111(【】内の数字は店舗の通し番号))。KSY「SC1111 Raspberry Pi 5/4GB」とせんごく「【本体】Raspberry Pi 5 - 4GB　【018】RPi5-4GB-SC1111」は機種Raspberry Pi 5と容量4GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1016\",\"sengoku\",\"EEHD-6A5V\"]",
+    "fingerprint": "f527ac5404c63a41877a06097e882970360d970c61169a1790f52ea0a1b44f03",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1112(KSYの型番欄の記載、せんごくの型番【019】RPi5-8GB-SC1112に含まれるコードSC1112(【】内の数字は店舗の通し番号))。KSY「SC1112 Raspberry Pi 5/8GB」とせんごく「【本体】Raspberry Pi 5 - 8GB　【019】RPi5-8GB-SC1112」は機種Raspberry Pi 5と容量8GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1094\",\"sengoku\",\"EEHD-6HEU\"]",
+    "fingerprint": "801f2a15b8dd90a2b2840d7b87e4f04bc0daa7642bc47ac9fedd46282137e180",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1631(KSYの型番欄の記載、せんごくの型番【005】SC1631に含まれるコードSC1631(【】内の数字は店舗の通し番号))。KSY「Raspberry Pi Pico 2」とせんごく「Raspberry Pi Pico 2　【005】SC1631」は機種Raspberry Pi Pico 2が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1095\",\"sengoku\",\"EEHD-6UGR\"]",
+    "fingerprint": "f65aab5048d32aaa95b5d32f5887923a6501bad419862fc268a6add2f26a5443",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1110(KSYの型番欄の記載、せんごくの型番【021】RPi5-2GB-SC1110に含まれるコードSC1110(【】内の数字は店舗の通し番号))。KSY「Raspberry Pi 5 /2GB」とせんごく「【本体】Raspberry Pi 5 - 2GB　【021】RPi5-2GB-SC1110」は機種Raspberry Pi 5と容量2GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1097\",\"sengoku\",\"EEHD-6JRZ\"]",
+    "fingerprint": "8ce648175975f70d877e6efec12b262bc1e808474687bc00b9f77481de558ca3",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0721(KSYの型番欄の記載、せんごくの型番【012】SC0721に含まれるコードSC0721(【】内の数字は店舗の通し番号))。KSY「Raspberry Pi Zero 2 WH」とせんごく「Raspberry Pi Zero 2 WH　【012】SC0721」は機種Raspberry Pi Zero 2 WHが一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1157\",\"sengoku\",\"EEHD-6MF6\"]",
+    "fingerprint": "9cfb0f26f8408d29f76ee8fe4b6054c6060a6709cef709c50f1ac4ac6a228161",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1113(KSYの型番欄の記載、せんごくの型番【020】RPi5-16GB-SC1113に含まれるコードSC1113(【】内の数字は店舗の通し番号))。KSY「SC1113 Raspberry Pi 5/16GB」とせんごく「【本体】Raspberry Pi 5 - 16GB　【020】RPi5-16GB-SC1113」は機種Raspberry Pi 5と容量16GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1178\",\"sengoku\",\"EEHD-6MG3\"]",
+    "fingerprint": "fa3ef2cc6b0c646006c672b19dc6a172cc26aba5b49723e885613ad377829032",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1633(KSYの型番欄の記載、せんごくの型番【007】SC1633に含まれるコードSC1633(【】内の数字は店舗の通し番号))。KSY「Raspberry Pi Pico 2W」とせんごく「Raspberry Pi Pico 2 W　【007】SC1633」は機種Raspberry Pi Pico 2 Wが一致し、「2W」と「2 W」の空白の有無は表記差である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1201\",\"sengoku\",\"EEHD-6RNR\"]",
+    "fingerprint": "4154568ffe0ad75832d787cb04169ee2f295a00145b71361685c9e25ac51a37c",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1632(KSYの型番欄の記載、せんごくの型番【006】SC1632に含まれるコードSC1632(【】内の数字は店舗の通し番号))。KSY「Raspberry Pi Pico 2 H」とせんごく「Raspberry Pi Pico 2 H【ピンヘッダ実装済】　【006】SC1632」は機種Raspberry Pi Pico 2 Hが一致し、せんごくのみ商品名にピンヘッダ実装済とある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSY側の商品名にピンヘッダ実装の明記がない",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1202\",\"sengoku\",\"EEHD-6NYK\"]",
+    "fingerprint": "b1f723d82d6b3c67bd0e8ee9d66acb222177fdf583f58209767edd81d9f1e884",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1634(KSYの型番欄の記載、せんごくの型番【008】SC1634に含まれるコードSC1634(【】内の数字は店舗の通し番号))。KSY「Raspberry Pi Pico 2 WH」とせんごく「Raspberry Pi Pico 2 WH【ピンヘッダ実装済】　【008】SC1634」は機種Raspberry Pi Pico 2 WHが一致し、せんごくのみ商品名にピンヘッダ実装済とある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSY側の商品名にピンヘッダ実装の明記がない",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"1272\",\"sengoku\",\"EEHD-6WSZ\"]",
+    "fingerprint": "dacc2cf3c50794fc8b958b54a42b0f66f83cd4accfc2e35c5d2a3b560e8bab50",
+    "decision": "same_product",
+    "evidence": "共有コードはSC2162(KSYの型番欄の記載、せんごくの型番【022】RPi5-1GB-SC2162に含まれるコードSC2162(【】内の数字は店舗の通し番号))。KSY「Raspberry Pi 5/1GB」とせんごく「【本体】Raspberry Pi 5 - 1GB　【022】RPi5-1GB-SC2162」は機種Raspberry Pi 5と容量1GBが一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"219\",\"sengoku\",\"EEHD-66P8\"]",
+    "fingerprint": "f8168a6abf38d785a0178f83dc923d61ed89801350cb476adef508601c85f1c9",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0020(KSYは店舗コードRASPI0W11に公式コードがなく、スイッチサイエンス3200の型番SC0020を根拠にしたalias、せんごくは型番【009】RPI-ZERO-Wに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。KSY「Raspberry Pi Zero W」とせんごく「Raspberry Pi Zero W (V1.1)　【009】RPI-ZERO-W」は機種Raspberry Pi Zero Wが一致し、せんごくのみ商品名に版(V1.1)の記載がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYの型番欄に単独の公式コードSC0020がなく、aliasに依存している",
+      "せんごくの型番欄に単独の公式コードSC0020がなく、aliasに依存している",
+      "KSY側の商品名に版(V1.1)の記載がない",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"222\",\"sengoku\",\"EEHD-6YP3\"]",
+    "fingerprint": "56ebab7a1ebc33ba56100e3c4ee46303285f0c9c0b04964460c5822ecea16c87",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0019(KSYは店舗コードRASPIZERO13に公式コードがなく、秋月129605の型番SC0019を根拠にしたalias、せんごくは型番【023】RPI-ZERO-1.3に単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。KSY「Raspberry Pi Zero V1.3」とせんごく「Raspberry Pi Zero (V1.3)　【023】RPI-ZERO-1.3」は機種Raspberry Pi Zeroと版V1.3が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYの型番欄に単独の公式コードSC0019がなく、aliasに依存している",
+      "せんごくの型番欄に単独の公式コードSC0019がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"361\",\"sengoku\",\"EEHD-68VN\"]",
+    "fingerprint": "95511fa5044fa0eaa830e5413216c6dba38b6400cea2e6b9b182288aa52f23bb",
+    "decision": "same_product",
+    "evidence": "共有コードは11820(せんごくの型番【11820】の括弧内で、KSY側は型番欄「11820」に同じ番号)。KSY「モーター ドライバー ボード for Pi」とせんごく「Raspberry Pi用 モータードライバーボード　【11820】 RPi Motor Driver Board」はいずれもRaspberry Pi用のモータードライバーボードで、用途と種別が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"363\",\"sengoku\",\"EEHD-5S5E\"]",
+    "fingerprint": "3aa8574578d4228ca266e6dd6b6fe87eafcffba45697633eb1bb9c846cec2c7c",
+    "decision": "same_product",
+    "evidence": "共有コードは11010(せんごくの型番【11010】の括弧内で、KSY側は型番欄「11010」に同じ番号)。KSY「AD/DAコンバーター 拡張ボード 高精細 for Pi」とせんごく「RaspberryPi高精度AD / DA拡張ボード　【11010】 High-Precision AD/DA Board」はいずれもRaspberry Pi向けの高精度AD/DA拡張ボードで、用途と種別が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"364\",\"sengoku\",\"EEHD-5J6G\"]",
+    "fingerprint": "6cc0da08fb5bb6c39286f493083ff7034c59e1d73ac33ad68513427bf368afa9",
+    "decision": "same_product",
+    "evidence": "共有コードは11638(せんごくの型番【11638】の括弧内で、KSY側は型番欄「11638」に同じ番号)。KSY「リレー ボード for Pi」とせんごく「Raspberry Pi用 リレーボード　【11638】 RPi Relay Board」はいずれもRaspberry Pi用のリレーボードで、用途と種別が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"368\",\"sengoku\",\"EEHD-68UX\"]",
+    "fingerprint": "9d727e67ac2ee488d5e513fcdcc318b88b8d941e93598ede40366313bad86326",
+    "decision": "same_product",
+    "evidence": "共有コードは9522(せんごくの型番【9522】の括弧内で、KSY側は型番欄「9522」に同じ番号)。KSY「ホール センサー モジュール AH49EZ3搭載 アナログ出力」とせんごく「ホールセンサー　【9522】 Hall Sensor」はいずれもホールセンサーモジュールで、種別が一致するが、KSY側のみAH49EZ3搭載・アナログ出力の記載がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくの商品名にAH49EZ3搭載・アナログ出力の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"369\",\"sengoku\",\"EEHD-68UY\"]",
+    "fingerprint": "48982f1bebd4068fc95f52372b4e20d807ea6026de369ad32dcaa8b8734da29e",
+    "decision": "same_product",
+    "evidence": "共有コードは9523(せんごくの型番【9523】の括弧内で、KSY側は型番欄「9523」に同じ番号)。KSY「赤外線反射センサー モジュール ST188搭載」とせんごく「赤外線反射センサー　【9523】 Infrared Reflective Sensor」はいずれも赤外線反射センサーで、種別が一致するが、KSY側のみST188搭載の記載がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくの商品名にST188搭載の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"370\",\"sengoku\",\"EEHD-68V5\"]",
+    "fingerprint": "f06755af6d08749070b71af0f1db99562f423119ad833a38f44e8f0d20b8ebc3",
+    "decision": "same_product",
+    "evidence": "共有コードは9533(せんごくの型番【9533】の括弧内で、KSY側は型番欄「9533」に同じ番号)。KSY「回転センサー モジュール」とせんごく「回転センサー　【9533】 Rotation Sensor」はいずれも回転センサーモジュールで、種別が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"371\",\"sengoku\",\"EEHD-68V7\"]",
+    "fingerprint": "be49d65bd01d3b1655ca8ef4ff76e8dc121fefc8f1e97a96a7d7dfee724dcff6",
+    "decision": "same_product",
+    "evidence": "共有コードは9535(せんごくの型番【9535】の括弧内で、KSY側は型番欄「9535」に同じ番号)。KSY「温湿度センサー モジュール DHT11搭載 デジタル出力」とせんごく「DHT11 温湿度センサー　【9535】 DHT11 Temperature-Humidity Sensor」はいずれもDHT11搭載の温湿度センサーで、チップと種別が一致するが、KSY側のみデジタル出力の記載がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"374\",\"sengoku\",\"EEHD-68V3\"]",
+    "fingerprint": "22ed23f0053e4ae00cd07c4efe1c4873b2a083de89513790ebca01c2aba781b5",
+    "decision": "same_product",
+    "evidence": "共有コードは9525(せんごくの型番【9525】の括弧内で、KSY側は型番欄「9525」に同じ番号)。KSY「液体レベル センサー モジュール」とせんごく「水位センサー　【9525】 Liquid Level Sensor」はKSYの液体レベルセンサーとせんごくの水位センサー(英名Liquid Level Sensor)は同じ種別のセンサーモジュールである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"375\",\"sengoku\",\"EEHD-68V4\"]",
+    "fingerprint": "2d0dce203e4e0294601aa2b0512dedafd36628e6a98b756f1b5965d006abea1f",
+    "decision": "same_product",
+    "evidence": "共有コードは9527(せんごくの型番【9527】の括弧内で、KSY側は型番欄「9527」に同じ番号)。KSY「土壌用湿度センサー モジュール」とせんごく「土壌水分センサー　【9527】 Moisture Sensor」はKSYの土壌用湿度センサーとせんごくの土壌水分センサー(英名Moisture Sensor)は同じ種別のセンサーモジュールである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"377\",\"sengoku\",\"EEHD-68V6\"]",
+    "fingerprint": "9b695b5e9489e5086757f78594d1dd17480f44fad861996667b0639f9e0a88d7",
+    "decision": "same_product",
+    "evidence": "共有コードは9534(せんごくの型番【9534】の括弧内で、KSY側は型番欄「9534」に同じ番号)。KSY「サウンドセンサー モジュール　LM386搭載」とせんごく「LM386搭載サウンドセンサー　【9534】 Sound Sensor」はいずれもLM386搭載のサウンドセンサーモジュールで、チップと種別が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"388\",\"sengoku\",\"EEHD-68UZ\"]",
+    "fingerprint": "f6e0690ac4c4bcdb7da86fd52b794136f86e8c0279313f8b3a89c5b9647577e0",
+    "decision": "same_product",
+    "evidence": "共有コードは9524(せんごくの型番【9524】の括弧内で、KSY側は型番欄「9524」に同じ番号)。KSY「レーザー センサー モジュール」とせんごく「レーザーセンサー　【9524】 Laser Sensor」はいずれもレーザーセンサーモジュールで、種別が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"389\",\"sengoku\",\"EEHD-68VC\"]",
+    "fingerprint": "a66e8818d5190b7ce709bcb6807d1f62f3da0c869fc741a70ade5b16d678970e",
+    "decision": "same_product",
+    "evidence": "共有コードは9536(せんごくの型番【9536】の括弧内で、KSY側は型番欄「9536」に同じ番号)。KSY「傾斜センサー モジュール」とせんごく「傾きセンサー　【9536】 Tilt Sensor」はKSYの傾斜センサーとせんごくの傾きセンサー(英名Tilt Sensor)は同じ種別のセンサーモジュールである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"406\",\"sengoku\",\"EEHD-57LT\"]",
+    "fingerprint": "bf18536a7a4b602c3a446e867907abb835cef1bab0e9f44fe36a25ae6f21156f",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0065(KSYは店舗コードRASPIZWHSC0065の末尾にSC0065を含むためalias、せんごくは型番【010】RPI-ZERO-WHに単独の公式コードがなく、商品名と他店の同名商品を根拠に付けたalias)。KSY「Raspberry Pi Zero WH」とせんごく「Raspberry Pi Zero WH【ピンヘッダ実装済】　【010】RPI-ZERO-WH」は機種Raspberry Pi Zero WHが一致し、せんごくのみ商品名にピンヘッダ実装済とある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYの型番欄に単独の公式コードSC0065がなく、aliasに依存している",
+      "せんごくの型番欄に単独の公式コードSC0065がなく、aliasに依存している",
+      "KSY側の商品名にピンヘッダ実装の明記がない",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"435\",\"sengoku\",\"EEHD-6RCT\"]",
+    "fingerprint": "170892d135087355134a1d64739afca4374f263a818a82e28609f64c7e88d13a",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0073(KSYは店舗コードRASPI3PSC0073の末尾にSC0073を含むためalias、せんごくの型番【014】RPi3B-SC0073に含まれるコードSC0073(【】内の数字は店舗の通し番号))。KSY「Raspberry Pi 3 Model B+」とせんごく「【本体】Raspberry Pi 3 Model B+　【014】RPi3B-SC0073」は機種Raspberry Pi 3 Model B+が一致し、せんごくの【本体】は本体のみを示す表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYの型番欄に単独の公式コードSC0073がなく、aliasに依存している",
+      "メーカー欄が両店とも空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"497\",\"sengoku\",\"EEHD-6YSS\"]",
+    "fingerprint": "d304d8d55d65265e66ee3f94304c7e9b8dd32ceddea7fb3253ad5360d23c7599",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0193で、KSY側は型番欄にSC0193がそのまま入っており、せんごく側は型番【015】RPi4B-2GBに公式コードがないため商品名から付けたaliasでSC0193を割り当てたものである。KSY「Raspberry Pi 4 Model B/2GB」とせんごく「【本体】Raspberry Pi 4 Model B - 2GB　【015】RPi4B-2GB」はどちらもRaspberry Pi 4 Model Bの2GB版で一致し、せんごくの「【本体】」は店舗側の表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYとせんごくのメーカー欄が空欄",
+      "せんごく側の型番欄に公式コードSC0193の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"552\",\"sengoku\",\"EEHD-655N\"]",
+    "fingerprint": "4e068f1dead221dc98b5070659edabb7d0a8838d2906865aa0a1ba97bc9d7270",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0195で、KSY側は型番欄にSC0195がそのまま入っており、せんごく側は型番【017】RPi4B-8GBに公式コードがないため商品名から付けたaliasでSC0195を割り当てたものである。KSY「Raspberry Pi 4 Model B/8GB element14」とせんごく「【本体】Raspberry Pi 4 Model B - 8GB　【017】RPi4B-8GB」はどちらもRaspberry Pi 4 Model Bの8GB版で一致し、KSY側の商品名にだけelement14の流通ブランド表記がある。",
+    "differences": [
+      "流通ブランド表記: KSY「element14」 ↔ せんごく「表記なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYとせんごくのメーカー欄が空欄",
+      "せんごく側の型番欄に公式コードSC0195の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"634\",\"sengoku\",\"EEHD-5S4T\"]",
+    "fingerprint": "7f641ba148833d66e913e990be034843372803c329604c3ff221090e8d9e283e",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0915で、KSY側は型番欄にSC0915がそのまま入っており、せんごく側は型番【001】RPI-PICOに公式コードがないため商品名から付けたaliasでSC0915を割り当てたものである。KSY「Raspberry Pi Pico」とせんごく「Raspberry Pi Pico　【001】RPI-PICO」はどちらもRaspberry Pi Picoで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYとせんごくのメーカー欄が空欄",
+      "せんごく側の型番欄に公式コードSC0915の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"667\",\"sengoku\",\"EEHD-5UJW\"]",
+    "fingerprint": "e347646fe06d304bb21cd7f053ce063c3c79e6f8a0027f577abbbf4752477bca",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0382で、KSY側は型番欄にSC0382がそのまま入っており、せんごく側は型番RPI400JPに公式コードがないため商品名から付けたaliasでSC0382を割り当てたものである。KSY「Raspberry Pi 400 日本版」とせんごく「Raspberry Pi 400 日本版　RPI400JP」はどちらもRaspberry Pi 400の日本版で一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYとせんごくのメーカー欄が空欄",
+      "せんごく側の型番欄はせんごく独自のRPI400JPで、公式コードSC0382の記載はなくaliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"723\",\"sengoku\",\"EEHD-655P\"]",
+    "fingerprint": "27ab5bb95db0aed1650fc94142601942bc32f142fc2fab2e5fe4a5e2232115fc",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0194で、KSY側は型番欄にSC0194がそのまま入っており、せんごく側は型番【016】RPi4B-4GBに公式コードがないため商品名から付けたaliasでSC0194を割り当てたものである。KSY「Raspberry Pi 4 Model B/4GB element14」とせんごく「【本体】Raspberry Pi 4 Model B - 4GB　【016】RPi4B-4GB」はどちらもRaspberry Pi 4 Model Bの4GB版で一致し、KSY側の商品名にだけelement14の流通ブランド表記がある。",
+    "differences": [
+      "流通ブランド表記: KSY「element14」 ↔ せんごく「表記なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYとせんごくのメーカー欄が空欄",
+      "せんごく側の型番欄に公式コードSC0194の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"794\",\"sengoku\",\"EEHD-5V4E\"]",
+    "fingerprint": "4607177e37da25e648c8c23af374e8cea7e333b33e3e1b5fa4a904453988b910",
+    "decision": "same_product",
+    "evidence": "共有コードは20550(せんごくの型番【20550】の括弧内で、KSY側は型番欄「20550」に同じ番号)。KSY「アクリル保護プレート 透明 for Pico」とせんごく「Raspberry Pi Pico用 アクリル保護ケース (クリア)　【20550】 Raspberry-Pi-Pico-Case」はいずれもRaspberry Pi Pico用の透明(クリア)アクリル製保護具で、素材・色・対象が一致するが、呼称だけがKSYの「プレート」とせんごくの「ケース」で異なる。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "KSYは「保護プレート」、せんごくは「保護ケース」と呼び、板状か箱状かの形状が商品名からは確認できない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"821\",\"sengoku\",\"EEHD-5VV4\"]",
+    "fingerprint": "c73031b5899251442a39e7a2394516811df604fa9171031d424c9d1c653d7ec4",
+    "decision": "same_product",
+    "evidence": "共有コードは20410(せんごくの型番【20410】の括弧内で、KSY側は型番欄「20410」に同じ番号)。KSY「イーサネット UART変換基板　for Pico」とせんごく「Raspberry Pi Pico用 イーサネット to UARTコンバーター　【20410】 Pico-ETH-CH9121」はいずれもRaspberry Pi Pico用のイーサネットとUARTの変換ボードで、用途と種別が一致するが、せんごく側のみCH9121の型式名がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "KSYの商品名にCH9121搭載の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"849\",\"sengoku\",\"EEHD-6CEA\"]",
+    "fingerprint": "c938ab227a0f4f9a397aad051e372f9e1b2a77aef9fe07556994c1d7e5d82794",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0510で、KSY側は型番欄にSC0510がそのまま入っており、せんごく側は型番【011】SC0510の【…】内の数字が店舗の通し番号で、その後ろのSC0510を読み取ったものである。KSY「Raspberry Pi Zero 2 W」とせんごく「Raspberry Pi Zero 2 W　【011】SC0510」はどちらもRaspberry Pi Zero 2 Wで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYとせんごくのメーカー欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"863\",\"sengoku\",\"EEHD-65C4\"]",
+    "fingerprint": "5cbdfd2d51878809d5287505b176ebdc3fa0d02986b56aeffa8a57ae0fb063a6",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0918で、KSY側は型番欄にSC0918がそのまま入っており、せんごく側は型番【003】RPI-PICO-Wに公式コードがないため商品名から付けたaliasでSC0918を割り当てたものである。KSY「Raspberry Pi Pico W」とせんごく「Raspberry Pi Pico W　【003】RPI-PICO-W」はどちらもRaspberry Pi Pico Wで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYとせんごくのメーカー欄が空欄",
+      "せんごく側の型番欄に公式コードSC0918の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"864\",\"sengoku\",\"EEHD-5YEC\"]",
+    "fingerprint": "54eb9e59580712e3b94ce1d08e8ce46603dc763da66e716221433f3502a5f667",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0917で、KSY側は型番欄にSC0917がそのまま入っており、せんごく側は型番【002】RPI-PICO-Hに公式コードがないため商品名から付けたaliasでSC0917を割り当てたものである。KSY「Raspberry Pi Pico H」とせんごく「Raspberry Pi Pico H【ピンヘッダ実装済】　【002】RPI-PICO-H」はどちらもRaspberry Pi Pico Hで一致し、せんごく側の商品名にだけ「【ピンヘッダ実装済】」の補足がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYとせんごくのメーカー欄が空欄、せんごくのベンダー欄も空欄",
+      "KSY側の商品名にはピンヘッダ実装済の記載がない",
+      "せんごく側の型番欄に公式コードSC0917の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"865\",\"sengoku\",\"EEHD-65YB\"]",
+    "fingerprint": "c7573c7fe36c4cb15a02b80b84310327828ca0f2101d1a782cc8e5dd386e3189",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0919で、KSY側は型番欄にSC0919がそのまま入っており、せんごく側は型番【004】RPI-PICO-WHに公式コードがないため商品名から付けたaliasでSC0919を割り当てたものである。KSY「Raspberry Pi Pico WH」とせんごく「Raspberry Pi Pico WH【ピンヘッダ実装済】　【004】RPI-PICO-WH」はどちらもRaspberry Pi Pico WHで一致し、せんごく側の商品名にだけ「【ピンヘッダ実装済】」の補足がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYとせんごくのメーカー欄が空欄",
+      "KSY側の商品名にはピンヘッダ実装済の記載がない",
+      "せんごく側の型番欄に公式コードSC0919の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"871\",\"sengoku\",\"EEHD-5SJE\"]",
+    "fingerprint": "c34b05d47df4c86a12e72d1e8d4a23743a5754bc4d61196447f478207b63fe5c",
+    "decision": "same_product",
+    "evidence": "共有コードは14718(せんごくの型番【14718】の括弧内で、KSY側は型番欄「14718」に同じ番号)。KSY「LCDモジュール 1.8\"  for micro:bit」とせんごく「1.8インチ 160x128 カラフルディスプレイモジュール for micro:bit　【14718】 1.8inch LCD for micro:bit」はいずれもmicro:bit用の1.8インチLCDモジュールで、サイズと用途が一致するが、せんごく側のみ160×128の記載がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "KSYの商品名に解像度の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"ksy\",\"999\",\"sengoku\",\"EEHD-5WUD\"]",
+    "fingerprint": "004f2e952ad11186e0e1bd2b1167fe6727f5e5346344504391266faac256dfb7",
+    "decision": "same_product",
+    "evidence": "共有コードは21354(せんごくの型番【21354】の括弧内で、KSY側は型番欄「21354」に同じ番号)。KSY「Piケース ABS製 for Zeroシリーズ」とせんごく「Raspberry Pi Zeroシリーズ用ABS保護ケース (Zero / Zero 2 W対応)　【21354】 PI-ZERO-CASE-A」はいずれもRaspberry Pi Zeroシリーズ用のABS製ケースで、素材と対象が一致するが、せんごく側のみZero / Zero 2 W対応の記載がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "KSYの商品名に対応機種(Zero / Zero 2 W)の個別記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10022\",\"sengoku\",\"EEHD-6L6N\"]",
+    "fingerprint": "8da1be2f8800703629dc5a365aa720d14442b7abd99504bc7fea75c1822f8d4d",
+    "decision": "same_product",
+    "evidence": "共有コードは28626(せんごくの型番【28626】の括弧内で、スイッチサイエンス側は型番欄「28626」に同じ番号)。スイッチサイエンス「DDSM400 ダイレクトドライブサーボモーター」とせんごく「ダイレクトドライブサーボモーター　【28626】 DDSM400」はいずれもDDSM400のダイレクトドライブサーボモーターで、型式名と種別が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10023\",\"sengoku\",\"EEHD-6LY3\"]",
+    "fingerprint": "7744fe6d93f54521a2fc9e665a43a0bcc1e472bdf0f92271b4176ad54d66e153",
+    "decision": "same_product",
+    "evidence": "共有コードは28902(せんごくの型番【28902】の括弧内で、スイッチサイエンス側は型番欄「28902」に同じ番号)。スイッチサイエンス「USB Type-C接続 サーマルカメラ 45°FOV--在庫限り」とせんごく「スマートフォン向けIRサーマルイメージングカメラ 45°FOV　【28902】 Thermal-45 USB Camera (B)」はいずれもUSB Type-C接続の45°FOVサーマルカメラで、画角と種別が一致するが、スイッチサイエンスの「在庫限り」は販売状況の表記である。",
+    "differences": [
+      "販売状況: スイッチサイエンス「在庫限り」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくの型番末尾(B)に当たる記載がスイッチサイエンスの商品名にない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10024\",\"sengoku\",\"EEHD-6LF3\"]",
+    "fingerprint": "c7549436a86131afcf1eb367193f7cd46a2664466a71102e92912fc7f61ddeb4",
+    "decision": "same_product",
+    "evidence": "共有コードは28903(せんごくの型番【28903】の括弧内で、スイッチサイエンス側は型番欄「28903」に同じ番号)。スイッチサイエンス「USB Type-C接続 サーマルカメラ 90°FOV--在庫限り」とせんごく「スマートフォン向けIRサーマルイメージングカメラ 90° FOV　【28903】 Thermal-90 USB Camera (B)」はいずれもUSB Type-C接続の90°FOVサーマルカメラで、画角と種別が一致するが、スイッチサイエンスの「在庫限り」は販売状況の表記である。",
+    "differences": [
+      "販売状況: スイッチサイエンス「在庫限り」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくの型番末尾(B)に当たる記載がスイッチサイエンスの商品名にない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10053\",\"sengoku\",\"EEHD-6MG3\"]",
+    "fingerprint": "9fb433bbc4001ebecbb9177fee794dd9d86a1f484ae84aba06a57b7b7440de7e",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1633で、スイッチサイエンス側は型番欄にSC1633がそのまま入っており、せんごく側は型番【007】SC1633の【…】内の数字が店舗の通し番号で、その後ろのSC1633を読み取ったものである。スイッチサイエンス「Raspberry Pi Pico 2 W」とせんごく「Raspberry Pi Pico 2 W　【007】SC1633」はどちらもRaspberry Pi Pico 2 Wで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10055\",\"sengoku\",\"EEHD-6MF6\"]",
+    "fingerprint": "c91803adf172ec50a54ea0f59649c5223759db4b7d6d6d3cc8ce9d47f0aa12c1",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1113で、スイッチサイエンス側は型番欄にSC1113がそのまま入っており、せんごく側は型番【020】RPi5-16GB-SC1113の【…】内の数字が店舗の通し番号で、その後ろのSC1113を読み取ったものである。スイッチサイエンス「Raspberry Pi 5 / 16GB」とせんごく「【本体】Raspberry Pi 5 - 16GB　【020】RPi5-16GB-SC1113」はどちらもRaspberry Pi 5の16GB版で一致し、せんごくの「【本体】」は店舗側の表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10122\",\"sengoku\",\"EEHD-6LEZ\"]",
+    "fingerprint": "20c90a4cf87b0e0596a1ceeb94b6856ac36e32ac351a454181e8226802218717",
+    "decision": "same_product",
+    "evidence": "共有コードは29330(せんごくの型番【29330】の括弧内で、スイッチサイエンス側は型番欄「29330」に同じ番号)。スイッチサイエンス「RP2350-GEEK」とせんごく「RP2350-GEEK 開発ボード　【29330】 RP2350-GEEK」はいずれもRP2350-GEEKの開発ボードで、型式名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10125\",\"sengoku\",\"EEHD-6LEU\"]",
+    "fingerprint": "7e1731f3151d24d6363a977a4feeed0152dd157e7abb7fa4925ad2505f4a282b",
+    "decision": "same_product",
+    "evidence": "共有コードは28816(せんごくの型番【28816】の括弧内で、スイッチサイエンス側は型番欄「28816」に同じ番号)。スイッチサイエンス「RP2350-Zero」とせんごく「RP2350-Zero 開発ボード　【28816】 RP2350-Zero」はいずれもRP2350-Zeroの開発ボードで、型式名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "ピンヘッダの有無がどちらの商品名にも記載されていない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10128\",\"sengoku\",\"EEHD-6LEY\"]",
+    "fingerprint": "8276f95764a1125d0fd7df07e2a78139fccc52d878a93be9e68580d98879cdc5",
+    "decision": "same_product",
+    "evidence": "共有コードは29266(せんごくの型番【29266】の括弧内で、スイッチサイエンス側は型番欄「29266」に同じ番号)。スイッチサイエンス「Waveshare RP2350-ETH開発ボード」とせんごく「RP2350-ETH 開発ボード　【29266】 RP2350-ETH」はいずれもRP2350-ETHの開発ボードで、型式名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10130\",\"sengoku\",\"EEHD-6LEX\"]",
+    "fingerprint": "c9959a0129e6b61610b9488962531fb5ec4a2fd450122da22895ae527faf1cce",
+    "decision": "same_product",
+    "evidence": "共有コードは29371(せんごくの型番【29371】の括弧内で、スイッチサイエンス側は型番欄「29371」に同じ番号)。スイッチサイエンス「Waveshare RP2350-Plus-M」とせんごく「RP2350‑Plus 開発ボード (4MB Flash版 ピンヘッダ実装済)　【29371】 RP2350-Plus-M」はいずれもRP2350-Plus-Mの開発ボードで、型式名が一致するが、4MB Flash・ピンヘッダ実装済はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "スイッチサイエンスの商品名にFlash容量(4MB)とピンヘッダ実装済の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10131\",\"sengoku\",\"EEHD-6L8H\"]",
+    "fingerprint": "6ffde7d20fdc7046ea67fb7ede5d3d7f2310890e2cc22254d554f1d8d26c7392",
+    "decision": "same_product",
+    "evidence": "共有コードは29035(せんごくの型番【29035】の括弧内で、スイッチサイエンス側は型番欄「29035」に同じ番号)。スイッチサイエンス「Waveshare 5V/3.3V 4A出力 降圧型DC-DCコンバータ」とせんごく「小型降圧コンバーター 3.3V/5V出力　【29035】 DC5-36-TO-DC3V3-5」はいずれも3.3V/5V出力の降圧型DC-DCコンバータで、種別と出力電圧が一致するが、4A出力はスイッチサイエンス側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくの商品名に出力電流(4A)の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10132\",\"sengoku\",\"EEHD-6L5E\"]",
+    "fingerprint": "6098f245d7959b0d0fad65f5b464f9a40bec5e328097b55be44f8cc65038b111",
+    "decision": "same_product",
+    "evidence": "共有コードは29320(せんごくの型番【29320】の括弧内で、スイッチサイエンス側は型番欄「29320」に同じ番号)。スイッチサイエンス「Waveshare Raspberry Pi 5用 PoE/PCIe-M.2 SSD変換HAT+」とせんごく「Raspberry Pi 5用 PCIe - M.2アダプター(PoE機能付き)(B)　【29320】 PoE M.2 HAT+ (B)」はいずれもRaspberry Pi 5用のPoE機能付きPCIe-M.2変換HATで、対象と機能が一致するが、(B)はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "スイッチサイエンスの商品名に型番末尾(B)に当たる記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10138\",\"sengoku\",\"EEHD-6LF4\"]",
+    "fingerprint": "2429c02fb3c9f0f24f870f7b481118093946de278e6570e5e3a8a32d851df385",
+    "decision": "same_product",
+    "evidence": "共有コードは29318(せんごくの型番【29318】の括弧内で、スイッチサイエンス側は型番欄「29318」に同じ番号)。スイッチサイエンス「Waveshare 3.5型静電容量式タッチスクリーンディスプレイ（320 x 480、SPI/I2C接続）」とせんごく「3.5インチ 320×480 タッチディスプレイモジュール ST7796S IPS　【29318】 3.5inch Capacitive Touch LCD」はいずれも3.5インチ320×480の静電容量式タッチディスプレイで、サイズ・解像度・タッチ方式が一致するが、SPI/I2C接続はスイッチサイエンス側、ST7796S IPSはせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10139\",\"sengoku\",\"EEHD-6L8U\"]",
+    "fingerprint": "1e916f47572c5c3f634976cc606eb297e7569d10d3b4e5850861f1a364d107f2",
+    "decision": "same_product",
+    "evidence": "共有コードは29063(せんごくの型番【29063】の括弧内で、スイッチサイエンス側は型番欄「29063」に同じ番号)。スイッチサイエンス「Waveshare 2.0型静電容量式タッチスクリーンディスプレイ（240 x 320、SPI/I2C接続）」とせんごく「2インチ 240×320 タッチディスプレイ ST7789T3 IPS　【29063】 2inch Capacitive Touch LCD」はいずれも2インチ240×320の静電容量式タッチディスプレイで、サイズ・解像度・タッチ方式が一致するが、SPI/I2C接続はスイッチサイエンス側、ST7789T3 IPSはせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10221\",\"sengoku\",\"EEHD-6PA7\"]",
+    "fingerprint": "8ca7c559426073d7e8bdb3671e209d4ca42202511d32a74dddef0592233a3a36",
+    "decision": "same_product",
+    "evidence": "共有コードは29414(せんごくの型番【29414】の括弧内で、スイッチサイエンス側は型番欄「29414」に同じ番号)。スイッチサイエンス「Waveshare RP2350-Plus-M（16 MB版）」とせんごく「RP2350‑Plus 開発ボード (16MB Flash版 ピンヘッダ実装済)　【29414】 RP2350-Plus-16MB-M」はいずれもRP2350-Plus-Mの16MB Flash版開発ボードで、型式名とFlash容量が一致するが、ピンヘッダ実装済はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "スイッチサイエンスの商品名にピンヘッダ実装済の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10222\",\"sengoku\",\"EEHD-6W7L\"]",
+    "fingerprint": "348011696637e84b3086bfd8999d8388dba6e0ea14c07dc662242630bbf61e62",
+    "decision": "same_product",
+    "evidence": "共有コードは29381(せんごくの型番【29381】の括弧内で、スイッチサイエンス側は型番欄「29381」に同じ番号)。スイッチサイエンス「Waveshare 0.71インチ DualEye LCDモジュール」とせんごく「0.71インチ ダブルアイ 円形LCD表示モジュール　【29381】 0.71inch DualEye LCD Module」はいずれも0.71インチのDualEye(ダブルアイ)円形LCDモジュールで、サイズと型式名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10257\",\"sengoku\",\"EEHD-6RNR\"]",
+    "fingerprint": "41411ca20176ef5f521b22f075d38213d8409db2762bf0d1d8400f350e6c2f7e",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1632で、スイッチサイエンス側は型番欄にSC1632がそのまま入っており、せんごく側は型番【006】SC1632の【…】内の数字が店舗の通し番号で、その後ろのSC1632を読み取ったものである。スイッチサイエンス「Raspberry Pi Pico 2 H」とせんごく「Raspberry Pi Pico 2 H【ピンヘッダ実装済】　【006】SC1632」はどちらもRaspberry Pi Pico 2 Hで一致し、せんごく側の商品名にだけ「【ピンヘッダ実装済】」の補足がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "スイッチサイエンス側の商品名にはピンヘッダ実装済の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10258\",\"sengoku\",\"EEHD-6NYK\"]",
+    "fingerprint": "da7cc9eb70d5fb9266c4d486051c808688b908af92d9b2f51d46b57df408ecd4",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1634で、スイッチサイエンス側は型番欄にSC1634がそのまま入っており、せんごく側は型番【008】SC1634の【…】内の数字が店舗の通し番号で、その後ろのSC1634を読み取ったものである。スイッチサイエンス「Raspberry Pi Pico 2 WH」とせんごく「Raspberry Pi Pico 2 WH【ピンヘッダ実装済】　【008】SC1634」はどちらもRaspberry Pi Pico 2 WHで一致し、せんごく側の商品名にだけ「【ピンヘッダ実装済】」の補足がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "スイッチサイエンス側の商品名にはピンヘッダ実装済の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10275\",\"sengoku\",\"EEHD-6NMS\"]",
+    "fingerprint": "1ba7862c7e00e1f41027a0a16606697e62e6148005e5e4736a13f067ef2dc907",
+    "decision": "same_product",
+    "evidence": "共有コードは30274(せんごくの型番【30274】の括弧内で、スイッチサイエンス側は型番欄「30274」に同じ番号)。スイッチサイエンス「Waveshare RP2350-USB-A」とせんごく「RP2350A USB Mini開発ボード　【30274】 RP2350-USB-A」はいずれもRP2350-USB-Aの開発ボードで、型式名が一致するが、RP2350A USB Miniはせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10277\",\"sengoku\",\"EEHD-6LZA\"]",
+    "fingerprint": "99844b01eb0a93eac6d6d24300a7bc569192b51fefb0db00c9f15e5eea470e54",
+    "decision": "same_product",
+    "evidence": "共有コードは29573(せんごくの型番【29573】の括弧内で、スイッチサイエンス側は型番欄「29573」に同じ番号)。スイッチサイエンス「Waveshare USB - RS232/485 変換ケーブル」とせんごく「USB To RS232/485シリアルケーブル　【29573】 USB TO RS232/485 (C)」はいずれもUSBからRS232/485へ変換するケーブルで、種別が一致するが、(C)はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "スイッチサイエンスの商品名に型番末尾(C)に当たる記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10278\",\"sengoku\",\"EEHD-6W73\"]",
+    "fingerprint": "d28f7f357fe21b3dd3285582e520b8effeced6c8e168075e48c11a801ec803e9",
+    "decision": "same_product",
+    "evidence": "共有コードは29422(せんごくの型番【29422】の括弧内で、スイッチサイエンス側は型番欄「29422」に同じ番号)。スイッチサイエンス「GamePi13 3D Acce（LCDゲームコンソール）」とせんごく「GamePi13 1.3インチ LCD ゲームコンソール(Raspberry Pi Zero 用)　【29422】 GamePi13 3D Acce」はいずれもGamePi13 3D Acceの1.3インチLCDゲームコンソールで、型式名と種別が一致するが、Raspberry Pi Zero用はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10332\",\"sengoku\",\"EEHD-6PZ6\"]",
+    "fingerprint": "43d391f5dc345d2d0cbc39715fd6c6ed335914baf6fce83fe4aa23ce92645def",
+    "decision": "same_product",
+    "evidence": "共有コードは30737(せんごくの型番【30737】の括弧内で、スイッチサイエンス側は型番欄「30737」に同じ番号)。スイッチサイエンス「RP2350搭載 1.43インチ丸型AMOLEDタッチスクリーン開発ボード（ケース付き）」とせんごく「RP2350 1.43インチ AMOLED ディスプレイ開発ボード　【30737】 RP2350-Touch-AMOLED-1.43-B」はいずれもRP2350搭載の1.43インチAMOLEDタッチディスプレイ開発ボードで、チップ・サイズ・表示種別が一致するが、ケース付きはスイッチサイエンス側のみの記載である。",
+    "differences": [
+      "付属品: スイッチサイエンス「ケース付き」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくの商品名にケース同梱の記載がなく、型番末尾「-B」の意味も確認できない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10344\",\"sengoku\",\"EEHD-6ZDS\"]",
+    "fingerprint": "c4572523e121f3e870a194cb3b4374117997defec756c6b23090af2bb8c53730",
+    "decision": "same_product",
+    "evidence": "共有コードは105990190(スイッチサイエンスのcodesとせんごくの型番欄に記載)。スイッチサイエンス「Seeed バスサーボドライバボード（XIAO用）」とせんごく「Bus Servo Driver Board for XIAO　105990190」はXIAO用バスサーボドライバーボードで、メーカーもSeeedで対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはSeeed Studio)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10387\",\"sengoku\",\"EEHD-6PYZ\"]",
+    "fingerprint": "0a0e14de84300be22822cef52d22da9254436fc01f5d4c541618c20bff901264",
+    "decision": "same_product",
+    "evidence": "共有コードは30718(せんごくの型番【30718】の括弧内で、スイッチサイエンス側は型番欄「30718」に同じ番号)。スイッチサイエンス「RP2350搭載 2インチ静電容量式タッチスクリーン開発ボード（OV5640カメラ付き）」とせんごく「RP2350 2インチ CTPタッチディスプレイ開発ボード　【30718】 RP2350-Touch-LCD-2-C」はいずれもRP2350搭載の2インチ静電容量式(CTP)タッチディスプレイ開発ボードで、チップ・サイズ・タッチ方式が一致するが、OV5640カメラ付きはスイッチサイエンス側のみの記載である。",
+    "differences": [
+      "付属品: スイッチサイエンス「OV5640カメラ付き」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくの商品名にカメラ同梱の記載がなく、型番末尾「-C」の意味も確認できない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10388\",\"sengoku\",\"EEHD-6PZ7\"]",
+    "fingerprint": "d779d290487b5800968772326575c0b864ff075110008ca5e479e826db146d87",
+    "decision": "same_product",
+    "evidence": "共有コードは30712(せんごくの型番【30712】の括弧内で、スイッチサイエンス側は型番欄「30712」に同じ番号)。スイッチサイエンス「Waveshare TVOC（総揮発性有機化合物）センサ」とせんごく「TVOCガスセンサー (総揮発性有機化合物センサー)　【30712】 TVOC Sensor」はいずれもTVOC(総揮発性有機化合物)センサーで、検出対象と種別が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10389\",\"sengoku\",\"EEHD-6PZ4\"]",
+    "fingerprint": "caf33719f935c4d3e8b93b6524195e823d8a77f50b58a1371c9744b1cac3212c",
+    "decision": "same_product",
+    "evidence": "共有コードは30901(せんごくの型番【30901】の括弧内で、スイッチサイエンス側は型番欄「30901」に同じ番号)。スイッチサイエンス「Waveshare Raspberry Pi 5/CM5用 絶縁型PoE HAT (H)」とせんごく「PoE HAT (H) for Raspberry Pi 5 / CM 5　【30901】 PoE HAT (H)」はいずれもRaspberry Pi 5 / CM5用のPoE HAT (H)で、対象と型式名が一致するが、絶縁型はスイッチサイエンス側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "せんごくの商品名に絶縁型の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10463\",\"sengoku\",\"EEHD-6RKV\"]",
+    "fingerprint": "34bd5a25f68286177d7afb02761a90e1efee36071f7581d9e57f6ec591007bc6",
+    "decision": "same_product",
+    "evidence": "共有コードはRA4M1-ZERO(せんごくの型番【30661】RA4M1-Zeroの括弧後の型式名で、スイッチサイエンスの型番欄「RA4M1-Zero」と一致し、そのWAVESHARE-30661もせんごくの括弧内30661と一致)。スイッチサイエンス「Waveshare RA4M1-Zero」とせんごく「RA4M1-Zero Mini 開発ボード(ピンヘッダなし)　【30661】 RA4M1-Zero」はいずれもRA4M1-Zeroの開発ボードで、型式名が一致するが、ピンヘッダなしはせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "スイッチサイエンスの商品名にピンヘッダの有無の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10464\",\"sengoku\",\"EEHD-6XSY\"]",
+    "fingerprint": "4c46a20ca4d8cc1ee87d2b6f87e1684c7290eea62c60db5e16145bd9af02be5e",
+    "decision": "same_product",
+    "evidence": "共有コードは31510(せんごくの型番【31510】の括弧内で、スイッチサイエンス側は型番欄「31510」に同じ番号)。スイッチサイエンス「PI5-CASE-TD2 WaveShare製 Raspberry Pi 5/Touch Display 2用ケース」とせんごく「Raspberry Pi 7インチタッチディスプレイ& Pi 5用保護ケース 黒　【31510】 PI5-CASE-TD2-7inch」はいずれもRaspberry Pi 5とTouch Display 2用のケースで、対象と種別が一致するが、7インチ・黒はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "スイッチサイエンスの商品名にディスプレイのサイズ(7インチ)と色(黒)の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10465\",\"sengoku\",\"EEHD-6RKV\"]",
+    "fingerprint": "2343ad50c68c61ec53b9b1281d21418789ac2c8f4712c9dcfaa9a8b71e6c908a",
+    "decision": "rejected",
+    "evidence": "共有コードはRA4M1-ZERO(せんごくの型番【30661】RA4M1-Zeroの括弧後の型式名)だが、スイッチサイエンス「RP2350搭載 1.8インチ AMOLED タッチスクリーン開発ボード（ケース付）」はRP2350搭載の1.8インチAMOLEDタッチスクリーン開発ボード(ケース付)で、せんごく「RA4M1-Zero Mini 開発ボード(ピンヘッダなし)　【30661】 RA4M1-Zero」とは別製品である。スイッチサイエンス自身のコードWAVESHARE-31296もせんごくの括弧内30661と一致せず、型番欄のRA4M1-Zeroは商品名と整合しない。",
+    "differences": [
+      "商品内容: スイッチサイエンス「RP2350搭載 1.8インチ AMOLED タッチスクリーン開発ボード（ケース付）」 ↔ せんごく「RA4M1-Zero Mini 開発ボード(ピンヘッダなし)」",
+      "メーカーSKU: スイッチサイエンス「WAVESHARE-31296」 ↔ せんごく「30661」",
+      "付属品: スイッチサイエンス「ケース付」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10576\",\"sengoku\",\"EEHD-6BVP\"]",
+    "fingerprint": "1b51cf01f53dc71325c46b2cff3b1c1bc96010480043c55e68ecd0eb88d8770f",
+    "decision": "same_product",
+    "evidence": "共有コードは18899(せんごくの型番【18899】の括弧内で、スイッチサイエンス側は型番欄「18899」に同じ番号)。スイッチサイエンス「Raspberry Pi CM4用PCIe接続USB 3.2 Gen1変換基板」とせんごく「CM4 IOボード用 PCIe to USB 3.2 Gen1 Adapter　【18899】 PCIe TO USB 3.2 Gen1 (B)」はいずれもCM4 IOボード用のPCIeからUSB 3.2 Gen1への変換基板で、対象と規格が一致するが、(B)はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "スイッチサイエンスの商品名に型番末尾(B)に当たる記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10817\",\"sengoku\",\"EEHD-6ATC\"]",
+    "fingerprint": "b809c1d729cf6eb3207c952a9bf99a1622fd16910d679e8cd3b05dafc45da9d6",
+    "decision": "same_product",
+    "evidence": "共有コードは17075(せんごくの型番【17075】の括弧内で、スイッチサイエンス側は型番欄「17075」に同じ番号)。スイッチサイエンス「Waveshare Raspberry Pi用2ch CAN FD HAT」とせんごく「Raspberry Pi用 2チャンネル絶縁型CAN FD拡張HAT　【17075】 2-CH CAN FD HAT」はいずれもRaspberry Pi用の2チャンネルCAN FD HATで、チャンネル数と種別が一致するが、絶縁型はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "スイッチサイエンスの商品名に絶縁型の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10818\",\"sengoku\",\"EEHD-5BKD\"]",
+    "fingerprint": "ea3988b7a5cf510e2a8f3cde764f824dcd9ad83502b20bb5545ae690bc60ed32",
+    "decision": "same_product",
+    "evidence": "共有コードは14972(せんごくの型番【14972】の括弧内で、スイッチサイエンス側は型番欄「14972」に同じ番号)。スイッチサイエンス「Waveshare Raspberry Pi用 1.3インチLCD HAT」とせんごく「1.3インチ 240×240 IPS LCDディスプレイHAT for RaspberryPi　【14972】 1.3inch LCD HAT」はいずれもRaspberry Pi用の1.3インチLCD HATで、サイズと種別が一致するが、240×240 IPSはせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10819\",\"sengoku\",\"EEHD-5A7M\"]",
+    "fingerprint": "8041f10dda0f8fa3bd593dfbbdb7dbaef5a8ff0fc1e79c52d24b6f21198ed7c8",
+    "decision": "same_product",
+    "evidence": "共有コードは13890(せんごくの型番【13890】の括弧内で、スイッチサイエンス側は型番欄「13890」に同じ番号)。スイッチサイエンス「Waveshare Raspberry Pi用 1.3インチOLED HAT」とせんごく「1.3インチ 128×64 OLEDディスプレイHAT for RaspberryPi　【13890】 1.3inch OLED HAT」はいずれもRaspberry Pi用の1.3インチOLED HATで、サイズと種別が一致するが、128×64はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10820\",\"sengoku\",\"EEHD-5A7N\"]",
+    "fingerprint": "77f39bd6d9b51644452aad0d3f36ceb85129799788c7ad51c65986380715e837",
+    "decision": "same_product",
+    "evidence": "共有コードは13891(せんごくの型番【13891】の括弧内で、スイッチサイエンス側は型番欄「13891」に同じ番号)。スイッチサイエンス「Waveshare Raspberry Pi用 1.44インチLCD HAT」とせんごく「1.44インチ 128×128 LCDディスプレイHAT for RaspberryPi　【13891】 1.44inch LCD HAT」はいずれもRaspberry Pi用の1.44インチLCD HATで、サイズと種別が一致するが、128×128はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10825\",\"sengoku\",\"EEHD-6UY5\"]",
+    "fingerprint": "e11b9d4671b27a01fbf01cc2d6fd7fa959f034c097f61df12c9a8ab39efc5f8b",
+    "decision": "same_product",
+    "evidence": "共有コードは32223(せんごくの型番【32223】の括弧内で、スイッチサイエンス側は型番欄「32223」に同じ番号)。スイッチサイエンス「PCM5122搭載 Raspberry Pi用 I2S Hi-Fi DACボード」とせんごく「PCM5122搭載 HIFI I2S DAC オーディオボード (Raspberry Pi用)　【32223】 PCM5122 Audio Board (A)」はいずれもPCM5122搭載のRaspberry Pi用I2S DACオーディオボードで、チップ・インターフェース・用途が一致するが、(A)はせんごく側のみの記載である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄は空欄(販売元欄にWaveshare)",
+      "スイッチサイエンスの商品名に型番末尾(A)に当たる記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10905\",\"sengoku\",\"EEHD-5EZ5\"]",
+    "fingerprint": "35362a539d8b04dd96a7d2c2d54f5fcd37f9447ebe3b7cc570fbf81cd0c1a626",
+    "decision": "same_product",
+    "evidence": "共有コードは15823。せんごくの型番【15823】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare e-Paper ESP32ドライバボード」とせんごく「電子ペーパーモジュール用ESP32ドライバボード Wi-Fi/Bluetooth対応　【15823】 e-Paper ESP32 Driver Board」はいずれもWaveshareの電子ペーパー用ESP32ドライバボードで、品名と英語名e-Paper ESP32 Driver Boardが対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "Wi-Fi/Bluetooth対応はせんごく側の名称のみに記載"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10907\",\"sengoku\",\"EEHD-6W7H\"]",
+    "fingerprint": "777a6ad9c997337aa62ee50475106b6280304ce31cd6b48938f336ef1ef71b57",
+    "decision": "same_product",
+    "evidence": "共有コードは33024。せんごくの型番【33024】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare Raspberry Pi 5用HDMIコネクタ変換/NVMe SSDアダプタ基板」とせんごく「PCIe - M.2 マルチファンクションアダプタ (Raspberry Pi 5対応)　【33024】 Pi5 Connector Adapter (C)」はいずれもRaspberry Pi 5用のコネクタ変換/NVMe(M.2)アダプタ基板で、せんごくの英語名Pi5 Connector Adapter (C)と用途が対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に版数(C)の記載がない",
+      "せんごく側の名称にHDMIコネクタ変換の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10908\",\"sengoku\",\"EEHD-6UGR\"]",
+    "fingerprint": "657ef85b62878b6fdd05e530de287deb1b8a00fc582fd3e50f397dc11ab5e6ab",
+    "decision": "unresolved",
+    "evidence": "共有コードはSC1110で、スイッチサイエンスは型番欄の記載、せんごくは型番【021】RPi5-2GB-SC1110の括弧の後ろから読んだもの。せんごく名はPi 5 2GB、スイッチサイエンス名はPi 5 1GB（同店の保存コードにはSC2162も併記）。容量と型番が矛盾するため、前例(a129606-s10908、スイッチサイエンス10908とKSY1095)と同じく型番一致では承認せず要確認に残す。初回判定（Claude Sonnet 5.5）はRAM容量の相違を理由にrejected。統合確認（Claude Opus 5.5）で前例に合わせunresolvedへ変更した。",
+    "differences": [
+      "RAM容量: スイッチサイエンス「1GB」 ↔ せんごく「2GB」"
+    ],
+    "missingEvidence": [
+      "スイッチサイエンス 10908 の型番SC1110と名称1GB（SC2162相当）の矛盾が未解消"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10908\",\"sengoku\",\"EEHD-6WSZ\"]",
+    "fingerprint": "260281f5d83c94caec268aac729a899cb78673acf91a1239b39dcbbb5053892c",
+    "decision": "same_product",
+    "evidence": "共有コードはSC2162で、スイッチサイエンス側は保存コードSC1110・SC2162のうちSC2162で、せんごく側は型番【022】RPi5-1GB-SC2162の【…】内の数字が店舗の通し番号で、その後ろのSC2162を読み取ったものである。スイッチサイエンス「Raspberry Pi 5 / 1GB」とせんごく「【本体】Raspberry Pi 5 - 1GB　【022】RPi5-1GB-SC2162」はどちらもRaspberry Pi 5の1GB版で容量が一致する。",
+    "differences": [
+      "型番欄の公式コード: スイッチサイエンス「SC1110(保存コードにSC2162も併記)」 ↔ せんごく「SC2162」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "スイッチサイエンスの型番欄SC1110が商品名の1GBとどう対応するか(SC1110はせんごくの2GB版【021】のコードでもあり、この商品ページ内の記載の食い違い)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"10978\",\"sengoku\",\"EEHD-6XBV\"]",
+    "fingerprint": "73fe5d8a0fbd0bbde36bfd2c28650dbc84d832aa1a3ec3360ff24cb2120b649b",
+    "decision": "same_product",
+    "evidence": "共有コードは100010048(スイッチサイエンスのcodesにあるSEEED-100010048からSEEED-接頭辞を除いたSKU)。スイッチサイエンス「Seeed Studio XIAO ESP32C5」とせんごく「Seeed Studio XIAO ESP32-C5　100010048」はXIAO ESP32-C5で、ハイフンの有無以外の差はない。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "スイッチサイエンスの型番欄はESP32-C5で、Seeed SKUはSEEED-接頭辞付きcodesからのみ読み取った",
+      "せんごく側のmanufacturer欄が空欄(vendorはSeeed Studio)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11071\",\"sengoku\",\"EEHD-68AA\"]",
+    "fingerprint": "cf986dfe11712f58b1f9b3ffd81c0d58d7479693193b6b4ff0ae8dc4725de20c",
+    "decision": "same_product",
+    "evidence": "共有コードは25766。せんごくの型番【25766】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare Raspberry Pi用RTCウォッチドッグHAT (B)」とせんごく「RTC WatchDog HAT (B) 高精度RTCチップDS3231SN搭載　【25766】 RTC Watchdog HAT (B)」はいずれもRaspberry Pi用のRTCウォッチドッグHAT (B)で、品名と版数(B)が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称にRTCチップDS3231SNの記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11413\",\"m5stack\",\"h-m5stack-faces-3-bottom-board\"]",
+    "fingerprint": "385cd3f2355a840b33956d0be974ab45ca746456867fd8d7bd1f7b68484ab5ee",
+    "decision": "same_product",
+    "evidence": "共有コードはA168(両店の型番欄に記載)。スイッチサイエンス「M5Stack Faces 3 ボトムベース」とM5Stack公式「M5STACK Faces 3 Bottom Board」はFaces 3のボトムベースとして名称が対応し、メーカー欄もどちらもM5Stackである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-01",
+    "offerIds": [
+      null,
+      "50271506301185"
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11414\",\"m5stack\",\"h-m5stack-faces-keyboard-panel-v3-0\"]",
+    "fingerprint": "436c6cc8b7c6e3d5ab1751ad7ee69e70c7a7732e0d0ae6250a131f602331d661",
+    "decision": "same_product",
+    "evidence": "共有コードはA003-V3(両店の型番欄に記載、接尾辞-V3も両側で一致)。スイッチサイエンス「M5Stack Faces用キーボードパネル v3.0」とM5Stack公式「M5STACK Faces KeyBoard Panel v3.0」はキーボードパネルのv3.0同士で対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-01",
+    "offerIds": [
+      null,
+      "50271482806529"
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11415\",\"m5stack\",\"h-m5stack-faces-gamepad-panel-v3-0\"]",
+    "fingerprint": "51115f1094d7ae39cf9a5c9a6ab6dc26ecba37cda3325dca2f179f1bcfd27eba",
+    "decision": "same_product",
+    "evidence": "共有コードはA004-V3(両店の型番欄に記載、接尾辞-V3も両側で一致)。スイッチサイエンス「M5Stack Faces用ゲームパッドパネル v3.0」とM5Stack公式「M5STACK Faces Gamepad Panel v3.0」はゲームパッドパネルのv3.0同士で対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-01",
+    "offerIds": [
+      null,
+      "50271456559361"
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11416\",\"m5stack\",\"h-m5stack-faces-calculator-panel-v3-0\"]",
+    "fingerprint": "ad93e69b1f78d4b21195e9e6b7548de386b65cc6b6de365cffcb93ea69867006",
+    "decision": "same_product",
+    "evidence": "共有コードはA005-V3(両店の型番欄に記載、接尾辞-V3も両側で一致)。スイッチサイエンス「M5Stack Faces用電卓入力パネル v3.0」とM5Stack公式「M5STACK Faces Calculator Panel v3.0」は電卓パネルのv3.0同士で対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-01",
+    "offerIds": [
+      null,
+      "50271427690753"
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"11479\",\"m5stack\",\"h-m5atom-joystick-with-m5atoms3r-v1-1\"]",
+    "fingerprint": "26204e31f03f72cdd0e4b36313e6f8101ba7456bb87a7b5a208e92378536c261",
+    "decision": "same_product",
+    "evidence": "共有コードはK137-V11(両店の型番欄に記載、接尾辞-V11も両側で一致)。スイッチサイエンス「M5Atom Joystick v1.1（AtomS3R搭載）」とM5Stack公式「M5Atom Joystick with M5AtomS3R V1.1」はAtomS3R搭載のV1.1同士で対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-01",
+    "offerIds": [
+      null,
+      "50379596726529"
+    ],
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"2110\",\"sengoku\",\"EEHD-6XMB\"]",
+    "fingerprint": "981d3acbeb254f80f48aa1f4b79ba0df7728cd8382516ab85700344fb52bec12",
+    "decision": "rejected",
+    "evidence": "共有コードは11750。せんごくの型番【11750】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「とても背の高いピンソケット2×20（40P）--在庫限り」とせんごく「10.1インチ 1280×800 HDMI IPS液晶 CTPタッチディスプレイ ケース付き　【11750】 10.1inch HDMI LCD (B) (with case)」は別の商品で、前者は背の高いピンソケット、後者はWaveshareの10.1インチHDMI液晶ディスプレイであり、5桁の番号が偶然一致しただけである。",
+    "differences": [
+      "商品種別: スイッチサイエンス「とても背の高いピンソケット2×20（40P）--在庫限り」 ↔ せんごく「10.1インチ 1280×800 HDMI IPS液晶 CTPタッチディスプレイ ケース付き」",
+      "製造元: スイッチサイエンス「スイッチサイエンス」 ↔ せんごく「Waveshare」"
+    ],
+    "missingEvidence": [],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"2129\",\"ksy\",\"776\"]",
+    "fingerprint": "2de67eb381d5fb665ab1f0623c9840c6ec410742d808b152fed0da1c5d914ebb",
+    "decision": "same_product",
+    "evidence": "共有コードは103010002(スイッチサイエンスの型番SEEED-103010002からSEEED-接頭辞を除いたSKU)。スイッチサイエンス「GrovePi+」とKSY「Grove Pi+」は空白の有無だけの表記差で、KSYのvendor欄はseeedである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない",
+      "KSY側のmanufacturer欄が空欄(vendorはseeed)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"2129\",\"sengoku\",\"EEHD-4R4V\"]",
+    "fingerprint": "48acc925630c3e2ebf1635c9d8d0f3a29858eb2e720d7cbd3e62af72e0ef77ce",
+    "decision": "same_product",
+    "evidence": "共有コードは103010002(スイッチサイエンスの型番SEEED-103010002からSEEED-接頭辞を除いたSKU)。スイッチサイエンス「GrovePi+」とせんごく「【GrovePi+】Raspberry Pi用Groveベースシールド　103010002」は同名のGrovePi+で、せんごくは用途の説明が付くだけである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない",
+      "せんごく側のmanufacturer欄が空欄(vendorはSeeed Studio)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3190\",\"ksy\",\"222\"]",
+    "fingerprint": "40f08cd57c56e64302ec783291eda652d8d6617bc9c3fe573243e225cd0dbf49",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0019で、スイッチサイエンス側は型番RPI-ZERO、KSY側は型番RASPIZERO13でどちらも公式コードがなく、両側とも商品名から付けたaliasでSC0019を割り当てたものである。スイッチサイエンス「Raspberry Pi Zero v1.3」とKSY「Raspberry Pi Zero V1.3」はどちらもRaspberry Pi Zeroのv1.3で一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "両店の型番欄に公式コードSC0019の記載はなく、aliasのみが根拠",
+      "スイッチサイエンスのメーカー欄は「スイッチサイエンス」、KSYのメーカー欄は空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3190\",\"sengoku\",\"EEHD-6YP3\"]",
+    "fingerprint": "1e1b82724d41819580651e0a18b8db6b00b30e4e2da7b64daaedc2838eaab8e5",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0019で、スイッチサイエンス側は型番RPI-ZEROに公式コードがないため商品名から付けたaliasで、せんごく側も型番【023】RPI-ZERO-1.3に公式コードがないため商品名から付けたaliasで、どちらもSC0019を割り当てたものである。スイッチサイエンス「Raspberry Pi Zero v1.3」とせんごく「Raspberry Pi Zero (V1.3)　【023】RPI-ZERO-1.3」はどちらもRaspberry Pi Zeroのv1.3で一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "両店の型番欄に公式コードSC0019の記載はなく、aliasのみが根拠",
+      "スイッチサイエンスのメーカー欄は「スイッチサイエンス」、せんごくのメーカー欄は空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3200\",\"ksy\",\"219\"]",
+    "fingerprint": "d57c9e55d0625a6ad6fbb538543af9aa959199b7b6c7f960529da9dc67e7807e",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0020で、スイッチサイエンス側は型番欄にSC0020がそのまま入っており、KSY側は型番RASPI0W11に公式コードがないため商品名から付けたaliasでSC0020を割り当てたものである。スイッチサイエンス「Raspberry Pi Zero W」とKSY「Raspberry Pi Zero W」はどちらもRaspberry Pi Zero Wで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄が空欄",
+      "KSY側の型番欄に公式コードSC0020の記載はなく、aliasのみが根拠",
+      "リビジョン(V1.1等)の記載が両店の商品名にない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3200\",\"sengoku\",\"EEHD-66P8\"]",
+    "fingerprint": "596bbb12094855960b809fa9bd34159932b338ab5663bb868a1eec2f46ae3841",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0020で、スイッチサイエンス側は型番欄にSC0020がそのまま入っており、せんごく側は型番【009】RPI-ZERO-Wに公式コードがないため商品名から付けたaliasでSC0020を割り当てたものである。スイッチサイエンス「Raspberry Pi Zero W」とせんごく「Raspberry Pi Zero W (V1.1)　【009】RPI-ZERO-W」はどちらもRaspberry Pi Zero Wで一致し、せんごく側の商品名にだけ(V1.1)のリビジョン表記がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "スイッチサイエンス側の商品名にリビジョン表記がなく、せんごくのV1.1との一致は未確認",
+      "せんごく側の型番欄に公式コードSC0020の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3646\",\"ksy\",\"406\"]",
+    "fingerprint": "307807e962eae63b222583c69860ccaf0b3183aa29055c0fb504b34e0a1f9241",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0065で、スイッチサイエンス側は型番欄にSC0065がそのまま入っており、KSY側は型番RASPIZWHSC0065の末尾にSC0065を含むため商品名から付けたaliasで取り出したものである。スイッチサイエンス「Raspberry Pi Zero WH」とKSY「Raspberry Pi Zero WH」はどちらもRaspberry Pi Zero WHで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄が空欄",
+      "KSY側の公式コードSC0065は型番RASPIZWHSC0065の末尾からのaliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"3646\",\"sengoku\",\"EEHD-57LT\"]",
+    "fingerprint": "4c1791238389af30f75f4d9086c168490bbd74d7211ceda1629ad863f4116059",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0065で、スイッチサイエンス側は型番欄にSC0065がそのまま入っており、せんごく側は型番【010】RPI-ZERO-WHに公式コードがないため商品名から付けたaliasでSC0065を割り当てたものである。スイッチサイエンス「Raspberry Pi Zero WH」とせんごく「Raspberry Pi Zero WH【ピンヘッダ実装済】　【010】RPI-ZERO-WH」はどちらもRaspberry Pi Zero WHで一致し、せんごく側の商品名にだけ「【ピンヘッダ実装済】」の補足がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "スイッチサイエンス側の商品名にはピンヘッダ実装済の記載がない",
+      "せんごく側の型番欄に公式コードSC0065の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"4084\",\"sengoku\",\"EEHD-6W7F\"]",
+    "fingerprint": "17227ed658e89f327f8471a9401a1d98d4953ebd13d93aef5d910b3764b6fc1e",
+    "decision": "rejected",
+    "evidence": "共有コードは3965。せんごくの型番【3965】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「MPRLS Ported 気圧センサモジュール（0～25 PSI）」とせんごく「RS232 通信ボード(SP3232搭載)　【3965】 RS232 Board」は別の商品で、前者はAdafruitの気圧センサモジュール、後者はWaveshareのRS232通信ボードであり、4桁の番号が偶然一致しただけである。",
+    "differences": [
+      "商品種別: スイッチサイエンス「MPRLS Ported 気圧センサモジュール（0～25 PSI）」 ↔ せんごく「RS232 通信ボード(SP3232搭載)」",
+      "製造元: スイッチサイエンス「Adafruit」 ↔ せんごく「Waveshare」"
+    ],
+    "missingEvidence": [],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"4110\",\"sengoku\",\"EEHD-5JEN\"]",
+    "fingerprint": "5a63c972140194d8a0fe403677ebb5e59e14dbb348d8ed596ca2c5f0e4ff68c1",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0130で、スイッチサイエンス側は型番SC0130(J)から製造記号(J)を除いたコードで、せんごく側は型番【013】Pi3A+に公式コードがないため商品名から付けたaliasでSC0130を割り当てたものである。スイッチサイエンス「Raspberry Pi 3 Model A+」とせんごく「【本体】Raspberry Pi 3 Model A+　【013】Pi3A+」はどちらもRaspberry Pi 3 Model A+で一致し、せんごくの「【本体】」は店舗側の表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "製造記号(J)はスイッチサイエンス側のみにあり、せんごく側には記載がない",
+      "せんごく側の型番欄に公式コードSC0130の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5345\",\"sengoku\",\"EEHD-5MCN\"]",
+    "fingerprint": "3184a20b8c287458d456632903e81deaa8f5d462964cfef379a1ec4d8ab6f911",
+    "decision": "same_product",
+    "evidence": "共有コードは101020594(スイッチサイエンスの型番SEEED-101020594からSEEED-接頭辞を除いたSKU)。スイッチサイエンス「GROVE - I2C 熱電対アンプ（MCP9600）」とせんごく「Grove - I2C Thermocouple Amplifier (MCP9600)」は熱電対アンプとIC型番MCP9600が日英表記で対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない",
+      "せんごく側のmanufacturer欄が空欄(vendorはSeeed Studio)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5435\",\"ksy\",\"748\"]",
+    "fingerprint": "e7b9a63e58460d8b4d6fc578c6892987c0f3a4eba4012548715d2b652c63c472",
+    "decision": "same_product",
+    "evidence": "共有コードは101020593(スイッチサイエンスの型番SEEED-101020593からSEEED-接頭辞を除いたSKU)。スイッチサイエンス「GROVE - クーロンカウンター 3.3V to 5V（LTC2941）」とKSY「Grove クーロン カウンター モジュール LTC2941搭載」はクーロンカウンターとICのLTC2941が対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSY名に「3.3V to 5V」の電圧仕様の記載がない",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない",
+      "KSY側のmanufacturer欄が空欄(vendorはseeed)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5680\",\"ksy\",\"723\"]",
+    "fingerprint": "82cb5fd447ef8d123c8f68d524577923d6c34e4da33777081de4e706e77318d4",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0194で、スイッチサイエンス側は型番欄がelement14の注文コード3051891のため商品名から付けたaliasで、KSY側は型番欄にそのまま入っているSC0194を共有コードとしたものである。スイッチサイエンス「Raspberry Pi 4 Model B / 4GB」とKSY「Raspberry Pi 4 Model B/4GB element14」はどちらもRaspberry Pi 4 Model Bの4GB版で一致し、スイッチサイエンスのメーカー欄element14とKSYの商品名のelement14が対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄が空欄",
+      "スイッチサイエンス側の型番欄はelement14の注文コード3051891で、SC0194はaliasによる付与"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5680\",\"sengoku\",\"EEHD-655P\"]",
+    "fingerprint": "9d5487a2b60002f4728879642a6fe3e10e755a328fa9502d27747a6b928257be",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0194で、スイッチサイエンス側は型番欄がelement14の注文コード3051891のため商品名から付けたaliasで、せんごく側も型番【016】RPi4B-4GBに公式コードがないため商品名から付けたaliasで、どちらもSC0194を割り当てたものである。スイッチサイエンス「Raspberry Pi 4 Model B / 4GB」とせんごく「【本体】Raspberry Pi 4 Model B - 4GB　【016】RPi4B-4GB」はどちらもRaspberry Pi 4 Model Bの4GB版で一致し、スイッチサイエンスのメーカー欄はelement14、せんごくのベンダー欄はRaspberry Piと流通ブランド表記だけが異なる。",
+    "differences": [
+      "流通ブランド表記: スイッチサイエンス「element14」 ↔ せんごく「Raspberry Pi」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "両店の型番欄に公式コードSC0194の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5681\",\"ksy\",\"497\"]",
+    "fingerprint": "66fbe50aff520820f2bbfbaf0d1217478f2efc8b564208942c61c2db8376041e",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0193で、スイッチサイエンス側は型番SC0193(9)から製造記号(9)を除いたコードで、KSY側は型番欄にそのまま入っているSC0193である。スイッチサイエンス「Raspberry Pi 4 Model B / 2GB」とKSY「Raspberry Pi 4 Model B/2GB」はどちらもRaspberry Pi 4 Model Bの2GB版で一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄が空欄",
+      "製造記号(9)はスイッチサイエンス側のみにあり、KSY側には記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5681\",\"sengoku\",\"EEHD-6YSS\"]",
+    "fingerprint": "30afc938285660a1d4d862e8f69d94c08be08ed2e153b529aa923ee55ec5c208",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0193で、スイッチサイエンス側は型番SC0193(9)から製造記号(9)を除いたコードで、せんごく側は型番【015】RPi4B-2GBに公式コードがないため商品名から付けたaliasでSC0193を割り当てたものである。スイッチサイエンス「Raspberry Pi 4 Model B / 2GB」とせんごく「【本体】Raspberry Pi 4 Model B - 2GB　【015】RPi4B-2GB」はどちらもRaspberry Pi 4 Model Bの2GB版で一致し、せんごくの「【本体】」は店舗側の表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "製造記号(9)はスイッチサイエンス側のみにあり、せんごく側には記載がない",
+      "せんごく側の型番欄に公式コードSC0193の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"5682\",\"ksy\",\"483\"]",
+    "fingerprint": "6dc0ad4a395cd77d053a7ad50ba429f1cef1d0d52224aec2bffed52ef597d332",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0192で、スイッチサイエンス側は型番SC0192(9)から製造記号(9)を除いたコードで、KSY側は型番欄にそのまま入っているSC0192である。スイッチサイエンス「Raspberry Pi 4 Model B / 1GB」とKSY「Raspberry Pi 4 Model B RAM:1GB」はどちらもRaspberry Pi 4 Model Bの1GB版で一致し、KSY側は「RAM:1GB」と容量を別表記している。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "KSYのメーカー欄が空欄",
+      "製造記号(9)はスイッチサイエンス側のみにあり、KSY側には記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6021\",\"sengoku\",\"EEHD-68WU\"]",
+    "fingerprint": "d73ae8e07038316143b6dd13184d5a642a03b22b41c739cc159afceadb820a2e",
+    "decision": "rejected",
+    "evidence": "共有コードは26012。せんごくの型番【26012】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「電源ユニット - 2.54mm 2ピンコネクタ/スイッチ付 単三 × 4本 電池ボックス」とせんごく「USB A-RJ45ケーブル 1.8m　【26012】 USB-TO-RJ45-Console-Cable」は別の商品で、前者は近藤科学の単三4本用電池ボックス、後者はWaveshareのUSB A-RJ45コンソールケーブルであり、5桁の番号が偶然一致しただけである。",
+    "differences": [
+      "商品種別: スイッチサイエンス「電源ユニット - 2.54mm 2ピンコネクタ/スイッチ付 単三 × 4本 電池ボックス」 ↔ せんごく「USB A-RJ45ケーブル 1.8m」",
+      "製造元: スイッチサイエンス「近藤科学」 ↔ せんごく「Waveshare」"
+    ],
+    "missingEvidence": [],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6370\",\"sengoku\",\"EEHD-655N\"]",
+    "fingerprint": "cbba3e75cb0911e5eaccd3f05a85afd67f011da4c5e7e96dff2dd6024bbd9cd4",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0195で、スイッチサイエンス側は型番欄にSC0195がそのまま入っており、せんごく側は型番【017】RPi4B-8GBに公式コードがないため商品名から付けたaliasでSC0195を割り当てたものである。スイッチサイエンス「Raspberry Pi 4 Model B / 8GB」とせんごく「【本体】Raspberry Pi 4 Model B - 8GB　【017】RPi4B-8GB」はどちらもRaspberry Pi 4 Model Bの8GB版で一致し、せんごくの「【本体】」は店舗側の表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "せんごく側の型番欄に公式コードSC0195の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6750\",\"sengoku\",\"EEHD-5UJW\"]",
+    "fingerprint": "9fbbbadfa83dc0f289b9a63b5253c57a87c4727777c716261cd277700125af72",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0382で、スイッチサイエンス側は型番欄にSC0382がそのまま入っており、せんごく側は型番RPI400JPに公式コードがないため商品名から付けたaliasでSC0382を割り当てたものである。スイッチサイエンス「Raspberry Pi 400 日本語キーボード」とせんごく「Raspberry Pi 400 日本版　RPI400JP」はどちらもRaspberry Pi 400の日本向け版で、スイッチサイエンスの「日本語キーボード」とせんごくの「日本版」は店舗ごとの表記違いである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "せんごく側の型番欄はせんごく独自のRPI400JPで、公式コードSC0382の記載はなくaliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6854\",\"sengoku\",\"EEHD-6ZDT\"]",
+    "fingerprint": "5b0bb97e04569d529de0333ee00922d83b6af56c705e9253610f706925165233",
+    "decision": "same_product",
+    "evidence": "共有コードは103030356(スイッチサイエンスのcodesとせんごくの型番欄に記載)。スイッチサイエンス「Seeed Studio XIAO 拡張ボード」とせんごく「Expansion Base for XIAO　103030356」はXIAO用の拡張ボードとして名称が対応し、メーカーもSeeedである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはSeeed Studio)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"6900\",\"sengoku\",\"EEHD-5S4T\"]",
+    "fingerprint": "572b286bf4d9c816638170699252f2f9858a3b992c126da9218c461634a0decd",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0915で、スイッチサイエンス側は型番欄にSC0915がそのまま入っており、せんごく側は型番【001】RPI-PICOに公式コードがないため商品名から付けたaliasでSC0915を割り当てたものである。スイッチサイエンス「Raspberry Pi Pico」とせんごく「Raspberry Pi Pico　【001】RPI-PICO」はどちらもRaspberry Pi Picoで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "せんごく側の型番欄に公式コードSC0915の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7323\",\"sengoku\",\"EEHD-6F3G\"]",
+    "fingerprint": "9bebf8978270c366d3888de8f2619ee6307f61313337f7fb3bd418a74fb372c5",
+    "decision": "same_product",
+    "evidence": "共有コードは20052。せんごくの型番【20052】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi Pico用 2.66インチ e-Paper ディスプレイ（白黒）296×152」とせんごく「Raspberry Pi Pico用 2.66インチ 296×152 電子ペーパーEインクディスプレイモジュール (白黒 SPI接続)　【20052】 Pico-ePaper-2.66」はいずれもRaspberry Pi Pico用の2.66インチ296×152白黒電子ペーパーで、せんごくの英語名Pico-ePaper-2.66と対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称にSPI接続と型名Pico-ePaper-2.66の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7326\",\"sengoku\",\"EEHD-5VV3\"]",
+    "fingerprint": "c028b31f160a951cb93817ff5763cccf2c0af15e727fec8d3c9b072147645762",
+    "decision": "same_product",
+    "evidence": "共有コードは19340。せんごくの型番【19340】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi Pico用 1.14インチ 液晶モジュール 240×135」とせんごく「Raspberry Pi Pico用 1.14インチ 240×135 LCDディスプレイモジュール (65K Colors SPI接続)　【19340】 Pico-LCD-1.14」はいずれもRaspberry Pi Pico用の1.14インチ240×135のLCDモジュールで、せんごくの英語名Pico-LCD-1.14と対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称にSPI接続・65K色の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7337\",\"sengoku\",\"EEHD-5U63\"]",
+    "fingerprint": "6bb9729b2a38439b31c7ef7b3c4f7aaa10d1682dad0d887dd947603159a36dc5",
+    "decision": "same_product",
+    "evidence": "共有コードは19635。せんごくの型番【19635】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi Zero用PoE / USBハブ基板」とせんごく「Raspberry Pi Zero用 PoEイーサネット/USBハブHAT (RJ45ポート×1 USBポート×3)　【19635】 PoE/ETH/USB HUB HAT」はいずれもRaspberry Pi Zero用のPoE/USBハブ基板で、せんごくの英語名PoE/ETH/USB HUB HATと用途が対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称にポート構成(RJ45×1・USB×3)の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7343\",\"sengoku\",\"EEHD-5UUE\"]",
+    "fingerprint": "bbb3008650bb66e6c94898ff36b2d6a445c5a12a2f1357bf01bfdde46775fb2c",
+    "decision": "same_product",
+    "evidence": "共有コードは17912。せんごくの型番【17912】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi用 2チャンネル絶縁CAN HAT」とせんごく「Raspberry Pi用2チャンネル絶縁CAN拡張HAT　【17912】 2-CH CAN HAT」はいずれもRaspberry Pi用の2チャンネル絶縁CAN HATで、せんごくの英語名2-CH CAN HATと一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7344\",\"sengoku\",\"EEHD-65BE\"]",
+    "fingerprint": "7d2d382a2b51919917bda581bc8405d12a033c15dae0dcbcb1edc1045b9b77ef",
+    "decision": "same_product",
+    "evidence": "共有コードは17221。せんごくの型番【17221】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi用 2チャンネル絶縁 RS485 HAT」とせんごく「RaspberryPi用 2チャンネル 絶縁型 RS485 拡張HAT　【17221】 2-CH RS485 HAT」はいずれもRaspberry Pi用の2チャンネル絶縁RS485 HATで、せんごくの英語名2-CH RS485 HATと一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7347\",\"sengoku\",\"EEHD-5SJD\"]",
+    "fingerprint": "db34fdb23b369a48cc5730da804a864486128085a195a8cf2873f1e475577a98",
+    "decision": "same_product",
+    "evidence": "共有コードは19192。せんごくの型番【19192】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「1.28インチ 丸形液晶ディスプレイモジュール 240×240」とせんごく「1.28インチ丸型 240×240 LCDディスプレイモジュール (65K RGB)　【19192】 1.28inch LCD Module」はいずれも1.28インチ丸形240×240のLCDモジュールで一致し、せんごくの英語名は1.28inch LCD Moduleである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に65K RGBの記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7539\",\"sengoku\",\"EEHD-5S5E\"]",
+    "fingerprint": "5c55fb4c28ece987f86e8d172340c3d92035c19f2137b2b36f541b51c63126f9",
+    "decision": "same_product",
+    "evidence": "共有コードは11010。せんごくの型番【11010】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi用 高精度AD/DA」とせんごく「RaspberryPi高精度AD / DA拡張ボード　【11010】 High-Precision AD/DA Board」はいずれもRaspberry Pi用の高精度AD/DA拡張ボードで、せんごくの英語名High-Precision AD/DA Boardと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "ADC/DACチップ型番はどちらの名称にも記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7544\",\"sengoku\",\"EEHD-5VV4\"]",
+    "fingerprint": "4cdce34a48a7066ff8a868622f31bf15a7d3044b28bb680e22bb24383171598e",
+    "decision": "same_product",
+    "evidence": "共有コードは20410。せんごくの型番【20410】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi Pico用 イーサネット基板」とせんごく「Raspberry Pi Pico用 イーサネット to UARTコンバーター　【20410】 Pico-ETH-CH9121」はいずれもRaspberry Pi Pico用のイーサネット基板で、せんごくの英語名Pico-ETH-CH9121と用途が対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称にCH9121チップとUART変換の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7546\",\"sengoku\",\"EEHD-6FDH\"]",
+    "fingerprint": "eae2c9d363597b989ec1168a922443fdedca8855df585747dc159576afe32cbf",
+    "decision": "same_product",
+    "evidence": "共有コードは20218。せんごくの型番【20218】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi Pico用 8チャンネルリレー」とせんごく「Raspberry Pi Pico用 工業用8チャンネルリレーモジュール 多重保護機能付き　【20218】 Pico-Relay-B」はいずれもRaspberry Pi Pico用の8チャンネルリレーで、せんごくの英語名Pico-Relay-Bと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に版数(B)と多重保護機能の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7550\",\"sengoku\",\"EEHD-5XHL\"]",
+    "fingerprint": "893c3e6208adf1422cf602033424ba0d10747bb3a60c54e0953b20492588d6b6",
+    "decision": "same_product",
+    "evidence": "共有コードは20219。せんごくの型番【20219】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi 400用 傾きのあるGPIO拡張基板--在庫限り」とせんごく「Raspberry Pi 400 GPIO ヘッダーアダプター　【20219】 PI400-GPIO-ADAPTER-C」はいずれもRaspberry Pi 400用のGPIO拡張(ヘッダーアダプター)基板で、せんごくの英語名PI400-GPIO-ADAPTER-Cと用途が対応する。",
+    "differences": [
+      "販売状態: スイッチサイエンス「在庫限り」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に版数(C)の記載がない",
+      "「傾きのある」形状の記載はスイッチサイエンス側のみ"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7600\",\"sengoku\",\"EEHD-6CEA\"]",
+    "fingerprint": "4b8f28ee852067f3115b294f375ef207cc933a107fe66c13548d0cbc0763e554",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0510で、スイッチサイエンス側は型番欄にSC0510がそのまま入っており、せんごく側は型番【011】SC0510の【…】内の数字が店舗の通し番号で、その後ろのSC0510を読み取ったものである。スイッチサイエンス「Raspberry Pi Zero 2 W」とせんごく「Raspberry Pi Zero 2 W　【011】SC0510」はどちらもRaspberry Pi Zero 2 Wで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7677\",\"sengoku\",\"EEHD-6JZF\"]",
+    "fingerprint": "e0f2104a84570f14d4114d5660a1217cd5eaddb8f27ea744af3fd06df0e4bdfc",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0914で、スイッチサイエンス側は型番SC0914(7)から製造記号(7)を除いたコードで、せんごく側は型番欄にそのまま入っているSC0914である。スイッチサイエンス「Raspberryシリコン - RP2040（7インチリール/500個）」とせんごく「Raspberry Pi RP2040 マイコン チップ　SC0914」はどちらもRP2040チップだが、スイッチサイエンスは7インチリール500個の販売で、せんごく側の商品名には販売数量の記載がない。",
+    "differences": [
+      "販売数量: スイッチサイエンス「7インチリール/500個」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "せんごく側の販売数量・梱包形態(リールか個売りか)",
+      "製造記号(7)はスイッチサイエンス側のみにあり、せんごく側には記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7678\",\"sengoku\",\"EEHD-6JZF\"]",
+    "fingerprint": "ca52961a3448b4af6710ef72fd4b84917533219866c42401a9268d4ad4f7974c",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0914で、スイッチサイエンス側は型番SC0914(13)から製造記号(13)を除いたコードで、せんごく側は型番欄にそのまま入っているSC0914である。スイッチサイエンス「Raspberryシリコン - RP2040（13インチリール/3400個）」とせんごく「Raspberry Pi RP2040 マイコン チップ　SC0914」はどちらもRP2040チップだが、スイッチサイエンスは13インチリール3400個の販売で、せんごく側の商品名には販売数量の記載がない。",
+    "differences": [
+      "販売数量: スイッチサイエンス「13インチリール/3400個」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "せんごく側の販売数量・梱包形態(リールか個売りか)",
+      "製造記号(13)はスイッチサイエンス側のみにあり、せんごく側には記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7886\",\"sengoku\",\"EEHD-6633\"]",
+    "fingerprint": "8da126d00950caa23b33b27bc93e943f7d3210cdb92bfda0012399abf4b87842",
+    "decision": "same_product",
+    "evidence": "共有コードは20187。せんごくの型番【20187】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare RP2040-Zero」とせんごく「RP2040-Zero ミニMCUボード　【20187】 RP2040-Zero」はいずれもWaveshareのRP2040-Zeroで、品名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "ピンヘッダの有無はどちらの名称にも記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"7887\",\"sengoku\",\"EEHD-63PE\"]",
+    "fingerprint": "0ca5bb9b3f8f3c690fd43d67d088a4b55dddbf49811d9bad434c7506e1ea0998",
+    "decision": "same_product",
+    "evidence": "共有コードは20330。せんごくの型番【20330】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare RP2040-LCD-0.96」とせんごく「0.96インチLCD搭載 RP2040 MCUボード ピンヘッダなし　【20330】 RP2040-LCD-0.96」はいずれもRP2040-LCD-0.96(0.96インチLCD搭載のRP2040ボード)で、品名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "ピンヘッダの有無: せんごくは「ピンヘッダなし」、スイッチサイエンス側に記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8170\",\"sengoku\",\"EEHD-5YEC\"]",
+    "fingerprint": "6d70038158fa66142751700081334cd6fa5662a512a68396e08f1760c45728ab",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0917で、スイッチサイエンス側は型番RPI-SC0917のSC0917(保存コードにも同じSC0917がある)で、せんごく側は型番【002】RPI-PICO-Hに公式コードがないため商品名から付けたaliasでSC0917を割り当てたものである。スイッチサイエンス「Raspberry Pi Pico H」とせんごく「Raspberry Pi Pico H【ピンヘッダ実装済】　【002】RPI-PICO-H」はどちらもRaspberry Pi Pico Hで一致し、せんごく側の商品名にだけ「【ピンヘッダ実装済】」の補足がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごくのメーカー欄とベンダー欄が空欄",
+      "スイッチサイエンス側の商品名にはピンヘッダ実装済の記載がない",
+      "せんごく側の型番欄に公式コードSC0917の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8171\",\"sengoku\",\"EEHD-65C4\"]",
+    "fingerprint": "886eeee7972cf7c4af792632ac02a0094301bffc3bee709f5c76ee8512e34c5a",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0918で、スイッチサイエンス側は型番RPI-SC0918のSC0918(保存コードにも同じSC0918がある)で、せんごく側は型番【003】RPI-PICO-Wに公式コードがないため商品名から付けたaliasでSC0918を割り当てたものである。スイッチサイエンス「Raspberry Pi Pico W」とせんごく「Raspberry Pi Pico W　【003】RPI-PICO-W」はどちらもRaspberry Pi Pico Wで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "せんごく側の型番欄に公式コードSC0918の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8172\",\"sengoku\",\"EEHD-65YB\"]",
+    "fingerprint": "1f230f70b524c0ced65f5d22b3811bdc7eccc57c5af0fad09bb3407ed00ed066",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0919で、スイッチサイエンス側は型番欄にSC0919がそのまま入っており、せんごく側は型番【004】RPI-PICO-WHに公式コードがないため商品名から付けたaliasでSC0919を割り当てたものである。スイッチサイエンス「Raspberry Pi Pico WH」とせんごく「Raspberry Pi Pico WH【ピンヘッダ実装済】　【004】RPI-PICO-WH」はどちらもRaspberry Pi Pico WHで一致し、せんごく側の商品名にだけ「【ピンヘッダ実装済】」の補足がある。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄",
+      "スイッチサイエンス側の商品名にはピンヘッダ実装済の記載がない",
+      "せんごく側の型番欄に公式コードSC0919の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8315\",\"sengoku\",\"EEHD-6FDJ\"]",
+    "fingerprint": "8754a420b25cea2b3a4982a9ae02be9896ee54c9e81b8293f4b926653ac227b3",
+    "decision": "same_product",
+    "evidence": "共有コードは22545。せんごくの型番【22545】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「1.51インチ透明 青色OLEDディスプレイ（128×64 SPI/I2C）」とせんごく「1.51インチ 128×64 透明OLEDディスプレイ SPI/I2C ライトブルーカラー表示　【22545】 1.51inch Transparent OLED」はいずれも1.51インチ128×64の透明OLEDディスプレイ(SPI/I2C)で、せんごくの英語名1.51inch Transparent OLEDと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "表示色の表記がスイッチサイエンス「青色」とせんごく「ライトブルーカラー」で異なる(同じ色の表記差か未確認)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8423\",\"sengoku\",\"EEHD-63A4\"]",
+    "fingerprint": "c7bc29662907b24c6fd8b6cc0fc178041747bf1b370135f7b1b9985593f09a18",
+    "decision": "same_product",
+    "evidence": "共有コードは22668。せんごくの型番【22668】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare RP2040-LCD-1.28」とせんごく「RP2040搭載 1.28インチ円形ディスプレイ 加速度・ジャイロセンサー内蔵　【22668】 RP2040-LCD-1.28」はいずれもRP2040搭載の1.28インチ円形ディスプレイで、せんごくの英語名RP2040-LCD-1.28とスイッチサイエンスの品名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に加速度・ジャイロセンサー内蔵の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8655\",\"sengoku\",\"EEHD-6ZDD\"]",
+    "fingerprint": "72e4637dddb3c7bdd000c7804897c2b9fc38e1a29186a4027f62f8f2c9a2d218",
+    "decision": "same_product",
+    "evidence": "共有コードはADA-5645(スイッチサイエンスのcodesとせんごくの型番欄に記載、スイッチサイエンスの型番欄は5645)。スイッチサイエンス「Adafruit NeoPixel ドライバBFF（QT Py/Xiao用アドオンボード）」とせんごく「Adafruit NeoPixel Driver BFF Add-On for QT Py and Xiao　ADA-5645」はNeoPixel Driver BFFで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはAdafruit)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8726\",\"sengoku\",\"EEHD-63HY\"]",
+    "fingerprint": "abb951f7ee6b8cd460d0045f3c86d2f3ebe86890edd331177daae6e0309749c0",
+    "decision": "same_product",
+    "evidence": "共有コードは23285。せんごくの型番【23285】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「PoE HAT (E)」とせんごく「Raspberry Pi 3B+/4B用 Power over Ethernet HAT(802.3af準拠)　【23285】 PoE HAT (E)」はいずれもPoE HAT (E)で、品名と版数(E)が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に対象機種(3B+/4B)と802.3af準拠の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8727\",\"sengoku\",\"EEHD-63NR\"]",
+    "fingerprint": "01e632b01f5ab7e7045a8b201cb11f76af8d16e69c83799cac5a5112b343c145",
+    "decision": "same_product",
+    "evidence": "共有コードは22809。せんごくの型番【22809】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「RP2040-One」とせんごく「RP2040-One (Raspberry Pi RP2040搭載)　【22809】 RP2040-One」はいずれもRP2040-Oneで、品名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8808\",\"sengoku\",\"EEHD-65BM\"]",
+    "fingerprint": "ac7a5bf758caa402003c7c225b41e2e3f25af26fd8312aeb070ed1135652f5e7",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0715(せんごくの型番「【CS】GS_SC0715」から店独自の接頭辞【CS】GS_を除いて読み取ったコード)。スイッチサイエンス「Raspberry Pi Global Shutter Camera--在庫限り」とせんごく「【CSマウント】Raspberry Pi Global Shutter Camera CSマウント (レンズ別売)　【CS】GS_SC0715」は製品名が一致し、せんごく側が販売時のマウント表記とレンズ別売を付け加えている。",
+    "differences": [
+      "マウント表記: スイッチサイエンス「記載なし」 ↔ せんごく「CSマウント」",
+      "レンズ: スイッチサイエンス「記載なし」 ↔ せんごく「レンズ別売」",
+      "販売状況: スイッチサイエンス「在庫限り」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "スイッチサイエンス側の名称にマウント種別・レンズ有無の記載がない",
+      "せんごくの【CS】GS_は店独自の接頭辞で、この形からのコード読み取りは規定された派生形式ではない(SC0715は両店の名称・メーカー欄と整合するが、別マウント構成の有無は未確認)",
+      "せんごく側のmanufacturer欄が空欄(vendorはRaspberry Pi)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8853\",\"sengoku\",\"EEHD-6UGA\"]",
+    "fingerprint": "5196927567a571ca6e6bd7c1979f9e7f4984abfa0338d2be44f90791cbb8e282",
+    "decision": "same_product",
+    "evidence": "共有コードは23652。せんごくの型番【23652】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「TTL TO RS422 (B)」とせんごく「DINレール対応 TTL-RS422 絶縁コンバータ　【23652】 TTL TO RS422 (B)」はいずれもTTL TO RS422 (B)で、品名と版数(B)が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称にDINレール対応・絶縁の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8854\",\"sengoku\",\"EEHD-63PJ\"]",
+    "fingerprint": "6008e92202507b5241038cb7a8c0c5946adb4aa7da98e738670e37d125180336",
+    "decision": "same_product",
+    "evidence": "共有コードは23452。せんごくの型番【23452】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi用電源管理HAT」とせんごく「Raspberry Pi 用電源管理 HAT (B)　【23452】 Power Management HAT (B) (EN)」はいずれもRaspberry Pi用の電源管理HATで、せんごくの英語名はPower Management HAT (B) (EN)である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に版数(B)の記載がない",
+      "せんごく側の英語名末尾(EN)の意味(言語版か仕様差か)が不明"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8855\",\"sengoku\",\"EEHD-6635\"]",
+    "fingerprint": "0f71573ad16b0bfcee3ce25acf9c963267a5408f588b8586c69e7f22fbd8e591",
+    "decision": "same_product",
+    "evidence": "共有コードは23504。せんごくの型番【23504】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare RP2040-Plus（16 MB ピンヘッダ実装済み）」とせんごく「RP2040搭載 MCUボード 16MBフラッシュ搭載 ピンヘッダ実装済　【23504】 RP2040-Plus-16MB-M」はいずれもRP2040-Plusの16MBフラッシュ版で、ピンヘッダ実装済みの記載も一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "せんごくの英語名末尾-Mの意味は名称からは明記されていない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8856\",\"sengoku\",\"EEHD-6634\"]",
+    "fingerprint": "f7d7e5ec034d1212aee189d4c99397bccd1ed15b57a242050642c621351d45e1",
+    "decision": "same_product",
+    "evidence": "共有コードは23503。せんごくの型番【23503】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare RP2040-Plus（16 MB）」とせんごく「RP2040搭載 MCUボード 16MBフラッシュ搭載　【23503】 RP2040-Plus-16MB」はいずれもRP2040-Plusの16MBフラッシュ版で、どちらもピンヘッダ実装済みの記載がなく一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"8858\",\"sengoku\",\"EEHD-65J8\"]",
+    "fingerprint": "201ee1f175ec55ee0476311f774f3a002aabf11ff1e1c46c255a0431a36f3433",
+    "decision": "same_product",
+    "evidence": "共有コードは24004。せんごくの型番【24004】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi Pico向け センシングスターターキット 拡張ベースボード付」とせんごく「Raspberry Pi Pico入門用 拡張基板と15種類の一般的なモジュールキット　【24004】 Pico-Sensor-Kit-B」はいずれもRaspberry Pi Pico向けのセンサ入門キットで、拡張ベースボード(拡張基板)付きの記載が一致し、せんごくの英語名はPico-Sensor-Kit-Bである。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に版数(B)と15種類のモジュールの記載がない",
+      "キット内容物の一覧が未確認"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9026\",\"sengoku\",\"EEHD-654V\"]",
+    "fingerprint": "39955adf67fa8c2ab6d525471d1c0669e60814022d9ac4dda841d890afcd6787",
+    "decision": "same_product",
+    "evidence": "共有コードは19137。せんごくの型番【19137】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi用 HDMI-CSI 変換アダプターボード」とせんごく「Raspberry Piシリーズ用HDMI-CSI変換アダプタ (1080p@30fps対応)　【19137】 HDMI to CSI Adapter」はいずれもRaspberry Pi用のHDMI-CSI変換アダプタ基板で、せんごくの英語名HDMI to CSI Adapterと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に1080p@30fps対応の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9030\",\"sengoku\",\"EEHD-65J7\"]",
+    "fingerprint": "3f99316bcb0c09dd5ad04739812384e4e3613927beae200af13a1e7d3d9308e2",
+    "decision": "same_product",
+    "evidence": "共有コードは24382。せんごくの型番【24382】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「1.69インチ 角丸LCDディスプレイモジュール（240×280 SPI接続）」とせんごく「1.69インチ 240×280 IPS液晶ディスプレイ SPI接続 26万色　【24382】 1.69inch LCD Module」はいずれも1.69インチ240×280のSPI接続LCDモジュールで、せんごくの英語名1.69inch LCD Moduleと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称にIPS・26万色の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9031\",\"sengoku\",\"EEHD-65ZX\"]",
+    "fingerprint": "289bcbbe20c7e50eb5743e6e57cbdcb3250804261870f85b1d94e90ec2bdbac0",
+    "decision": "same_product",
+    "evidence": "共有コードは24580。せんごくの型番【24580】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「RP2040搭載1.28インチ円形タッチスクリーンディスプレイ」とせんごく「RP2040搭載 1.28インチ円形タッチディスプレイ 加速度・ジャイロセンサー内蔵　【24580】 RP2040-Touch-LCD-1.28」はいずれもRP2040搭載の1.28インチ円形タッチディスプレイで、せんごくの英語名RP2040-Touch-LCD-1.28と対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に加速度・ジャイロセンサー内蔵の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9092\",\"sengoku\",\"EEHD-66FM\"]",
+    "fingerprint": "338682886fd22220d9ea53d62ea20283c1269c8a053cef26f8703741f962dc02",
+    "decision": "same_product",
+    "evidence": "共有コードは24665。せんごくの型番【24665】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「RP2040-Tiny開発キット」とせんごく「RP2040-Tiny 開発ボード USB ポートアダプタ付き　【24665】 RP2040-Tiny-Kit」はいずれもRP2040-Tinyの開発キットで、せんごくの英語名RP2040-Tiny-Kitと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "キット内容: せんごくは「USB ポートアダプタ付き」、スイッチサイエンス側に内容物の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9097\",\"sengoku\",\"EEHD-5SG4\"]",
+    "fingerprint": "9cd490a3049d207f81de094f8ba127ebb3dd8b06b25a30abb93dcc00e01ac22a",
+    "decision": "same_product",
+    "evidence": "共有コードは14810。せんごくの型番【14810】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「バーコードスキャナモジュール（1D/2D コードリーダ）」とせんごく「バーコードスキャナーモジュール 1D/2Dコードリーダー　【14810】 Barcode Scanner Module」はいずれも1D/2D対応のバーコードスキャナモジュールで、せんごくの英語名Barcode Scanner Moduleと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9120\",\"sengoku\",\"EEHD-6ZDE\"]",
+    "fingerprint": "c2e572780f1ea5c289102c256d5657eb822e025b86e492061888f9c35f33011c",
+    "decision": "same_product",
+    "evidence": "共有コードはADA-5772(スイッチサイエンスのcodesとせんごくの型番欄に記載、スイッチサイエンスの型番欄は5772)。スイッチサイエンス「Adafruit EYESPI 18ピンFPCコネクタ BFF（QT Py/Xiao用アドオンボード）」とせんごく「Adafruit EYESPI BFF for QT Py or Xiao - 18 Pin FPC Connector　ADA-5772」はEYESPI 18ピンFPC BFFで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはAdafruit)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9249\",\"sengoku\",\"EEHD-6A5U\"]",
+    "fingerprint": "37755075fb25ec24ccd13f3b486e8a99953fc97ab81e03068910a59d66d0e3c0",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1111で、スイッチサイエンス側は型番欄にSC1111がそのまま入っており、せんごく側は型番【018】RPi5-4GB-SC1111の【…】内の数字が店舗の通し番号で、その後ろのSC1111を読み取ったものである。スイッチサイエンス「Raspberry Pi 5 / 4GB」とせんごく「【本体】Raspberry Pi 5 - 4GB　【018】RPi5-4GB-SC1111」はどちらもRaspberry Pi 5の4GB版で一致し、せんごくの「【本体】」は店舗側の表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9250\",\"sengoku\",\"EEHD-6A5V\"]",
+    "fingerprint": "0c018cf36293e98eccc61f04eff600d54faeaa79cf758a2417179a4346e4c081",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1112で、スイッチサイエンス側は型番欄にSC1112がそのまま入っており、せんごく側は型番【019】RPi5-8GB-SC1112の【…】内の数字が店舗の通し番号で、その後ろのSC1112を読み取ったものである。スイッチサイエンス「Raspberry Pi 5 / 8GB」とせんごく「【本体】Raspberry Pi 5 - 8GB　【019】RPi5-8GB-SC1112」はどちらもRaspberry Pi 5の8GB版で一致し、せんごくの「【本体】」は店舗側の表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9284\",\"sengoku\",\"EEHD-6ZDR\"]",
+    "fingerprint": "34fbb74593993baec944ec2e4732087a3508101b30938b1b87ad62d9b12b2ec5",
+    "decision": "same_product",
+    "evidence": "共有コードは104030107(スイッチサイエンスのcodesとせんごくの型番欄に記載)。スイッチサイエンス「XIAO用 6x10 RGBマトリックスボード」とせんごく「6x10 RGB WS2812 Matrix for XIAO　104030107」はXIAO用の6x10 RGBマトリックスで対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "スイッチサイエンス名にLEDの種類(WS2812)の記載がない",
+      "せんごく側のmanufacturer欄が空欄(vendorはSeeed Studio)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9438\",\"sengoku\",\"EEHD-68LU\"]",
+    "fingerprint": "42bc086de52d732a86fa223cc1dd020790136386bef4a8ecad62fea6ca4562a5",
+    "decision": "same_product",
+    "evidence": "共有コードは26117。せんごくの型番【26117】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「0.85インチ LCDディスプレイモジュール（128x128、SPI接続）」とせんごく「0.85インチ 128×128 LCDディスプレイ SPI接続　【26117】 0.85inch LCD Module」はいずれも0.85インチ128×128のLCDモジュール(SPI接続)で、せんごくの英語名0.85inch LCD Moduleと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9444\",\"sengoku\",\"EEHD-6ATG\"]",
+    "fingerprint": "ecd47fead4b8c57651fbfa76af8a6ce8e90f014c9c9b72f973f1371b931b2f4e",
+    "decision": "same_product",
+    "evidence": "共有コードは26089。せんごくの型番【26089】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「PI5-CASE-F - WaveShare製 Raspberry Pi 5用ケース」とせんごく「Raspberry Pi 5用 クリアアクリルケース　【26089】 PI5-CASE-F」はいずれもPI5-CASE-FのRaspberry Pi 5用ケースで、品名の型名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "素材(クリアアクリル)はスイッチサイエンス側の名称に記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9534\",\"sengoku\",\"EEHD-6ZDF\"]",
+    "fingerprint": "5427715185339482cf599b08fc02b51d2b395570cb646d4ae722d6091d6a1b35",
+    "decision": "same_product",
+    "evidence": "共有コードはADA-5877(スイッチサイエンスのcodesとせんごくの型番欄に記載、スイッチサイエンスの型番欄は5877)。スイッチサイエンス「Adafruit CAN Bus BFF（QT Py/Xiao用アドオンボード）」とせんごく「Adafruit CAN Bus BFF Add-On for QT Py　ADA-5877」はCAN Bus BFFで一致し、対象ボードの書き方だけが異なる。",
+    "differences": [
+      "対象ボード: スイッチサイエンス「QT Py/Xiao用」 ↔ せんごく「QT Py用」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく名にXIAO対応の記載がない(対象ボードの記載範囲の差)",
+      "せんごく側のmanufacturer欄が空欄(vendorはAdafruit)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9536\",\"sengoku\",\"EEHD-6ZDH\"]",
+    "fingerprint": "22ed42e6a0f324ca213e6c0974f9b1c47c89ff2aa6377c14942bb7e493ac8eae",
+    "decision": "same_product",
+    "evidence": "共有コードはADA-5882(スイッチサイエンスのcodesとせんごくの型番欄に記載、スイッチサイエンスの型番欄は5882)。スイッチサイエンス「Adafruit DC電源BFF （QT Py/Xiao用アドオンボード）」とせんごく「Adafruit DC Power BFF Add-On for QT Py　ADA-5882」はDC Power(DC電源) BFFで一致し、対象ボードの書き方だけが異なる。",
+    "differences": [
+      "対象ボード: スイッチサイエンス「QT Py/Xiao用」 ↔ せんごく「QT Py用」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく名にXIAO対応の記載がない(対象ボードの記載範囲の差)",
+      "せんごく側のmanufacturer欄が空欄(vendorはAdafruit)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9615\",\"sengoku\",\"EEHD-6ATF\"]",
+    "fingerprint": "100b36e35194cbd665c25f1ed2fb31aeef9f94e607a795f06e8f9358c6609019",
+    "decision": "same_product",
+    "evidence": "共有コードは26086。せんごくの型番【26086】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「PI5-CASE-C - WaveShare製 Raspberry Pi 5用ケース」とせんごく「Raspberry Pi 5用 アルミケース デュアルファン仕様　【26086】 PI5-CASE-C」はいずれもPI5-CASE-CのRaspberry Pi 5用ケースで、品名の型名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "素材(アルミ)とデュアルファン仕様はスイッチサイエンス側の名称に記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9616\",\"sengoku\",\"EEHD-6ATE\"]",
+    "fingerprint": "614d1bfd6d8b15ded62d172fd62083da954dbe68d00506b2770e08a30b9582f8",
+    "decision": "same_product",
+    "evidence": "共有コードは26411。せんごくの型番【26411】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「PI5-CASE-H - WaveShare製 Raspberry Pi 5用ケース」とせんごく「Raspberry Pi 5用 アルミケース(H型) 温度制御ブロワーファン付き　【26411】 PI5-CASE-H」はいずれもPI5-CASE-HのRaspberry Pi 5用ケースで、品名の型名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "素材(アルミ)と温度制御ブロワーファン付きはスイッチサイエンス側の名称に記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9628\",\"sengoku\",\"EEHD-68TF\"]",
+    "fingerprint": "a00368c005cc454c19688e0d1f37c04a2b84ad3b6efa52b102864000d5efb1d0",
+    "decision": "same_product",
+    "evidence": "共有コードは23489。せんごくの型番【23489】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「DDSM115 ダイレクトドライブサーボモーター（100.7 Φ）」とせんごく「DDSM115 ダイレクトドライブサーボモーター　【23489】 DDSM115」はいずれもDDSM115のダイレクトドライブサーボモーターで、品名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンスの「100.7 Φ」はせんごく側の名称に記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9634\",\"sengoku\",\"EEHD-6ZDK\"]",
+    "fingerprint": "d059a8e07fddfc7994a1cfcd90220ae47309fa40e0b8387bf4b956465f0d9316",
+    "decision": "same_product",
+    "evidence": "共有コードはADA-5937(スイッチサイエンスのcodesとせんごくの型番欄に記載、スイッチサイエンスの型番欄は5937)。スイッチサイエンス「Adafruit BNO055 + BMP280 BFF（QT Py/Xiao用アドオンボード）」とせんごく「Adafruit BNO055 + BMP280 BFF Add-On for QT Py　ADA-5937」はBNO055 + BMP280 BFFで一致し、対象ボードの書き方だけが異なる。",
+    "differences": [
+      "対象ボード: スイッチサイエンス「QT Py/Xiao用」 ↔ せんごく「QT Py用」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく名にXIAO対応の記載がない(対象ボードの記載範囲の差)",
+      "せんごく側のmanufacturer欄が空欄(vendorはAdafruit)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9776\",\"sengoku\",\"EEHD-6BVU\"]",
+    "fingerprint": "4d9b05066c0ebe01125a1949bf16c7dba99dc1076626cf7afe090156173a30e6",
+    "decision": "same_product",
+    "evidence": "共有コードは27057。せんごくの型番【27057】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare 1.69インチタッチスクリーンディスプレイ」とせんごく「1.69インチ丸角LCDディスプレイモジュール　【27057】 1.69inch Touch LCD Module」はいずれも1.69インチのタッチ対応LCDモジュールで、せんごくの英語名1.69inch Touch LCD Moduleと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "せんごくの日本語名にタッチ対応の記載がなく、英語名のみで確認",
+      "解像度とインターフェースはどちらの名称にも記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9778\",\"sengoku\",\"EEHD-6SG3\"]",
+    "fingerprint": "c85bcd528026b930475a011082c2164bdf4f38c05737d50170e2521e7ef760e9",
+    "decision": "same_product",
+    "evidence": "共有コードは27479。せんごくの型番【27479】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare TTL - RS485変換モジュール」とせんごく「TTL to RS485 (C) アイソレーション変換モジュール　【27479】 TTL TO RS485 (C)」はいずれもTTLとRS485の変換モジュールで、せんごくの英語名はTTL TO RS485 (C)である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に版数(C)とアイソレーションの記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9779\",\"sengoku\",\"EEHD-6FDN\"]",
+    "fingerprint": "af5f8603e44beffb65f5d1e52b0ee5c3039c2254b0905bf1f83aaa2a14366169",
+    "decision": "same_product",
+    "evidence": "共有コードは27480。せんごくの型番【27480】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Raspberry Pi 5用 2ch M.2 SSD HAT+」とせんごく「Raspberry Pi 5用 PCIe to 2ch M.2 アダプター　【27480】 PCIe TO 2-CH M.2 HAT+」はいずれもRaspberry Pi 5用の2チャンネルM.2 SSD HAT+で、せんごくの英語名PCIe TO 2-CH M.2 HAT+と対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9780\",\"sengoku\",\"EEHD-6FDM\"]",
+    "fingerprint": "4942b3985d9bd7240a43c3a75234cdec6abcad3fa5cd7975ed171f6af593977f",
+    "decision": "same_product",
+    "evidence": "共有コードは27466。せんごくの型番【27466】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「FT232RNL搭載USB Type-C - シリアルアダプタ」とせんごく「USB To UART (TTL) ミニコミュニケーションモジュール　【27466】 USB-TO-TTL-FT232」はいずれもUSB-UART(TTL)シリアル変換のFT232搭載モジュールで、せんごくの英語名USB-TO-TTL-FT232と対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンスの「USB Type-C」はせんごく側の名称に記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9809\",\"sengoku\",\"EEHD-6HEU\"]",
+    "fingerprint": "c2c1a1f6e8d5d3879db4415df2294266cdde978e3c2a8e9da793b9a6b96d1594",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1631で、スイッチサイエンス側は型番欄にSC1631がそのまま入っており、せんごく側は型番【005】SC1631の【…】内の数字が店舗の通し番号で、その後ろのSC1631を読み取ったものである。スイッチサイエンス「Raspberry Pi Pico 2」とせんごく「Raspberry Pi Pico 2　【005】SC1631」はどちらもRaspberry Pi Pico 2で一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9810\",\"sengoku\",\"EEHD-6UGR\"]",
+    "fingerprint": "2813ad63c9563a87d2f21f53d38424ae5fd855e945216860ef6f580b8519aebe",
+    "decision": "same_product",
+    "evidence": "共有コードはSC1110で、スイッチサイエンス側は型番欄にSC1110がそのまま入っており、せんごく側は型番【021】RPi5-2GB-SC1110の【…】内の数字が店舗の通し番号で、その後ろのSC1110を読み取ったものである。スイッチサイエンス「Raspberry Pi 5 / 2GB」とせんごく「【本体】Raspberry Pi 5 - 2GB　【021】RPi5-2GB-SC1110」はどちらもRaspberry Pi 5の2GB版で一致し、せんごくの「【本体】」は店舗側の表記である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9812\",\"sengoku\",\"EEHD-6JRZ\"]",
+    "fingerprint": "5facc12daee9605ea19f0c012548417765c936445915436571342f083c187aaa",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0721で、スイッチサイエンス側は型番欄にSC0721がそのまま入っており、せんごく側は型番【012】SC0721の【…】内の数字が店舗の通し番号で、その後ろのSC0721を読み取ったものである。スイッチサイエンス「Raspberry Pi Zero 2 WH」とせんごく「Raspberry Pi Zero 2 WH　【012】SC0721」はどちらもRaspberry Pi Zero 2 WHで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のメーカー欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9845\",\"sengoku\",\"EEHD-6N8D\"]",
+    "fingerprint": "f6c62e9fad53f7a393a35899ec4a369a7e805a2b60e646e3673e3ce3bff79616",
+    "decision": "rejected",
+    "evidence": "共有コードは5989。せんごくの型番【5989】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「STEMMA QT/Qwiic互換 HDC302x 高精度温度/湿度センサ」とせんごく「USB Blaster V2 ダウンロードケーブル　【5989】 USB Blaster V2」は別の商品で、前者はAdafruitのHDC302x温湿度センサ、後者はUSB Blaster V2ダウンロードケーブルであり、4桁の番号が偶然一致しただけである。",
+    "differences": [
+      "商品種別: スイッチサイエンス「STEMMA QT/Qwiic互換 HDC302x 高精度温度/湿度センサ」 ↔ せんごく「USB Blaster V2 ダウンロードケーブル」",
+      "製造元: スイッチサイエンス「Adafruit」 ↔ せんごく「Waveshare」"
+    ],
+    "missingEvidence": [],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9860\",\"sengoku\",\"EEHD-6BVF\"]",
+    "fingerprint": "812a300e2597ae02b09ca6f16c6359410b7f6b91aa7ed1ad95fe5d83353a3e4a",
+    "decision": "same_product",
+    "evidence": "共有コードは26583。せんごくの型番【26583】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare Raspberry Pi 5用 M.2 SSD HAT+」とせんごく「Raspberry Pi 5用 PCIe to M.2アダプター　【26583】 PCIe TO M.2 HAT+」はいずれもRaspberry Pi 5用のM.2 SSD HAT+(PCIe to M.2アダプター)で、せんごくの英語名PCIe TO M.2 HAT+と対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9861\",\"sengoku\",\"EEHD-6FDP\"]",
+    "fingerprint": "730b8fea1e4bcef30586a3b0bdd199d365cc5ac841c78fb30c9b3b85d129de43",
+    "decision": "same_product",
+    "evidence": "共有コードは27580。せんごくの型番【27580】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare Raspberry Pi 5用 PCIe-M.2 SSD MINI変換基板」とせんごく「Raspberry Pi 5用 小型 NVMe M.2アダプターHAT　【27580】 PCIe TO M.2 MINI」はいずれもRaspberry Pi 5用の小型PCIe-M.2変換基板で、せんごくの英語名PCIe TO M.2 MINIと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9864\",\"sengoku\",\"EEHD-6FDK\"]",
+    "fingerprint": "3c17e685ea8f6907992bb9a5f6bf14e8b4dfedbe6667f367c1111b6664beec58",
+    "decision": "same_product",
+    "evidence": "共有コードは27009。せんごくの型番【27009】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare Raspberry Pi 5/4B用HDMI（Micro-標準）アダプタ基板」とせんごく「RPi4/5対応 Micro HDMI to HDMI 多機能アダプター　【27009】 Pi5 Connector Adapter」はいずれもRaspberry Pi 5(4B)向けのMicro HDMI-標準HDMI変換アダプタ基板で、せんごくの英語名Pi5 Connector Adapterと対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "せんごくの「多機能」の内容はスイッチサイエンス側の名称に記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"switch-science\",\"9865\",\"sengoku\",\"EEHD-6FDR\"]",
+    "fingerprint": "7505dcfa5acddb1a38a6b08ef976eb9e53e137aba876f7bb6c92e72539a291e4",
+    "decision": "same_product",
+    "evidence": "共有コードは27670。せんごくの型番【27670】の括弧内から読んだ番号で(Waveshare品のため括弧内はメーカーSKU)、スイッチサイエンスの型番欄と一致する。スイッチサイエンス「Waveshare PoE HAT（G）」とせんごく「Raspberry pi 5用 5V5A給電 802.3af/at対応　【27670】 PoE HAT (G)」はいずれもRaspberry Pi 5向けのPoE HAT (G)で、品名と版数(G)が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "せんごく側のmanufacturer欄が空欄(vendorはWaveshare)",
+      "スイッチサイエンス側の名称に対象機種と5V5A給電・802.3af/at対応の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a109164-s2129",
+    "fingerprint": "3d6698a8a582e91dc87e52d6dde54ed0b4b16a82190622180e9595c073976081",
+    "decision": "same_product",
+    "evidence": "共有コードは103010002(秋月電子の型番欄に記載、スイッチサイエンスは型番SEEED-103010002からSEEED-接頭辞を除いたSKU)。秋月電子「GrovePi+」とスイッチサイエンス「GrovePi+」は商品名が完全に一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側のmanufacturer欄が空欄",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a109473-s1821",
+    "fingerprint": "5d5b32dccec0aef2883c412d832ef0e7bbb7d0b20e12f63fb351acf97f9222a2",
+    "decision": "same_product",
+    "evidence": "共有コードは102040001(秋月電子の型番欄に記載、スイッチサイエンスは型番SEEED-102040001からSEEED-接頭辞を除いたSKU)。秋月電子「Xadow-M0 訳あり品」とスイッチサイエンス「Xadow - M0--在庫限り」は製品名Xadow M0が一致し、販売状況の表記だけが異なる。",
+    "differences": [
+      "販売状況: 秋月電子「訳あり品」 ↔ スイッチサイエンス「在庫限り」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側のmanufacturer欄が空欄",
+      "訳あり品の具体的な状態(外装・動作保証など)",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a111110-s2896",
+    "fingerprint": "c5f7d5f2fd9bbba9b3f2d42772e8cc6f1168915fdc6f039b5b54fcc5c9a571dd",
+    "decision": "same_product",
+    "evidence": "共有コードは113990234(秋月電子の型番欄に記載、スイッチサイエンスは型番SEEED-113990234からSEEED-接頭辞を除いたSKU)。秋月電子「Wio Core」とスイッチサイエンス「Wio Core--在庫限り」は製品名が一致し、スイッチサイエンスだけ在庫限りと記載する。",
+    "differences": [
+      "販売状況: 秋月電子「記載なし」 ↔ スイッチサイエンス「在庫限り」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側のmanufacturer欄が空欄",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a112022-s1486",
+    "fingerprint": "1f55f5a2220e8799dbb1f0bd7b93c24e7ed17c71a2be6ef737d320cb9b00a044",
+    "decision": "same_product",
+    "evidence": "共有コードは321080035(秋月電子の型番欄に記載、スイッチサイエンスは型番SEEED-321080035からSEEED-接頭辞を除いたSKU)。秋月電子「オシロスコープ・プローブ 60MHz MCXコネクター付き」とスイッチサイエンス「DSO Quad用MCX端子プローブキット(単倍・10倍)--在庫限り」は名称が異なるが、どちらもMCX端子のオシロスコープ用プローブである。",
+    "differences": [
+      "商品名の構成: 秋月電子「プローブ 60MHz」 ↔ スイッチサイエンス「プローブキット(単倍・10倍)」",
+      "対象機種: 秋月電子「記載なし」 ↔ スイッチサイエンス「DSO Quad用」",
+      "販売状況: 秋月電子「記載なし」 ↔ スイッチサイエンス「在庫限り」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "プローブの本数・倍率構成(単倍・10倍)が秋月電子側に記載されていない",
+      "帯域60MHzがスイッチサイエンス側に記載されていない",
+      "秋月電子側のmanufacturer欄が空欄",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a112166-s3280",
+    "fingerprint": "8e7910623f0e82dad8cd2f20ca6b1e446f2f1ad022de00224536f4dd33e15446",
+    "decision": "same_product",
+    "evidence": "共有コードは114991071(秋月電子の型番欄に記載、スイッチサイエンスは型番SEEED-114991071からSEEED-接頭辞を除いたSKU)。秋月電子「Tetris(R) MicroCard (テトリスマイクロカード)」とスイッチサイエンス「Tetris® MicroCard--販売終了」は製品名が一致し、®の表記と販売終了の記載だけが異なる。",
+    "differences": [
+      "販売状況: 秋月電子「記載なし」 ↔ スイッチサイエンス「販売終了」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側のmanufacturer欄が空欄",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a112961-s3646",
+    "fingerprint": "4c6fabef3fd5e98b5311a8f71123a01be7ff17575dfe7e4d62334163b4502c8f",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0065で、秋月電子側は型番欄が商品名「Raspberry Pi Zero WH」のみで公式コードがないため商品名から付けたaliasで、スイッチサイエンス側は型番欄にそのまま入っているSC0065を共有コードとしたものである。秋月電子「Raspberry Pi Zero WH (ラズベリーパイゼロ ダブルエイチ) 本体」とスイッチサイエンス「Raspberry Pi Zero WH」はどちらもRaspberry Pi Zero WHで一致し、秋月の「本体」と日本語読みは店舗側の補足である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄",
+      "秋月電子側の型番欄に公式コードSC0065の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a114472-s5951",
+    "fingerprint": "d270de55ae293972b9ae2deac240a44da519c972b75e2df57efc5cadbb3ff7a6",
+    "decision": "same_product",
+    "evidence": "共有コードは102991187(秋月電子の型番欄に記載、スイッチサイエンスは型番SEEED-102991187からSEEED-接頭辞を除いたSKU)。秋月電子「Grove AI HAT for Edge Computing」とスイッチサイエンス「Grove - AI HAT for Edge Computing」は区切りのハイフン以外が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側のmanufacturer欄が空欄",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a114778-s5680",
+    "fingerprint": "5ff9390c54f3ce084c109a983ac66a0fe4a93460108004c1633b29d9419c311f",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0194で、秋月電子側は型番Pi 4 Model B/4GBに公式コードがなく、スイッチサイエンス側は型番欄がelement14の注文コード3051891のため、どちらも商品名から付けたaliasでSC0194を割り当てたものである。秋月電子「Raspberry Pi 4 Model B 4GB (ラズベリーパイフォーモデルビー)」とスイッチサイエンス「Raspberry Pi 4 Model B / 4GB」はどちらもRaspberry Pi 4 Model Bの4GB版で一致し、スイッチサイエンスのメーカー欄だけがelement14の流通ブランドを示している。",
+    "differences": [
+      "流通ブランド表記: 秋月電子「表記なし」 ↔ スイッチサイエンス「element14」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄",
+      "両店の型番欄に公式コードSC0194の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a114878-s4110",
+    "fingerprint": "464e7616a4bb871cb027b9540d2f3da1959fe865b4be96a1b8528de58a01bbe2",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0130で、秋月電子側は型番欄が商品名と同じで公式コードがないため商品名から付けたaliasで、スイッチサイエンス側は型番SC0130(J)から製造記号(J)を除いたSC0130である。秋月電子「Raspberry Pi 3 Model A+ (ラズベリーパイスリーモデルエープラス)」とスイッチサイエンス「Raspberry Pi 3 Model A+」はどちらもRaspberry Pi 3 Model A+で一致し、秋月の日本語読みは店舗側の補足である。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄",
+      "製造記号(J)はスイッチサイエンス側のみにあり、秋月電子側には記載がない",
+      "秋月電子側の型番欄に公式コードSC0130の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a115359-s6370",
+    "fingerprint": "e8beca0bc3efe4a423e2392dbed9c3bc52638c9c1d14cebdd9683c6351769dea",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0195で、秋月電子側は型番欄がelement14の注文コード3369505のため商品名から付けたaliasで、スイッチサイエンス側は型番欄にそのまま入っているSC0195を共有コードとしたものである。秋月電子「Raspberry Pi 4 Model B 8GB(ラズベリーパイフォーモデルビー) element14版」とスイッチサイエンス「Raspberry Pi 4 Model B / 8GB」はどちらもRaspberry Pi 4 Model Bの8GB版で一致するが、秋月の商品名は「element14版」と流通ブランドを明記している。",
+    "differences": [
+      "流通ブランド表記: 秋月電子「element14版」 ↔ スイッチサイエンス「Raspberry Pi Trading」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄",
+      "秋月電子側の型番欄はelement14の注文コード3369505で、SC0195はaliasによる付与"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a115450-s6370",
+    "fingerprint": "a55598dc8b2c0e72f2b2365118bccf5ddeeac148b35b44719dc164ef74813812",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0195で、秋月電子側は型番SC0195(9)から製造記号(9)を除いたコードで、スイッチサイエンス側は型番欄にそのまま入っているSC0195である。秋月電子「Raspberry Pi 4 Model B 8GB(ラズベリーパイフォーモデルビー)」とスイッチサイエンス「Raspberry Pi 4 Model B / 8GB」はどちらもRaspberry Pi 4 Model Bの8GB版で一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄",
+      "製造記号(9)は秋月電子側のみにあり、スイッチサイエンス側には記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a116739-s6750",
+    "fingerprint": "b6ce5adb1d1345c695e2f2023ebff8c20764011c8b44a2f1acb991a7dc4c2bbe",
+    "decision": "unresolved",
+    "evidence": "共有コードはSC0382で、秋月電子側は型番SC0382SDの末尾SDを外して商品名から付けたaliasでSC0382とし、スイッチサイエンス側は型番欄にそのまま入っているSC0382を共有コードとしたものである。秋月電子「Raspberry Pi 400 日本版」とスイッチサイエンス「Raspberry Pi 400 日本語キーボード」はどちらもRaspberry Pi 400の日本向け版に見えるが、秋月の型番だけ末尾にSDが付いており、そのSDが何を示すか両店の記載から判断できない。",
+    "differences": [
+      "型番末尾: 秋月電子「SC0382SD」 ↔ スイッチサイエンス「SC0382」"
+    ],
+    "missingEvidence": [
+      "秋月電子の型番末尾「SD」の意味(SDカード等の同梱物か、別版・別コードか)",
+      "SC0382SDがメーカー公式のSC0382と同一の品番かを示す記載"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a116834-s5680",
+    "fingerprint": "7156a34c82291db1edd1f0daf7ac760ef60313f0959e2e6aba93adb0fb1a7d5f",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0194で、秋月電子側は型番SC0194(9)から製造記号(9)を除いたコードで、スイッチサイエンス側は型番欄がelement14の注文コード3051891のため商品名から付けたaliasで割り当てたSC0194である。秋月電子「Raspberry Pi 4 Model B 4GB」とスイッチサイエンス「Raspberry Pi 4 Model B / 4GB」はどちらもRaspberry Pi 4 Model Bの4GB版で一致し、スイッチサイエンスのメーカー欄だけがelement14の流通ブランドを示している。",
+    "differences": [
+      "流通ブランド表記: 秋月電子「表記なし」 ↔ スイッチサイエンス「element14」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄",
+      "製造記号(9)は秋月電子側のみにあり、スイッチサイエンス側には記載がない",
+      "スイッチサイエンス側の型番欄はelement14の注文コード3051891で、SC0194はaliasによる付与"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a117036-s5345",
+    "fingerprint": "496cc934fff93057fc791694724531cab46ee6ac4de210c16cc8e9773cedbde2",
+    "decision": "same_product",
+    "evidence": "共有コードは101020594(秋月電子の型番欄に記載、スイッチサイエンスは型番SEEED-101020594からSEEED-接頭辞を除いたSKU)。秋月電子「Grove - I2C Thermocouple Amplifier (MCP9600)」とスイッチサイエンス「GROVE - I2C 熱電対アンプ（MCP9600）」は熱電対アンプとIC型番MCP9600が日英表記で対応する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側のmanufacturer欄が空欄",
+      "スイッチサイエンスのmanufacturer欄が店舗名「スイッチサイエンス」でメーカー名ではない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a117056-s7677",
+    "fingerprint": "12ae995d95441405c3475737d2d61900cd63c354fed1b6e36ceab62a6389232e",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0914で、秋月電子側は型番欄にそのまま入っているSC0914で、スイッチサイエンス側は型番SC0914(7)から製造記号(7)を除いたコードである。秋月電子「RP2040」とスイッチサイエンス「Raspberryシリコン - RP2040（7インチリール/500個）」はどちらもRP2040チップだが、スイッチサイエンスは7インチリール500個の販売で、秋月の商品名「RP2040」には販売数量の記載がない。",
+    "differences": [
+      "販売数量: 秋月電子「記載なし」 ↔ スイッチサイエンス「7インチリール/500個」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄",
+      "秋月電子側の販売数量・梱包形態(リールか個売りか)",
+      "製造記号(7)はスイッチサイエンス側のみにあり、秋月電子側には記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a117056-s7678",
+    "fingerprint": "c90a4f6f7f66633b77a03b61d58fcdfecbe61c4b1269b57ddece6d8e271fac8f",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0914で、秋月電子側は型番欄にそのまま入っているSC0914で、スイッチサイエンス側は型番SC0914(13)から製造記号(13)を除いたコードである。秋月電子「RP2040」とスイッチサイエンス「Raspberryシリコン - RP2040（13インチリール/3400個）」はどちらもRP2040チップだが、スイッチサイエンスは13インチリール3400個の販売で、秋月の商品名「RP2040」には販売数量の記載がない。",
+    "differences": [
+      "販売数量: 秋月電子「記載なし」 ↔ スイッチサイエンス「13インチリール/3400個」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄",
+      "秋月電子側の販売数量・梱包形態(リールか個売りか)",
+      "製造記号(13)はスイッチサイエンス側のみにあり、秋月電子側には記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a117398-s7600",
+    "fingerprint": "a1970fc8bb141d45ea45088e910db980e846e702a48f01f2d3d5924465312aa7",
+    "decision": "unresolved",
+    "evidence": "共有コードはSC0510で、秋月電子側は型番欄がSC1176だが商品名の一致から付けたaliasでSC0510とし、スイッチサイエンス側は型番欄にそのまま入っているSC0510を共有コードとしたものである。秋月電子「Raspberry Pi Zero 2 W」とスイッチサイエンス「Raspberry Pi Zero 2 W」は商品名はどちらも「Raspberry Pi Zero 2 W」で同一だが、型番欄の公式コードが秋月のSC1176とスイッチサイエンスのSC0510で食い違っている。",
+    "differences": [
+      "型番: 秋月電子「SC1176」 ↔ スイッチサイエンス「SC0510」"
+    ],
+    "missingEvidence": [
+      "SC1176とSC0510のどちらがこのZero 2 Wの公式コードか",
+      "SC1176が別版・別販売形態を示すコードか、秋月側の表記違いかを示す記載"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a118180-s3200",
+    "fingerprint": "7ed50ee3c27128c2b1ac799325c038dda9b0476439d3f46a2fd340c50d1dabae",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0020で、秋月電子側は型番欄が商品名と同じで公式コードがないため商品名から付けたaliasで、スイッチサイエンス側は型番欄にそのまま入っているSC0020を共有コードとしたものである。秋月電子「Raspberry Pi Zero W」とスイッチサイエンス「Raspberry Pi Zero W」はどちらもRaspberry Pi Zero Wで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄",
+      "秋月電子側の型番欄に公式コードSC0020の記載はなく、aliasのみが根拠",
+      "リビジョン(V1.1等)の記載が両店の商品名にない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a129522-s9704",
+    "fingerprint": "2c3fb18b66067a4b1a59646986539daada8244085a190fb0db8ee0c6d443af69",
+    "decision": "unresolved",
+    "evidence": "共有コードは113991274(秋月電子の型番「113991274+114992364」を連結部で分けた前半のSKUで、スイッチサイエンスのcodesと一致)。秋月電子「reComputer R1025-10」は2つのSKUを連結しているが、スイッチサイエンス「reComputer R1025-10 - Raspberry Pi CM4搭載（RAM 4GB、eMMC 32GB ）」は113991274のみで、構成が同じと言い切れない。",
+    "differences": [
+      "SKU構成: 秋月電子「113991274+114992364」 ↔ スイッチサイエンス「113991274」",
+      "RAM・eMMC構成: 秋月電子「記載なし」 ↔ スイッチサイエンス「RAM 4GB、eMMC 32GB」"
+    ],
+    "missingEvidence": [
+      "秋月電子の型番にあるもう一つのSKU 114992364が何か(同梱品か別構成か)",
+      "秋月電子「reComputer R1025-10」のRAM・eMMC構成(スイッチサイエンスの4GB/32GBと同じか)",
+      "秋月電子の商品が113991274単体の構成と同じ内容か"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a129605-s3190",
+    "fingerprint": "e730e17d4c3712d928dc053eec1bead2cb52cd140c8b52f278e497dc4b020ccf",
+    "decision": "same_product",
+    "evidence": "共有コードはSC0019で、秋月電子側は型番欄にそのまま入っているSC0019で、スイッチサイエンス側は型番RPI-ZEROに公式コードがないため商品名から付けたaliasで割り当てたものである。秋月電子「Raspberry Pi Zero v1.3」とスイッチサイエンス「Raspberry Pi Zero v1.3」はどちらもRaspberry Pi Zeroのv1.3で商品名が一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子のメーカー欄が空欄、スイッチサイエンスのメーカー欄は「スイッチサイエンス」でRaspberry Pi Tradingの記載がない",
+      "スイッチサイエンス側の型番欄に公式コードSC0019の記載はなく、aliasのみが根拠"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a130198-s5682",
+    "fingerprint": "66faf6eb993559e23f994e37ea6e45b55288bd145db2841833a8e3d20aa5bbe4",
+    "decision": "unresolved",
+    "evidence": "共有コードはSC0192で、秋月電子側は型番SC0192(11)、スイッチサイエンス側は型番SC0192(9)で、それぞれ製造記号を除いたコードである。秋月電子「Raspberry Pi 4 Model B 1GB(ラズベリーパイフォーモデルビー)」とスイッチサイエンス「Raspberry Pi 4 Model B / 1GB」はどちらもRaspberry Pi 4 Model Bの1GB版で名前は一致するが、製造記号が(11)と(9)で食い違っている。",
+    "differences": [
+      "製造記号: 秋月電子「(11)」 ↔ スイッチサイエンス「(9)」"
+    ],
+    "missingEvidence": [
+      "製造記号(11)と(9)が同一製品の製造ロット違いか、別版・別コードかを示す記載"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a131943-s11365",
+    "fingerprint": "cd2bc3790780a8a38a75206769c8baef46b68f88958fc2e19155cf761f5f3c22",
+    "decision": "same_product",
+    "evidence": "共有コードは100065783(両店の型番欄に記載、スイッチサイエンスはcodesにSEEED-100065783も持つ)。秋月電子「reBot Arm B601-DM(組み立て済)」とスイッチサイエンス「reBot Arm B601-DM」は製品名が一致し、秋月電子だけ組み立て済と記載する。",
+    "differences": [
+      "組み立て状態: 秋月電子「組み立て済」 ↔ スイッチサイエンス「記載なし」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "スイッチサイエンス側の名称に組み立て済か否かの記載がない",
+      "秋月電子側のmanufacturer欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "a131946-s11363",
+    "fingerprint": "7acd1298de3d48184a2a28ad2d8157b0b9f11ddba273e3b2b4c3490aeb45f89f",
+    "decision": "same_product",
+    "evidence": "共有コードは100004723(両店の型番欄に記載、スイッチサイエンスはcodesにSEEED-100004723も持つ)。秋月電子「Star Arm 102 for reBot Arm B601-DM(リーダーアーム)」とスイッチサイエンス「Star Arm 102 reBot Arm B601-DM/RS用リーダーアーム」はStar Arm 102のリーダーアームで一致し、対応アームの記載範囲だけが異なる。",
+    "differences": [
+      "対応アーム: 秋月電子「reBot Arm B601-DM」 ↔ スイッチサイエンス「reBot Arm B601-DM/RS」"
+    ],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子の商品がB601-RSにも対応するか(記載範囲の差で同一SKUと見られるが名称上は未確認)",
+      "秋月電子側のmanufacturer欄が空欄"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"109162\",\"sengoku\",\"EEHD-5CUG\"]",
+    "fingerprint": "51b1f4c2288ec56241b4a1ad5de6d425f93960bde0bc5679284c1c6b13ebafc2",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 104030003。秋月電子は型番欄「104030003(LED05291P)」の先頭9桁（括弧内はSeeedの旧部品番号）、せんごくは型番欄の104030003でメーカー表示Seeed Studio。秋月電子「Grove-4桁7セグメント赤色LEDモジュール」とせんごく「Grove - 4-Digit Display」は同じGrove 4桁7セグメント表示モジュールを指す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）",
+      "せんごく側にLEDの色の記載がない（秋月電子は赤色と記載）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"109276\",\"sengoku\",\"EEHD-4HFG\"]",
+    "fingerprint": "f727c62a55f054759f4ef0d9ed9d6f2a4887938f30ff2141a251d05ea29f8c7d",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 101020013。秋月電子は型番欄「101020013(SEN12671P)」の先頭9桁、せんごくは型番欄の101020013でメーカー表示Seeed Studio。秋月電子「Grove リアルタイムクロックモジュール」とせんごく「Grove - DS1307 RTC (Real Time Clock) for Arduino」は同じGrove RTCモジュールを指す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）",
+      "秋月電子側に搭載IC（DS1307）の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"109279\",\"sengoku\",\"EEHD-68ZY\"]",
+    "fingerprint": "d48a014ffe4f9679c1a33c09fcb063e0698a441703f497aaeaa3af08377129b0",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 101020028。秋月電子は型番欄「101020028(COM90133P)」の先頭9桁、せんごくは型番欄の101020028でメーカー表示Seeed Studio。秋月電子「Grove ジョイスティックモジュール」とせんごく「Grove - Thumb Joystick」は同じGroveジョイスティックを指す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "[\"akizuki\",\"109284\",\"sengoku\",\"EEHD-54S7\"]",
+    "fingerprint": "f827ca69445591107c94fd04ab905e284cd8984cb095bf373145c710c285b813",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 104030008。秋月電子は型番欄「104030008(OLE35046P)」の先頭9桁、せんごくは型番欄の104030008でメーカー表示Seeed Studio。秋月電子「Grove I2C OLEDディスプレイモジュール」とせんごく「Grove - OLED Display 0.96inch」は同じGrove OLEDディスプレイを指す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）",
+      "秋月電子側に画面サイズ・解像度の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a109162-s1175",
+    "fingerprint": "69450445945307cbf9651ae20367af5081f4586a234182ce908f846d6969512a",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 104030003。秋月電子は型番欄「104030003(LED05291P)」の先頭9桁（括弧内はSeeedの旧部品番号）、スイッチサイエンスは型番欄の104030003でメーカーSeeed。秋月電子「Grove-4桁7セグメント赤色LEDモジュール」とスイッチサイエンス「GROVE - 7セグメント4桁ディスプレイ」は同じGrove 4桁7セグメント表示モジュールを指す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）",
+      "スイッチサイエンス側にLEDの色の記載がない（秋月電子は赤色と記載）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a109276-s826",
+    "fingerprint": "921b142f5e9717c9c39e22df43ed1eb4d1bdbd4136e68f8f2e41944cc4dc214b",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 101020013。秋月電子は型番欄「101020013(SEN12671P)」の先頭9桁、スイッチサイエンスは型番欄の101020013でメーカーSeeed。秋月電子「Grove リアルタイムクロックモジュール」とスイッチサイエンス「GROVE - RTC」は同じGrove RTCモジュールを指す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a109279-s884",
+    "fingerprint": "efb9e933a8df9b515ab42bcc65a64e17bdf0b5ebe3c737f2984f81bbac8ed10e",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 101020028。秋月電子は型番欄「101020028(COM90133P)」の先頭9桁、スイッチサイエンスは型番欄の101020028でメーカーSeeed。秋月電子「Grove ジョイスティックモジュール」とスイッチサイエンス「GROVE - ジョイスティック」は同じGroveジョイスティックを指す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a109281-s1245",
+    "fingerprint": "94a82dcbf2bd0249333d751d46204ceee93bf97acf6f027fcdaa77a46276a1ed",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 109990013。秋月電子は型番欄「109990013(TOL01241P)」の先頭9桁、スイッチサイエンスは型番欄の109990013でメーカーSeeed。商品名はどちらも「DSO Nano v3」で版まで一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）",
+      "付属品（プローブ等）の記載が両店にない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a109284-s829",
+    "fingerprint": "b1cf8beb35cd6c2033fd9eac3f99e23c6b61ce60c1a1ffeb4548d1defcef71d1",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 104030008。秋月電子は型番欄「104030008(OLE35046P)」の先頭9桁、スイッチサイエンスは型番欄の104030008でメーカーSeeed。秋月電子「Grove I2C OLEDディスプレイモジュール」とスイッチサイエンス「GROVE - I2C OLEDディスプレイ128×64」は同じGrove OLEDディスプレイを指す。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）",
+      "秋月電子側に解像度の記載がない"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a109683-s2798",
+    "fingerprint": "f58d07f97fd206306926cec99ec25f13543474c437d31bfdd01221f5e5d39a92",
+    "decision": "same_product",
+    "evidence": "共有コードはSeeed SKU 102010027。秋月電子は型番欄「SKU-102010027」のSKU-を除いた9桁、スイッチサイエンスは型番欄の102010027でメーカーSeeed。商品名はどちらも「BeagleBone Green」で一致する。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・販売数量・付属品・書込サービス等の価格比較条件は未承認",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a115511-s8875",
+    "fingerprint": "df8197251fc404e09ac21067e384b6c4fb8ec5ae18f9885138ab02ee71b521d6",
+    "decision": "unresolved",
+    "evidence": "共有コードはSeeed SKU 114020163。秋月電子は型番欄に「114020161/114020163」と2つのSKUを併記し、同じ併記の商品ページが2つ（115511、115513）ある。スイッチサイエンスは114020163を「表面実装用Groveコネクタ（垂直タイプ 20個セット）」として販売。どちらも垂直の面実装Groveコネクタだが、秋月電子がどちらのSKU（販売単位か別構成か）を売っているか確定できない。前例 a129522-s9704（連結SKU）と同じく要確認とする。",
+    "differences": [
+      "SKU: 秋月電子「114020161/114020163」 ↔ スイッチサイエンス「114020163」"
+    ],
+    "missingEvidence": [
+      "秋月電子が併記する114020161の内容（販売単位の違いか別構成か）",
+      "秋月電子の販売数量（スイッチサイエンスは20個セット）",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a115512-s8874",
+    "fingerprint": "9e508c63e7aa06ef5e204afc5771de48fbaf946a033e2b7b4a2881a95791e79a",
+    "decision": "unresolved",
+    "evidence": "共有コードはSeeed SKU 114020164。秋月電子は型番欄に「114020162/114020164」と2つのSKUを併記し、同じ併記の商品ページが2つ（115512、115514）ある。スイッチサイエンスは114020164を「表面実装用Groveコネクタ（水平タイプ 20個セット）」として販売。秋月電子のL型はスイッチサイエンスの水平タイプに対応するが、秋月電子がどちらのSKU（販売単位か別構成か）を売っているか確定できない。前例 a129522-s9704（連結SKU）と同じく要確認とする。",
+    "differences": [
+      "SKU: 秋月電子「114020162/114020164」 ↔ スイッチサイエンス「114020164」"
+    ],
+    "missingEvidence": [
+      "秋月電子が併記する114020162の内容（販売単位の違いか別構成か）",
+      "秋月電子の販売数量（スイッチサイエンスは20個セット）",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a115513-s8875",
+    "fingerprint": "66df9565b38a7829e26e8bf8b4e044100c5739dd468d5a89d962b7d571bc9d0c",
+    "decision": "unresolved",
+    "evidence": "共有コードはSeeed SKU 114020163。秋月電子は型番欄に「114020161/114020163」と2つのSKUを併記し、同じ併記の商品ページが2つ（115511、115513）ある。スイッチサイエンスは114020163を「表面実装用Groveコネクタ（垂直タイプ 20個セット）」として販売。どちらも垂直の面実装Groveコネクタだが、秋月電子がどちらのSKU（販売単位か別構成か）を売っているか確定できない。前例 a129522-s9704（連結SKU）と同じく要確認とする。",
+    "differences": [
+      "SKU: 秋月電子「114020161/114020163」 ↔ スイッチサイエンス「114020163」"
+    ],
+    "missingEvidence": [
+      "秋月電子が併記する114020161の内容（販売単位の違いか別構成か）",
+      "秋月電子の販売数量（スイッチサイエンスは20個セット）",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a115514-s8874",
+    "fingerprint": "fb278bbcae08dc0bbc8a61c3c63814c00de60617bbab83235f23bb24989a985d",
+    "decision": "unresolved",
+    "evidence": "共有コードはSeeed SKU 114020164。秋月電子は型番欄に「114020162/114020164」と2つのSKUを併記し、同じ併記の商品ページが2つ（115512、115514）ある。スイッチサイエンスは114020164を「表面実装用Groveコネクタ（水平タイプ 20個セット）」として販売。秋月電子のL型はスイッチサイエンスの水平タイプに対応するが、秋月電子がどちらのSKU（販売単位か別構成か）を売っているか確定できない。前例 a129522-s9704（連結SKU）と同じく要確認とする。",
+    "differences": [
+      "SKU: 秋月電子「114020162/114020164」 ↔ スイッチサイエンス「114020164」"
+    ],
+    "missingEvidence": [
+      "秋月電子が併記する114020162の内容（販売単位の違いか別構成か）",
+      "秋月電子の販売数量（スイッチサイエンスは20個セット）",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a131169-s10706",
+    "fingerprint": "38c6c8e6df373732532dcfb1acb77a522dd714758336c19f0c6ae95d6d8f6bc1",
+    "decision": "unresolved",
+    "evidence": "共有コードはSeeed SKU 114993666。秋月電子は型番欄「114993666(100044242)」の先頭9桁、スイッチサイエンスは型番欄の114993666。どちらもSO-ARM101（SO-101）ロボットアームキットの標準版だが、秋月電子は「ACアダプター付」、スイッチサイエンスは「ACアダプタ抜き」と明記しており付属品が異なる。秋月電子の括弧内の番号100044242がACアダプター付き構成の別コードかどうか確定できないため要確認とする。",
+    "differences": [
+      "付属品: 秋月電子「ACアダプター付」 ↔ スイッチサイエンス「ACアダプタ抜き」"
+    ],
+    "missingEvidence": [
+      "秋月電子の型番括弧内100044242の意味（ACアダプター付き構成のコードか、同梱ACアダプターのコードか）",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "id": "a131228-s10707",
+    "fingerprint": "cd888bebcaa577639830ca54304d4d6b2ef9213d9674aa9e67c8b578383ef16a",
+    "decision": "unresolved",
+    "evidence": "共有コードはSeeed SKU 114993667。秋月電子は型番欄「114993667(100036511)」の先頭9桁、スイッチサイエンスは型番欄の114993667。どちらもSO-ARM101（SO-101）ロボットアームキットのPro版だが、秋月電子は「ACアダプター付」、スイッチサイエンスは「ACアダプタ抜き」と明記しており付属品が異なる。秋月電子の括弧内の番号100036511がACアダプター付き構成の別コードかどうか確定できないため要確認とする。",
+    "differences": [
+      "付属品: 秋月電子「ACアダプター付」 ↔ スイッチサイエンス「ACアダプタ抜き」"
+    ],
+    "missingEvidence": [
+      "秋月電子の型番括弧内100036511の意味（ACアダプター付き構成のコードか、同梱ACアダプターのコードか）",
+      "秋月電子側の保存データにはメーカー名がない（型番欄のSeeed SKUによる判断）"
+    ],
+    "reviewedAt": "2026-11-01",
+    "reviewerModel": "Claude Opus 5.5"
   }
 ]

@@ -19,6 +19,13 @@ export const RELATED_CSS = `
 .eph .related-card { padding: 8px 0; min-width: 0; }
 .eph .related-card + .related-card { border-top: 1px solid var(--line-soft); }
 .eph .related-card ul { margin: 4px 0; padding-left: 18px; }
+.eph .related-title { font-size: 12px; font-weight: 700; overflow-wrap: anywhere; }
+.eph .related-card .related-name { margin: 2px 0; }
+.eph .related-offer { display: flex; flex-wrap: wrap; gap: 2px 10px; padding: 6px 0; }
+.eph .related-offer + .related-offer { border-top: 1px dashed var(--line-soft); }
+.eph .related-store { flex: 0 0 9em; }
+.eph .related-offer-body { flex: 1 1 12em; min-width: 0; overflow-wrap: anywhere; }
+.eph .related-offer .hero-value { font-size: 16px; margin: 2px 0; }
 .eph .related-evidence { font-size: 11px; color: var(--muted); }
 .eph .related-evidence p { overflow-wrap: anywhere; }
 .eph .series-controls { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 4px; }
@@ -131,6 +138,36 @@ export function renderStorePrices(doc: Document, parent: HTMLElement, current: P
   if (grid.childElementCount) parent.appendChild(grid);
 }
 
+/**
+ * One card per reviewed variant: members of one family with the same directed differences
+ * differ only by store. Relations without a family distance, or without any difference,
+ * keep a card of their own. Entry order (closest first) decides card and row order.
+ */
+function variantGroups(entries: readonly RelatedEntry[]): RelatedEntry[][] {
+  const groups = new Map<string, RelatedEntry[]>();
+  for (const entry of entries) {
+    const { id, similarity, differences } = entry.relation;
+    const key = similarity && differences.length
+      ? JSON.stringify([similarity.family, differences.map((d) => directedDifference(d, entry.sourceIndex)).sort()])
+      : JSON.stringify([id]);
+    const group = groups.get(key);
+    if (group) group.push(entry); else groups.set(key, [entry]);
+  }
+  return [...groups.values()];
+}
+
+function offerRow(doc: Document, entry: RelatedEntry, label: (id: string) => string): HTMLElement {
+  const row = node(doc, 'div', '', 'related-offer'); row.dataset['relationId'] = entry.relation.id;
+  const store = node(doc, 'div', '', 'related-store related-meta');
+  store.append(node(doc, 'div', label(entry.target.storeId)), node(doc, 'div', entry.relation.reviewStatus === 'verified' ? '照合確認済み' : entry.relation.reviewStatus === 'needs_review' ? '要確認' : '候補・未確定'));
+  const body = node(doc, 'div', '', 'related-offer-body');
+  body.appendChild(productLink(doc, entry));
+  // The card explains reference-only rows once; such a row keeps its link and evidence.
+  if (entry.state.kind !== 'reference_only') price(doc, body, entry);
+  body.appendChild(evidence(doc, entry));
+  row.append(store, body); return row;
+}
+
 /** Unconfirmed identity and alternatives never enter the normal price chart. */
 export function renderRelatedGroups(doc: Document, parent: HTMLElement, entries: readonly RelatedEntry[], label: (id: string) => string): void {
   for (const [key, title, matches] of [
@@ -139,20 +176,22 @@ export function renderRelatedGroups(doc: Document, parent: HTMLElement, entries:
     ['unresolved', '要確認の候補', (e: RelatedEntry) => e.relation.kind === 'unresolved'],
   ] as const) {
     const group = entries.filter(matches); if (!group.length) continue;
-    const section = details(doc, `${title} (${group.length})`, `group-${key}`); section.className = 'related-section';
+    const cards = key === 'similar' ? variantGroups(group) : group.map((entry) => [entry]);
+    const section = details(doc, `${title} (${cards.length < group.length ? `${group.length}件・${cards.length}種類` : group.length})`, `group-${key}`); section.className = 'related-section';
     section.open = key === 'similar';
-    if (key === 'similar') section.appendChild(node(doc, 'p', '用途・機能が近い商品を、確認した差分が少ない順に表示します。互換性や置き換え可能性は保証しません。差分は閲覧中の商品 → 他店の商品です。', 'related-meta'));
-    for (const entry of group) {
-      const card = node(doc, 'div', '', 'related-card'); card.dataset['relationId'] = entry.relation.id;
-      card.appendChild(node(doc, 'div', `${label(entry.target.storeId)} · ${entry.relation.reviewStatus === 'verified' ? '照合確認済み' : entry.relation.reviewStatus === 'needs_review' ? '要確認' : '候補・未確定'}`, 'related-meta'));
-      card.appendChild(productLink(doc, entry));
-      if (key === 'similar') for (const difference of entry.relation.differences) {
+    if (key === 'similar') section.appendChild(node(doc, 'p', '用途・機能が近い商品を、確認した差分が少ない順に表示します。互換性や置き換え可能性は保証しません。差分は閲覧中の商品 → 他店の商品です。差分が同じ商品は1枚にまとめ、店舗ごとに表示します。', 'related-meta'));
+    for (const members of cards) {
+      const card = node(doc, 'div', '', 'related-card');
+      const first = members[0]!;
+      if (key === 'similar') {
+        card.appendChild(node(doc, 'div', members.reduce((name, e) => e.target.name.length < name.length ? e.target.name : name, first.target.name), 'related-title'));
         // Generated feature differences have an explicit ordered pair. Reverse
         // them on the other store; free-text legacy evidence keeps its wording.
-        card.appendChild(node(doc, 'p', directedDifference(difference, entry.sourceIndex), 'related-name'));
+        for (const difference of first.relation.differences) card.appendChild(node(doc, 'p', directedDifference(difference, first.sourceIndex), 'related-name'));
       }
-      card.appendChild(node(doc, 'div', '参考記録価格（販売条件を要確認）', 'related-meta'));
-      price(doc, card, entry); card.appendChild(evidence(doc, entry)); section.appendChild(card);
+      card.appendChild(node(doc, 'div', `参考記録価格（販売条件を要確認）${members.some((e) => e.state.kind === 'reference_only') ? '。通信量を抑えるため履歴の自動取得は上位候補のみで、価格のない店舗は商品リンクで確認できます。' : ''}`, 'related-meta'));
+      for (const entry of members) card.appendChild(offerRow(doc, entry, label));
+      section.appendChild(card);
     }
     parent.appendChild(section);
   }

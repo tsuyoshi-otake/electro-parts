@@ -3,12 +3,13 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
-import { endpoint, generate, parseCatalog, serializeCatalog, serializeRelations } from '../../scripts/matching/generate.ts';
-import { catalogStores, discover, discoverCatalog, fingerprint, hash, listingKey, type Catalog, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
-import { appendStore, appendSupplement, applySupplements, identityCodes, snapshotListings, type SnapshotListings } from '../../scripts/matching/catalogs.ts';
+import { aliasKeys, endpoint, generate, parseCatalog, serializeCatalog, serializeRelations } from '../../scripts/matching/generate.ts';
+import { catalogStores, discover, discoverCatalog, fingerprint, hash, listingKey, normalizeCode, type Alias, type Catalog, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
+import { appendStore, appendSupplement, applySupplements, derivedCodes, identityCodes, snapshotListings, type SnapshotListings } from '../../scripts/matching/catalogs.ts';
 import { normalizeKsyItem } from '../../src/adapters/ksy/snapshotAdapter.ts';
 import { normalizeSengokuItem } from '../../src/adapters/sengoku/snapshotAdapter.ts';
 import type { ProductRelation } from '../../userscript/core/relations.ts';
+import { PRODUCT_RELATIONS } from '../../userscript/adapters/productRelations.ts';
 import { collectKsyFixture } from '../helpers/ksy.ts';
 import { collectSengokuFixture } from '../helpers/sengoku.ts';
 
@@ -17,7 +18,8 @@ const catalog = parseCatalog(read('catalog.jsonl'));
 const legacy = JSON.parse(read('legacy.json')) as ProductRelation[];
 const reviews = JSON.parse(read('reviews.json')) as Review[];
 const families = JSON.parse(read('families.json')) as Family[];
-const result = generate(catalog, legacy, reviews, families);
+const aliases = JSON.parse(read('aliases.json')) as Alias[];
+const result = generate(catalog, legacy, reviews, families, aliases);
 const byId = new Map(result.relations.map(r => [r.id, r]));
 
 describe('reproducible reviewed matching pipeline', () => {
@@ -29,16 +31,16 @@ describe('reproducible reviewed matching pipeline', () => {
   });
   it('searches every store pair and preserves distinct variants on a shared official product page', () => {
     expect(result.report.byStorePair).toEqual({
-      'akizuki/switch-science': { candidates: 379, verified: 356, unresolved: 12, pending: 0 },
+      'akizuki/switch-science': { candidates: 414, verified: 381, unresolved: 22, pending: 0 },
       'akizuki/m5stack': { candidates: 23, verified: 22, unresolved: 1, pending: 0 },
-      'akizuki/ksy': { candidates: 116, verified: 115, unresolved: 1, pending: 0 },
-      'akizuki/sengoku': { candidates: 790, verified: 771, unresolved: 9, pending: 0 },
-      'switch-science/m5stack': { candidates: 518, verified: 514, unresolved: 2, pending: 0 },
-      'switch-science/ksy': { candidates: 199, verified: 196, unresolved: 3, pending: 0 },
-      'switch-science/sengoku': { candidates: 1053, verified: 1010, unresolved: 6, pending: 0 },
+      'akizuki/ksy': { candidates: 129, verified: 126, unresolved: 3, pending: 0 },
+      'akizuki/sengoku': { candidates: 827, verified: 806, unresolved: 11, pending: 0 },
+      'switch-science/m5stack': { candidates: 523, verified: 519, unresolved: 2, pending: 0 },
+      'switch-science/ksy': { candidates: 207, verified: 204, unresolved: 3, pending: 0 },
+      'switch-science/sengoku': { candidates: 1166, verified: 1117, unresolved: 7, pending: 0 },
       'm5stack/ksy': { candidates: 9, verified: 9, unresolved: 0, pending: 0 },
       'm5stack/sengoku': { candidates: 395, verified: 392, unresolved: 1, pending: 0 },
-      'ksy/sengoku': { candidates: 110, verified: 108, unresolved: 2, pending: 0 },
+      'ksy/sengoku': { candidates: 149, verified: 147, unresolved: 2, pending: 0 },
     });
     const strips = result.relations.filter(r => r.products[0].storeId === 'switch-science' && ['5208','5209'].includes(r.products[0].pageKey) && r.products[1].storeId === 'm5stack');
     expect(strips).toHaveLength(2);
@@ -53,28 +55,38 @@ describe('reproducible reviewed matching pipeline', () => {
     expect(() => endpoint(official, 'missing')).toThrow(/variant required/);
     const changed = structuredClone(catalog);
     changed.listings.find(p => p.pageKey === official.pageKey)!.variants![0]!.sku += '-V2';
-    expect(() => generate(changed, legacy, reviews, families)).toThrow(/stale/);
-    expect(discoverCatalog({...catalog, listings: [...catalog.listings].reverse()}).map(c => c.id)).toEqual(result.candidates.map(c => c.id));
+    expect(() => generate(changed, legacy, reviews, families, aliases)).toThrow(/stale/);
+    expect(discoverCatalog({...catalog, listings: [...catalog.listings].reverse()}, aliasKeys(catalog, aliases)).map(c => c.id)).toEqual(result.candidates.map(c => c.id));
   });
   it('searches every pinned listing and accounts for every candidate without automatic promotion', () => {
-    expect(catalog.listings).toHaveLength(44404);
-    expect(result.candidates).toHaveLength(3592);
+    expect(catalog.listings).toHaveLength(44518);
+    expect(result.candidates).toHaveLength(3842);
     expect(result.report.pending).toEqual([]);
-    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(62);
-    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(37);
-    expect(result.report).toMatchObject({ sameVerified: 3493, similarVerified: 108, pricePolicies: 2 });
-    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(3592);
+    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(67);
+    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(52);
+    expect(result.report).toMatchObject({ sameVerified: 3723, similarVerified: 823, pricePolicies: 2 });
+    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(3842);
     expect(result.report.byBrand['Seeed']!.accepted).toBeGreaterThan(30);
     expect(result.report.byBrand['Raspberry Pi Trading']!.accepted).toBeGreaterThan(40);
     expect(result.report.byBrand['Arduino']!.accepted).toBeGreaterThan(25);
-    expect(generate(catalog, [], [], []).relations).toEqual([]);
-    expect(generate(catalog, [], [], []).report.pending).toHaveLength(3592);
+    expect(generate(catalog, [], [], [], aliases).relations).toEqual([]);
+    expect(generate(catalog, [], [], [], aliases).report.pending).toHaveLength(3842);
   });
 
   it('produces byte-identical artifacts and a lossless, price-free evidence projection', () => {
     expect(serializeRelations(result.relations)).toBe(readFileSync('userscript/adapters/productRelations.ts', 'utf8'));
     expect(serializeCatalog(catalog)).toBe(read('catalog.jsonl'));
-    expect(serializeRelations(generate(catalog, legacy, reviews, families).relations)).toBe(serializeRelations(result.relations));
+    expect(serializeRelations(generate(catalog, legacy, reviews, families, aliases).relations)).toBe(serializeRelations(result.relations));
+    // The packed runtime table is lossless: the same rows and endpoints, with an endpoint's
+    // reviewed spellings merged across the relations that use it.
+    expect(PRODUCT_RELATIONS).toHaveLength(result.relations.length);
+    for (const [i, relation] of result.relations.entries()) {
+      const decoded = PRODUCT_RELATIONS[i]!;
+      expect({ ...decoded, products: null }).toStrictEqual({ ...relation, products: null });
+      for (const [j, p] of relation.products.entries()) {
+        expect(decoded.products[j]).toMatchObject({ ...p, expectedNames: expect.arrayContaining([...p.expectedNames]), expectedModels: expect.arrayContaining([...p.expectedModels]) });
+      }
+    }
     expect(JSON.stringify(result.report, null, 2) + '\n').toBe(read('coverage.json'));
     for (const p of catalog.listings) {
       expect(p).not.toHaveProperty('prices'); expect(p).not.toHaveProperty('stock');
@@ -103,12 +115,14 @@ describe('reproducible reviewed matching pipeline', () => {
   it('stops on changed source evidence, duplicate reviews, orphaned reviews and invalid family members', () => {
     const changed = structuredClone(catalog);
     changed.listings.find(p => p.storeId === 'akizuki' && p.pageKey === '108286')!.name += ' Rev2';
-    expect(() => generate(changed, legacy, reviews, families)).toThrow(/stale/);
-    expect(() => generate(catalog, legacy, [...reviews, reviews[0]!], families)).toThrow(/duplicate review/);
-    expect(() => generate(catalog, legacy, [{...reviews[0]!, id: 'absent'}], [])).toThrow(/orphaned/);
+    expect(() => generate(changed, legacy, reviews, families, aliases)).toThrow(/stale/);
+    expect(() => generate(catalog, legacy, [...reviews, reviews[0]!], families, aliases)).toThrow(/duplicate review/);
+    expect(() => generate(catalog, legacy, [{...reviews[0]!, id: 'absent'}], [], aliases)).toThrow(/orphaned/);
     const bad = structuredClone(families); bad[0]!.members[0]!.fingerprint = 'old';
-    expect(() => generate(catalog, legacy, reviews, bad)).toThrow(/family member stale/);
-    expect(() => generate(catalog, legacy, reviews, [...families, families[0]!])).toThrow(/invalid family/);
+    expect(() => generate(catalog, legacy, reviews, bad, aliases)).toThrow(/family member stale/);
+    expect(() => generate(catalog, legacy, reviews, [...families, families[0]!], aliases)).toThrow(/invalid family/);
+    // A review found only through an alias is orphaned without it.
+    expect(() => generate(catalog, legacy, reviews, families)).toThrow(/orphaned/);
   });
 
   it('cannot turn a deferred/rejected identity into a verified family relation', () => {
@@ -117,7 +131,7 @@ describe('reproducible reviewed matching pipeline', () => {
     const family = structuredClone(families.find(f => f.id === 'pi5')!);
     const p = catalog.listings.find(p => p.storeId === 'switch-science' && p.pageKey === '10908')!;
     family.members.push({ key: 'switch-science/10908', fingerprint: fingerprint(p), variant: 'contradictory', features: { 世代: 'Pi 5', RAM: '1GB' } });
-    expect(generate(catalog, [], reviews, [family]).relations.find(r => r.id === 'a129606-s10908')!.kind).toBe('unresolved');
+    expect(generate(catalog, [], reviews, [family], aliases).relations.find(r => r.id === 'a129606-s10908')!.kind).toBe('unresolved');
   });
 
   it('builds concrete cross-store differences from reviewed family members, not names of accessories', () => {
@@ -126,10 +140,19 @@ describe('reproducible reviewed matching pipeline', () => {
     expect(byId.get('a131437-s9940')!.differences).toEqual(['画面: 5インチ ↔ 7インチ']);
     expect(byId.get('a118154-s9771')!.differences).toEqual(['カメラ: OV2640 ↔ OV3660']);
     expect(result.relations.some(r => r.kind === 'similar_product' && r.products.some(p => p.pageKey === '6991'))).toBe(false); // header kit, not a Pico board.
+    const order = catalogStores(catalog);
     for (const r of result.relations.filter(r => r.similarity)) {
       expect(r.similarity!.distance).toBe(r.differences.length);
       expect(r.missingEvidence.join(' ')).toContain('互換性');
+      // Every store pair, oriented like the code candidates.
+      expect(order.indexOf(r.products[0].storeId)).toBeLessThan(order.indexOf(r.products[1].storeId));
     }
+    const id = (...key: string[]): string => JSON.stringify(key);
+    // 2026-11-01: families reach KSY and せんごく, so a header or Plus variant sold by one shop links to the plain board at another.
+    expect(byId.get(id('ksy', '219', 'sengoku', 'EEHD-57LT'))).toMatchObject({ kind: 'similar_product', differences: ['ヘッダー: 未実装 ↔ 実装済'] });
+    expect(byId.get(id('switch-science', '10978', 'sengoku', 'EEHD-6Y7S'))!.differences).toEqual(['ヘッダー: 未実装 ↔ 実装済']);
+    expect(byId.get('a117044-s11438')).toMatchObject({ kind: 'similar_product', differences: ['構成: 標準 ↔ Plus'] }); // XIAO RP2040 Plus, sold only by スイッチサイエンス.
+    expect(result.report.familyCounts).toMatchObject({ zero: 120, 'xiao-nrf52840': 54, 'xiao-rp2040': 5 });
   });
 
   it('preserves original model provenance and the independently reviewed price policies', () => {
@@ -160,6 +183,75 @@ describe('indexed candidate discovery', () => {
     expect(p.sku).toBe('1096'); expect(p.codes).toContain('A000062'); expect(p.codes).not.toContain('1096');
     expect(p.expectedModels).toContain('1096');
   });
+  it('derives extra keys only from the scoped shop wrappers and keeps every version suffix', () => {
+    const row = (storeId: string, modelNumber: string, vendor = ''): Listing => ({...sample, storeId, modelNumber, vendor, manufacturer: '', codes: [normalizeCode(modelNumber)]});
+    expect(derivedCodes(row('sengoku', '【19192】 1.28inch LCD Module', 'Waveshare'))).toContain('19192');
+    // Elsewhere the bracket holds せんごく's own serial number.
+    expect(derivedCodes(row('sengoku', '【19192】 1.28inch LCD Module', 'ノンブランド'))).not.toContain('19192');
+    expect(derivedCodes(row('sengoku', '【019】RPi5-8GB-SC1112', 'Raspberry Pi'))).toContain('SC1112');
+    expect(derivedCodes(row('sengoku', '【011】SC0510', 'Raspberry Pi'))).toEqual(['SC0510']);
+    expect(derivedCodes(row('sengoku', '【9918】M5STACK-A145-V033', 'M5STACK'))).toEqual(['A145-V033']);
+    expect(derivedCodes(row('switch-science', 'SEEED-113990234'))).toEqual(['113990234']);
+    // Akizuki's older Seeed rows; a `+` set is left to its reviewed alias, and other shops do not write these forms.
+    expect(derivedCodes(row('akizuki', '104030003(LED05291P)'))).toEqual(['104030003']);
+    expect(derivedCodes(row('akizuki', 'SKU-102010027'))).toEqual(['102010027']);
+    expect(derivedCodes(row('akizuki', '114020161/114020163'))).toEqual(['114020161', '114020163']);
+    expect(derivedCodes(row('akizuki', '113991274+114992364'))).toEqual([]);
+    expect(derivedCodes(row('switch-science', '104030003(LED05291P)'))).toEqual([]);
+    expect(derivedCodes(row('akizuki', 'SC0194(9)'))).toEqual(['SC0194']);
+    expect(derivedCodes(row('switch-science', 'SC0130(J)'))).toEqual(['SC0130']);
+    expect(derivedCodes(row('akizuki', 'C008-B-V11'))).toEqual([]);
+    expect(derivedCodes(row('akizuki', '【19192】 1.28inch LCD Module'))).toEqual([]); // only せんごく writes brackets this way.
+    expect(derivedCodes(row('ksy', 'RASPIZWHSC0065', 'ラズベリーパイ財団'))).toEqual([]); // KSY codes go through reviewed aliases only.
+  });
+  it('adds derived pairs as such without changing what the stored codes already find', () => {
+    const extra = (p: Listing): string[] => derivedCodes(p);
+    const a = {...sample, codes: ['SC0194(9)']};
+    const b = {...sample, storeId: 'right', codes: ['SC0194']};
+    expect(discover([a], [b])).toEqual([]);
+    expect(discover([a], [b], extra)).toMatchObject([{ codes: ['SC0194'], derived: true }]);
+    const stored = {...b, codes: ['SC0194(9)']};
+    expect(discover([a], [stored], extra)).toEqual(discover([a], [stored]));
+    expect(discover([a], [stored], extra)[0]).not.toHaveProperty('derived');
+    expect(result.relations.find(r => r.id === JSON.stringify(['ksy', '406', 'sengoku', 'EEHD-57LT']))!.provenance.originalReason).toBe('indexed derived code: SC0065');
+  });
+  it('accepts an alias only for the current listing, with new codes and evidence, and only when it adds a pair', () => {
+    const alias = aliases.find(a => a.key === 'akizuki/118180')!;
+    const listing = catalog.listings.find(p => listingKey(p) === alias.key)!;
+    const swap = (changed: Alias): Alias[] => aliases.map(a => a.key === alias.key ? changed : a);
+    expect(() => generate(catalog, legacy, reviews, families, swap({...alias, fingerprint: 'old'}))).toThrow(/alias stale\/invalid: akizuki\/118180/);
+    expect(() => generate(catalog, legacy, reviews, families, swap({...alias, codes: [listing.codes[0]!]}))).toThrow(/alias stale\/invalid/);
+    expect(() => generate(catalog, legacy, reviews, families, swap({...alias, codes: ['SC']}))).toThrow(/alias stale\/invalid/);
+    expect(() => generate(catalog, legacy, reviews, families, swap({...alias, evidence: '短い'}))).toThrow(/alias stale\/invalid/);
+    expect(() => generate(catalog, legacy, reviews, families, [...aliases, alias])).toThrow(/alias stale\/invalid/);
+    expect(() => generate(catalog, legacy, reviews, families, swap({...alias, codes: ['ZZZQ-9999']}))).toThrow(/alias adds no candidate: akizuki\/118180/);
+    // Akizuki prints only the name; the alias is what pairs it with the code-bearing Zero W listings.
+    expect(result.relations.find(r => r.id === 'a118180-s3200')).toMatchObject({ kind: 'same_product', reviewStatus: 'verified' });
+    // Each alias code must add a pair of its own: another row's alias pairing the listing does not keep a dead code.
+    const zeroW = aliases.find(a => a.key === 'sengoku/EEHD-66P8')!;
+    const ss3200 = catalog.listings.find(p => listingKey(p) === 'switch-science/3200')!;
+    const byOther: Alias = { key: listingKey(ss3200), fingerprint: fingerprint(ss3200), codes: ['【009】RPI-ZERO-W'],
+      evidence: '試験用の別名。せんごくの保存型番で同じ組を見つける。', reviewedAt: '2026-11-01' };
+    const swapZeroW = (codes: string[]): Alias[] => [...aliases.map(a => a === zeroW ? {...zeroW, codes} : a), byOther];
+    expect(generate(catalog, [], [], [], swapZeroW(['SC0020'])).candidates.find(c => c.id === JSON.stringify(['switch-science', '3200', 'sengoku', 'EEHD-66P8']))).toMatchObject({ derived: true });
+    expect(() => generate(catalog, [], [], [], swapZeroW(['ZZZQ-9999']))).toThrow(/alias adds no candidate: sengoku\/EEHD-66P8 ZZZQ-9999/);
+    expect(() => generate(catalog, [], [], [], swapZeroW(['SC0020', 'ZZZQ-9999']))).toThrow(/alias adds no candidate: sengoku\/EEHD-66P8 ZZZQ-9999/);
+    // A key the listing's own fields already give is not alias evidence.
+    const pi4 = aliases.find(a => a.key === 'sengoku/EEHD-655N')!;
+    expect(() => generate(catalog, [], [], [], aliases.map(a => a === pi4 ? {...pi4, codes: ['RPI4B-8GB']} : a))).toThrow(/alias stale\/invalid: sengoku\/EEHD-655N/);
+  });
+  it('binds a review of a derived pair to the keys that found it', () => {
+    // Stored-code pairs keep the listing-only fingerprint their reviews were made against.
+    expect(result.candidates.filter(c => !c.derived).every(c => c.fingerprint === hash(fingerprint(c.products[0]) + fingerprint(c.products[1])))).toBe(true);
+    // The same two rows paired through a different shared alias code is new evidence and needs a new review.
+    const review = reviews.find(r => r.id === 'a118180-s3200')!;
+    const ss = catalog.listings.find(p => listingKey(p) === 'switch-science/3200')!;
+    const moved = [...aliases.map(a => a.key === 'akizuki/118180' ? {...a, codes: ['ZZQ-1234']} : a),
+      { key: 'switch-science/3200', fingerprint: fingerprint(ss), codes: ['ZZQ-1234'], evidence: '試験用の別名。同じ組を別の共有コードで見つける。', reviewedAt: '2026-11-01' }];
+    expect(generate(catalog, [], [], [], moved).candidates.find(c => c.id === review.id)).toMatchObject({ codes: ['ZZQ-1234'], derived: true });
+    expect(() => generate(catalog, [], [review], [], moved)).toThrow(/stale or orphaned: a118180-s3200/);
+    expect(generate(catalog, [], [review], [], aliases).relations).toHaveLength(1);
+  });
   it('handles large disjoint catalogues without a cartesian scan', () => {
     const rows = Array.from({length: 20_000}, (_, i) => ({...sample, pageKey: String(i), codes: [`MPN-${i}`]}));
     const other = rows.map(p => ({...p, storeId: 'right', codes: [`OTHER-${p.pageKey}`]}));
@@ -186,10 +278,12 @@ describe('catalogue supplements', () => {
   const snapshot = (rows: Listing[]): SnapshotListings => ({ text: JSON.stringify(rows), observedAt: later, listings: rows.map(p => ({...structuredClone(p), observedAt: later})) });
   const renamed = m5.map(p => listingKey(p) === listingKey(target) ? {...p, name: `${p.name} (renamed)`} : p);
 
-  it('records the pinned sources, the 2026-10-03 supplements and the two re-reviewed rows', () => {
+  it('records the pinned sources, the 2026-10-03 and 2026-10-31 supplements and the two re-reviewed rows', () => {
     expect(catalogStores(catalog)).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy', 'sengoku']);
+    // KSY's 2026-10-31 list added nothing, so it has no supplement.
     expect(catalog.sources.filter(s => s.supplement).map(s => [s.storeId, s.observedAt.slice(0, 10), s.count, s.supplement!.snapshotCount]))
-      .toEqual([['akizuki', '2026-10-03', 4130, 12800], ['switch-science', '2026-10-03', 101, 10442], ['m5stack', '2026-10-03', 9, 672]]);
+      .toEqual([['akizuki', '2026-10-03', 4130, 12800], ['switch-science', '2026-10-03', 101, 10442], ['m5stack', '2026-10-03', 9, 672],
+        ['akizuki', '2026-10-31', 25, 12815], ['switch-science', '2026-10-31', 60, 10502], ['m5stack', '2026-10-31', 10, 682], ['sengoku', '2026-10-31', 19, 19724]]);
     const retired = catalog.sources.flatMap(s => (s.retired ?? []).map(key => [s.storeId, s.observedAt.slice(0, 10), key]));
     expect(retired).toEqual([['switch-science', '2026-08-02', 'switch-science/6785'], ['m5stack', '2026-09-12', 'm5stack/h-m5stickc-plus-esp32-pico-mini-iot-development-kit']]);
     for (const [, , key] of retired) expect(catalog.listings.find(p => listingKey(p) === key)!.observedAt.slice(0, 10)).toBe('2026-10-03');
@@ -203,7 +297,7 @@ describe('catalogue supplements', () => {
     expect(next.sources.at(-1)).toMatchObject({ storeId: 'm5stack', observedAt: later, count: 1, supplement: { snapshotCount: m5.length + 1 } });
     expect(next.listings.slice(0, catalog.listings.length)).toEqual(catalog.listings);
     expect(next.listings.at(-1)).toMatchObject({ pageKey: 'synthetic-new', observedAt: later });
-    expect(serializeRelations(generate(next, legacy, reviews, families).relations)).toBe(serializeRelations(result.relations));
+    expect(serializeRelations(generate(next, legacy, reviews, families, aliases).relations)).toBe(serializeRelations(result.relations));
     const shrunk = appendSupplement(catalog, 'm5stack', 'm5stack-synthetic.json', snapshot([fresh]), new Set()).report;
     expect(shrunk.absentFromSnapshot).toHaveLength(m5.length);
   });
@@ -214,7 +308,7 @@ describe('catalogue supplements', () => {
     expect(report.replaced).toEqual([{ key, changed: { name: [target.name, `${target.name} (renamed)`] } }]);
     expect(next.listings.findIndex(p => listingKey(p) === key)).toBe(catalog.listings.findIndex(p => listingKey(p) === key));
     expect(next.sources.find(s => s.storeId === 'm5stack' && s.observedAt === target.observedAt)!.retired).toContain(key);
-    expect(() => generate(next, legacy, reviews, families)).toThrow(/stale/);
+    expect(() => generate(next, legacy, reviews, families, aliases)).toThrow(/stale/);
     expect(() => appendSupplement(catalog, 'm5stack', 'x.json', snapshot(m5), new Set([key]))).toThrow(/without an identity change/);
     expect(() => appendSupplement(catalog, 'm5stack', 'x.json', snapshot(renamed.filter(p => listingKey(p) !== key).concat(fresh)), new Set([key]))).toThrow(/both catalogues/);
     expect(() => appendSupplement(catalog, 'm5stack', 'x.json', snapshot(m5), new Set())).toThrow(/adds nothing/);
@@ -247,8 +341,10 @@ describe('KSY source', () => {
     writeFileSync(file, gzipSync(JSON.stringify(raw)));
     return { file, cleanup: () => rmSync(dir, { recursive: true, force: true }) };
   }
-  // The catalogue as it stood when KSY was appended, before the stores added after it.
-  const upToKsy: Catalog = { ...catalog, sources: catalog.sources.filter(s => s.storeId !== 'sengoku'), listings: catalog.listings.filter(p => p.storeId !== 'sengoku') };
+  // The catalogue as it stood when KSY was appended, before the stores and supplements added after it.
+  const ksyAt = Date.parse(catalog.sources.find(s => s.storeId === 'ksy')!.observedAt);
+  const before = (storeId: string, observedAt: string): boolean => storeId !== 'sengoku' && Date.parse(observedAt) <= ksyAt;
+  const upToKsy: Catalog = { ...catalog, sources: catalog.sources.filter(s => before(s.storeId, s.observedAt)), listings: catalog.listings.filter(p => before(p.storeId, p.observedAt)) };
   const withoutKsy: Catalog = { ...upToKsy, sources: upToKsy.sources.filter(s => s.storeId !== 'ksy'), listings: upToKsy.listings.filter(p => p.storeId !== 'ksy') };
 
   it('is the reproducible projection of the saved public list, appended as the store\'s first source', async () => {
@@ -281,7 +377,7 @@ describe('KSY source', () => {
   it('joins the reviewed KSY pairs as identities only and keeps the Pi 5 SC1110 contradiction unresolved', () => {
     // The pairs reviewed when KSY was added; its pairs with せんごく are checked with that store.
     const ksy = result.relations.filter(r => r.products.some(p => p.storeId === 'ksy') && !r.products.some(p => p.storeId === 'sengoku'));
-    expect(ksy).toHaveLength(324);
+    expect(ksy).toHaveLength(579);
     for (const r of ksy) expect(r.pricePolicy).toBeNull();
     const id = (...key: string[]): string => JSON.stringify(key);
     // Same precedent as a129606-s10908: the code says 2GB on one side, the other side's name says 1GB.
@@ -326,9 +422,10 @@ describe('せんごく source', () => {
   });
 
   it('pins the 2026-10-30 snapshot of the 電子工作部品 listings as the store\'s first source', () => {
-    expect(catalog.sources.filter(s => s.storeId === 'sengoku')).toEqual([{ storeId: 'sengoku', file: 'sengoku-2026-10-30T04-22-21-879Z.json.gz',
+    expect(catalog.sources.filter(s => s.storeId === 'sengoku' && !s.supplement)).toEqual([{ storeId: 'sengoku', file: 'sengoku-2026-10-30T04-22-21-879Z.json.gz',
       sha256: '850717e5c63f18e62c98b232a2ffc7fb17ad5815c3f8daa044c4cee3f722989a', observedAt: '2026-10-30T04:22:21.879Z', count: 19706 }]);
-    expect(sengoku).toHaveLength(19706);
+    expect(sengoku.filter(p => p.observedAt === '2026-10-30T04:22:21.879Z')).toHaveLength(19706);
+    expect(sengoku).toHaveLength(19706 + 19);
     for (const p of sengoku) {
       expect(p.url).toBe(`https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=${p.pageKey}`);
       expect(p).toMatchObject({ manufacturer: '', expectedModels: [p.modelNumber] });
@@ -339,13 +436,15 @@ describe('せんごく source', () => {
 
   it('joins every reviewed せんごく pair as an identity only, with the integrating review\'s changes on record', () => {
     const joined = result.relations.filter(r => r.products.some(p => p.storeId === 'sengoku'));
-    expect(joined).toHaveLength(2299);
+    expect(joined).toHaveLength(2902);
     for (const r of joined) {
       expect(r.pricePolicy).toBeNull();
       // The panel swaps `項目: left ↔ right` per product, so せんごく must be the right-hand side.
       expect(r.products[1].storeId).toBe('sengoku');
-      for (const d of r.differences) expect(d).toMatch(/^[^:]+: .+ ↔ せんごく「.+」$/);
+      // Family relations state the feature values; reviews quote each store.
+      for (const d of r.differences) expect(d).toMatch(r.similarity ? /^[^:]+: .+ ↔ .+$/ : /^[^:]+: .+ ↔ せんごく「.+」$/);
     }
+    expect(joined.filter(r => r.similarity)).toHaveLength(419);
     const id = (...key: string[]): string => JSON.stringify(key);
     // The official page body names StampS3A (recorded by the SS 10300 review); the first review stopped at the title.
     const cardputer = byId.get(id('m5stack', 'h-m5stack-cardputer-with-m5stamps3-v1-1', 'sengoku', 'EEHD-6RTA'))!;

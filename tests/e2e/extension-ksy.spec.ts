@@ -91,9 +91,16 @@ test('KSY extension follows the product dialog without navigation and keeps the 
     await expect(reset).toHaveCount(0);
     expect(requests.filter((p) => p.includes('/stores/ksy/'))).toEqual(['/electro-parts/data/v1/stores/ksy/manifest.json',
       '/electro-parts/data/v1/stores/ksy/products/1094.json', '/electro-parts/data/v1/stores/ksy/products/483.json']);
-    expect(requests.filter((p) => !p.includes('/stores/ksy/')).sort()).toEqual(['/electro-parts/data/v1/stores/akizuki/manifest.json',
-      '/electro-parts/data/v1/stores/akizuki/products/129604.json', '/electro-parts/data/v1/stores/switch-science/manifest.json',
-      '/electro-parts/data/v1/stores/switch-science/products/9809.json']);
+    // 0.6.3: the Pico and Pi 4 families reach KSY, so each product (1094, 483) fills its cap of 8 other-store histories and no more.
+    const others = requests.filter((p) => !p.includes('/stores/ksy/')).sort();
+    expect(others.filter((p) => p.includes('/products/'))).toHaveLength(16);
+    expect(others).toEqual(['/electro-parts/data/v1/stores/akizuki/manifest.json',
+      ...['114778', '114839', '115359', '115450', '116132', '116834', '129604', '130198', '130330', '130982', '132017']
+        .map((id) => `/electro-parts/data/v1/stores/akizuki/products/${id}.json`),
+      '/electro-parts/data/v1/stores/sengoku/manifest.json',
+      ...['EEHD-5S4T', 'EEHD-6HEU', 'EEHD-6MG3'].map((id) => `/electro-parts/data/v1/stores/sengoku/products/${id}.json`),
+      '/electro-parts/data/v1/stores/switch-science/manifest.json',
+      '/electro-parts/data/v1/stores/switch-science/products/5682.json', '/electro-parts/data/v1/stores/switch-science/products/9809.json']);
 
     await page.reload();
     await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(62, 62, 62)');
