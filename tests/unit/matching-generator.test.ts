@@ -227,6 +227,30 @@ describe('indexed candidate discovery', () => {
     expect(() => generate(catalog, legacy, reviews, families, swap({...alias, codes: ['ZZZQ-9999']}))).toThrow(/alias adds no candidate: akizuki\/118180/);
     // Akizuki prints only the name; the alias is what pairs it with the code-bearing Zero W listings.
     expect(result.relations.find(r => r.id === 'a118180-s3200')).toMatchObject({ kind: 'same_product', reviewStatus: 'verified' });
+    // Each alias code must add a pair of its own: another row's alias pairing the listing does not keep a dead code.
+    const zeroW = aliases.find(a => a.key === 'sengoku/EEHD-66P8')!;
+    const ss3200 = catalog.listings.find(p => listingKey(p) === 'switch-science/3200')!;
+    const byOther: Alias = { key: listingKey(ss3200), fingerprint: fingerprint(ss3200), codes: ['【009】RPI-ZERO-W'],
+      evidence: '試験用の別名。せんごくの保存型番で同じ組を見つける。', reviewedAt: '2026-11-01' };
+    const swapZeroW = (codes: string[]): Alias[] => [...aliases.map(a => a === zeroW ? {...zeroW, codes} : a), byOther];
+    expect(generate(catalog, [], [], [], swapZeroW(['SC0020'])).candidates.find(c => c.id === JSON.stringify(['switch-science', '3200', 'sengoku', 'EEHD-66P8']))).toMatchObject({ derived: true });
+    expect(() => generate(catalog, [], [], [], swapZeroW(['ZZZQ-9999']))).toThrow(/alias adds no candidate: sengoku\/EEHD-66P8 ZZZQ-9999/);
+    expect(() => generate(catalog, [], [], [], swapZeroW(['SC0020', 'ZZZQ-9999']))).toThrow(/alias adds no candidate: sengoku\/EEHD-66P8 ZZZQ-9999/);
+    // A key the listing's own fields already give is not alias evidence.
+    const pi4 = aliases.find(a => a.key === 'sengoku/EEHD-655N')!;
+    expect(() => generate(catalog, [], [], [], aliases.map(a => a === pi4 ? {...pi4, codes: ['RPI4B-8GB']} : a))).toThrow(/alias stale\/invalid: sengoku\/EEHD-655N/);
+  });
+  it('binds a review of a derived pair to the keys that found it', () => {
+    // Stored-code pairs keep the listing-only fingerprint their reviews were made against.
+    expect(result.candidates.filter(c => !c.derived).every(c => c.fingerprint === hash(fingerprint(c.products[0]) + fingerprint(c.products[1])))).toBe(true);
+    // The same two rows paired through a different shared alias code is new evidence and needs a new review.
+    const review = reviews.find(r => r.id === 'a118180-s3200')!;
+    const ss = catalog.listings.find(p => listingKey(p) === 'switch-science/3200')!;
+    const moved = [...aliases.map(a => a.key === 'akizuki/118180' ? {...a, codes: ['ZZQ-1234']} : a),
+      { key: 'switch-science/3200', fingerprint: fingerprint(ss), codes: ['ZZQ-1234'], evidence: '試験用の別名。同じ組を別の共有コードで見つける。', reviewedAt: '2026-11-01' }];
+    expect(generate(catalog, [], [], [], moved).candidates.find(c => c.id === review.id)).toMatchObject({ codes: ['ZZQ-1234'], derived: true });
+    expect(() => generate(catalog, [], [review], [], moved)).toThrow(/stale or orphaned: a118180-s3200/);
+    expect(generate(catalog, [], [review], [], aliases).relations).toHaveLength(1);
   });
   it('handles large disjoint catalogues without a cartesian scan', () => {
     const rows = Array.from({length: 20_000}, (_, i) => ({...sample, pageKey: String(i), codes: [`MPN-${i}`]}));

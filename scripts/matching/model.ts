@@ -26,7 +26,11 @@ export interface Catalog {
   sources: Source[];
   listings: Listing[];
 }
-/** `derived`: found only through keys read from the listings' own fields or reviewed aliases, not their stored codes. */
+/**
+ * `derived`: found only through keys read from the listings' own fields or reviewed aliases, not their stored codes.
+ * `fingerprint` covers both listings and, for a derived pair, the keys that found it: a review cites them, so changing
+ * an alias or a derivation rule forces a new review even when the same two rows still pair.
+ */
 export interface Candidate { id: string; products: [Listing, Listing]; codes: string[]; fingerprint: string; derived?: true }
 /**
  * Extra identity codes for one listing that its own model field does not carry, found by reading its name.
@@ -60,7 +64,9 @@ export const usefulCode = (code: string): boolean => code.length >= 4 && /\d/.te
 export function discover(left: readonly Listing[], right: readonly Listing[], extra?: ExtraKeys): Candidate[] {
   const candidates = match(left, right, p => p.codes);
   // A pair its stored codes already find keeps exactly those codes; extra keys only add pairs.
-  if (extra) for (const c of match(left, right, p => [...p.codes, ...extra(p)]).values()) if (!candidates.has(c.id)) candidates.set(c.id, { ...c, derived: true });
+  if (extra) for (const c of match(left, right, p => [...p.codes, ...extra(p)]).values()) {
+    if (!candidates.has(c.id)) candidates.set(c.id, { ...c, derived: true, fingerprint: hash(c.fingerprint + JSON.stringify([...c.codes].sort())) });
+  }
   return [...candidates.values()].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 }
 

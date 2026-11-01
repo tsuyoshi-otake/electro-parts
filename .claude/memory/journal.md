@@ -920,3 +920,15 @@ Learning: check each listing claim against the rendering code, not against the p
   - The generated table's diff is no longer readable, because indices are renumbered on every rebuild. Review stays on `data/matching` plus `matching:check`.
 - Independent verifier (rubric-verifier, Sonnet, `.claude/goal-loop/similar-cards-046/rubric.md`): 7/7 pass in round 1. Its own checks: generated vs decoded table, 0 mismatches and 5,273 shared endpoints; FC_RUNS=2000 passed; a jsdom Pico render gave 7 cards, 21 unique rows and the note 0 times inside rows; full suites passed with 0 runner processes left.
 - Cleanup: deleted the benchmark copies and throwaway scripts. Kept only the commit message draft until the commit.
+
+## 2026-11-01 PR #47 review: alias guard and derived-pair fingerprints (#45)
+- Symptom (Codex review on b788d65, two P2 findings):
+  1. The unused-alias guard passed whenever the aliased row sat in any derived candidate, so a dead alias code survived if another row's alias paired it.
+  2. A derived pair's fingerprint covered only the two rows, so changing the alias codes while the pair stayed discoverable kept a review that cites the old code.
+- Investigation: Codex's concrete example (Sengoku Zero W already paired through the derived `RPI-ZERO-W`) does not hold on current data: `RPI-ZERO-W` has no digit, so `usefulCode` drops it. Replacing each of the 26 aliases with a dead code left no row in a derived pair, so current data was not affected. The gap is real for any row another alias reaches, which the new test builds (an SS 3200 alias with Sengoku's stored `【009】RPI-ZERO-W`).
+- Fix:
+  - `generate.ts`: every alias code must appear in a pair of its row that the rows' own keys (stored codes + `derivedCodes`) do not find. An alias code equal to one of the row's derived keys is rejected as stale/invalid.
+  - `model.ts`: a derived candidate's fingerprint is `hash(rowFingerprints + sorted codes)`. Stored-code fingerprints are unchanged, so the 3,611 earlier reviews are untouched.
+  - The 231 derived-pair reviews (all made on this branch) were rebound by a one-off script. It required, per review: valid under the old scheme, absent from main's `reviews.json`, and the committed `candidates.jsonl` showing the same keys the reviewer saw. Only fingerprint lines changed; `productRelations.ts` is byte-identical.
+- Verification: fail-before, the two new tests failed at the dead-code and stale-review assertions; after the fix `matching:check` 0 (4,615 relations), typecheck 0, `npm test` 50 files / 645 tests, no runner left.
+- Learning: when keys come from several sources, a usage guard must attribute each key to the pairs it alone creates; "the row appears in a derived pair" proves nothing about a particular alias. And a review fingerprint must cover the evidence the review cites, not just the rows.

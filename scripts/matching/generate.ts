@@ -5,7 +5,7 @@ import { parseArgs } from 'node:util';
 import type { ProductRelation, RelationProduct } from '../../userscript/core/relations.ts';
 import { packRelations } from '../../userscript/core/relationTable.ts';
 import { assertCatalog, catalogStores, discover, discoverCatalog, fingerprint, listingKey, normalizeCode, pairId, usefulCode, type Alias, type Catalog, type ExtraKeys, type Family, type Listing, type Review } from './model.ts';
-import { importCatalogs, appendStore, applySupplements, extraKeys, identityCodes, snapshotListings } from './catalogs.ts';
+import { importCatalogs, appendStore, applySupplements, derivedCodes, extraKeys, identityCodes, snapshotListings } from './catalogs.ts';
 
 export function endpoint(p: Listing, offerId?: string | null): RelationProduct {
   const variant = offerId ? p.variants?.find(v => v.offerId === offerId) : undefined;
@@ -16,6 +16,9 @@ export function endpoint(p: Listing, offerId?: string | null): RelationProduct {
 }
 const order = (a: { id: string }, b: { id: string }): number => a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 
+/** Keys a listing has without aliases: its stored codes and the forms read from its own fields. */
+const ownKeys = (p: Listing): Set<string> => new Set([...p.codes, ...derivedCodes(p)]);
+
 /** Each alias names a current listing by fingerprint, gives usable codes with evidence and is used once per listing. */
 export function aliasKeys(catalog: Catalog, aliases: readonly Alias[]): ExtraKeys {
   const listings = new Map(catalog.listings.map(p => [listingKey(p), p]));
@@ -23,7 +26,7 @@ export function aliasKeys(catalog: Catalog, aliases: readonly Alias[]): ExtraKey
   for (const alias of aliases) {
     const p = listings.get(alias.key);
     if (seen.has(alias.key) || !p || fingerprint(p) !== alias.fingerprint || !alias.codes.length || alias.evidence.length < 20
-      || !Number.isFinite(Date.parse(alias.reviewedAt)) || alias.codes.some(code => !usefulCode(normalizeCode(code)) || p.codes.includes(normalizeCode(code)))) {
+      || !Number.isFinite(Date.parse(alias.reviewedAt)) || alias.codes.some(code => !usefulCode(normalizeCode(code)) || ownKeys(p).has(normalizeCode(code)))) {
       throw new Error(`alias stale/invalid: ${alias.key}`);
     }
     seen.add(alias.key);
@@ -38,8 +41,11 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
   if (stores.length < 2) throw new Error('two sources required');
   const storeOrder = new Map(stores.map((storeId, i) => [storeId, i]));
   const candidates = discoverCatalog(catalog, aliasKeys(catalog, aliases));
-  // An alias that pairs with nothing is an unused input, not evidence.
-  for (const alias of aliases) if (!candidates.some(c => c.derived && c.products.some(p => listingKey(p) === alias.key))) throw new Error(`alias adds no candidate: ${alias.key}`);
+  // Each alias code must find a pair for its listing that the rows' own keys do not; otherwise it is unused input, not evidence.
+  const aliasPairs = candidates.filter(c => c.derived && !c.codes.some(code => c.products.every(p => ownKeys(p).has(code))));
+  for (const alias of aliases) for (const code of alias.codes.map(normalizeCode)) {
+    if (!aliasPairs.some(c => c.codes.includes(code) && c.products.some(p => listingKey(p) === alias.key))) throw new Error(`alias adds no candidate: ${alias.key} ${code}`);
+  }
   const candidateIndex = new Map(candidates.map(p => [p.id, p]));
   const reviewIndex = new Map<string, Review>();
   const relations = new Map<string, ProductRelation>();
