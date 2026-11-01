@@ -932,3 +932,23 @@ Learning: check each listing claim against the rendering code, not against the p
   - The 231 derived-pair reviews (all made on this branch) were rebound by a one-off script. It required, per review: valid under the old scheme, absent from main's `reviews.json`, and the committed `candidates.jsonl` showing the same keys the reviewer saw. Only fingerprint lines changed; `productRelations.ts` is byte-identical.
 - Verification: fail-before, the two new tests failed at the dead-code and stale-review assertions; after the fix `matching:check` 0 (4,615 relations), typecheck 0, `npm test` 50 files / 645 tests, no runner left.
 - Learning: when keys come from several sources, a usage guard must attribute each key to the pairs it alone creates; "the row appears in a derived pair" proves nothing about a particular alias. And a review fingerprint must cover the evidence the review cites, not just the rows.
+
+## 2026-11-01 0.6.3 release: PR #47 merged, Pages republished, live check, store draft
+- User request: 「うん、よろしくね」 after the review fix: merge when CI passes, then republish Pages, run the pre-submission check and prepare the store submission.
+- PR #47 CI on 66d5a19 passed (mutation testing skipped by its path filter); no unresolved thread. Squash-merged as 32d6d3d. #45 and #46 closed. The branch was deleted locally and on origin.
+- Pages: "Crawl and publish" with `republish=true` on 32d6d3d (run 41289620110): success. Snapshot and import steps skipped, so no new observation.
+  - Pages ZIP SHA-256 060536c0eb154062…, 654,400 bytes, byte-identical to `scripts/build-extension.ts --zip` on main; manifest 0.6.3.
+  - Userscript `@version 0.6.3`; `index.html` equals `public/index.html`.
+  - `dist/electronics-price-history-extension.zip` is a stale file: `build:extension` without `--zip` writes only `dist/extension/`. Compare with a `--zip` build, never with that file.
+- Live check of the Pages ZIP (docs/verification/2026-11-01-release-063.md): 13/13 on seven real pages in local Chromium.
+  - The first run had 12/13. C07 expected the panel to fit 390 px, but Akizuki keeps a 1,080 px layout at that viewport (`viewport` `width=1200`; also 1,080 without the extension), so the expectation was wrong, not the panel. C07 now checks that the panel adds no width.
+  - The KSY element screenshot was clipped by the dialog that scrolls on its own; `ksy.mjs` scrolled it and found 4 cards and 12 rows, nothing missing.
+  - Page errors: Switch Science `empire.js` null `innerHTML` and M5Stack Goaffpro, both reproduced without the extension.
+- Store dashboard (`npm run cws:dashboard`): status showed 0.6.1 published and nothing in review.
+  - The first `upload` timed out in `openTab` waiting for 「ステータス:」 right after `status` had succeeded. The same command passed on the second run. Not reproduced, so no code change.
+  - Draft 0.6.3. The listing said 「照合済みの同一商品 約3,500組」 (the 0.6.1 count, 3,493); 0.6.3 has 3,723, so the listing doc now says 約3,700組 and `fill` pasted it.
+  - `check`: 4 × same. `blockers`: no blockers, 「審査のため送信」 enabled.
+- Kept until the 0.6.3 review passes: `~/tmp/electro-063` (scripts, `pages/ext.zip`, extraction and screenshots).
+- Learning: a live-check expectation for "narrow width" must come from the store's own layout at that width (measured without the extension), not from the viewport.
+- The user pressed 審査のため送信. The first `status` right after still read 「公開済み - 一般公開」 (draft 0.6.3). `blockers` then found 「送信できない理由」 but no 「公開できません」 dialog and timed out; a read-only CDP read of the tab showed 「ステータス: 審査待ち」 and 「レビュー中のアイテムは編集、公開できません。」. A second `status` read 審査待ち / draft 0.6.3 / published 0.6.1. Learning: the status lags a few seconds after submitting, so read it again before doubting the submission; `blockers` is a pre-submission command and fails by design once an item is in review.
+- `close` closed that Chrome (0 processes) and deleted its profile; `~/tmp/electro-cws` removed.
