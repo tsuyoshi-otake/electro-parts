@@ -26,7 +26,15 @@ export interface Catalog {
   sources: Source[];
   listings: Listing[];
 }
-export interface Candidate { id: string; products: [Listing, Listing]; codes: string[]; fingerprint: string }
+/** `derived`: found only through keys read from the listings' own fields or reviewed aliases, not their stored codes. */
+export interface Candidate { id: string; products: [Listing, Listing]; codes: string[]; fingerprint: string; derived?: true }
+/**
+ * Extra identity codes for one listing that its own model field does not carry, found by reading its name.
+ * They only add candidates; the pair is still reviewed. Bound to the listing's fingerprint like a family member.
+ */
+export interface Alias { key: string; fingerprint: string; codes: string[]; evidence: string; reviewedAt: string }
+/** Keys besides a listing's stored `codes` (derived from its fields, or aliases). */
+export type ExtraKeys = (p: Listing) => readonly string[];
 export interface Review {
   id: string; fingerprint: string; decision: 'same_product' | 'unresolved' | 'rejected';
   evidence: string; differences: string[]; missingEvidence: string[]; reviewedAt: string;
@@ -49,14 +57,21 @@ export const pairId = (a: Listing, b: Listing): string => a.storeId === 'akizuki
 export const usefulCode = (code: string): boolean => code.length >= 4 && /\d/.test(code);
 
 /** O(N + K) lookup plus O(R log R) output ordering. Never an N x M cross join. */
-export function discover(left: readonly Listing[], right: readonly Listing[]): Candidate[] {
+export function discover(left: readonly Listing[], right: readonly Listing[], extra?: ExtraKeys): Candidate[] {
+  const candidates = match(left, right, p => p.codes);
+  // A pair its stored codes already find keeps exactly those codes; extra keys only add pairs.
+  if (extra) for (const c of match(left, right, p => [...p.codes, ...extra(p)]).values()) if (!candidates.has(c.id)) candidates.set(c.id, { ...c, derived: true });
+  return [...candidates.values()].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+}
+
+function match(left: readonly Listing[], right: readonly Listing[], keys: (p: Listing) => readonly string[]): Map<string, Candidate> {
   const index = new Map<string, Listing[]>();
-  for (const p of right) for (const code of new Set(p.codes)) {
+  for (const p of right) for (const code of new Set(keys(p))) {
     if (!usefulCode(code)) continue;
     const group = index.get(code) ?? []; group.push(p); index.set(code, group);
   }
   const candidates = new Map<string, Candidate>();
-  for (const p of left) for (const code of new Set(p.codes)) {
+  for (const p of left) for (const code of new Set(keys(p))) {
     if (!usefulCode(code)) continue;
     for (const q of index.get(code) ?? []) {
       if (p.storeId === q.storeId) continue;
@@ -68,7 +83,7 @@ export function discover(left: readonly Listing[], right: readonly Listing[]): C
       else candidates.set(id, { id, products: [p, q], codes: [code], fingerprint: hash(fingerprint(p) + fingerprint(q)) });
     }
   }
-  return [...candidates.values()].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+  return candidates;
 }
 
 /** Stores in first-source order; pair orientation follows it. */
@@ -115,12 +130,12 @@ export function assertCatalog(catalog: Catalog): void {
 }
 
 /** Each store is indexed once. Earlier sources retain their historical pair orientation. */
-export function discoverCatalog(catalog: Catalog): Candidate[] {
+export function discoverCatalog(catalog: Catalog, extra?: ExtraKeys): Candidate[] {
   const previous: Listing[] = [];
   const result: Candidate[] = [];
   for (const storeId of catalogStores(catalog)) {
     const current = catalog.listings.filter(p => p.storeId === storeId);
-    result.push(...discover(previous, current));
+    result.push(...discover(previous, current, extra));
     previous.push(...current);
   }
   return result.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);

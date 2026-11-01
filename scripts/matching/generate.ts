@@ -3,8 +3,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import type { ProductRelation, RelationProduct } from '../../userscript/core/relations.ts';
-import { assertCatalog, catalogStores, discover, discoverCatalog, fingerprint, listingKey, pairId, type Catalog, type Family, type Listing, type Review } from './model.ts';
-import { importCatalogs, appendStore, applySupplements, identityCodes, snapshotListings } from './catalogs.ts';
+import { packRelations } from '../../userscript/core/relationTable.ts';
+import { assertCatalog, catalogStores, discover, discoverCatalog, fingerprint, listingKey, normalizeCode, pairId, usefulCode, type Alias, type Catalog, type ExtraKeys, type Family, type Listing, type Review } from './model.ts';
+import { importCatalogs, appendStore, applySupplements, extraKeys, identityCodes, snapshotListings } from './catalogs.ts';
 
 export function endpoint(p: Listing, offerId?: string | null): RelationProduct {
   const variant = offerId ? p.variants?.find(v => v.offerId === offerId) : undefined;
@@ -15,13 +16,30 @@ export function endpoint(p: Listing, offerId?: string | null): RelationProduct {
 }
 const order = (a: { id: string }, b: { id: string }): number => a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 
-export function generate(catalog: Catalog, legacy: readonly ProductRelation[], reviews: readonly Review[], families: readonly Family[]) {
+/** Each alias names a current listing by fingerprint, gives usable codes with evidence and is used once per listing. */
+export function aliasKeys(catalog: Catalog, aliases: readonly Alias[]): ExtraKeys {
+  const listings = new Map(catalog.listings.map(p => [listingKey(p), p]));
+  const seen = new Set<string>();
+  for (const alias of aliases) {
+    const p = listings.get(alias.key);
+    if (seen.has(alias.key) || !p || fingerprint(p) !== alias.fingerprint || !alias.codes.length || alias.evidence.length < 20
+      || !Number.isFinite(Date.parse(alias.reviewedAt)) || alias.codes.some(code => !usefulCode(normalizeCode(code)) || p.codes.includes(normalizeCode(code)))) {
+      throw new Error(`alias stale/invalid: ${alias.key}`);
+    }
+    seen.add(alias.key);
+  }
+  return extraKeys(aliases);
+}
+
+export function generate(catalog: Catalog, legacy: readonly ProductRelation[], reviews: readonly Review[], families: readonly Family[], aliases: readonly Alias[] = []) {
   assertCatalog(catalog);
   const listings = new Map(catalog.listings.map(p => [listingKey(p), p]));
   const stores = catalogStores(catalog);
-  const [left, right] = stores;
-  if (!left || !right) throw new Error('two sources required');
-  const candidates = discoverCatalog(catalog);
+  if (stores.length < 2) throw new Error('two sources required');
+  const storeOrder = new Map(stores.map((storeId, i) => [storeId, i]));
+  const candidates = discoverCatalog(catalog, aliasKeys(catalog, aliases));
+  // An alias that pairs with nothing is an unused input, not evidence.
+  for (const alias of aliases) if (!candidates.some(c => c.derived && c.products.some(p => listingKey(p) === alias.key))) throw new Error(`alias adds no candidate: ${alias.key}`);
   const candidateIndex = new Map(candidates.map(p => [p.id, p]));
   const reviewIndex = new Map<string, Review>();
   const relations = new Map<string, ProductRelation>();
@@ -54,7 +72,7 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
       id: review.id, kind: review.decision, reviewStatus: review.decision === 'same_product' ? 'verified' : 'needs_review',
       products: old?.products ?? [endpoint(candidate.products[0], review.offerIds?.[0]), endpoint(candidate.products[1], review.offerIds?.[1])],
       evidence: review.evidence, differences: review.differences, missingEvidence: review.missingEvidence,
-      reviewedAt: review.reviewedAt, provenance: old?.provenance ?? { method: 'catalog', model: review.reviewerModel ?? null, originalClassification: review.decision, originalReason: `indexed exact code: ${candidate.codes.join(', ')}` },
+      reviewedAt: review.reviewedAt, provenance: old?.provenance ?? { method: 'catalog', model: review.reviewerModel ?? null, originalClassification: review.decision, originalReason: `indexed ${candidate.derived ? 'derived' : 'exact'} code: ${candidate.codes.join(', ')}` },
       pricePolicy: old?.pricePolicy ?? null,
       ...(!old ? { evidenceUrls: candidate.products.map(p => p.url) } : {}),
     });
@@ -76,8 +94,11 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
       members.add(member.key); return { ...member, listing: p };
     });
     familyCounts[family.id] = 0;
-    // Bounded reviewed family blocks, not a catalogue-wide similarity cross join.
-    for (const a of resolved.filter(m => m.listing.storeId === left)) for (const b of resolved.filter(m => m.listing.storeId === right)) {
+    // Bounded reviewed family blocks (at most 64 members), not a catalogue-wide similarity cross join.
+    // Every store pair, oriented by catalogue store order like the code candidates.
+    const cross = resolved.flatMap((x, i) => resolved.slice(i + 1).filter(y => y.listing.storeId !== x.listing.storeId)
+      .map(y => storeOrder.get(x.listing.storeId)! < storeOrder.get(y.listing.storeId)! ? [x, y] as const : [y, x] as const));
+    for (const [a, b] of cross) {
       if (a.variant === b.variant) continue;
       const id = pairId(a.listing, b.listing);
       if (relations.has(id) || reviewIndex.get(id)?.decision === 'rejected') continue;
@@ -132,21 +153,13 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
 }
 
 export function serializeRelations(relations: readonly ProductRelation[]): string {
-  const endpointKey = (p: RelationProduct): string => JSON.stringify([listingKey(p), p.offer?.id ?? null]);
-  const products = new Map<string, RelationProduct>();
-  for (const r of relations) for (const p of r.products) {
-    const key = endpointKey(p);
-    const previous = products.get(key);
-    // A listing can have additional already-reviewed spellings in a legacy price policy.
-    products.set(key, previous ? { ...p, expectedNames: [...new Set([...previous.expectedNames, ...p.expectedNames])], expectedModels: [...new Set([...previous.expectedModels, ...p.expectedModels])] } : p);
-  }
-  const rows = relations.map(r => {
-    const { products: endpoints, ...rest } = r;
-    return `  r(${JSON.stringify(rest)}, p[${JSON.stringify(endpointKey(endpoints[0]))}]!, p[${JSON.stringify(endpointKey(endpoints[1]))}]!),`;
-  });
-  // Each row goes through `r` so it is typed on its own; an array of object literals
-  // makes TypeScript build one union of every row's type, which fails past ~1,300 rows (TS2590).
-  return `// Generated by npm run matching:build. Edit data/matching reviews/families, not this file.\nimport type { ProductRelation, RelationProduct } from '../core/relations.ts';\n\nexport const STORE_LABELS: Readonly<Record<string, string>> = { 'akizuki': '秋月電子', 'switch-science': 'スイッチサイエンス', 'm5stack': 'M5Stack公式', 'ksy': 'KSY', 'sengoku': 'せんごく' };\nconst p: Record<string, RelationProduct> = {\n${[...products].sort(([a], [b]) => a < b ? -1 : 1).map(([key, value]) => `  ${JSON.stringify(key)}: ${JSON.stringify(value)},`).join('\n')}\n};\nconst r = (relation: Omit<ProductRelation, 'products'>, a: RelationProduct, b: RelationProduct): ProductRelation => ({ ...relation, products: [a, b] });\nexport const PRODUCT_RELATIONS: readonly ProductRelation[] = [\n${rows.join('\n')}\n];\n`;
+  const table = packRelations(relations);
+  const rows = (items: readonly unknown[]): string => items.map(item => JSON.stringify(item)).join(',\n');
+  const json = `{"version":${table.version},\n"strings":[\n${rows(table.strings)}\n],\n"products":[\n${rows(table.products)}\n],\n"relations":[\n${rows(table.relations)}\n]}`;
+  // JSON in a template literal: one row per line, no per-row TypeScript literal types
+  // (thousands of object literals fail with TS2590), and JSON.parse is the fast path.
+  const literal = json.replace(/[\\`]|\$\{/g, m => `\\${m}`);
+  return `// Generated by npm run matching:build. Edit data/matching reviews/families, not this file.\nimport type { ProductRelation } from '../core/relations.ts';\nimport { unpackRelations, type PackedRelationTable } from '../core/relationTable.ts';\n\nexport const STORE_LABELS: Readonly<Record<string, string>> = { 'akizuki': '秋月電子', 'switch-science': 'スイッチサイエンス', 'm5stack': 'M5Stack公式', 'ksy': 'KSY', 'sengoku': 'せんごく' };\nexport const PRODUCT_RELATIONS: readonly ProductRelation[] = unpackRelations(JSON.parse(\`${literal}\`) as PackedRelationTable);\n`;
 }
 
 export const serializeCatalog = (catalog: Catalog): string => JSON.stringify({ schemaVersion: catalog.schemaVersion, sources: catalog.sources }) + '\n' + catalog.listings.map(p => JSON.stringify(p)).join('\n') + '\n';
@@ -159,6 +172,7 @@ async function main(): Promise<void> {
   const { values } = parseArgs({ options: { check: { type: 'boolean' }, discover: { type: 'boolean' }, 'import-left': { type: 'string' }, 'import-right': { type: 'string' }, 'import-store': { type: 'string' },
     supplement: { type: 'string', multiple: true }, replace: { type: 'string', multiple: true } } });
   const dir = 'data/matching';
+  const readAliases = async (): Promise<Alias[]> => JSON.parse(await readFile(`${dir}/aliases.json`, 'utf8')) as Alias[];
   if (values['import-left'] || values['import-right']) {
     if (!values['import-left'] || !values['import-right'] || values.check || values.discover || values.supplement) throw new Error('import requires both files and cannot use --check/--discover');
     const catalog = await importCatalogs([values['import-left'], values['import-right']]);
@@ -198,11 +212,11 @@ async function main(): Promise<void> {
   if (values.discover) {
     if (values.check) throw new Error('--discover and --check are separate operations');
     assertCatalog(catalog);
-    const candidates = discoverCatalog(catalog);
+    const candidates = discoverCatalog(catalog, aliasKeys(catalog, await readAliases()));
     await writeFile(`${dir}/candidates.jsonl`, serializeCandidates(candidates));
     console.log(`Discovered ${candidates.length} candidates from ${catalog.listings.length} listings. No reviews or runtime mappings were changed.`); return;
   }
-  const result = generate(catalog, await read<ProductRelation[]>('legacy.json'), await read<Review[]>('reviews.json'), await read<Family[]>('families.json'));
+  const result = generate(catalog, await read<ProductRelation[]>('legacy.json'), await read<Review[]>('reviews.json'), await read<Family[]>('families.json'), await readAliases());
   const artifacts = [
     ['userscript/adapters/productRelations.ts', serializeRelations(result.relations)],
     [`${dir}/coverage.json`, JSON.stringify(result.report, null, 2) + '\n'],
@@ -216,6 +230,6 @@ async function main(): Promise<void> {
   console.log(JSON.stringify({ candidates: result.candidates.length, pending: result.report.pending.length, relations: result.relations.length, same: result.report.sameVerified, similar: result.report.similarVerified, pricePolicies: result.report.pricePolicies }));
 }
 function serializeCandidates(candidates: ReturnType<typeof discover>): string {
-  return candidates.map(c => JSON.stringify({ id: c.id, codes: c.codes, fingerprint: c.fingerprint, products: c.products.map(listingKey) })).join('\n') + '\n';
+  return candidates.map(c => JSON.stringify({ id: c.id, codes: c.codes, fingerprint: c.fingerprint, products: c.products.map(listingKey), ...(c.derived ? { derived: true } : {}) })).join('\n') + '\n';
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();

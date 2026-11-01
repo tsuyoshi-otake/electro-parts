@@ -773,3 +773,150 @@ Learning: check each listing claim against the rendering code, not against the p
   - Its first deletion failed with "Device or resource busy" because the shell's cwd was inside it, and the `&&` chain then skipped this entry.
   - Learning: never `cd` into a directory a later step of the same chain deletes.
 - Still kept until 0.6.1 review passes: the `~/tmp/electro-mount` evidence (4 MB) and `~/tmp/electro-sengoku-061`.
+
+## 2026-11-01 0.6.1 published on the Chrome Web Store; Seeed Studio mapping audit
+
+- User: 「審査通った?」. Chrome's update service (`clients2.google.com/service/update2/crx`, `response=updatecheck`, the extension id) serves 0.6.1: a 674,688-byte CRX, SHA-256 9b15cf9c…. Its files match the submitted `electronics-price-history-extension-0.6.1.zip` (SHA-256 4fd7e947…) 6/6. The only differences are the store's additions: `update_url` in manifest.json and `_metadata/verified_contents.json`. So the published build is the one that passed the live pre-submission check.
+- Learning: neither browser tool can read the store page or the dashboard, but the update-check endpoint shows the published version read-only, with no sign-in.
+- User: 「Seeed Studio XIAO RP2040 Plus これとか各お店でちゃんとマッピング出来てる?」「Seeed Studio 製品ね」.
+  - Scope: rows of data/matching/catalog.jsonl (44,404) whose maker/vendor/name says Seeed, or whose name has XIAO, Seeeduino, reTerminal, reComputer, SenseCAP, ReSpeaker or Wio. Counts: akizuki 56, switch-science 506, ksy 43, sengoku 162, m5stack 0. Grouped by Seeed's 9-digit SKU, taken from the model number, manufacturer code, name and codes.
+  - 154 SKUs appear at 2+ stores, giving 242 cross-store pairs:
+    - 232 are same_product/verified.
+    - 7 are unresolved/needs_review: reComputer J202 (bundle), ReSpeaker Mic Array v2.0/v3.0, ReSpeaker 2-Mics Pi HAT, Wio LTE JP, Grove GPS Air530/Air530Z.
+    - 3 have no candidate at all.
+  - The 3 pairs with no candidate:
+    - Wio Core, akizuki/111110 ⇔ switch-science/2896.
+    - XIAO ESP32-C5, switch-science/10978 ⇔ sengoku/EEHD-6XBV.
+    - For both, the SS row carries only `SEEED-<sku>` (empty manufacturerProductCode), so exact-code discovery never pairs it with the bare SKU.
+    - reComputer R1025-10, akizuki/129522 (`113991274+114992364`, two SKUs joined) ⇔ switch-science/9704 (`113991274`). This may be a bundle, so it needs review; it is not the same product by default.
+  - Latest snapshots: CI artifacts from 2026-10-31, run 41144837918 (akizuki, SS, ksy) and run 41156911724 (sengoku). Seeed rows missing from the catalogue: SS 8, sengoku 13.
+  - XIAO RP2040 Plus is switch-science/11438 (`SEEED-100059977`). It is new since the catalogue's 2026-10-03 SS supplement and no other store sells it, so there is nothing to pair yet.
+  - Five new sengoku rows share a SKU with akizuki/SS, making 8 pairs:
+    - 6x10 RGB Matrix for XIAO (SS 9284)
+    - Bus Servo Driver Board (akizuki 131540, SS 10344)
+    - Expansion Base for XIAO (akizuki 115955, SS 6854)
+    - XIAO Debug Mate (akizuki 131742)
+    - LED Driver Board (akizuki 131168)
+  - Sengoku lists 17 Pre-Soldered XIAO rows in the 10-31 snapshot. Each has its own SKU and no relation, and families.json has no XIAO family, so they appear neither as same nor as similar products.
+  - Not investigated:
+    - Grove modules with no Seeed in the maker or name (covered only through a shared SKU).
+    - 36 Seeed-like rows with no SKU, mostly third-party XIAO add-ons at SS.
+    - Name-only near matches beyond those listed.
+- Learning: when a maker's SKU is only in a store-prefixed form (`SEEED-…`, like `M5STACK-…`), exact-code discovery misses the pair. Before calling a maker fully mapped, group by the bare maker SKU across stores. The fix is still to be built; promote it to rules.md once it is verified.
+- Cleanup:
+  - Deleted `~/tmp/electro-sengoku-061` (17 MB), since 0.6.1 passed review.
+  - Kept `~/tmp/electro-mount` (4 MB) until the next store submission. It holds the reusable pre-submission scripts and the 0.6.2 evidence that docs/verification/2026-10-31-panel-near-top.md names.
+  - Removed the scratch CRX and snapshot downloads.
+- User, mid-turn: 「Raspberry Pi Zero Wとかラズパイもちゃんとマッピングできてる?」.
+  - Scope: catalogue maker rows say Raspberry Pi at SS 126, ksy 13 and sengoku 82; akizuki has no maker field. Checked 28 board models (Zero v1.3/W/WH/2 W/2 WH, Pico ×8, Pi 5 ×5 RAM, Pi 4B ×5 RAM, 3B+, 3A+, 400/500/500+ JP), one board row per store, picked by hand from the name grouping.
+  - Result: 146 cross-store pairs, 50 same_product, 0 any other relation.
+    - Mapped: akizuki–SS 16/24, akizuki–ksy 17/27, ksy–SS 17/23.
+    - Anything with sengoku: 0/72.
+    - Zero v1.3, Zero W, Zero WH: 0/6 each. Pi 4B 1GB and 4GB, 3B+, 3A+, 400 JP: 0.
+  - Causes:
+    - All 296 sengoku rows whose model number starts with a bracketed code (`【009】RPI-ZERO-W`, `【19635】 PoE/ETH/USB HUB HAT`; Waveshare 192, Raspberry Pi 25, LUCKFOX 22) have no relation. For 131 of them, the bracket or the rest is a code that another store carries. The 0.6.1 import never normalised this form, so those pairs were never candidates. The gap reaches well beyond Raspberry Pi.
+    - Zero W has no shared code anywhere: the akizuki model number is the product name, SS has `SC0020`/`RPI-ZERO-W`, and ksy has its own `RASPI0W11`. ksy also embeds the official code inside its own (`RASPIZWHSC0065`, `RASPI3PSC0073`).
+    - Suffix and code differences need review; they must not simply be stripped:
+      - akizuki `SC0192(11)`/`SC0194(9)`/`SC0195(9)` vs `SC0192`/`SC0194`/`SC0195`;
+      - akizuki Zero 2 W `SC1176` vs `SC0510` elsewhere;
+      - SS Pi 5 1GB carries `SC1110`, the 2GB code.
+  - Not investigated:
+    - Compute Modules, official accessories (power supplies, cases, cameras, displays, HATs), and third-party Raspberry Pi accessories.
+    - Raspberry Pi rows added after the catalogue sources.
+- Learning: a store-specific code wrapper (`【…】` at sengoku, `SEEED-` at SS, store-internal codes embedding the maker code at ksy) silently removes a store from exact-code discovery. After importing a store, check how many of its rows end up in any relation, broken down by maker. 0 of 296 bracketed rows would have shown this at import.
+
+## 2026-11-01 mapping-gaps (#45, 0.6.3, uncommitted on fix/mapping-gaps)
+
+- User: 「見直して対応してね」 (after the Seeed and Raspberry Pi audits above).
+- Symptom: Raspberry Pi boards had no sengoku pair (0/72) and several rows with no shared code (Zero W, Pi 4B 1GB/4GB, 3B+, 3A+, 400 JP). Three Seeed SKU pairs had no candidate. XIAO configurations (Pre-Soldered, Plus, Sense) had no similar relation, and families paired akizuki/SS only.
+- Root cause: discovery indexed only stored `codes`, so codes in a store-specific wrapper never met the bare code elsewhere:
+  - sengoku `【…】rest`,
+  - SS `SEEED-<sku>` (its maker field says スイッチサイエンス on older rows, so a maker-gated rule also missed Wio Core),
+  - akizuki `SC0194(9)`.
+  Rows with no official code at all (akizuki Zero W, ksy `RASPI…`) could not be found by any rule.
+- Fix:
+  - `derivedCodes` (scripts/matching/catalogs.ts) adds discovery-only keys:
+    - the sengoku bracket only for Waveshare/LUCKFOX/Argon SKUs;
+    - the rest via `identityCodes`;
+    - `SC####` for the Raspberry Pi label;
+    - `SEEED-` without a maker condition;
+    - the SC production suffix.
+  - `discover` marks pairs found only that way `derived: true`. Stored codes and fingerprints are unchanged.
+  - `data/matching/aliases.json` holds 26 reviewed per-row aliases. The generator stops on a stale, duplicate, useless or candidate-less alias.
+  - Families pair every store pair in catalogue order. New families: zero and 11 XIAO MCU families. Extended: pico, pi4, pi5.
+  - Catalogue supplemented from the 2026-10-31 snapshots: akizuki +25, SS +60, m5stack +10, sengoku +19. KSY had nothing new.
+  - 234 new candidates, of which 215 were derived. Five Sonnet batches reviewed them: 220 same, 9 unresolved, 5 rejected.
+  - Opus overrode one review: SS 10908 × sengoku 6UGR, rejected → unresolved, per the a129606-s10908 precedent.
+  - Version 0.6.3. Docs updated: ADR-0018 §0.6.3, three-store-mapping §0.6.3, README, the index.html changelog.
+- Verification:
+  - `npm run matching:check`: candidates 3826, pending 0, relations 4599, same 3713, similar 823, pricePolicies 2.
+  - `npm run typecheck` passes.
+  - `npm test`: 49 files, 639 tests.
+  - `npm run test:e2e`: 17 passed. Two specs pinned the old family reach and were updated:
+    - the Pico page shows 21 similar cards (was 7);
+    - KSY 1094/483 each load exactly 8 other-store histories, 16 in total, so the cap holds.
+  - `npm audit --audit-level=high` passes. The 3 moderate advisories are in Stryker's minimatch, with no fix; the lockfile differs from main only in the version.
+  - Audit re-runs:
+    - Raspberry Pi boards: 90/90 pairs proposed, 84 same, 6 unresolved.
+    - Seeed SKU pairs: 337 same, 7 unresolved, 0 unmapped.
+  - The only leftover node processes were the editor's tsserver.
+- Tradeoff:
+  - Similar relations went from 108 to 823.
+  - productRelations.ts is 6.76 MB (was 5.69); the extension content.js is 7.08 MB.
+  - Pico/XIAO pages list about 21 similar cards, open by default (ADR-0017 puts similar cards in their own open section). The mobile Pico panel screenshot is about 5,300 px tall.
+  - Left for a follow-up: grouping or collapsing similar cards, and a smaller relation representation.
+- Learning:
+  - Derived keys belong in discovery only, never in stored codes. Every derived pair still gets its own review.
+  - Numeric SKU keys collide by chance: all 5 rejections were Waveshare digits matching unrelated SS codes.
+  - E2E specs that pin related-card counts or request lists change with every family change. Update them with a comment that names the cap they still prove.
+- Verifier round 1 (rubric-verifier, Sonnet): 8/8 pass. Beyond the rubric it found:
+  - 12 akizuki Seeed pairs still unmapped. Akizuki's older rows write the SKU as `104030003(LED05291P)` (with Seeed's former part number), `SKU-102010027`, or `114020161/114020163` (alternatives). My Seeed audit had grouped only bare and `SEEED-` SKUs, so it reported 0 unmapped too early.
+  - One `npm test` run of nine crashed a worker ("Worker exited unexpectedly"); the other eight passed. Treated as a flake: no test failed.
+- Fix:
+  - `derivedCodes` reads those three akizuki forms. A `+` set (reComputer) stays with its alias.
+  - Discovery found 16 more pairs: akizuki/SS 12, akizuki/sengoku 4. Opus reviewed them: 10 same, 6 unresolved.
+    - Grove SMD connectors ×4: akizuki lists two SKUs per row. Unresolved, following the a129522-s9704 joined-SKU precedent.
+    - SO-101 ×2: akizuki ships with an AC adapter, SS without, and akizuki's second number is unexplained. Unresolved.
+- Totals now:
+  - candidates 3842, relations 4615 (same 3723 / 3, similar 823 / 6, unresolved 60).
+  - The 2026-11-01 batch is 250: 230 same, 15 unresolved, 5 rejected.
+  - Seeed SKU pairs, any 9-digit SKU embedded in codes: 347 same, 14 unresolved, 0 unmapped.
+- Learning: audit a maker with every form its SKU takes in each store's model field (search embedded digits, then classify the wrappers), not only the forms the fix targets. Otherwise the audit confirms the fix instead of testing it.
+- Rerun after the 16-pair fix: matching:check, typecheck and `npm test` (49 files / 639 tests) passed. `npm run test:e2e` failed twice in global setup with `EPERM: rename …/e2e-site/data/v1/stores/m5stack.staging-* -> …/m5stack`; the target did not exist and no test ran. A third run 45 s later passed 17/17. This looks like a transient Windows lock on the just-written staging directory (an indexer or antivirus). The publisher's rename is unchanged, and CI runs on Linux.
+- Verifier round 2: 8/8 pass on the updated rubric. Its observations:
+  - 361 cross-store pairs share a standalone 9-digit number; all are mapped (347 same, 14 unresolved, 0 unmapped).
+  - All 250 reviews of the 2026-11-01 batch match candidates.jsonl fingerprints.
+  - E2E passed first time (17); no runner was left behind.
+- Cleanup: deleted the scratch snapshot downloads (snap1031), the *.before.* backups, the review batches and the throwaway scripts. Kept only the commit message draft until the commit.
+
+## 2026-11-01 similar-cards-046 (#46, in 0.6.3, uncommitted on fix/mapping-gaps)
+
+- Symptom: after #45, a Pico page showed 21 similar cards, open by default; the 390 px panel screenshot was 5,319 px tall. productRelations.ts was 6,785,792 B, content.js 7,104,269 B (gzip 765,695), and loading the bundled table took ~59 ms in node.
+- Cause:
+  - Each similar relation rendered as its own card, although the cards differed only by store.
+  - The rows beyond the 8-load cap each repeated the same reference-only sentence.
+  - The generated table spelled every row as an object literal with repeated keys and strings.
+- Fix (the user chose "same product together", "pack the table" and "ship in 0.6.3"):
+  - `renderRelatedGroups` groups similar entries by family plus the sorted directed differences: one card with a representative name (the shortest), the differences, the note, then one `.related-offer[data-relation-id]` row per store.
+  - The summary reads `類似商品 (21件・7種類)` when grouping happened.
+  - Relations without a family distance or without differences keep their own card.
+  - Reference-only rows show only their link and evidence; the card says once why prices are missing.
+  - `relations.ts` (order, the 8-load cap) is unchanged.
+  - New `userscript/core/relationTable.ts` owns `packRelations`/`unpackRelations`: strings interned most-frequent-first, one endpoint per store/page/variant (the spelling merge moved here from the generator), rows by index, trailing absent fields dropped, and decoding throws on a bad version, index or enum.
+  - `serializeRelations` embeds the JSON in a template literal, one row per line, escaping `\`, `` ` `` and `${`. The per-row `r()` helper and `p` dictionary are gone.
+- Verification:
+  - The decoded table is `isDeepStrictEqual` to the old one, with the same 5,273 shared endpoint objects.
+  - The generator test checks the shipped table against `generate()`.
+  - The fast-check round trip goes through the emitted source. Breaking the backtick escaping makes it fail with a backtick counterexample.
+  - Pico grouping unit test: 7 cards, 21 rows, matching differences per row, and the reference-only note 7 times.
+  - E2E Pico spec: 7 cards, 21 rows.
+  - Full run: matching:check, typecheck, `npm test` 50 files / 644 tests, E2E 17/17, audit high 0 (3 moderate, as before).
+  - Sizes: productRelations.ts 3,058,055 B; content.js 3,188,045 B (gzip 649,274); table load ~30 ms (one run 46 ms). Retained heap after GC is 13 MB before and 14–17 MB after.
+  - The Pico screenshot is 3,701 px tall (4,141 px before the reference-only note moved to the card).
+- Learning:
+  - fast-check 4 `fc.record` builds null-prototype objects unless `noNullPrototype: true`, which breaks `toStrictEqual` with "no visual difference". Promoted to rules.md.
+  - The TS2590 rule now points at the packed-data approach.
+  - Passing a regex as a node argument from Git Bash failed to match even with `MSYS_NO_PATHCONV=1`. The cause was not isolated; a script that builds the string with `String.fromCharCode` worked. Not promoted.
+  - The generated table's diff is no longer readable, because indices are renumbered on every rebuild. Review stays on `data/matching` plus `matching:check`.
+- Independent verifier (rubric-verifier, Sonnet, `.claude/goal-loop/similar-cards-046/rubric.md`): 7/7 pass in round 1. Its own checks: generated vs decoded table, 0 mismatches and 5,273 shared endpoints; FC_RUNS=2000 passed; a jsdom Pico render gave 7 cards, 21 unique rows and the note 0 times inside rows; full suites passed with 0 runner processes left.
+- Cleanup: deleted the benchmark copies and throwaway scripts. Kept only the commit message draft until the commit.

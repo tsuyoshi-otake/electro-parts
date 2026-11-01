@@ -3,7 +3,7 @@
     "id": "pico",
     "label": "Raspberry Pi Picoシリーズ",
     "purpose": "GPIOを備えた小型マイコン開発ボード",
-    "reviewedAt": "2026-09-07",
+    "reviewedAt": "2026-11-01",
     "sources": [
       "https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html"
     ],
@@ -167,6 +167,166 @@
           "無線": "Wi-Fi/Bluetooth",
           "ヘッダー": "実装済"
         }
+      },
+      {
+        "key": "ksy/634",
+        "fingerprint": "44ed7c3a41d2f09d14d74cc0a75ac92e598e946938dde4c19a08d21ac6134ce9",
+        "variant": "pico",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "ksy/864",
+        "fingerprint": "a69b8fc9dc733a0396ea3b0970a27841879cb8611fdc09c5f2f5cf9e88899d79",
+        "variant": "picoh",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "なし",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "ksy/863",
+        "fingerprint": "7333144fe246a3bdaffe7d9059df386336649a5f9bef52cf22537eed083232af",
+        "variant": "picow",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "ksy/865",
+        "fingerprint": "a91af8a70481916fa1b74d78e47705807e905bf5349b72a140d245d9159c841a",
+        "variant": "picowh",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "ksy/1094",
+        "fingerprint": "cb12d6a399bda313d6b661ac066074f5b34cba7d32426496a6b071d213e7a6a0",
+        "variant": "pico2",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "ksy/1201",
+        "fingerprint": "c95735aaa63cfb7257ca8c2e825c0e23619ef4f093045a42cf0072e00e0dd2aa",
+        "variant": "pico2h",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "なし",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "ksy/1178",
+        "fingerprint": "1e564a0d68a1f3c9bddb567b009f38c263bbcdbdc910d263cbd00d7889f79bd4",
+        "variant": "pico2w",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "ksy/1202",
+        "fingerprint": "20136633e9bf5cc4b2ea8eae4e3d9fe43c6622799d4a87f443799723b15625f9",
+        "variant": "pico2wh",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-5S4T",
+        "fingerprint": "fc7cadf0e6710f9f38456b33690e3c88083f3605ec22e6cce3e25ebb3cbf1cae",
+        "variant": "pico",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-5YEC",
+        "fingerprint": "52c1e799d2c2f528b438d96353b811c183dc68706d427070e62a5cb7cbeadd8b",
+        "variant": "picoh",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "なし",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-65C4",
+        "fingerprint": "37a6b08b86155d2458c612cf0d4f920db0eadbad892798b272f4618914c2336e",
+        "variant": "picow",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-65YB",
+        "fingerprint": "3d83d437fc6fd43983d790234db4bca0ce52825abeb900515415d8b5c98bce06",
+        "variant": "picowh",
+        "features": {
+          "MCU": "RP2040",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6HEU",
+        "fingerprint": "5f1cb377952e3eaf0ac9c317da4fb4b5772887f05fe0913ac80941e113d65e9a",
+        "variant": "pico2",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6RNR",
+        "fingerprint": "7f0cdaf4050bb01a7abc5497c777b97a9e6363b065d6e200a54a8ce3d89374a0",
+        "variant": "pico2h",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "なし",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6MG3",
+        "fingerprint": "7ca4c43d3779995d72a801c98bf9697e437d5d706a09604e38d3ffa2c06f8108",
+        "variant": "pico2w",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6NYK",
+        "fingerprint": "4c6f2303de945d450423d377302f8bdd80d3bf9502793bdea2d36426ee719abe",
+        "variant": "pico2wh",
+        "features": {
+          "MCU": "RP2350",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
       }
     ]
   },
@@ -174,8 +334,10 @@
     "id": "pi5",
     "label": "Raspberry Pi 5",
     "purpose": "同じ世代のシングルボードコンピューターの容量選択",
-    "reviewedAt": "2026-09-07",
-    "sources": [],
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://datasheets.raspberrypi.com/rpi5/raspberry-pi-5-product-brief.pdf"
+    ],
     "members": [
       {
         "key": "akizuki/131519",
@@ -257,6 +419,96 @@
           "世代": "Pi 5",
           "RAM": "16GB"
         }
+      },
+      {
+        "key": "ksy/1272",
+        "fingerprint": "7bbef7211cbe78ea90d6b0656b1708a91c12b6e518cf08ff3ee420540dc6e5c4",
+        "variant": "1gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "1GB"
+        }
+      },
+      {
+        "key": "ksy/1095",
+        "fingerprint": "54354b7e3769a81a4de1d01ff937315e4cc2a1dee62ee3ddfb5fe43575e6ce5d",
+        "variant": "2gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "2GB"
+        }
+      },
+      {
+        "key": "ksy/1015",
+        "fingerprint": "afabf925942030694783d9365c70d265fa8014a1930d7ce31f578a1f643506fc",
+        "variant": "4gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "4GB"
+        }
+      },
+      {
+        "key": "ksy/1016",
+        "fingerprint": "ca91884701673942215236e2e16da482e5fd8c45991a9e1df6967dc84e132026",
+        "variant": "8gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "8GB"
+        }
+      },
+      {
+        "key": "ksy/1157",
+        "fingerprint": "24ea1cc56900074b527be8fcbfa711ba9eddf90b32bc49187f36444dae1ab196",
+        "variant": "16gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "16GB"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6WSZ",
+        "fingerprint": "f81b6deb9c160f76abdff76ddae8d6a952886420ef8513ea071efd44819dbdde",
+        "variant": "1gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "1GB"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6UGR",
+        "fingerprint": "838121c0284121bae86120b553ffe6ba82a5333909e88f0cf6568d00d5e458cb",
+        "variant": "2gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "2GB"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6A5U",
+        "fingerprint": "e402923ca1a23a8b3de5cf76d6cc15efd6d0e570dc00c3830b4b3dd3a80574a5",
+        "variant": "4gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "4GB"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6A5V",
+        "fingerprint": "86c17ad47233ae9e077104f1eaea7949d2cfc1c89e4250820429095920d3b8eb",
+        "variant": "8gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "8GB"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6MF6",
+        "fingerprint": "871250ab10005525f93704209e7b9d2184fdd62c38ca34f937b614f25857c758",
+        "variant": "16gb",
+        "features": {
+          "世代": "Pi 5",
+          "RAM": "16GB"
+        }
       }
     ]
   },
@@ -264,8 +516,10 @@
     "id": "pi4",
     "label": "Raspberry Pi 4 Model B",
     "purpose": "同じ世代のシングルボードコンピューターの容量選択",
-    "reviewedAt": "2026-09-07",
-    "sources": [],
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://datasheets.raspberrypi.com/rpi4/raspberry-pi-4-product-brief.pdf"
+    ],
     "members": [
       {
         "key": "akizuki/114839",
@@ -301,6 +555,141 @@
         "features": {
           "世代": "Pi 4 Model B",
           "RAM": "3GB"
+        }
+      },
+      {
+        "key": "akizuki/130198",
+        "fingerprint": "35865c376fedaf757ea4ca35d160ad95a18f17ac9bbe64f0a727e01d10121e0c",
+        "variant": "1gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "1GB"
+        }
+      },
+      {
+        "key": "switch-science/5682",
+        "fingerprint": "f09ffb738d9e6580027048d40c817102ba5a4e8356cacfcada5154afb60ed9fe",
+        "variant": "1gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "1GB"
+        }
+      },
+      {
+        "key": "ksy/483",
+        "fingerprint": "bac5b4fa6e235413ded1a8a7a0bc2ed48463c3a481bb77b1b833328e9c48f602",
+        "variant": "1gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "1GB"
+        }
+      },
+      {
+        "key": "ksy/497",
+        "fingerprint": "08aab57a2f0f10c03a42ce553017b7d2c30ef2644779140c4b7504402bd27a98",
+        "variant": "2gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "2GB"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6YSS",
+        "fingerprint": "098741f59fd1d0ecd454c44c7029452b83b8a01d5c3c03be9001bc46a5e2fc82",
+        "variant": "2gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "2GB"
+        }
+      },
+      {
+        "key": "akizuki/116834",
+        "fingerprint": "26267fc80667952372420d64676ae2a44e01135ffacb5a0c1dd77f627fce554b",
+        "variant": "4gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "4GB"
+        }
+      },
+      {
+        "key": "akizuki/114778",
+        "fingerprint": "1998818ac3f90b09fbbd85c315b7fd9a1b6904aa2237b8e9c35ebf8f3d387e87",
+        "variant": "4gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "4GB"
+        }
+      },
+      {
+        "key": "switch-science/5680",
+        "fingerprint": "fb7b7cbc295bdb0cf1ccae892771c61a1c63be981ae495796880268b27543908",
+        "variant": "4gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "4GB"
+        }
+      },
+      {
+        "key": "ksy/723",
+        "fingerprint": "ac3051922aa5baae5c7439b314abfba9f7c66026a0524bbc93a93ed20efbce3f",
+        "variant": "4gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "4GB"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-655P",
+        "fingerprint": "c6c61eb3a843c39a464a0ac3fcbd1662cc8b9d3d09457466005ec298adf172c2",
+        "variant": "4gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "4GB"
+        }
+      },
+      {
+        "key": "akizuki/115450",
+        "fingerprint": "68111b206b7ed7d9e3f56d6f6b103ab6cb03758b1f779194e045af9cd8e28a3d",
+        "variant": "8gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "8GB"
+        }
+      },
+      {
+        "key": "akizuki/115359",
+        "fingerprint": "68ed9e107b13b8aea2240ca628dd6017ae9bfd958b92f9f3bef4fa5c5f903d5f",
+        "variant": "8gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "8GB"
+        }
+      },
+      {
+        "key": "switch-science/6370",
+        "fingerprint": "2463e6312d5107e63371e5cea5198b4c7810d75441308029d389c68dbfb1209c",
+        "variant": "8gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "8GB"
+        }
+      },
+      {
+        "key": "ksy/552",
+        "fingerprint": "0838aa4ed6cfb977b44fd33f16cf6d5cac75092728c8ddd72e277cc46baa4a58",
+        "variant": "8gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "8GB"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-655N",
+        "fingerprint": "b2abcbc46fd1e4a308a883e06de33aa28a22d7c2983ee23cb74e627f523711a2",
+        "variant": "8gb",
+        "features": {
+          "世代": "Pi 4 Model B",
+          "RAM": "8GB"
         }
       }
     ]
@@ -820,6 +1209,1040 @@
         "features": {
           "カメラ": "OV3660",
           "無線": "Wi-Fi付き"
+        }
+      }
+    ]
+  },
+  {
+    "id": "zero",
+    "label": "Raspberry Pi Zeroシリーズ",
+    "purpose": "Zeroサイズの小型シングルボードコンピューター",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html",
+      "https://datasheets.raspberrypi.com/rpizero2/raspberry-pi-zero-2-w-product-brief.pdf"
+    ],
+    "members": [
+      {
+        "key": "akizuki/129605",
+        "fingerprint": "a88232bc6efe572b93574942cfcdb2ec1c49d627606638712216676855caa21b",
+        "variant": "zero13",
+        "features": {
+          "世代": "Zero",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/3190",
+        "fingerprint": "346b27d451686711098f3d7b7f4c9b55d9210ecf5efe22e3c128605c526b09e9",
+        "variant": "zero13",
+        "features": {
+          "世代": "Zero",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "ksy/222",
+        "fingerprint": "a26d21ab8d8f04095dd06756f1eaaf45f68e201c56483e3a8b437fad82003abd",
+        "variant": "zero13",
+        "features": {
+          "世代": "Zero",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6YP3",
+        "fingerprint": "daf738301b0d262d323c27cc9800cdcc1331ec881be34e37a6045e3e540e40dd",
+        "variant": "zero13",
+        "features": {
+          "世代": "Zero",
+          "無線": "なし",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/118180",
+        "fingerprint": "097adb12773486c24580ce2c9d5199b02d333cfb19f3f3e4e4dc8bfa4d9efda9",
+        "variant": "zerow",
+        "features": {
+          "世代": "Zero",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/3200",
+        "fingerprint": "14ea789da92e1afa704a387b3b990fcfdbd14c61407129b5ff877d5bf43c93e0",
+        "variant": "zerow",
+        "features": {
+          "世代": "Zero",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "ksy/219",
+        "fingerprint": "1757392c691980afaab26287a1de42586170836321cfdfc9512c0842858c6b0f",
+        "variant": "zerow",
+        "features": {
+          "世代": "Zero",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-66P8",
+        "fingerprint": "9d054173bf6ee8fc9839b41dcd28fd1c4736d4ba5d19b4a5db6c958f538d5221",
+        "variant": "zerow",
+        "features": {
+          "世代": "Zero",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/112961",
+        "fingerprint": "7634eed2f876955c325f424f8e5b16e8fc84c32657cbb24a759f7333633461c3",
+        "variant": "zerowh",
+        "features": {
+          "世代": "Zero",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/3646",
+        "fingerprint": "71946b70ba877761ee85ac2774ebceb4061d6c51dfa71e78d6364d59532f4e10",
+        "variant": "zerowh",
+        "features": {
+          "世代": "Zero",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "ksy/406",
+        "fingerprint": "e15397fcada04504523a80f4fc09db1b01cec01967d722b6a92bc7b46adaa968",
+        "variant": "zerowh",
+        "features": {
+          "世代": "Zero",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-57LT",
+        "fingerprint": "ffd13c82aeea8d1b08180907a3b9650f7c1db3b26593a2b3b5b174a9b7d6cfd7",
+        "variant": "zerowh",
+        "features": {
+          "世代": "Zero",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "akizuki/117398",
+        "fingerprint": "c70d30931e05f6604f66c87f7bf2231d2f8e9e4048d31f404a3e839a116d2013",
+        "variant": "zero2w",
+        "features": {
+          "世代": "Zero 2",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/7600",
+        "fingerprint": "4905ebe284525318327ffbc27b307dbac2792dcbb5b12d7c52bea1711b716f3b",
+        "variant": "zero2w",
+        "features": {
+          "世代": "Zero 2",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "ksy/849",
+        "fingerprint": "99009408c161ecdb2533c496ad4f3f3db751cb3d56eaeb06d5d420b9793e34ac",
+        "variant": "zero2w",
+        "features": {
+          "世代": "Zero 2",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6CEA",
+        "fingerprint": "42e3408ddd179bf74af9ee5a6044fc6ddb5a8cd8aec7920f6c8542b49cc2058d",
+        "variant": "zero2w",
+        "features": {
+          "世代": "Zero 2",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/129607",
+        "fingerprint": "3e8995154e7748cd426c9a33a908ff94f3c8f2455ebfb7027b6ca4eea1af5716",
+        "variant": "zero2wh",
+        "features": {
+          "世代": "Zero 2",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/9812",
+        "fingerprint": "a88ce87232dfefef13298b5a37aa4a262f49bab181c8994b7d9ac1cf59baf561",
+        "variant": "zero2wh",
+        "features": {
+          "世代": "Zero 2",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "ksy/1097",
+        "fingerprint": "6abf5f85ea1f60f53658548ca99ee306d19cff6a10a67e77de439d00522893af",
+        "variant": "zero2wh",
+        "features": {
+          "世代": "Zero 2",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6JRZ",
+        "fingerprint": "5d66d4c55f3755f794910e44d8e2719c5714cc46cfcf8bcf6c2bec06e97d52ab",
+        "variant": "zero2wh",
+        "features": {
+          "世代": "Zero 2",
+          "無線": "Wi-Fi/Bluetooth",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-esp32c3",
+    "label": "Seeed Studio XIAO ESP32C3",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/XIAO_ESP32C3_Getting_Started/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/117454",
+        "fingerprint": "e4d5af14086ae330be87440f62bd3b82b9ba46e9e491d10641778d35f621fd13",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32C3",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/8348",
+        "fingerprint": "3dc96fa8df44c0dda30fb9a7d31b92e9a2ef93815efeeb9979e6db595d3aede2",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32C3",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-68Z7",
+        "fingerprint": "44efc222d14aa07ff5013dd5ff0b0f15dfa8d49e80eaed3aea83a6f303ced1e0",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32C3",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6PRR",
+        "fingerprint": "cd5096b4a1f557d1c781a31888e39ebe6f8606a71b07d0e7c1e59d807e8ab425",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO ESP32C3",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-esp32c5",
+    "label": "Seeed Studio XIAO ESP32C5",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/xiao_esp32c5_getting_started/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "switch-science/10978",
+        "fingerprint": "40036635b4382ac09bcb4d359217d73e723858298fe5772b8a43cabc90ab95e5",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32C5",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6XBV",
+        "fingerprint": "d1818a394b11b968b16c4fc3709d6747bc3964bce6e70631f6719e1706e28f4b",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32C5",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6Y7S",
+        "fingerprint": "f002ef5f15c7882b0ecae89a9b090c7c9f0cad40bdf090b337518a9d9a38e128",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO ESP32C5",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-esp32c6",
+    "label": "Seeed Studio XIAO ESP32C6",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/129481",
+        "fingerprint": "b3c99df4ca06a39c0a443a9f783b0c515e823ddb7dcdb19bb5bfcfce85a11acc",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32C6",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/9688",
+        "fingerprint": "53a38371ea51de26c0d2ab3d8e6a0afba7e5a6cabc1f65e7cdde36c264c8146f",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32C6",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6HDC",
+        "fingerprint": "2f4be9c84cc64beb712c31584723153d8b14b7a960d2e996abcbb8f75f4612d7",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32C6",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6PRS",
+        "fingerprint": "b655cd73fc728a8d92fe5e6b016175e026ce26e2bbe5cd1c44ac44fb2af21d5b",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO ESP32C6",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-esp32s3",
+    "label": "Seeed Studio XIAO ESP32S3",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/118078",
+        "fingerprint": "9a142d3e7a58eaa977ee0ae121e60aec420ef571109a4cf324a013d88726dca0",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/8968",
+        "fingerprint": "b9c1e786571ac0d5209e5c6c3fd44dc0abaf9dc4a19af6a98aeeea55c8d39387",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-65UW",
+        "fingerprint": "51986954d295103dfb397b8608b3059a664df9463ee86c0841722905d4c07327",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6PRP",
+        "fingerprint": "3f9339913143dc749b8154848a963ef782a4d6826d0bdb75fb5a92e757077a72",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/10470",
+        "fingerprint": "be9575cb72efbd849082a258b3f0aed9d6b4b3dce46f7d2a28793dacdbe5b994",
+        "variant": "plus",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "Plus",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6TTN",
+        "fingerprint": "60e90b0a90f5a06c36e376e8c4bd2949208b1cee6af1adf62713c8d10308d710",
+        "variant": "plus",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "Plus",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/118079",
+        "fingerprint": "4b3a70d613305c649de21787420fca4cfe31be8feb1f54c7d2bc33a33897dea4",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/8969",
+        "fingerprint": "3b1f08ea28e664dca6543ec67545558dfc11a452a04dc4a11e1f8e2b5dba039b",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-65UX",
+        "fingerprint": "9e9f90f6609e2446b5f1c3511dfbb8fe9aefe2bbeb20320038b7292b30737748",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6TVV",
+        "fingerprint": "1ae33e807e78710ee5f7fe085351dcdc9384b551c53a5090121cb317b4d63eea",
+        "variant": "sensepre",
+        "features": {
+          "モデル": "XIAO ESP32S3",
+          "構成": "Sense",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-mg24",
+    "label": "Seeed Studio XIAO MG24",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/xiao_mg24_getting_started/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/131167",
+        "fingerprint": "bd476129779adcb19afdf15e878f61f909bb5c7043dff00f2daca3e4685cf9cb",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO MG24",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/10223",
+        "fingerprint": "938c0619ad953587fbdc0cd8ce53f4c988a0459e13294f3485465a4dae45255a",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO MG24",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6PJV",
+        "fingerprint": "e97c1231c1b15a1d051a8ec0c3e83af02fac86ad9bed06743abbcb835413c9f8",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO MG24",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6PJY",
+        "fingerprint": "7f9473db69c10702b536356b82ebed324402d381672b249e9702f42a1cc3ce04",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO MG24",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "akizuki/130231",
+        "fingerprint": "02e1a149405b7dd7325fbf5d8f1296ce172e02e1c259de249f7c2795d6f7acab",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO MG24",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/10224",
+        "fingerprint": "33700e282b194acb74921858f60e072b4ba75ae6119d4f0a4a8177692da47f05",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO MG24",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6PJX",
+        "fingerprint": "ee0110484ce4e7199fb60a39727c5a8bd02f941eec3b4a69a1df85ad048d5f2e",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO MG24",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6PJZ",
+        "fingerprint": "9ce87fbdbe0aaea8db997c97d115e3e104f2b3b9001f7d66d8d9db6ca6b35e75",
+        "variant": "sensepre",
+        "features": {
+          "モデル": "XIAO MG24",
+          "構成": "Sense",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-nrf52840",
+    "label": "Seeed Studio XIAO nRF52840",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/XIAO_BLE/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/117341",
+        "fingerprint": "0ff7de7b87c4e9532656c54194dc733a785cd08651d71467134dd4a72a4c0ce8",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/8145",
+        "fingerprint": "2e1619ad0251cc66e17eb99d7d30240bc7741d842f452f96be695bdd063cc2ca",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "ksy/876",
+        "fingerprint": "946ae58570063bae9769913be9cbed4e378c5e69918d50cbcf1612b7cab9d39b",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-5X8K",
+        "fingerprint": "46c8ba8fff62f4319b305537d8b41ee610ada099a99f123072af79a0e6d9f0ec",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6SLV",
+        "fingerprint": "c7424a003f02e0d83d79624657ac9dc64e758027afc0508744e33254edf473ee",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/10468",
+        "fingerprint": "b4c66a00b9fe3a04a7cc7d497fe0460f6d1fa6da865804fe3192e76bf53ee07c",
+        "variant": "plus",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "Plus",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6TTL",
+        "fingerprint": "0972eba9d1b27a2f4d5531bc185a24d82eb46e360288f38fae90f3c40dfaa920",
+        "variant": "plus",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "Plus",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/117342",
+        "fingerprint": "bd93ec82cee0fc4462f9b8da61a3ab213637ed564bcade242b50a3fa2b0417e8",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/8146",
+        "fingerprint": "f52eea8ed7a476009ca94690efb73fa4847d908d18fdba28fb73ebcb4a539c66",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "ksy/877",
+        "fingerprint": "ecdd5ad63a737310b1f2651f9cd201b68a7ca9ceb3da3641609aa368697bb080",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-5X8L",
+        "fingerprint": "4285bca6feada3a4b53c3018b378e225ef47b20210a4c39eeb9dc5b997276346",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6PRN",
+        "fingerprint": "52530b7f1fbe4eaa448a1f29c572601ab902b6ba80ccd6213f54623679d9a27b",
+        "variant": "sensepre",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "Sense",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/10469",
+        "fingerprint": "baf9fe0f962a14b506d8918bf5356e2e84cd26f7c126b503203dfdb4fbb1e8cb",
+        "variant": "senseplus",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "Sense Plus",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6TTM",
+        "fingerprint": "add4b17f2e45e43cde8ab9dd45f3c7d4ec7667346ea4f9821d8767546f9cefe3",
+        "variant": "senseplus",
+        "features": {
+          "モデル": "XIAO nRF52840",
+          "構成": "Sense Plus",
+          "ヘッダー": "未実装"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-nrf54l15",
+    "label": "Seeed Studio XIAO nRF54L15",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/xiao_nrf54l15_sense_getting_started/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/131381",
+        "fingerprint": "54468c73870705e2af1bc02d3b65f91615af0717f904b7acb015bc06acf1831b",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO nRF54L15",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6TSV",
+        "fingerprint": "e779a0ffe71424f49a2a6e665f38acbe5d0468361ee14705a8c9efd2ace1e1af",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO nRF54L15",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6TSY",
+        "fingerprint": "6e101de9e00912e68c6cdceea82763735ec658328f7d192d6546777480d0f5e4",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO nRF54L15",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "akizuki/131382",
+        "fingerprint": "04df6141e902a90a8678ee24ee5904cac7fc5440e1cc9341188c77cde761b38d",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO nRF54L15",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/10703",
+        "fingerprint": "1fa06dca6a464609caece7ea7b6662cb32c5de4850db9edbc5d3a6a4c3b0910f",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO nRF54L15",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6TT4",
+        "fingerprint": "fbe9f42391594e5547723582f17415d11752a8c23c91553a1b665c5c69a5aece",
+        "variant": "sense",
+        "features": {
+          "モデル": "XIAO nRF54L15",
+          "構成": "Sense",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6TT7",
+        "fingerprint": "720b5ee6a6f4a0bfe034d2634cebd07d6515e02ef477fee3141e82ecf06e3156",
+        "variant": "sensepre",
+        "features": {
+          "モデル": "XIAO nRF54L15",
+          "構成": "Sense",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-ra4m1",
+    "label": "Seeed Studio XIAO RA4M1",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/getting_started_xiao_ra4m1/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/131171",
+        "fingerprint": "585c810d3d41dae75336d87718e2d2bc6442de5f0e8c789d8db1cfed8b2a00d6",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO RA4M1",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/9879",
+        "fingerprint": "b314206f20223679d7dc0a61592a75752a297d83f9db37703a00ccefaf33f945",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO RA4M1",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6KF7",
+        "fingerprint": "d9461016eaa47b9635d02c035f1f87073d8396e7143fc4f3eab440d9543c2cc5",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO RA4M1",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6TGA",
+        "fingerprint": "25925327f24e7b59176c249273bb8b6af859b341da1583f0c9079f6e4224d2c6",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO RA4M1",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-rp2040",
+    "label": "Seeed Studio XIAO RP2040",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/XIAO-RP2040/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/117044",
+        "fingerprint": "f556d529a59298ed17e91e50fcf7b3d0e09d6bea72b6c41c73c3cbcba70e5f23",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO RP2040",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/7634",
+        "fingerprint": "747c1e8bfb58d9181fd7d7cf945d8537b5a78f81eff3e1ed682cbc3af7b54ac4",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO RP2040",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-68ZM",
+        "fingerprint": "ceae9e88857c93b02c150e3a478f5c580603d9c69da5efbe49e1b743269c3786",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO RP2040",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6Y7T",
+        "fingerprint": "e2e869374881d5effbd0f14b91243c90bce18b3defd71f70a7a01b19dcc08ef0",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO RP2040",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/11438",
+        "fingerprint": "40adfe125cfd6122d6e407e2a7e38d89973b84fa8f04b11853dedb9198a38554",
+        "variant": "plus",
+        "features": {
+          "モデル": "XIAO RP2040",
+          "構成": "Plus",
+          "ヘッダー": "未実装"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-rp2350",
+    "label": "Seeed Studio XIAO RP2350",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/getting-started-xiao-rp2350/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/129619",
+        "fingerprint": "35463a4c78499cf7b0550661023563fce902ad92d8a418edaedebc855e4a003f",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO RP2350",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/9974",
+        "fingerprint": "25f87da97efbeccfd24e2a3bdcc767b2fa51f45fd59c7e444f80e219429a2fcf",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO RP2350",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6LLT",
+        "fingerprint": "5e12097a2a08a146079f177707d01e27755c8e3155208dd6b4de711c44717560",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO RP2350",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-6LLU",
+        "fingerprint": "73c49a00daf7d2e20d379f63f37560c24d1899bbe920e7378eb201f843f01020",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO RP2350",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      }
+    ]
+  },
+  {
+    "id": "xiao-samd21",
+    "label": "Seeed Studio XIAO SAMD21 (Seeeduino XIAO)",
+    "purpose": "同じMCUを載せたSeeed Studio XIAO規格の小型マイコンボード",
+    "reviewedAt": "2026-11-01",
+    "sources": [
+      "https://wiki.seeedstudio.com/Seeeduino-XIAO/",
+      "https://wiki.seeedstudio.com/SeeedStudio_XIAO_Series_Introduction/"
+    ],
+    "members": [
+      {
+        "key": "akizuki/115178",
+        "fingerprint": "b5778825e19b509c740dcd6afbaf4c01d41161918e882f7966728aec277e3a27",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO SAMD21 (Seeeduino XIAO)",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "switch-science/6335",
+        "fingerprint": "1b4bc233b3463b8fd6081e76b1cadceb4f18091fd1eecb39710219abc26d4ae9",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO SAMD21 (Seeeduino XIAO)",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-5MYD",
+        "fingerprint": "8f0a5302bf243584f06618e1513b839ea2f03c67334c76e8548d52d7bab6a968",
+        "variant": "std",
+        "features": {
+          "モデル": "XIAO SAMD21 (Seeeduino XIAO)",
+          "構成": "標準",
+          "ヘッダー": "未実装"
+        }
+      },
+      {
+        "key": "akizuki/116135",
+        "fingerprint": "e0ca3585dde68d12a8b90398185f8c88d2cc1e8fc294da953b103672fa3c3d3b",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO SAMD21 (Seeeduino XIAO)",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "switch-science/7100",
+        "fingerprint": "d0f1f8677789cbff6522ef6aa84cb2041d1d8cf17b3bfcc84832a7ccfe7f6cfa",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO SAMD21 (Seeeduino XIAO)",
+          "構成": "標準",
+          "ヘッダー": "実装済"
+        }
+      },
+      {
+        "key": "sengoku/EEHD-5S4H",
+        "fingerprint": "26edf3251e8d395b4cc0dbb61a48e3616b858303f79e609ae275585f0b013048",
+        "variant": "pre",
+        "features": {
+          "モデル": "XIAO SAMD21 (Seeeduino XIAO)",
+          "構成": "標準",
+          "ヘッダー": "実装済"
         }
       }
     ]
