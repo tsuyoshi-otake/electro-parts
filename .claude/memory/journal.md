@@ -1104,3 +1104,9 @@ Learning: check each listing claim against the rendering code, not against the p
   - Relations 5,580 → 5,631 (unresolved +43, similar +8).
   - Families 163 → 164. Dismissals: 65, all `different`.
 - Still open: the 43 unresolved pairs need maker data (suffix meanings, ranks, colours, TLP291-4 channel count); base stems over 10 listings and sibling pairs stay unproposed; the two old contradictions `a116956-s5843` and `a130198-s5682`.
+
+## 2026-11-02 pr54-cli-modes: one operation per matching CLI run (#54 review, 7fdee88)
+- Symptom (Codex review on #54): `--supplement … --names` entered the supplement branch and wrote catalog.jsonl; `--names --similar` printed only the name queue. The conflict checks lived inside each branch, so an earlier branch won.
+- Fix: main() counts the selected operations and throws before any read when more than one is set; `--replace` needs `--supplement`. Per-branch checks removed.
+- Verification: a new CLI test (spawned with a 60 s timeout) failed before the fix (`--names --similar` exited 0) and passes after; npm test 671, typecheck, lint, matching:check pass; no vitest process left.
+- Learning: mutually exclusive CLI modes are validated once, up front, not per branch.
