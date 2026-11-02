@@ -1119,3 +1119,7 @@ Learning: check each listing claim against the rendering code, not against the p
   - Userscript `@version 0.6.8`; `index.html` has the `<h2>0.6.8` entry.
 - No tag or GitHub release: the repo has used Pages as the release channel since 0.4.2, and 0.6.3 had none either.
 - Not done: the Chrome Web Store live check and submission. They wait until the 0.6.3 review ends.
+
+## 2026-11-03 Chrome Web Store status after the 0.6.3 review
+- `cws:dashboard` status: 「公開済み - 一般公開」, draft 0.6.3, published 0.6.3. The 0.6.3 review passed, so 0.6.8 can now go through the pre-submission check and draft.
+- `close` deleted the signed-in profile; 0 Chrome processes on that profile. Removed `~/tmp/electro-cws`, and `~/tmp/electro-063` and `~/tmp/electro-mount`, which were kept only until this review passed.
