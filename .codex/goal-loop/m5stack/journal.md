@@ -37,8 +37,8 @@
 
 ZIP: `dist/electronics-price-history-extension-0.4.4.zip`, 92,130 bytes,
 SHA256 `d94772bd1dd93cf15dc3449a2cb958eba8404cd6a78d8a688ee21c241cf16866`.
-Live local evidence: `C:/Users/developer/tmp/electro-local044/final2/` plus
-`C:/Users/developer/tmp/electro-local044/verify-final2.cjs`.
+Live local evidence: `~/tmp/electro-local044/final2/` plus
+`~/tmp/electro-local044/verify-final2.cjs`.
 Store HTML was live for all three stores. Before deployment only the M5Stack data
 endpoint was intercepted to serve the real locally generated snapshot; existing
 stores used public data. This is not yet public M5Stack validation or Web Store

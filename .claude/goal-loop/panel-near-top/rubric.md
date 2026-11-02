@@ -33,7 +33,7 @@ above the description — as near the top as on Akizuki — without breaking lay
   area; README's install list describes both positions; the roadmap doc describes the new anchor, the fallback,
   and why `clear: both` is needed.
 - C8: Live-page evidence exists and shows the requested placement without overlap or overflow. Verify: read
-  `C:\Users\developer\tmp\electro-mount\shots-062\results.json` and look at
+  `~/tmp/electro-mount/shots-062/results.json` and look at
   `m5-atom-lite-desktop-light.png`, `m5-atom-lite-phone-light.png`, `ss-6262-desktop-light.png`,
   `ss-11479-phone-light.png` in that folder. Expect: 9 results all `pass:true`; every M5 entry has parent
   `div.product-main`, next `div.product-description…` and `columnOverlapSteps` 0; every SS entry has parent
