@@ -1,4 +1,5 @@
 import type { OfferV1, ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
+import type { AvailabilityState } from '../../src/core/domain.ts';
 import type { LoadState } from './dataClient.ts';
 
 /** Curated evidence, not a live similarity search. Store knowledge is injected. */
@@ -117,7 +118,68 @@ export function currentOffer(product: ProductFileV1): OfferV1 | null {
   })[0] ?? null;
 }
 
-export type ComparisonEligibility = { comparable: false; reason: string } | { comparable: true; other: SegmentV1; label: string; differenceMinor: number | null };
+/** Viewers read yen. A quote in another currency leaves out shipping, duties and tax, so it is never ranked against yen quotes. */
+export const HOME_CURRENCY = 'JPY';
+
+const STOCK_TIER: Record<AvailabilityState, number> = {
+  in_stock: 0, low_stock: 0, restocking: 1, preparing: 1, checking: 1, unknown: 1, not_displayed: 1, out_of_stock: 2, discontinued: 2,
+};
+const UNLISTED_TIER = 3;
+
+/** What ordering reads from a loaded row: currency, last observed stock, recorded price and observation time. Null until loaded. */
+export function storePriceRank(entry: RelatedEntry): { currency: string | null; stockTier: number; amountMinor: number | null; observedAt: number } | null {
+  if (entry.state.kind !== 'ready') return null;
+  const product = entry.state.product;
+  const quote = primaryQuote(product, entry.target);
+  if (!quote) return { currency: null, stockTier: UNLISTED_TIER, amountMinor: null, observedAt: product.product.lastSeenAt };
+  const last = quote.offer.availability[quote.offer.availability.length - 1];
+  const listed = product.product.listed && presentAtEnd(quote.offer.presence);
+  return {
+    currency: quote.segment.basis.currency,
+    stockTier: !listed ? UNLISTED_TIER : last ? STOCK_TIER[last[1]] : STOCK_TIER.unknown,
+    amountMinor: quote.segment.stats.current.minAmountMinor,
+    observedAt: product.product.lastSeenAt,
+  };
+}
+
+/**
+ * Same-product rows: home-currency quotes first, then in stock → restocking or unknown → out of stock → unlisted,
+ * then the lower recorded price, then the newer observation. Rows without loaded data keep their order at the end.
+ * This orders recorded observations; it never claims a current or cheapest price.
+ */
+export function orderStorePrices(entries: readonly RelatedEntry[]): RelatedEntry[] {
+  const key = (entry: RelatedEntry): readonly number[] => {
+    const rank = storePriceRank(entry);
+    if (!rank) return [3];
+    const group = rank.currency === null ? 2 : rank.currency === HOME_CURRENCY ? 0 : 1;
+    return [group, rank.stockTier, rank.amountMinor ?? Number.POSITIVE_INFINITY, -rank.observedAt];
+  };
+  const keyed = entries.map((entry, index) => ({ entry, index, key: key(entry) }));
+  keyed.sort((a, b) => {
+    for (let i = 0; i < Math.max(a.key.length, b.key.length); i++) {
+      const d = (a.key[i] ?? 0) - (b.key[i] ?? 0);
+      if (d !== 0) return d;
+    }
+    return a.index - b.index;
+  });
+  return keyed.map((k) => k.entry);
+}
+
+/**
+ * Relation ids whose approved comparison shows the lowest recorded price among the comparable in-stock rows,
+ * the viewed store included: empty when the viewed store is cheaper or nothing is comparable.
+ */
+export function cheapestComparable(current: ProductFileV1, segment: SegmentV1, entries: readonly RelatedEntry[]): ReadonlySet<string> {
+  const candidates = entries.flatMap((entry) => {
+    const eligibility = comparisonEligibility(current, segment, entry);
+    return eligibility.comparable && eligibility.differenceMinor !== null && storePriceRank(entry)?.stockTier === 0
+      ? [{ id: entry.relation.id, difference: eligibility.differenceMinor }] : [];
+  });
+  const lowest = Math.min(...candidates.map((c) => c.difference));
+  return new Set(lowest <= 0 ? candidates.filter((c) => c.difference === lowest).map((c) => c.id) : []);
+}
+
+export type ComparisonEligibility ={ comparable: false; reason: string } | { comparable: true; other: SegmentV1; label: string; differenceMinor: number | null };
 
 /** Fail closed for arithmetic/overlays; links and labelled reference prices still work. */
 export function comparisonEligibility(current: ProductFileV1, segment: SegmentV1, entry: RelatedEntry): ComparisonEligibility {
