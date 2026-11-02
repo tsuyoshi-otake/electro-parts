@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
 import { m5stackCollector } from '../../src/collectors/m5stack/collector.ts';
-import type { M5StackItem, M5StackSnapshot } from '../../src/adapters/m5stack/rawSchema.ts';
+import type { ShopifyItem, ShopifySnapshot } from '../../src/adapters/shopify/rawSchema.ts';
 import { m5stackSnapshotAdapter } from '../../src/adapters/m5stack/snapshotAdapter.ts';
 
-export function m5stackFixture(): {pages: M5StackItem[][]; index: string; sitemap: string} {
+export function m5stackFixture(): {pages: ShopifyItem[][]; index: string; sitemap: string} {
   return JSON.parse(gunzipSync(readFileSync('tests/fixtures/m5stack/catalog.json.gz')).toString());
 }
 export async function collectM5StackFixture(edit?: (url: string, body: string) => string, config = {}) {
@@ -22,7 +22,7 @@ export async function collectM5StackFixture(edit?: (url: string, body: string) =
       return {status:200,header:()=>null,bytes:async()=>Buffer.from(body)};
     },
   });
-  return {...outcome,raw:outcome.raw as M5StackSnapshot,requests};
+  return {...outcome,raw:outcome.raw as ShopifySnapshot,requests};
 }
 export async function loadM5StackNormalized() {
   const result=await collectM5StackFixture();

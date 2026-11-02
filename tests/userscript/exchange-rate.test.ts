@@ -16,9 +16,11 @@ function providerBody(overrides: Record<string, unknown> = {}): Record<string, u
   const last = NOW / 1000 - 3600;
   return {
     result: 'success', provider: 'https://www.exchangerate-api.com', base_code: 'USD',
-    time_last_update_unix: last, time_next_update_unix: last + 86_400 + 390, rates: { USD: 1, JPY: 157.820352 }, ...overrides,
+    time_last_update_unix: last, time_next_update_unix: last + 86_400 + 390, rates: { USD: 1, JPY: 157.820352, GBP: 0.78 }, ...overrides,
   };
 }
+/** Yen per pound from that answer: 157.820352 / 0.78. */
+const JPY_PER_GBP = 157.820352 / 0.78;
 
 function rateHost(response: HostResponse | Error = json(providerBody())): FakeHost {
   const host = fakeHost(NOW);
@@ -34,8 +36,17 @@ const stored = (host: FakeHost) => JSON.parse(host.store.get(KEY) ?? 'null') as 
 describe('provider response', () => {
   it('accepts a successful USD answer with a positive JPY rate and update times', () => {
     expect(parseRateResponse(JSON.stringify(providerBody()), 'USD')).toEqual({
-      base: 'USD', jpyPerUnit: 157.820352, updatedAt: NOW - HOUR, nextUpdateAt: NOW - HOUR + DAY + 390_000,
+      base: 'USD', jpyPerUnit: 157.820352, cross: {}, updatedAt: NOW - HOUR, nextUpdateAt: NOW - HOUR + DAY + 390_000,
     });
+  });
+
+  it('derives yen per unit of a cross currency from the same answer, leaving out one it lacks', () => {
+    expect(parseRateResponse(JSON.stringify(providerBody()), 'USD', ['GBP', 'EUR'])?.cross).toEqual({ GBP: JPY_PER_GBP });
+    for (const GBP of [0, '0.78', undefined]) {
+      const parsed = parseRateResponse(JSON.stringify(providerBody({ rates: { USD: 1, JPY: 157.820352, GBP } })), 'USD', ['GBP']);
+      // The direct rate stays usable; only the cross rate is missing.
+      expect(parsed).toMatchObject({ jpyPerUnit: 157.820352, cross: {} });
+    }
   });
 
   it.each([
@@ -56,16 +67,17 @@ describe('provider response', () => {
   });
 
   it('converts minor units to whole yen', () => {
-    const rate = { base: 'USD', jpyPerUnit: 157.820352, updatedAt: NOW };
+    const rate = { base: 'USD', jpyPerUnit: 157.820352, via: null, updatedAt: NOW };
     expect(yenFromMinor(550, rate)).toBe(868); // 868.01
     expect(yenFromMinor(795, rate)).toBe(1255); // 1254.67
+    expect(yenFromMinor(5750, { base: 'GBP', jpyPerUnit: JPY_PER_GBP, via: 'USD', updatedAt: NOW })).toBe(11634); // 11634.19
   });
 });
 
 describe('once a day per browser', () => {
   it('fetches once, then later pages reuse the stored rate without a request', async () => {
     const host = rateHost();
-    await expect(page(host).get('USD')).resolves.toEqual({ base: 'USD', jpyPerUnit: 157.820352, updatedAt: NOW - HOUR });
+    await expect(page(host).get('USD')).resolves.toEqual({ base: 'USD', jpyPerUnit: 157.820352, via: null, updatedAt: NOW - HOUR });
     host.clock = NOW + 12 * HOUR;
     await expect(page(host).get('USD')).resolves.toMatchObject({ jpyPerUnit: 157.820352 });
     expect(rateRequests(host)).toBe(1);
@@ -91,9 +103,50 @@ describe('once a day per browser', () => {
 
   it('does not fetch for prices in another currency', async () => {
     const host = rateHost();
-    expect(page(host).supports('JPY')).toBe(false);
-    await expect(page(host).get('JPY')).resolves.toBeNull();
+    for (const currency of ['JPY', 'EUR']) {
+      expect(page(host).supports(currency)).toBe(false);
+      await expect(page(host).get(currency)).resolves.toBeNull();
+    }
     expect(host.requests).toHaveLength(0);
+  });
+
+  it('answers GBP as a cross rate from the same stored answer, without a request of its own', async () => {
+    const host = rateHost();
+    expect(page(host).supports('GBP')).toBe(true);
+    await expect(page(host).get('GBP')).resolves.toEqual({ base: 'GBP', jpyPerUnit: JPY_PER_GBP, via: 'USD', updatedAt: NOW - HOUR });
+    host.clock = NOW + 12 * HOUR;
+    await expect(page(host).get('USD')).resolves.toMatchObject({ base: 'USD', jpyPerUnit: 157.820352, via: null });
+    await expect(page(host).get('GBP')).resolves.toMatchObject({ jpyPerUnit: JPY_PER_GBP });
+    expect(rateRequests(host)).toBe(1);
+  });
+
+  it('refreshes an entry saved before cross rates once when GBP is asked, and not for USD', async () => {
+    const host = rateHost();
+    // What 0.6.x stored: the USD rate alone, fetched an hour ago.
+    const old = { base: 'USD', jpyPerUnit: 150, updatedAt: NOW - 2 * HOUR, nextUpdateAt: NOW + 20 * HOUR, fetchedAt: NOW - HOUR };
+    host.store.set(KEY, JSON.stringify({ rate: old, failures: 0, retryAt: 0, leaseUntil: 0 }));
+    await expect(page(host).get('USD')).resolves.toMatchObject({ jpyPerUnit: 150 });
+    expect(rateRequests(host)).toBe(0);
+    await expect(page(host).get('GBP')).resolves.toMatchObject({ jpyPerUnit: JPY_PER_GBP });
+    expect(rateRequests(host)).toBe(1);
+    await page(host).get('GBP');
+    expect(rateRequests(host)).toBe(1);
+  });
+
+  it('answers no GBP rate when the answer lacks one, and does not fetch again for it', async () => {
+    const host = rateHost(json(providerBody({ rates: { USD: 1, JPY: 157.820352 } })));
+    await expect(page(host).get('GBP')).resolves.toBeNull();
+    await expect(page(host).get('GBP')).resolves.toBeNull();
+    await expect(page(host).get('USD')).resolves.toMatchObject({ jpyPerUnit: 157.820352 });
+    expect(rateRequests(host)).toBe(1);
+  });
+
+  it('keeps an old entry\'s backoff when GBP asks for a refresh', async () => {
+    const host = rateHost();
+    const old = { base: 'USD', jpyPerUnit: 150, updatedAt: NOW - 2 * HOUR, nextUpdateAt: NOW + 20 * HOUR, fetchedAt: NOW - HOUR };
+    host.store.set(KEY, JSON.stringify({ rate: old, failures: 2, retryAt: NOW + HOUR, leaseUntil: 0 }));
+    await expect(page(host).get('GBP')).resolves.toBeNull();
+    expect(rateRequests(host)).toBe(0);
   });
 
   it('lets a tab that starts during another tab\'s fetch use the lease instead of fetching', async () => {
@@ -239,6 +292,21 @@ describe('panel yen reference', () => {
     expect(link?.rel).toBe('noopener noreferrer');
     // Directly after the headline price.
     expect(fx?.previousElementSibling?.className).toBe('hero-value');
+  });
+
+  it('shows a GBP price in yen with the cross rate and the two quoted rates it came from', async () => {
+    const gbp = usdProduct();
+    const segment = gbp.offers[0]!.segments[0]!;
+    segment.basis = { ...segment.basis, currency: 'GBP' };
+    segment.stats = { ...segment.stats, current: { state: 'exact', minAmountMinor: 5750, maxAmountMinor: 5750 } };
+    const host = rateHost();
+    const shadow = await mount(host, gbp);
+    const fx = shadow.querySelector('.fx');
+    expect(fx?.querySelector('.fx-value')?.textContent).toBe('約 ￥11,634（円換算の参考値）');
+    expect(fx?.textContent).toContain('1 GBP = 202.33円（USD/JPY と USD/GBP から算出、');
+    expect(fx?.querySelector('a')?.textContent).toBe('Rates By Exchange Rate API');
+    expect(shadow.querySelector('.hero-value')?.textContent).toContain('£57.50');
+    expect(rateRequests(host)).toBe(1);
   });
 
   it('converts only that figure: the delta, statistics and chart stay in USD', async () => {

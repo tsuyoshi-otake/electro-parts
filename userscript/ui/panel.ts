@@ -241,7 +241,9 @@ function renderYenReference(doc: Document, parent: HTMLElement, value: PriceValu
   const wrap = doc.createElement('div');
   wrap.className = 'fx';
   wrap.appendChild(text(doc, 'div', `約 ${amount}（円換算の参考値）`, 'fx-value'));
-  const meta = text(doc, 'div', `1 ${rate.base} = ${rate.jpyPerUnit.toFixed(2)}円（${formatDateTime(rate.updatedAt)} 更新）· 税・送料・関税・決済時の換算を含みません · `, 'hero-meta');
+  // A cross rate says which quoted rates it was divided from.
+  const via = rate.via === null ? '' : `${rate.via}/JPY と ${rate.via}/${rate.base} から算出、`;
+  const meta = text(doc, 'div', `1 ${rate.base} = ${rate.jpyPerUnit.toFixed(2)}円（${via}${formatDateTime(rate.updatedAt)} 更新）· 税・送料・関税・決済時の換算を含みません · `, 'hero-meta');
   const link = doc.createElement('a');
   link.href = EXCHANGE_RATE_ATTRIBUTION.href;
   link.target = '_blank';

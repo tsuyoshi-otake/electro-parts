@@ -1,4 +1,5 @@
-import { M5STACK_ORIGIN, m5stackPageKey } from '../../src/adapters/m5stack/identity.ts';
+import { M5STACK_STORE } from '../../src/adapters/m5stack/identity.ts';
+import { shopifyPageKey } from '../../src/adapters/shopify/identity.ts';
 import type { StorePageAdapter } from '../core/types.ts';
 import { pageThemeCss } from '../ui/pageTheme.ts';
 
@@ -39,9 +40,9 @@ html[data-eph-page-theme="dark"] .m5product-detail * { box-shadow: none !importa
     try {
       const canonical=doc.querySelector('link[rel="canonical"]')?.getAttribute('href');
       if(!canonical) return null;
-      const u=new URL(canonical,M5STACK_ORIGIN);
-      if(u.origin!==M5STACK_ORIGIN||handle(u.pathname)!==fromPath) return null;
-      return m5stackPageKey(fromPath);
+      const u=new URL(canonical,M5STACK_STORE.origin);
+      if(u.origin!==M5STACK_STORE.origin||handle(u.pathname)!==fromPath) return null;
+      return shopifyPageKey(M5STACK_STORE,fromPath);
     } catch{return null;}
   },
   findMountPoint(doc) {

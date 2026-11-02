@@ -7,9 +7,10 @@ import { normalizeKsyItem, validateKsyRaw } from '../../src/adapters/ksy/snapsho
 import type { KsyItem, KsySnapshot } from '../../src/adapters/ksy/rawSchema.ts';
 import { normalizeSengokuItem, validateSengokuRaw } from '../../src/adapters/sengoku/snapshotAdapter.ts';
 import type { SengokuItem, SengokuSnapshot } from '../../src/adapters/sengoku/rawSchema.ts';
-import { validateM5StackRaw } from '../../src/adapters/m5stack/snapshotAdapter.ts';
-import { m5stackPageKey, m5stackProductUrl } from '../../src/adapters/m5stack/identity.ts';
-import type { M5StackItem, M5StackSnapshot } from '../../src/adapters/m5stack/rawSchema.ts';
+import { M5STACK_STORE } from '../../src/adapters/m5stack/identity.ts';
+import { shopifyPageKey, shopifyProductUrl } from '../../src/adapters/shopify/identity.ts';
+import type { ShopifyItem, ShopifySnapshot } from '../../src/adapters/shopify/rawSchema.ts';
+import { validateShopifyRaw } from '../../src/adapters/shopify/snapshotAdapter.ts';
 import { validateSwitchScienceRaw } from '../../src/adapters/switch-science/snapshotAdapter.ts';
 import type { SwitchScienceRawItem, SwitchScienceRawSnapshot } from '../../src/adapters/switch-science/rawSchema.ts';
 import type { ValidationResult } from '../../src/core/validation.ts';
@@ -34,11 +35,11 @@ function retailerListing(storeId: RetailerStore, item: Record<string, unknown>, 
   };
 }
 
-function m5stackListing(p: M5StackItem, observedAt: string): Listing {
+function m5stackListing(p: ShopifyItem, observedAt: string): Listing {
   const variants = p.variants.map(v => ({ offerId: String(v.id), sku: v.sku ?? '', name: v.title }));
   const model = variants.length === 1 ? variants[0]!.sku : '';
-  return { storeId: 'm5stack', pageKey: m5stackPageKey(p.handle), name: p.title, modelNumber: model,
-    url: m5stackProductUrl(p.handle), manufacturer: p.vendor?.toLowerCase() === 'm5stack-store' ? 'M5Stack' : p.vendor ?? '', manufacturerProductName: p.title,
+  return { storeId: 'm5stack', pageKey: shopifyPageKey(M5STACK_STORE, p.handle), name: p.title, modelNumber: model,
+    url: shopifyProductUrl(M5STACK_STORE, p.handle), manufacturer: p.vendor?.toLowerCase() === 'm5stack-store' ? 'M5Stack' : p.vendor ?? '', manufacturerProductName: p.title,
     manufacturerProductCode: model, productCode: '', sku: '', codes: identityCodes('m5stack', p.vendor ?? '', variants.map(v => v.sku)),
     expectedModels: [model], observedAt, variants, vendor: p.vendor ?? '' };
 }
@@ -250,7 +251,7 @@ const PROJECTIONS: Readonly<Record<string, { validate: (raw: unknown) => Validat
     raw.items.map(i => retailerListing('akizuki', { salesCode: i.salesCode, modelNumber: i.modelNumber, name: i.name, url: i.url }, raw.retrievedAt)) },
   'switch-science': { validate: validateSwitchScienceRaw, listings: (raw: SwitchScienceRawSnapshot) =>
     raw.items.map(i => retailerListing('switch-science', switchScienceItem(i), raw.retrievedAt)) },
-  'm5stack': { validate: validateM5StackRaw, listings: (raw: M5StackSnapshot) => raw.items.map(p => m5stackListing(p, raw.retrievedAt)) },
+  'm5stack': { validate: (raw: unknown) => validateShopifyRaw(M5STACK_STORE, raw), listings: (raw: ShopifySnapshot) => raw.items.map(p => m5stackListing(p, raw.retrievedAt)) },
   'ksy': { validate: validateKsyRaw, listings: (raw: KsySnapshot) => raw.items.map(i => ksyListing(i, raw.retrievedAt)) },
   'sengoku': { validate: validateSengokuRaw, listings: (raw: SengokuSnapshot) => raw.items.map(i => sengokuListing(i, raw.retrievedAt)) },
 };

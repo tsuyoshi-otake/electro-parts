@@ -3,8 +3,13 @@ import { JSDOM } from 'jsdom';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
 import { collectM5StackFixture, loadM5StackNormalized } from '../helpers/m5stack.ts';
-import { m5stackHandleFromKey, m5stackPageKey } from '../../src/adapters/m5stack/identity.ts';
-import { usdCents } from '../../src/adapters/m5stack/rawSchema.ts';
+import { M5STACK_STORE } from '../../src/adapters/m5stack/identity.ts';
+import { shopifyHandleFromKey, shopifyPageKey } from '../../src/adapters/shopify/identity.ts';
+import { decimalMinor } from '../../src/adapters/shopify/rawSchema.ts';
+
+const m5stackPageKey = (handle: string) => shopifyPageKey(M5STACK_STORE, handle);
+const m5stackHandleFromKey = (key: string) => shopifyHandleFromKey(M5STACK_STORE, key);
+const usdCents = (raw: string) => decimalMinor(raw, 'USD');
 import { m5stackPageAdapter } from '../../userscript/adapters/m5stack.ts';
 
 describe('M5Stack full public catalogue',()=>{
