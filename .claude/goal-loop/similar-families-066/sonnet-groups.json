@@ -1,0 +1,2636 @@
+[
+  {
+    "group": 1,
+    "families": [
+      {
+        "label": "ATOMS3R シリーズ",
+        "purpose": "ESP32-S3搭載の小型ATOMS3Rを使う開発キット（液晶付き、カメラ付き、M12カメラ付き、液晶なしプロトキットの構成違い）",
+        "members": [
+          {
+            "key": "switch-science/9915",
+            "variant": "C126",
+            "features": {
+              "型番": "C126",
+              "構成": "ATOMS3R本体(0.85インチ液晶付き開発キット)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atoms3r-dev-kit",
+            "variant": "C126",
+            "features": {
+              "型番": "C126",
+              "構成": "ATOMS3R本体(0.85インチ液晶付き開発キット)"
+            },
+            "offerId": "45605332615425"
+          },
+          {
+            "key": "sengoku/EEHD-6J74",
+            "variant": "C126",
+            "features": {
+              "型番": "C126",
+              "構成": "ATOMS3R本体(0.85インチ液晶付き開発キット)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9916",
+            "variant": "C126-CAM",
+            "features": {
+              "型番": "C126-CAM",
+              "構成": "ATOMS3R カメラキット"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atoms3r-camera-kit",
+            "variant": "C126-CAM",
+            "features": {
+              "型番": "C126-CAM",
+              "構成": "ATOMS3R カメラキット"
+            },
+            "offerId": "45605343920385"
+          },
+          {
+            "key": "sengoku/EEHD-6J75",
+            "variant": "C126-CAM",
+            "features": {
+              "型番": "C126-CAM",
+              "構成": "ATOMS3R カメラキット"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/10009",
+            "variant": "C126-M12",
+            "features": {
+              "型番": "C126-M12",
+              "構成": "ATOMS3R M12カメラキット(OV3660)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atoms3r-camera-kit-m12-version-ov3660",
+            "variant": "C126-M12",
+            "features": {
+              "型番": "C126-M12",
+              "構成": "ATOMS3R M12カメラキット(OV3660)"
+            },
+            "offerId": "45624741560577"
+          },
+          {
+            "key": "switch-science/10008",
+            "variant": "C126-EXT",
+            "features": {
+              "型番": "C126-EXT",
+              "構成": "ATOMS3R Ext プロトキット(液晶なし)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atoms3r-proto-kit-without-screen",
+            "variant": "C126-EXT",
+            "features": {
+              "型番": "C126-EXT",
+              "構成": "ATOMS3R Ext プロトキット(液晶なし)"
+            },
+            "offerId": "45624738971905"
+          },
+          {
+            "key": "sengoku/EEHD-6UUJ",
+            "variant": "C126-EXT",
+            "features": {
+              "型番": "C126-EXT",
+              "構成": "ATOMS3R Ext プロトキット(液晶なし)"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "ATOMS3R本体を共通とする構成違い4種(C126、C126-CAM、C126-M12、C126-EXT)を1家族にまとめた。"
+  },
+  {
+    "group": 2,
+    "families": [
+      {
+        "label": "UnitV2 AIカメラ",
+        "purpose": "単体でAI画像認識を実行するカメラユニット（標準カメラ、M12レンズ版、カメラなしのUSB版）",
+        "members": [
+          {
+            "key": "akizuki/117207",
+            "variant": "U078-D",
+            "features": {
+              "型番": "U078-D",
+              "版": "AIカメラ(SSD202D)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/7160",
+            "variant": "U078-D",
+            "features": {
+              "型番": "U078-D",
+              "版": "AIカメラ(SSD202D)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-unitv2-ai-camera-gc2145",
+            "variant": "U078-D",
+            "features": {
+              "型番": "U078-D",
+              "版": "AIカメラ(SSD202D)"
+            },
+            "offerId": "39509561770156"
+          },
+          {
+            "key": "ksy/772",
+            "variant": "U078-D",
+            "features": {
+              "型番": "U078-D",
+              "版": "AIカメラ(SSD202D)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6UPJ",
+            "variant": "U078-D",
+            "features": {
+              "型番": "U078-D",
+              "版": "AIカメラ(SSD202D)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/7536",
+            "variant": "U078-M12",
+            "features": {
+              "型番": "U078-M12",
+              "版": "M12版"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stack-unitv2-m12-version-with-cameras",
+            "variant": "U078-M12",
+            "features": {
+              "型番": "U078-M12",
+              "版": "M12版"
+            },
+            "offerId": "40678244384940"
+          },
+          {
+            "key": "sengoku/EEHD-6MZC",
+            "variant": "U078-M12",
+            "features": {
+              "型番": "U078-M12",
+              "版": "M12版"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/7534",
+            "variant": "U078-USB",
+            "features": {
+              "型番": "U078-USB",
+              "版": "USBカメラ対応版(カメラ非搭載)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stack-unitv2-usb-version-without-camera",
+            "variant": "U078-USB",
+            "features": {
+              "型番": "U078-USB",
+              "版": "USBカメラ対応版(カメラ非搭載)"
+            },
+            "offerId": "40678244352172"
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 3,
+    "families": [
+      {
+        "label": "M5Stack CoreS3 シリーズ",
+        "purpose": "ESP32-S3搭載のIoT開発用コントローラ（標準、Lite、SEのモデル違い）",
+        "members": [
+          {
+            "key": "switch-science/8960",
+            "variant": "K128",
+            "features": {
+              "型番": "K128",
+              "モデル": "CoreS3"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stack-cores3-esp32s3-iotdevelopment-kit",
+            "variant": "K128",
+            "features": {
+              "型番": "K128",
+              "モデル": "CoreS3"
+            },
+            "offerId": "43849492922625"
+          },
+          {
+            "key": "sengoku/EEHD-666F",
+            "variant": "K128",
+            "features": {
+              "型番": "K128",
+              "モデル": "CoreS3"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/10610",
+            "variant": "K128-LITE",
+            "features": {
+              "型番": "K128-LITE",
+              "モデル": "CoreS3 Lite"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stack-cores3-lite-esp32s3-iot-dev-kit",
+            "variant": "K128-LITE",
+            "features": {
+              "型番": "K128-LITE",
+              "モデル": "CoreS3 Lite"
+            },
+            "offerId": "46532030497025"
+          },
+          {
+            "key": "sengoku/EEHD-6UVR",
+            "variant": "K128-LITE",
+            "features": {
+              "型番": "K128-LITE",
+              "モデル": "CoreS3 Lite"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9690",
+            "variant": "K128-SE",
+            "features": {
+              "型番": "K128-SE",
+              "モデル": "CoreS3 SE"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stack-cores3-se-iot-controller-w-o-battery-bottom",
+            "variant": "K128-SE",
+            "features": {
+              "型番": "K128-SE",
+              "モデル": "CoreS3 SE"
+            },
+            "offerId": "45170957451521"
+          },
+          {
+            "key": "sengoku/EEHD-6CFC",
+            "variant": "K128-SE",
+            "features": {
+              "型番": "K128-SE",
+              "モデル": "CoreS3 SE"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 4,
+    "families": [
+      {
+        "label": "M5Paper",
+        "purpose": "ESP32搭載の電子ペーパー開発キット（初版、V1.1、COMM Editionの版違い）",
+        "members": [
+          {
+            "key": "switch-science/6749",
+            "variant": "K049",
+            "features": {
+              "型番": "K049",
+              "版": "M5Paper"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5paper-esp32-development-kit-960x540-4-7-eink-display-235-ppi",
+            "variant": "K049",
+            "features": {
+              "型番": "K049",
+              "版": "M5Paper"
+            },
+            "offerId": "37595977908396"
+          },
+          {
+            "key": "switch-science/7359",
+            "variant": "K049-B",
+            "features": {
+              "型番": "K049-B",
+              "版": "M5Paper V1.1"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5paper-esp32-development-kit-v1-1-960x540-4-7-eink-display-235-ppi",
+            "variant": "K049-B",
+            "features": {
+              "型番": "K049-B",
+              "版": "M5Paper V1.1"
+            },
+            "offerId": "39966887903404"
+          },
+          {
+            "key": "sengoku/EEHD-6UXK",
+            "variant": "K049-B",
+            "features": {
+              "型番": "K049-B",
+              "版": "M5Paper V1.1"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5paper-esp32-development-kit-comm-edition",
+            "variant": "K049-C",
+            "features": {
+              "型番": "K049-C",
+              "版": "M5Paper COMM Edition"
+            },
+            "offerId": "42358997516545"
+          }
+        ]
+      }
+    ],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/117206",
+          "m5stack/h-m5paper-esp32-development-kit-comm-edition"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: K049）。秋月電子「M5Paper V1.1」とM5Stack公式「[EOL] M5Paper ESP32 Development Kit COMM Edition」。秋月電子は名称がV1.1なのに型番はK049で改版記号がなく、K049(初版)とK049-B(V1.1)のどちらと同じ商品か未確定のため、COMM Editionとの版の差を決められない。同一性レビューの結果が出るまで家族には入れない。"
+      },
+      {
+        "products": [
+          "akizuki/117206",
+          "m5stack/h-m5paper-esp32-development-kit-v1-1-960x540-4-7-eink-display-235-ppi"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: K049）。秋月電子「M5Paper V1.1」とM5Stack公式「M5Paper ESP32 Development Kit V1.1 (960X540, 4.7\" eInk display, 235 ppi)」。どちらも名称はV1.1だが型番は秋月電子がK049、M5Stack公式がK049-Bで、改版記号の書き方が違うだけの同一商品の可能性が高いため、異なる版として同じ家族には入れず同一性レビューに回す。"
+      },
+      {
+        "products": [
+          "akizuki/117206",
+          "sengoku/EEHD-6UXK"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: K049）。秋月電子「M5Paper V1.1」とせんごく「【7359】M5Paper V1.1　M5STACK-K049-B」。どちらも名称はV1.1で、型番は秋月電子がK049、せんごくがK049-B。改版記号の書き方が違うだけで同一商品の可能性があるため、異なる版として同じ家族には入れず同一性レビューに回す。"
+      },
+      {
+        "products": [
+          "akizuki/117206",
+          "switch-science/7359"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: K049）。秋月電子「M5Paper V1.1」とスイッチサイエンス「M5Paper V1.1--販売終了」。名称はどちらもV1.1だが、型番は秋月電子がK049、スイッチサイエンスがK049-Bで改版記号の有無だけが異なる。同一商品の可能性があるため、異なる版として家族には入れず同一性レビューに回す。"
+      }
+    ],
+    "notes": "秋月電子 akizuki/117206 は名称V1.1と型番K049が食い違い版が確定しないため家族から外し、リードは全て identity とした。"
+  },
+  {
+    "group": 5,
+    "families": [
+      {
+        "label": "M5StickC ENV Hat シリーズ",
+        "purpose": "M5StickCに載せて温度・湿度・気圧などを測る環境センサーHat（世代ごとのセンサー違い）",
+        "members": [
+          {
+            "key": "m5stack/h-m5stickc-env-hat",
+            "variant": "U053",
+            "features": {
+              "型番": "U053",
+              "版": "ENV Hat",
+              "センサー": "DHT12, BMP280, BMM150"
+            },
+            "offerId": "17266544214106"
+          },
+          {
+            "key": "switch-science/6559",
+            "variant": "U053-B",
+            "features": {
+              "型番": "U053-B",
+              "版": "ENV Hat II",
+              "センサー": "SHT30, BMP280, BMM150"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stickc-env-hat-sht30-bmp280-bmm150",
+            "variant": "U053-B",
+            "features": {
+              "型番": "U053-B",
+              "版": "ENV Hat II",
+              "センサー": "SHT30, BMP280, BMM150"
+            },
+            "offerId": "36196608082084"
+          },
+          {
+            "key": "m5stack/h-m5stickc-env-hat-ii-r-sht30-bmp280",
+            "variant": "U053-C",
+            "features": {
+              "型番": "U053-C",
+              "版": "ENV Hat II.R",
+              "センサー": "SHT30, BMP280"
+            },
+            "offerId": "39813482184876"
+          },
+          {
+            "key": "switch-science/7367",
+            "variant": "U053-D",
+            "features": {
+              "型番": "U053-D",
+              "版": "ENV Hat III",
+              "センサー": "SHT30, QMP6988"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stickc-env-hat-iii-sht30-qmp6988",
+            "variant": "U053-D",
+            "features": {
+              "型番": "U053-D",
+              "版": "ENV Hat III",
+              "センサー": "SHT30, QMP6988"
+            },
+            "offerId": "42560331677953"
+          },
+          {
+            "key": "sengoku/EEHD-6UPS",
+            "variant": "U053-D",
+            "features": {
+              "型番": "U053-D",
+              "版": "ENV Hat III",
+              "センサー": "SHT30, QMP6988"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 6,
+    "families": [
+      {
+        "label": "ESP32 PSRAM Timer Camera",
+        "purpose": "ESP32とOV3660カメラを搭載した小型のタイマー撮影用カメラユニット（標準、魚眼、X版の違い）",
+        "members": [
+          {
+            "key": "m5stack/h-esp32-psram-timer-camera-ov3660",
+            "variant": "U082",
+            "features": {
+              "型番": "U082",
+              "版": "Timer Camera",
+              "センサー": "OV3660"
+            },
+            "offerId": "36362174824612"
+          },
+          {
+            "key": "switch-science/6786",
+            "variant": "U082-F",
+            "features": {
+              "型番": "U082-F",
+              "版": "Timer Camera F (Fisheye)",
+              "センサー": "OV3660"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-esp32-psram-timer-camera-fisheye-ov3660",
+            "variant": "U082-F",
+            "features": {
+              "型番": "U082-F",
+              "版": "Timer Camera F (Fisheye)",
+              "センサー": "OV3660"
+            },
+            "offerId": "37561871663276"
+          },
+          {
+            "key": "sengoku/EEHD-6UXG",
+            "variant": "U082-F",
+            "features": {
+              "型番": "U082-F",
+              "版": "Timer Camera F (Fisheye)",
+              "センサー": "OV3660"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/6742",
+            "variant": "U082-X",
+            "features": {
+              "型番": "U082-X",
+              "版": "Timer Camera X",
+              "センサー": "OV3660"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-esp32-psram-timer-camera-x-ov3660",
+            "variant": "U082-X",
+            "features": {
+              "型番": "U082-X",
+              "版": "Timer Camera X",
+              "センサー": "OV3660"
+            },
+            "offerId": "36362228301988"
+          },
+          {
+            "key": "sengoku/EEHD-6UXF",
+            "variant": "U082-X",
+            "features": {
+              "型番": "U082-X",
+              "版": "Timer Camera X",
+              "センサー": "OV3660"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 7,
+    "families": [
+      {
+        "label": "M5StickC Plus2",
+        "purpose": "ESP32搭載の小型IoT開発キット（M5StickC Plus2）として使う。本体のみか、ウォッチアクセサリ付きかが違う",
+        "members": [
+          {
+            "key": "akizuki/118338",
+            "variant": "K016-P2",
+            "features": {
+              "型番": "K016-P2",
+              "構成": "M5StickC Plus2 本体"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9350",
+            "variant": "K016-P2",
+            "features": {
+              "型番": "K016-P2",
+              "構成": "M5StickC Plus2 本体"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stickc-plus2-esp32-mini-iot-development-kit",
+            "variant": "K016-P2",
+            "features": {
+              "型番": "K016-P2",
+              "構成": "M5StickC Plus2 本体"
+            },
+            "offerId": "44269818216705"
+          },
+          {
+            "key": "sengoku/EEHD-68ND",
+            "variant": "K016-P2",
+            "features": {
+              "型番": "K016-P2",
+              "構成": "M5StickC Plus2 本体"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9420",
+            "variant": "K016-H2",
+            "features": {
+              "型番": "K016-H2",
+              "構成": "M5StickC Plus2 + ウォッチアクセサリ"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stickc-plus2-with-watch-accessories",
+            "variant": "K016-H2",
+            "features": {
+              "型番": "K016-H2",
+              "構成": "M5StickC Plus2 + ウォッチアクセサリ"
+            },
+            "offerId": "44291638198529"
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "6件の候補はすべてK016-P2（本体）とK016-H2（ウォッチアクセサリ付き）の組。同じ本体を単体で買うか、アクセサリ付きで買うかの違いなので1つの系列にした。"
+  },
+  {
+    "group": 8,
+    "families": [
+      {
+        "label": "M5StackChan AIデスクトップロボット",
+        "purpose": "ESP32-S3搭載のAIデスクトップロボット（スタックチャン）として使う。ジョイスティックコントローラの有無が違う",
+        "members": [
+          {
+            "key": "switch-science/11129",
+            "variant": "K151",
+            "features": {
+              "型番": "K151",
+              "搭載チップ": "ESP32-S3",
+              "構成": "ロボット本体のみ"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-stackchan-kawaii-co-created-open-source-ai-desktop-robot",
+            "variant": "K151",
+            "features": {
+              "型番": "K151",
+              "搭載チップ": "ESP32-S3",
+              "構成": "ロボット本体のみ"
+            },
+            "offerId": "47729185456385"
+          },
+          {
+            "key": "sengoku/EEHD-6YER",
+            "variant": "K151",
+            "features": {
+              "型番": "K151",
+              "搭載チップ": "ESP32-S3",
+              "構成": "ロボット本体のみ"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/11131",
+            "variant": "K151-R",
+            "features": {
+              "型番": "K151-R",
+              "搭載チップ": "ESP32-S3",
+              "構成": "ロボット本体 + ジョイスティックコントローラ"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stackchan-ai-desktop-robot-kit-with-remote-control-esp32-s3",
+            "variant": "K151-R",
+            "features": {
+              "型番": "K151-R",
+              "搭載チップ": "ESP32-S3",
+              "構成": "ロボット本体 + ジョイスティックコントローラ"
+            },
+            "offerId": "48652973605121"
+          },
+          {
+            "key": "sengoku/EEHD-6YES",
+            "variant": "K151-R",
+            "features": {
+              "型番": "K151-R",
+              "搭載チップ": "ESP32-S3",
+              "構成": "ロボット本体 + ジョイスティックコントローラ"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "ロボット本体は同じで、ジョイスティックコントローラが付くK151-Rと付かないK151。主製品は同じなので系列にした。"
+  },
+  {
+    "group": 9,
+    "families": [
+      {
+        "label": "M5StampC5 (ESP32-C5)",
+        "purpose": "ESP32-C5搭載の小型マイコンモジュールとして組み込み開発に使う。2.54mmヘッダーピン付き(DIP)かどうかが違う",
+        "members": [
+          {
+            "key": "switch-science/11347",
+            "variant": "S016",
+            "features": {
+              "型番": "S016",
+              "搭載チップ": "ESP32-C5",
+              "構成": "モジュール単体"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stampc5-module-esp32-c5",
+            "variant": "S016",
+            "features": {
+              "型番": "S016",
+              "搭載チップ": "ESP32-C5",
+              "構成": "モジュール単体"
+            },
+            "offerId": "49613777338625"
+          },
+          {
+            "key": "sengoku/EEHD-6YJK",
+            "variant": "S016",
+            "features": {
+              "型番": "S016",
+              "搭載チップ": "ESP32-C5",
+              "構成": "モジュール単体"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/11352",
+            "variant": "S016-DIP",
+            "features": {
+              "型番": "S016-DIP",
+              "搭載チップ": "ESP32-C5",
+              "構成": "DIP（2.54mmヘッダーピン付き）"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5stampc5-module-with-2-54-header-pin",
+            "variant": "S016-DIP",
+            "features": {
+              "型番": "S016-DIP",
+              "搭載チップ": "ESP32-C5",
+              "構成": "DIP（2.54mmヘッダーピン付き）"
+            },
+            "offerId": "49613596754177"
+          },
+          {
+            "key": "sengoku/EEHD-6YPM",
+            "variant": "S016-DIP",
+            "features": {
+              "型番": "S016-DIP",
+              "搭載チップ": "ESP32-C5",
+              "構成": "DIP（2.54mmヘッダーピン付き）"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "同じM5StampC5で、ヘッダーピン付き(DIP)の有無だけが違う。6件の候補すべてが系列内の組。"
+  },
+  {
+    "group": 10,
+    "families": [
+      {
+        "label": "M5GO Bottom2 バッテリーボトム（Core2用）",
+        "purpose": "M5Stack Core2の底面に取り付けるバッテリー内蔵ボトムとして使う。V1.3版かどうかが違う",
+        "members": [
+          {
+            "key": "switch-science/6785",
+            "variant": "A014-C",
+            "features": {
+              "型番": "A014-C",
+              "対応機種": "M5Stack Core2",
+              "版": "無印（名称に版数なし）"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5go-battery-bottom2-for-core2-only",
+            "variant": "A014-C",
+            "features": {
+              "型番": "A014-C",
+              "対応機種": "M5Stack Core2",
+              "版": "無印（名称に版数なし）"
+            },
+            "offerId": "37525141815468"
+          },
+          {
+            "key": "sengoku/EEHD-5TPM",
+            "variant": "A014-C",
+            "features": {
+              "型番": "A014-C",
+              "対応機種": "M5Stack Core2",
+              "版": "無印（名称に版数なし）"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/11376",
+            "variant": "A014-C-V13",
+            "features": {
+              "型番": "A014-C-V13",
+              "対応機種": "M5Stack Core2",
+              "版": "V1.3"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-m5go-battery-bottom2-for-core2-only-v1-3",
+            "variant": "A014-C-V13",
+            "features": {
+              "型番": "A014-C-V13",
+              "対応機種": "M5Stack Core2",
+              "版": "V1.3"
+            },
+            "offerId": "50248043921665"
+          },
+          {
+            "key": "sengoku/EEHD-6Z3M",
+            "variant": "A014-C-V13",
+            "features": {
+              "型番": "A014-C-V13",
+              "対応機種": "M5Stack Core2",
+              "版": "V1.3"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "どちらもCore2専用で、型番はA014-CとA014-C-V13（K010とK010-V11と同じ版違いの形）。スイッチサイエンスが両方を別商品として並べているため、同一性ではなく版違いの系列にした。"
+  },
+  {
+    "group": 11,
+    "families": [
+      {
+        "label": "UnitV AIカメラ（OV7740）",
+        "purpose": "K210搭載でAI画像認識を単体実行するカメラユニットとして使う。M12レンズ版かどうかが違う",
+        "members": [
+          {
+            "key": "switch-science/6996",
+            "variant": "U078-C",
+            "features": {
+              "型番": "U078-C",
+              "センサー": "OV7740",
+              "版": "OV7740版"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-unitv-k210-edge-computing-ai-camera-ov7740",
+            "variant": "U078-C",
+            "features": {
+              "型番": "U078-C",
+              "センサー": "OV7740",
+              "版": "OV7740版"
+            },
+            "offerId": "38098576801964"
+          },
+          {
+            "key": "sengoku/EEHD-5WT5",
+            "variant": "U078-C",
+            "features": {
+              "型番": "U078-C",
+              "センサー": "OV7740",
+              "版": "OV7740版"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9182",
+            "variant": "U078-V-M12",
+            "features": {
+              "型番": "U078-V-M12",
+              "センサー": "OV7740",
+              "版": "OV7740、M12レンズ版"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-unitv-k210-ai-camera-m12-version-ov7740",
+            "variant": "U078-V-M12",
+            "features": {
+              "型番": "U078-V-M12",
+              "センサー": "OV7740",
+              "版": "OV7740、M12レンズ版"
+            },
+            "offerId": "43957902016769"
+          },
+          {
+            "key": "sengoku/EEHD-6UT8",
+            "variant": "U078-V-M12",
+            "features": {
+              "型番": "U078-V-M12",
+              "センサー": "OV7740",
+              "版": "OV7740、M12レンズ版"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "同じUnitV AIカメラ(OV7740)で、M12レンズ版かどうかの違い。6件の候補すべてが系列内の組。"
+  },
+  {
+    "group": 12,
+    "families": [
+      {
+        "label": "M5Stack用 超音波測距ユニット（RCWL-9620）",
+        "purpose": "RCWL-9620で物体までの距離を測るM5Stack用ユニットとして使う。接続方式(I2CかI/O)が違う",
+        "members": [
+          {
+            "key": "switch-science/7631",
+            "variant": "U098-B1",
+            "features": {
+              "型番": "U098-B1",
+              "センサー": "RCWL-9620",
+              "インターフェース": "I2C"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-ultrasonic-distance-unit-i2c-rcwl-9620",
+            "variant": "U098-B1",
+            "features": {
+              "型番": "U098-B1",
+              "センサー": "RCWL-9620",
+              "インターフェース": "I2C"
+            },
+            "offerId": "42084188225793"
+          },
+          {
+            "key": "sengoku/EEHD-5YFG",
+            "variant": "U098-B1",
+            "features": {
+              "型番": "U098-B1",
+              "センサー": "RCWL-9620",
+              "インターフェース": "I2C"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/7632",
+            "variant": "U098-B2",
+            "features": {
+              "型番": "U098-B2",
+              "センサー": "RCWL-9620",
+              "インターフェース": "I/O"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-ultrasonic-distance-unit-i-o-rcwl-9620",
+            "variant": "U098-B2",
+            "features": {
+              "型番": "U098-B2",
+              "センサー": "RCWL-9620",
+              "インターフェース": "I/O"
+            },
+            "offerId": "42084187930881"
+          },
+          {
+            "key": "sengoku/EEHD-6UXR",
+            "variant": "U098-B2",
+            "features": {
+              "型番": "U098-B2",
+              "センサー": "RCWL-9620",
+              "インターフェース": "I/O"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "同じRCWL-9620の超音波測距ユニットで、I2C版とI/O版。距離測定という用途は同じなので系列にした。"
+  },
+  {
+    "group": 13,
+    "families": [
+      {
+        "label": "Roller485 ユニット (STM32)",
+        "purpose": "STM32搭載のRoller485モーターユニットとして回転駆動に使う。スリップリングの有無(通常版とLite)が違う",
+        "members": [
+          {
+            "key": "switch-science/9924",
+            "variant": "U182",
+            "features": {
+              "型番": "U182",
+              "スリップリング": "あり",
+              "マイコン": "STM32"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-roller485-unit-with-bldc-motor-stm32",
+            "variant": "U182",
+            "features": {
+              "型番": "U182",
+              "スリップリング": "あり",
+              "マイコン": "STM32"
+            },
+            "offerId": "45585634754817"
+          },
+          {
+            "key": "sengoku/EEHD-6UUF",
+            "variant": "U182",
+            "features": {
+              "型番": "U182",
+              "スリップリング": "あり",
+              "マイコン": "STM32"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9925",
+            "variant": "U182-LITE",
+            "features": {
+              "型番": "U182-LITE",
+              "スリップリング": "なし",
+              "マイコン": "STM32"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-roller485-lite-unit-without-slip-ring-stm32",
+            "variant": "U182-LITE",
+            "features": {
+              "型番": "U182-LITE",
+              "スリップリング": "なし",
+              "マイコン": "STM32"
+            },
+            "offerId": "45585621778689"
+          },
+          {
+            "key": "sengoku/EEHD-6UUG",
+            "variant": "U182-LITE",
+            "features": {
+              "型番": "U182-LITE",
+              "スリップリング": "なし",
+              "マイコン": "STM32"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "Roller485ユニットのスリップリング付き(U182)とLite(U182-LITE、スリップリングなし)。同じ製品ラインの構成違いとして系列にした。"
+  },
+  {
+    "group": 14,
+    "families": [
+      {
+        "label": "IM315TX用 評価・開発ボード",
+        "purpose": "315MHz無線モジュールIM315TXの動作確認やアプリケーション開発に使う評価用ボード",
+        "members": [
+          {
+            "key": "akizuki/109067",
+            "variant": "IM315-8SW-TX",
+            "features": {
+              "型番": "IM315-8SW-TX",
+              "対象モジュール": "IM315TX",
+              "種別": "リモコン評価ボード"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-4J8A",
+            "variant": "IM315-EVB-TX",
+            "features": {
+              "型番": "IM315-EVB-TX",
+              "対象モジュール": "IM315TX",
+              "種別": "アプリケーション開発ボード"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/109069",
+          "sengoku/EEHD-4J8A"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315TX用 USBインターフェイスボード」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315TX用)」は、前者がUSB接続のためのインターフェイスボード、後者が無線モジュールを載せたアプリケーション開発用の評価ボードで、用途が違い代わりにならない。"
+      },
+      {
+        "products": [
+          "akizuki/109071",
+          "sengoku/EEHD-4J8A"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315TX用 IM無線シールド For Arduino(R)」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315TX用)」は、前者がArduinoに載せて使う拡張シールド、後者が単体の開発ボードで、製品の種類が違い代わりにならない。"
+      },
+      {
+        "products": [
+          "akizuki/109073",
+          "sengoku/EEHD-4J8A"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315TX/RX/TRX・IM920用 試作・評価用ユニバーサル基板」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315TX用)」は、前者が自作回路用の汎用基板、後者がIM315TX用の開発ボードで、製品の種類が違い代わりにならない。"
+      }
+    ],
+    "notes": "IM315TX用のリモコン評価ボード(IM315-8SW-TX)とアプリケーション開発ボード(IM315-EVB-TX)は、どちらもIM315TXを試すための評価用ボードとして代替になりうると判断し系列にした。商品名だけの判断で、スイッチ数などの仕様は与えられた項目からは確認できていない。"
+  },
+  {
+    "group": 15,
+    "families": [
+      {
+        "label": "FEETECH STS3215 シリアルバスサーボ",
+        "purpose": "ロボットの関節駆動に使うFEETECH製STS3215シリアルバスサーボ。電圧とトルクが違う",
+        "members": [
+          {
+            "key": "akizuki/130969",
+            "variant": "STS3215-C018",
+            "features": {
+              "型番": "STS3215-C018",
+              "電圧": "12V",
+              "トルク": "30kg・cm"
+            },
+            "offerId": null
+          },
+          {
+            "key": "akizuki/131131",
+            "variant": "STS3215-C044",
+            "features": {
+              "型番": "STS3215-C044",
+              "電圧": "7.4V",
+              "トルク": "16kg・cm"
+            },
+            "offerId": null
+          },
+          {
+            "key": "akizuki/131132",
+            "variant": "STS3215-C046",
+            "features": {
+              "型番": "STS3215-C046",
+              "電圧": "7.4V",
+              "トルク": "14.4kg・cm"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/7489",
+            "variant": "ST-3215-C001",
+            "features": {
+              "型番": "ST-3215-C001",
+              "電圧": "6~7.4V",
+              "トルク": "19kg"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/116312",
+          "switch-science/7489"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: STS3215）。秋月電子「FEETECHシリアルバスサーボ STS3215 7.4V 19kg・cm 1:345」（STS3215-C001）とスイッチサイエンス「FEETECH STS3215 シリアルバスサーボ 6~7.4V/360°/19kg」（ST-3215-C001）は型番の書き方が違うだけで、7.4V帯・19kgの仕様も一致し、同一商品の可能性があるため同一性レビューに回す。"
+      }
+    ],
+    "notes": "スイッチサイエンス7489は秋月116312(C001)と同一商品の可能性があるため、系列には7489側だけを入れ、秋月116312は外した。7489の仕様(6~7.4V・19kg)に対し、C018(12V・30kg)、C044(16kg)、C046(14.4kg)を電圧・トルク違いの代替候補とした。"
+  },
+  {
+    "group": 16,
+    "families": [
+      {
+        "label": "ATOMIC Motion ベース（電力モニター付き）",
+        "purpose": "ATOMIC系コントローラに装着して使う、電力モニター(INA226AIDGSR)付きのモーションベース。v1.1とv1.2の版違い",
+        "members": [
+          {
+            "key": "switch-science/10301",
+            "variant": "A090-V11",
+            "features": {
+              "型番": "A090-V11",
+              "版": "v1.1",
+              "電力モニター": "INA226AIDGSR"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atomic-motion-base-v1-1",
+            "variant": "A090-V11",
+            "features": {
+              "型番": "A090-V11",
+              "版": "v1.1",
+              "電力モニター": "INA226AIDGSR"
+            },
+            "offerId": "46069241282817"
+          },
+          {
+            "key": "switch-science/10489",
+            "variant": "A090-V12",
+            "features": {
+              "型番": "A090-V12",
+              "版": "v1.2",
+              "電力モニター": "INA226AIDGSR"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atomic-motion-base-v1-2-with-power-monitor",
+            "variant": "A090-V12",
+            "features": {
+              "型番": "A090-V12",
+              "版": "v1.2",
+              "電力モニター": "INA226AIDGSR"
+            },
+            "offerId": "46367908364545"
+          },
+          {
+            "key": "sengoku/EEHD-6UVF",
+            "variant": "A090-V12",
+            "features": {
+              "型番": "A090-V12",
+              "版": "v1.2",
+              "電力モニター": "INA226AIDGSR"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "同じATOMIC Motionベースのv1.1(販売終了・EOL)とv1.2。版違いの系列にした。"
+  },
+  {
+    "group": 17,
+    "families": [
+      {
+        "label": "AI-8850 LLMアクセラレーション M.2キット",
+        "purpose": "M.2スロットに装着し、AX8850でLLM推論を高速化するアクセラレータキット",
+        "members": [
+          {
+            "key": "switch-science/11003",
+            "variant": "AI-002-8G",
+            "features": {
+              "型番": "AI-002-8G",
+              "メモリ容量": "8GB"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/11009",
+            "variant": "AI-002-4G",
+            "features": {
+              "型番": "AI-002-4G",
+              "メモリ容量": "4GB"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-ai-8850-llm-acceleration-m-2-kit-4gb-version-ax8850",
+            "variant": "AI-002-4G",
+            "features": {
+              "型番": "AI-002-4G",
+              "メモリ容量": "4GB"
+            },
+            "offerId": "49249291206913"
+          },
+          {
+            "key": "m5stack/h-ai-8850-llm-accelerator-m-2-kit-8gb-version-ax8850",
+            "variant": "AI-002-8G",
+            "features": {
+              "型番": "AI-002-8G",
+              "メモリ容量": "8GB"
+            },
+            "offerId": "47570450645249"
+          },
+          {
+            "key": "sengoku/EEHD-6WMN",
+            "variant": "AI-002-8G",
+            "features": {
+              "型番": "AI-002-8G",
+              "メモリ容量": "8GB"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 18,
+    "families": [
+      {
+        "label": "AI Pyramid Computing Box",
+        "purpose": "AX8850を搭載し、手元でAI・LLM推論を実行する小型コンピューティングボックス",
+        "members": [
+          {
+            "key": "switch-science/11008",
+            "variant": "AI-003-PRO",
+            "features": {
+              "型番": "AI-003-PRO",
+              "メモリ容量": "8GB"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/11010",
+            "variant": "AI-003",
+            "features": {
+              "型番": "AI-003",
+              "メモリ容量": "4GB"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-ai-pyramid-computing-box-4gb-version-ax8850",
+            "variant": "AI-003",
+            "features": {
+              "型番": "AI-003",
+              "メモリ容量": "4GB"
+            },
+            "offerId": "47873164378369"
+          },
+          {
+            "key": "m5stack/h-ai-pyramid-computing-box-pro-8gb-version-ax8850",
+            "variant": "AI-003-PRO",
+            "features": {
+              "型番": "AI-003-PRO",
+              "メモリ容量": "8GB"
+            },
+            "offerId": "47873165623553"
+          },
+          {
+            "key": "sengoku/EEHD-6WMY",
+            "variant": "AI-003",
+            "features": {
+              "型番": "AI-003",
+              "メモリ容量": "4GB"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 19,
+    "families": [
+      {
+        "label": "M5Stack用MAX3421E搭載 USBモジュール",
+        "purpose": "M5StackにUSBホスト機能を追加するMAX3421E搭載モジュール",
+        "members": [
+          {
+            "key": "switch-science/6061",
+            "variant": "M020",
+            "features": {
+              "型番": "M020",
+              "搭載IC": "MAX3421E"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9566",
+            "variant": "M020-V12",
+            "features": {
+              "型番": "M020-V12",
+              "搭載IC": "MAX3421E"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-usb-module",
+            "variant": "M020",
+            "features": {
+              "型番": "M020",
+              "搭載IC": "MAX3421E"
+            },
+            "offerId": "16804810686554"
+          },
+          {
+            "key": "m5stack/h-usb-module-with-max3421e-v1-2",
+            "variant": "M020-V12",
+            "features": {
+              "型番": "M020-V12",
+              "搭載IC": "MAX3421E"
+            },
+            "offerId": "44512358793473"
+          },
+          {
+            "key": "sengoku/EEHD-6UTY",
+            "variant": "M020-V12",
+            "features": {
+              "型番": "M020-V12",
+              "搭載IC": "MAX3421E"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 20,
+    "families": [
+      {
+        "label": "Base26 産業用プロト基板モジュール",
+        "purpose": "M5Stack用の産業用プロトタイプ基板ベース",
+        "members": [
+          {
+            "key": "switch-science/6355",
+            "variant": "K026",
+            "features": {
+              "型番": "K026",
+              "ベース": "Base26"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/8662",
+            "variant": "K026-B",
+            "features": {
+              "型番": "K026-B",
+              "ベース": "Base26"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-base-26proto-industrial-board-module",
+            "variant": "K026",
+            "features": {
+              "型番": "K026",
+              "ベース": "Base26"
+            },
+            "offerId": "17266544377946"
+          },
+          {
+            "key": "m5stack/h-base26-proto-industrial-board-module-v1-1",
+            "variant": "K026-B",
+            "features": {
+              "型番": "K026-B",
+              "ベース": "Base26"
+            },
+            "offerId": "43546412712193"
+          },
+          {
+            "key": "sengoku/EEHD-6UXV",
+            "variant": "K026-B",
+            "features": {
+              "型番": "K026-B",
+              "ベース": "Base26"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 21,
+    "families": [
+      {
+        "label": "Base15 産業用プロト基板モジュール",
+        "purpose": "M5Stack用の産業用プロトタイプ基板ベース",
+        "members": [
+          {
+            "key": "switch-science/6545",
+            "variant": "K025",
+            "features": {
+              "型番": "K025",
+              "ベース": "Base15"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/8661",
+            "variant": "K025-B",
+            "features": {
+              "型番": "K025-B",
+              "ベース": "Base15"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-base15-proto-industrial-board-module",
+            "variant": "K025",
+            "features": {
+              "型番": "K025",
+              "ベース": "Base15"
+            },
+            "offerId": "17266544803930"
+          },
+          {
+            "key": "m5stack/h-base15-proto-industrial-board-module-v1-1",
+            "variant": "K025-B",
+            "features": {
+              "型番": "K025-B",
+              "ベース": "Base15"
+            },
+            "offerId": "43546412744961"
+          },
+          {
+            "key": "sengoku/EEHD-6UXU",
+            "variant": "K025-B",
+            "features": {
+              "型番": "K025-B",
+              "ベース": "Base15"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 22,
+    "families": [
+      {
+        "label": "BALA2 セルフバランスカー",
+        "purpose": "ESP32で制御する二輪のセルフバランスカー（自立走行ロボット）キット",
+        "members": [
+          {
+            "key": "switch-science/6630",
+            "variant": "K014-C",
+            "features": {
+              "型番": "K014-C",
+              "モデル": "BALA2"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/8446",
+            "variant": "K014-E",
+            "features": {
+              "型番": "K014-E",
+              "モデル": "BALA2 FIRE"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-bala2-esp32-self-balancing-robot-kit",
+            "variant": "K014-C",
+            "features": {
+              "型番": "K014-C",
+              "モデル": "BALA2"
+            },
+            "offerId": "36137100345508"
+          },
+          {
+            "key": "m5stack/h-bala2-fire-self-balancing-robot-kit",
+            "variant": "K014-E",
+            "features": {
+              "型番": "K014-E",
+              "モデル": "BALA2 FIRE"
+            },
+            "offerId": "43135408701697"
+          },
+          {
+            "key": "sengoku/EEHD-6URT",
+            "variant": "K014-E",
+            "features": {
+              "型番": "K014-E",
+              "モデル": "BALA2 FIRE"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 23,
+    "families": [
+      {
+        "label": "M5Stack PM2.5 大気質センサキット",
+        "purpose": "PMSA003で粒子状物質（PM2.5）と温湿度を測定する大気質センサキット",
+        "members": [
+          {
+            "key": "switch-science/6920",
+            "variant": "K023",
+            "features": {
+              "型番": "K023",
+              "粒子センサー": "PMSA003",
+              "温湿度センサー": "SHT20"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/8714",
+            "variant": "K023-B",
+            "features": {
+              "型番": "K023-B",
+              "粒子センサー": "PMSA003",
+              "温湿度センサー": "SHT30"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-pm-2-5-sensor-usb-power-sht20",
+            "variant": "K023",
+            "features": {
+              "型番": "K023",
+              "粒子センサー": "PMSA003",
+              "温湿度センサー": "SHT20"
+            },
+            "offerId": "17175634673754"
+          },
+          {
+            "key": "m5stack/h-pm2-5-air-quality-kit-pmsa003-sht30",
+            "variant": "K023-B",
+            "features": {
+              "型番": "K023-B",
+              "粒子センサー": "PMSA003",
+              "温湿度センサー": "SHT30"
+            },
+            "offerId": "43666667700481"
+          },
+          {
+            "key": "sengoku/EEHD-6USG",
+            "variant": "K023-B",
+            "features": {
+              "型番": "K023-B",
+              "粒子センサー": "PMSA003",
+              "温湿度センサー": "SHT30"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "switch-science/6920 の温湿度センサー SHT20 は、同一商品として確認済みの M5Stack公式 K023（PMSA003 + SHT20）の表記による。"
+  },
+  {
+    "group": 24,
+    "families": [
+      {
+        "label": "M5Stack用HR8825搭載 ステッピングモータードライバモジュール",
+        "purpose": "M5Stackからステッピングモーターを駆動するHR8825搭載ドライバモジュール",
+        "members": [
+          {
+            "key": "switch-science/7476",
+            "variant": "M039",
+            "features": {
+              "型番": "M039",
+              "ドライバIC": "HR8825"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9005",
+            "variant": "M039-V11",
+            "features": {
+              "型番": "M039-V11",
+              "ドライバIC": "HR8825"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-steepmotor-driver-module-hr8825",
+            "variant": "M039",
+            "features": {
+              "型番": "M039",
+              "ドライバIC": "HR8825"
+            },
+            "offerId": "40279505961132"
+          },
+          {
+            "key": "m5stack/h-stepmotor-driver-module-v1-1-hr8825",
+            "variant": "M039-V11",
+            "features": {
+              "型番": "M039-V11",
+              "ドライバIC": "HR8825"
+            },
+            "offerId": "43867243708673"
+          },
+          {
+            "key": "sengoku/EEHD-67S4",
+            "variant": "M039-V11",
+            "features": {
+              "型番": "M039-V11",
+              "ドライバIC": "HR8825"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 25,
+    "families": [
+      {
+        "label": "M5Stack用MAX31855搭載 Kmeterユニット",
+        "purpose": "K型熱電対とMAX31855でM5Stackから温度を測るセンサユニット",
+        "members": [
+          {
+            "key": "switch-science/7655",
+            "variant": "U133",
+            "features": {
+              "型番": "U133",
+              "製品名": "Kmeterユニット",
+              "センサーIC": "MAX31855"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9007",
+            "variant": "U133-V11",
+            "features": {
+              "型番": "U133-V11",
+              "製品名": "絶縁型Kmeterユニット",
+              "センサーIC": "MAX31855"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-kmeter-isolation-unit-with-thermocouple-temperature-sensor-max31855",
+            "variant": "U133-V11",
+            "features": {
+              "型番": "U133-V11",
+              "製品名": "絶縁型Kmeterユニット",
+              "センサーIC": "MAX31855"
+            },
+            "offerId": "43798378447105"
+          },
+          {
+            "key": "m5stack/h-kmeter-unit-with-thermocouple-temperature-sensor-max31855",
+            "variant": "U133",
+            "features": {
+              "型番": "U133",
+              "製品名": "Kmeterユニット",
+              "センサーIC": "MAX31855"
+            },
+            "offerId": "42227779010817"
+          },
+          {
+            "key": "sengoku/EEHD-6USU",
+            "variant": "U133-V11",
+            "features": {
+              "型番": "U133-V11",
+              "製品名": "絶縁型Kmeterユニット",
+              "センサーIC": "MAX31855"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "既存の name-max31855-2/-5/-7 は各1件だけの家族で、この家族とは別に扱う。"
+  },
+  {
+    "group": 26,
+    "families": [
+      {
+        "label": "M5Stack用CamS3 Wi-Fiカメラユニット",
+        "purpose": "M5Stackに接続して映像を取得するWi-Fiカメラユニット",
+        "members": [
+          {
+            "key": "switch-science/9428",
+            "variant": "U174",
+            "features": {
+              "型番": "U174",
+              "センサー": "OV2640"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/9923",
+            "variant": "U174-B",
+            "features": {
+              "型番": "U174-B",
+              "センサー": "PY260"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-unit-cams3-wi-fi-camera-5mp",
+            "variant": "U174-B",
+            "features": {
+              "型番": "U174-B",
+              "センサー": "PY260"
+            },
+            "offerId": "45493180858625"
+          },
+          {
+            "key": "m5stack/h-unit-cams3-wi-fi-camera-ov2640",
+            "variant": "U174",
+            "features": {
+              "型番": "U174",
+              "センサー": "OV2640"
+            },
+            "offerId": "44259395404033"
+          },
+          {
+            "key": "sengoku/EEHD-6KAF",
+            "variant": "U174-B",
+            "features": {
+              "型番": "U174-B",
+              "センサー": "PY260"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 27,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/113206",
+          "switch-science/7113"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: FS90R）。秋月電子「360°連続回転サーボ(ローテーションサーボ) FS90R」とスイッチサイエンス「FEETECH FS90R マイクロPWMサーボ 4.8~6V/連続回転/1.5kg」。どちらも連続回転のFS90Rサーボで、秋月電子側は版の記載がなく、スイッチサイエンス側だけがFS90R-V2と明記しているため、同一品の可能性があり同一性確認に回す。"
+      },
+      {
+        "products": [
+          "akizuki/113206",
+          "switch-science/7484"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: FS90R）。秋月電子「360°連続回転サーボ(ローテーションサーボ) FS90R」とスイッチサイエンス「FEETECH FS90R サーボ用ホイール」。前者はサーボ本体、後者はそのサーボに取り付けるホイールという付属品で、商品の種類と用途が異なり代替にならない。"
+      },
+      {
+        "products": [
+          "akizuki/113207",
+          "switch-science/7113"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: FS90R）。秋月電子「タイヤ FS90R対応」とスイッチサイエンス「FEETECH FS90R マイクロPWMサーボ 4.8~6V/連続回転/1.5kg」。前者はFS90R用のタイヤという付属品、後者はサーボ本体で、商品の種類と用途が異なり代替にならない。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 28,
+    "families": [
+      {
+        "label": "オムロン G2R-1-E パワーリレー",
+        "purpose": "電源や負荷の開閉に使う高容量型パワーリレー（コイル電圧違いから選ぶ）",
+        "members": [
+          {
+            "key": "akizuki/118268",
+            "variant": "G2R-1-E 24V",
+            "features": {
+              "型番": "G2R-1-E",
+              "コイル電圧": "24V"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/2AW6-7PFW",
+            "variant": "G2R-1-E 5V",
+            "features": {
+              "型番": "G2R-1-E",
+              "コイル電圧": "5V"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/3AX6-6PFL",
+            "variant": "G2R-1-E 12V",
+            "features": {
+              "型番": "G2R-1-E",
+              "コイル電圧": "12V"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/118268",
+          "sengoku/EEHD-4R4Z"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: G2R-1）。秋月電子「パワーリレー G2R-1-E 24V」とせんごく「パワーリレー(24V・高容量型)　G2R-1-E DC24V」。どちらもG2R-1-Eの24Vコイル品で、表記（24VとDC24V）が違うだけで同一品の可能性があるため、同一性確認に回す。"
+      }
+    ],
+    "notes": "せんごく 24V（EEHD-4R4Z）は秋月電子 24V と同一品の可能性があるため家族に入れていない。同一性が確認されれば同じ家族に加わる。"
+  },
+  {
+    "group": 29,
+    "families": [
+      {
+        "label": "ATOMIC 2D/1D バーコードスキャナベース",
+        "purpose": "ATOMシリーズに取り付けて2D/1Dバーコードを読み取るスキャナベース",
+        "members": [
+          {
+            "key": "switch-science/9179",
+            "variant": "A133",
+            "features": {
+              "型番": "A133",
+              "製品名": "ATOMIC 2D/1D バーコードスキャナベース"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atomic-2d-1d-barcode-scanner-base",
+            "variant": "A133",
+            "features": {
+              "型番": "A133",
+              "製品名": "ATOMIC 2D/1D バーコードスキャナベース"
+            },
+            "offerId": "43965377937665"
+          },
+          {
+            "key": "switch-science/9772",
+            "variant": "A133-B",
+            "features": {
+              "型番": "A133-B",
+              "製品名": "ATOMIC 2D/1D バーコードスキャナベース2"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6UU8",
+            "variant": "A133-B",
+            "features": {
+              "型番": "A133-B",
+              "製品名": "ATOMIC 2D/1D バーコードスキャナベース2"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "A133（初代ベース）とA133-B（ベース2）の2変種。既知のsame_product 2組は同一variantにした。"
+  },
+  {
+    "group": 30,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/110144",
+          "sengoku/EEHD-4J8B"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315RX・IM315TRX・IM920用 IM無線シールド For Arduino(R)」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315RX、IM315TRX用)　IM315-EVB-RX」は、前者がArduino用のシールド、後者が単体で使うアプリケーション開発ボードで、接続先のホストと用途が異なる別製品であり、互いの代替にはならない。"
+      },
+      {
+        "products": [
+          "akizuki/114403",
+          "sengoku/EEHD-4J8B"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315RX・IM315TRX・IM920用 リレー接点出力ボード」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315RX、IM315TRX用)　IM315-EVB-RX」は、前者がリレー接点を出力する専用ボード、後者が汎用の開発ボードで、製品の種類と用途が異なる別製品である。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 31,
+    "families": [
+      {
+        "label": "E220-900T22S(JP)搭載LoRa評価ボード",
+        "purpose": "LoRaモジュールE220-900T22S(JP)を試用・評価するための評価ボード",
+        "members": [
+          {
+            "key": "akizuki/117616",
+            "variant": "E220-900T22S(JP)-EV1",
+            "features": {
+              "型番": "E220-900T22S(JP)-EV1",
+              "版": "EV1"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/10792",
+            "variant": "E220-900T22S(JP)-EV2",
+            "features": {
+              "型番": "E220-900T22S(JP)-EV2",
+              "版": "EV2"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/131361",
+          "switch-science/10792"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: E220）。秋月電子「LoRaモジュール評価ボード E220-900T22S(JP)-EV2」とスイッチサイエンス「E220-900T22S(JP)-EV2 LoRa通信モジュール評価ボード」は、型番が E220-900T22S(JP)-EV2 と E220-900T22SJP-EV2 で括弧の有無という表記差しかなく、同一品の可能性が高いため、同一性レビューに委ねる。"
+      }
+    ],
+    "notes": "秋月のEV2とSSのEV2は同一品の疑い。EV1との組のみ家族にした。"
+  },
+  {
+    "group": 32,
+    "families": [
+      {
+        "label": "ESP32-C6開発ボード",
+        "purpose": "ESP32-C6を搭載したWi-Fi 6対応のマイコン開発ボード",
+        "members": [
+          {
+            "key": "akizuki/117846",
+            "variant": "ESP32-C6-DevKitC-1-N8",
+            "features": {
+              "型番": "ESP32-C6-DevKitC-1-N8",
+              "フラッシュ容量": "8MB"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6PZB",
+            "variant": "ESP32-C6-DEV-KIT-N16",
+            "features": {
+              "型番": "ESP32-C6-DEV-KIT-N16",
+              "フラッシュ容量": "16MB"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6PZC",
+            "variant": "ESP32-C6-DEV-KIT-N16-M",
+            "features": {
+              "型番": "ESP32-C6-DEV-KIT-N16-M",
+              "フラッシュ容量": "16MB"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "フラッシュ容量8MBと16MB、およびピンヘッダ実装済(-M)の違い。"
+  },
+  {
+    "group": 33,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "ksy/729",
+          "sengoku/EEHD-5M7K"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: UV324）。KSY「AC電源アダプター 12V 2A DCプラグ」とせんごく「高出力型ACアダプター 12V2A センタープラス(内径φ2.1)　UV324-1220 PL03B」は、KSY側の型番 UV324-1220 にプラグ形状の記載がなく、PL03B版と同一品の可能性があるため、同一性レビューに委ねる。"
+      },
+      {
+        "products": [
+          "ksy/729",
+          "sengoku/EEHD-5M7L"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: UV324）。KSY「AC電源アダプター 12V 2A DCプラグ」とせんごく「高出力型ACアダプター 12V2A センタープラス(EIAJ4)　UV324-1220 EIAJ4」は、KSY側の型番 UV324-1220 にプラグ形状の記載がなく、EIAJ4版と同一品の可能性があるため、同一性レビューに委ねる。"
+      }
+    ],
+    "notes": "KSY側のプラグ形状が不明なため、どちらも断定できず同一性レビューへ回した。"
+  },
+  {
+    "group": 34,
+    "families": [
+      {
+        "label": "Waveshare RA4M1-Zero",
+        "purpose": "RA4M1を搭載した小型マイコン開発ボード",
+        "members": [
+          {
+            "key": "switch-science/10463",
+            "variant": "RA4M1-Zero",
+            "features": {
+              "型番": "RA4M1-Zero",
+              "Waveshare品番": "30661"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6RKU",
+            "variant": "RA4M1-Zero-M",
+            "features": {
+              "型番": "RA4M1-Zero-M",
+              "Waveshare品番": "30662"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [
+      {
+        "products": [
+          "switch-science/10465",
+          "sengoku/EEHD-6RKU"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: RA4M1、RA4M1-ZERO）。スイッチサイエンス「RP2350搭載 1.8インチ AMOLED タッチスクリーン開発ボード（ケース付）」とせんごく「RA4M1-Zero Mini 開発ボード(ピンヘッダ付き)　【30662】 RA4M1-Zero-M」は、前者がRP2350搭載のAMOLEDタッチ画面付きボード、後者がRA4M1搭載の小型ボードで、マイコンも用途も異なる別製品である。"
+      }
+    ],
+    "notes": "switch-science/10465 は型番欄が RA4M1-Zero だが、名称と WAVESHARE-31296 から RP2350 搭載 AMOLED ボードであり、型番欄は誤りと見られる。"
+  },
+  {
+    "group": 35,
+    "families": [
+      {
+        "label": "nRF52840 MDBT50Q 開発用USBドングル",
+        "purpose": "nRF52840搭載のRaytac MDBT50Qモジュールを使う開発用USBドングル",
+        "members": [
+          {
+            "key": "switch-science/5531",
+            "variant": "MDBT50Q-RX",
+            "features": {
+              "型番": "MDBT50Q-RX",
+              "メーカー": "Raytac"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6KTS",
+            "variant": "MDBT50Q-CX-40",
+            "features": {
+              "型番": "MDBT50Q-CX-40",
+              "メーカー": "Raytac"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [
+      {
+        "products": [
+          "switch-science/5532",
+          "sengoku/EEHD-6KTS"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: RAYTAC-MDBT50Q）。スイッチサイエンス「nRF52840 MDBT50Q用評価ボード [MDBT50Q-DB]--販売終了」とせんごく「【10014】RAYTAC nRF52840 MDBT50Q 開発用USBドングル(Type-Cコネクタ)　RAYTAC-MDBT50Q-CX-40」は、前者が評価ボード、後者がUSBドングルで、製品の形態と使い方が異なる別製品である。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 36,
+    "families": [
+      {
+        "label": "PIC18F2550 USB内蔵PICマイコン",
+        "purpose": "USB機能を内蔵したPIC18F2550マイコン（パッケージ違い）",
+        "members": [
+          {
+            "key": "akizuki/102140",
+            "variant": "PIC18F2550-I/SO",
+            "features": {
+              "型番": "PIC18F2550-I/SO",
+              "パッケージ記号": "SO"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/8ALA-RBFS",
+            "variant": "PIC18F2550-I/SP",
+            "features": {
+              "型番": "PIC18F2550-I/SP",
+              "パッケージ記号": "SP"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "同一チップでパッケージ記号が I/SO と I/SP で異なる。"
+  },
+  {
+    "group": 37,
+    "families": [
+      {
+        "label": "PIC16F84A PICマイコン",
+        "purpose": "PIC16F84Aフラッシュ内蔵8bitマイコン（20MHz品、パッケージ違い）",
+        "members": [
+          {
+            "key": "akizuki/104439",
+            "variant": "PIC16F84A-20I/SS",
+            "features": {
+              "型番": "PIC16F84A-20I/SS",
+              "パッケージ記号": "SS"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/3ARW-78D8",
+            "variant": "PIC16F84A-20I/P",
+            "features": {
+              "型番": "PIC16F84A-20I/P",
+              "パッケージ記号": "P"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "同一チップでパッケージ記号が I/SS と I/P で異なる。"
+  },
+  {
+    "group": 38,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/111159",
+          "sengoku/EEHD-4WZP"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: LM336Z）。秋月電子「電圧リファレンス(シャントレギュレーター) LM336Z-5.0」とせんごく「基準電圧ダイオード 5V (シャントレギュレータ)　LM336Z-5.0/NOPB」は、型番の違いが鉛フリー品を示す末尾 /NOPB の有無だけで、同一品の可能性が高いため、同一性レビューに委ねる。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 39,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/114806",
+          "switch-science/7111"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: FS90）。秋月電子「FEETECHサーボ FS90」とスイッチサイエンス「FEETECH FS90 マイクロPWMサーボ 4.8~6V/120°/1.5kg」は、秋月側の型番 FS90 に改訂記号の記載がなく、スイッチサイエンスの FS90-C2 と同一品の可能性があるため、同一性レビューに委ねる。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 40,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/117928",
+          "switch-science/8624"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: MDBT50Q）。秋月電子「ブートローダー書込済Bluetoothモジュール MDBT50Q-1MV2」とスイッチサイエンス「nRF52840 MDBT50Q-1MV2用評価ボード [MDBT50Q-DB-40]」は、前者がモジュール本体、後者がそのモジュールを載せて使う評価ボードで、製品の種類が異なる別製品である。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 41,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/117954",
+          "sengoku/EEHD-5VJE"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: XT90H）。秋月電子「XT90コネクター メス XT90H-F」とせんごく「【4235】XT90 カバー付 オス　XT90H-M」は、メスとオスの対になるコネクターで、互いに嵌合する相手側の部品であり、代替にはならない。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 42,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/117955",
+          "sengoku/EEHD-5VJF"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: XT90H）。秋月電子「XT90コネクター オス XT90H-M」とせんごく「【4236】XT90 カバー付 メス　XT90H-F」は、オスとメスの対になるコネクターで、互いに嵌合する相手側の部品であり、代替にはならない。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 43,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "akizuki/131664",
+          "switch-science/8042"
+        ],
+        "decision": "identity",
+        "evidence": "類似候補（共通語幹: SCS0009）。秋月電子「FEETECHシリアルバスサーボ SCS0009 6V 2.3kg・cm」とスイッチサイエンス「FEETECH SCS0009 シリアルバスサーボ 4~7.4V/300°/2.3kg」は、型番 SCS0009-C001 と SC-0090-C001 が表記の揺れに見える差しかなく、同一品の可能性が高いため、同一性レビューに委ねる。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 44,
+    "families": [],
+    "dismissed": [
+      {
+        "products": [
+          "switch-science/10016",
+          "sengoku/EEHD-6KKK"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: WIZNET-W55RP20）。スイッチサイエンス「W55RP20（W5500 + RP2040 SiP）」とせんごく「【10015】W55RP20-EVB-Pico - W55RP20評価基板　WIZNET-W55RP20-EVB-Pico」は、前者がSiPのチップ単体、後者がそのチップを載せた評価基板で、製品の種類が異なる別製品である。"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "group": 45,
+    "families": [
+      {
+        "label": "M5Stack INA226 電流電圧測定ユニット",
+        "purpose": "絶縁型でINA226により電流と電圧を測定するM5Stack用ユニット（測定レンジ違い）",
+        "members": [
+          {
+            "key": "switch-science/10735",
+            "variant": "U200",
+            "features": {
+              "型番": "U200",
+              "測定レンジ": "±10A"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6UVW",
+            "variant": "U200-1A",
+            "features": {
+              "型番": "U200-1A",
+              "測定レンジ": "±1A"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 46,
+    "families": [
+      {
+        "label": "M5Stack INA226 電流電圧測定ユニット",
+        "purpose": "絶縁型でINA226により電流と電圧を測定するM5Stack用ユニット（測定レンジ違い）",
+        "members": [
+          {
+            "key": "switch-science/10736",
+            "variant": "U200-1A",
+            "features": {
+              "型番": "U200-1A",
+              "測定レンジ": "±1A"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6UVV",
+            "variant": "U200",
+            "features": {
+              "型番": "U200",
+              "測定レンジ": "±10A"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 47,
+    "families": [
+      {
+        "label": "M5Capsule",
+        "purpose": "M5Stamp S3系マイコンを搭載した小型の開発デバイス",
+        "members": [
+          {
+            "key": "switch-science/11252",
+            "variant": "K129-V11",
+            "features": {
+              "型番": "K129-V11",
+              "搭載モジュール": "M5Stamp S3A"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-67PS",
+            "variant": "K129",
+            "features": {
+              "型番": "K129",
+              "搭載モジュール": "M5Stamp S3"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "v1.1(S3A搭載)と初版(S3搭載)の違い。"
+  },
+  {
+    "group": 48,
+    "families": [
+      {
+        "label": "SparkFun RS-485-シリアル変換モジュール (BOB-10124)",
+        "purpose": "SP3485を使ってRS-485とシリアルを相互変換するモジュール（単体とコネクタ付きセット）",
+        "members": [
+          {
+            "key": "switch-science/596",
+            "variant": "BOB-10124",
+            "features": {
+              "型番": "BOB-10124",
+              "構成": "SP3485搭載RS-485-シリアル変換モジュール"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-4JUR",
+            "variant": "BOB-10124-SET",
+            "features": {
+              "型番": "BOB-10124-SET",
+              "構成": "RS-485-シリアル変換モジュールとコネクタのセット"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 49,
+    "families": [
+      {
+        "label": "ATOM 2D/1D バーコードスキャナキット",
+        "purpose": "ATOMに2D/1Dバーコードスキャナを組み合わせて読み取りを行う開発キット",
+        "members": [
+          {
+            "key": "switch-science/6476",
+            "variant": "K041",
+            "features": {
+              "型番": "K041",
+              "製品名": "ATOMIC 2D/1D バーコードスキャナキット"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atom-2d-1d-barcode-scanner-kit-v1-1",
+            "variant": "K041-B",
+            "features": {
+              "型番": "K041-B",
+              "製品名": "ATOM 2D/1D Barcode Scanner Kit v1.1"
+            },
+            "offerId": "43789164183809"
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "K041と、v1.1のK041-B。"
+  },
+  {
+    "group": 50,
+    "families": [
+      {
+        "label": "M5StickV AIカメラ",
+        "purpose": "K210搭載のAI画像認識用カメラ開発デバイス（SDカード同梱品を含む）",
+        "members": [
+          {
+            "key": "switch-science/6480",
+            "variant": "K027-C",
+            "features": {
+              "型番": "K027-C",
+              "製品名": "M5StickV + 16GB SD Card"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-stickv",
+            "variant": "K027",
+            "features": {
+              "型番": "K027",
+              "製品名": "M5StickV K210 AI Camera (Without Wifi)"
+            },
+            "offerId": "40115186729132"
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 51,
+    "families": [
+      {
+        "label": "ATOM 2D/1D バーコードスキャナキット",
+        "purpose": "ATOMに2D/1Dバーコードスキャナを組み合わせて読み取りを行う開発キット",
+        "members": [
+          {
+            "key": "switch-science/8865",
+            "variant": "K041-B",
+            "features": {
+              "型番": "K041-B",
+              "製品名": "ATOMIC 2D/1D バーコードスキャナキット v1.1"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atom-2d-1d-barcode-scanner-kit",
+            "variant": "K041",
+            "features": {
+              "型番": "K041",
+              "製品名": "ATOM 2D/1D Barcode Scanner Development Kit"
+            },
+            "offerId": "34497201471652"
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "K041-B(v1.1)とK041。"
+  },
+  {
+    "group": 52,
+    "families": [
+      {
+        "label": "M5Core用ウォッチデバイス化キット",
+        "purpose": "M5Coreを腕に着けられるウォッチ型デバイスにするキット",
+        "members": [
+          {
+            "key": "switch-science/9122",
+            "variant": "A128",
+            "features": {
+              "型番": "A128",
+              "製品名": "M5Core用ウォッチ型デバイス化キット"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6UTR",
+            "variant": "A128-B",
+            "features": {
+              "型番": "A128-B",
+              "製品名": "M5Core用ウォッチデバイス化キット v1.1 (オレンジ)"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": ""
+  },
+  {
+    "group": 53,
+    "families": [
+      {
+        "label": "M5Capsule",
+        "purpose": "M5Stamp S3系マイコンを搭載した小型の開発デバイス",
+        "members": [
+          {
+            "key": "switch-science/9272",
+            "variant": "K129",
+            "features": {
+              "型番": "K129",
+              "搭載モジュール": "M5Stamp S3"
+            },
+            "offerId": null
+          },
+          {
+            "key": "sengoku/EEHD-6YCU",
+            "variant": "K129-V11",
+            "features": {
+              "型番": "K129-V11",
+              "搭載モジュール": "M5Stamp S3A"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [],
+    "notes": "初版(S3搭載)とv1.1(S3A搭載)の違い。"
+  }
+]

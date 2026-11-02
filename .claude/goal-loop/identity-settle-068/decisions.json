@@ -1,0 +1,829 @@
+[
+  {
+    "n": 1,
+    "products": [
+      "akizuki/100091",
+      "sengoku/EEHD-0HNH"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: MP-121M）。秋月電子「2.1mm標準DCプラグ MP-121M」とせんごく「DCプラグφ2.1　MP-121M-1」。どちらも外径2.1mmのDCプラグで、末尾「-1」は包装・ロット・仕様のどれを指すか名称にも他の項目にも示されず、同一品の別表記である可能性がある。違いを示す事実が欠けているので類似品とは言えず、同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-0HNH",
+      "aliasCode": "MP-121M"
+    }
+  },
+  {
+    "n": 2,
+    "products": [
+      "akizuki/102474",
+      "sengoku/A5RW-6SGC"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 2SC5200）。秋月電子「トランジスター 2SC5200 230V15A」とせんごく「トランジスタ　2SC5200-O」。末尾の -O はトランジスタのランク区分の可能性があるが、秋月側の名称・型番にはランク表記がなく、どのランクを売っているか分からない。同じ品である可能性が残るため、別個の類似品とはせず同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/A5RW-6SGC",
+      "aliasCode": "2SC5200"
+    }
+  },
+  {
+    "n": 3,
+    "products": [
+      "akizuki/102475",
+      "sengoku/75MW-6SGB"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 2SA1943）。秋月電子「トランジスター 2SA1943 230V15A」とせんごく「トランジスタ　2SA1943-O」。末尾の-Oは電流増幅率などのランクを示す記号の可能性があるが、秋月電子側はランクを記載しておらず、同じ品を指している可能性がある。秋月電子側のランクの記載が欠けているため、同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/75MW-6SGB",
+      "aliasCode": "2SA1943"
+    }
+  },
+  {
+    "n": 4,
+    "products": [
+      "akizuki/106437",
+      "sengoku/EEHD-0A3G"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: FA-130RA）。秋月電子「DCモーター FA-130RA-2270」とせんごく「DCモーター　FA-130RA」の組。-2270が何を表す枝番かは項目に示されず、せんごく側は枝番のない基本型番だけでどの仕様品を扱うか読み取れない。同一品の可能性があり、相違の証拠もないため同一性レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/106437",
+      "aliasCode": "FA-130RA"
+    }
+  },
+  {
+    "n": 5,
+    "products": [
+      "akizuki/106438",
+      "sengoku/EEHD-0A3H"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: RE-280RA）。秋月電子「DCモーター RE-280RA-2865」とせんごく「DCモーター　RE-280RA」。-2865 はモーター仕様を区別する枝番かもしれないが、名称・コードからその意味は読み取れない。せんごく側は基本型番のみで、どの仕様の品を売っているか示されていないため同じ品の可能性があり、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/106438",
+      "aliasCode": "RE-280RA"
+    }
+  },
+  {
+    "n": 6,
+    "products": [
+      "akizuki/106513",
+      "sengoku/6DKD-V4FL"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: MP-122M）。秋月電子「2.5mm標準DCプラグ(1A) MP-122M」とせんごく「DCプラグ φ2.5　MP-122M-1」。どちらもφ2.5のDCプラグだが、末尾の-1が包装単位か仕様の枝番かを示す記載がなく、同一品の別表記かもしれない。-1の意味が欠けているため、同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/6DKD-V4FL",
+      "aliasCode": "MP-122M"
+    }
+  },
+  {
+    "n": 7,
+    "products": [
+      "akizuki/106766",
+      "sengoku/EEHD-4KGH"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: MP-115M）。秋月電子「6.3mmステレオプラグ 8角カバータイプ MP-115M」とせんごく「φ6.3プラグ(ステレオ・8角)　MP-115M-1」は、どちらも6.3mmステレオの8角プラグで同じ品の可能性がある。末尾の「-1」が包装・発注単位の違いか仕様差かが各ページから読み取れないため、同一品かどうかの別レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-4KGH",
+      "aliasCode": "MP-115M"
+    }
+  },
+  {
+    "n": 8,
+    "products": [
+      "akizuki/107037",
+      "switch-science/4145"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: DFR0029）。秋月電子「押しボタンスイッチモジュール(Digital Push Button)」とスイッチサイエンス「《お取り寄せ商品》Gravity: Digital Push Button (Blue)」。-B は青を表すと名称で確認できるが、秋月側の名称・型番には色の記載がなく、どの色を売っているか分からない。青と同じ品である可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "switch-science/4145",
+      "aliasCode": "DFR0029"
+    }
+  },
+  {
+    "n": 9,
+    "products": [
+      "akizuki/107037",
+      "switch-science/4146"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: DFR0029）。秋月電子「押しボタンスイッチモジュール(Digital Push Button)」とスイッチサイエンス「《お取り寄せ商品》Gravity: Digital Push Button (Green)」。-G は緑を表すと名称で確認できるが、秋月側には色の記載がなく、どの色を売っているか分からない。緑と同じ品である可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "switch-science/4146",
+      "aliasCode": "DFR0029"
+    }
+  },
+  {
+    "n": 10,
+    "products": [
+      "akizuki/107037",
+      "switch-science/4147"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: DFR0029）。秋月電子「押しボタンスイッチモジュール(Digital Push Button)」とスイッチサイエンス「《お取り寄せ商品》Gravity: Digital Push Button (Red)-DFRobot」。-R は赤を表すと名称で確認できるが、秋月側には色の記載がなく、どの色を売っているか分からない。赤と同じ品である可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "switch-science/4147",
+      "aliasCode": "DFR0029"
+    }
+  },
+  {
+    "n": 11,
+    "products": [
+      "akizuki/107037",
+      "switch-science/4148"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: DFR0029）。秋月電子「押しボタンスイッチモジュール(Digital Push Button)」とスイッチサイエンス「《お取り寄せ商品》Gravity:Digital Push Button (White)」。-W は白を表すと名称で確認できるが、秋月側には色の記載がなく、どの色を売っているか分からない。白と同じ品である可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "switch-science/4148",
+      "aliasCode": "DFR0029"
+    }
+  },
+  {
+    "n": 12,
+    "products": [
+      "akizuki/107037",
+      "switch-science/4149"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: DFR0029）。秋月電子「押しボタンスイッチモジュール(Digital Push Button)」とスイッチサイエンス「《お取り寄せ商品》Gravity:Digital Push Button (Yellow)」。-Y は黄を表すと名称で確認できるが、秋月側には色の記載がなく、どの色を売っているか分からない。黄と同じ品である可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "switch-science/4149",
+      "aliasCode": "DFR0029"
+    }
+  },
+  {
+    "n": 13,
+    "products": [
+      "akizuki/108693",
+      "sengoku/EEHD-4KGK"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: MP-114M）。秋月電子「6.3mmモノラルプラグ 8角カバータイプ MP-114M」とせんごく「φ6.3プラグ(モノラル・8角)　MP-114M-1」の組。どちらも6.3mmモノラルの8角プラグで、-1が梱包や選別などの枝番かどうかは項目に示されない。同一品の可能性があり、差の根拠がないため同一性レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-4KGK",
+      "aliasCode": "MP-114M"
+    }
+  },
+  {
+    "n": 14,
+    "products": [
+      "akizuki/109169",
+      "sengoku/EEHD-0A3G"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: FA-130RA）。秋月電子「DCモーター FA-130RA-2270L」とせんごく「DCモーター　FA-130RA」の組。-2270Lの末尾の意味は項目に示されず、せんごく側は枝番のない基本型番だけでどの仕様品を扱うか読み取れない。同一品の可能性があり、相違の証拠もないため同一性レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/109169",
+      "aliasCode": "FA-130RA"
+    }
+  },
+  {
+    "n": 15,
+    "products": [
+      "akizuki/109607",
+      "switch-science/2346"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: ESP-WROOM-02）。秋月電子「Wi-Fiモジュール ESP-WROOM-02」(ESP-WROOM-02-N4)とスイッチサイエンス「ESP-WROOM-02 Wi-Fiモジュール（フラッシュ2MB）--在庫限り」(ESP-WROOM-02)は同じWi-Fiモジュールの可能性がある。末尾「-N4」の意味が項目から読み取れず、秋月側はフラッシュ容量を示していないため、別製品とは断定できない。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/109607",
+      "aliasCode": "ESP-WROOM-02"
+    }
+  },
+  {
+    "n": 16,
+    "products": [
+      "akizuki/110090",
+      "sengoku/4AST-L5HS"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: MPS-08）。秋月電子「ミニカードスペーサー MPS-08-0」とせんごく「ワンタッチ基板スタンド　MPS-08」は基板を支える同種の部材に見えるが、秋月側の末尾「-0」が包装や発注上の枝番なのか別仕様なのかを名称や仕様から確認できず、同一品の可能性が残るため同一性レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/110090",
+      "aliasCode": "MPS-08"
+    }
+  },
+  {
+    "n": 17,
+    "products": [
+      "akizuki/110188",
+      "sengoku/EEHD-4KLS"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: MJ-073N）。秋月電子「3.5mmステレオミニジャックMJ-073N 中継用」とせんごく「φ3.5ジャック(ステレオ・中継・8角)　MJ-073N-1」。どちらもステレオ中継用の3.5mmジャックだが、末尾「-1」の意味が項目から読み取れず、秋月側は端子形状の記載もない。同一品の包装・ロット違いの可能性が残るため同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-4KLS",
+      "aliasCode": "MJ-073N"
+    }
+  },
+  {
+    "n": 18,
+    "products": [
+      "akizuki/112523",
+      "sengoku/62BA-3BGD"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: MP-105LC）。秋月電子「3.5mmモノラルミニプラグ MP105LC」とせんごく「φ3.5プラグ(モノラル)　MP-105LC-1」。末尾の -1 は包装単位や仕様違いを表す枝番かもしれないが、名称・コードから意味が分からない。名称は同じ3.5mmモノラルプラグで、同一品の可能性があるため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/62BA-3BGD",
+      "aliasCode": "MP-105LC"
+    }
+  },
+  {
+    "n": 19,
+    "products": [
+      "akizuki/113561",
+      "sengoku/EEHD-5AC7"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 1N4007G）。秋月電子「汎用整流ダイオード 1000V1A 1N4007G」とせんごく「一般整流用ダイオード 1000V 1A　1N4007G-T」は、どちらも1000V 1Aの整流ダイオードで、末尾の「-T」が梱包形態などの注文用接尾辞か別仕様かを示す情報が両方の項目になく、同一品の可能性が残るため同一性の審査に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5AC7",
+      "aliasCode": "1N4007G"
+    }
+  },
+  {
+    "n": 20,
+    "products": [
+      "akizuki/114155",
+      "sengoku/4AD7-PHL6"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: B2B-ZR）。秋月電子「ZHコネクター ベース付ピン トップ型 2P B2B-ZR-3.4(LF)(SN)」とせんごく「超小型基板用コネクタ ポスト2P　B2B-ZR(LF)(SN)」の組。どちらもトップ型2Pのポストで、-3.4が何を表すかは名称や他の項目から確認できない。同一品の可能性があり、相違の証拠もないため同一性レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/114155",
+      "aliasCode": "B2B-ZR(LF)(SN)"
+    }
+  },
+  {
+    "n": 21,
+    "products": [
+      "akizuki/114156",
+      "sengoku/3AD7-PHLL"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: B3B-ZR）。秋月電子「ZHコネクター ベース付ピン トップ型 3P B3B-ZR-3.4(LF)(SN)」とせんごく「超小型基板用コネクタ ポスト3P　B3B-ZR(LF)(SN)」は、どちらも3Pの基板用ポストで同一品の可能性がある。末尾「-3.4」が何を表すか項目から読み取れず、せんごく側がどの仕様か示されていないため、違いを断定できない。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/114156",
+      "aliasCode": "B3B-ZR(LF)(SN)"
+    }
+  },
+  {
+    "n": 22,
+    "products": [
+      "akizuki/114157",
+      "sengoku/7AD7-PHLV"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: B4B-ZR）。秋月電子「ZHコネクター ベース付ピン トップ型 4P B4B-ZR-3.4(LF)(SN)」とせんごく「超小型基板用コネクタ　ポスト4P　B4B-ZR(LF)(SN)」はどちらも4極のトップ型ポストだが、秋月側の「-3.4」が何を表す仕様なのか各項目から確認できず、同一品の可能性があるため同一性レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/114157",
+      "aliasCode": "B4B-ZR(LF)(SN)"
+    }
+  },
+  {
+    "n": 23,
+    "products": [
+      "akizuki/114158",
+      "sengoku/6AD7-PHLZ"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: B5B-ZR）。秋月電子「ZHコネクター ベース付ピン トップ型 5P B5B-ZR-3.4(LF)(SN)」とせんごく「超小型基板用コネクタ ポスト5P　B5B-ZR(LF)(SN)」。どちらも5極のJST基板用ポストだが、型番の「-3.4」が何を表すか名称・コードから示されず、せんごく側は B5B-ZR のみ記載。同一品の別表記か別仕様か判断できないため同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/114158",
+      "aliasCode": "B5B-ZR(LF)(SN)"
+    }
+  },
+  {
+    "n": 24,
+    "products": [
+      "akizuki/114159",
+      "sengoku/6AD7-RHL5"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: B6B-ZR）。秋月電子「ZHコネクター ベース付ピン トップ型 6P B6B-ZR-3.4(LF)(SN)」とせんごく「超小型基板用コネクタ ポスト6P　B6B-ZR(LF)(SN)」。どちらも6Pの基板用ポストだが、-3.4 が何を表す枝番か名称から読み取れず、せんごく側がその仕様かどうかも示されていない。同じ品の可能性があるため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/114159",
+      "aliasCode": "B6B-ZR(LF)(SN)"
+    }
+  },
+  {
+    "n": 25,
+    "products": [
+      "akizuki/114312",
+      "sengoku/EEHD-4HNU"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: D2F-01）。秋月電子「マイクロスイッチ D2F-01」とせんごく「極超小型基本スイッチ 一般形 【ピン・ボタン形/はんだづけ小型端子】　D2F-01-D」。末尾の-Dが何を表すかが両方の記載から読み取れず、秋月電子側はボタン形状や端子形状も示していないため、同一品の可能性がある。-Dの意味が欠けているため、同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "family",
+      "family": "stem-d2f-01"
+    }
+  },
+  {
+    "n": 26,
+    "products": [
+      "akizuki/114313",
+      "sengoku/EEHD-4HNT"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: D2F-01F）。秋月電子「マイクロスイッチ D2F-01F」とせんごく「極超小型基本スイッチ 低荷重動作形 【ピン・ボタン形/はんだづけ小型端子】　D2F-01F-D」は、同じオムロン系の小型スイッチで同一品の可能性がある。秋月側は動作荷重や端子形状を示さず、末尾「-D」の意味も読み取れないため、同一品かどうかの別レビューに回す。"
+    },
+    "outcome": {
+      "kind": "family",
+      "family": "stem-d2f-01"
+    }
+  },
+  {
+    "n": 27,
+    "products": [
+      "akizuki/114423",
+      "sengoku/EEHD-5BXT"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: B02B、B02B-PASK）。秋月電子「PAコネクター ベース付ポスト トップ型 2P B02B-PASK」とせんごく「【2.0mm】PAコネクタ ベース付ポスト トップ型 2P　B02B-PASK-1」は同じ2P・トップ型のポストで、末尾の「-1」が注文・梱包上の接尾辞か仕様の違いかを示す情報がなく、同一品の可能性が残るため同一性の審査に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5BXT",
+      "aliasCode": "B02B-PASK"
+    }
+  },
+  {
+    "n": 28,
+    "products": [
+      "akizuki/115011",
+      "sengoku/EEHD-5BXU"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: B03B、B03B-PASK）。秋月電子「PAコネクター ベース付ポスト トップ型 3P B03B-PASK」とせんごく「【2.0mm】PAコネクタ ベース付ポスト トップ型 3P　B03B-PASK-1」は名称がほぼ同じで、末尾「-1」が梱包や発注上の枝番か別仕様か示されておらず、同一品の可能性があるため同一性レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5BXU",
+      "aliasCode": "B03B-PASK"
+    }
+  },
+  {
+    "n": 29,
+    "products": [
+      "akizuki/115012",
+      "sengoku/EEHD-5BY5"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: B04B、B04B-PASK）。秋月電子「PAコネクター ベース付ポスト トップ型 4P B04B-PASK」とせんごく「【2.0mm】PAコネクタ ベース付ポスト トップ型 4P　B04B-PASK-1」。名称の仕様は同じ4Pトップ型で、末尾「-1」は包装などの枝番と見られるが意味は項目に示されず、同一品の可能性がある。違いを示す事実が欠けているので同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5BY5",
+      "aliasCode": "B04B-PASK"
+    }
+  },
+  {
+    "n": 30,
+    "products": [
+      "akizuki/115013",
+      "sengoku/EEHD-5BY6"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: B05B、B05B-PASK）。秋月電子「PAコネクター ベース付ポスト トップ型 5P B05B-PASK」とせんごく「【2.0mm】PAコネクタ ベース付ポスト トップ型 5P　B05B-PASK-1」。名称は同じ5Pのトップ型ポストで、-1 は包装や鉛フリー等の枝番かもしれないが意味が示されていない。同一品の可能性があるため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5BY6",
+      "aliasCode": "B05B-PASK"
+    }
+  },
+  {
+    "n": 31,
+    "products": [
+      "akizuki/115200",
+      "sengoku/EEHD-5KC3"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: ABX00028）。秋月電子「Arduino Nano Every (半完成品セミキット)」とせんごく「Arduino Nano Every　ABX00028-R」。製品名は同じ Arduino Nano Every で、型番の -R が何を表すか（包装単位か仕様違いか）は名称・コードから分からない。同じ品の可能性があるため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5KC3",
+      "aliasCode": "ABX00028"
+    }
+  },
+  {
+    "n": 32,
+    "products": [
+      "akizuki/115403",
+      "sengoku/EEHD-4YLT"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: MJ-354W）。秋月電子「3.5mmステレオミニジャック MJ-354W-SG」とせんごく「φ3.5ジャック(ステレオ・パネル用)　MJ-354W」。どちらも3.5mmステレオジャックだが、末尾の-SGがめっきや色などの仕様なのか包装などの区別なのかが記載されておらず、同一品の可能性がある。-SGの意味が欠けているため、同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/115403",
+      "aliasCode": "MJ-354W"
+    }
+  },
+  {
+    "n": 33,
+    "products": [
+      "akizuki/115498",
+      "sengoku/F847-L557"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: MJ-072）。秋月電子「2.5mmステレオミニジャック 中継用 MJ-072」とせんごく「φ2.5ジャック(ステレオ・中継・8角)　MJ-072-1」は、どちらも2.5mmステレオの中継用ジャックで同じ品の可能性がある。末尾「-1」が包装・発注単位などの違いか仕様差かがフィールドから読み取れないため、同一品かどうかの別レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/F847-L557",
+      "aliasCode": "MJ-072"
+    }
+  },
+  {
+    "n": 34,
+    "products": [
+      "akizuki/116066",
+      "sengoku/EEHD-5BKF"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: TLP291）。秋月電子「フォトカプラー 赤外LED+フォトトランジスター TLP291(SE(BLL)」とせんごく「フォトカプラ　TLP291-4」。末尾の-4が何を表すかがせんごく側の記載にはなく、秋月電子側のBLLランクをせんごく側が指すのかも示されていないため、同一品か別構成か判断できない。-4の意味とランクが欠けているため、同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5BKF",
+      "aliasCode": "TLP291"
+    }
+  },
+  {
+    "n": 35,
+    "products": [
+      "akizuki/116298",
+      "sengoku/EEHD-5BKF"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: TLP291）。秋月電子「フォトカプラー 赤外LED+フォトトランジスター TLP291(SE(GB)」とせんごく「フォトカプラ　TLP291-4」。末尾の-4が何を表すかがせんごく側の記載にはなく、秋月電子側のGBランクをせんごく側が指すのかも示されていないため、同一品か別構成か判断できない。-4の意味とランクが欠けているため、同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5BKF",
+      "aliasCode": "TLP291"
+    }
+  },
+  {
+    "n": 36,
+    "products": [
+      "akizuki/117089",
+      "sengoku/EEHD-4ZNH"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 2SC1815）。秋月電子「トランジスター 2SC1815」とせんごく「トランジスタ　2SC1815-Y」。-Y は hFE ランクを表す接尾辞だが、秋月側にはランクの記載がなく、どのランクを売っているか分からない。Y ランクと同じ品の可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-4ZNH",
+      "aliasCode": "2SC1815"
+    }
+  },
+  {
+    "n": 37,
+    "products": [
+      "akizuki/117089",
+      "sengoku/EEHD-4ZNJ"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 2SC1815）。秋月電子「トランジスター 2SC1815」とせんごく「トランジスタ　2SC1815-GR」。-GR は hFE ランクを表す接尾辞だが、秋月側にはランクの記載がなく、どのランクを売っているか分からない。GR ランクと同じ品の可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-4ZNJ",
+      "aliasCode": "2SC1815"
+    }
+  },
+  {
+    "n": 38,
+    "products": [
+      "akizuki/117089",
+      "sengoku/EEHD-5HVC"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 2SC1815）。秋月電子「トランジスター 2SC1815」とせんごく「トランジスタ　2SC1815-BL」。-BL は hFE ランクを表す接尾辞だが、秋月側にはランクの記載がなく、どのランクを売っているか分からない。BL ランクと同じ品の可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5HVC",
+      "aliasCode": "2SC1815"
+    }
+  },
+  {
+    "n": 39,
+    "products": [
+      "akizuki/117089",
+      "sengoku/EEHD-5JL5"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 2SC1815）。秋月電子「トランジスター 2SC1815」とせんごく「トランジスタ　2SC1815-O」。-O は hFE ランクを表す接尾辞だが、秋月側にはランクの記載がなく、どのランクを売っているか分からない。O ランクと同じ品の可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5JL5",
+      "aliasCode": "2SC1815"
+    }
+  },
+  {
+    "n": 40,
+    "products": [
+      "akizuki/117091",
+      "sengoku/85DY-AMDJ"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 2SA1015）。秋月電子「トランジスター 2SA1015」とせんごく「トランジスタ　2SA1015-Y」は同じ2SA1015で、末尾の「-Y」は選別ランクの接尾辞と考えられるが、秋月電子側はどのランクを販売するか記載がなく、同一品の可能性があるため同一性の審査に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/85DY-AMDJ",
+      "aliasCode": "2SA1015"
+    }
+  },
+  {
+    "n": 41,
+    "products": [
+      "akizuki/117091",
+      "sengoku/EEHD-584M"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 2SA1015）。秋月電子「トランジスター 2SA1015」とせんごく「トランジスタ　2SA1015-GR」は同じ2SA1015で、末尾の「-GR」はランクの接尾辞と考えられるが、秋月電子側がランクを明示しておらず、同一品の可能性が残るため同一性の審査に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-584M",
+      "aliasCode": "2SA1015"
+    }
+  },
+  {
+    "n": 42,
+    "products": [
+      "akizuki/117410",
+      "sengoku/EEHD-0RA8"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: P-416）。秋月電子「金メッキバナナプラグ 赤 P-416-5」とせんごく「ブッシュ付バナナプラグ(赤)　P-416(E) R」。どちらも赤のバナナプラグだが、-5 が何を表す枝番か名称から分からず、金メッキ・ブッシュ付の違いも仕様差か表記差か示されていない。同じ品の可能性があるため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "family",
+      "family": "stem-p-416"
+    }
+  },
+  {
+    "n": 43,
+    "products": [
+      "akizuki/117411",
+      "sengoku/EEHD-0RAA"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: P-416）。秋月電子「金メッキバナナプラグ 黒 P-416-5」とせんごく「ブッシュ付バナナプラグ(黒)　P-416(E) B」。どちらも黒のバナナプラグだが、-5 が何を表す枝番か名称から分からず、金メッキ・ブッシュ付の違いも仕様差か表記差か示されていない。同じ品の可能性があるため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "family",
+      "family": "stem-p-416"
+    }
+  },
+  {
+    "n": 44,
+    "products": [
+      "akizuki/130394",
+      "sengoku/3AE3-K4LZ"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: BS170）。秋月電子「Nch MOSFET BS170-D27Z」とせんごく「MOSFET　BS170」。末尾の -D27Z は包装形態などを示す注文用接尾辞かもしれないが、名称・コードから意味が分からない。せんごく側は基本型番のみで、同じ素子の別包装を指す可能性が残るため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/130394",
+      "aliasCode": "BS170"
+    }
+  },
+  {
+    "n": 45,
+    "products": [
+      "akizuki/131637",
+      "sengoku/8AP3-KHKA"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: 2N3906）。秋月電子「トランジスター 2N3906-Y」とせんごく「トランジスタ　2N3906」。末尾の-Yは電流増幅率などのランクを示す記号と考えられるが、せんごく側はランクを記載しておらず、同じ品を指している可能性がある。せんごく側のランクの記載が欠けているため、同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "akizuki/131637",
+      "aliasCode": "2N3906"
+    }
+  },
+  {
+    "n": 46,
+    "products": [
+      "switch-science/5207",
+      "m5stack/h-esp32-fisheve-camera-modulewith-psram-ov2640"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: U017）。スイッチサイエンス「M5Camera--販売終了」とM5Stack公式「[EOL] ESP32 Fisheye Camera Module with PSRAM (OV2640)」。どちらもESP32とPSRAMにOV2640を載せたカメラモジュールだが、スイッチサイエンス側はレンズの記載がなく、公式側の末尾「-PCBA」の意味も項目から分からない。同一品の可能性があるため同一性の確認に回す。"
+    },
+    "outcome": {
+      "kind": "family",
+      "family": "stem-u017"
+    }
+  },
+  {
+    "n": 47,
+    "products": [
+      "switch-science/6613",
+      "m5stack/h-m5-faces-calculator-panel"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: A005）。スイッチサイエンス「M5Stack Faces用電卓パネル--在庫限り」（A005-B）とM5Stack公式「[EOL] M5STACK FACES Calculator Panel」（A005）の組。名称は実質同じで、-Bが版や仕様の違いを表すのか項目からは確認できない。同一品の可能性があり、相違の証拠もないため同一性レビューに回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "switch-science/6613",
+      "aliasCode": "A005"
+    }
+  },
+  {
+    "n": 48,
+    "products": [
+      "switch-science/8648",
+      "sengoku/EEHD-5KC3"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: ABX00028）。スイッチサイエンス「Arduino Nano Every（ピンヘッダ未実装）」とせんごく「Arduino Nano Every　ABX00028-R」。製品名は同じで、型番の -R の意味と、せんごく側のピンヘッダ実装の有無が示されていない。同じ品の可能性があり、情報不足は相違の証明にならないため、同一性レビューへ回す。"
+    },
+    "outcome": {
+      "kind": "unresolved",
+      "aliasKey": "sengoku/EEHD-5KC3",
+      "aliasCode": "ABX00028"
+    }
+  },
+  {
+    "n": 49,
+    "products": [
+      "switch-science/9129",
+      "m5stack/h-esp-32-camera-psram"
+    ],
+    "firstDecision": {
+      "decision": "identity",
+      "reviewerModel": "Claude Sonnet 5.5",
+      "evidence": "類似候補（共通語幹: U017）。スイッチサイエンス「M5Stack ESP32CAM-PSRAM 魚眼レンズカメラモジュール (OV2640)--販売終了」(U017-PCBA)とM5Stack公式「[EOL] PSRAM Camera Module with ESP32 WROVER (OV2640)」(U017)はどちらもPSRAM付きESP32とOV2640のカメラモジュールで、末尾「-PCBA」が基板実装品などの枝番か別仕様かを各項目から読み取れず、同一品の可能性があるため同一性レビューに回す。"
+    },
+    "outcome": {
+      "kind": "family",
+      "family": "stem-u017"
+    }
+  }
+]

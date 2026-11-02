@@ -1,0 +1,1875 @@
+{
+ "overrides": [
+  {
+   "group": 6,
+   "families": [
+    {
+     "label": "浜松ホトニクス Si PINフォトダイオード S6775",
+     "purpose": "光の強さを電流として検出するSi PINフォトダイオード",
+     "members": [
+      {
+       "key": "akizuki/104806",
+       "variant": "S6775",
+       "features": {
+        "型番": "S6775"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-0STN",
+       "variant": "S6775-01",
+       "features": {
+        "型番": "S6775-01"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "「大面積・960nm」はS6775側の名称だけの記載で、S6775-01が大面積でないことは示されていない。比べられる事実の型番だけを特徴に残した。",
+   "firstDecision": [
+    {
+     "group": 6,
+     "families": [
+      {
+       "label": "浜松ホトニクス Si PINフォトダイオード S6775",
+       "purpose": "光の強さを電流として検出するSi PINフォトダイオード",
+       "members": [
+        {
+         "key": "akizuki/104806",
+         "variant": "S6775",
+         "features": {
+          "型番": "S6775",
+          "名称上の仕様": "大面積・960nm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-0STN",
+         "variant": "S6775-01",
+         "features": {
+          "型番": "S6775-01",
+          "名称上の仕様": "可視光カット"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": "S6775-01 は名称に可視光カットと明記されているため、フィルタ有無の違うSi PINフォトダイオードとして類似品にした。"
+    }
+   ]
+  },
+  {
+   "group": 19,
+   "families": [
+    {
+     "label": "アナログpHセンサーキット（SEN0161系）",
+     "purpose": "水溶液のpHを測る、マイコン向けのpHセンサーキット",
+     "members": [
+      {
+       "key": "akizuki/112547",
+       "variant": "SEN0161",
+       "features": {
+        "型番": "SEN0161"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/5040",
+       "variant": "SEN0161-V2",
+       "features": {
+        "型番": "SEN0161-V2"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "秋月の型番SEN0161はメーカー型番そのもので、SS側はV2と品名・型番で明示された別SKU。版の違う別製品として類似商品にした。",
+   "firstDecision": [
+    {
+     "group": 19,
+     "families": [],
+     "extensions": [],
+     "dismissed": [
+      {
+       "products": [
+        "akizuki/112547",
+        "switch-science/5040"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: SEN0161）。秋月電子「PH meter」とスイッチサイエンス「《お取り寄せ商品》Gravity: Analog pH Sensor/Meter Kit V2」。スイッチサイエンス側はV2と明記されているが、秋月電子側の名称はPH meterだけで、初版とV2のどちらを販売しているのか示しておらず、同一品の可能性がある。秋月電子側の版の記載が欠けているため、同一性の確認に回す。"
+      }
+     ],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "group": 47,
+   "families": [
+    {
+     "label": "M5Stack FIRE IoT開発キット",
+     "purpose": "PSRAM搭載のM5Stack FIREを使うIoT開発キット",
+     "members": [
+      {
+       "key": "m5stack/h-fire-iot-development-kit",
+       "variant": "K007",
+       "features": {
+        "型番": "K007"
+       },
+       "offerId": "16804798169178"
+      },
+      {
+       "key": "switch-science/7364",
+       "variant": "K007-V26",
+       "features": {
+        "型番": "K007-V26"
+       },
+       "offerId": null
+      },
+      {
+       "key": "akizuki/117214",
+       "variant": "K007-V27",
+       "features": {
+        "型番": "K007-V27"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/9009",
+       "variant": "K007-V27",
+       "features": {
+        "型番": "K007-V27"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-674K",
+       "variant": "K007-V27",
+       "features": {
+        "型番": "K007-V27"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "M5Stack公式のK007はメーカーSKUそのもので、V2.6（K007-V26）とV2.7（K007-V27）は品名と型番で版が明示された別SKU。同一の可能性ではなく版違いの製品群にした。",
+   "firstDecision": [
+    {
+     "group": 47,
+     "families": [],
+     "extensions": [],
+     "dismissed": [
+      {
+       "products": [
+        "akizuki/117214",
+        "m5stack/h-fire-iot-development-kit"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: K007）。秋月電子「M5Stack FIRE IoT開発キット(PSRAM) V2.7」とM5Stack公式「[EOL] M5Stack FIRE IoT Development Kit (PSRAM 2.0)」。公式側は K007 のみでV2.6かV2.7かの版が名称に示されず、V2.7そのものを指す可能性がある。版の記載が欠けているので別版とは言えず、同一性の確認に回す。"
+      },
+      {
+       "products": [
+        "m5stack/h-fire-iot-development-kit",
+        "sengoku/EEHD-674K"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: K007）。M5Stack公式「[EOL] M5Stack FIRE IoT Development Kit (PSRAM 2.0)」とせんごく「【9009】M5Stack FIRE IoT開発キット(PSRAM) V2.7　M5STACK-K007-V27」。公式側の K007 は版を示さず、V2.7と同じ品を指すのかV2.6など別の版かが項目から分からない。同一品の可能性があるため同一性の確認に回す。"
+      },
+      {
+       "products": [
+        "switch-science/7364",
+        "m5stack/h-fire-iot-development-kit"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: K007）。スイッチサイエンス「M5Stack FIRE IoT開発キット（PSRAM） V2.6--販売終了」とM5Stack公式「[EOL] M5Stack FIRE IoT Development Kit (PSRAM 2.0)」。公式側は K007 のみで版が明記されず、販売終了のV2.6と同じ品である可能性がある。版の記載が欠けているため違いの証明にならず、同一性の確認に回す。"
+      },
+      {
+       "products": [
+        "switch-science/9009",
+        "m5stack/h-fire-iot-development-kit"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: K007）。スイッチサイエンス「M5Stack FIRE IoT開発キット（PSRAM） V2.7」とM5Stack公式「[EOL] M5Stack FIRE IoT Development Kit (PSRAM 2.0)」。公式側の K007 はどの版を売っているか示されず、V2.7と同一の可能性がある。版の情報が片側に欠けているので同一性の確認に回す。"
+      }
+     ],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "group": 50,
+   "families": [
+    {
+     "label": "バナナプラグ P-416系（赤・黒）",
+     "purpose": "計測器やテストリードの接続に使う、色違いのバナナプラグ",
+     "members": [
+      {
+       "key": "akizuki/117410",
+       "variant": "red",
+       "features": {
+        "型番": "P-416-5(E)R",
+        "色": "赤"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-0RAA",
+       "variant": "black",
+       "features": {
+        "型番": "P-416(E)B",
+        "色": "黒"
+       },
+       "offerId": null
+      }
+     ]
+    },
+    {
+     "label": "バナナプラグ P-416系（黒・赤）",
+     "purpose": "計測器やテストリードの接続に使う、色違いのバナナプラグ",
+     "members": [
+      {
+       "key": "akizuki/117411",
+       "variant": "black",
+       "features": {
+        "型番": "P-416-5(E)B",
+        "色": "黒"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-0RA8",
+       "variant": "red",
+       "features": {
+        "型番": "P-416(E)R",
+        "色": "赤"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [
+    {
+     "products": [
+      "akizuki/117410",
+      "sengoku/EEHD-0RA8"
+     ],
+     "decision": "identity",
+     "evidence": "類似候補（共通語幹: P-416）。秋月電子「金メッキバナナプラグ 赤 P-416-5」とせんごく「ブッシュ付バナナプラグ(赤)　P-416(E) R」。どちらも赤のバナナプラグだが、-5 が何を表す枝番か名称から分からず、金メッキ・ブッシュ付の違いも仕様差か表記差か示されていない。同じ品の可能性があるため、同一性レビューへ回す。"
+    },
+    {
+     "products": [
+      "akizuki/117411",
+      "sengoku/EEHD-0RAA"
+     ],
+     "decision": "identity",
+     "evidence": "類似候補（共通語幹: P-416）。秋月電子「金メッキバナナプラグ 黒 P-416-5」とせんごく「ブッシュ付バナナプラグ(黒)　P-416(E) B」。どちらも黒のバナナプラグだが、-5 が何を表す枝番か名称から分からず、金メッキ・ブッシュ付の違いも仕様差か表記差か示されていない。同じ品の可能性があるため、同一性レビューへ回す。"
+    }
+   ],
+   "notes": "メーカー名はどの行の項目にもないため、ラベルから「テイシン電機」を外した。同じラベルの2群にならないよう色の順で分けた。同色の組の同一性の保留はそのまま。",
+   "firstDecision": [
+    {
+     "group": 50,
+     "families": [
+      {
+       "label": "テイシン電機 バナナプラグ P-416（赤・黒の色違い）",
+       "purpose": "計測器やテストリードの接続に使う、赤と黒の色違いのバナナプラグ",
+       "members": [
+        {
+         "key": "akizuki/117410",
+         "variant": "red",
+         "features": {
+          "型番": "P-416-5(E)R",
+          "色": "赤"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-0RAA",
+         "variant": "black",
+         "features": {
+          "型番": "P-416(E)B",
+          "色": "黒"
+         },
+         "offerId": null
+        }
+       ]
+      },
+      {
+       "label": "テイシン電機 バナナプラグ P-416（黒・赤の色違い）",
+       "purpose": "計測器やテストリードの接続に使う、赤と黒の色違いのバナナプラグ",
+       "members": [
+        {
+         "key": "akizuki/117411",
+         "variant": "black",
+         "features": {
+          "型番": "P-416-5(E)B",
+          "色": "黒"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-0RA8",
+         "variant": "red",
+         "features": {
+          "型番": "P-416(E)R",
+          "色": "赤"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [
+      {
+       "products": [
+        "akizuki/117410",
+        "sengoku/EEHD-0RA8"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: P-416）。秋月電子「金メッキバナナプラグ 赤 P-416-5」とせんごく「ブッシュ付バナナプラグ(赤)　P-416(E) R」。どちらも赤のバナナプラグだが、-5 が何を表す枝番か名称から分からず、金メッキ・ブッシュ付の違いも仕様差か表記差か示されていない。同じ品の可能性があるため、同一性レビューへ回す。"
+      },
+      {
+       "products": [
+        "akizuki/117411",
+        "sengoku/EEHD-0RAA"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: P-416）。秋月電子「金メッキバナナプラグ 黒 P-416-5」とせんごく「ブッシュ付バナナプラグ(黒)　P-416(E) B」。どちらも黒のバナナプラグだが、-5 が何を表す枝番か名称から分からず、金メッキ・ブッシュ付の違いも仕様差か表記差か示されていない。同じ品の可能性があるため、同一性レビューへ回す。"
+      }
+     ],
+     "notes": "同色の組は同一性レビューへ。色違いの組は、各リストを1度しか使えないため2つの小さなファミリーに分けた。"
+    }
+   ]
+  },
+  {
+   "group": 68,
+   "families": [],
+   "extensions": [
+    {
+     "family": "stem-a090",
+     "members": [
+      {
+       "key": "switch-science/9511",
+       "variant": "A090",
+       "features": {
+        "型番": "A090",
+        "構成": "STM32F030"
+       },
+       "offerId": null
+      },
+      {
+       "key": "m5stack/h-atomic-motion-base-stm32f030",
+       "variant": "A090",
+       "features": {
+        "型番": "A090",
+        "構成": "STM32F030"
+       },
+       "offerId": "44393917219073"
+      },
+      {
+       "key": "sengoku/EEHD-6UXZ",
+       "variant": "A090",
+       "features": {
+        "型番": "A090",
+        "構成": "STM32F030"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "dismissed": [],
+   "notes": "「非搭載（名称はSTM32F030のみ）」は記載がないことからの推測。製品群の特徴を型番と名称上の構成に揃え、ラベルを版を問わない「ATOMIC Motion ベース」に変えた（familyEdits）。",
+   "firstDecision": [
+    {
+     "group": 68,
+     "families": [],
+     "extensions": [
+      {
+       "family": "stem-a090",
+       "members": [
+        {
+         "key": "switch-science/9511",
+         "variant": "A090",
+         "features": {
+          "型番": "A090",
+          "版": "STM32F030搭載版",
+          "電力モニター": "非搭載（名称はSTM32F030のみ）"
+         },
+         "offerId": null
+        },
+        {
+         "key": "m5stack/h-atomic-motion-base-stm32f030",
+         "variant": "A090",
+         "features": {
+          "型番": "A090",
+          "版": "STM32F030搭載版",
+          "電力モニター": "非搭載（名称はSTM32F030のみ）"
+         },
+         "offerId": "44393917219073"
+        },
+        {
+         "key": "sengoku/EEHD-6UXZ",
+         "variant": "A090",
+         "features": {
+          "型番": "A090",
+          "版": "STM32F030搭載版",
+          "電力モニター": "非搭載（名称はSTM32F030のみ）"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "dismissed": [],
+     "notes": "既存のATOMIC Motion ベース家族に、電力モニターのない初代A090（STM32F030）を追加した。"
+    }
+   ]
+  },
+  {
+   "group": 86,
+   "mergedFrom": [
+    86,
+    120
+   ],
+   "families": [
+    {
+     "label": "M5Stack Faces用キーボードパネル",
+     "purpose": "M5Stack Facesに取り付けて文字を入力するキーボードパネル",
+     "members": [
+      {
+       "key": "m5stack/h-m5-faces-qwerty-panel",
+       "variant": "A003",
+       "features": {
+        "型番": "A003"
+       },
+       "offerId": "35580991406244"
+      },
+      {
+       "key": "switch-science/6611",
+       "variant": "A003",
+       "features": {
+        "型番": "A003"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/11414",
+       "variant": "A003-V3",
+       "features": {
+        "型番": "A003-V3"
+       },
+       "offerId": null
+      },
+      {
+       "key": "m5stack/h-m5stack-faces-keyboard-panel-v3-0",
+       "variant": "A003-V3",
+       "features": {
+        "型番": "A003-V3"
+       },
+       "offerId": "50271482806529"
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "G120の初回判定は同一の可能性。A003とA003-V3（v3.0）はメーカーが別SKUで売る版違いなので類似商品にし、同じ系列のG86とまとめた。",
+   "firstDecision": [
+    {
+     "group": 86,
+     "families": [
+      {
+       "label": "M5Stack Faces用キーボードパネル",
+       "purpose": "M5Stack Facesに取り付けて文字入力に使うキーボードパネル",
+       "members": [
+        {
+         "key": "switch-science/11414",
+         "variant": "a003v3",
+         "features": {
+          "型番": "A003-V3",
+          "名称": "Faces用キーボードパネル v3.0"
+         },
+         "offerId": null
+        },
+        {
+         "key": "m5stack/h-m5-faces-qwerty-panel",
+         "variant": "a003",
+         "features": {
+          "型番": "A003",
+          "名称": "FACES QWERTY KeyBoard Panel"
+         },
+         "offerId": "35580991406244"
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": ""
+    },
+    {
+     "group": 120,
+     "families": [],
+     "extensions": [],
+     "dismissed": [
+      {
+       "products": [
+        "switch-science/6611",
+        "m5stack/h-m5stack-faces-keyboard-panel-v3-0"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: A003）。スイッチサイエンス「M5Stack Faces用QWERTYパネル--販売終了」(自社コードA003、A003-B)とM5Stack公式「M5STACK Faces KeyBoard Panel v3.0」(A003-V3)は、どちらもFaces用のキーボードパネルで同じ品の可能性がある。スイッチサイエンス側はどの版を売っているか示しておらず、v3.0と同一かどうか確かめられないため、同一品かどうかの別レビューに回す。"
+      }
+     ],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "group": 87,
+   "mergedFrom": [
+    87,
+    121
+   ],
+   "families": [
+    {
+     "label": "M5Stack Faces用ゲームパッドパネル",
+     "purpose": "M5Stack Facesに取り付けてゲーム操作に使うゲームパッドパネル",
+     "members": [
+      {
+       "key": "m5stack/h-m5-faces-gamepad-panel",
+       "variant": "A004",
+       "features": {
+        "型番": "A004"
+       },
+       "offerId": "35581002317988"
+      },
+      {
+       "key": "switch-science/6612",
+       "variant": "A004",
+       "features": {
+        "型番": "A004"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/11415",
+       "variant": "A004-V3",
+       "features": {
+        "型番": "A004-V3"
+       },
+       "offerId": null
+      },
+      {
+       "key": "m5stack/h-m5stack-faces-gamepad-panel-v3-0",
+       "variant": "A004-V3",
+       "features": {
+        "型番": "A004-V3"
+       },
+       "offerId": "50271456559361"
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "G87とG121の初回判定は同一の可能性。A004とA004-V3（v3.0）はメーカーが別SKUで売る版違いなので類似商品にし、1つの製品群にまとめた。",
+   "firstDecision": [
+    {
+     "group": 87,
+     "families": [],
+     "extensions": [],
+     "dismissed": [
+      {
+       "products": [
+        "switch-science/11415",
+        "m5stack/h-m5-faces-gamepad-panel"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: A004）。スイッチサイエンス「M5Stack Faces用ゲームパッドパネル v3.0」(A004-V3)は版がv3.0と明示されているが、M5Stack公式「[EOL] M5STACK FACES Gamepad Panel」(A004)はどの版を売っているか示しておらず、同じv3.0の可能性が残るため別版とは断定できず同一性レビューに回す。"
+      }
+     ],
+     "notes": ""
+    },
+    {
+     "group": 121,
+     "families": [],
+     "extensions": [],
+     "dismissed": [
+      {
+       "products": [
+        "switch-science/6612",
+        "m5stack/h-m5stack-faces-gamepad-panel-v3-0"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: A004）。スイッチサイエンス「M5Stack Faces用ゲームパッドパネル--販売終了」（型番A004）とM5Stack公式「M5STACK Faces Gamepad Panel v3.0」（型番A004-V3）は同じFacesのゲームパッドパネルで、スイッチサイエンス側がどの版を販売しているか記載がなく、v3.0と同一品の可能性が残るため同一性の審査に回す。"
+      }
+     ],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "group": 96,
+   "families": [
+    {
+     "label": "M5Stack用I2Cジョイスティックユニット",
+     "purpose": "I2Cで接続してジョイスティック入力を読み取るM5Stack用ユニット",
+     "members": [
+      {
+       "key": "switch-science/4050",
+       "variant": "U024",
+       "features": {
+        "型番": "U024",
+        "マイコン": "MEGA328P"
+       },
+       "offerId": null
+      },
+      {
+       "key": "m5stack/h-joystick-unit",
+       "variant": "U024",
+       "features": {
+        "型番": "U024",
+        "マイコン": "MEGA328P"
+       },
+       "offerId": "16804781981786"
+      },
+      {
+       "key": "switch-science/8101",
+       "variant": "U024-C",
+       "features": {
+        "型番": "U024-C",
+        "マイコン": "MEGA8A"
+       },
+       "offerId": null
+      },
+      {
+       "key": "m5stack/h-i2c-joystick-unit-v1-1-mega8a",
+       "variant": "U024-C",
+       "features": {
+        "型番": "U024-C",
+        "マイコン": "MEGA8A"
+       },
+       "offerId": "42734110572801"
+      },
+      {
+       "key": "sengoku/EEHD-6UXS",
+       "variant": "U024-C",
+       "features": {
+        "型番": "U024-C",
+        "マイコン": "MEGA8A"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/9922",
+       "variant": "U024-V2",
+       "features": {
+        "型番": "U024-V2",
+        "マイコン": "STM32G030"
+       },
+       "offerId": null
+      },
+      {
+       "key": "m5stack/h-i2c-joystick-2-unit-stm32g030",
+       "variant": "U024-V2",
+       "features": {
+        "型番": "U024-V2",
+        "マイコン": "STM32G030"
+       },
+       "offerId": "45567387304193"
+      },
+      {
+       "key": "sengoku/EEHD-6KAG",
+       "variant": "U024-V2",
+       "features": {
+        "型番": "U024-V2",
+        "マイコン": "STM32G030"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "U024とU024-V2の表記（MEGA328P、STM32G030）に合わせ、M5Stack公式の品名どおりMEGA8Aと書いた。",
+   "firstDecision": [
+    {
+     "group": 96,
+     "families": [
+      {
+       "label": "M5Stack用I2Cジョイスティックユニット",
+       "purpose": "I2Cで接続してジョイスティック入力を読み取るM5Stack用ユニット",
+       "members": [
+        {
+         "key": "switch-science/4050",
+         "variant": "U024",
+         "features": {
+          "型番": "U024",
+          "マイコン": "MEGA328P"
+         },
+         "offerId": null
+        },
+        {
+         "key": "m5stack/h-joystick-unit",
+         "variant": "U024",
+         "features": {
+          "型番": "U024",
+          "マイコン": "MEGA328P"
+         },
+         "offerId": "16804781981786"
+        },
+        {
+         "key": "switch-science/8101",
+         "variant": "U024-C",
+         "features": {
+          "型番": "U024-C",
+          "マイコン": "ATMEGA8A"
+         },
+         "offerId": null
+        },
+        {
+         "key": "m5stack/h-i2c-joystick-unit-v1-1-mega8a",
+         "variant": "U024-C",
+         "features": {
+          "型番": "U024-C",
+          "マイコン": "ATMEGA8A"
+         },
+         "offerId": "42734110572801"
+        },
+        {
+         "key": "sengoku/EEHD-6UXS",
+         "variant": "U024-C",
+         "features": {
+          "型番": "U024-C",
+          "マイコン": "ATMEGA8A"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/9922",
+         "variant": "U024-V2",
+         "features": {
+          "型番": "U024-V2",
+          "マイコン": "STM32G030"
+         },
+         "offerId": null
+        },
+        {
+         "key": "m5stack/h-i2c-joystick-2-unit-stm32g030",
+         "variant": "U024-V2",
+         "features": {
+          "型番": "U024-V2",
+          "マイコン": "STM32G030"
+         },
+         "offerId": "45567387304193"
+        },
+        {
+         "key": "sengoku/EEHD-6KAG",
+         "variant": "U024-V2",
+         "features": {
+          "型番": "U024-V2",
+          "マイコン": "STM32G030"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "group": 98,
+   "mergedFrom": [
+    98,
+    99
+   ],
+   "families": [
+    {
+     "label": "M5Stack用NeoPixel互換 LEDテープ",
+     "purpose": "M5Stackに接続して光らせる、NeoPixel互換のRGB LEDテープ（長さ違い）",
+     "members": [
+      {
+       "key": "switch-science/5208",
+       "variant": "A035",
+       "features": {
+        "型番": "A035",
+        "長さ": "10cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UMK",
+       "variant": "A035",
+       "features": {
+        "型番": "A035",
+        "長さ": "10cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/5209",
+       "variant": "A035-B",
+       "features": {
+        "型番": "A035-B",
+        "長さ": "20cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UML",
+       "variant": "A035-B",
+       "features": {
+        "型番": "A035-B",
+        "長さ": "20cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/5210",
+       "variant": "A035-C",
+       "features": {
+        "型番": "A035-C",
+        "長さ": "50cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/5211",
+       "variant": "A035-D",
+       "features": {
+        "型番": "A035-D",
+        "長さ": "100cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/5212",
+       "variant": "A035-E",
+       "features": {
+        "型番": "A035-E",
+        "長さ": "200cm"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "同じ系列がG98とG99に分かれ、特徴の名前（テープ長・長さ）と値の書き方が違っていた。1つの製品群にまとめ、特徴を型番と長さに揃えた。",
+   "firstDecision": [
+    {
+     "group": 98,
+     "families": [
+      {
+       "label": "M5Stack用NeoPixel互換 LEDテープ",
+       "purpose": "M5Stackに接続して光らせる、NeoPixel互換のRGB LEDテープ",
+       "members": [
+        {
+         "key": "switch-science/5208",
+         "variant": "a035",
+         "features": {
+          "型番": "A035",
+          "テープ長": "10 cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-6UML",
+         "variant": "a035b",
+         "features": {
+          "型番": "A035-B",
+          "テープ長": "20 cm"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": "A035 は10cm、A035-B は20cm と名称で確認できる。"
+    },
+    {
+     "group": 99,
+     "families": [
+      {
+       "label": "M5Stack用NeoPixel互換 LEDテープ",
+       "purpose": "M5Stackに接続して光らせるNeoPixel互換のLEDテープ",
+       "members": [
+        {
+         "key": "sengoku/EEHD-6UMK",
+         "variant": "A035",
+         "features": {
+          "型番": "A035",
+          "長さ": "10cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/5209",
+         "variant": "A035-B",
+         "features": {
+          "型番": "A035-B",
+          "長さ": "20cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/5210",
+         "variant": "A035-C",
+         "features": {
+          "型番": "A035-C",
+          "長さ": "50cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/5211",
+         "variant": "A035-D",
+         "features": {
+          "型番": "A035-D",
+          "長さ": "100cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/5212",
+         "variant": "A035-E",
+         "features": {
+          "型番": "A035-E",
+          "長さ": "200cm"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": "A035 系は名称で長さ(10cm から200cm)の違いが確認できるため類似品にした。"
+    }
+   ]
+  },
+  {
+   "group": 114,
+   "mergedFrom": [
+    114,
+    131
+   ],
+   "families": [
+    {
+     "label": "BALA-C セルフバランスロボット",
+     "purpose": "ESP32で動く、小型のセルフバランスロボット",
+     "members": [
+      {
+       "key": "m5stack/h-bala-c-esp32-development-mini-self-balancing-car",
+       "variant": "K038",
+       "features": {
+        "型番": "K038",
+        "モデル": "BALA-C"
+       },
+       "offerId": "32128285409370"
+      },
+      {
+       "key": "switch-science/6346",
+       "variant": "K038",
+       "features": {
+        "型番": "K038",
+        "モデル": "BALA-C"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/8297",
+       "variant": "K038-B",
+       "features": {
+        "型番": "K038-B",
+        "モデル": "BALA-C PLUS"
+       },
+       "offerId": null
+      },
+      {
+       "key": "m5stack/h-bala-c-plus-esp32-self-balancing-robot-kit",
+       "variant": "K038-B",
+       "features": {
+        "型番": "K038-B",
+        "モデル": "BALA-C PLUS"
+       },
+       "offerId": "42995610059009"
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "同じ系列がG114とG131に分かれ、ラベルと特徴の名前（製品名・モデル）が違っていた。1つの製品群にまとめた。",
+   "firstDecision": [
+    {
+     "group": 114,
+     "families": [
+      {
+       "label": "BALA-C セルフバランスロボット",
+       "purpose": "M5Stackで動く、自立してバランスを取る小型走行ロボットのキット",
+       "members": [
+        {
+         "key": "switch-science/6346",
+         "variant": "K038",
+         "features": {
+          "型番": "K038",
+          "製品名": "BALA-C"
+         },
+         "offerId": null
+        },
+        {
+         "key": "m5stack/h-bala-c-plus-esp32-self-balancing-robot-kit",
+         "variant": "K038-B",
+         "features": {
+          "型番": "K038-B",
+          "製品名": "BALA-C PLUS"
+         },
+         "offerId": "42995610059009"
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": ""
+    },
+    {
+     "group": 131,
+     "families": [
+      {
+       "label": "BALA-C 自立バランスロボット",
+       "purpose": "ESP32で動かす小型の倒立振子(セルフバランス)ロボット",
+       "members": [
+        {
+         "key": "switch-science/8297",
+         "variant": "k038b",
+         "features": {
+          "型番": "K038-B",
+          "モデル": "BALA-C PLUS"
+         },
+         "offerId": null
+        },
+        {
+         "key": "m5stack/h-bala-c-esp32-development-mini-self-balancing-car",
+         "variant": "k038",
+         "features": {
+          "型番": "K038",
+          "モデル": "BALA-C"
+         },
+         "offerId": "32128285409370"
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "group": 117,
+   "families": [
+    {
+     "label": "M5Stack用サーボ（SG90とServo Kit）",
+     "purpose": "M5Stackから角度や回転を制御する小型サーボモーター",
+     "members": [
+      {
+       "key": "m5stack/h-sg90-servo",
+       "variant": "A076",
+       "features": {
+        "型番": "A076",
+        "製品名": "SG90 Servo"
+       },
+       "offerId": "30885112512602"
+      },
+      {
+       "key": "switch-science/6478",
+       "variant": "A076-B",
+       "features": {
+        "型番": "A076-B",
+        "製品名": "Servo Kit 180°"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UNJ",
+       "variant": "A076-B",
+       "features": {
+        "型番": "A076-B",
+        "製品名": "Servo Kit 180°"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/6479",
+       "variant": "A076-C",
+       "features": {
+        "型番": "A076-C",
+        "製品名": "Servo Kit 360°"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UNK",
+       "variant": "A076-C",
+       "features": {
+        "型番": "A076-C",
+        "製品名": "Servo Kit 360°"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "A076（SG90 Servo）、A076-B（Servo Kit 180°）、A076-C（Servo Kit 360°）はメーカーが別SKUで売る別製品。品名が違うので同一の可能性はなく、用途の同じサーボの製品群にした。",
+   "firstDecision": [
+    {
+     "group": 117,
+     "families": [],
+     "extensions": [],
+     "dismissed": [
+      {
+       "products": [
+        "m5stack/h-sg90-servo",
+        "sengoku/EEHD-6UNJ"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: A076）。M5Stack公式「SG90 Servo」とせんごく「【6478】Servo Kit 180‘　M5STACK-A076-B」。-B は名称から180°タイプと分かるが、M5Stack公式の A076 は「SG90 Servo」とだけあり回転角が示されていない。同じ品を指す可能性があり、片側の情報不足は相違の証明にならないため、同一性レビューへ回す。"
+      },
+      {
+       "products": [
+        "m5stack/h-sg90-servo",
+        "sengoku/EEHD-6UNK"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: A076）。M5Stack公式「SG90 Servo」とせんごく「【6479】Servo Kit 360’　M5STACK-A076-C」。-C は名称から360°タイプと分かるが、M5Stack公式の A076 は「SG90 Servo」とだけあり回転角が示されていない。同じ品を指す可能性があり、片側の情報不足は相違の証明にならないため、同一性レビューへ回す。"
+      },
+      {
+       "products": [
+        "switch-science/6478",
+        "m5stack/h-sg90-servo"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: A076）。スイッチサイエンス「Servo Kit 180‘」とM5Stack公式「SG90 Servo」。-B は180°タイプと名称で分かるが、M5Stack公式の A076 は「SG90 Servo」とだけあり回転角が示されていない。同じ品を指す可能性があり、片側の情報不足は相違の証明にならないため、同一性レビューへ回す。"
+      },
+      {
+       "products": [
+        "switch-science/6479",
+        "m5stack/h-sg90-servo"
+       ],
+       "decision": "identity",
+       "evidence": "類似候補（共通語幹: A076）。スイッチサイエンス「Servo Kit 360’」とM5Stack公式「SG90 Servo」。-C は360°タイプと名称で分かるが、M5Stack公式の A076 は「SG90 Servo」とだけあり回転角が示されていない。同じ品を指す可能性があり、片側の情報不足は相違の証明にならないため、同一性レビューへ回す。"
+      }
+     ],
+     "notes": "基本型番 A076 の SG90 Servo は回転角が示されていないため、180°・360°のどちらとも同一の可能性が残る。"
+    }
+   ]
+  },
+  {
+   "group": 124,
+   "mergedFrom": [
+    124,
+    125
+   ],
+   "families": [
+    {
+     "label": "24AWG 4芯シールドツイストペアケーブル",
+     "purpose": "M5Stack機器の配線に使う4芯シールド付きツイストペアケーブル（長さ違い）",
+     "members": [
+      {
+       "key": "switch-science/6865",
+       "variant": "A088",
+       "features": {
+        "型番": "A088",
+        "長さ": "20cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UP4",
+       "variant": "A088",
+       "features": {
+        "型番": "A088",
+        "長さ": "20cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/6866",
+       "variant": "A088-A",
+       "features": {
+        "型番": "A088-A",
+        "長さ": "50cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UP5",
+       "variant": "A088-A",
+       "features": {
+        "型番": "A088-A",
+        "長さ": "50cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/6867",
+       "variant": "A088-B",
+       "features": {
+        "型番": "A088-B",
+        "長さ": "100cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UP6",
+       "variant": "A088-B",
+       "features": {
+        "型番": "A088-B",
+        "長さ": "100cm"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/6868",
+       "variant": "A088-C",
+       "features": {
+        "型番": "A088-C",
+        "長さ": "500cm（メーカー品名は300cm）"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UP7",
+       "variant": "A088-C",
+       "features": {
+        "型番": "A088-C",
+        "長さ": "500cm（メーカー品名は300cm）"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "同じ系列がG124とG125に分かれ、A088-Cの長さの書き方が2つのグループで違っていた（せんごくの【6868】はSS 6868の再販で同じ品）。1つの製品群にまとめた。",
+   "firstDecision": [
+    {
+     "group": 124,
+     "families": [
+      {
+       "label": "24AWG 4芯シールドツイストペアケーブル",
+       "purpose": "M5Stack向けに信号線を延長・配線する4芯のシールド付きケーブル",
+       "members": [
+        {
+         "key": "switch-science/6865",
+         "variant": "A088",
+         "features": {
+          "型番": "A088",
+          "長さ": "20cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-6UP5",
+         "variant": "A088-A",
+         "features": {
+          "型番": "A088-A",
+          "長さ": "50cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-6UP6",
+         "variant": "A088-B",
+         "features": {
+          "型番": "A088-B",
+          "長さ": "100cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-6UP7",
+         "variant": "A088-C",
+         "features": {
+          "型番": "A088-C",
+          "長さ": "500cm"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": "A088 系は名称で長さ(20cm から500cm)の違いが確認できるため類似品にした。"
+    },
+    {
+     "group": 125,
+     "families": [
+      {
+       "label": "24AWG 4芯シールドツイストペアケーブル",
+       "purpose": "M5Stack機器の接続に使う4芯シールド付きツイストペアケーブル（長さ違い）",
+       "members": [
+        {
+         "key": "sengoku/EEHD-6UP4",
+         "variant": "A088",
+         "features": {
+          "型番": "A088",
+          "長さ": "20cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/6866",
+         "variant": "A088-A",
+         "features": {
+          "型番": "A088-A",
+          "長さ": "50cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/6867",
+         "variant": "A088-B",
+         "features": {
+          "型番": "A088-B",
+          "長さ": "100cm"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/6868",
+         "variant": "A088-C",
+         "features": {
+          "型番": "A088-C",
+          "長さ": "500cm（メーカー名は300cm表記）"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": "スイッチサイエンスA088-Cは商品名が500cm、メーカー名が300cmと食い違う。どちらでもせんごくの20cmより長く、長さ違いの別商品である点は変わらない。"
+    }
+   ]
+  },
+  {
+   "group": 126,
+   "mergedFrom": [
+    126,
+    127
+   ],
+   "families": [
+    {
+     "label": "SK6812搭載 防水RGB LEDテープ",
+     "purpose": "M5Stackで光らせる、SK6812搭載の防水RGB LEDテープ（長さ違い）",
+     "members": [
+      {
+       "key": "switch-science/6914",
+       "variant": "A093",
+       "features": {
+        "型番": "A093",
+        "長さ": "50cm",
+        "LED数": "30LEDs"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UPA",
+       "variant": "A093",
+       "features": {
+        "型番": "A093",
+        "長さ": "50cm",
+        "LED数": "30LEDs"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/6915",
+       "variant": "A093-B",
+       "features": {
+        "型番": "A093-B",
+        "長さ": "100cm",
+        "LED数": "60LEDs"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UPB",
+       "variant": "A093-B",
+       "features": {
+        "型番": "A093-B",
+        "長さ": "100cm",
+        "LED数": "60LEDs"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/6916",
+       "variant": "A093-C",
+       "features": {
+        "型番": "A093-C",
+        "長さ": "200cm",
+        "LED数": "120LEDs"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UPC",
+       "variant": "A093-C",
+       "features": {
+        "型番": "A093-C",
+        "長さ": "200cm",
+        "LED数": "120LEDs"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/6917",
+       "variant": "A093-D",
+       "features": {
+        "型番": "A093-D",
+        "長さ": "500cm",
+        "LED数": "300LEDs"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UPD",
+       "variant": "A093-D",
+       "features": {
+        "型番": "A093-D",
+        "長さ": "500cm",
+        "LED数": "300LEDs"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "同じ系列がG126とG127に分かれ、LED数の書き方（30LEDsと30）が違っていた。1つの製品群にまとめ、品名どおり「30LEDs」の形に揃えた。",
+   "firstDecision": [
+    {
+     "group": 126,
+     "families": [
+      {
+       "label": "SK6812搭載 防水RGB LEDテープ",
+       "purpose": "M5Stackで光らせるSK6812搭載の防水デジタルRGB LEDテープ",
+       "members": [
+        {
+         "key": "switch-science/6914",
+         "variant": "a093",
+         "features": {
+          "型番": "A093",
+          "長さ": "50cm",
+          "LED数": "30LEDs"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-6UPB",
+         "variant": "a093-b",
+         "features": {
+          "型番": "A093-B",
+          "長さ": "100cm",
+          "LED数": "60LEDs"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-6UPC",
+         "variant": "a093-c",
+         "features": {
+          "型番": "A093-C",
+          "長さ": "200cm",
+          "LED数": "120LEDs"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-6UPD",
+         "variant": "a093-d",
+         "features": {
+          "型番": "A093-D",
+          "長さ": "500cm",
+          "LED数": "300LEDs"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": "長さとLED数が違う同シリーズのテープ。"
+    },
+    {
+     "group": 127,
+     "families": [
+      {
+       "label": "SK6812搭載 防水RGB LEDテープ",
+       "purpose": "M5Stack用に使うSK6812搭載のデジタル防水RGB LEDテープ",
+       "members": [
+        {
+         "key": "sengoku/EEHD-6UPA",
+         "variant": "a093",
+         "features": {
+          "型番": "A093",
+          "長さ": "50cm",
+          "LED数": "30"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/6915",
+         "variant": "a093b",
+         "features": {
+          "型番": "A093-B",
+          "長さ": "100cm",
+          "LED数": "60"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/6916",
+         "variant": "a093c",
+         "features": {
+          "型番": "A093-C",
+          "長さ": "200cm",
+          "LED数": "120"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/6917",
+         "variant": "a093d",
+         "features": {
+          "型番": "A093-D",
+          "長さ": "500cm",
+          "LED数": "300"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": ""
+    }
+   ]
+  },
+  {
+   "group": 145,
+   "families": [
+    {
+     "label": "4チャンネル エンコーダモータードライバモジュール",
+     "purpose": "M5Stackで4台のエンコーダ付きモーターを駆動するドライバモジュール",
+     "members": [
+      {
+       "key": "switch-science/9504",
+       "variant": "M138",
+       "features": {
+        "型番": "M138"
+       },
+       "offerId": null
+      },
+      {
+       "key": "m5stack/h-4-channel-encoder-motor-driver-module-stm32f030",
+       "variant": "M138",
+       "features": {
+        "型番": "M138"
+       },
+       "offerId": "44363288412417"
+      },
+      {
+       "key": "sengoku/EEHD-6UTS",
+       "variant": "M138",
+       "features": {
+        "型番": "M138"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/9921",
+       "variant": "M138-V11",
+       "features": {
+        "型番": "M138-V11"
+       },
+       "offerId": null
+      },
+      {
+       "key": "m5stack/h-4-channel-encoder-motor-driver-module-stm32f030-v1-1",
+       "variant": "M138-V11",
+       "features": {
+        "型番": "M138-V11"
+       },
+       "offerId": "45412391813377"
+      },
+      {
+       "key": "sengoku/EEHD-6KAJ",
+       "variant": "M138-V11",
+       "features": {
+        "型番": "M138-V11"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "「STM32F030 V1.1」はチップ名ではない（V1.1は基板の版）。両方ともSTM32F030なので、違いの事実は型番だけ。",
+   "firstDecision": [
+    {
+     "group": 145,
+     "families": [
+      {
+       "label": "4チャンネル エンコーダモータードライバモジュール",
+       "purpose": "M5Stackで4台のエンコーダ付きモーターを駆動するドライバモジュール",
+       "members": [
+        {
+         "key": "switch-science/9504",
+         "variant": "M138",
+         "features": {
+          "型番": "M138",
+          "搭載チップ": "STM32F030"
+         },
+         "offerId": null
+        },
+        {
+         "key": "m5stack/h-4-channel-encoder-motor-driver-module-stm32f030",
+         "variant": "M138",
+         "features": {
+          "型番": "M138",
+          "搭載チップ": "STM32F030"
+         },
+         "offerId": "44363288412417"
+        },
+        {
+         "key": "sengoku/EEHD-6UTS",
+         "variant": "M138",
+         "features": {
+          "型番": "M138",
+          "搭載チップ": "STM32F030"
+         },
+         "offerId": null
+        },
+        {
+         "key": "switch-science/9921",
+         "variant": "M138-V11",
+         "features": {
+          "型番": "M138-V11",
+          "搭載チップ": "STM32F030 V1.1"
+         },
+         "offerId": null
+        },
+        {
+         "key": "m5stack/h-4-channel-encoder-motor-driver-module-stm32f030-v1-1",
+         "variant": "M138-V11",
+         "features": {
+          "型番": "M138-V11",
+          "搭載チップ": "STM32F030 V1.1"
+         },
+         "offerId": "45412391813377"
+        },
+        {
+         "key": "sengoku/EEHD-6KAJ",
+         "variant": "M138-V11",
+         "features": {
+          "型番": "M138-V11",
+          "搭載チップ": "STM32F030 V1.1"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": "M138-V11 は名称にv1.1と明記された改版で、M138 とは別に販売されているため類似品にした。"
+    }
+   ]
+  },
+  {
+   "group": 147,
+   "mergedFrom": [
+    147,
+    148
+   ],
+   "families": [
+    {
+     "label": "PwrCANケーブル",
+     "purpose": "M5Stackのモジュール同士をPwrCANで接続するケーブル（長さと本数違い）",
+     "members": [
+      {
+       "key": "switch-science/9919",
+       "variant": "A146",
+       "features": {
+        "型番": "A146",
+        "長さ": "10cm",
+        "入数": "10本"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UUD",
+       "variant": "A146",
+       "features": {
+        "型番": "A146",
+        "長さ": "10cm",
+        "入数": "10本"
+       },
+       "offerId": null
+      },
+      {
+       "key": "switch-science/9920",
+       "variant": "A146-B",
+       "features": {
+        "型番": "A146-B",
+        "長さ": "50cm",
+        "入数": "2本"
+       },
+       "offerId": null
+      },
+      {
+       "key": "sengoku/EEHD-6UUE",
+       "variant": "A146-B",
+       "features": {
+        "型番": "A146-B",
+        "長さ": "50cm",
+        "入数": "2本"
+       },
+       "offerId": null
+      }
+     ]
+    }
+   ],
+   "extensions": [],
+   "dismissed": [],
+   "notes": "同じ系列がG147とG148に分かれ、特徴の名前（ケーブル長・入数と長さ・セット内容）が違っていた。1つの製品群にまとめた。",
+   "firstDecision": [
+    {
+     "group": 147,
+     "families": [
+      {
+       "label": "M5Stack PwrCANケーブル",
+       "purpose": "M5StackモジュールをPwrCANで接続する通信・給電ケーブル",
+       "members": [
+        {
+         "key": "switch-science/9919",
+         "variant": "a146",
+         "features": {
+          "型番": "A146",
+          "ケーブル長": "10cm",
+          "入数": "10本"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-6UUE",
+         "variant": "a146b",
+         "features": {
+          "型番": "A146-B",
+          "ケーブル長": "50cm",
+          "入数": "2本"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": "A146 は10cm 10本、A146-B は50cm 2本と名称で確認できる。同じケーブルで長さと入数が異なる。"
+    },
+    {
+     "group": 148,
+     "families": [
+      {
+       "label": "PWRCANケーブル",
+       "purpose": "M5Stack製品同士をPwrCANで接続するケーブル",
+       "members": [
+        {
+         "key": "switch-science/9920",
+         "variant": "A146-B",
+         "features": {
+          "型番": "A146-B",
+          "長さ": "50cm",
+          "セット内容": "2本セット"
+         },
+         "offerId": null
+        },
+        {
+         "key": "sengoku/EEHD-6UUD",
+         "variant": "A146",
+         "features": {
+          "型番": "A146",
+          "長さ": "10cm",
+          "セット内容": "10本セット"
+         },
+         "offerId": null
+        }
+       ]
+      }
+     ],
+     "extensions": [],
+     "dismissed": [],
+     "notes": ""
+    }
+   ]
+  }
+ ],
+ "familyEdits": [
+  {
+   "id": "stem-a090",
+   "label": "ATOMIC Motion ベース",
+   "purpose": "ATOMIC系コントローラに装着してサーボやモーターを動かすモーションベース。STM32F030版と、電力モニター(INA226AIDGSR)付きのv1.1・v1.2がある",
+   "features": {
+    "A090-V11": {
+     "型番": "A090-V11",
+     "構成": "v1.1・電力モニター INA226AIDGSR"
+    },
+    "A090-V12": {
+     "型番": "A090-V12",
+     "構成": "v1.2・電力モニター INA226AIDGSR"
+    }
+   }
+  }
+ ]
+}

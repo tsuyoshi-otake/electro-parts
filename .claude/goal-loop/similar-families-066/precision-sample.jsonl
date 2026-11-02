@@ -1,0 +1,90 @@
+{"n":1,"id":"a109835-s930","similarity":0.552,"band":4,"verdict":"different","reason":"秋月はATMEGA32U4単体のチップで、スイッチサイエンスのFio v3はそのチップを載せた開発ボードなので代用にならない。"}
+{"n":2,"id":"[\"akizuki\",\"111461\",\"sengoku\",\"EEHD-4PMR\"]","similarity":0.476,"band":3,"verdict":"similar","reason":"どちらも3mmLEDを取り付けるブラケットで、秋月はカバー付き(LED3-1B/LED3-2)、せんごくはブラケットのみ(SGKD7426)という構成の違いがある。"}
+{"n":3,"id":"[\"m5stack\",\"h-m5stack-unitv2-m12-version-with-cameras\",\"ksy\",\"772\"]","similarity":0.34,"band":2,"verdict":"similar","reason":"どちらもM5StackのAIカメラUnitV2だが、公式はM12レンズ版(U078-M12)でKSYは通常版(U078-D)というレンズ仕様の違いがある。"}
+{"n":4,"id":"[\"switch-science\",\"2761\",\"ksy\",\"552\"]","similarity":0.552,"band":4,"verdict":"different","reason":"Sense HatはRaspberry Pi用の拡張HATで、Raspberry Pi 4 Model Bは本体ボードなので用途が全く異なる。"}
+{"n":5,"id":"[\"switch-science\",\"10507\",\"ksy\",\"1185\"]","similarity":0.222,"band":1,"verdict":"different","reason":"Picossci 2BはRP2350Bを載せたピッチ変換基板で、KSYのものはRP2350Bマイコンチップ単体なので別種の商品である。"}
+{"n":6,"id":"[\"akizuki\",\"112370\",\"sengoku\",\"EEHD-6US6\"]","similarity":0.102,"band":0,"verdict":"different","reason":"秋月はHX711のADコンバーター基板単体で、せんごくはM5Stack用の20kgレンジ計量ユニットであり、共通するのはHX711チップだけで製品の種類が違う。"}
+{"n":7,"id":"[\"switch-science\",\"780\",\"sengoku\",\"EEHD-0EPJ\"]","similarity":0.515,"band":4,"verdict":"same","reason":"どちらも水素ガスセンサMQ-8(SEN-10916)と専用ボード(BOB-08891)のセットで、型番構成も同一であり表記が違うだけである。"}
+{"n":8,"id":"a129377-s2312","similarity":0.517,"band":4,"verdict":"similar","reason":"どちらもA4988搭載のステッピングモータードライバモジュールだが、スイッチサイエンスのSparkFun Big Easy Driverは別設計の基板で、秋月の汎用モジュールとは基板仕様が異なる。"}
+{"n":9,"id":"a109835-s982","similarity":0.571,"band":4,"verdict":"different","reason":"秋月はATMEGA32U4のチップ単体で、スイッチサイエンスのものはそれを載せたATmega32U4モジュールなので、チップと基板で別種の商品である。"}
+{"n":10,"id":"[\"switch-science\",\"7159\",\"sengoku\",\"EEHD-5FV3\"]","similarity":0.509,"band":4,"verdict":"similar","reason":"どちらもTB6612FNG搭載のデュアルモータードライバで、Seeed GroveはI2C制御、SparkFun ROB-14450はピンヘッダ実装済みの直接入力基板という違いがある。"}
+{"n":11,"id":"[\"akizuki\",\"130256\",\"sengoku\",\"EEHD-6KTJ\"]","similarity":0.316,"band":2,"verdict":"different","reason":"秋月は4.4mm5極バランスの基板取付ジャック(メス側)、せんごくはバランスプラグ(オス側)で、互いに嵌合する相手側の部品である。"}
+{"n":12,"id":"a111508-s2827","similarity":0.475,"band":3,"verdict":"similar","reason":"どちらもelement14版のRaspberry Piボードだが、秋月はPi 2 Model B V1.2、スイッチサイエンスはModel A+ 512MBと世代・モデルが異なる。"}
+{"n":13,"id":"[\"switch-science\",\"11121\",\"sengoku\",\"EEHD-6AFE\"]","similarity":0.364,"band":2,"verdict":"different","reason":"どちらもM5Capsule向けだが、一方は5サーボ接続基板キット、他方はプロトキットで用途が異なり、互いの代わりにならない。"}
+{"n":14,"id":"a116360-s7100","similarity":0.123,"band":0,"verdict":"similar","reason":"どちらも小型のSAMD21開発ボードで、秋月はAdafruit QT Py(STEMMA QT)、スイッチサイエンスはSeeed XIAO SAMD21という別メーカーのピン配置・コネクタの違いがある。"}
+{"n":15,"id":"[\"switch-science\",\"2978\",\"sengoku\",\"EEHD-5FVA\"]","similarity":0.618,"band":4,"verdict":"similar","reason":"どちらもTB6612FNG搭載のSparkFun系デュアルモータードライバで、型番(ROB-13845とROB-14451)が異なり、スイッチサイエンス側のみピンヘッダ付きと明記されている。"}
+{"n":16,"id":"[\"switch-science\",\"267\",\"sengoku\",\"EEHD-5KVB\"]","similarity":0.097,"band":0,"verdict":"similar","reason":"どちらも9軸IMUのブレイクアウト基板だが、9DOF Razorは別世代のセンサ構成の超薄型基板、SEN-15335はICM-20948搭載のQwiic対応基板という違いがある。"}
+{"n":17,"id":"[\"switch-science\",\"6538\",\"m5stack\",\"h-finger-sensor-unit\"]","similarity":0.19,"band":0,"verdict":"different","reason":"どちらもFPC1020A搭載の指紋センサだが、スイッチサイエンスはM5Stack Faces専用のパネルモジュール、公式はGrove接続のUnitで、対応するホストが異なる。"}
+{"n":18,"id":"[\"switch-science\",\"6447\",\"sengoku\",\"EEHD-5KVB\"]","similarity":0.119,"band":0,"verdict":"different","reason":"AdafruitのFeatherWingはFeather基板に重ねる専用形状の拡張で、SparkFunのQwiic対応ブレイクアウトとはホスト形態が異なり、センサチップも異なる。"}
+{"n":19,"id":"a131480-s9927","similarity":0.254,"band":1,"verdict":"similar","reason":"どちらもSTHS34PF80を使った赤外線人体検知センサモジュールだが、スイッチサイエンスはM5Stack用Unit(U185)、秋月は汎用のモジュール基板(6426)というコネクタ形態の違いがある。"}
+{"n":20,"id":"a108414-s1613","similarity":0.348,"band":2,"verdict":"different","reason":"秋月はWS2812Bを実装したLEDモジュール基板で、スイッチサイエンスはWS2812BのLEDチップ単体10個入りなので、モジュールと素子で別種の商品である。"}
+{"n":21,"id":"[\"switch-science\",\"10694\",\"m5stack\",\"h-atomic-gps-base-v2-0-atgm336h\"]","similarity":0.377,"band":2,"verdict":"different","reason":"どちらもATGM336H搭載のGPSだが、スイッチサイエンスはM5Stack(Core系)用モジュール、公式はATOM用のATOMIC GPS Baseで、対応するホストが異なる。"}
+{"n":22,"id":"a116141-s10650","similarity":0.867,"band":4,"verdict":"different","reason":"秋月はMQ-2のセンサー素子単体で、スイッチサイエンスはMQ-2をボード化したユニット(KO_Dream F-039)なので、素子とモジュールで別種の商品である。"}
+{"n":23,"id":"[\"akizuki\",\"109069\",\"sengoku\",\"EEHD-4J8A\"]","similarity":0.222,"band":1,"verdict":"different","reason":"どちらもIM315TX用の周辺ボードだが、秋月はUSBインターフェイスボード、せんごくはアプリケーション開発ボードで機能が異なり代用できない。"}
+{"n":24,"id":"[\"switch-science\",\"6356\",\"m5stack\",\"h-battery-bottom-charging-base\"]","similarity":0.298,"band":1,"verdict":"similar","reason":"どちらもM5GO/FIRE用のバッテリー付きボトム充電ベースだが、型番がA014とA016で世代・仕様に差がある。"}
+{"n":25,"id":"[\"switch-science\",\"3585\",\"sengoku\",\"EEHD-53CZ\"]","similarity":0.272,"band":1,"verdict":"different","reason":"スイッチサイエンスはVL53L0xに加えPMW3901の光学フローセンサも載せた複合モジュールで、せんごくはVL53L0X単体の測距モジュールなので機能構成が異なる。"}
+{"n":26,"id":"[\"switch-science\",\"5783\",\"sengoku\",\"EEHD-5JGK\"]","similarity":0.8,"band":4,"verdict":"same","reason":"どちらもTO-252ピッチ変換基板の5枚パックで、商品名・枚数が一致し型番表記(ABBC-037とABB-TO-252-CV)が違うだけと判断できる。"}
+{"n":27,"id":"[\"switch-science\",\"10173\",\"m5stack\",\"h-iot-base-cat-m-kit-sim7080g-with-thermal-camera-mlx90640\"]","similarity":0.269,"band":1,"verdict":"different","reason":"スイッチサイエンスはSIM7080G搭載のCAT-Mユニット単体で、公式はIoT BaseにサーマルカメラMLX90640を加えたキットなので、単品とセットの関係である。"}
+{"n":28,"id":"[\"akizuki\",\"105081\",\"sengoku\",\"EEHD-5AJJ\"]","similarity":0.23,"band":1,"verdict":"similar","reason":"どちらもA特性100kΩのボリューム(可変抵抗)だが、秋月はスイッチ付き2連の横型、せんごくは9型金属軸の単連という連数・形状の違いがある。"}
+{"n":29,"id":"a116722-s8841","similarity":0.438,"band":3,"verdict":"similar","reason":"どちらもOdyssey X86J4125864のシングルボードPCだが、秋月はWindows10 Enterprise Activated版、スイッチサイエンスはv2という版・OS構成の違いがある。"}
+{"n":30,"id":"[\"switch-science\",\"9568\",\"m5stack\",\"h-mini-scales-unit-hx711\"]","similarity":0.244,"band":1,"verdict":"similar","reason":"どちらもHX711搭載のM5Stack用重量計測ユニットだが、スイッチサイエンスはI2C接続のU180、公式はMini Scales UnitのU177で型番とインターフェースが異なる。"}
+{"n":31,"id":"[\"switch-science\",\"9428\",\"sengoku\",\"EEHD-6KAF\"]","similarity":0.686,"band":4,"verdict":"similar","reason":"どちらもM5Stack用CamS3 Wi-Fiカメラユニットで用途は同じだが、カメラセンサーがOV2640とPY260、型番がU174とU174-Bで異なる。"}
+{"n":32,"id":"[\"akizuki\",\"116431\",\"sengoku\",\"EEHD-65VX\"]","similarity":0.492,"band":3,"verdict":"similar","reason":"どちらもUL1015の耐熱ビニル絶縁電線で用途は同じだが、AWG16とAWG10で太さが違い、長さと色数も2m×7色と1m×6色で異なる。"}
+{"n":33,"id":"[\"switch-science\",\"1641\",\"m5stack\",\"h-10-dof-imu-unit-bmi270-bmm350-spa06-003\"]","similarity":0.189,"band":0,"verdict":"similar","reason":"どちらも10軸(加速度・ジャイロ・地磁気・気圧)のIMUモジュールで用途は同じだが、搭載チップ(L3GD20+LSM303+BMP180とBMI270+BMM350+SPA06-003)と形状が異なる。"}
+{"n":34,"id":"[\"switch-science\",\"8191\",\"m5stack\",\"h-sim7080g-cat-m-nb-iot-unit\"]","similarity":0.478,"band":3,"verdict":"similar","reason":"どちらもM5Stack用SIM7080G搭載のCAT-M/NB-IoT通信ユニットだが、型番がU137とU128で、片方はGNSSとアンテナ付きと記載されている。"}
+{"n":35,"id":"[\"switch-science\",\"4037\",\"sengoku\",\"EEHD-5KPE\"]","similarity":0.225,"band":1,"verdict":"different","reason":"同じMLX90640の赤外線アレイでも、前者はQwiic接続の汎用モジュール、後者はM5StickC専用のHatで、対応するホストが異なる。"}
+{"n":36,"id":"a131361-s8949","similarity":0.369,"band":2,"verdict":"similar","reason":"どちらもE220-900T22SのLoRa通信をパソコン側から使うための製品だが、前者は評価ボード、後者はUSBドングルとして製品化されており形態が異なる。"}
+{"n":37,"id":"a116774-s7508","similarity":0.213,"band":1,"verdict":"similar","reason":"どちらもDS3231搭載の高精度RTCモジュールで用途は同じだが、メーカーが違い、Grove系かSTEMMA QT(Qwiic互換)かなど接続コネクタが異なると見られる。"}
+{"n":38,"id":"[\"switch-science\",\"9179\",\"m5stack\",\"h-atom-2d-1d-barcode-scanner-kit\"]","similarity":0.179,"band":0,"verdict":"different","reason":"前者はATOMIC用バーコードスキャナベース単体、後者はATOM本体を含む開発キットで、単品とそれを含むキットの関係にある。"}
+{"n":39,"id":"a109835-s1120","similarity":0.308,"band":2,"verdict":"different","reason":"前者はATmega32U4のマイコンチップ単体、後者はそのチップを搭載したArduino Microボードで、種類が異なる。"}
+{"n":40,"id":"[\"m5stack\",\"h-stackchan-kawaii-co-created-open-source-ai-desktop-robot\",\"sengoku\",\"EEHD-6YJL\"]","similarity":0.34,"band":2,"verdict":"unknown","reason":"前者はロボット完成品、後者は「Core」と記載された本体部分と見られるが、構成内容が項目から確定できず同一・類似・別物の判断がつかない。"}
+{"n":41,"id":"[\"switch-science\",\"5755\",\"m5stack\",\"h-m5stickc-env-hat-sht30-bmp280-bmm150\"]","similarity":0.597,"band":4,"verdict":"similar","reason":"どちらもM5StickC用の環境センサーHatで用途は同じだが、世代が違い(ENV Hat対ENV Hat II)、温湿度センサーがDHT12とSHT30で異なる。"}
+{"n":42,"id":"[\"switch-science\",\"10940\",\"m5stack\",\"h-lora-gps-cap-for-cardputer-adv-sx1262-atgm336h\"]","similarity":0.641,"band":4,"verdict":"similar","reason":"どちらもCardputer Adv用のSX1262・ATGM336H搭載LoRa+GPSキャップで用途は同じだが、型番がU214とU201で異なり、公式側は販売終了品。"}
+{"n":43,"id":"[\"switch-science\",\"10016\",\"sengoku\",\"EEHD-6KKK\"]","similarity":0.208,"band":1,"verdict":"different","reason":"前者はW55RP20のSiPチップ単体、後者はそれを載せたPico形状の評価基板で、チップと基板という別種の製品。"}
+{"n":44,"id":"a101948-s19","similarity":0.364,"band":2,"verdict":"unknown","reason":"どちらもENC28J60のチップと見られるが、前者は/SPのパッケージ指定があり、後者はパッケージの記載がなく同一かどうか判断できない。"}
+{"n":45,"id":"[\"m5stack\",\"h-m5stack-cores3-lite-esp32s3-iot-dev-kit\",\"sengoku\",\"EEHD-6CFC\"]","similarity":0.407,"band":3,"verdict":"similar","reason":"どちらもESP32-S3搭載のM5Stack CoreS3系の開発機で用途は同じだが、LiteとSEという別バリエーション(K128-LITEとK128-SE)で構成が異なる。"}
+{"n":46,"id":"[\"switch-science\",\"11347\",\"sengoku\",\"EEHD-6XBV\"]","similarity":0.261,"band":1,"verdict":"similar","reason":"どちらもESP32-C5を載せた小型の開発ボードで用途は同じだが、M5StampC5とSeeed XIAOでメーカーと基板形状・端子配置が異なる。"}
+{"n":47,"id":"a115096-s1745","similarity":0.2,"band":1,"verdict":"similar","reason":"どちらもL3GD20Hのジャイロを使うセンサーモジュールだが、前者は3軸ジャイロのみ、後者はLSM303Dの加速度・地磁気も載るMinIMU-9で機能範囲が異なる。"}
+{"n":48,"id":"[\"akizuki\",\"100819\",\"sengoku\",\"EEHD-57ED\"]","similarity":0.092,"band":0,"verdict":"different","reason":"前者はパルストランス内蔵のRJ-45 LANコネクター部品、後者はRJ-45からD-Sub15ピンへの変換アダプターで、用途が異なる。"}
+{"n":49,"id":"a113075-s5048","similarity":0.205,"band":1,"verdict":"unknown","reason":"どちらもML8511の紫外線センサーだが、前者は型番がチップ名と同じでチップ単体かモジュールか項目から確定できず、後者はGravityのアナログモジュール。"}
+{"n":50,"id":"[\"switch-science\",\"9925\",\"sengoku\",\"EEHD-6UUF\"]","similarity":0.459,"band":3,"verdict":"similar","reason":"どちらもM5StackのRoller485ユニット(STM32)でモーター用途は同じだが、Lite版とスリップリング付き版(U182-LiteとU182)で構成が異なる。"}
+{"n":51,"id":"[\"akizuki\",\"129333\",\"ksy\",\"1024\"]","similarity":0.48,"band":3,"verdict":"different","reason":"前者はカメラ用のCSIケーブル、後者はディスプレイ用のDSIケーブルで、FPCの寸法が同じでも用途と接続先が異なる。"}
+{"n":52,"id":"a108677-s6070","similarity":0.182,"band":0,"verdict":"different","reason":"同じMCP4725のDAC製品でも、前者は汎用のモジュール、後者はM5StickC専用のHatで、対応するホストが異なる。"}
+{"n":53,"id":"[\"m5stack\",\"h-m5stickc-plus2-with-watch-accessories\",\"sengoku\",\"EEHD-68ND\"]","similarity":0.4,"band":3,"verdict":"different","reason":"後者はM5StickC Plus2本体、前者はそれに時計用アクセサリーを同梱したセットで、単品とセットの関係にある。"}
+{"n":54,"id":"[\"switch-science\",\"7536\",\"m5stack\",\"h-m5stack-unitv2-usb-version-without-camera\"]","similarity":0.449,"band":3,"verdict":"similar","reason":"どちらもM5Stack UnitV2のAIカメラユニットで用途は同じだが、前者はM12レンズ版、後者はカメラなしのUSB版(U078-M12とU078-USB)で構成が異なる。"}
+{"n":55,"id":"[\"m5stack\",\"h-3-axis-magnetometer-unit-bmm350\",\"sengoku\",\"EEHD-68VH\"]","similarity":0.442,"band":3,"verdict":"similar","reason":"どちらも3軸地磁気センサーのモジュールで用途は同じだが、搭載チップがBMM350とBMM150で世代が異なり、メーカーと接続形状も異なる。"}
+{"n":56,"id":"[\"switch-science\",\"6015\",\"ksy\",\"552\"]","similarity":0.479,"band":3,"verdict":"different","reason":"前者はRaspberry Pi 4用ケースのクーリングファン、後者はRaspberry Pi 4 Model B本体で、アクセサリーと本体の関係にある。"}
+{"n":57,"id":"[\"switch-science\",\"9815\",\"m5stack\",\"h-m5go-battery-bottom3-for-cores3-only\"]","similarity":0.28,"band":1,"verdict":"similar","reason":"どちらもCoreS3専用の底部拡張ベースだが、前者はハシビロ工業のRGBボトム、後者はバッテリー付きのM5GOボトムで機能構成が異なる。"}
+{"n":58,"id":"a112332-s10382","similarity":0.323,"band":2,"verdict":"similar","reason":"どちらもPCM5102A搭載のI2Sオーディオ用DAC基板で用途は同じだが、前者は組立が必要なキットで、後者はAdafruit製の完成基板と見られる。"}
+{"n":59,"id":"[\"switch-science\",\"2821\",\"sengoku\",\"EEHD-4WVG\"]","similarity":0.175,"band":0,"verdict":"different","reason":"前者は5V/3.3V出力付きのリチウムイオン電池充電器、後者はブレッドボード用の電源ボードで、共通するのは出力電圧表記のみで用途が異なる。"}
+{"n":60,"id":"a109251-s2206","similarity":0.333,"band":2,"verdict":"different","reason":"前者はWS2822Sのチップ単体、後者はそれを使ったLEDタイルモジュール(5個入り)で、部品と完成モジュールという別種の製品。"}
+{"n":61,"id":"[\"akizuki\",\"116943\",\"sengoku\",\"EEHD-4WZS\"]","similarity":0.629,"band":4,"verdict":"different","reason":"片方は両端SMAコネクタ付きの完成ケーブル(1.5m)、もう片方は切売りの同軸ケーブル素材で、用途が別物。"}
+{"n":62,"id":"[\"switch-science\",\"362\",\"sengoku\",\"EEHD-00GY\"]","similarity":0.448,"band":3,"verdict":"same","reason":"どちらもMQ-4(SEN-09404)と専用基板BOB-08891のセットで、構成コードも一致する。"}
+{"n":63,"id":"[\"akizuki\",\"131914\",\"sengoku\",\"EEHD-6UXF\"]","similarity":0.328,"band":2,"verdict":"similar","reason":"どちらもOV3660搭載のM5Stack製ESP32カメラユニットで、PoE給電のWi-Fiカメラ(U121-B-V11)とTimer Camera X(U082-X)という型・構成の違いがある。"}
+{"n":64,"id":"[\"m5stack\",\"h-m5stickc-heart-rate-hat-max30102\",\"sengoku\",\"EEHD-6YXV\"]","similarity":0.197,"band":0,"verdict":"similar","reason":"どちらもMAX30102による心拍測定モジュールだが、M5StickC専用Hat(U118)と他社製の汎用センサーユニット(KO_Dream_F-054)で形状・接続が異なる。"}
+{"n":65,"id":"[\"switch-science\",\"1058\",\"sengoku\",\"EEHD-4YFL\"]","similarity":0.429,"band":3,"verdict":"similar","reason":"どちらもA4988搭載のステッピングモータードライバ基板だが、Pololu製レギュレータ付き基板とSparkFunのBig Easy Driverで基板仕様が異なる。"}
+{"n":66,"id":"[\"switch-science\",\"10226\",\"sengoku\",\"EEHD-4WSD\"]","similarity":0.161,"band":0,"verdict":"different","reason":"XIAO用のRS-485拡張モジュールとUSB-RS-485変換基板で、接続するホストが異なり互いに代用できない。"}
+{"n":67,"id":"[\"switch-science\",\"6723\",\"m5stack\",\"h-guide-rail-for-m5-base\"]","similarity":0,"band":0,"verdict":"different","reason":"A111レーダー用ピッチ変換基板とM5 Base用ガイドレールで、型番A111の一致は偶然であり用途が全く異なる。"}
+{"n":68,"id":"[\"akizuki\",\"103604\",\"sengoku\",\"EEHD-0HP4\"]","similarity":0.439,"band":3,"verdict":"similar","reason":"どちらもAカーブ10kΩの2連ボリュームで、メーカー・型番(RK09712系とRV24BF)とサイズ・軸形状が異なる。"}
+{"n":69,"id":"[\"switch-science\",\"1136\",\"sengoku\",\"EEHD-5GBL\"]","similarity":0.324,"band":2,"verdict":"similar","reason":"どちらもADS1015搭載の12bit 4chのADCボードで、Adafruit製とSparkFun製(Qwiicコネクタ対応)という基板・コネクタの違いがある。"}
+{"n":70,"id":"a115323-s5085","similarity":0.186,"band":0,"verdict":"different","reason":"アナログ標準パネルメーターと水流タービン発電機で、共通点は5VDCという語のみ。"}
+{"n":71,"id":"a116349-s1852","similarity":0.15,"band":0,"verdict":"similar","reason":"どちらもATmega32U4搭載の小型Arduino互換ボードだが、Feather Bluefruit LEはBLE内蔵、A-Star 32U4 Mini ULVは低電圧対応の小型基板という違いがある。"}
+{"n":72,"id":"a131556-s8891","similarity":0.368,"band":2,"verdict":"similar","reason":"どちらもAVR64DD32搭載の開発用マイコンボードだが、Curiosity Nano評価ボード(デバッガ内蔵)とスイッチサイエンスのマイコン基板で構成・サイズが異なる。"}
+{"n":73,"id":"[\"switch-science\",\"10355\",\"sengoku\",\"EEHD-6VBS\"]","similarity":0.532,"band":4,"verdict":"different","reason":"Pololuの電流センサモジュール基板と、同じチップ単体のホール効果電流センサーICで、モジュールと裸のICは別種。"}
+{"n":74,"id":"[\"switch-science\",\"6857\",\"sengoku\",\"EEHD-57ED\"]","similarity":0.182,"band":0,"verdict":"different","reason":"D-sub15と端子台の変換ユニットと、D-sub15とRJ-45の変換アダプタで、変換先が異なり代用できない。"}
+{"n":75,"id":"[\"akizuki\",\"105963\",\"sengoku\",\"8AP3-KHKA\"]","similarity":0.762,"band":4,"verdict":"same","reason":"どちらも2N3906トランジスタで、秋月の型番末尾BUは包装表記の違いにすぎない。"}
+{"n":76,"id":"[\"switch-science\",\"9181\",\"m5stack\",\"h-atom-speaker-kit-ns4168\"]","similarity":0.3,"band":2,"verdict":"different","reason":"ATOMICスピーカーベース単体(A098)と、ATOM本体を含むSpeaker Kit(K054)で、単品とキットの違いがある。"}
+{"n":77,"id":"[\"ksy\",\"918\",\"sengoku\",\"EEHD-64DT\"]","similarity":0.203,"band":1,"verdict":"same","reason":"どちらもRaspberry Pi HQカメラ用M12望遠25mmレンズで、型番SC0861とHQ_SC0861が一致する。"}
+{"n":78,"id":"[\"switch-science\",\"212\",\"sengoku\",\"EEHD-6747\"]","similarity":0.271,"band":1,"verdict":"different","reason":"ATmega328P搭載のArduino Nanoボードと、ATmega328P用スケッチ書き込み治具で、共通点はチップ名のみ。"}
+{"n":79,"id":"[\"akizuki\",\"111463\",\"sengoku\",\"EEHD-4PMR\"]","similarity":0.606,"band":4,"verdict":"similar","reason":"どちらも3mmLED用ブラケットで用途は同じだが、型番(LED3-3とSGKD7426)が異なり同一品とは断定できない。"}
+{"n":80,"id":"a115654-s5337","similarity":0.435,"band":3,"verdict":"similar","reason":"どちらもSHT35の高精度温湿度センサーモジュールだが、秋月はキット形態、Seeed製はGrove(I2C)コネクタ付きで構成が異なる。"}
+{"n":81,"id":"[\"m5stack\",\"h-midi-synthesizer-unit-sam2695\",\"sengoku\",\"EEHD-6KAD\"]","similarity":0.31,"band":2,"verdict":"same","reason":"どちらもM5Stack製のSAM2695搭載MIDI音源ユニットで、型番U178とU187は数字の入れ替わりと見られ、名称と仕様が一致する。"}
+{"n":82,"id":"[\"akizuki\",\"112473\",\"sengoku\",\"EEHD-6UU3\"]","similarity":0.118,"band":0,"verdict":"different","reason":"HX711単体のADコンバーターと、HX711を載せたM5Stack用I2C重量ユニットで、チップと完成ユニットの違いがある。"}
+{"n":83,"id":"a118243-s9781","similarity":0.34,"band":2,"verdict":"different","reason":"FT232RNLのICそのものと、同チップ搭載のUSB Type-Cシリアルアダプタ製品で、部品と完成モジュールの違いがある。"}
+{"n":84,"id":"a107915-s1613","similarity":0.391,"band":2,"verdict":"similar","reason":"どちらもWS2812Bのシリアル制御フルカラーLEDチップだが、スイッチサイエンスは10個入りで販売単位・版が異なる。"}
+{"n":85,"id":"[\"switch-science\",\"11024\",\"ksy\",\"840\"]","similarity":0.433,"band":3,"verdict":"similar","reason":"どちらもIMX519搭載のオートフォーカス16MPカメラモジュールだが、型番(B0500とB0371)が異なり別バージョンの製品。"}
+{"n":86,"id":"[\"m5stack\",\"h-ai-pyramid-computing-box-pro-8gb-version-ax8850\",\"sengoku\",\"EEHD-6WMY\"]","similarity":0.581,"band":4,"verdict":"similar","reason":"どちらもAX8850搭載のM5Stack AI Pyramid Computing Boxだが、Pro 8GB版(AI-003-PRO)と4GB版(AI-003)でメモリ容量とグレードが異なる。"}
+{"n":87,"id":"[\"akizuki\",\"111317\",\"sengoku\",\"EEHD-5FV3\"]","similarity":0.566,"band":4,"verdict":"different","reason":"TB6612FNGのドライバIC単体と、同ICを搭載しピンヘッダ実装済みのモータードライバ基板で、部品と基板製品の違いがある。"}
+{"n":88,"id":"a102792-s9949","similarity":0.239,"band":1,"verdict":"different","reason":"RS485/RS422トランシーバーICと、USB接続のマルチプロトコルシリアルケーブルで、部品とケーブル製品の違いがある。"}
+{"n":89,"id":"[\"switch-science\",\"6072\",\"m5stack\",\"h-m5stickc-env-hat-ii-r-sht30-bmp280\"]","similarity":0.4,"band":3,"verdict":"similar","reason":"どちらもBMP280搭載のM5StickC用環境センサーHatだが、温湿度センサーがSHT20とSHT30で異なり、前者はSK6812 LEDも搭載する。"}
+{"n":90,"id":"[\"akizuki\",\"131544\",\"sengoku\",\"EEHD-0P5A\"]","similarity":0.115,"band":0,"verdict":"different","reason":"MMBF5457のTO-92変換モジュールとレールスプリッターIC TLE2426で、共通点はTO-92という語のみ。"}

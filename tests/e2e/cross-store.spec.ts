@@ -96,7 +96,9 @@ test('production bundle compares both directions and toggles a series with the k
   expect(Math.abs(cardBounds[0]!.y - cardBounds[1]!.y)).toBeLessThan(2);
   expect(cardBounds[1]!.x).toBeGreaterThan(cardBounds[0]!.x + cardBounds[0]!.width);
   await expect(panel(page)).toContainText('$7.50');
-  expect(requests).toHaveLength(10);
+  // Four store manifests, the page's own history and MAX_RELATED_HISTORY_LOADS (8) related histories: since 0.6.7 the
+  // ATOM family also holds the official and せんごく ATOM Matrix pages, so 9 related products meet the cap.
+  expect(requests).toHaveLength(13);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect.poll(() => panel(page).locator('.store-prices').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(1);
   await expect(panel(page).locator('.eph-comparison-chart')).toHaveAttribute('viewBox', /^0 0 3\d{2} 220$/);
@@ -104,7 +106,7 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
   await checkbox.check();
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeVisible();
-  expect(requests).toHaveLength(10);
+  expect(requests).toHaveLength(13);
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-mobile.png' });
   const overflow = await panel(page).evaluate((el) => {
     const section = el.shadowRoot!.querySelector('section')!;

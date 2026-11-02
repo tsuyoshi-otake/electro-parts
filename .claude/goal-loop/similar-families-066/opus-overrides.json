@@ -1,0 +1,393 @@
+[
+  {
+    "group": 1,
+    "families": [
+      {
+        "label": "ATOMS3R カメラキット",
+        "purpose": "ESP32-S3搭載のATOMS3Rで画像を撮影するカメラキット（標準カメラとM12レンズ・OV3660版の違い）",
+        "members": [
+          {
+            "key": "switch-science/9916",
+            "variant": "C126-CAM",
+            "features": {
+              "型番": "C126-CAM",
+              "構成": "ATOMS3R カメラキット"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atoms3r-camera-kit",
+            "variant": "C126-CAM",
+            "features": {
+              "型番": "C126-CAM",
+              "構成": "ATOMS3R カメラキット"
+            },
+            "offerId": "45605343920385"
+          },
+          {
+            "key": "sengoku/EEHD-6J75",
+            "variant": "C126-CAM",
+            "features": {
+              "型番": "C126-CAM",
+              "構成": "ATOMS3R カメラキット"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/10009",
+            "variant": "C126-M12",
+            "features": {
+              "型番": "C126-M12",
+              "構成": "ATOMS3R M12カメラキット(OV3660)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atoms3r-camera-kit-m12-version-ov3660",
+            "variant": "C126-M12",
+            "features": {
+              "型番": "C126-M12",
+              "構成": "ATOMS3R M12カメラキット(OV3660)"
+            },
+            "offerId": "45624741560577"
+          }
+        ]
+      },
+      {
+        "label": "ATOMS3R 本体・プロトキット",
+        "purpose": "ESP32-S3搭載のATOMS3Rを小型コントローラとして使う開発キット（0.85インチ液晶付きと、液晶なしのプロト基板付きの違い）",
+        "members": [
+          {
+            "key": "switch-science/9915",
+            "variant": "C126",
+            "features": {
+              "型番": "C126",
+              "構成": "ATOMS3R本体(0.85インチ液晶付き開発キット)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atoms3r-dev-kit",
+            "variant": "C126",
+            "features": {
+              "型番": "C126",
+              "構成": "ATOMS3R本体(0.85インチ液晶付き開発キット)"
+            },
+            "offerId": "45605332615425"
+          },
+          {
+            "key": "sengoku/EEHD-6J74",
+            "variant": "C126",
+            "features": {
+              "型番": "C126",
+              "構成": "ATOMS3R本体(0.85インチ液晶付き開発キット)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "switch-science/10008",
+            "variant": "C126-EXT",
+            "features": {
+              "型番": "C126-EXT",
+              "構成": "ATOMS3R Ext プロトキット(液晶なし)"
+            },
+            "offerId": null
+          },
+          {
+            "key": "m5stack/h-atoms3r-proto-kit-without-screen",
+            "variant": "C126-EXT",
+            "features": {
+              "型番": "C126-EXT",
+              "構成": "ATOMS3R Ext プロトキット(液晶なし)"
+            },
+            "offerId": "45624738971905"
+          },
+          {
+            "key": "sengoku/EEHD-6UUJ",
+            "variant": "C126-EXT",
+            "features": {
+              "型番": "C126-EXT",
+              "構成": "ATOMS3R Ext プロトキット(液晶なし)"
+            },
+            "offerId": null
+          }
+        ]
+      }
+    ],
+    "dismissed": [
+      {
+        "products": [
+          "m5stack/h-atoms3r-camera-kit",
+          "sengoku/EEHD-6J74"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。M5Stack公式「ATOMS3R Camera Kit (8MB PSRAM)」とせんごく「【9915】ATOMS3R (8MB PSRAM搭載)　M5STACK-C126」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "m5stack/h-atoms3r-camera-kit",
+          "sengoku/EEHD-6UUJ"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。M5Stack公式「ATOMS3R Camera Kit (8MB PSRAM)」とせんごく「【10008】ATOMS3R Ext プロトキット(8MB PSRAM搭載、液晶なし)　M5STACK-C126-EXT」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "m5stack/h-atoms3r-camera-kit-m12-version-ov3660",
+          "sengoku/EEHD-6J74"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。M5Stack公式「[EOL] ATOMS3R Camera Kit M12 Version (OV3660)」とせんごく「【9915】ATOMS3R (8MB PSRAM搭載)　M5STACK-C126」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "m5stack/h-atoms3r-camera-kit-m12-version-ov3660",
+          "sengoku/EEHD-6UUJ"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。M5Stack公式「[EOL] ATOMS3R Camera Kit M12 Version (OV3660)」とせんごく「【10008】ATOMS3R Ext プロトキット(8MB PSRAM搭載、液晶なし)　M5STACK-C126-EXT」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "m5stack/h-atoms3r-dev-kit",
+          "sengoku/EEHD-6J75"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。M5Stack公式「ATOMS3R Development Kit with 0.85-inch Screen (8MB PSRAM)」とせんごく「【9916】ATOMS3R カメラキット(8MB PSRAM搭載)　M5STACK-C126-Cam」。前者は0.85インチ液晶付きの本体開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "m5stack/h-atoms3r-proto-kit-without-screen",
+          "sengoku/EEHD-6J75"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。M5Stack公式「ATOMS3R Proto Kit without Screen (8MB PSRAM)」とせんごく「【9916】ATOMS3R カメラキット(8MB PSRAM搭載)　M5STACK-C126-Cam」。前者は液晶なしでプロト基板を付けた開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/10008",
+          "m5stack/h-atoms3r-camera-kit"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R Ext プロトキット（8MB PSRAM搭載、液晶なし）」とM5Stack公式「ATOMS3R Camera Kit (8MB PSRAM)」。前者は液晶なしでプロト基板を付けた開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/10008",
+          "m5stack/h-atoms3r-camera-kit-m12-version-ov3660"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R Ext プロトキット（8MB PSRAM搭載、液晶なし）」とM5Stack公式「[EOL] ATOMS3R Camera Kit M12 Version (OV3660)」。前者は液晶なしでプロト基板を付けた開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/10008",
+          "sengoku/EEHD-6J75"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R Ext プロトキット（8MB PSRAM搭載、液晶なし）」とせんごく「【9916】ATOMS3R カメラキット(8MB PSRAM搭載)　M5STACK-C126-Cam」。前者は液晶なしでプロト基板を付けた開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/10009",
+          "m5stack/h-atoms3r-dev-kit"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R M12カメラキット（OV3660）--在庫限り」とM5Stack公式「ATOMS3R Development Kit with 0.85-inch Screen (8MB PSRAM)」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/10009",
+          "m5stack/h-atoms3r-proto-kit-without-screen"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R M12カメラキット（OV3660）--在庫限り」とM5Stack公式「ATOMS3R Proto Kit without Screen (8MB PSRAM)」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/10009",
+          "sengoku/EEHD-6J74"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R M12カメラキット（OV3660）--在庫限り」とせんごく「【9915】ATOMS3R (8MB PSRAM搭載)　M5STACK-C126」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/10009",
+          "sengoku/EEHD-6UUJ"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R M12カメラキット（OV3660）--在庫限り」とせんごく「【10008】ATOMS3R Ext プロトキット(8MB PSRAM搭載、液晶なし)　M5STACK-C126-EXT」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/9915",
+          "m5stack/h-atoms3r-camera-kit"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R (8MB PSRAM搭載)」とM5Stack公式「ATOMS3R Camera Kit (8MB PSRAM)」。前者は0.85インチ液晶付きの本体開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/9915",
+          "m5stack/h-atoms3r-camera-kit-m12-version-ov3660"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R (8MB PSRAM搭載)」とM5Stack公式「[EOL] ATOMS3R Camera Kit M12 Version (OV3660)」。前者は0.85インチ液晶付きの本体開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/9915",
+          "sengoku/EEHD-6J75"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R (8MB PSRAM搭載)」とせんごく「【9916】ATOMS3R カメラキット(8MB PSRAM搭載)　M5STACK-C126-Cam」。前者は0.85インチ液晶付きの本体開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/9916",
+          "m5stack/h-atoms3r-dev-kit"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R カメラキット(8MB PSRAM搭載)」とM5Stack公式「ATOMS3R Development Kit with 0.85-inch Screen (8MB PSRAM)」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/9916",
+          "m5stack/h-atoms3r-proto-kit-without-screen"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R カメラキット(8MB PSRAM搭載)」とM5Stack公式「ATOMS3R Proto Kit without Screen (8MB PSRAM)」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/9916",
+          "sengoku/EEHD-6J74"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R カメラキット(8MB PSRAM搭載)」とせんごく「【9915】ATOMS3R (8MB PSRAM搭載)　M5STACK-C126」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      },
+      {
+        "products": [
+          "switch-science/9916",
+          "sengoku/EEHD-6UUJ"
+        ],
+        "decision": "different",
+        "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R カメラキット(8MB PSRAM搭載)」とせんごく「【10008】ATOMS3R Ext プロトキット(8MB PSRAM搭載、液晶なし)　M5STACK-C126-EXT」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。"
+      }
+    ],
+    "notes": "統合確認でカメラキット（C126-CAM、C126-M12）と本体・プロトキット（C126、C126-EXT）に分割。",
+    "firstDecision": {
+      "group": 1,
+      "families": [
+        {
+          "label": "ATOMS3R シリーズ",
+          "purpose": "ESP32-S3搭載の小型ATOMS3Rを使う開発キット（液晶付き、カメラ付き、M12カメラ付き、液晶なしプロトキットの構成違い）",
+          "members": [
+            {
+              "key": "switch-science/9915",
+              "variant": "C126",
+              "features": {
+                "型番": "C126",
+                "構成": "ATOMS3R本体(0.85インチ液晶付き開発キット)"
+              },
+              "offerId": null
+            },
+            {
+              "key": "m5stack/h-atoms3r-dev-kit",
+              "variant": "C126",
+              "features": {
+                "型番": "C126",
+                "構成": "ATOMS3R本体(0.85インチ液晶付き開発キット)"
+              },
+              "offerId": "45605332615425"
+            },
+            {
+              "key": "sengoku/EEHD-6J74",
+              "variant": "C126",
+              "features": {
+                "型番": "C126",
+                "構成": "ATOMS3R本体(0.85インチ液晶付き開発キット)"
+              },
+              "offerId": null
+            },
+            {
+              "key": "switch-science/9916",
+              "variant": "C126-CAM",
+              "features": {
+                "型番": "C126-CAM",
+                "構成": "ATOMS3R カメラキット"
+              },
+              "offerId": null
+            },
+            {
+              "key": "m5stack/h-atoms3r-camera-kit",
+              "variant": "C126-CAM",
+              "features": {
+                "型番": "C126-CAM",
+                "構成": "ATOMS3R カメラキット"
+              },
+              "offerId": "45605343920385"
+            },
+            {
+              "key": "sengoku/EEHD-6J75",
+              "variant": "C126-CAM",
+              "features": {
+                "型番": "C126-CAM",
+                "構成": "ATOMS3R カメラキット"
+              },
+              "offerId": null
+            },
+            {
+              "key": "switch-science/10009",
+              "variant": "C126-M12",
+              "features": {
+                "型番": "C126-M12",
+                "構成": "ATOMS3R M12カメラキット(OV3660)"
+              },
+              "offerId": null
+            },
+            {
+              "key": "m5stack/h-atoms3r-camera-kit-m12-version-ov3660",
+              "variant": "C126-M12",
+              "features": {
+                "型番": "C126-M12",
+                "構成": "ATOMS3R M12カメラキット(OV3660)"
+              },
+              "offerId": "45624741560577"
+            },
+            {
+              "key": "switch-science/10008",
+              "variant": "C126-EXT",
+              "features": {
+                "型番": "C126-EXT",
+                "構成": "ATOMS3R Ext プロトキット(液晶なし)"
+              },
+              "offerId": null
+            },
+            {
+              "key": "m5stack/h-atoms3r-proto-kit-without-screen",
+              "variant": "C126-EXT",
+              "features": {
+                "型番": "C126-EXT",
+                "構成": "ATOMS3R Ext プロトキット(液晶なし)"
+              },
+              "offerId": "45624738971905"
+            },
+            {
+              "key": "sengoku/EEHD-6UUJ",
+              "variant": "C126-EXT",
+              "features": {
+                "型番": "C126-EXT",
+                "構成": "ATOMS3R Ext プロトキット(液晶なし)"
+              },
+              "offerId": null
+            }
+          ]
+        }
+      ],
+      "dismissed": [],
+      "notes": "ATOMS3R本体を共通とする構成違い4種(C126、C126-CAM、C126-M12、C126-EXT)を1家族にまとめた。"
+    }
+  }
+]

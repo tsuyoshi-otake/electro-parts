@@ -13,7 +13,7 @@ import type { M5StackItem, M5StackSnapshot } from '../../src/adapters/m5stack/ra
 import { validateSwitchScienceRaw } from '../../src/adapters/switch-science/snapshotAdapter.ts';
 import type { SwitchScienceRawItem, SwitchScienceRawSnapshot } from '../../src/adapters/switch-science/rawSchema.ts';
 import type { ValidationResult } from '../../src/core/validation.ts';
-import { assertCatalog, hash, listingKey, normalizeCode, type Alias, type Catalog, type ExtraKeys, type Listing } from './model.ts';
+import { assertCatalog, hash, listingKey, normalizeCode, pageReference, type Alias, type Catalog, type ExtraKeys, type Listing } from './model.ts';
 
 type RetailerStore = 'akizuki' | 'switch-science';
 const order = (a: Listing, b: Listing): number => listingKey(a) < listingKey(b) ? -1 : 1;
@@ -122,21 +122,37 @@ export function identityCodes(storeId: string, manufacturer: string, values: str
 const SENGOKU_WAVESHARE_LABELS: ReadonlySet<string> = new Set(['Waveshare', 'Argon', 'LUCKFOX']);
 
 /**
+ * Maker prefixes a shop writes in front of the maker's own part number (`SFE-BOB-11083`, `ATMEL-ATMEGA328P-AU`,
+ * `DIGI-XB2B-WFPT-001`, せんごく `ALIENTEK-3IN1USC-FT-I`). Seen in the Switch Science and せんごく catalogues on
+ * 2026-11-02. Gated on the prefix, not on the maker field: Switch Science's older rows name the shop itself as maker.
+ */
+const MAKER_PREFIX = /^(?:SFE|DFROBOT|ADA|POLOLU|WAVESHARE|PIMORONI|ARDUINO|FEETECH|KITRONIK|UCTRONICS|DIGI|ATMEL|MICROCHIP|M5STACK|ALIENTEK|BENEWAKE)-(.+)$/;
+/**
+ * A part number: hyphen-joined runs of letters and digits, with both (`TC74HC138AP`, `S2B-PH-K-S`). A bare number
+ * (`POLOLU-3424`, `ADA-4200`) collides across makers and stays behind its prefix.
+ */
+const partNumber = (s: string): boolean => s.length >= 4 && /^[A-Z0-9]+(?:-[A-Z0-9]+)*$/.test(s) && /[A-Z]/.test(s) && /\d/.test(s);
+
+/**
  * Match keys read at discovery time from a listing's own fields, in forms seen in the catalogue. The stored `codes`
  * (and so every fingerprint) stay as imported; these keys only add candidates, and each pair is still reviewed.
- * Revision and configuration suffixes stay: a production suffix only adds the plain code next to the stored one.
+ * Revision and configuration suffixes stay: an annotation only adds the plain code next to the stored one.
  */
 export function derivedCodes(p: Listing): string[] {
   const keys: string[] = [];
+  const forms: string[] = [];
   const bracketed = p.storeId === 'sengoku' ? p.modelNumber.match(/^【([^】]+)】\s*(.*)$/) : null;
   if (bracketed) {
     const [, inner = '', rest = ''] = bracketed;
     const vendor = p.vendor ?? '';
     if (SENGOKU_WAVESHARE_LABELS.has(vendor) && /^\d{4,6}$/.test(inner)) keys.push(inner);
-    if (rest) keys.push(...identityCodes('sengoku', SENGOKU_PREFIX_MAKERS[vendor] ?? '', [rest]));
+    if (rest) { const codes = identityCodes('sengoku', SENGOKU_PREFIX_MAKERS[vendor] ?? '', [rest]); keys.push(...codes); forms.push(...codes); }
     // `【019】RPi5-8GB-SC1112`, `【014】RPi3B-SC0073`: the shop's name for the board around the official code.
     if (vendor === 'Raspberry Pi') keys.push(...(normalizeCode(rest).match(/SC\d{4}/g) ?? []));
   }
+  // せんごく reselling a Switch Science product writes `<code>/<its page number>` (`SSCI-012164/1216`).
+  const resold = p.storeId === 'sengoku' ? resaleReference(p) : null;
+  if (resold) { keys.push(resold.code); forms.push(resold.code); }
   for (const code of p.codes) {
     // Seeed's 9-digit SKU behind a shop prefix (`SEEED-113990234`). The prefix names the maker: Switch Science's older
     // rows give itself as manufacturer, and Sengoku gives none.
@@ -147,11 +163,49 @@ export function derivedCodes(p: Listing): string[] {
       const sku = code.match(/^(?:SKU-)?(\d{9})(?:\([0-9A-Z]+\))?$/); if (sku) keys.push(sku[1]!);
       if (/^\d{9}(?:\/\d{9})+$/.test(code)) keys.push(...code.split('/'));
     }
-    // A Raspberry Pi product code with a production suffix (`SC0194(9)`, `SC0130(J)`); the review decides whether it matters.
-    const suffixed = code.match(/^(SC\d{4})\([0-9A-Z]{1,2}\)$/);
-    if (suffixed) keys.push(suffixed[1]!);
+    forms.push(code);
+    // An ordering or production annotation after the part number: Toshiba's `TC74HC138AP(F)`, JST's
+    // `S2B-PH-K-S(LF)(SN)`, Raspberry Pi's `SC0194(9)`, TI's `LMC660CN/NOPB`. The review decides whether it matters.
+    const annotated = code.match(/^([^(]+)\(/)?.[1] ?? code.match(/^(.+)\/NOPB$/)?.[1];
+    if (annotated && partNumber(annotated)) { keys.push(annotated); forms.push(annotated); }
+    // Alternatives joined by `/` (`PIM185/PIM208`). A short tail is a package code (`PIC16F84A-20I/SS`) and stays.
+    const parts = code.split('/');
+    if (parts.length > 1 && parts.every(part => part.length >= 5 && partNumber(part))) { keys.push(...parts); forms.push(...parts); }
+  }
+  for (const form of forms) {
+    const rest = form.match(MAKER_PREFIX)?.[1];
+    if (rest && partNumber(rest)) keys.push(rest);
   }
   return [...new Set(keys)].filter(key => !p.codes.includes(key));
+}
+
+/** `<code>/<page number>` in a せんごく model: the code and the Switch Science page it names (4 or 5 digits). */
+function resaleReference(p: Listing): { code: string; page: string } | null {
+  const m = normalizeCode(p.modelNumber).match(/^([^【/]+)\/(\d{4,5})$/);
+  return m && /[A-Z]/.test(m[1]!) && /\d/.test(m[1]!) ? { code: m[1]!, page: m[2]! } : null;
+}
+
+/**
+ * せんごく maker labels whose leading 【N】 is the Switch Science page number of the product it resells: every such
+ * row with an existing page carried that page's product name on 2026-11-02 (M5STACK 420 of 420, スイッチサイエンス 37 of 37).
+ * Other labels hold Waveshare part numbers or the shop's own running numbers there.
+ */
+const SENGOKU_RESALE_LABELS: ReadonlySet<string> = new Set(['M5STACK', 'スイッチサイエンス', 'DFROBOT', 'Pololu', 'SONY (ソニー)', 'D-Robotics', 'DAMIAO', 'Arduino', 'ALIENTEK']);
+const switchSciencePage = (pageKey: string): string => pageReference({ storeId: 'switch-science', pageKey });
+
+/**
+ * References to a listing: every listing names its own page, which a reviewed alias can cite when only the names tie
+ * two listings (0.6.5), and a せんごく row names the Switch Science page it resells. They are searched only after codes,
+ * derived keys and aliases, so a pair those already find keeps its keys.
+ */
+export function referenceKeys(p: Listing): string[] {
+  const pages = new Set([pageReference(p)]);
+  if (p.storeId !== 'sengoku') return [...pages];
+  const resold = resaleReference(p);
+  if (resold) pages.add(switchSciencePage(resold.page));
+  const bracket = normalizeCode(p.modelNumber).match(/^【(\d{3,5})】/)?.[1] ?? normalizeCode(p.name).match(/【(\d{3,5})】/)?.[1];
+  if (bracket && SENGOKU_RESALE_LABELS.has(p.vendor ?? '')) pages.add(switchSciencePage(bracket));
+  return [...pages];
 }
 
 /** Discovery keys besides the stored codes: the derived forms above plus the reviewed aliases of the listing. */

@@ -952,3 +952,161 @@ Learning: check each listing claim against the rendering code, not against the p
 - Learning: a live-check expectation for "narrow width" must come from the store's own layout at that width (measured without the extension), not from the viewport.
 - The user pressed 審査のため送信. The first `status` right after still read 「公開済み - 一般公開」 (draft 0.6.3). `blockers` then found 「送信できない理由」 but no 「公開できません」 dialog and timed out; a read-only CDP read of the tab showed 「ステータス: 審査待ち」 and 「レビュー中のアイテムは編集、公開できません。」. A second `status` read 審査待ち / draft 0.6.3 / published 0.6.1. Learning: the status lags a few seconds after submitting, so read it again before doubting the submission; `blockers` is a pre-submission command and fails by design once an item is in review.
 - `close` closed that Chrome (0 processes) and deleted its profile; `~/tmp/electro-cws` removed.
+
+## 2026-11-02 Mapping gap audit after 0.6.3 (investigation only, no code change)
+- User question: 「まだまだ、マッピングが不完全じゃない?」. Audited `data/matching` on main (bc809d9): all five stores' full catalogues (44,518 rows), 3,842 reviewed candidates.
+- Rows reaching a relation (same, similar or unresolved; families included): akizuki 1,095/12,832, switch-science 1,564/10,503, m5stack 502/682, ksy 284/776, sengoku 1,781/19,725. Most unmatched rows are store-only products, so these ratios alone do not prove a gap.
+- Prototype discovery keys (scratchpad only), counted as new pairs that `candidates.jsonl` lacks, deduplicated across rules: 335.
+  - Ordering/packaging annotation after the code (`TC74HC138AP(F)`, `TBD62083APG(ZHZW)`, `S2B-PH-K-S(LF)(SN)`, `LMC660CN/NOPB`, `PIM185/PIM208`): 149, 111 with similar names; mostly akizuki/sengoku Toshiba ICs. Package variants (`PIC16F84A-20I/SS` vs `/P`) also land here and are similar products, not same.
+  - Sengoku 【N】 or `<code>/N` naming the Switch Science page it resells (`SSCI-012164/1216`, `【10241】`): 138, only 57 with similar names. Waveshare SKUs in brackets (`【10444】 1.3inch OLED`) collide with SS page numbers, so this rule needs the code before the slash or a name check.
+  - Switch Science maker prefixes (`SFE-BOB-11083`, `ATMEL-ATMEGA328P-AU`, `DIGI-XB2B-WFPT-001`, `ARDUINO-A000103`, `PIMORONI-PIM172`) against the bare code elsewhere: 61. SS writes these prefixes on ~4,800 codes (SFE 1,448, DFROBOT 901, ADA 692, POLOLU 451, WAVESHARE 304, PIMORONI 161). A numeric rest (`ADA-4200`) must stay maker-scoped.
+  - SS rows whose manufacturer is スイッチサイエンス with an `M5STACK-` code (44 rows): 24 pairs with the official M5Stack shop, all blocked by the "contradictory known makers" filter, not by the key. Mostly [EOL] products.
+- Not measured: products with no shared code at all (KSY in-house codes such as `TAIYPX201` for Taiyo PX-201, M5Stack official 180 unrelated rows of which 97 are [EOL]), and listings after the 2026-10-31 supplements.
+- Learning: discovery misses come in families: shop annotations around the code, shop maker prefixes, a shop's self-label as manufacturer blocking a pair, and resale numbers. Measure each family by prototype keys against `candidates.jsonl` before writing the rule, and check precision with name similarity plus samples, since bracket and numeric keys collide.
+
+## 2026-11-02 discovery-keys-064: discovery keys for annotations, maker prefixes and resale numbers (#48, 0.6.4)
+- Symptom: the audit above found 335 likely pairs that discovery never produced. The causes were ordering annotations (`TC74HC138AP(F)`, `/NOPB`), alternatives (`PIM185/PIM208`), Switch Science maker prefixes (`SFE-`, `ATMEL-` …), sengoku resale references (`SSCI-012164/1216`, `【3650】`) and SS rows that name the shop as maker (`M5STACK-K033`).
+- Fix, all in `scripts/matching`. Uncommitted on branch `fix/discovery-keys-064`, so there is no SHA yet.
+  - `derivedCodes` frees the part number before an annotation and the parts of an `A/B` alternative. Every part must be at least 5 characters and look like a part number, so `PIC16F84A-20I/SS` stays whole.
+  - It strips 16 maker prefixes, but only when the rest contains a letter, so `POLOLU-3424` is not freed.
+  - It takes `<code>` from sengoku `<code>/<4–5 digits>`; the 4–5 digits exclude `AMCS-473/630`.
+  - `referenceKeys` gives SS rows `SWITCH-SCIENCE/<page>`, and gives sengoku rows the same key from `/N`, or from a leading `【N】` when the vendor is one of 9 labels.
+  - `discover(left, right, ...tiers)` adds later-tier pairs only.
+  - `makerClaim` ignores the manufacturer 「スイッチサイエンス」 on SS rows.
+- Fail-before: with the matching code at HEAD, the 3 new unit tests failed and the 2 existing tests passed; afterwards all 5 passed.
+- Result: 245 new candidates, 0 of the 3,842 existing fingerprints changed. Sonnet reviewed 5 batches of 49, and the Opus integrator read all 245 rows.
+  - Mechanical checks found 93 `differences` with remarks outside the quotes; those remarks moved to the evidence.
+  - The consistency check found 4 non-same reviews whose rows were already linked through same_product. Three were KSY×sengoku Pimoroni pairs, the fourth SS 7678×KSY 720. All 4 became same_product, with the first decision kept in the evidence.
+  - Two reviews replace `legacy.json` relations (a112633-s2090 unresolved→same, a131817-s4449 candidate→verified), noted in their evidence.
+  - Final counts: same 208, unresolved 15, rejected 22. Relations went from 4,615 to 4,836.
+- Verification: goal-loop rubric `.claude/goal-loop/discovery-keys-064/rubric.md`, graded by a fresh rubric-verifier (Sonnet).
+  - Iteration 1: C1, C2 and C4–C8 passed. C3 failed on two Expect values that I had written wrong: the Waveshare `【10444】X` row derives `10444` and the M5STACK row derives `PROTO-MODULE`.
+  - Investigation: HEAD's `derivedCodes` gives the same output for both rows (the 0.6.3 Waveshare bracket SKU rule and the M5Stack-scoped prefix rule). The code was right and the rubric was wrong. Corrected the Expect; iteration 2 regraded C3 as pass. No code changed between the iterations.
+  - typecheck exit 0; 649 unit tests in 50 files; 17 E2E; `npm audit --audit-level=high` exit 0. The 3 moderate advisories are Stryker's minimatch, which has no fix.
+  - Afterwards no vitest, Playwright or browser processes remained; only the editor's tsserver was running.
+- Still open:
+  - The two old contradictions `a116956-s5843` and `a130198-s5682` are unresolved, yet both pairs are linked through KSY same_product reviews. They predate this change.
+  - Discovery still never compares names, so rows without a shared code (3,004 have no usable code) and name-only similar products are not found.
+- Learning: rules.md has 3 new rules: tiers for new key kinds, label-gated number references, and cross-checking new reviews against both rows' existing decisions. A rubric Expect for a function's output must be derived by running HEAD's function on the same input, not from the change's intent.
+
+## 2026-11-02 name-discovery-065: name-based candidate discovery (#49, 0.6.5)
+- Symptom: 3,004 rows have no usable code of their own, so no code tier could pair them, even when the name carries the part number (sengoku 「タイマーIC NJM555D」 with an empty model field).
+- Fix, all in `scripts/matching`. Uncommitted on branch `fix/discovery-keys-064`, on top of the uncommitted 0.6.4 work, so there is no SHA yet.
+  - `names.ts` proposes pairs from model-like name tokens plus own codes, with measurements excluded. Tokens shared by more than 20 rows are dropped. A pair needs compatible makers and one side without own codes, then trigram Dice ≥ 0.2. It keeps the top 2 per row and counterpart shop (union), with known pairs ranked too. Cost is O(N·L + Σ min(df,20)²); 44,518 rows take about 0.14 s.
+  - `pageReference` gives every row its own page key, which only an alias can cite.
+  - `npm run matching:names` lists open proposals, and `coverage.json` holds `nameProposals`.
+  - `discoveryTiers` orders the tiers derived → page references → aliases.
+  - Family members may name a store variant by `offerId`, and must do so when the row has variants.
+- Precision before adoption: in sample 1, both-coded name pairs were same 1 / similar 49 / different 34 of 87. In sample 2, codeless pairs at Dice ≥0.3 were same 11 of 15, at 0.2–0.3 same 1 of 15, and below 0.2 same 0 of 30. Mutual top-2 lost the 11EQS06 same pair (0.94), so union stays.
+- Review of all 107 proposals:
+  - Sonnet worked in 3 batches (36/36/35). The first decisions were same 37, similar 22, unresolved 15, rejected 33. Mechanical checks found 0 format errors.
+  - The Opus integrator read every row and changed 29.
+    - 10 same → unresolved: multi-source codes (1N4148, 1N60, T-xx-x cores, SK6812MINI) where one maker is unknown.
+    - 1 unresolved → same: TLP624(F), following the 0.6.4 (F) precedent.
+    - 4 similar → rejected: XT90 male/female, and LoRa boards for different hosts.
+    - 14 family feature sets lost their 「記載なし」 values.
+  - Final counts: same 28, similar 18, unresolved 24, rejected 37. The originals are kept in `.claude/goal-loop/name-discovery-065/`.
+- Failure 1: the first `matching:build` stopped with `review is stale or orphaned: ["switch-science","5754","sengoku","EEHD-5HEF"]`.
+  - Root cause: the alias `U055` on sengoku EEHD-5HEF, needed so the M5Stack variant code is in the candidate codes, also met SS 5754's own `U055`. Aliases sat in tier 2, ahead of the page-reference tier, so the resale pair was found first by the alias and rekeyed. 4 existing fingerprints changed.
+  - Verified by diffing against the 0.6.4 candidates. Fix: aliases moved to the last tier. Afterwards 0 of the 4,087 fingerprints changed and all 89 new candidates were present.
+- Failure 2: the build stopped with `reviewed variant required: m5stack/h-dual-kemter-module-13-2-max31855`. Families had no way to name a variant. Fix: optional `offerId` on family members, validated both ways.
+- Failure 3: the name tier proposed a106875-s1607, which `legacy.json` held as unresolved (gpt-5.6-luna insufficient_evidence). Its rejection removed that legacy relation.
+  - Fix: the review evidence now records the legacy judgement, as in 0.6.4.
+- Verification:
+  - Fail-before: the old tier order makes the module-level generate throw (stale review). Without the offerId check, the family test fails with "reviewed variant required".
+  - typecheck exit 0; 658 unit tests in 51 files; `npm audit --audit-level=high` exit 0 (3 moderate, Stryker's minimatch).
+  - E2E run 1 stopped in global setup with the known `EPERM` rename in `test-results/e2e-site` (publisher untouched). Run 2 passed 17/17.
+  - goal-loop rubric `.claude/goal-loop/name-discovery-065/rubric.md`, graded by a fresh rubric-verifier (Sonnet): 9/9 pass in iteration 1.
+  - No vitest or Playwright processes remained; only the editor's tsserver was running.
+- Result: relations 4,836 → 4,905 (same 3,931 → 3,959, similar 823 → 841, unresolved 74 → 97), families 25 → 43, aliases 26 → 85, open name proposals 0.
+- Still open:
+  - Similar-product discovery among both-coded pairs: about 1,355 at Dice ≥0.3.
+  - 2,244 codeless rows without a model-like token.
+  - The two old contradictions a116956-s5843 and a130198-s5682.
+- Learning: rules.md now holds the alias-last tier rule (merged into the tier rule), the "names only propose where a side is codeless" rule, and the maker/substitutability rule for same and similar.
+
+## 2026-11-02 similar-families-066: similar-product leads among both-coded rows (#50, 0.6.6)
+- Symptom: after 0.6.5, two rows that both have codes of their own were never compared unless a code matched. Versions and configurations of one line (UnitV2 `U078-D`/`U078-M12`/`U078-USB`, CoreS3 `K128`/`K128-SE`) were linked only where a hand-made family existed.
+- Measurement (2026-11-02 catalogue, 44,518 rows):
+  - Both-coded name pairs with the 0.6.5 blocking: 8,108. 4,031 were already known, 4,077 open.
+  - By Dice band (≥0.5 / 0.4 / 0.3 / 0.2 / <0.2): 517 / 402 / 573 / 924 / 1,661. Top-2 per row at Dice ≥0.2: 2,040.
+  - Sonnet sample of 90 (18 per band): same 6, similar 42, different 39, unknown 3. The similar share ranged 28-78 % by band, so no Dice threshold bounds precision. Pairs that also shared a code stem: similar 6 of 8.
+- Fix, uncommitted on branch `fix/discovery-keys-064`, on top of the uncommitted 0.6.4 and 0.6.5 work, so there is no SHA yet.
+  - `names.ts`: `tokenPairs` serves both tiers (`bothCoded` flag). `codeStems` gives a code and its `-` prefixes that are model-like and contain a letter. `proposeSimilar` keeps both-coded pairs that share a rare name token and a stem. Cost: `tokenPairs` plus O(C·K) per pair, no N×M join.
+  - `model.ts` / `generate.ts`: `Dismissal` (`different` | `identity`) bound to both rows' fingerprints. A stale, orphaned, duplicate, reversed or known-pair dismissal throws. `coverage.json` gets `similarProposals` and `dismissedLeads`. `npm run matching:similar` prints the open queue.
+- Review of all 234 leads (53 connected groups, 224 rows):
+  - 4 Sonnet reviewers returned a family or per-pair dismissals for each group (`.claude/goal-loop/similar-families-066/sonnet-groups.json`).
+  - The Opus integrator read every row and changed group 1: ATOMS3R split into camera kits (`C126-CAM`, `C126-M12`) and body/proto kits (`C126`, `C126-EXT`); the 20 pairs between them became `different` dismissals with the first decision quoted.
+  - After applying, the integrator merged three same-label family pairs (`U200`, `K041`, `K129`). Both shops sell both versions, so the same-version pairs are code candidates and the leads formed two unconnected groups. Relations were unchanged (5,095). The merge exposed K041's same-variant members with different product-name features; they were unified per variant.
+- Failures and fixes during the work:
+  - Family ids took the shortest stem (`stem-esp32`); the tie-breaker now takes the longest.
+  - A recount of the range blocked only coded rows and found 8,275 name pairs instead of 8,108. Root cause: `tokenPairs` counts a token's rows including codeless ones, so common tokens (`300MIL`) pass the 20-row limit only in the wrong recount. Recounted with the generator's blocking: 8,108, open 3,843. Recorded as a rule.
+  - The summary carried a stem-only range of 1,854 from a scratch file with an unknown definition. The recount with a clear definition (stem shared, no shared token in ≤20 rows, not known, not dismissed) gave 2,372; the docs use 2,372.
+- Result: families 43 → 84 (41 `stem-` families, 191 members); relations 4,905 → 5,095 (similar 841 → 1,031); dismissals 46 (different 33, identity 13); open similar leads 0. `candidates.jsonl`, `reviews.json` and `aliases.json` are byte-identical to 0.6.5, so the 4,176 fingerprints are unchanged.
+- Verification:
+  - Fail-before: the new tests failed under temporary mutations of the new code, which was restored. The tests also pin that dropping the stem families reopens 234 leads and dropping the dismissals reopens 46.
+  - typecheck exit 0; 664 unit tests in 51 files; E2E 17/17 in one run; `npm audit --audit-level=high` exit 0 (3 moderate, Stryker's minimatch, as before).
+  - goal-loop rubric `.claude/goal-loop/similar-families-066/rubric.md`, graded by a fresh rubric-verifier (Sonnet): 9/9 pass in iteration 1.
+- Still open:
+  - 13 `identity` dismissals wait for alias + review (LM336Z-5.0 vs /NOPB, FS90R vs FS90R-V2, M5Paper K049 vs K049-B ×4, G2R-1-E 24V vs DC24V, E220 EV2 spelling, SCS0009 vs SC-0090, STS3215 vs ST-3215, UV324-1220 plug variants ×2).
+  - 3,843 open both-coded name pairs without a shared stem, and 2,372 stem-only pairs (largest stems `ESP32` 271, `Y2KB` 220; real M5Stack versions such as `U035`/`U035-B` are among them).
+  - The two old contradictions a116956-s5843 and a130198-s5682.
+- Learning: rules.md has 5 new rules (two-signal similar leads, the dismissal ledger, families of mutual substitutes only, merging split same-line families, counting token blocks like `tokenPairs`) and the 0.6.5 names rule now points to `proposeSimilar`.
+
+## 2026-11-02 stem-families-067: base-code similar leads and the settled 0.6.6 identities (#51, #52, 0.6.7)
+- Symptom: 0.6.6 proposed a similar lead only when the names also shared a rare token. M5Stack versions whose names share no word (CardKB `U035` 「カード型キーボードユニット」 and `U035-B` 「CardKB Mini」, ENV `U001`…`U001-D`) stayed unlinked: 2,372 stem-only pairs. The 13 `identity` dismissals of 0.6.6 also waited for alias + review.
+- Measurement (the 0.6.6 state, representative stem = the longest shared one):
+  - By store pair: akizuki/sengoku 871, SS/sengoku 528, SS/official 386, akizuki/SS 275, official/sengoku 205, akizuki/official 63, KSY pairs 44.
+  - Shape × stem listings: base code (one code is the stem) 201 / 275 / 158 / 0 at ≤5 / 6-10 / 11-20 / >20; siblings 152 / 319 / 450 / 817.
+  - Sonnet sample of 90 in 7 strata: base ≤10 similar 23 of 24, base 11-20 7 of 12, siblings 5/12, 10/12, 11/12, 6/18 by band.
+- Fix (uncommitted on `fix/discovery-keys-064` with 0.6.4-0.6.6, so no SHA yet):
+  - `names.ts`: `proposeSimilar` adds a second tier. A cross-store pair with compatible makers, where one row's own code is the stem and at most `SIMILAR_DISCOVERY.maxStemListings` (10) rows carry it, is a lead with `tokens: []`. Blocks over the limit are skipped before pairing: O(N·C·K) + O(Σ min(df, 10)²), no N×M join.
+  - `generate.ts`: the coverage limitation text names both tiers.
+  - Data: 478 leads → 79 new `stem-` families (376 members), 31 members added to 10 existing families, 81 dismissals (different 32, identity 49). #52: 12 aliases + reviews (same 3, unresolved 9) and ak/117206 joined `stem-k049`.
+- Review: 148 connected groups (571 rows), 8 Sonnet reviewers with `check067.cjs`; first decisions 80 families / 31 extensions / different 32 / identity 61. The Opus integrator read every row and replaced 22 groups (15 overrides; 7 merge two groups):
+  - Maker SKU vs versioned SKU became families: `A003`/`A004` vs `-V3`, `K007`/`-V26`/`-V27`, `SEN0161`/`-V2`, `A076`/`-B`/`-C` (identity 61 → 49).
+  - 7 lines split over two groups merged into one family each (`A003`, `A004`, `A035`, `A088`, `A093`, `A146`, `K038`).
+  - Features limited to facts: `S6775`, `M138` to 型番 only; `ATMEGA8A` → `MEGA8A`; maker name dropped from the P-416 labels; `stem-a090` relabelled 「ATOMIC Motion ベース」 with 型番 + 構成 so the first `A090` (STM32F030) fits without the inferred 「非搭載」.
+  - First decisions, overrides with notes, the guide, the checker, leads and the precision sample are in `.claude/goal-loop/stem-families-067/`.
+- Failures and fixes during the work:
+  - The せんごく generator test failed: the nine #52 reviews had bare `differences` (`型番: LM336Z-5.0 ↔ …`). Rewritten as `項目: <店>「…」 ↔ <店>「…」`; ids, fingerprints and decisions unchanged.
+  - The E2E `cross-store.spec.ts:74` expected 10 requests and saw 13. Root cause: the ATOM family gained the official and せんごく ATOM Matrix pages, so ATOM Lite's related products went 5 → 9, and the loads stop at `MAX_RELATED_HISTORY_LOADS` (8): 4 manifests + 1 own + 8 = 13. The expectation was re-derived, not raised blindly.
+  - `report.similarProposals` holds ids, not lead objects; the test reads tiers from `generate(...).similarProposals`.
+  - A shell command that began with `cat > file` without input hung until stopped; nothing was written. Doc sections are now written with the Write tool first.
+- Result: relations 5,095 → 5,108 (#52: same +3, unresolved +9, similar +1) → 5,580 (#51: similar +472, 75 of them non-lead pairs inside families). Families 84 → 163. Dismissals 114 (different 65, identity 49). Open leads 0. The 4,176 reviews of 0.6.6 keep their ids, fingerprints and decisions; `candidates.jsonl`, `reviews.json` and `aliases.json` are byte-identical before and after the #51 apply.
+- Verification:
+  - Fail-before: with the base-code tier replaced by `continue`, the 3 new `base-code leads (0.6.7)` tests in `matching-names.test.ts` failed; restored, they pass.
+  - `npm test` 669 passed; `npm run typecheck` exit 0; `npm audit --audit-level=high` 0; E2E 17/17 with `-c tests/e2e/playwright.config.ts`; no vitest or Playwright process left.
+  - Rubric `.claude/goal-loop/stem-families-067/rubric.md` (C1-C9) graded by an independent rubric-verifier against the pre-#51 baseline copy: overall pass in 1 iteration. It re-ran the family rule check over all 163 families (0 violations) and found none of the 114 dismissed pairs in the 5,580 generated relations.
+- Still open: the 49 `identity` dismissals need alias + review as #52 did; base stems with more than 10 listings (sample 7 of 12 similar) and sibling pairs sharing no name word stay unproposed; the two old contradictions `a116956-s5843` and `a130198-s5682` remain unresolved.
+- Learning: rules.md now holds the base-code tier with its sample numbers, maker SKU vs version SKU → family, features as facts (never an absence), the review `differences` form, and the E2E fetch-count derivation.
+
+## 2026-11-02 identity-settle-068: the 49 identity dismissals of 0.6.7 settled (#53, 0.6.8)
+- Symptom: 0.6.7 (#51) left 49 base-code leads as `identity` dismissals: the suffix (`MP-121M-1`, `2SC1815-GR`, `DFR0029-B`, `B2B-ZR-3.4`, `U017-PCBA`…) might be only another spelling, so the pairs were neither similar nor reviewed.
+- Investigation:
+  - Read both rows of every pair, all fields.
+  - Checked whether either store sells both codes as separate products. It did for 10 pairs: sengoku `P-416`/`P-416-5`, `D2F-01`/`D2F-01-D`, `1N4007G`/`-T`; akizuki `BS170`/`-D27Z`, `2N3906BU`/`-Y`; SS and the official shop both `U017`/`U017-PCBA`.
+  - A trial script placed each alias on either side and listed the candidates it would add. Every chosen placement (suffixed row += base code) adds only the intended pair. One alias settles two pairs twice: sengoku `ABX00028-R` += `ABX00028`, sengoku `TLP291-4` += `TLP291`.
+- Fix (uncommitted on `fix/discovery-keys-064` with 0.6.4-0.6.7, so no SHA yet):
+  - 41 aliases + 43 `unresolved` reviews (Opus), each with its missing evidence.
+  - Families: `stem-p-416` merged with `stem-p-416-2` into one 4-member family (the same-colour pairs differ by `P-416-5`, which sengoku sells apart as 金メッキ). New `stem-d2f-01` (akizuki terminal from the same-product せんごく row). New `stem-u017` (English names show the fisheye version).
+  - All 49 `identity` dismissals removed.
+  - No pair became `same_product`: none had only a spelling difference the fields prove.
+- Failures during the work:
+  - The first review texts called akizuki rows "マル信無線電機の型番" and "JST の" although akizuki's maker field is empty, and the TLP291 sentence was ungrammatical. Rewritten to cite せんごく's maker label; applied again from the baseline (texts do not enter fingerprints).
+  - A `node -e "…"` doc edit inside double quotes lost every Markdown backtick to bash command substitution (README, roadmap). Fixed with Edit; doc text with backticks goes through a quoted heredoc or the Edit tool.
+- Verification:
+  - Fail-before: the new `the settled 0.6.7 identities (0.6.8)` test failed with the pre-#53 data swapped in, and passes after.
+  - `npm test` 670 passed; typecheck 0; E2E 17/17; `npm audit --audit-level=high` exit 0 (3 moderate in Stryker dev deps); no vitest or Playwright process left.
+  - Rubric `.claude/goal-loop/identity-settle-068/rubric.md` (C1-C8) graded by an independent rubric-verifier against the pre-#53 baseline copy: overall pass in 1 iteration (it repeated the baseline swap and restore).
+- Result:
+  - Candidates 4,188 → 4,231 (old ids and fingerprints unchanged).
+  - Relations 5,580 → 5,631 (unresolved +43, similar +8).
+  - Families 163 → 164. Dismissals: 65, all `different`.
+- Still open: the 43 unresolved pairs need maker data (suffix meanings, ranks, colours, TLP291-4 channel count); base stems over 10 listings and sibling pairs stay unproposed; the two old contradictions `a116956-s5843` and `a130198-s5682`.
+
+## 2026-11-02 pr54-cli-modes: one operation per matching CLI run (#54 review, 7fdee88)
+- Symptom (Codex review on #54): `--supplement … --names` entered the supplement branch and wrote catalog.jsonl; `--names --similar` printed only the name queue. The conflict checks lived inside each branch, so an earlier branch won.
+- Fix: main() counts the selected operations and throws before any read when more than one is set; `--replace` needs `--supplement`. Per-branch checks removed.
+- Verification: a new CLI test (spawned with a 60 s timeout) failed before the fix (`--names --similar` exited 0) and passes after; npm test 671, typecheck, lint, matching:check pass; no vitest process left.
+- Learning: mutually exclusive CLI modes are validated once, up front, not per branch.

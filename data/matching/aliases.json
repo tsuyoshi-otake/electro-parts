@@ -1,5 +1,93 @@
 [
   {
+    "key": "akizuki/102273",
+    "fingerprint": "8db79c09ed60970af88e31efa7d0119c42e4d257b16a23afb5dcc2fbd654fb24",
+    "codes": [
+      "SENGOKU/EEHD-5GBJ"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SENGOKU/EEHD-5GBJはせんごく「5mmLED用直角ジグ　PRT-15315」と商品名の共通語「5MMLED」（名前の類似度0.2）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/103582",
+    "fingerprint": "c49f0ad70e27836f1d720a837962b9094162927239cba908a51fc6d13d486c62",
+    "codes": [
+      "SENGOKU/EEHD-5GBJ"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SENGOKU/EEHD-5GBJはせんごく「5mmLED用直角ジグ　PRT-15315」と商品名の共通語「5MMLED」（名前の類似度0.2）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/106875",
+    "fingerprint": "8c44ada9e2be16460287d66ab91084cc09f2ed08dcf855b6904766b6f69921c9",
+    "codes": [
+      "SWITCH-SCIENCE/1607"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SWITCH-SCIENCE/1607はスイッチサイエンス「モノクロHR-TFTメモリ液晶モジュール LS027B4DH01--販売終了」と商品名の共通語「LS027B4DH01」（名前の類似度0.392）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/108218",
+    "fingerprint": "23ce760efac4c3b4afce8609376354e8d328b85fa36ca393eec20a11d4e118b1",
+    "codes": [
+      "SENGOKU/EEHD-4WXC"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SENGOKU/EEHD-4WXCはせんごく「MAX31855搭載 熱電対アンプ breakout board (MAX6675アップグレード版)　ADA-269」と商品名の共通語「MAX31855」（名前の類似度0.282）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/110215",
+    "fingerprint": "3778e2d683e3d281affeff9239349beac17180ab8ebec87a0bf9b0741471044b",
+    "codes": [
+      "SENGOKU/EEHD-00JB",
+      "SENGOKU/EEHD-53WR",
+      "SENGOKU/EEHD-5WDX"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SENGOKU/EEHD-00JBはせんごく「高熱伝導性シリコーンラバーシート　TC-30BG TO-220」と商品名の共通語「TO-220」（名前の類似度0.205）、SENGOKU/EEHD-53WRはせんごく「シリコンラバーシート　TC-30TAG-2 TO-220」と商品名の共通語「TO-220」（名前の類似度0.222）、SENGOKU/EEHD-5WDXはせんごく「TO-220 Clip-On Heatsink　ADA-977」と商品名の共通語「TO-220」（名前の類似度0.211）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/112220",
+    "fingerprint": "c2fd01f249c4ec897c4f09f5ff13df5a0ea106ddffe490128eb492f642ef82c4",
+    "codes": [
+      "KSY/156"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。KSY/156はKSY「Piケース KKSB メタル for 3/2/B+ 銀/黒」と商品名の共通語「3/2/B」（名前の類似度0.2）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/112414",
+    "fingerprint": "54fd5b23c2a317b8da9677eb80d128004fa906da426a175410f2d2f6d197dc76",
+    "codes": [
+      "SWITCH-SCIENCE/3399"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SWITCH-SCIENCE/3399はスイッチサイエンス「ヤマハFM音源LSI YMF825搭載モジュール YMF825Board--販売終了」と商品名の共通語「YMF825」（名前の類似度0.52）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/112774",
+    "fingerprint": "0f7a79633566ee1d7835ebcfec4f2746dfc711ddf04dc201e3a4baa1c0527e09",
+    "codes": [
+      "SWITCH-SCIENCE/10413",
+      "SWITCH-SCIENCE/212",
+      "SWITCH-SCIENCE/750",
+      "SWITCH-SCIENCE/8522"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SWITCH-SCIENCE/10413はスイッチサイエンス「LoRa無線マイコン(ATMega328P)基板」と商品名の共通語「ATMEGA328P」（名前の類似度0.205）、SWITCH-SCIENCE/212はスイッチサイエンス「Arduino Nano 3.0 (ATmega328P搭載)--販売終了」と商品名の共通語「ATMEGA328P」（名前の類似度0.317）、SWITCH-SCIENCE/750はスイッチサイエンス「Arduino Nano 3.1 (ATmega328P搭載)--販売終了」と商品名の共通語「ATMEGA328P」（名前の類似度0.317）、SWITCH-SCIENCE/8522はスイッチサイエンス「Atmega328P スケッチ書き込み装置治具」と商品名の共通語「ATMEGA328P」（名前の類似度0.211）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/112775",
+    "fingerprint": "bcf9efc0a913506f16cd9990a82d71601c66db3c2911096697bec9ff39779cbe",
+    "codes": [
+      "SWITCH-SCIENCE/212",
+      "SWITCH-SCIENCE/750",
+      "SWITCH-SCIENCE/8522"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SWITCH-SCIENCE/212はスイッチサイエンス「Arduino Nano 3.0 (ATmega328P搭載)--販売終了」と商品名の共通語「ATMEGA328P」（名前の類似度0.306）、SWITCH-SCIENCE/750はスイッチサイエンス「Arduino Nano 3.1 (ATmega328P搭載)--販売終了」と商品名の共通語「ATMEGA328P」（名前の類似度0.306）、SWITCH-SCIENCE/8522はスイッチサイエンス「Atmega328P スケッチ書き込み装置治具」と商品名の共通語「ATMEGA328P」（名前の類似度0.203）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
     "key": "akizuki/112961",
     "fingerprint": "7634eed2f876955c325f424f8e5b16e8fc84c32657cbb24a759f7333633461c3",
     "codes": [
@@ -25,6 +113,24 @@
     ],
     "evidence": "秋月の型番欄は商品名「Raspberry Pi 3 Model A+」のみ。スイッチサイエンス4110の同名商品が型番SC0130(J)を持つため、製造記号を除いたSC0130を探索キーにする。",
     "reviewedAt": "2026-11-01"
+  },
+  {
+    "key": "akizuki/115002",
+    "fingerprint": "2a668a2f64e0e907ff2a00e0dca1e07f1ed1fb927e407f9d34731fc6f4a3109b",
+    "codes": [
+      "SWITCH-SCIENCE/3794"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SWITCH-SCIENCE/3794はスイッチサイエンス「HDMI2.0ケーブル 2m」と商品名の共通語「HDMI2.0」（名前の類似度0.439）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/115111",
+    "fingerprint": "9e5365ee745e0234126896972039a9dc07a18358679c1da5b8680777aa0993d8",
+    "codes": [
+      "SENGOKU/EEHD-5CE3"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SENGOKU/EEHD-5CE3はせんごく「プリント基板取付用電源トランス　HP-126」と商品名の共通語「HP-126」（名前の類似度0.462）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
   },
   {
     "key": "akizuki/115359",
@@ -108,6 +214,240 @@
     "reviewedAt": "2026-11-01"
   },
   {
+    "key": "sengoku/1AD1-0028",
+    "fingerprint": "366a55323d2b201505b69f49e8a65caf9dcf440ee7870907fda032a8ac25c3d7",
+    "codes": [
+      "AKIZUKI/111943"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/111943は秋月電子「トロイダルコア T-25-6」と商品名の共通語「T-25-6」（名前の類似度0.6）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/1AD1-0032",
+    "fingerprint": "e7d581315ab1afd659571d2a398b1b3a62fa94b785719eaf6e4df75bb7eb6648",
+    "codes": [
+      "AKIZUKI/116459"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/116459は秋月電子「トロイダルコア T-37-6」と商品名の共通語「T-37-6」（名前の類似度0.6）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/1AD1-0035",
+    "fingerprint": "7213bcea08bc5b6c0091b67a78df94c48e6086ad11df2e5af21685a1c228adff",
+    "codes": [
+      "AKIZUKI/111946"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/111946は秋月電子「トロイダルコア T-50-2」と商品名の共通語「T-50-2」（名前の類似度0.6）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/1AD1-0036",
+    "fingerprint": "0018bcf4e1113c7aacd9f82b9a923dd90764975d98702fa46ed9be36276b0414",
+    "codes": [
+      "AKIZUKI/111947"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/111947は秋月電子「トロイダルコア T-50-6」と商品名の共通語「T-50-6」（名前の類似度0.6）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/1AD1-0037",
+    "fingerprint": "271d6646003c82bf981f1ee361dbbc1839b93daece9d9d2fa58eb36e515c3489",
+    "codes": [
+      "AKIZUKI/111948"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/111948は秋月電子「トロイダルコア T-50-10」と商品名の共通語「T-50-10」（名前の類似度0.636）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/1AD1-0039",
+    "fingerprint": "c90248119fea390727f03c2364914c6a1854e90af5dd349da7b27d0252ade62d",
+    "codes": [
+      "AKIZUKI/111950"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/111950は秋月電子「トロイダルコア T-68-2」と商品名の共通語「T-68-2」（名前の類似度0.6）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/25KG-8CL2",
+    "fingerprint": "331cd0e3bd8796650723bee247b599aecbfa2df200a5d63c46c50d8688ad34ca",
+    "codes": [
+      "11EQS06"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。11EQS06は秋月電子「ショットキーバリアダイオード 60V1A 11EQS06」と商品名の共通語「11EQS06」（名前の類似度0.941）、11EQS06は秋月電子「ショットキーバリアダイオード 60V1A 11EQS06」と商品名の共通語「11EQS06」（名前の類似度0.941）、11EQS06は秋月電子「ショットキーバリアダイオード 60V1A 11EQS06」と商品名の共通語「11EQS06」（名前の類似度0.941）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/2ADT-MJKG",
+    "fingerprint": "196ea20086b36c331d55100290f2d4a269c90dc812c08716d797ed66b2c28732",
+    "codes": [
+      "NJM360D"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。NJM360Dは秋月電子「高速コンパレーター NJM360D」と商品名の共通語「NJM360D」（名前の類似度0.72）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/2AT7-B5DM",
+    "fingerprint": "5a59706e052a43d786915f5b070a32334f086937d189f9081f5d9e447d7df956",
+    "codes": [
+      "AKIZUKI/105507"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/105507は秋月電子「ゲルマニウムダイオード1N60」と商品名の共通語「1N60」（名前の類似度0.815）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/42WA-3PL8",
+    "fingerprint": "3cf35916068d7de30837d660aa2f04450d1b45c933f41210f505fa40a1d98305",
+    "codes": [
+      "11EQS04"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。11EQS04は秋月電子「ショットキーバリアダイオード 40V1A 11EQS04」と商品名の共通語「11EQS04」（名前の類似度0.941）、11EQS04は秋月電子「ショットキーバリアダイオード 40V1A 11EQS04」と商品名の共通語「11EQS04」（名前の類似度0.941）、11EQS04は秋月電子「ショットキーバリアダイオード 40V1A 11EQS04」と商品名の共通語「11EQS04」（名前の類似度0.941）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/5A8C-CJLH",
+    "fingerprint": "7aba81c162be8f7453d5dcf02c93c29e12029f1bb5d639cc1f67986a96c7cf9b",
+    "codes": [
+      "TLP624"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。TLP624は秋月電子「フォトカプラー TLP624」と商品名の共通語「TLP624」（名前の類似度0.762）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/5AFT-MJKB",
+    "fingerprint": "78a7dc50f0542d55c98282d144f5e8e0149f65666e879a9052d6132f2af3cb8b",
+    "codes": [
+      "NJM2073D"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。NJM2073Dは秋月電子「オーディオアンプIC NJM2073D」と商品名の共通語「NJM2073D」（名前の類似度0.5）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/5AVR-L5KB",
+    "fingerprint": "79ff20dda51b102cfaee3fc2bc76e1c174a5b1ca40f6bc895e3f79e33a3358ee",
+    "codes": [
+      "ST-32P"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。ST-32Pは秋月電子「山水トランジスター用小型トランス ST-32P (ピンタイプ)」と商品名の共通語「ST-32P」（名前の類似度0.471）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/7DUC-SCL4",
+    "fingerprint": "9cbaa8bbff4cff99ba33d70c5697841ff020b10546845fc795e15877e7044708",
+    "codes": [
+      "AKIZUKI/100743",
+      "AKIZUKI/100941",
+      "AKIZUKI/116603"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/100743は秋月電子「汎用小信号高速スイッチング・ダイオード 1N4148 100V200mA」と商品名の共通語「1N4148」（名前の類似度0.792）、AKIZUKI/100941は秋月電子「汎用小信号高速スイッチング・ダイオード 1N4148 100V200mA」と商品名の共通語「1N4148」（名前の類似度0.792）、AKIZUKI/116603は秋月電子「汎用小信号高速スイッチング・ダイオード 1N4148」と商品名の共通語「1N4148」（名前の類似度0.955）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/8DMU-SAD6",
+    "fingerprint": "1985d25f5a5441d47d78a2978cb77ba795082fb8411786a4b569ab5f2a1c06e5",
+    "codes": [
+      "AKIZUKI/114881"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/114881は秋月電子「ペルチェ素子 8.2Aタイプ(40x40mm) TEC1-12708」と商品名の共通語「TEC1-12708」（名前の類似度0.456）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-47U4",
+    "fingerprint": "73f16abcf6c43893bcb30b9cdc12c100f835f579a09d4c41664a794d813187b1",
+    "codes": [
+      "AKIZUKI/105020"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/105020は秋月電子「5mmLED用薄型ブラケットリング取付金具」と商品名の共通語「5MMLED」（名前の類似度0.2）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-47U5",
+    "fingerprint": "f49d7715c2b52a053287410dae414c8855557ed6a364af375a7a6dcfad14afc4",
+    "codes": [
+      "AKIZUKI/105020",
+      "AKIZUKI/111956"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/105020は秋月電子「5mmLED用薄型ブラケットリング取付金具」と商品名の共通語「5MMLED」（名前の類似度0.211）、AKIZUKI/111956は秋月電子「黄緑色5mmLED 565nm PG5734SY」と商品名の共通語「5MMLED」（名前の類似度0.205）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-47U6",
+    "fingerprint": "377d641e975aa5103ef47865d939b0a327f7da7df5d35e0978a6b0f13b2629a9",
+    "codes": [
+      "AKIZUKI/105020",
+      "AKIZUKI/111956"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/105020は秋月電子「5mmLED用薄型ブラケットリング取付金具」と商品名の共通語「5MMLED」（名前の類似度0.211）、AKIZUKI/111956は秋月電子「黄緑色5mmLED 565nm PG5734SY」と商品名の共通語「5MMLED」（名前の類似度0.205）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-47U7",
+    "fingerprint": "3eee7a6261f20075dc7adf422ba03e09bc1d5e3c8fcecca8d41367665c9a2229",
+    "codes": [
+      "AKIZUKI/105020",
+      "AKIZUKI/111956"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/105020は秋月電子「5mmLED用薄型ブラケットリング取付金具」と商品名の共通語「5MMLED」（名前の類似度0.211）、AKIZUKI/111956は秋月電子「黄緑色5mmLED 565nm PG5734SY」と商品名の共通語「5MMLED」（名前の類似度0.205）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-47U8",
+    "fingerprint": "f77f70ea84a96271f9cad18946725082e6540161359d67670f32bf81950864bb",
+    "codes": [
+      "AKIZUKI/105020",
+      "AKIZUKI/111956"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/105020は秋月電子「5mmLED用薄型ブラケットリング取付金具」と商品名の共通語「5MMLED」（名前の類似度0.205）、AKIZUKI/111956は秋月電子「黄緑色5mmLED 565nm PG5734SY」と商品名の共通語「5MMLED」（名前の類似度0.2）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-4AWV",
+    "fingerprint": "869065b1673bb8ac70ac122b27e9d5fe5db0488f8d3f29be979bf36d76bed995",
+    "codes": [
+      "AKIZUKI/103023",
+      "AKIZUKI/103024"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/103023は秋月電子「白色テープLED 9LED 30cm」と商品名の共通語「9LED」（名前の類似度0.214）、AKIZUKI/103024は秋月電子「青色テープLED 9LED 30cm」と商品名の共通語「9LED」（名前の類似度0.214）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-4MY6",
+    "fingerprint": "f01bcef51d401d7e8dc1f4abde83c634f70b33ac9066842e3d4784481fc1a582",
+    "codes": [
+      "AKIZUKI/117720"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/117720は秋月電子「可変三端子レギュレーター 1.2~33V3A LM350T(NS)」と商品名の共通語「LM350T」（名前の類似度0.44）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-4ULV",
+    "fingerprint": "333071ba65b145445d697ecdb1f6ae14aadebf27fd0088aff8b981536b63879d",
+    "codes": [
+      "104990172"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。104990172は秋月電子「2.8インチTFT for Raspberry Pi(PiShow2.8)」と商品名の共通語「PISHOW2.8」（名前の類似度0.481）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-54PC",
+    "fingerprint": "37d2b402a910f6d2d86f2314b5136b4566f66815e61f3f972dbbda3b3430bef5",
+    "codes": [
+      "AKIZUKI/116924"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/116924は秋月電子「フォトカプラー 赤外LED+フォトトランジスター TLP184(SE」と商品名の共通語「TLP184」（名前の類似度0.41）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-566P",
+    "fingerprint": "12abe9827a46f8ccf119df83653e86631a6b0b0474fa2cfa98600a1ff0506051",
+    "codes": [
+      "AKIZUKI/117257",
+      "SWITCH-SCIENCE/5161",
+      "SWITCH-SCIENCE/9211"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/117257は秋月電子「ESP8266開発用ボード ESP8266-DevKitS」と商品名の共通語「ESP8266」（名前の類似度0.208）、SWITCH-SCIENCE/5161はスイッチサイエンス「《お取り寄せ商品》WT8266-S1 WiFi Module Based on ESP8266」と商品名の共通語「ESP8266」（名前の類似度0.214）、SWITCH-SCIENCE/9211はスイッチサイエンス「半導体キーホルダー２（ESP8266）」と商品名の共通語「ESP8266」（名前の類似度0.227）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
     "key": "sengoku/EEHD-57LT",
     "fingerprint": "ffd13c82aeea8d1b08180907a3b9650f7c1db3b26593a2b3b5b174a9b7d6cfd7",
     "codes": [
@@ -117,6 +457,71 @@
     "reviewedAt": "2026-11-01"
   },
   {
+    "key": "sengoku/EEHD-5GMG",
+    "fingerprint": "25dc6c9231fd923bdb7463ccd1162e1080e1b4b809616d933579ebbe90b3d631",
+    "codes": [
+      "AKIZUKI/117954",
+      "AKIZUKI/117955"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/117954は秋月電子「XT90コネクター メス XT90H-F」と商品名の共通語「XT90」（名前の類似度0.222）、AKIZUKI/117955は秋月電子「XT90コネクター オス XT90H-M」と商品名の共通語「XT90」（名前の類似度0.222）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5GMH",
+    "fingerprint": "a08fe3537258de7fdc54f89d51278b00dfcbe4194eeef59df64d64a97eaad6f2",
+    "codes": [
+      "AKIZUKI/117954",
+      "AKIZUKI/117955"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/117954は秋月電子「XT90コネクター メス XT90H-F」と商品名の共通語「XT90」（名前の類似度0.222）、AKIZUKI/117955は秋月電子「XT90コネクター オス XT90H-M」と商品名の共通語「XT90」（名前の類似度0.222）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5GY4",
+    "fingerprint": "3fe99d959b7d8b98e32a3e40c3a2e492ce9c4760e1e7842a8359593185ff9378",
+    "codes": [
+      "H5P-SHF-AA"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。H5P-SHF-AAは秋月電子「NHコネクター ハウジング 5P H5P-SHF-AA」と商品名の共通語「H5P-SHF-AA」（名前の類似度0.792）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5GY5",
+    "fingerprint": "67e8b0df3429f5aeb1c52ea01010c624ac07db1164913b2bac4fe8934c43c10e",
+    "codes": [
+      "B5P-SHF-1AA"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。B5P-SHF-1AAは秋月電子「NHコネクター ベース付ポスト トップ型 5P B5P-SHF-1AA」と商品名の共通語「B5P-SHF-1AA」（名前の類似度0.561）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5GY6",
+    "fingerprint": "dc498f80fb19f84c616d0e2616f92c8b05594f7c65e47fe425e80b9515e43da8",
+    "codes": [
+      "BS5P-SHF-1AA"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。BS5P-SHF-1AAは秋月電子「NHコネクター ベース付ポスト サイド型 5P BS5P-SHF-1AA」と商品名の共通語「BS5P-SHF-1AA」（名前の類似度0.643）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5HE4",
+    "fingerprint": "2b7dd225c75a9af16ac5f12d8c068aa55c7ebd8ebce6e66d0da7225d2339e36a",
+    "codes": [
+      "U054"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。U054はM5Stack公式「M5StickC PIR Hat (AS312)」と商品名の共通語「AS312」（名前の類似度0.706）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5HEF",
+    "fingerprint": "d09bd905e8d0e2a3a4f9083dac5307cb701e21446cf3103be6cd84f4801991cf",
+    "codes": [
+      "U055"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。U055はM5Stack公式「M5StickC Speaker Hat (PAM8303)」と商品名の共通語「PAM8303」（名前の類似度0.75）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
     "key": "sengoku/EEHD-5JEN",
     "fingerprint": "83ab2f98cb4aa1152376f85ea0d4f4b573658c84e0988561ec2dca82639a6669",
     "codes": [
@@ -124,6 +529,17 @@
     ],
     "evidence": "せんごく「Raspberry Pi 3 Model A+」の型番は【013】Pi3A+。スイッチサイエンス4110の同名商品の型番SC0130(J)から製造記号を除いたSC0130を探索キーにする。",
     "reviewedAt": "2026-11-01"
+  },
+  {
+    "key": "sengoku/EEHD-5P3W",
+    "fingerprint": "1809f13b8b944c652ae223823d8227ac0911bd4a74c89618a8fad5ced6529abf",
+    "codes": [
+      "AKIZUKI/115477",
+      "SWITCH-SCIENCE/3765",
+      "SWITCH-SCIENCE/8625"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/115477は秋月電子「シリアル制御フルカラーチップLED SK6812MINI」と商品名の共通語「SK6812MINI」（名前の類似度0.327）、SWITCH-SCIENCE/3765はスイッチサイエンス「SK6812MINI 10個セット カットテープ」と商品名の共通語「SK6812MINI」（名前の類似度0.409）、SWITCH-SCIENCE/8625はスイッチサイエンス「SK6812MINI（3535 RGB SMD LED）1500個セット」と商品名の共通語「SK6812MINI」（名前の類似度0.327）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
   },
   {
     "key": "sengoku/EEHD-5S4T",
@@ -144,6 +560,15 @@
     "reviewedAt": "2026-11-01"
   },
   {
+    "key": "sengoku/EEHD-5UZS",
+    "fingerprint": "931d43d1162f8b46a217fc6b2cce85a331d12cabead5bbf414ba7b757f497808",
+    "codes": [
+      "SWITCH-SCIENCE/7311"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SWITCH-SCIENCE/7311はスイッチサイエンス「M5Stackシリーズ用ケース FUSION CONTAINER2（厚めのタイプ）」と商品名の共通語「CONTAINER2」（名前の類似度1）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
     "key": "sengoku/EEHD-5YEC",
     "fingerprint": "52c1e799d2c2f528b438d96353b811c183dc68706d427070e62a5cb7cbeadd8b",
     "codes": [
@@ -151,6 +576,15 @@
     ],
     "evidence": "せんごく「Raspberry Pi Pico H【ピンヘッダ実装済】」の型番は【002】RPI-PICO-H。秋月118085・スイッチサイエンス8170・KSY864のPico Hの型番SC0917を探索キーにする。",
     "reviewedAt": "2026-11-01"
+  },
+  {
+    "key": "sengoku/EEHD-5ZEJ",
+    "fingerprint": "023d2d824571de74ea80092c2219a809b385fd821f583e7d082ceb6299c41c1e",
+    "codes": [
+      "AKIZUKI/118185"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/118185は秋月電子「フォトカプラー TLP627M(E(O」と商品名の共通語「TLP627M」（名前の類似度0.667）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
   },
   {
     "key": "sengoku/EEHD-655N",
@@ -198,6 +632,107 @@
     "reviewedAt": "2026-11-01"
   },
   {
+    "key": "sengoku/EEHD-66TY",
+    "fingerprint": "925b38334b317e64630470823ade6f7c38ad9d4cbc094ec16095c1e821411d04",
+    "codes": [
+      "CXD5602PWBCAM2W"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。CXD5602PWBCAM2Wは秋月電子「SPRESENSE HDRカメラボード」と商品名の共通語「CXD5602PWBCAM2W」（名前の類似度0.525）、CXD5602PWBCAM2WはKSY「SPRESENSE HDR カメラボード」と商品名の共通語「CXD5602PWBCAM2W」（名前の類似度0.525）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-68JJ",
+    "fingerprint": "de2c5d96c7078c686c1533a4051c8ca56d08ec2ae005c1231b88a18cc2cde075",
+    "codes": [
+      "AKIZUKI/130256",
+      "SWITCH-SCIENCE/9678"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/130256は秋月電子「4.4mm5極バランス接続ジャック 基板取付用 NBA1-24-001」と商品名の共通語「4.4MM5」（名前の類似度0.213）、SWITCH-SCIENCE/9678はスイッチサイエンス「バランス出力 4.4mm5極端子基板 JCACK-44-5」と商品名の共通語「4.4MM5」（名前の類似度0.244）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-68MF",
+    "fingerprint": "f54fb67b624a53db593a0b0f22bebcee9f58c8d5de2ad5014ab01fa07deda00d",
+    "codes": [
+      "CXD5602PWBLM1JUL"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。CXD5602PWBLM1JULは秋月電子「SONY SPRESENSE LTE BOARD (LTE拡張ボード)」と商品名の共通語「CXD5602PWBLM1JUL」（名前の類似度0.479）、CXD5602PWBLM1JULはKSY「SPRESENSE LTE 拡張ボード」と商品名の共通語「CXD5602PWBLM1JUL」（名前の類似度0.517）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-68T6",
+    "fingerprint": "b3d812d3c802ca20a52c3bad328995a1a68dc33b9a384f9ae4403ca319732dfd",
+    "codes": [
+      "AKIZUKI/107667",
+      "AKIZUKI/111574"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/107667は秋月電子「ケーブル取付用USB3.0コネクター(Aタイプ、オス)」と商品名の共通語「USB3.0」（名前の類似度0.233）、AKIZUKI/111574は秋月電子「USB3.0コネクターDIP化キット基板」と商品名の共通語「USB3.0」（名前の類似度0.226）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-6KM5",
+    "fingerprint": "0184e2fbb7f44483406a9a0f7b9940b464a714dcf14724a5316a1f982e28deaf",
+    "codes": [
+      "RWS100B-5"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。RWS100B-5は秋月電子「スイッチング電源 DC5V14A 出力70Wタイプ RWS100B-5」と商品名の共通語「RWS100B-5」（名前の類似度0.333）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-6KM6",
+    "fingerprint": "2663420e53bca5b9ca1ea325882e86d7d748701b41690b156630a2e829d3f9ce",
+    "codes": [
+      "RWS100B-12"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。RWS100B-12は秋月電子「スイッチング電源 DC12V8.5A 出力100Wタイプ RWS100B-12」と商品名の共通語「RWS100B-12」（名前の類似度0.394）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-6KM7",
+    "fingerprint": "2e4501bf99934f2871cf799add66357dd29ad9c98ad51b32f7f0211e361af78f",
+    "codes": [
+      "RWS100B-24"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。RWS100B-24は秋月電子「スイッチング電源 DC24V4.5A 出力100Wタイプ RWS100B-24」と商品名の共通語「RWS100B-24」（名前の類似度0.394）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-6KMA",
+    "fingerprint": "0d3d89c7a7f9f9f309efde894889b6bfe574a302d14c1074b432e621d08e7d14",
+    "codes": [
+      "RWS150B-12"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。RWS150B-12は秋月電子「スイッチング電源 DC12V13A 出力150Wタイプ RWS150B-12」と商品名の共通語「RWS150B-12」（名前の類似度0.375）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-6KMB",
+    "fingerprint": "f46acd607f20ec8c10bd79c9dc2c9f693a033047dd936bd212c3bdcb67ff511c",
+    "codes": [
+      "RWS150B-24"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。RWS150B-24は秋月電子「スイッチング電源 DC24V6.5A 出力150Wタイプ RWS150B-24」と商品名の共通語「RWS150B-24」（名前の類似度0.394）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-6WWU",
+    "fingerprint": "572eb22874f36629263b9d2134d5d3edb4ca22b71098e1c4200717f10793d93e",
+    "codes": [
+      "NJM555D"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。NJM555Dは秋月電子「タイマーIC NJM555D」と商品名の共通語「NJM555D」（名前の類似度1）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-6WWV",
+    "fingerprint": "520de69edff1203dfa2b61f4bbfb9e32d489c2f6823788bcd484bf859ca81f3f",
+    "codes": [
+      "NJM431D"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。NJM431Dは秋月電子「可変シャントレギュレーター NJM431D」と商品名の共通語「NJM431D」（名前の類似度0.857）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
     "key": "sengoku/EEHD-6YP3",
     "fingerprint": "daf738301b0d262d323c27cc9800cdcc1331ec881be34e37a6045e3e540e40dd",
     "codes": [
@@ -232,5 +767,484 @@
     ],
     "evidence": "スイッチサイエンス「Raspberry Pi 4 Model B / 4GB」の型番はelement14の注文コード3051891。KSY723(element14の4GB版)の型番SC0194を探索キーにする。",
     "reviewedAt": "2026-11-01"
+  },
+  {
+    "key": "switch-science/8958",
+    "fingerprint": "0c11b2bcc15bb8447475a81be9a06ad9877b174a0577f127f682923028c8753c",
+    "codes": [
+      "SENGOKU/EEHD-67PR",
+      "SENGOKU/EEHD-6JS8"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SENGOKU/EEHD-67PRはせんごく「【9278】M5Stack用LoRaユニット JPバージョン アンテナ付(E220-900T22S)　M5STACK-U170」と商品名の共通語「E220-900T22S」（名前の類似度0.302）、SENGOKU/EEHD-6JS8はせんごく「【9146】FLINT LoRa無線シールド(E220-900T22S for Arduino)　FLINT-013」と商品名の共通語「E220-900T22S」（名前の類似度0.296）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/9057",
+    "fingerprint": "7a8698d3ee79c61eb36b74fc00076792aa3c6cdf5cdc993982ea49ead73d1ee8",
+    "codes": [
+      "SENGOKU/3DGJ-TALY",
+      "AKIZUKI/103142"
+    ],
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SENGOKU/3DGJ-TALYはせんごく「AVR 8bit RISCマイコン megaAVR　ATmega328P-PU」と商品名の共通語「ATMEGA328P-PU」（名前の類似度0.406）、AKIZUKI/103142は秋月電子「AVRマイコン ATMEGA328P-PU」と商品名の共通語「ATMEGA328P-PU」（名前の類似度0.5）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-4WZP",
+    "fingerprint": "a5490d2c068aa6721cf79e40c8a7f0e654552d70684f48c8bce413f175f8c7a2",
+    "codes": [
+      "LM336Z-5.0"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。型番 LM336Z-5.0/NOPB の末尾 /NOPB は鉛フリー品の注文記号で、LM336Z-5.0 は秋月電子「電圧リファレンス(シャントレギュレーター) LM336Z-5.0」の型番。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/7113",
+    "fingerprint": "ef72b349925d2d4dae2930b1070162c85a70127edeb0c8f57dbf6db2f8b2f504",
+    "codes": [
+      "FS90R"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。商品名「FEETECH FS90R マイクロPWMサーボ」に FS90R がある（型番欄は FS90R-V2(FS-90R0-C003)）。FS90R は秋月電子「360°連続回転サーボ(ローテーションサーボ) FS90R」の型番。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/7111",
+    "fingerprint": "7944215ae37551b5b0f08e1f4f60119e53f21757c56f9d595513a7e55a9b8fa7",
+    "codes": [
+      "FS90"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。商品名「FEETECH FS90 マイクロPWMサーボ」に FS90 がある（型番欄は FS90-C2(FS-9000-C003)）。FS90 は秋月電子「FEETECHサーボ FS90」の型番。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/7489",
+    "fingerprint": "e910bbac90da223b0fc4aa8cb2d21842df5787ff87b90d9962b3f8665c880129",
+    "codes": [
+      "STS3215-C001"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。商品名の STS3215 と型番欄 ST-3215-C001 の構成コード C001 を合わせた表記。STS3215-C001 は秋月電子「FEETECHシリアルバスサーボ STS3215 7.4V 19kg・cm 1:345」の型番。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/8042",
+    "fingerprint": "0452a86ab120e7dcb94e59b97176028aab2ed737dcc33664e5a1802280cd882f",
+    "codes": [
+      "SCS0009-C001"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。商品名の SCS0009 と型番欄 SC-0090-C001 の構成コード C001 を合わせた表記。SCS0009-C001 は秋月電子「FEETECHシリアルバスサーボ SCS0009 6V 2.3kg・cm」の型番。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/117206",
+    "fingerprint": "e8b1f216796baecba1bc9bdf4c40de79f24aa7baa8ac073b3999019928bbd8fd",
+    "codes": [
+      "K049-B"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。商品名「M5Paper V1.1」の V1.1 は、M5Stack公式・スイッチサイエンス・せんごくで K049-B として掲載される版。型番欄は M5STACK-K049 で名称と食い違うため、同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/118268",
+    "fingerprint": "cd2d3a533889def95085d73085a85e46aceb7295d8ffd0f6cbc6d47164d2c92d",
+    "codes": [
+      "G2R-1-EDC24V"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。商品名「パワーリレー G2R-1-E 24V」はコイル電圧24Vの G2R-1-E で、G2R-1-EDC24V はせんごく「パワーリレー(24V・高容量型) G2R-1-E DC24V」の型番（空白を除いた形）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/10792",
+    "fingerprint": "39a095c08ebf4a81d10de870284ef5e87627540df5b06b97e1f7aac266cb0bce",
+    "codes": [
+      "E220-900T22S(JP)-EV2"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。商品名「E220-900T22S(JP)-EV2 LoRa通信モジュール評価ボード」に E220-900T22S(JP)-EV2 がある（型番欄は括弧なしの E220-900T22SJP-EV2）。秋月電子「LoRaモジュール評価ボード E220-900T22S(JP)-EV2」の型番。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5M7K",
+    "fingerprint": "c2691b4d53be8d629ef74948b92b5879018d76542692699923ddc1dc5afc0000",
+    "codes": [
+      "UV324-1220"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。型番 UV324-1220 PL03B の PL03B はプラグの種類（内径φ2.1）を示し、UV324-1220 は KSY「AC電源アダプター 12V 2A DCプラグ」の型番。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5M7L",
+    "fingerprint": "e8a919c2cf52ff71063c1f86952a38929777c87a23c169c9d6e30ece9b22a9ba",
+    "codes": [
+      "UV324-1220"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.7、#52）の探索キー。型番 UV324-1220 EIAJ4 の EIAJ4 はプラグの種類を示し、UV324-1220 は KSY「AC電源アダプター 12V 2A DCプラグ」の型番。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-0HNH",
+    "fingerprint": "931c9bfdcce75a500e5e31dcaf8ee856eb6b0bfeb22aa895527f9756f236f7f1",
+    "codes": [
+      "MP-121M"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 MP-121M-1 と MP-121M は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/A5RW-6SGC",
+    "fingerprint": "8d18400d98e730cda4e9195c2af034fa76e848bd61f119c21a01242acb611e6a",
+    "codes": [
+      "2SC5200"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 2SC5200-O と 2SC5200 は末尾だけが違い、末尾 -O はhFEランク。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/75MW-6SGB",
+    "fingerprint": "f4cb940b9e81b23ea89536d7a7a7fbca2b57bbabffa749cdb9b839b6e43ba1f9",
+    "codes": [
+      "2SA1943"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 2SA1943-O と 2SA1943 は末尾だけが違い、末尾 -O はhFEランク。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/106437",
+    "fingerprint": "309db013ac1faacfbf115a64e83d859c86abb79b94dacb6eabc1fed7a51bdcde",
+    "codes": [
+      "FA-130RA"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 FA-130RA-2270 と FA-130RA は末尾だけが違い、末尾 -2270 はせんごくの行に示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/106438",
+    "fingerprint": "f07e1a2418dfc3bb1ec19d8441805f059de25c027493a5e93285dca7cda4c9b5",
+    "codes": [
+      "RE-280RA"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 RE-280RA-2865 と RE-280RA は末尾だけが違い、末尾 -2865 はせんごくの行に示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/6DKD-V4FL",
+    "fingerprint": "f4f5aa705d3996cbc2385ccfb9f31c8ab049a4fd40e721d39abd9fb8785fb823",
+    "codes": [
+      "MP-122M"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 MP-122M-1 と MP-122M は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-4KGH",
+    "fingerprint": "4881c0dd92aa7c2d951df2711977ac23632ff52c9ca2e984bceee455e8f3e3b7",
+    "codes": [
+      "MP-115M"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 MP-115M-1 と MP-115M は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/4145",
+    "fingerprint": "1c9ded97bdd08cecb4048d076377a4b08b9067eff0f4e818e3024057165cc8b9",
+    "codes": [
+      "DFR0029"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 DFROBOT-DFR0029-B と DFR0029 は末尾だけが違い、末尾 -B は色（Blue）。秋月電子の行は色を書いていない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/4146",
+    "fingerprint": "564e9d89bf8d1825f060bf40e3cb7debdc212bd088aa3bf170d34d9d716c989c",
+    "codes": [
+      "DFR0029"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 DFROBOT-DFR0029-G と DFR0029 は末尾だけが違い、末尾 -G は色（Green）。秋月電子の行は色を書いていない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/4147",
+    "fingerprint": "bb949a8bdf863382cff1b09dafe5155eed8b3624d24d0a91dac2c7f76f9c6a20",
+    "codes": [
+      "DFR0029"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 DFROBOT-DFR0029-R と DFR0029 は末尾だけが違い、末尾 -R は色（Red）。秋月電子の行は色を書いていない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/4148",
+    "fingerprint": "12a1fc0c1a257965fff0798b6180b112440ac65f55690a7a558d4c6359285692",
+    "codes": [
+      "DFR0029"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 DFROBOT-DFR0029-W と DFR0029 は末尾だけが違い、末尾 -W は色（White）。秋月電子の行は色を書いていない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/4149",
+    "fingerprint": "2e080b36158e8a8b0dd8965ac11106640a196c3397daabe9b97ce26d62426ccf",
+    "codes": [
+      "DFR0029"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 DFROBOT-DFR0029-Y と DFR0029 は末尾だけが違い、末尾 -Y は色（Yellow）。秋月電子の行は色を書いていない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-4KGK",
+    "fingerprint": "257217d18dce3c825a2f2edd7556cdb51b366934a31c9bce74ec699891feb5d9",
+    "codes": [
+      "MP-114M"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 MP-114M-1 と MP-114M は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/109169",
+    "fingerprint": "ab8f3000629394a45227240b5690f927f813be06ba5be520f13287d40d4848d9",
+    "codes": [
+      "FA-130RA"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 FA-130RA-2270L と FA-130RA は末尾だけが違い、末尾 -2270L はせんごくの行に示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/109607",
+    "fingerprint": "e3351fe2c0b422bcd19e817881632a07ad8eff8eda16622bd363166efe7f7d5a",
+    "codes": [
+      "ESP-WROOM-02"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 ESP-WROOM-02-N4 と ESP-WROOM-02 は末尾だけが違い、末尾 -N4 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/110090",
+    "fingerprint": "3a6babb16cd23ba5d51634ab323e0d3fd52cddad055d0aa48337f2e994c9b556",
+    "codes": [
+      "MPS-08"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 MPS-08-0 と MPS-08 は末尾だけが違い、末尾 -0 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-4KLS",
+    "fingerprint": "93fc0337cb5dfec761100f9d5b49a3b75a7affd100af1be601b2d079c582e402",
+    "codes": [
+      "MJ-073N"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 MJ-073N-1 と MJ-073N は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/62BA-3BGD",
+    "fingerprint": "6c2c65c62f56a62ab2daf8445e82b2991b5e3bf46e8b270f8575d46d6ba2d574",
+    "codes": [
+      "MP-105LC"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 MP-105LC-1 と MP-105LC は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5AC7",
+    "fingerprint": "46b332e395c25c94c87dccc8f98fd0fd08dc78427cfaeda57d2437955df5b53c",
+    "codes": [
+      "1N4007G"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 1N4007G-T と 1N4007G は末尾だけが違い、末尾 -T の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/114155",
+    "fingerprint": "819ef2f6d4fdba65a4fe0a967c193a396c3da9edbdb1bdf144496382c0d4369f",
+    "codes": [
+      "B2B-ZR(LF)(SN)"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 B2B-ZR-3.4(LF)(SN) と B2B-ZR(LF)(SN) は末尾だけが違い、-3.4 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/114156",
+    "fingerprint": "5a39f37738c66263bd77fafe89e152188a4a16c14a9bc2cce661b0426b57c88b",
+    "codes": [
+      "B3B-ZR(LF)(SN)"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 B3B-ZR-3.4(LF)(SN) と B3B-ZR(LF)(SN) は末尾だけが違い、-3.4 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/114157",
+    "fingerprint": "7d1046406fbfcff808dc94ccd4b86fa5fc582d09ffdd3e1523bb9277c100155c",
+    "codes": [
+      "B4B-ZR(LF)(SN)"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 B4B-ZR-3.4(LF)(SN) と B4B-ZR(LF)(SN) は末尾だけが違い、-3.4 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/114158",
+    "fingerprint": "aa31998e95d1dfb3b8e0367946352c61392277aaff65c09fb3e708e687d3a788",
+    "codes": [
+      "B5B-ZR(LF)(SN)"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 B5B-ZR-3.4(LF)(SN) と B5B-ZR(LF)(SN) は末尾だけが違い、-3.4 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/114159",
+    "fingerprint": "077925571821d77c1e797ec614c6cdbbd295ff524039f99409dd38f574c4a936",
+    "codes": [
+      "B6B-ZR(LF)(SN)"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 B6B-ZR-3.4(LF)(SN) と B6B-ZR(LF)(SN) は末尾だけが違い、-3.4 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5BXT",
+    "fingerprint": "3b42b62f5efe1c2af495e4f425dc74e8a4751378f31aeb8044f5a66369b965f4",
+    "codes": [
+      "B02B-PASK"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 B02B-PASK-1 と B02B-PASK は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5BXU",
+    "fingerprint": "9fbd7d21f5c05413a5dcd184a1d099259e7e8c44b6d9d3eb90f424c0d0ca557b",
+    "codes": [
+      "B03B-PASK"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 B03B-PASK-1 と B03B-PASK は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5BY5",
+    "fingerprint": "fce11f66d75ae962117eebbb294d27bb2f6f0e77c396d387f11230c1633a8352",
+    "codes": [
+      "B04B-PASK"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 B04B-PASK-1 と B04B-PASK は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5BY6",
+    "fingerprint": "09c73988dafa2a66c56d8baa2ef14f2cb89e874f1626381c6391927cdaa5587d",
+    "codes": [
+      "B05B-PASK"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 B05B-PASK-1 と B05B-PASK は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5KC3",
+    "fingerprint": "887c59dc145c9358d47ee93a8f94e59dadaa5ceddae365f8a5962f5ac13f1978",
+    "codes": [
+      "ABX00028"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 ABX00028-R と ABX00028 は末尾だけが違い、末尾 -R の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/115403",
+    "fingerprint": "7bab63ffc75ab1f72627cc384908543361abc79b7a745d69cf715520a137d604",
+    "codes": [
+      "MJ-354W"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 MJ-354W-SG と MJ-354W は末尾だけが違い、末尾 -SG の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/F847-L557",
+    "fingerprint": "bb9d7614ab262b3e2b13a8ba074be11fd30ecd9b011c1a8192afed9c465bdb42",
+    "codes": [
+      "MJ-072"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 MJ-072-1 と MJ-072 は末尾だけが違い、末尾 -1 の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5BKF",
+    "fingerprint": "3cffd386967ae0983ea51e5237e246a2db21d6748e84ae2c7b1c269bd1b51482",
+    "codes": [
+      "TLP291"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 TLP291-4 と TLP291 は末尾だけが違い、末尾 -4 は名称にも他の項目にも説明がない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-4ZNH",
+    "fingerprint": "08ebb164d80f3f210dcfb568a2c150fe0516b55179566876480f024766636ed1",
+    "codes": [
+      "2SC1815"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 2SC1815-Y と 2SC1815 は末尾だけが違い、末尾 -Y はhFEランク。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-4ZNJ",
+    "fingerprint": "1d9acb675fbf92dce324f80d9078354eb92faa28e914cdd5981dc90d8eba8f73",
+    "codes": [
+      "2SC1815"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 2SC1815-GR と 2SC1815 は末尾だけが違い、末尾 -GR はhFEランク。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5HVC",
+    "fingerprint": "52acbefae964e6a5a7651554e64ba3413f8e8b78f2e5ffeb07389cd160b75419",
+    "codes": [
+      "2SC1815"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 2SC1815-BL と 2SC1815 は末尾だけが違い、末尾 -BL はhFEランク。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-5JL5",
+    "fingerprint": "4ae1d440bb9618914661829d0770ad6f114db13574316658fe8ddba1d9c5651a",
+    "codes": [
+      "2SC1815"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 2SC1815-O と 2SC1815 は末尾だけが違い、末尾 -O はhFEランク。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/85DY-AMDJ",
+    "fingerprint": "d73505a2e7f54095576709564b8924a23922b1f9d9a6d8605ff5891b5f46879e",
+    "codes": [
+      "2SA1015"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 2SA1015-Y と 2SA1015 は末尾だけが違い、末尾 -Y はhFEランク。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "sengoku/EEHD-584M",
+    "fingerprint": "865f4ad07b11f0cdcc6d637cd659cce2b547453bb6cacddc1b07d20502111ae6",
+    "codes": [
+      "2SA1015"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 2SA1015-GR と 2SA1015 は末尾だけが違い、末尾 -GR はhFEランク。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/130394",
+    "fingerprint": "799293cdc7b544d6730404bf5e9e333e302143693ab5919e4d67460adbf4d0e9",
+    "codes": [
+      "BS170"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 BS170-D27Z と BS170 は末尾だけが違い、末尾 -D27Z の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "akizuki/131637",
+    "fingerprint": "2a03eb08597245d3907e883f0c82a8ee241776ed8df1e5ff6b318e66aa758ec3",
+    "codes": [
+      "2N3906"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 2N3906-Y と 2N3906 は末尾だけが違い、末尾 -Y の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/6613",
+    "fingerprint": "464fbbc7fded8bbf39bc5854ca294ec48ab9deb98679c914dd7796c8de48cce5",
+    "codes": [
+      "A005"
+    ],
+    "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 M5STACK-A005-B と A005 は末尾だけが違い、末尾 -B の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-02"
   }
 ]
