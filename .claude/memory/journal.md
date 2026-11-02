@@ -1110,3 +1110,12 @@ Learning: check each listing claim against the rendering code, not against the p
 - Fix: main() counts the selected operations and throws before any read when more than one is set; `--replace` needs `--supplement`. Per-branch checks removed.
 - Verification: a new CLI test (spawned with a 60 s timeout) failed before the fix (`--names --similar` exited 0) and passes after; npm test 671, typecheck, lint, matching:check pass; no vitest process left.
 - Learning: mutually exclusive CLI modes are validated once, up front, not per branch.
+
+## 2026-11-02 0.6.8 release: PR #54 merged, Pages republished
+- User request: 「Merge and release」. CI on 7fdee88 (the review fix) passed; head 1fdc1fd only adds the journal entry with `[skip ci]`. No unresolved thread, merge state CLEAN.
+- Squash-merged as 06cfcaf. #48–#53 closed; branch deleted locally and on origin.
+- Pages: "Crawl and publish" with `republish=true` on 06cfcaf (run 41451841736): success, no crawl and no new observation.
+  - Pages ZIP SHA-256 bc67dbc5b7f9076…, 778,004 bytes, byte-identical to `scripts/build-extension.ts --zip` on main; manifest 0.6.8.
+  - Userscript `@version 0.6.8`; `index.html` has the `<h2>0.6.8` entry.
+- No tag or GitHub release: the repo has used Pages as the release channel since 0.4.2, and 0.6.3 had none either.
+- Not done: the Chrome Web Store live check and submission. They wait until the 0.6.3 review ends.
