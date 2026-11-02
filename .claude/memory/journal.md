@@ -1123,3 +1123,11 @@ Learning: check each listing claim against the rendering code, not against the p
 ## 2026-11-03 Chrome Web Store status after the 0.6.3 review
 - `cws:dashboard` status: 「公開済み - 一般公開」, draft 0.6.3, published 0.6.3. The 0.6.3 review passed, so 0.6.8 can now go through the pre-submission check and draft.
 - `close` deleted the signed-in profile; 0 Chrome processes on that profile. Removed `~/tmp/electro-cws`, and `~/tmp/electro-063` and `~/tmp/electro-mount`, which were kept only until this review passed.
+
+## 2026-11-03 0.6.8 pre-submission check and store draft
+- User request: 「Prepare 0.6.8」 after the 0.6.3 review passed.
+- Live check of the Pages ZIP (docs/verification/2026-11-03-release-068.md): 13/13 on seven real pages in local Chromium; the ZIP SHA-256 is bc67dbc5b7f90761…, manifest 0.6.8. The only page error was the Switch Science `empire.js` one, known from 0.6.1–0.6.3.
+  - The 0.6.3 `live.mjs` had been deleted with `~/tmp/electro-063`, so it was rewritten from the extension E2E specs. The first two runs failed every page at the settle wait: the panel is in a shadow root, so `document.querySelector` inside `waitForFunction` never saw it. Polling `locator.innerText()` fixed it.
+  - Learning: a live-check script is evidence to keep with the record. Before deleting a release's `~/tmp` folder, copy the script into the next release's folder, or rebuild it from the E2E specs knowing the panel is in a shadow root.
+- Dashboard: the first `status` timed out on the Google sign-in redirect (the sign-in was not finished in that profile); it passed after the user signed in there. `upload` gave draft 0.6.8, published 0.6.3. `fill`: 4 × same. The listing count 約3,900組 still holds (same_product 3,962). `blockers`: no blockers, 「審査のため送信」 enabled.
+- Kept until the 0.6.8 review passes: `~/tmp/electro-068` (live.mjs, ext.zip, ext/, shots/).
