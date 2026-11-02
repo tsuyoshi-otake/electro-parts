@@ -12,7 +12,8 @@ import { RELATED_CSS, renderRelatedGroups, renderStorePrices } from './related.t
  *
  * Layout: the panel is mounted as a full-width block, so the chart is the
  * primary element (left) and the figures read as a compact summary beside it
- * (right). Narrow viewports or embedding columns stack the two. No animation
+ * (right). Narrow viewports or embedding columns stack the two, chart first,
+ * so the order never depends on the store's layout. No animation
  * anywhere (ADR-0011).
  */
 

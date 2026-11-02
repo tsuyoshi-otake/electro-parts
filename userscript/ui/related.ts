@@ -50,8 +50,8 @@ export const RELATED_CSS = `
 .eph circle:focus-visible { stroke: var(--fg); stroke-width: 2px; }
 .eph .series-controls input { accent-color: var(--accent); }
 @media (pointer: coarse) { .eph .series-controls label, .eph summary, .eph .related-card a { min-height: 44px; } }
-@media (max-width: 900px) { .eph .body.has-comparison { grid-template-columns: 1fr; } .eph .body.has-comparison .stats-col { grid-row: 1; } }
-@container (max-width: 700px) { .eph .body.has-comparison { grid-template-columns: 1fr; } .eph .body.has-comparison .stats-col { grid-row: 1; } }
+@media (max-width: 900px) { .eph .body.has-comparison { grid-template-columns: 1fr; } }
+@container (max-width: 700px) { .eph .body.has-comparison { grid-template-columns: 1fr; } }
 `;
 
 function node(doc: Document, tag: string, content: string, className = ''): HTMLElement {

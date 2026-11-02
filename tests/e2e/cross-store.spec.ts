@@ -104,12 +104,27 @@ test('production bundle compares both directions and toggles a series with the k
   expect(Math.abs(cardBounds[0]!.y - cardBounds[1]!.y)).toBeLessThan(2);
   expect(cardBounds[1]!.x).toBeGreaterThan(cardBounds[0]!.x + cardBounds[0]!.width);
   await expect(panel(page)).toContainText('$7.50');
+  // The chart comes first at every width: left of the store prices here, above them when stacked.
+  const chartThenPrices = () => panel(page).evaluate(el => {
+    const root = el.shadowRoot!;
+    const chart = root.querySelector('.chart-box')!.getBoundingClientRect();
+    const prices = root.querySelector('.stats-col')!.getBoundingClientRect();
+    return chart.right <= prices.left + 1 ? 'left' : chart.bottom <= prices.top + 1 ? 'above' : 'after';
+  });
+  expect(await chartThenPrices()).toBe('left');
   // Four store manifests, the page's own history and MAX_RELATED_HISTORY_LOADS (8) related histories: since 0.6.7 the
   // ATOM family also holds the official and せんごく ATOM Matrix pages, so 9 related products meet the cap.
   expect(requests).toHaveLength(13);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect.poll(() => panel(page).locator('.store-prices').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(1);
   await expect(panel(page).locator('.eph-comparison-chart')).toHaveAttribute('viewBox', /^0 0 3\d{2} 220$/);
+  expect(await chartThenPrices()).toBe('above');
+  // A wide viewport with the panel in a narrow store column stacks the same way.
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  await panel(page).evaluate(el => { (el as HTMLElement).style.width = '600px'; });
+  await expect.poll(chartThenPrices).toBe('above');
+  await panel(page).evaluate(el => { (el as HTMLElement).style.width = ''; });
+  await page.setViewportSize({ width: 390, height: 844 });
   await expect(checkbox).not.toBeChecked();
   await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
   await checkbox.check();
