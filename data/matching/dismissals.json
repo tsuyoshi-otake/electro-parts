@@ -1,0 +1,717 @@
+[
+  {
+    "products": [
+      "akizuki/102540",
+      "sengoku/EEHD-5SBM"
+    ],
+    "fingerprint": "244db29471c4666c53f38c76876ac9c00a83e9eebc6752dae667d4c1d00bd929",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: TS-10）。秋月電子「精密ピンセット 標準タイプ TS-10」は工具のピンセット、せんごく「【取寄せ品】スパイラルチューブ(Φ9.4・黒)50m巻　TS-10-W」は配線をまとめるスパイラルチューブで、型番の語幹が重なるだけの別種の商品のため代替品にならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/102541",
+      "sengoku/EEHD-5SBP"
+    ],
+    "fingerprint": "125db2bb3619688513420631af3d724314c67010e9788439e1625bde21eaf4cb",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: TS-15）。秋月電子「精密ピンセット わし口タイプ TS-15」は作業用のピンセット、せんごく「【取寄せ品】スパイラルチューブ(Φ13.9・黒)50m巻　TS-15-W」は配線をまとめるスパイラルチューブで、型番の語幹が同じだけで用途も種類も異なる別商品のため代替にならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/107029",
+      "switch-science/4128"
+    ],
+    "fingerprint": "7cfa5f3b3480c04ad967f8b13f3cb310c0a0ca4eeceee2e9e63bc3697aefffb9",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: DFR0009）。秋月電子「LCD Keypad Shield For Arduino(R)」は液晶とキーパッドを備えたシールド、スイッチサイエンス「《お取り寄せ商品》Gravity: PCB of Arduino LCD Keypad Shield--販売終了」は名称が示すとおりPCB（基板）のみで、完成したシールドと基板単体は別種の商品のため代替にならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/109069",
+      "sengoku/EEHD-4J8A"
+    ],
+    "fingerprint": "48f69167ba531572d75c7ea156309c82287fb2a65037ec5450c674bdebde6a9b",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315TX用 USBインターフェイスボード」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315TX用)」は、前者がUSB接続のためのインターフェイスボード、後者が無線モジュールを載せたアプリケーション開発用の評価ボードで、用途が違い代わりにならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/109071",
+      "sengoku/EEHD-4J8A"
+    ],
+    "fingerprint": "47ec0a343c65bd86a2404c1ce54fdf2a9d0f7014573f47260e14a7377f726a5f",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315TX用 IM無線シールド For Arduino(R)」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315TX用)」は、前者がArduinoに載せて使う拡張シールド、後者が単体の開発ボードで、製品の種類が違い代わりにならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/109073",
+      "sengoku/EEHD-4J8A"
+    ],
+    "fingerprint": "d2b448e80d2408402f7e2aed3c54db4816b58ececc374bbf041abd051f120780",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315TX/RX/TRX・IM920用 試作・評価用ユニバーサル基板」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315TX用)」は、前者が自作回路用の汎用基板、後者がIM315TX用の開発ボードで、製品の種類が違い代わりにならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/110116",
+      "sengoku/EEHD-4N7Y"
+    ],
+    "fingerprint": "3a085eafd9d000e4469cfefde5c7baaf07097a4c480836676c4b98491c95c146",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: MK-621）。秋月電子「バナナプラグ(赤色) MK-621-0」とせんごく「これはきれい!3色の光が点灯・点滅!光ファイバと赤緑青3個のLED付き光の3原色実験キット　MK-621」。前者は測定用のバナナプラグ単品、後者はLEDと光ファイバの工作キットで、用途も種類も異なり、コード語幹が同じだけの別製品。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/110117",
+      "sengoku/EEHD-4N7Y"
+    ],
+    "fingerprint": "c25c88a0a66d57cd90705d5de39881def99bc73b113b04aa70c8fe4bbe0d32de",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: MK-621）。秋月電子「バナナプラグ(黒色) MK-621-1」とせんごく「これはきれい!3色の光が点灯・点滅!光ファイバと赤緑青3個のLED付き光の3原色実験キット　MK-621」。前者はバナナプラグ単品(黒)、後者はLED付きの光の実験キットで、代替として選べる関係にない別種の製品。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/110144",
+      "sengoku/EEHD-4J8B"
+    ],
+    "fingerprint": "39316f4f4660700f178abba509b8b8055b43553b7672e58d538320ab59b6912d",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315RX・IM315TRX・IM920用 IM無線シールド For Arduino(R)」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315RX、IM315TRX用)　IM315-EVB-RX」は、前者がArduino用のシールド、後者が単体で使うアプリケーション開発ボードで、接続先のホストと用途が異なる別製品であり、互いの代替にはならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/113206",
+      "switch-science/7484"
+    ],
+    "fingerprint": "da2188fa2442f195d2587a8b6c60ccca94ccb0132ba82d5750b2ad80e0298131",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: FS90R）。秋月電子「360°連続回転サーボ(ローテーションサーボ) FS90R」とスイッチサイエンス「FEETECH FS90R サーボ用ホイール」。前者はサーボ本体、後者はそのサーボに取り付けるホイールという付属品で、商品の種類と用途が異なり代替にならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/113207",
+      "switch-science/7113"
+    ],
+    "fingerprint": "ef49f418719e6002a7bd6016ebf10151caf8b8dd11f31f0b06011cf329924707",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: FS90R）。秋月電子「タイヤ FS90R対応」とスイッチサイエンス「FEETECH FS90R マイクロPWMサーボ 4.8~6V/連続回転/1.5kg」。前者はFS90R用のタイヤという付属品、後者はサーボ本体で、商品の種類と用途が異なり代替にならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/114403",
+      "sengoku/EEHD-4J8B"
+    ],
+    "fingerprint": "117e24aed404775af0be17f30fa952e9e6648cf150222d2c22d08184219b1b6e",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: IM315）。秋月電子「IM315RX・IM315TRX・IM920用 リレー接点出力ボード」とせんごく「315MHz無線モジュール用 アプリケーション開発ボード(IM315RX、IM315TRX用)　IM315-EVB-RX」は、前者がリレー接点を出力する専用ボード、後者が汎用の開発ボードで、製品の種類と用途が異なる別製品である。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/117928",
+      "switch-science/8624"
+    ],
+    "fingerprint": "0807f5e03ea70f82dde01f3e6342e3db39127cdb60e9295aca73453c1e639252",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: MDBT50Q）。秋月電子「ブートローダー書込済Bluetoothモジュール MDBT50Q-1MV2」とスイッチサイエンス「nRF52840 MDBT50Q-1MV2用評価ボード [MDBT50Q-DB-40]」は、前者がモジュール本体、後者がそのモジュールを載せて使う評価ボードで、製品の種類が異なる別製品である。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/117954",
+      "sengoku/EEHD-5VJE"
+    ],
+    "fingerprint": "cc013b4cc7b249b6fac3d9e6d5b3e14a73d49f7edf8b08de031d55e9013e7573",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: XT90H）。秋月電子「XT90コネクター メス XT90H-F」とせんごく「【4235】XT90 カバー付 オス　XT90H-M」は、メスとオスの対になるコネクターで、互いに嵌合する相手側の部品であり、代替にはならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/117955",
+      "sengoku/EEHD-5VJF"
+    ],
+    "fingerprint": "d7f81d2caea592614d8f8ccd741f63b7bb0d9ba693fe2ae9778ae5c488044aad",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: XT90H）。秋月電子「XT90コネクター オス XT90H-M」とせんごく「【4236】XT90 カバー付 メス　XT90H-F」は、オスとメスの対になるコネクターで、互いに嵌合する相手側の部品であり、代替にはならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/117990",
+      "m5stack/h-angle-unit"
+    ],
+    "fingerprint": "960c581a14c1442deb873467795375cfaa2cbcc62682751ea4b91509baf15127",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: U005）。秋月電子「M型コネクター延長ケーブル RG-316 2m」は延長ケーブルで、M5Stack公式「Mini Angle Unit Rotary Switch with Potentiometer」はM5Stack用の回転角ユニット本体であり、ケーブルとユニットは別種の商品。型番に U005 が含まれるだけで、代わりに選べる商品ではない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/117990",
+      "sengoku/EEHD-5N88"
+    ],
+    "fingerprint": "e2196e4e8cbbe44b8589d00bef5f1798f877832240db8661730a6de50e4c8bc7",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: U005）。秋月電子「M型コネクター延長ケーブル RG-316 2m」は延長ケーブルで、せんごく「【6551】M5Stack用回転角ユニット　M5STACK-U005」はM5Stack用の回転角ユニット本体であり、ケーブルとユニットは別種の商品。型番に U005 が含まれるだけで、代わりに選べる商品ではない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/117990",
+      "switch-science/6551"
+    ],
+    "fingerprint": "049edb839df4f5866e6d4716609577b9dab6264dac82d12cca08de821ed30c02",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: U005）。秋月電子「M型コネクター延長ケーブル RG-316 2m」は延長ケーブルで、スイッチサイエンス「M5Stack用回転角ユニット」はM5Stack用の回転角ユニット本体であり、ケーブルとユニットは別種の商品。型番に U005 が含まれるだけで、代わりに選べる商品ではない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/117991",
+      "m5stack/h-angle-unit"
+    ],
+    "fingerprint": "85cc5ead8a8f35f7af44fa89f5086c0cb86b400d80f02329e42eacb3420b27ac",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: U005）。秋月電子「M型コネクター延長ケーブル RG-316 5m」は延長ケーブルで、M5Stack公式「Mini Angle Unit Rotary Switch with Potentiometer」はM5Stack用の回転角ユニット本体であり、ケーブルとユニットは別種の商品。型番に U005 が含まれるだけで、代わりに選べる商品ではない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/117991",
+      "sengoku/EEHD-5N88"
+    ],
+    "fingerprint": "428c9f1beb50b8c3f43ac751d713ee81007fbe3ff8e070e037a44b44e32c4db0",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: U005）。秋月電子「M型コネクター延長ケーブル RG-316 5m」は延長ケーブルで、せんごく「【6551】M5Stack用回転角ユニット　M5STACK-U005」はM5Stack用の回転角ユニット本体であり、ケーブルとユニットは別種の商品。型番に U005 が含まれるだけで、代わりに選べる商品ではない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/117991",
+      "switch-science/6551"
+    ],
+    "fingerprint": "e08ab72222e8246460884f7879a980f4855c9aa601b1b5c90720be36fe46c25a",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: U005）。秋月電子「M型コネクター延長ケーブル RG-316 5m」は延長ケーブルで、スイッチサイエンス「M5Stack用回転角ユニット」はM5Stack用の回転角ユニット本体であり、ケーブルとユニットは別種の商品。型番に U005 が含まれるだけで、代わりに選べる商品ではない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/130213",
+      "switch-science/10016"
+    ],
+    "fingerprint": "73bed5770c73bd79ce87f05851f618e57bb93a4c42c86195f0011364429cf039",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: W55RP20）。秋月電子「W55RP20-EVB-Pico」はW55RP20を載せたPico形状の評価ボード、スイッチサイエンス「W55RP20（W5500 + RP2040 SiP）」はSiPチップ単体で、チップとそれを使った評価ボードは用途も使い方も異なり代替にならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/131015",
+      "switch-science/10978"
+    ],
+    "fingerprint": "808f5fe4d5ea3507c03e5e8c1d2869d909f5af8f567622d38eb60e43b9e22806",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: ESP32、ESP32-C5）。秋月電子「ESP32-C5-DevKitC-1-N8R4 ESP32-C5-WROOM-1開発ボード 8MB」とスイッチサイエンス「Seeed Studio XIAO ESP32C5」の組。前者はDevKitC-1の開発ボード、後者はXIAO規格の小型ボードで、スイッチサイエンス側の型番ESP32-C5はチップ名にすぎない。XIAO規格の既存ファミリーにDevKitCは入らないため別製品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/131134",
+      "switch-science/10783"
+    ],
+    "fingerprint": "5f51027761bdfc87b0f932252ec26483939e8aa3613c20125a8306dd66c150eb",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: W6300）。秋月電子「W6300-EVB-Pico」はW6300を載せた評価ボード、スイッチサイエンス『TCP/IPハードウェア処理チップ「W6300」』はチップ単体で、チップと評価ボードは用途も扱い方も異なり代替にならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/131135",
+      "switch-science/10783"
+    ],
+    "fingerprint": "0072b500848ca925dc555f81d625c116a99eb04c497452c267c2e301b2a946d5",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: W6300）。秋月電子「W6300-EVB-Pico2」はW6300を載せたPico2形状の評価ボード、スイッチサイエンス『TCP/IPハードウェア処理チップ「W6300」』はチップ単体で、チップと評価ボードは用途も扱い方も異なり代替にならない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/131172",
+      "switch-science/10784"
+    ],
+    "fingerprint": "b4234afa3a9f34bd48fe464e4ac4d496e942bda7b515ad3a8d4d4171b685ca9a",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: W6300）。秋月電子「イーサーネットコントローラー W6300」はICチップ単体で、スイッチサイエンス「WIZnet W6300-EVB-Pico2」はそのチップを載せた評価ボード。チップと評価ボードは別種の商品で、互いに代わりに選べない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/131172",
+      "switch-science/10785"
+    ],
+    "fingerprint": "c40837168606903cc662a6178ad104c3814e6b0bd474e01084c3ee832b7d8ba1",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: W6300）。秋月電子「イーサーネットコントローラー W6300」はICチップ単体で、スイッチサイエンス「WIZnet W6300-EVB-Pico」はそのチップを載せた評価ボード。チップと評価ボードは別種の商品で、互いに代わりに選べない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/131642",
+      "switch-science/10978"
+    ],
+    "fingerprint": "4330771a4d570b5a938679447548fa1672480043d029a34eb79f705950caa58e",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: ESP32、ESP32-C5）。秋月電子「ESP32-C5-DevKitC-1-N8R8 ESP32-C5-WROOM-1開発ボード 8MB」とスイッチサイエンス「Seeed Studio XIAO ESP32C5」の組。前者はDevKitC-1の開発ボード、後者はXIAO規格の小型ボードで、スイッチサイエンス側の型番ESP32-C5はチップ名にすぎない。XIAO規格の既存ファミリーにDevKitCは入らないため別製品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "akizuki/131885",
+      "switch-science/10978"
+    ],
+    "fingerprint": "40cd7f481ce93bb178555f1ec457655faf3490a53e91fc0485a3ef6c171ba74e",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: ESP32、ESP32-C5）。秋月電子「Wi-Fiモジュール ESP32-C5-WROOM-1-N16R8」とスイッチサイエンス「Seeed Studio XIAO ESP32C5」の組。前者はWi-Fiモジュール単体、後者はそのチップを載せたXIAO規格の開発ボードで、モジュールとボードは別種の商品。スイッチサイエンス側の型番ESP32-C5はチップ名にすぎない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "ksy/326",
+      "sengoku/EEHD-5GHZ"
+    ],
+    "fingerprint": "65efeebc8731d83d76b09be8b70b56a5fba7f31603c61c675eec348019686085",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: DTP502535）。KSY「リチウムイオンポリマー電池 400mAh 2C」(DTP502535(PHR))とせんごく「リチウムイオンポリマー電池 7.4V 400mAh　DTP502535-2S」は、せんごく側が2直列(2S)で7.4Vと明記された別構成のパックであり、KSY側の単品コードとは電圧仕様が異なるため、同じ用途で置き換えられない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "m5stack/h-atoms3r-camera-kit",
+      "sengoku/EEHD-6J74"
+    ],
+    "fingerprint": "5a531806360d270f118a08857860298a34cdb999b0926505146f5895b67a08f0",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。M5Stack公式「ATOMS3R Camera Kit (8MB PSRAM)」とせんごく「【9915】ATOMS3R (8MB PSRAM搭載)　M5STACK-C126」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "m5stack/h-atoms3r-camera-kit",
+      "sengoku/EEHD-6UUJ"
+    ],
+    "fingerprint": "9f4411cd540c8e27ff2375ee4158c3c0980e098e0c58f67f207e59514ee6c7d6",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。M5Stack公式「ATOMS3R Camera Kit (8MB PSRAM)」とせんごく「【10008】ATOMS3R Ext プロトキット(8MB PSRAM搭載、液晶なし)　M5STACK-C126-EXT」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "m5stack/h-atoms3r-camera-kit-m12-version-ov3660",
+      "sengoku/EEHD-6J74"
+    ],
+    "fingerprint": "9a24b14a484dba3ec6b9bbfdb00ef0830b1ea784639e6eed7da1955d1ab72eb7",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。M5Stack公式「[EOL] ATOMS3R Camera Kit M12 Version (OV3660)」とせんごく「【9915】ATOMS3R (8MB PSRAM搭載)　M5STACK-C126」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "m5stack/h-atoms3r-camera-kit-m12-version-ov3660",
+      "sengoku/EEHD-6UUJ"
+    ],
+    "fingerprint": "7bbea88753204d398380ce0b735f34bafff6b634a516641c03daf89669d19889",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。M5Stack公式「[EOL] ATOMS3R Camera Kit M12 Version (OV3660)」とせんごく「【10008】ATOMS3R Ext プロトキット(8MB PSRAM搭載、液晶なし)　M5STACK-C126-EXT」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "m5stack/h-atoms3r-dev-kit",
+      "sengoku/EEHD-6J75"
+    ],
+    "fingerprint": "79fa2dae02fcf9d8991f00d29f61215774bc446bab1bcd1f72290fd94b9d591b",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。M5Stack公式「ATOMS3R Development Kit with 0.85-inch Screen (8MB PSRAM)」とせんごく「【9916】ATOMS3R カメラキット(8MB PSRAM搭載)　M5STACK-C126-Cam」。前者は0.85インチ液晶付きの本体開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "m5stack/h-atoms3r-proto-kit-without-screen",
+      "sengoku/EEHD-6J75"
+    ],
+    "fingerprint": "cd7045cb5a23269629a72e8aafffc2e9ab715c6526d67503efc11d77c530827f",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。M5Stack公式「ATOMS3R Proto Kit without Screen (8MB PSRAM)」とせんごく「【9916】ATOMS3R カメラキット(8MB PSRAM搭載)　M5STACK-C126-Cam」。前者は液晶なしでプロト基板を付けた開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "m5stack/h-rca-audio-video-composite-module-13-2",
+      "sengoku/EEHD-0DTX"
+    ],
+    "fingerprint": "c16bd5f75c7d8fca188be2c9e8dc8f4234127c41a664b1dd669a995a9d418ef4",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: M125）。M5Stack公式「RCA Audio/Video Composite Module 13.2」とせんごく「【切売り】スピーカーコード 1.25SQ (透明/紫)　M125-SP 1.25 透明/紫」の組。前者はM5Stack用のRCAコンポジットモジュール、後者は切り売りのスピーカーコードで、M125は型番の先頭が偶然一致しただけの別種の商品。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10008",
+      "m5stack/h-atoms3r-camera-kit"
+    ],
+    "fingerprint": "3ac987f0b91773f952b3b6a91dee847dea91f41ea6b57ea9beb2b13af83772e3",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R Ext プロトキット（8MB PSRAM搭載、液晶なし）」とM5Stack公式「ATOMS3R Camera Kit (8MB PSRAM)」。前者は液晶なしでプロト基板を付けた開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10008",
+      "m5stack/h-atoms3r-camera-kit-m12-version-ov3660"
+    ],
+    "fingerprint": "4531e82203f0913e236da9715083340b0f7e30df7a23cc59a59f768289592c0a",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R Ext プロトキット（8MB PSRAM搭載、液晶なし）」とM5Stack公式「[EOL] ATOMS3R Camera Kit M12 Version (OV3660)」。前者は液晶なしでプロト基板を付けた開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10008",
+      "sengoku/EEHD-6J75"
+    ],
+    "fingerprint": "9081af59b739f9638ac30c3260eff484300807d0c93ed3c76a5c2fb44e324f90",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R Ext プロトキット（8MB PSRAM搭載、液晶なし）」とせんごく「【9916】ATOMS3R カメラキット(8MB PSRAM搭載)　M5STACK-C126-Cam」。前者は液晶なしでプロト基板を付けた開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10009",
+      "m5stack/h-atoms3r-dev-kit"
+    ],
+    "fingerprint": "340a5251aed3d5c99b826bd5681c5a45cea9674fdf16d436d71647462bb853f2",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R M12カメラキット（OV3660）--在庫限り」とM5Stack公式「ATOMS3R Development Kit with 0.85-inch Screen (8MB PSRAM)」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10009",
+      "m5stack/h-atoms3r-proto-kit-without-screen"
+    ],
+    "fingerprint": "84ae5f1d94300276d24a1603a82382df434e592820095d2ca768c15aa5b3d85c",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R M12カメラキット（OV3660）--在庫限り」とM5Stack公式「ATOMS3R Proto Kit without Screen (8MB PSRAM)」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10009",
+      "sengoku/EEHD-6J74"
+    ],
+    "fingerprint": "bc5f1b576d2ff58d064fba1e8a1cf5cc107fcc418da7ee4f7c75612e5b1ac629",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R M12カメラキット（OV3660）--在庫限り」とせんごく「【9915】ATOMS3R (8MB PSRAM搭載)　M5STACK-C126」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10009",
+      "sengoku/EEHD-6UUJ"
+    ],
+    "fingerprint": "66fbbf2b28ae452c7e8e8110fae349be37e1ad27f37d3b6f19ac2df3d9c8a048",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R M12カメラキット（OV3660）--在庫限り」とせんごく「【10008】ATOMS3R Ext プロトキット(8MB PSRAM搭載、液晶なし)　M5STACK-C126-EXT」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10016",
+      "sengoku/EEHD-6KKK"
+    ],
+    "fingerprint": "1d16a306d66c8e8e47bd9957fd8f261281441c4d48cf31dd22a1454a2ed9b180",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: WIZNET-W55RP20）。スイッチサイエンス「W55RP20（W5500 + RP2040 SiP）」とせんごく「【10015】W55RP20-EVB-Pico - W55RP20評価基板　WIZNET-W55RP20-EVB-Pico」は、前者がSiPのチップ単体、後者がそのチップを載せた評価基板で、製品の種類が異なる別製品である。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10465",
+      "sengoku/EEHD-6RKU"
+    ],
+    "fingerprint": "beb94dc122f284ce15dc350456c6f591718710544a839c96d682f7c87690bbc9",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: RA4M1、RA4M1-ZERO）。スイッチサイエンス「RP2350搭載 1.8インチ AMOLED タッチスクリーン開発ボード（ケース付）」とせんごく「RA4M1-Zero Mini 開発ボード(ピンヘッダ付き)　【30662】 RA4M1-Zero-M」は、前者がRP2350搭載のAMOLEDタッチ画面付きボード、後者がRA4M1搭載の小型ボードで、マイコンも用途も異なる別製品である。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/10830",
+      "sengoku/EEHD-6WPH"
+    ],
+    "fingerprint": "937f4c07b9aff78ea3a20142ce20e86c1d428edc5524832e27b0154a184bd7af",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: PRT-29920）。スイッチサイエンス「SparkFun Teensy用イーサーネットアダプタ」（PRT-29920）はアダプタ単品、せんごく「Teensy 4.1 用 Ethernet Adapter セット」（PRT-29920-SET）はセット品。単品とそれを含むセットで構成が違い、セットの中身も項目に示されないため、置き換えられる別商品としては扱わない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/3118",
+      "sengoku/EEHD-5GHZ"
+    ],
+    "fingerprint": "7d81b423a712cb17b3695d0a0c68269df52fa05defd60532caf00bf49498b8cd",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: DTP502535）。スイッチサイエンス「リチウムイオンポリマー電池 400mAh」(DTP502535(PHR))とせんごく「リチウムイオンポリマー電池 7.4V 400mAh　DTP502535-2S」は、せんごく側が2直列(2S)で7.4Vと明記された別構成のパックであり、電圧仕様が異なるため、同じ用途で置き換えられない。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/3654",
+      "sengoku/EEHD-6UU5"
+    ],
+    "fingerprint": "219ce9f4efe6c0c74ce0f99efd9bcf323c83bd46ddb34d4e1483494ea981a0d5",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: A001）。スイッチサイエンス「M5Stack用2 x 15ピンヘッダ・ソケットセット [A001]」とせんごく「【9591】M-BUS 2x15ピンヘッダ　M5STACK-A001-C」。前者はピンヘッダとソケットの両方を含むセット、後者はピンヘッダ単品で、単品と、それを含む別の部品も入ったセットという関係のため別の商品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/3654",
+      "sengoku/EEHD-6UU6"
+    ],
+    "fingerprint": "55055e36ec3f66ff64b68c170639e1fccb649385b4f63a148888a8e15ec49b4c",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: A001）。スイッチサイエンス「M5Stack用2 x 15ピンヘッダ・ソケットセット [A001]」とせんごく「【9592】M-BUS 2x15ピンソケット　M5STACK-A001-D」。前者はピンヘッダとソケットのセット、後者はソケット単品で、単品と、それを含むセットという関係のため代替として並べず、別の商品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/5532",
+      "sengoku/EEHD-6KTS"
+    ],
+    "fingerprint": "4320933d10875ab31f7085c214fb3fc2a7794cc87bde0faaab6856afde776f3b",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: RAYTAC-MDBT50Q）。スイッチサイエンス「nRF52840 MDBT50Q用評価ボード [MDBT50Q-DB]--販売終了」とせんごく「【10014】RAYTAC nRF52840 MDBT50Q 開発用USBドングル(Type-Cコネクタ)　RAYTAC-MDBT50Q-CX-40」は、前者が評価ボード、後者がUSBドングルで、製品の形態と使い方が異なる別製品である。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/8382",
+      "m5stack/h-m5stack-hoodie-black"
+    ],
+    "fingerprint": "9df0d90bf5065fd84acb86c6a2f7701b1a736cd48ab21dba03ca090c8ddc74ea",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: F059）。スイッチサイエンス「【期間限定】MFT2022Tシャツ+トート付き M5Stack フーディー（黒）--販売終了」はフーディーにTシャツとトートバッグを加えた期間限定セットで、M5Stack公式「[EOL] M5Stack Hoodie - Black」はフーディー単品。単品と、それを含む複数商品のセットは別の商品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/8382",
+      "sengoku/EEHD-6URB"
+    ],
+    "fingerprint": "c320aef153f71ed583e31cf30625f3a27a233156324e59f6b483e6cb7456801b",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: F059）。スイッチサイエンス「【期間限定】MFT2022Tシャツ+トート付き M5Stack フーディー（黒）--販売終了」はフーディーにTシャツとトートバッグを加えた期間限定セットで、せんごく「【8013】M5Stack フーディー(黒)　M5STACK-F059」はフーディー単品。単品と、それを含む複数商品のセットは別の商品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/8383",
+      "m5stack/h-m5stack-cushion"
+    ],
+    "fingerprint": "c0161d6a742623de39d79eb1c78d0a8bfe6a786b80c8065fac8c5a5ac74a61b1",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: A101）。スイッチサイエンス「【期間限定】MFT2022Tシャツ+トート付き M5Stackクッション（CORE2デザイン）--販売終了」はクッションにTシャツとトートバッグを加えた期間限定セットで、M5Stack公式「[EOL] M5Stack Cushion」はクッション単品。単品と、それを含む複数商品のセットは別の商品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/8383",
+      "sengoku/EEHD-6UPK"
+    ],
+    "fingerprint": "7cb3037f473befed0bf7fa555cde479fb1f15d729d9b8d182e3a53697270e32e",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: A101）。スイッチサイエンス「【期間限定】MFT2022Tシャツ+トート付き M5Stackクッション（CORE2デザイン）--販売終了」はクッションにTシャツとトートバッグを加えた期間限定セットで、せんごく「【7174】M5Stackクッション(CORE2デザイン)　M5STACK-A101」はクッション単品。単品と、それを含む複数商品のセットは別の商品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/8384",
+      "m5stack/h-m5stack-cushion"
+    ],
+    "fingerprint": "19b593f3512ecc0d3b0e9af560ab396ba6772777d4dbafa00f02328c60cf5b5d",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: A102）。スイッチサイエンス「【期間限定】MFT2022Tシャツ+トート付き M5Stackクッション（M5StickCデザイン）--販売終了」はクッションにTシャツとトートバッグを加えた期間限定セットで、M5Stack公式「[EOL] M5Stack Cushion」はクッション単品。単品と、それを含む複数商品のセットは別の商品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/8384",
+      "sengoku/EEHD-6UPL"
+    ],
+    "fingerprint": "14573c069aac6f5785f038d78767277cd1d741abb05b9973b20605437ebaf26a",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: A102）。スイッチサイエンス「【期間限定】MFT2022Tシャツ+トート付き M5Stackクッション（M5StickCデザイン）--販売終了」はクッションにTシャツとトートバッグを加えた期間限定セットで、せんごく「【7175】M5Stackクッション(M5StickCデザイン)　M5STACK-A102」はクッション単品。単品と、それを含む複数商品のセットは別の商品として扱う。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/8699",
+      "sengoku/EEHD-0DTX"
+    ],
+    "fingerprint": "0dff00933f1a05b98fc6567284d29e9c443fd3a2ec32998d01568a728e48f1dd",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: M125）。スイッチサイエンス「M5Stack用RCA オーディオ/ビデオコンポジットモジュール - 13.2」とせんごく「【切売り】スピーカーコード 1.25SQ (透明/紫)　M125-SP 1.25 透明/紫」の組。前者はM5Stack用のRCAモジュール、後者は切り売りのスピーカーコードで、M125は型番の先頭が偶然一致しただけの別種の商品。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Sonnet 5.5"
+  },
+  {
+    "products": [
+      "switch-science/9915",
+      "m5stack/h-atoms3r-camera-kit"
+    ],
+    "fingerprint": "4419ce390c175630dbf6b3cf1de1be7cea018f6fe69b1c3103b49ccda2586138",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R (8MB PSRAM搭載)」とM5Stack公式「ATOMS3R Camera Kit (8MB PSRAM)」。前者は0.85インチ液晶付きの本体開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/9915",
+      "m5stack/h-atoms3r-camera-kit-m12-version-ov3660"
+    ],
+    "fingerprint": "4e029e914a4dd62d79ae863e54e6606ced92493be63f438e6cab406ea87c9b2c",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R (8MB PSRAM搭載)」とM5Stack公式「[EOL] ATOMS3R Camera Kit M12 Version (OV3660)」。前者は0.85インチ液晶付きの本体開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/9915",
+      "sengoku/EEHD-6J75"
+    ],
+    "fingerprint": "e96f47ba164d85813ef0161b1d97fefee1c85cb16db3743653669e5bbe201d33",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R (8MB PSRAM搭載)」とせんごく「【9916】ATOMS3R カメラキット(8MB PSRAM搭載)　M5STACK-C126-Cam」。前者は0.85インチ液晶付きの本体開発キット、後者はカメラで撮影するカメラキットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/9916",
+      "m5stack/h-atoms3r-dev-kit"
+    ],
+    "fingerprint": "cc02c33b6608caa24e90e9a22bfe17ccb2603a9c5cdfaec6ee0109382a688092",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R カメラキット(8MB PSRAM搭載)」とM5Stack公式「ATOMS3R Development Kit with 0.85-inch Screen (8MB PSRAM)」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/9916",
+      "m5stack/h-atoms3r-proto-kit-without-screen"
+    ],
+    "fingerprint": "88d5868fd54b23023387406a8ef8f1fa97d97eca1d7d88029c351fccaff333b7",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R カメラキット(8MB PSRAM搭載)」とM5Stack公式「ATOMS3R Proto Kit without Screen (8MB PSRAM)」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/9916",
+      "sengoku/EEHD-6J74"
+    ],
+    "fingerprint": "50bc811a21854f08d0b99e65ce07f4119b39dc217eca28cb3af493c3133c0627",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R カメラキット(8MB PSRAM搭載)」とせんごく「【9915】ATOMS3R (8MB PSRAM搭載)　M5STACK-C126」。前者はカメラで撮影するカメラキット、後者は0.85インチ液晶付きの本体開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "switch-science/9916",
+      "sengoku/EEHD-6UUJ"
+    ],
+    "fingerprint": "189d6e74fc902763b5639bbadc8ee2d7c73ac236d5f48cb9e2e4b82bd516a480",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R カメラキット(8MB PSRAM搭載)」とせんごく「【10008】ATOMS3R Ext プロトキット(8MB PSRAM搭載、液晶なし)　M5STACK-C126-EXT」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
+    "reviewedAt": "2026-11-02",
+    "reviewerModel": "Claude Opus 5.5"
+  }
+]

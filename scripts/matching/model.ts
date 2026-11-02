@@ -27,7 +27,8 @@ export interface Catalog {
   listings: Listing[];
 }
 /**
- * `derived`: found only through keys read from the listings' own fields or reviewed aliases, not their stored codes.
+ * `derived`: found only through keys read from the listings' own fields (forms of a code, or a reference to another
+ * shop's page) or reviewed aliases, not their stored codes.
  * `fingerprint` covers both listings and, for a derived pair, the keys that found it: a review cites them, so changing
  * an alias or a derivation rule forces a new review even when the same two rows still pair.
  */
@@ -49,26 +50,48 @@ export interface Review {
 export interface Family {
   id: string; label: string; purpose: string; reviewedAt: string;
   sources: string[];
-  /** Each listing is explicitly reviewed. A name regex never enrols accessories. */
-  members: { key: string; fingerprint: string; variant: string; features: Record<string, string> }[];
+  /** Each listing is explicitly reviewed. A name regex never enrols accessories. A listing with store variants names one by offerId. */
+  members: { key: string; fingerprint: string; variant: string; features: Record<string, string>; offerId?: string }[];
 }
+/**
+ * A similar-product lead (ADR-0018 0.6.6) reviewed and kept out of every family: `different` products, or an
+ * `identity` question (perhaps the same product) that only aliases and reviews can settle. Bound to both listings like
+ * a candidate; `products` follow catalogue store order.
+ */
+export interface Dismissal { products: [string, string]; fingerprint: string; decision: 'different' | 'identity'; evidence: string; reviewedAt: string; reviewerModel: string }
 export const normalizeCode = (value: string): string => value.normalize('NFKC').trim().toUpperCase().replace(/\s+/g, '');
 export const listingKey = (p: Pick<Listing, 'storeId' | 'pageKey'>): string => `${p.storeId}/${p.pageKey}`;
+/** A listing's own page as a discovery key (`AKIZUKI/104326`, `SWITCH-SCIENCE/1216`). Never a maker code, so it cannot meet one. */
+export const pageReference = (p: Pick<Listing, 'storeId' | 'pageKey'>): string => normalizeCode(listingKey(p));
 export const hash = (value: string): string => createHash('sha256').update(value).digest('hex');
 export const fingerprint = (p: Listing): string => hash(JSON.stringify(p));
 export const pairId = (a: Listing, b: Listing): string => a.storeId === 'akizuki' && b.storeId === 'switch-science'
   ? `a${a.pageKey}-s${b.pageKey}` : JSON.stringify([a.storeId, a.pageKey, b.storeId, b.pageKey]);
 export const usefulCode = (code: string): boolean => code.length >= 4 && /\d/.test(code);
 
-/** O(N + K) lookup plus O(R log R) output ordering. Never an N x M cross join. */
-export function discover(left: readonly Listing[], right: readonly Listing[], extra?: ExtraKeys): Candidate[] {
+/**
+ * O(N + K) lookup per tier plus O(R log R) output ordering. Never an N x M cross join. `tiers` are extra keys in
+ * order of strength; each tier searches with the stored codes and every earlier tier.
+ */
+export function discover(left: readonly Listing[], right: readonly Listing[], ...tiers: ExtraKeys[]): Candidate[] {
   const candidates = match(left, right, p => p.codes);
-  // A pair its stored codes already find keeps exactly those codes; extra keys only add pairs.
-  if (extra) for (const c of match(left, right, p => [...p.codes, ...extra(p)]).values()) {
-    if (!candidates.has(c.id)) candidates.set(c.id, { ...c, derived: true, fingerprint: hash(c.fingerprint + JSON.stringify([...c.codes].sort())) });
+  // A pair the stored codes or an earlier tier already find keeps exactly those keys; a later tier only adds pairs.
+  for (let i = 0; i < tiers.length; i++) {
+    const earlier = tiers.slice(0, i + 1);
+    for (const c of match(left, right, p => [...p.codes, ...earlier.flatMap(keys => keys(p))]).values()) {
+      if (!candidates.has(c.id)) candidates.set(c.id, { ...c, derived: true, fingerprint: hash(c.fingerprint + JSON.stringify([...c.codes].sort())) });
+    }
   }
   return [...candidates.values()].sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
 }
+
+/**
+ * The manufacturer a listing claims. Switch Science's older rows give the shop itself for products it only resells
+ * (`M5STACK-K033`, `SEEED-…`), which says nothing about the maker.
+ */
+const makerClaim = (p: Listing): string => p.storeId === 'switch-science' && p.manufacturer === 'スイッチサイエンス' ? '' : p.manufacturer;
+/** Missing manufacturer is reviewable; contradictory known makers are not. */
+export const compatibleMakers = (p: Listing, q: Listing): boolean => !makerClaim(p) || !makerClaim(q) || normalizeCode(makerClaim(p)) === normalizeCode(makerClaim(q));
 
 function match(left: readonly Listing[], right: readonly Listing[], keys: (p: Listing) => readonly string[]): Map<string, Candidate> {
   const index = new Map<string, Listing[]>();
@@ -80,9 +103,7 @@ function match(left: readonly Listing[], right: readonly Listing[], keys: (p: Li
   for (const p of left) for (const code of new Set(keys(p))) {
     if (!usefulCode(code)) continue;
     for (const q of index.get(code) ?? []) {
-      if (p.storeId === q.storeId) continue;
-      // Missing manufacturer is reviewable; contradictory known makers are not.
-      if (p.manufacturer && q.manufacturer && normalizeCode(p.manufacturer) !== normalizeCode(q.manufacturer)) continue;
+      if (p.storeId === q.storeId || !compatibleMakers(p, q)) continue;
       const id = pairId(p, q);
       const existing = candidates.get(id);
       if (existing) existing.codes.push(code);
@@ -136,12 +157,12 @@ export function assertCatalog(catalog: Catalog): void {
 }
 
 /** Each store is indexed once. Earlier sources retain their historical pair orientation. */
-export function discoverCatalog(catalog: Catalog, extra?: ExtraKeys): Candidate[] {
+export function discoverCatalog(catalog: Catalog, ...tiers: ExtraKeys[]): Candidate[] {
   const previous: Listing[] = [];
   const result: Candidate[] = [];
   for (const storeId of catalogStores(catalog)) {
     const current = catalog.listings.filter(p => p.storeId === storeId);
-    result.push(...discover(previous, current, extra));
+    result.push(...discover(previous, current, ...tiers));
     previous.push(...current);
   }
   return result.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);

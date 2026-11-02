@@ -4,8 +4,9 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import type { ProductRelation, RelationProduct } from '../../userscript/core/relations.ts';
 import { packRelations } from '../../userscript/core/relationTable.ts';
-import { assertCatalog, catalogStores, discover, discoverCatalog, fingerprint, listingKey, normalizeCode, pairId, usefulCode, type Alias, type Catalog, type ExtraKeys, type Family, type Listing, type Review } from './model.ts';
-import { importCatalogs, appendStore, applySupplements, derivedCodes, extraKeys, identityCodes, snapshotListings } from './catalogs.ts';
+import { assertCatalog, catalogStores, discover, discoverCatalog, fingerprint, hash, listingKey, normalizeCode, pairId, usefulCode, type Alias, type Catalog, type Dismissal, type ExtraKeys, type Family, type Listing, type Review } from './model.ts';
+import { importCatalogs, appendStore, applySupplements, derivedCodes, extraKeys, identityCodes, referenceKeys, snapshotListings } from './catalogs.ts';
+import { proposeByName, proposeSimilar } from './names.ts';
 
 export function endpoint(p: Listing, offerId?: string | null): RelationProduct {
   const variant = offerId ? p.variants?.find(v => v.offerId === offerId) : undefined;
@@ -16,11 +17,13 @@ export function endpoint(p: Listing, offerId?: string | null): RelationProduct {
 }
 const order = (a: { id: string }, b: { id: string }): number => a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 
-/** Keys a listing has without aliases: its stored codes and the forms read from its own fields. */
-const ownKeys = (p: Listing): Set<string> => new Set([...p.codes, ...derivedCodes(p)]);
+/** Codes a listing has without aliases: the stored codes and the forms read from its own fields. */
+const ownCodes = (p: Listing): string[] => [...p.codes, ...derivedCodes(p)];
+/** Keys a listing has without aliases: its own codes and the page references read from its own fields. */
+const ownKeys = (p: Listing): Set<string> => new Set([...ownCodes(p), ...referenceKeys(p)]);
 
 /** Each alias names a current listing by fingerprint, gives usable codes with evidence and is used once per listing. */
-export function aliasKeys(catalog: Catalog, aliases: readonly Alias[]): ExtraKeys {
+function aliasKeys(catalog: Catalog, aliases: readonly Alias[]): ExtraKeys {
   const listings = new Map(catalog.listings.map(p => [listingKey(p), p]));
   const seen = new Set<string>();
   for (const alias of aliases) {
@@ -34,13 +37,19 @@ export function aliasKeys(catalog: Catalog, aliases: readonly Alias[]): ExtraKey
   return extraKeys(aliases);
 }
 
-export function generate(catalog: Catalog, legacy: readonly ProductRelation[], reviews: readonly Review[], families: readonly Family[], aliases: readonly Alias[] = []) {
+/**
+ * Discovery order: the forms read from a listing's own fields, then its page references, then reviewed aliases.
+ * An alias only adds pairs the listing's own keys miss, so a pair those keys already find keeps their codes and fingerprint.
+ */
+export const discoveryTiers = (catalog: Catalog, aliases: readonly Alias[]): ExtraKeys[] => [extraKeys([]), referenceKeys, aliasKeys(catalog, aliases)];
+
+export function generate(catalog: Catalog, legacy: readonly ProductRelation[], reviews: readonly Review[], families: readonly Family[], aliases: readonly Alias[] = [], dismissals: readonly Dismissal[] = []) {
   assertCatalog(catalog);
   const listings = new Map(catalog.listings.map(p => [listingKey(p), p]));
   const stores = catalogStores(catalog);
   if (stores.length < 2) throw new Error('two sources required');
   const storeOrder = new Map(stores.map((storeId, i) => [storeId, i]));
-  const candidates = discoverCatalog(catalog, aliasKeys(catalog, aliases));
+  const candidates = discoverCatalog(catalog, ...discoveryTiers(catalog, aliases));
   // Each alias code must find a pair for its listing that the rows' own keys do not; otherwise it is unused input, not evidence.
   const aliasPairs = candidates.filter(c => c.derived && !c.codes.some(code => c.products.every(p => ownKeys(p).has(code))));
   for (const alias of aliases) for (const code of alias.codes.map(normalizeCode)) {
@@ -84,6 +93,7 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     });
   }
   const familyIds = new Set<string>();
+  const familyPairs = new Set<string>();
   const familyCounts: Record<string, number> = {};
   for (const family of families) {
     if (familyIds.has(family.id) || !family.purpose || family.members.length > 64 || !Number.isFinite(Date.parse(family.reviewedAt))) throw new Error(`invalid family ${family.id}`);
@@ -96,7 +106,8 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     const resolved = family.members.map(member => {
       const p = listings.get(member.key);
       if (members.has(member.key) || !p || fingerprint(p) !== member.fingerprint || !member.variant || !Object.keys(member.features).length
-        || Object.values(member.features).some(v => typeof v !== 'string' || !v.trim())) throw new Error(`family member stale/invalid: ${family.id}/${member.key}`);
+        || Object.values(member.features).some(v => typeof v !== 'string' || !v.trim())
+        || (p.variants ? !p.variants.some(v => v.offerId === member.offerId) : member.offerId !== undefined)) throw new Error(`family member stale/invalid: ${family.id}/${member.key}`);
       members.add(member.key); return { ...member, listing: p };
     });
     familyCounts[family.id] = 0;
@@ -105,15 +116,16 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     const cross = resolved.flatMap((x, i) => resolved.slice(i + 1).filter(y => y.listing.storeId !== x.listing.storeId)
       .map(y => storeOrder.get(x.listing.storeId)! < storeOrder.get(y.listing.storeId)! ? [x, y] as const : [y, x] as const));
     for (const [a, b] of cross) {
-      if (a.variant === b.variant) continue;
       const id = pairId(a.listing, b.listing);
+      familyPairs.add(id);
+      if (a.variant === b.variant) continue;
       if (relations.has(id) || reviewIndex.get(id)?.decision === 'rejected') continue;
       const keys = [...new Set([...Object.keys(a.features), ...Object.keys(b.features)])].sort();
       if (keys.some(key => !a.features[key] || !b.features[key])) throw new Error(`incomplete feature schema ${family.id}`);
       const differences = keys.filter(key => a.features[key] !== b.features[key]).map(key => `${key}: ${a.features[key]} ↔ ${b.features[key]}`);
       if (!differences.length) throw new Error(`different variants need concrete differences: ${id}`);
       const common = keys.filter(key => a.features[key] === b.features[key]).map(key => `${key}: ${a.features[key]}`).join(' / ');
-      relations.set(id, { id, kind: 'similar_product', reviewStatus: 'verified', products: [endpoint(a.listing), endpoint(b.listing)],
+      relations.set(id, { id, kind: 'similar_product', reviewStatus: 'verified', products: [endpoint(a.listing, a.offerId), endpoint(b.listing, b.offerId)],
         evidence: `${family.label}。共通用途: ${family.purpose}。${common ? `共通仕様: ${common}。` : ''}登録した製品本体だけを照合し、周辺部品は含めない。`,
         differences, missingEvidence: ['互換性・置き換え時の配線/ソフトウェア・販売数量/付属品'], reviewedAt: family.reviewedAt,
         provenance: { method: 'catalog', model: null, originalClassification: 'reviewed_family', originalReason: family.id }, pricePolicy: null,
@@ -123,6 +135,24 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     }
   }
   const result = [...relations.values()].sort(order);
+  // Name proposals still waiting for review: the pairs the codes, aliases and families do not hold yet.
+  const nameProposals = proposeByName(catalog, new Set([...candidates.map(c => c.id), ...familyPairs]), ownCodes);
+  // Similar-product leads no candidate, relation or family holds yet. A dismissal names a current lead with its listings' fingerprints.
+  const leads = proposeSimilar(catalog, new Set([...candidates.map(c => c.id), ...familyPairs, ...relations.keys()]), ownCodes);
+  const leadIds = new Set(leads.map(lead => lead.id));
+  const dismissed = new Map<string, Dismissal>();
+  for (const dismissal of dismissals) {
+    const [a, b] = dismissal.products.map(key => listings.get(key));
+    const id = a && b ? pairId(a, b) : '';
+    if (!a || !b || dismissed.has(id) || !leadIds.has(id) || storeOrder.get(a.storeId)! > storeOrder.get(b.storeId)! || dismissal.fingerprint !== hash(fingerprint(a) + fingerprint(b))) {
+      throw new Error(`dismissal stale/orphaned: ${dismissal.products.join(' ')}`);
+    }
+    if (!['different', 'identity'].includes(dismissal.decision) || dismissal.evidence.length < 20 || !dismissal.reviewerModel || !Number.isFinite(Date.parse(dismissal.reviewedAt))) {
+      throw new Error(`dismissal evidence required: ${dismissal.products.join(' ')}`);
+    }
+    dismissed.set(id, dismissal);
+  }
+  const similarProposals = leads.filter(lead => !dismissed.has(lead.id));
   const byBrand: Record<string, { candidates: number; accepted: number; unresolved: number; rejected: number; pending: number; sourceListings: number; unmatchedListings: number }> = {};
   // A store's own maker label (KSY's `make`) stands in where the source names no manufacturer.
   const brandOf = (p: Listing): string => p.manufacturer || p.vendor || '(unknown)';
@@ -145,6 +175,9 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
         unresolved: pairs.filter(c => reviewIndex.get(c.id)?.decision === 'unresolved').length, pending: pairs.filter(c => !reviewIndex.has(c.id)).length }];
     }))),
     pending: candidates.filter(c => !reviewIndex.has(c.id)).map(c => c.id),
+    nameProposals: nameProposals.map(p => p.id),
+    similarProposals: similarProposals.map(p => p.id),
+    dismissedLeads: { different: [...dismissed.values()].filter(d => d.decision === 'different').length, identity: [...dismissed.values()].filter(d => d.decision === 'identity').length },
     legacyCount: legacy.length, relations: result.length,
     sameVerified: result.filter(r => r.kind === 'same_product' && r.reviewStatus === 'verified').length,
     similarVerified: result.filter(r => r.kind === 'similar_product' && r.reviewStatus === 'verified').length,
@@ -153,9 +186,9 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     familyCounts, byBrand: Object.fromEntries(Object.entries(byBrand).sort(([a], [b]) => a < b ? -1 : 1)),
     unmatchedByStore: Object.fromEntries(stores.map(storeId => [storeId,
       catalog.listings.filter(p => p.storeId === storeId && !allCandidateListings.has(listingKey(p))).length])),
-    limitations: ['All pairs of the pinned saved catalogues and their supplements are searched; listings added after the latest supplement and missing catalogue entries are not covered. Pinned rows keep their reviewed evidence unless a supplement replaced them after review.', 'Codes must contain a digit and have at least four characters. Numeric storefront SKUs are excluded; numeric manufacturer codes still require review for collisions.', 'Unmatched does not mean unrelated. Aliases and descriptions not present in these sources need further review.', 'Review is saved-catalogue identity review, not a live stock, compatibility or sales-condition assertion.'],
+    limitations: ['All pairs of the pinned saved catalogues and their supplements are searched; listings added after the latest supplement and missing catalogue entries are not covered. Pinned rows keep their reviewed evidence unless a supplement replaced them after review.', 'Codes must contain a digit and have at least four characters. Numeric storefront SKUs are excluded; numeric manufacturer codes still require review for collisions.', 'Unmatched does not mean unrelated. Aliases and descriptions not present in these sources need further review.', 'Names propose identity pairs only where one listing has no code of its own and both names share a model-like token in at most 20 listings. Listings with different codes on both sides are proposed only as similar-product leads, when their codes share a stem and either their names also share such a token (U078-M12 and U078-USB) or one code is that stem and at most 10 listings carry it (U035 and U035-B); other such pairs are not compared.', 'Review is saved-catalogue identity review, not a live stock, compatibility or sales-condition assertion.'],
   };
-  return { relations: result, candidates, report };
+  return { relations: result, candidates, report, nameProposals, similarProposals };
 }
 
 export function serializeRelations(relations: readonly ProductRelation[]): string {
@@ -175,7 +208,7 @@ export function parseCatalog(text: string): Catalog {
 }
 
 async function main(): Promise<void> {
-  const { values } = parseArgs({ options: { check: { type: 'boolean' }, discover: { type: 'boolean' }, 'import-left': { type: 'string' }, 'import-right': { type: 'string' }, 'import-store': { type: 'string' },
+  const { values } = parseArgs({ options: { check: { type: 'boolean' }, discover: { type: 'boolean' }, names: { type: 'boolean' }, similar: { type: 'boolean' }, 'import-left': { type: 'string' }, 'import-right': { type: 'string' }, 'import-store': { type: 'string' },
     supplement: { type: 'string', multiple: true }, replace: { type: 'string', multiple: true } } });
   const dir = 'data/matching';
   const readAliases = async (): Promise<Alias[]> => JSON.parse(await readFile(`${dir}/aliases.json`, 'utf8')) as Alias[];
@@ -218,11 +251,23 @@ async function main(): Promise<void> {
   if (values.discover) {
     if (values.check) throw new Error('--discover and --check are separate operations');
     assertCatalog(catalog);
-    const candidates = discoverCatalog(catalog, aliasKeys(catalog, await readAliases()));
+    const candidates = discoverCatalog(catalog, ...discoveryTiers(catalog, await readAliases()));
     await writeFile(`${dir}/candidates.jsonl`, serializeCandidates(candidates));
     console.log(`Discovered ${candidates.length} candidates from ${catalog.listings.length} listings. No reviews or runtime mappings were changed.`); return;
   }
-  const result = generate(catalog, await read<ProductRelation[]>('legacy.json'), await read<Review[]>('reviews.json'), await read<Family[]>('families.json'), await readAliases());
+  const result = generate(catalog, await read<ProductRelation[]>('legacy.json'), await read<Review[]>('reviews.json'), await read<Family[]>('families.json'), await readAliases(), await read<Dismissal[]>('dismissals.json'));
+  if (values.names) {
+    // The review queue of name proposals, one JSON line each. Nothing is written.
+    if (values.check) throw new Error('--names and --check are separate operations');
+    for (const proposal of result.nameProposals) console.log(JSON.stringify(proposal));
+    return;
+  }
+  if (values.similar) {
+    // The review queue of similar-product leads, one JSON line each. Nothing is written.
+    if (values.check || values.names) throw new Error('--similar, --names and --check are separate operations');
+    for (const proposal of result.similarProposals) console.log(JSON.stringify(proposal));
+    return;
+  }
   const artifacts = [
     ['userscript/adapters/productRelations.ts', serializeRelations(result.relations)],
     [`${dir}/coverage.json`, JSON.stringify(result.report, null, 2) + '\n'],

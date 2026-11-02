@@ -1,0 +1,80 @@
+{"n":1,"verdict":"different","reason":"WS2815B搭載LEDスティックとUSB基板の8LED基板で、LED数が同じだけの別物。"}
+{"n":2,"verdict":"different","reason":"銅張基板(素材)とユニバーサル基板(加工済み)で、FR-4が共通なだけ。"}
+{"n":3,"verdict":"different","reason":"HT16K33マトリクスドライバーモジュールとUSB用8LED基板で、LED数が同じだけ。"}
+{"n":4,"verdict":"different","reason":"銅張基板(素材)とユニバーサル基板(8枚入り)で、FR-4が共通なだけ。"}
+{"n":5,"verdict":"different","reason":"銅張基板(素材)とユニバーサル基板で、FR-4が共通なだけ。"}
+{"n":6,"verdict":"different","reason":"M5StackのMQTTユニットとRJ45用カバーで、RJ45が共通なだけ。"}
+{"n":7,"verdict":"different","reason":"両面銅張基板(素材)とユニバーサル基板で、FR-4が共通なだけ。"}
+{"n":8,"verdict":"different","reason":"六角ナットとパネル取付ソケットで、M2.6が共通なだけ。"}
+{"n":9,"verdict":"different","reason":"銅張基板(素材)とユニバーサル基板(15枚入り)で、FR-4が共通なだけ。"}
+{"n":10,"verdict":"different","reason":"なべ小ねじとパネル取付ソケットで、M2.6が共通なだけ。"}
+{"n":11,"verdict":"different","reason":"M5StackのMQTTユニットとRJ45用カバーで、RJ45が共通なだけ。"}
+{"n":12,"verdict":"different","reason":"両面銅張基板(素材)とユニバーサル基板で、FR-4が共通なだけ。"}
+{"n":13,"verdict":"different","reason":"RJ45 PoE MagJack(コネクタ部品)とRJ45用カバーで別物。"}
+{"n":14,"verdict":"different","reason":"RJ45ピッチ変換基板とRJ45用カバーで別物。"}
+{"n":15,"verdict":"different","reason":"銅張基板(素材)とユニバーサル基板(4枚入り)で、FR-4が共通なだけ。"}
+{"n":16,"verdict":"similar","reason":"どちらも5mm砲弾型LEDだが、色と12V用抵抗器付きかどうかが違う。"}
+{"n":17,"verdict":"different","reason":"USB3.0カメラシールドとUSB3.0変換コネクタで、規格名が共通なだけ。"}
+{"n":18,"verdict":"different","reason":"ESP8266の解説書籍とSparkFun ESP8266 Thingボードで別物。"}
+{"n":19,"verdict":"different","reason":"LEDルームランプと16LEDさんキットで、LED数が同じだけ。"}
+{"n":20,"verdict":"similar","reason":"どちらもTO-220用ヒートシンクだが、形状と寸法が異なる別製品。"}
+{"n":21,"verdict":"different","reason":"LED用ブラケットとLED本体で別物。"}
+{"n":22,"verdict":"different","reason":"M5Stack ENV IIIユニットとPICマイコン学習キットで、Ver.3が共通なだけ。"}
+{"n":23,"verdict":"different","reason":"LED用ブラケットとLED本体で別物。"}
+{"n":24,"verdict":"different","reason":"Adafruit 269系アンプ基板とM5Stack Kmeter絶縁ユニットで、MAX31855を使うだけの別製品。"}
+{"n":25,"verdict":"different","reason":"テープLEDとBA15口金タワー基板で、LED数が同じだけ。"}
+{"n":26,"verdict":"similar","reason":"どちらもPi 3/2/B+用ケースだが、アルミケースとPibowで別製品。"}
+{"n":27,"verdict":"different","reason":"テープLEDとBA15口金タワー基板で、LED数が同じだけ。"}
+{"n":28,"verdict":"similar","reason":"どちらもINA219搭載のAdafruit電流センサだが、ブレイクアウトとFeatherWingで形態が違う。"}
+{"n":29,"verdict":"similar","reason":"どちらもAS312のPIRセンサだが、M5Stack PIRユニットとM5StickC用Hatで別製品。"}
+{"n":30,"verdict":"different","reason":"AKI-PICプログラマーとM5Stack ENV IVユニットで、Ver.4が共通なだけ。"}
+{"n":31,"verdict":"different","reason":"LED取付金具とLED本体で別物。"}
+{"n":32,"verdict":"different","reason":"LED取付金具とLED本体で別物。"}
+{"n":33,"verdict":"different","reason":"Adafruit 269系アンプ基板とM5Stack Kmeterユニット(U133)で、MAX31855を使うだけの別製品。"}
+{"n":34,"verdict":"different","reason":"USB3.0ケーブル取付用コネクターとA(メス)-microUSB変換コネクタで別物。"}
+{"n":35,"verdict":"different","reason":"TO-220用ICレールと放熱シリコーンシートで別物。"}
+{"n":36,"verdict":"same","reason":"秋月の型番269とAdafruit ADA-269が対応し、MAX31855熱電対アンプで名称差のみ。"}
+{"n":37,"verdict":"different","reason":"TO-220用ICレールとヒートシンクで別物。"}
+{"n":38,"verdict":"similar","reason":"XT90のメスとオスで極性が逆の別製品。"}
+{"n":39,"verdict":"unclear","reason":"秋月側はメーカー・型番が空で、KKSBメタルケースと同一か判断できない。"}
+{"n":40,"verdict":"unclear","reason":"秋月のXT90H-Mと、メーカー・型番なしのXT90オスが同一品か判断できない。"}
+{"n":41,"verdict":"unclear","reason":"秋月のXT90H-Fと、メーカー・型番なしのXT90メスが同一品か判断できない。"}
+{"n":42,"verdict":"similar","reason":"どちらも5mm砲弾型LEDだが、色と12V用抵抗器付きかどうかが違う。"}
+{"n":43,"verdict":"different","reason":"WT8266-S1モジュールとSparkFun ESP8266 Thingで、ESP8266を使うだけの別製品。"}
+{"n":44,"verdict":"different","reason":"LED取付金具とLED本体で別物。"}
+{"n":45,"verdict":"different","reason":"Adafruit 269系アンプ基板とM5Stack絶縁型Kmeterユニット(U133-V11)で、チップが同じだけ。"}
+{"n":46,"verdict":"same","reason":"T-50-6のトロイダル(ダスト)コアで、名称差のみ(秋月のメーカーは空欄)。"}
+{"n":47,"verdict":"same","reason":"T-37-6のトロイダル(ダスト)コアで、名称差のみ(秋月のメーカーは空欄)。"}
+{"n":48,"verdict":"same","reason":"東芝TLP624フォトカプラで、秋月の(F)は鉛フリー表記と見て同一とした。"}
+{"n":49,"verdict":"same","reason":"11EQS04、40V1Aのショットキーバリアダイオードで一致。"}
+{"n":50,"verdict":"same","reason":"NJM360Dのコンパレータで一致。"}
+{"n":51,"verdict":"different","reason":"ブートローダ書込済のATmega328P単体とArduino Nanoボードで別物。"}
+{"n":52,"verdict":"same","reason":"1N4148の小信号スイッチングダイオードで一致(汎用品で片側のメーカーは不明)。"}
+{"n":53,"verdict":"same","reason":"11EQS06、60V1Aのショットキーバリアダイオードで一致。"}
+{"n":54,"verdict":"similar","reason":"どちらもATmega168/328用ボードだが、マイコンボードキットと簡易化基板で別製品。"}
+{"n":55,"verdict":"same","reason":"T-25-6のトロイダル(ダスト)コアで、名称差のみ(秋月のメーカーは空欄)。"}
+{"n":56,"verdict":"different","reason":"Adafruit 269系アンプ基板とスイッチサイエンス自社のMAX31855キットで、チップが同じだけ。"}
+{"n":57,"verdict":"same","reason":"T-50-10のトロイダル(ダスト)コアで、名称差のみ(秋月のメーカーは空欄)。"}
+{"n":58,"verdict":"same","reason":"T-50-2のトロイダル(ダスト)コアで、名称差のみ(秋月のメーカーは空欄)。"}
+{"n":59,"verdict":"different","reason":"Adafruit 269系アンプ基板とスイッチサイエンス自社のMAX31855 5V版キットで、チップが同じだけ。"}
+{"n":60,"verdict":"same","reason":"NHコネクタのポストBS5P-SHF-1AAで型番一致、サイド型とL型は呼び方の差。"}
+{"n":61,"verdict":"different","reason":"LPC1114用の変換基板と汎用ICソケットで、600milが共通なだけ。"}
+{"n":62,"verdict":"different","reason":"ICレールとLPC824ボードのパーツセットで、300milが共通なだけ。"}
+{"n":63,"verdict":"similar","reason":"どちらもUSB2.0ケーブルだが、コネクタ形状(miniB/microB)と長さが違う。"}
+{"n":64,"verdict":"similar","reason":"どちらも40P 600milのICソケットだが、ゼロプレッシャー型と平ピン型で違う。"}
+{"n":65,"verdict":"different","reason":"Type-C QIケーブルとUSB2.0メスコネクタで別物。"}
+{"n":66,"verdict":"similar","reason":"どちらも24P 300milのICソケットだが、丸ピンと平ピンで違う。"}
+{"n":67,"verdict":"similar","reason":"どちらもUSB2.0ケーブルだが、コネクタ形状(A-B/A-C)と長さが違う。"}
+{"n":68,"verdict":"similar","reason":"どちらも28P 600milのICソケットだが、ゼロプレッシャー型と丸ピン型で違う。"}
+{"n":69,"verdict":"similar","reason":"どちらも24P 600milのICソケットだが、丸ピンと平ピンで違う。"}
+{"n":70,"verdict":"different","reason":"ICレールとICソケットで別物。"}
+{"n":71,"verdict":"similar","reason":"どちらも300milのICソケットだが、ピン数(22P/28P)と形状が違う。"}
+{"n":72,"verdict":"similar","reason":"どちらも600mil丸ピンICソケットだが、ピン数(24P/32P)が違う。"}
+{"n":73,"verdict":"different","reason":"Type-C QIケーブルとUSB2.0オスコネクタで別物。"}
+{"n":74,"verdict":"different","reason":"USBケーブルとUSB有線LANアダプタで、規格名が共通なだけ。"}
+{"n":75,"verdict":"different","reason":"3GPi-SBとミニマイコンカー製作キットで、Ver.2が共通なだけ。"}
+{"n":76,"verdict":"different","reason":"DIP用丸ピンヘッダーとICソケットで部品種別が違う。"}
+{"n":77,"verdict":"different","reason":"nüno TINYキットとメーラー・ボードキットで、Ver.2が共通なだけ。"}
+{"n":78,"verdict":"different","reason":"CR2032電池ケースとLED点灯キットで、電池規格が共通なだけ。"}
+{"n":79,"verdict":"different","reason":"USB2.0ケーブルとUSB2.0オスコネクタで別物。"}
+{"n":80,"verdict":"different","reason":"フラットUSBケーブルとUSB2.0オスコネクタで別物。"}

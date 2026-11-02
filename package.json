@@ -1,6 +1,6 @@
 {
   "name": "electro-parts-price-history",
-  "version": "0.6.3",
+  "version": "0.6.8",
   "private": true,
   "description": "Price / stock / listing history tracker for Japanese electronic-parts retailers. Phase 1: Akizuki Denshi.",
   "license": "MIT",
@@ -24,6 +24,8 @@
     "matching:build": "node --import tsx scripts/matching/generate.ts",
     "matching:check": "node --import tsx scripts/matching/generate.ts --check",
     "matching:discover": "node --import tsx scripts/matching/generate.ts --discover",
+    "matching:names": "node --import tsx scripts/matching/generate.ts --names",
+    "matching:similar": "node --import tsx scripts/matching/generate.ts --similar",
     "crawl": "node --import tsx src/cli/main.ts crawl",
     "import": "node --import tsx src/cli/main.ts import",
     "generate": "node --import tsx src/cli/main.ts generate",

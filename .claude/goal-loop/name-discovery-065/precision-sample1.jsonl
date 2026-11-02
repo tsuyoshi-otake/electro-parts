@@ -1,0 +1,90 @@
+{"n":1,"verdict":"similar","reason":"型番がAI-002-8G(8GBキット)とAI-001で異なり、構成違いの同系列製品。"}
+{"n":2,"verdict":"different","reason":"IoT Base CAT-Mキット(K119)とCAT-Mユニット(U128)は別製品で、SIM7080Gを共有するだけ。"}
+{"n":3,"verdict":"similar","reason":"重さユニット(HX711)だが型番U030とU180(I2C版)で世代・インターフェースが異なる。"}
+{"n":4,"verdict":"similar","reason":"M5GOバッテリーボトムだが対応コアがCoreS3(A014-D)とCore2(A014-C)で別版。"}
+{"n":5,"verdict":"different","reason":"秋月はBME280キットにレベル変換モジュールを加えたセットで、SSは単体モジュール。"}
+{"n":6,"verdict":"similar","reason":"どちらもAlps 2連A100kΩだが、RK0971220とRK09L1240でシリーズ・軸形状が異なる。"}
+{"n":7,"verdict":"different","reason":"スライドボリュームと回転式金属軸ボリュームで製品種別が異なる。"}
+{"n":8,"verdict":"similar","reason":"STM32F0搭載の拡張I/OだがM5Stamp(S002)とUnit(U011-B)で形状・型番が異なる。"}
+{"n":9,"verdict":"different","reason":"スライドボリューム(2連)と回転式単連ボリュームで製品種別が異なる。"}
+{"n":10,"verdict":"different","reason":"スライドボリューム(2連)と回転式単連ボリュームで製品種別が異なる。"}
+{"n":11,"verdict":"similar","reason":"どちらも2連B100kΩだが、型番RK0972B104L15FとRK09L1240-F15-C0-B104でシリーズが異なる。"}
+{"n":12,"verdict":"similar","reason":"SparkFunのNEO-M9N Qwiic GPSだが型番GPS-17285とGPS-15733(チップアンテナ版)で構成が異なる。"}
+{"n":13,"verdict":"similar","reason":"SAM2695搭載のMIDI系ユニットだが型番U187(DIN付き)とU178(シンセ)で別製品。"}
+{"n":14,"verdict":"different","reason":"8ch Servo2 I2C UnitとChainBUSユニットは別機能の製品でSTM32G031を共有するだけ。"}
+{"n":15,"verdict":"similar","reason":"どちらもBMP180気圧センサモジュールだがメーカー・型番が異なる別製品。"}
+{"n":16,"verdict":"similar","reason":"どちらもBME680センサモジュールだがメーカー(秋月/SparkFun)が異なる別製品。"}
+{"n":17,"verdict":"different","reason":"ブートローダ書込済みATmega328P単体チップとArduino Nano基板で種別が異なる。"}
+{"n":18,"verdict":"different","reason":"ブランクのMEMS発振器単体とSiT2001Bを載せたブレイクアウトボードで種別が異なる。"}
+{"n":19,"verdict":"similar","reason":"どちらもSCD40のCO2センサモジュールだが、ピッチ変換基板とM5Stack用ユニットで別メーカー別製品。"}
+{"n":20,"verdict":"different","reason":"ATtiny10実装モジュールと書き込み補助基板で用途が異なる。"}
+{"n":21,"verdict":"similar","reason":"M5GO/FIRE用の底部モジュールだが、A016(チャージベース)とA014(バッテリーボトム)で機能が異なる。"}
+{"n":22,"verdict":"similar","reason":"どちらもBME688環境センサモジュールだがメーカー(DFRobot/Pimoroni)が異なる別製品。"}
+{"n":23,"verdict":"similar","reason":"どちらもLSM9DS1の9軸モジュールだがメーカー・型番が異なる別製品。"}
+{"n":24,"verdict":"similar","reason":"SparkFunのHC-SR04で3.3V版(SEN-28798)と5V版(SEN-15569)の違いがある。"}
+{"n":25,"verdict":"similar","reason":"同じC126系ATOMS3Rキットだが、カメラキット(C126-CAM)とExtプロトキット(C126-EXT)で構成が異なる。"}
+{"n":26,"verdict":"different","reason":"8ch Servo2 ChainとChainBUSユニットは別機能の製品でSTM32G031を共有するだけ。"}
+{"n":27,"verdict":"different","reason":"6DoF IMU ProユニットとM5StickC ENV Hatは別製品でBMP280/BMM150を共有するだけ。"}
+{"n":28,"verdict":"different","reason":"ATOMS3R Protoキット(C126-EXT)とAIチャットボットキット(K147)は用途の異なる別キット。"}
+{"n":29,"verdict":"different","reason":"M5Capsule用サーボ接続基板(第三者製)とM5Capsuleプロトキットは別製品。"}
+{"n":30,"verdict":"different","reason":"Cardputer MeshtasticキットとM5Stamp C6LoRaモジュールは別製品でSX1262を共有するだけ。"}
+{"n":31,"verdict":"similar","reason":"Roller485 Unitのスリップリング付き(U182)とLite版スリップリングなし(U182-LITE)で構成が異なる。"}
+{"n":32,"verdict":"different","reason":"Chain JoystickとChain Switchは機能の異なる別ユニット。"}
+{"n":33,"verdict":"different","reason":"Byteスイッチユニット(U191)とChain Angle(U208)は別製品でSTM32G031を共有するだけ。"}
+{"n":34,"verdict":"similar","reason":"同じGP2Y0A21YKセンサだが、SS側は接続ケーブル付きの構成で秋月は単品。"}
+{"n":35,"verdict":"different","reason":"Arducam製CM5内蔵AIカメラキットとRaspberry Pi AI Camera単体は別製品でIMX500を共有するだけ。"}
+{"n":36,"verdict":"different","reason":"DS18B20+のチップ単体と防水プローブ付き温度センサ(SparkFun)で種別が異なる。"}
+{"n":37,"verdict":"similar","reason":"MLX90614非接触温度センサだがM5StickC NCIR Hat(U061)とNCIR2ユニット(U150)で別製品。"}
+{"n":38,"verdict":"similar","reason":"どちらもATmega328Pのマイコンボードだが、Uno互換ボードとArduino Nanoで形状・メーカーが異なる。"}
+{"n":39,"verdict":"different","reason":"3軸加速度センサ(LIS3DHTR)と3軸デジタルコンパスV2で製品種別が異なる。"}
+{"n":40,"verdict":"different","reason":"M5Stack BugC2(K033-C)とM5StickC PLUS2ウォッチアクセサリ付き(K016-H2)は別製品でPLUS2を共有するだけ。"}
+{"n":41,"verdict":"different","reason":"StickS3用ディスプレイ(A183)と第三者製ExtPortは別製品で、StickS3対応という点だけ共通。"}
+{"n":42,"verdict":"similar","reason":"ADS1100搭載ADCだが、M5StickC Hat(U069)とI2C Unit(U013)で形状・型番が異なる。"}
+{"n":43,"verdict":"similar","reason":"ATGM336HのGPSモジュールだが、M003-V21とATOMIC GPS Base v2.0(A134-V2)で形状・版が異なる。"}
+{"n":44,"verdict":"similar","reason":"どちらもPM2.5大気質センサだがメーカー(DFRobot/M5Stack)・型番が異なる別製品。"}
+{"n":45,"verdict":"different","reason":"ESP32 PSRAM Timer Camera XとATOMS3Rカメラキットは別製品でOV3660を共有するだけ。"}
+{"n":46,"verdict":"similar","reason":"obnizのStarter Kit(obniz031)とBoard(obniz030)で型番・同梱構成が異なる。"}
+{"n":47,"verdict":"different","reason":"Arduino Pro MiniキットとPro Microは別のマイコンボード。"}
+{"n":48,"verdict":"different","reason":"AQM1248A液晶単体(秋月)と、それを実装したスイッチサイエンス製ボードで種別が異なる。"}
+{"n":49,"verdict":"similar","reason":"同じC126系ATOMS3Rキットだが、Extプロトキット(C126-Ext)とカメラキット(C126-CAM)で構成が異なる。"}
+{"n":50,"verdict":"similar","reason":"M5StackChanでK151-Rはジョイスティックコントローラ付きの構成で、K151と型番が異なる。"}
+{"n":51,"verdict":"different","reason":"Chain PIRとChainBUSユニットは別機能の製品でSTM32G031を共有するだけ。"}
+{"n":52,"verdict":"similar","reason":"CoreS3系だがK128-LITEとK128-SEで版が異なる。"}
+{"n":53,"verdict":"similar","reason":"PM2.5キットだがK023-B(PMSA003+SHT30)とK023(PMSA003+SHT20)でリビジョン・センサが異なる。"}
+{"n":54,"verdict":"different","reason":"アイソレートI/O基板とプロトタイプ基板は別メーカーの別アクセサリで、ESP32-DevKitC対応という点だけ共通。"}
+{"n":55,"verdict":"similar","reason":"UnitV2でU078-USB(カメラ非搭載版)とU078-Dで構成が異なる。"}
+{"n":56,"verdict":"different","reason":"ESP32-DevKitC開発ボードとそれ用のプロトタイプ基板で種別が異なる。"}
+{"n":57,"verdict":"similar","reason":"どちらもMLX90614の非接触温度センサモジュールだが、M5StickC Hat(U061)とWaveshare製で別製品。"}
+{"n":58,"verdict":"different","reason":"Chain JoystickとUnit ChainBUSは別機能の製品でSTM32G031を共有するだけ。"}
+{"n":59,"verdict":"similar","reason":"AX630C搭載のLLM製品だがLLM Module Kit(K144)とLLM630 Compute Kit(K143)で型番・形態が異なる。"}
+{"n":60,"verdict":"similar","reason":"どちらもブレッドボード用5V/3.3V電源ボードだがSparkFun品とSS品で型番・メーカーが異なる。"}
+{"n":61,"verdict":"different","reason":"CoreS3 SE本体(K128-SE)とCoreS3用バッテリーボトム(A014-D)は別製品。"}
+{"n":62,"verdict":"same","reason":"NJM2073D(JRC)で品名・型番とも一致、DIPの同一ICと判断できる。"}
+{"n":63,"verdict":"different","reason":"HP-126を使った電源トランス変換キットとHP-126トランス単体で種別が異なる。"}
+{"n":64,"verdict":"unclear","reason":"SS側の品名にEIC-801がなく、型番(165-40-4-8010と0165-4251-4-8010)も異なるため同一性を判断できない。"}
+{"n":65,"verdict":"similar","reason":"同じRaspberry Pi CSIケーブル(15-22pin)だが長さが200mmと500mmで型番も異なる。"}
+{"n":66,"verdict":"similar","reason":"どちらもA4988のステッパドライバだがPololu系とSparkFun Big Easy Driverで別製品。"}
+{"n":67,"verdict":"similar","reason":"同じ15-22pin CSIケーブルだが長さが300mm(SC1129)と200mm(SC1128)で異なる。"}
+{"n":68,"verdict":"different","reason":"M5StickC PLUS2ウォッチアクセサリキット(K016-H2)とBugC2 w/ PLUS2(K033-C)は別製品。"}
+{"n":69,"verdict":"similar","reason":"どちらもRS-485変換ブレイクアウトだが、型番BOB-09823とBOB-10124-SET(コネクタ付きセット)で構成が異なる。"}
+{"n":70,"verdict":"different","reason":"OPA2134PAを使ったヘッドホンアンプキットとOPA2134PAオペアンプ単体で種別が異なる。"}
+{"n":71,"verdict":"similar","reason":"MLX90614搭載だがNCIR2ユニット(U150)とM5StickC NCIR Hat(U061)で別製品。"}
+{"n":72,"verdict":"different","reason":"PoE-P4用のHDMI入力追加ボード(U220)とディスプレイ出力追加ボード(U221)で機能が逆の別製品。"}
+{"n":73,"verdict":"different","reason":"M5Stamp ESP32P4本体(S013)とその拡張用Wi-Fi 6モジュール(A172)は別製品。"}
+{"n":74,"verdict":"same","reason":"MQ-8(SEN-10916)と専用基板(BOB-08891)のセットで、SparkFunの同一セット。"}
+{"n":75,"verdict":"similar","reason":"UnitV2でM12版(U078-M12)と標準(U078-D)でレンズ構成が異なる。"}
+{"n":76,"verdict":"similar","reason":"同じ1.25Y-4N形状だが、秋月は裸圧着端子、せんごくは絶縁被覆付き(TMEX)で仕様が異なる。"}
+{"n":77,"verdict":"similar","reason":"どちらもTB6612FNGデュアルモータドライバだがPololuとSparkFun(ヘッダ実装)で別製品。"}
+{"n":78,"verdict":"similar","reason":"どちらもAMG8833赤外線アレイセンサ・モジュールだがSeeedとスイッチサイエンスで別製品。"}
+{"n":79,"verdict":"same","reason":"T-50-10(マイクロメタル製ダストコア/トロイダルコア)で型番・品種とも一致。秋月側のメーカー欄は空。"}
+{"n":80,"verdict":"similar","reason":"AQM1248A液晶ボードだがSSCI-110228(ピンヘッダ付き)とSSCI-026086で型番・実装仕様が異なる。"}
+{"n":81,"verdict":"similar","reason":"同じCSIケーブルだが長さが200mm(SC1128)と500mm(SC1130)で異なる。"}
+{"n":82,"verdict":"similar","reason":"AI Pyramid Computing Boxで4GB版(AI-003)とPro 8GB版(AI-003-PRO)で容量・版が異なる。"}
+{"n":83,"verdict":"similar","reason":"どちらもBME280環境センサモジュールだがSparkFunとPimoroniで別製品。"}
+{"n":84,"verdict":"similar","reason":"同じ1.25Y-3形状だが、秋月は裸圧着端子、せんごくは絶縁被覆付き(TMEX)で仕様が異なる。"}
+{"n":85,"verdict":"unclear","reason":"秋月はシールドモデルだがSS側は『ユニット』のみでどちらのモデルか品名・型番から判断できない。"}
+{"n":86,"verdict":"different","reason":"Chain Angle(U208)とChain Encoder(U207)は機能の異なる別ユニット。"}
+{"n":87,"verdict":"unclear","reason":"秋月はスタンダードモデルだがSS側(KO_Dream_F-026)がどのモデルか品名から判断できない。"}
+{"n":88,"verdict":"similar","reason":"どちらもSTHS34PF80の人体検知モジュールだがAdafruit系とSparkFun Qwiicで別製品。"}
+{"n":89,"verdict":"similar","reason":"同じCSIケーブルだが長さが300mm(SC1129)と200mm(SC1128)で異なる。"}
+{"n":90,"verdict":"similar","reason":"どちらもMCP4725のD/Aコンバータモジュールだが秋月(EEPROM搭載)とSparkFunで別製品。"}
