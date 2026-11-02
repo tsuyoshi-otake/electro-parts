@@ -1,5 +1,5 @@
 import type { ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
-import { comparisonEligibility, matchesRelationProduct, primaryQuote, type RelatedEntry } from '../core/relations.ts';
+import { cheapestComparable, comparisonEligibility, HOME_CURRENCY, matchesRelationProduct, orderStorePrices, primaryQuote, storePriceRank, type RelatedEntry } from '../core/relations.ts';
 import { availabilityLabel, formatDateTime, formatPriceValue, formatSignedMoney } from '../core/format.ts';
 
 export const RELATED_CSS = `
@@ -12,6 +12,10 @@ export const RELATED_CSS = `
 .eph .store-price .related-meta, .eph .store-price .comparison-note { line-height: 1.5; }
 @container store-summary (max-width: 399px) { .eph .store-prices { grid-template-columns: 1fr; } }
 .eph .store-price .hero-value { font-size: 22px; margin: 3px 0; }
+.eph .store-order { margin-top: 12px; }
+.eph .store-prices-more { margin-top: 8px; }
+.eph .store-prices-more > .store-prices { margin-top: 4px; }
+.eph .store-price .badge.cheapest { display: inline-block; margin: 0 0 4px; }
 .eph .related-name { font-size: 12px; overflow-wrap: anywhere; }
 .eph .related-meta, .eph .comparison-note { font-size: 11px; color: var(--muted); }
 .eph .comparison-difference { font-size: 12px; margin: 6px 0; font-variant-numeric: tabular-nums; }
@@ -119,23 +123,45 @@ function price(doc: Document, parent: HTMLElement, entry: RelatedEntry): void {
   if (!matchesRelationProduct(entry.target, state.product)) parent.appendChild(node(doc, 'div', '商品情報が照合時と異なるため要再確認', 'related-meta'));
 }
 
-/** Verified identity rows beside the current price. Eligibility still controls subtraction. */
+/** Rows shown before the fold; the rest stay one click away. */
+export const VISIBLE_STORE_PRICES = 3;
+
+function storePriceRow(doc: Document, current: ProductFileV1, segment: SegmentV1, entry: RelatedEntry, label: (id: string) => string, ownFresh: boolean, cheapest: boolean): HTMLElement {
+  const row = node(doc, 'div', '', 'store-price'); row.dataset['relationId'] = entry.relation.id;
+  row.appendChild(node(doc, 'div', label(entry.target.storeId), 'comparison-heading'));
+  if (cheapest) row.appendChild(node(doc, 'div', '最安（比較条件を確認した店舗の記録価格）', 'badge cheapest'));
+  row.appendChild(productLink(doc, entry));
+  price(doc, row, entry);
+  const currency = storePriceRank(entry)?.currency;
+  if (currency && currency !== HOME_CURRENCY) row.appendChild(node(doc, 'div', '送料・関税別のため円の店舗の後に表示', 'related-meta'));
+  const eligibility = comparisonEligibility(current, segment, entry);
+  if (eligibility.comparable && ownFresh) {
+    row.appendChild(node(doc, 'div', eligibility.label, 'related-meta'));
+    if (eligibility.differenceMinor !== null) row.appendChild(node(doc, 'div', `記録価格差（他店 − 閲覧中） ${formatSignedMoney(eligibility.differenceMinor, segment.basis.currency)}`, 'comparison-difference'));
+    row.appendChild(node(doc, 'div', '観測日時は店舗ごとに異なります。現在の最安価格を示すものではありません。', 'comparison-note'));
+  } else row.appendChild(node(doc, 'div', `参考記録価格 · ${eligibility.comparable ? '閲覧中店舗の更新確認ができません' : eligibility.reason}`, 'comparison-note'));
+  row.appendChild(evidence(doc, entry));
+  return row;
+}
+
+/**
+ * Verified identity rows beside the current price, in stock first and cheapest recorded price first,
+ * the first few shown and the rest folded. Eligibility still controls subtraction and the 最安 badge.
+ */
 export function renderStorePrices(doc: Document, parent: HTMLElement, current: ProductFileV1, segment: SegmentV1, entries: readonly RelatedEntry[], label: (id: string) => string, ownFresh: boolean): void {
+  const rows = orderStorePrices(entries.filter((e) => e.relation.kind === 'same_product' && e.relation.reviewStatus === 'verified'));
+  if (!rows.length) return;
+  const cheapest = ownFresh ? cheapestComparable(current, segment, rows) : new Set<string>();
+  if (rows.length > 1) parent.appendChild(node(doc, 'div', '在庫ありの店舗を先に、記録価格の安い順に表示しています。', 'related-meta store-order'));
   const grid = node(doc, 'div', '', 'store-prices');
-  for (const entry of entries.filter((e) => e.relation.kind === 'same_product' && e.relation.reviewStatus === 'verified')) {
-    const row = node(doc, 'div', '', 'store-price'); row.dataset['relationId'] = entry.relation.id;
-    row.appendChild(node(doc, 'div', label(entry.target.storeId), 'comparison-heading'));
-    row.appendChild(productLink(doc, entry));
-    price(doc, row, entry);
-    const eligibility = comparisonEligibility(current, segment, entry);
-    if (eligibility.comparable && ownFresh) {
-      row.appendChild(node(doc, 'div', eligibility.label, 'related-meta'));
-      if (eligibility.differenceMinor !== null) row.appendChild(node(doc, 'div', `記録価格差（他店 − 閲覧中） ${formatSignedMoney(eligibility.differenceMinor, segment.basis.currency)}`, 'comparison-difference'));
-      row.appendChild(node(doc, 'div', '観測日時は店舗ごとに異なります。現在の最安価格を示すものではありません。', 'comparison-note'));
-    } else row.appendChild(node(doc, 'div', `参考記録価格 · ${eligibility.comparable ? '閲覧中店舗の更新確認ができません' : eligibility.reason}`, 'comparison-note'));
-    row.appendChild(evidence(doc, entry)); grid.appendChild(row);
-  }
-  if (grid.childElementCount) parent.appendChild(grid);
+  for (const entry of rows.slice(0, VISIBLE_STORE_PRICES)) grid.appendChild(storePriceRow(doc, current, segment, entry, label, ownFresh, cheapest.has(entry.relation.id)));
+  parent.appendChild(grid);
+  const rest = rows.slice(VISIBLE_STORE_PRICES);
+  if (!rest.length) return;
+  const more = details(doc, `他の店舗（${rest.length}件）`, 'store-prices-more'); more.className = 'store-prices-more';
+  const moreGrid = node(doc, 'div', '', 'store-prices');
+  for (const entry of rest) moreGrid.appendChild(storePriceRow(doc, current, segment, entry, label, ownFresh, cheapest.has(entry.relation.id)));
+  more.appendChild(moreGrid); parent.appendChild(more);
 }
 
 /**

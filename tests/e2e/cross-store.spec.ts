@@ -9,7 +9,7 @@ const relation = PRODUCT_RELATIONS.find((r) => r.id === 'a117209-s6262')!;
 const panel = (page: Page) => page.locator('#electronics-price-history-root');
 
 /** Real production bundle/adapters/catalogue; synthetic observations, all network intercepted. */
-async function setup(page: Page, source: 0 | 1, failure = false, selected = relation) {
+async function setup(page: Page, source: 0 | 1, failure = false, selected = relation, adjust?: (p: ReturnType<typeof sampleProduct>) => void) {
   const requests: string[] = [];
   const currentRef = selected.products[source];
   const refs = new Map(PRODUCT_RELATIONS.filter(r => r.products.some(p => p.storeId === currentRef.storeId && p.pageKey === currentRef.pageKey))
@@ -37,6 +37,7 @@ async function setup(page: Page, source: 0 | 1, failure = false, selected = rela
       p.observation.runCount = 1;
       s.stats.segmentStartAt = p.product.lastSeenAt;
     }
+    adjust?.(p);
     return p;
   });
   await page.route('**/*', async (route) => {
@@ -90,6 +91,13 @@ test('production bundle compares both directions and toggles a series with the k
   // The same ATOM Lite at せんごく (0.6.1) is a third identity card, a reference price without arithmetic.
   await expect(panel(page).locator('.store-price')).toHaveCount(3);
   await expect(panel(page).locator(`.store-price[data-relation-id='${JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU'])}']`)).toContainText('せんごく');
+  // #55: in stock and cheaper first; the USD official row goes after the yen stores; 最安 only on the approved pair.
+  expect(await panel(page).locator('.store-price').evaluateAll(rows => rows.map(r => (r as HTMLElement).dataset['relationId']))).toEqual([
+    'a117209-s6262', JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU']), expect.stringContaining('m5stack'),
+  ]);
+  await expect(panel(page).locator('.store-price[data-relation-id="a117209-s6262"] .badge.cheapest')).toHaveText('最安（比較条件を確認した店舗の記録価格）');
+  await expect(panel(page).locator('.badge.cheapest')).toHaveCount(1);
+  await expect(panel(page).locator('.store-price').nth(2)).toContainText('送料・関税別');
   const cardBounds = await panel(page).locator('.store-price').evaluateAll(cards => cards.map(card => {
     const r = card.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width };
   }));
@@ -116,6 +124,37 @@ test('production bundle compares both directions and toggles a series with the k
   await setup(page, 1);
   await expect(panel(page)).toContainText('記録価格差（他店 − 閲覧中） +￥200');
   await expect(page.getByRole('button', { name: 'カートに入れる', exact: true })).toBeVisible();
+});
+
+test('four same-product stores: three rows in stock and cheaper first, the out-of-stock store folded (#55)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  const selected = PRODUCT_RELATIONS.find(r => r.id === 'a117056-s7677')!;
+  const recorded: Record<string, [number, 'in_stock' | 'out_of_stock']> = {
+    'ksy/720': [1300, 'in_stock'], 'sengoku/EEHD-6JZF': [900, 'out_of_stock'], 'switch-science/7677': [1100, 'in_stock'], 'switch-science/7678': [1000, 'in_stock'],
+  };
+  await setup(page, 0, false, selected, (p) => {
+    const row = recorded[`${p.storeId}/${p.pageKey}`]; if (!row) return;
+    const offer = p.offers[0]!;
+    offer.segments[0]!.stats.current = { state: 'exact', minAmountMinor: row[0], maxAmountMinor: row[0] };
+    const last = offer.availability[offer.availability.length - 1]!;
+    offer.availability[offer.availability.length - 1] = [last[0], row[1], last[2], last[3], last[4]];
+  });
+  await expect(panel(page)).not.toContainText('読み込み中');
+  const visible = panel(page).locator('.store-prices').first().locator('.store-price');
+  expect(await visible.evaluateAll(rows => rows.map(r => (r as HTMLElement).dataset['relationId']))).toEqual(['a117056-s7678', 'a117056-s7677', JSON.stringify(['akizuki', '117056', 'ksy', '720'])]);
+  await expect(panel(page).locator('.store-order')).toHaveText('在庫ありの店舗を先に、記録価格の安い順に表示しています。');
+  const more = panel(page).locator('details.store-prices-more');
+  const summary = more.locator('summary[data-focus-key="store-prices-more"]');
+  await expect(summary).toHaveText('他の店舗（1件）');
+  const folded = more.locator('.store-price');
+  await expect(folded).toBeHidden();
+  await summary.click();
+  await expect(folded).toBeVisible();
+  await expect(folded).toContainText('在庫なし');
+  await expect(folded).toHaveAttribute('data-relation-id', JSON.stringify(['akizuki', '117056', 'sengoku', 'EEHD-6JZF']));
+  await expect(panel(page).locator('.badge.cheapest')).toHaveCount(0);
+  await panel(page).scrollIntoViewIfNeeded();
+  await panel(page).screenshot({ path: 'test-results/e2e/store-order-fold.png' });
 });
 
 test('generated Pico family shows concrete differences and retains the native product page at narrow width', async ({ page }) => {
