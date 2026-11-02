@@ -40,3 +40,15 @@ M5Stack 公式ショップの価格は USD で記録・表示している(ADR-00
 - 失敗時は 1 日に最大でおよそ 5 回まで再試行する(1 + 2 + 4 + 8 h の後は 16 h 以上待つ)。成功後は 24 時間取得しない。
 - 契約 v2 の候補「為替換算と異なる通貨間の価格比較」([ロードマップ](../roadmap/roadmap.md))のうち、比較は引き続き対象外。
 - 検証: `tests/userscript/exchange-rate.test.ts`(頻度・リース・バックオフ・429・保存失敗・表示範囲)、`tests/unit/extension-fetch-proxy.test.ts`(許可 URL の完全一致)、`tests/contract/userscript-header.test.ts`(`@connect`)、`tests/contract/extension-manifest.test.ts`(ホスト権限を足していないこと)、`tests/e2e/extension-m5stack.spec.ts`(実 Chromium の拡張で表示・切替・再読込後の通信 1 回)。
+
+## 追記(0.7.0 / Issue #61): GBP はクロスレートで換算する
+
+Pimoroni(ADR-0025)の GBP の記録価格にも、同じ形の円の参考値を添える。
+
+- **取得先は増やさない**。GBP のレートは、既存の `https://open.er-api.com/v6/latest/USD` の応答にある `rates.JPY ÷ rates.GBP`(1 GBP あたりの円)で求める。GBP 建ての URL を足すと、通信先の許可(`isAllowedFetchUrl` の完全一致)・保存項目・1 日 1 回の頻度管理が通貨ごとに増えるため。拡張の許可 URL・権限・ユーザースクリプトの `@connect` は変わらない。
+- **保存は 1 項目のまま**。応答を読むときに GBP の円レートを `cross` として同じ保存項目に入れる。0.7.0 より前に保存した項目には `cross` が無い。GBP を尋ねたときだけ 1 回取り直す(リースとバックオフはそのまま効く)。USD だけを尋ねるページでは取り直さない。
+- 応答に GBP のレートが無い・0 以下・数値でない場合は、USD の答えは使い、GBP には参考値を出さない。GBP のために再取得はしない。
+- 表示: `1 GBP = 202.33円（USD/JPY と USD/GBP から算出、<提供元の更新日時> 更新）` のように、クロスレートであることと元の 2 つのレートを書く。提供元の更新日時は USD の応答のもの。
+- 規約(2026-11-03 に確認): クロスレートの計算を禁じる条項は無い。レートは情報提供目的で、取引に使う保証は無いとされている。表示は従来どおり参考値と明記し、出典を添える。
+- 換算の対象は引き続き通貨で決める(`supports()` が `USD` と `GBP` を満たす)。共通コアに店舗名は入らない。
+- 検証: `tests/userscript/exchange-rate.test.ts`(クロスレートの計算、GBP を尋ねても通信が増えないこと、旧形式の保存項目の 1 回だけの取り直し、GBP の無い応答、旧項目のバックオフ維持、パネルの表示)、`tests/e2e/extension-pimoroni.spec.ts`(実 Chromium の拡張で GBP の参考値・バリエーション切替・再読込後も通信 1 回)。

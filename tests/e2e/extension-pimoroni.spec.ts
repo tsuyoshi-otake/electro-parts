@@ -15,14 +15,17 @@ function contrastWithPageBase(rgb: string): number {
   return (Math.max(lum, base) + 0.05) / (Math.min(lum, base) + 0.05);
 }
 
-test('Pimoroni extension shows the GBP history on the Japan market page, selects variants and darkens the page with its own variables', async () => {
+test('Pimoroni extension shows the GBP history with a cross-rate yen reference on the Japan market page, selects variants and darkens the page with its own variables', async () => {
   const scratch = path.join(process.env['USERPROFILE'] ?? process.env['HOME'] ?? '.', 'tmp', 'electro-pimoroni-tests');
   await mkdir(scratch, { recursive: true }); const profile = await mkdtemp(path.join(scratch, 'profile-'));
   const context = await chromium.launchPersistentContext(profile, { channel: 'chromium', headless: true,
     args: ['--enable-gpu', `--disable-extensions-except=${E2E_EXTENSION_DIR}`, `--load-extension=${E2E_EXTENSION_DIR}`] });
   try {
     const requests: string[] = []; const rateRequests: string[] = [];
-    const html = gunzipSync(await readFile('tests/fixtures/pimoroni/product.html.gz')).toString();
+    // The USD answer the worker already reads; GBP is its JPY rate over its GBP rate (150 / 0.75 = 200 yen).
+    const last = Math.floor(Date.now() / 1000) - 3600;
+    const rate = JSON.stringify({ result: 'success', base_code: 'USD', time_last_update_unix: last, time_next_update_unix: last + 86400, rates: { USD: 1, JPY: 150, GBP: 0.75 } });
+    const html =gunzipSync(await readFile('tests/fixtures/pimoroni/product.html.gz')).toString();
     const css = gunzipSync(await readFile('tests/fixtures/pimoroni/pimoroni.css.gz')).toString();
     await context.route('**/*', async (route) => {
       const u = new URL(route.request().url());
@@ -30,7 +33,8 @@ test('Pimoroni extension shows the GBP history on the Japan market page, selects
         requests.push(u.href);
         await route.fulfill({ contentType: 'application/json', body: await readFile(path.join(E2E_SITE_DIR, u.pathname.replace(/^\/electro-parts\//, ''))) });
       } else if (u.hostname === 'open.er-api.com') {
-        rateRequests.push(u.href); await route.fulfill({ status: 500, body: '' });
+        rateRequests.push(u.href);
+        await route.fulfill({ contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: rate });
       } else if (u.hostname === 'shop.pimoroni.com' && u.pathname.endsWith('/pimoroni.css')) {
         await route.fulfill({ contentType: 'text/css', body: css });
       } else if (u.hostname === 'shop.pimoroni.com' && u.pathname === '/en-jp/products/presto') {
@@ -45,8 +49,10 @@ test('Pimoroni extension shows the GBP history on the Japan market page, selects
     await expect(page.locator('.product-page > #electronics-price-history-root + .about')).toBeAttached();
     await expect(panel).toContainText('£57.50'); await expect(panel).toContainText('GBP'); await expect(panel).toContainText('税区分不明');
     await expect(panel).not.toContainText('取得できませんでした');
-    // GBP has no yen reference, and nothing asks for a rate.
-    await expect(panel.locator('.fx-value')).toHaveCount(0);
+    // GBP gets a yen reference through the cross rate, and says which rates it came from.
+    await expect(panel.locator('.fx-value')).toHaveText('約 ￥11,500（円換算の参考値）');
+    await expect(panel).toContainText('1 GBP = 200.00円（USD/JPY と USD/GBP から算出、');
+    await expect(panel).toContainText('Rates By Exchange Rate API');
     const columns = await page.evaluate(() => {
       const box = (s: string) => document.querySelector(s)!.getBoundingClientRect();
       const host = box('#electronics-price-history-root'), media = box('.product-page > .media'), purchase = box('.product-page > .purchase');
@@ -55,6 +61,7 @@ test('Pimoroni extension shows the GBP history on the Japan market page, selects
     expect(columns).toEqual({ underMedia: true, leftOfPurchase: true });
     await panel.getByLabel('バリエーション').selectOption('54894104052091');
     await expect(panel).toContainText('£82.50');
+    await expect(panel.locator('.fx-value')).toHaveText('約 ￥16,500（円換算の参考値）');
     await panel.scrollIntoViewIfNeeded(); await expect(panel.locator('svg.eph-chart')).toBeVisible();
     const light = await page.evaluate(() => ({ body: getComputedStyle(document.body).backgroundColor, header: getComputedStyle(document.querySelector('#header')!).backgroundColor }));
     // The shop filters some images itself (brightness, drop shadows); the dark theme adds none.
@@ -77,6 +84,7 @@ test('Pimoroni extension shows the GBP history on the Japan market page, selects
     await page.reload(); await expect(panel.locator('section')).toHaveAttribute('data-theme', 'dark');
     await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(62, 62, 62)');
     await expect(panel).toContainText('£57.50');
+    await expect(panel.locator('.fx-value')).toHaveText('約 ￥11,500（円換算の参考値）');
 
     // One column below 1024 px: the panel follows the purchase box, inside the page width.
     await page.setViewportSize({ width: 390, height: 844 });
@@ -90,7 +98,8 @@ test('Pimoroni extension shows the GBP history on the Japan market page, selects
     await panel.getByRole('button', { name: 'ライト', exact: true }).click();
     await expect(page.locator('html')).not.toHaveAttribute('data-eph-page-theme', 'dark');
     await expect(page.locator('body')).toHaveCSS('background-color', light.body);
-    expect(rateRequests).toEqual([]);
+    // One USD request for the whole visit: the reload and the variant switch reuse the stored answer.
+    expect(rateRequests).toEqual(['https://open.er-api.com/v6/latest/USD']);
     // The store manifest and the product, then the same two again after the reload at most.
     expect(requests.length).toBeLessThanOrEqual(4);
   } finally { await context.close(); await rm(profile, { recursive: true, force: true }); }

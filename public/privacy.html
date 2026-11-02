@@ -44,8 +44,8 @@
       <td>同上(1 項目)</td>
     </tr>
     <tr>
-      <td>米ドルから円への為替レート 1 件(レート値・提供元の更新日時)と、再取得の時期を決める状態(取得日時・失敗回数・次に試す時刻)</td>
-      <td>USD 表示の商品で、記録価格の円換算の参考値を表示し、取得を 1 日 1 回までに抑えるため</td>
+      <td>米ドルから円への為替レート 1 件(レート値・同じ応答から計算した英ポンドから円へのレート・提供元の更新日時)と、再取得の時期を決める状態(取得日時・失敗回数・次に試す時刻)</td>
+      <td>USD・GBP 表示の商品で、記録価格の円換算の参考値を表示し、取得を 1 日 1 回までに抑えるため</td>
       <td>—</td>
       <td>利用者の端末内のみ(1 項目)。レートは再配布しません</td>
     </tr>
@@ -63,10 +63,11 @@
   <ul>
     <li><strong>履歴データの取得</strong>: <code>tsuyoshi-otake.github.io</code>(GitHub Pages)の公開済み静的 JSON。</li>
     <li><strong>為替レートの取得</strong>: <a href="https://www.exchangerate-api.com" rel="noopener">ExchangeRate-API</a> の
-      <code>https://open.er-api.com/v6/latest/USD</code>(固定の 1 URL、API キーなし)。米ドル表示の商品ページを開いたときだけ、
+      <code>https://open.er-api.com/v6/latest/USD</code>(固定の 1 URL、API キーなし)。米ドル・英ポンド表示の商品ページを開いたときだけ、
       1 つのブラウザーにつき原則 1 日 1 回まで取得します(取得に失敗した場合は 1 時間から 24 時間までの間隔を空けて再試行します)。
       この URL は商品・ページ・利用者のいずれも含まない固定値で、閲覧中のページの情報は送りません。
-      提供元の規約でレートの再配布が禁止されているため、本プロジェクトのサーバーを経由せず、各ブラウザーが直接取得します。</li>
+      提供元の規約でレートの再配布が禁止されているため、本プロジェクトのサーバーを経由せず、各ブラウザーが直接取得します。
+      英ポンドの参考値は、この同じ応答の米ドル建てレートから計算するため、取得先も回数も増えません。</li>
   </ul>
   <p>商品ページを開いた店舗のサーバーに対して、本ソフトウェアが追加のリクエストを送ることはありません。</p>
   <p>取得先である GitHub Pages には、通常の Web サーバーと同様にアクセスログ(IP アドレスなど)が
@@ -101,9 +102,10 @@
     number of the product page you are viewing, in the page, to decide which history to show; that never leaves your browser.</p>
   <p>It makes two kinds of network request, both from the extension's service worker with
     <code>credentials: 'omit'</code> and both to fixed addresses: a read of the published static JSON dataset at
-    <code>https://tsuyoshi-otake.github.io/electro-parts</code>, and, on product pages with US dollar prices, a read of
+    <code>https://tsuyoshi-otake.github.io/electro-parts</code>, and, on product pages with US dollar or British pound prices, a read of
     one fixed URL, <code>https://open.er-api.com/v6/latest/USD</code> (ExchangeRate-API, no key), at most about once a
-    day per browser, to show a yen reference value. That URL carries nothing about you or the page. The provider's terms
+    day per browser, to show a yen reference value. The pound value is computed from the same answer, so it adds no
+    request. That URL carries nothing about you or the page. The provider's terms
     forbid redistributing its rates, so each browser fetches them directly. Fetched data, the last rate and settings are
     cached in <code>chrome.storage.local</code> on your own device (up to 200 products, LRU) and are removed when you
     uninstall the extension. GitHub and ExchangeRate-API may record standard server logs; this project neither receives
