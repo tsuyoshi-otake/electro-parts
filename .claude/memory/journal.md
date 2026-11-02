@@ -140,7 +140,7 @@
 - Verify: `npm run typecheck`. Expect: both TypeScript projects pass. Result: passed.
 - Verify: `npm run test:unit`. Expect: shared controller, store adapter, and core tests pass. Result: 236 tests in 19 files passed. The controller's 11 tests were rerun with an explicit 10-second test timeout after completing the typed matchMedia mock.
 - Verify: `npm run build:userscript` and inspect its header and forbidden HTML sinks. Expect: version 0.3.1, both store match patterns, no HTML-string sinks or CDN references. Result: passed; 57,934-byte local bundle.
-- Verify: run the temporary preview at `C:/Users/developer/tmp/electro-parts-theme/serve.mts`, toggle both modes in Chrome, navigate between the two real adapter previews, and reload. Expect: selected mode, palette, chart, and text remain consistent. Result: passed with test data. No standalone browser was launched; preview processes were terminated afterward.
+- Verify: run the temporary preview at `~/tmp/electro-parts-theme/serve.mts`, toggle both modes in Chrome, navigate between the two real adapter previews, and reload. Expect: selected mode, palette, chart, and text remain consistent. Result: passed with test data. No standalone browser was launched; preview processes were terminated afterward.
 - Not published or installed: extension-management access was blocked by browser policy. The local build is ready for a user-managed update; do not confuse it with the currently served userscript.
 
 ## 2026-09-07 — Per-store observation cadence: weekly for Switch Science, monthly for Akizuki (#2)
@@ -374,7 +374,7 @@ Learning: the shadow host's innerText is empty, so read the shadow `<section>`; 
 
 ## 2026-10-04: Commit of #27 and #28
 
-The 0.4.7 page-theme work (#27) and the 0.4.8 yen reference (#28) were committed together as 02ed630 on `codex/page-theme-and-price-layout`, because shared files (version, panel, controller, README, privacy, listing, package files) carry hunks of both. Not pushed. Not done: push/PR, normal Chrome reload, Pages deploy, CWS submission of 0.4.8 (verified ZIP: `C:/Users/developer/tmp/electro-fx048/fx048.zip`, SHA256 f57053ec…c2f680).
+The 0.4.7 page-theme work (#27) and the 0.4.8 yen reference (#28) were committed together as 02ed630 on `codex/page-theme-and-price-layout`, because shared files (version, panel, controller, README, privacy, listing, package files) carry hunks of both. Not pushed. Not done: push/PR, normal Chrome reload, Pages deploy, CWS submission of 0.4.8 (verified ZIP: `~/tmp/electro-fx048/fx048.zip`, SHA256 f57053ec…c2f680).
 
 ## 2026-10-04: PR #29 CI audit failure (#27, #28)
 
@@ -1154,3 +1154,15 @@ Learning: check each listing claim against the rendering code, not against the p
 - Fix: removed the two `grid-row: 1` rules; the DOM order (chart, then stats) now decides at every width. Documented in ADR-0017 (0.6.9 addendum), README and the 0.6.9 changelog.
 - Verification: a new E2E assertion in `cross-store.spec.ts` checks the chart is left of the prices at 1440 px, above them at 390 px, and above them in a 600 px panel at a 1440 px viewport. It failed before the fix at 390 px ("after"); after the fix E2E 18/18, unit tests 678/678, typecheck and lint 0. `comparison-mobile.png` was checked by eye: chart, then the store prices.
 - Learning: a CSS reorder (`grid-row`, `order`) that only applies below a breakpoint makes the reading order depend on the host layout. Keep the panel's section order in the DOM, and assert visual order at each width.
+
+## 2026-11-03 pimoroni-store: Pimoroni as the sixth store, GBP base catalogue without redirects (#57, 0.7.0)
+- User decision: proceed as with M5Stack despite the Shopify template terms ("spider, crawl, or scrape"); recorded in ADR-0025.
+- Investigation (from Japan, project UA, 2 s apart, no redirects followed): `/meta.json` base currency GBP; `/` answered 302 to `/en-jp`, where Shopify Markets shows JPY (rate 215.46); root `products.json` was not redirected: 12 pages, 2,854 products / 3,789 variants; the sitemap index lists 3 root product sitemaps plus market copies (`/en-eu/`, `/en-us/`, `/en-jp/` ...). Fixtures: full trimmed catalogue, the `/en-jp` Presto page without scripts, and the store stylesheet.
+- Design: the M5Stack collector and adapter became `src/collectors/shopify` and `src/adapters/shopify`, parameterized by `ShopifyStore` (origin, currency, currency evidence). M5Stack and Pimoroni only bind their profile. `noRedirectTransport` (`redirect: 'manual'`) is the default for `currencyEvidence: 'meta'`; the fetcher treats 3xx as non-retryable, so the run fails closed. Only root `sitemap_products_N.xml` are read.
+- Refactor equivalence: the M5Stack fixture collection gave the same raw JSON sha256, normalizedHash, request list and errors before and after the move.
+- Page: root and `/en-jp` product pages (also via collections), canonical origin and handle checked, other markets not matched. Mount before `.product-page > .about` with `grid-column: 1`. Dark theme sets the store's own CSS variables (base #3e3e3e, surface #343434), restores light variables on `#header`, adds no image filter.
+- Failures on the way: the E2E first asserted no image filters but the store filters images in light mode too (now compared with light); a Node script in a Bash heredoc lost its backslashes, so one regex edit did not apply (done with Edit); jsdom printed CSS parse noise (VirtualConsole); the first capture threw on the 302 from `/` (switched the currency proof to `/meta.json`).
+- Verification: typecheck and lint 0, `npm test` 702/702, E2E 19/19 including `extension-pimoroni.spec.ts`; screenshots pimoroni-light/dark/narrow checked by eye. No test-runner processes left (only the IDE's tsserver).
+- Rubric verifier (`.claude/goal-loop/pimoroni-store/rubric.md`): C1-C8 pass; C9 failed on two literal local user paths in older journal entries (the 2026-09 theme preview and the 0.4.7/0.4.8 ZIP), which this change touches. Replaced with `~/tmp/...`. `git grep` still finds such paths in 11 other tracked files from earlier work (docs/verification, docs/handoffs, docs/roadmap, `.codex/goal-loop`, two rubrics), and in history; left for a separate task.
+- Residual risks: GitHub runners outside Japan may get a redirect on `products.json` or `meta.json`, which would stop every Pimoroni run (the first crawl will tell); the dark theme is not yet checked on the live page; whether Chrome asks users to approve the new content-script site on update is unverified; GBP has no yen reference; Pimoroni is not yet in the cross-store mapping.
+- Learning: see rules.md (terms of service, Shopify Markets currency proof, image filters in dark E2E).

@@ -26,5 +26,6 @@
 | 0022 | [USD の記録価格に、各ブラウザーが 1 日 1 回取得したレートで円の参考値を添える](0022-yen-reference-from-daily-exchange-rate.md) | 採用 |
 | 0023 | [Raspberry Pi Shop by KSY は公開一覧の JSON を offset で読み、ページ遷移のない商品ダイアログを追う](0023-ksy-public-list-and-in-place-product-dialog.md) | 採用 |
 | 0024 | [せんごくネット通販は「電子工作部品」の分類一覧を 4000 件未満の単位で読み、事実だけを記録する](0024-sengoku-electronic-parts-category-listings.md) | 採用 |
+| 0025 | [Pimoroni は基準通貨 GBP の Shopify カタログを転送なしで読み、日本向けの商品ページにも GBP の記録を出す](0025-pimoroni-gbp-base-catalogue-without-redirects.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。

@@ -99,6 +99,16 @@ export const defaultTransport: HttpTransport = async (url, init) => {
   return { status: res.status, header: (n) => res.headers.get(n), bytes: async () => new Uint8Array(await res.arrayBuffer()) };
 };
 
+/**
+ * Answers a redirect as its own 3xx status, which the fetcher does not retry,
+ * so the run fails instead of reading the page it was sent to. For sources
+ * that redirect by the requester's location to content in another currency.
+ */
+export const noRedirectTransport: HttpTransport = async (url, init) => {
+  const res = await fetch(url, { method: 'GET', headers: init.headers, signal: init.signal, redirect: 'manual', credentials: 'omit' });
+  return { status: res.status, header: (n) => res.headers.get(n), bytes: async () => new Uint8Array(await res.arrayBuffer()) };
+};
+
 export class PoliteFetcher {
   readonly stats: FetchStats = { logicalPages: 0, httpAttempts: 0, successfulResponses: 0, retries: 0, failures: 0, waitedMs: 0 };
   private readonly o: Required<Omit<PoliteFetcherOptions, 'headers' | 'isTransientBody' | 'log'>> & Pick<PoliteFetcherOptions, 'headers' | 'isTransientBody' | 'log'>;

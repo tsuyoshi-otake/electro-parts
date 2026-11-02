@@ -1,12 +1,13 @@
 import { akizukiCollector } from '../collectors/akizuki/collector.ts';
 import { ksyCollector } from '../collectors/ksy/collector.ts';
 import { m5stackCollector } from '../collectors/m5stack/collector.ts';
+import { pimoroniCollector } from '../collectors/pimoroni/collector.ts';
 import { sengokuCollector } from '../collectors/sengoku/collector.ts';
 import { switchScienceCollector } from '../collectors/switch-science/collector.ts';
 import type { StoreCollector } from './collector.ts';
 
 /** Mirror of `registry.ts` for collectors: one entry per store, nothing else. */
-const COLLECTORS: readonly StoreCollector[] = [akizukiCollector, switchScienceCollector, m5stackCollector, ksyCollector, sengokuCollector];
+const COLLECTORS: readonly StoreCollector[] = [akizukiCollector, switchScienceCollector, m5stackCollector, ksyCollector, sengokuCollector, pimoroniCollector];
 
 export function getStoreCollector(storeId: string): StoreCollector {
   const c = COLLECTORS.find((x) => x.storeId === storeId);

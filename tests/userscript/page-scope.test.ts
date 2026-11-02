@@ -58,6 +58,12 @@ describe('page scope of the registered stores', () => {
     'https://www.sengoku.co.jp/mod/sgk_cart/login.php',
     'https://www.sengoku.co.jp/mod/sgk_cart/mypage.php',
     'https://www.sengoku.co.jp/guide.html',
+    'https://shop.pimoroni.com/cart',
+    'https://shop.pimoroni.com/en-jp/cart',
+    'https://shop.pimoroni.com/checkouts/cn/abc',
+    'https://shop.pimoroni.com/account/login',
+    'https://shop.pimoroni.com/en-jp/account',
+    'https://shop.pimoroni.com/en-eu/products/presto',
   ])('leaves %s alone', (url) => {
     expect(owners(url)).toEqual([]);
   });
@@ -84,6 +90,12 @@ describe('page scope of the registered stores', () => {
     ['https://www.sengoku.co.jp/mod/sgk_cart/category.php?cid=3000', 'sengoku'],
     ['https://www.sengoku.co.jp/mod/sgk_cart/search.php?cid=3013&st=40', 'sengoku'],
     ['https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6N43', 'sengoku'],
+    ['https://shop.pimoroni.com/', 'pimoroni'],
+    ['https://shop.pimoroni.com/en-jp', 'pimoroni'],
+    ['https://shop.pimoroni.com/en-jp?ref=x', 'pimoroni'],
+    ['https://shop.pimoroni.com/en-jp/products/presto?variant=54894104052091', 'pimoroni'],
+    ['https://shop.pimoroni.com/en-jp/collections/displays', 'pimoroni'],
+    ['https://shop.pimoroni.com/products/presto', 'pimoroni'],
   ])('themes %s for %s', (url, storeId) => {
     expect(owners(url)).toEqual([storeId]);
   });
@@ -91,7 +103,8 @@ describe('page scope of the registered stores', () => {
   it('keeps every product page an adapter recognizes inside its own scope', () => {
     for (const url of ['https://akizukidenshi.com/catalog/g/g109951/', 'https://www.switch-science.com/products/9381',
       'https://www.switch-science.com/collections/all/products/9381', 'https://shop.m5stack.com/collections/atom/products/atom-lite',
-      'https://raspberry-pi.ksyic.com/main/index/pdp.id/1094/pdp.open/1094', 'https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6N43']) {
+      'https://raspberry-pi.ksyic.com/main/index/pdp.id/1094/pdp.open/1094', 'https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6N43',
+      'https://shop.pimoroni.com/en-jp/products/presto', 'https://shop.pimoroni.com/en-jp/collections/displays/products/presto', 'https://shop.pimoroni.com/products/presto']) {
       const product = PAGE_ADAPTERS.filter((a) => a.matches(at(url))).map((a) => a.storeId);
       expect(product, url).toHaveLength(1);
       expect(owners(url), url).toEqual(product);
