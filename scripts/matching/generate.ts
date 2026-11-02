@@ -210,10 +210,15 @@ export function parseCatalog(text: string): Catalog {
 async function main(): Promise<void> {
   const { values } = parseArgs({ options: { check: { type: 'boolean' }, discover: { type: 'boolean' }, names: { type: 'boolean' }, similar: { type: 'boolean' }, 'import-left': { type: 'string' }, 'import-right': { type: 'string' }, 'import-store': { type: 'string' },
     supplement: { type: 'string', multiple: true }, replace: { type: 'string', multiple: true } } });
+  // One operation per run: a read-only queue request must never fall into a branch that writes mapping inputs.
+  const modes = [values['import-left'] || values['import-right'] ? 'import' : '', values['import-store'] ? 'import-store' : '', values.supplement ? 'supplement' : '',
+    values.discover ? 'discover' : '', values.check ? 'check' : '', values.names ? 'names' : '', values.similar ? 'similar' : ''].filter(Boolean);
+  if (modes.length > 1) throw new Error(`choose one operation, not ${modes.map(m => `--${m}`).join(' + ')}`);
+  if (values.replace && !values.supplement) throw new Error('--replace requires --supplement');
   const dir = 'data/matching';
   const readAliases = async (): Promise<Alias[]> => JSON.parse(await readFile(`${dir}/aliases.json`, 'utf8')) as Alias[];
   if (values['import-left'] || values['import-right']) {
-    if (!values['import-left'] || !values['import-right'] || values.check || values.discover || values.supplement) throw new Error('import requires both files and cannot use --check/--discover');
+    if (!values['import-left'] || !values['import-right']) throw new Error('import requires both files');
     const catalog = await importCatalogs([values['import-left'], values['import-right']]);
     await mkdir(dir, { recursive: true }); await writeFile(`${dir}/catalog.jsonl`, serializeCatalog(catalog));
     console.log(`Imported ${catalog.listings.length} source listings. Existing reviews must be revalidated before build.`); return;
@@ -227,7 +232,6 @@ async function main(): Promise<void> {
   };
   if (values['import-store']) {
     // --import-store <storeId>=<complete snapshot>: a store's first source.
-    if (values.check || values.discover || values.supplement) throw new Error('import cannot use --check/--discover/--supplement');
     const [storeId, file] = storeFile('import-store', values['import-store']);
     const next = appendStore(catalog, storeId, file, await snapshotListings(storeId, file));
     await writeFile(`${dir}/catalog.jsonl`, serializeCatalog(next));
@@ -236,7 +240,6 @@ async function main(): Promise<void> {
   }
   if (values.supplement) {
     // --supplement <storeId>=<complete snapshot> (repeatable) [--replace <storeId>/<pageKey> ...]
-    if (values.check || values.discover) throw new Error('supplement cannot use --check/--discover');
     const steps = [];
     for (const arg of values.supplement) {
       const [storeId, file] = storeFile('supplement', arg);
@@ -249,7 +252,6 @@ async function main(): Promise<void> {
     return;
   }
   if (values.discover) {
-    if (values.check) throw new Error('--discover and --check are separate operations');
     assertCatalog(catalog);
     const candidates = discoverCatalog(catalog, ...discoveryTiers(catalog, await readAliases()));
     await writeFile(`${dir}/candidates.jsonl`, serializeCandidates(candidates));
@@ -258,13 +260,11 @@ async function main(): Promise<void> {
   const result = generate(catalog, await read<ProductRelation[]>('legacy.json'), await read<Review[]>('reviews.json'), await read<Family[]>('families.json'), await readAliases(), await read<Dismissal[]>('dismissals.json'));
   if (values.names) {
     // The review queue of name proposals, one JSON line each. Nothing is written.
-    if (values.check) throw new Error('--names and --check are separate operations');
     for (const proposal of result.nameProposals) console.log(JSON.stringify(proposal));
     return;
   }
   if (values.similar) {
     // The review queue of similar-product leads, one JSON line each. Nothing is written.
-    if (values.check || values.names) throw new Error('--similar, --names and --check are separate operations');
     for (const proposal of result.similarProposals) console.log(JSON.stringify(proposal));
     return;
   }

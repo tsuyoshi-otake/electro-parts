@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -692,5 +693,17 @@ describe('the settled 0.6.7 identities (0.6.8)', () => {
     expect(byId.get(id('akizuki', '114312', 'sengoku', 'EEHD-4HNL'))).toMatchObject({ kind: 'same_product' });
     expect(byId.get(id('akizuki', '114312', 'sengoku', 'EEHD-4HNU'))).toMatchObject({
       kind: 'similar_product', differences: ['型番: D2F-01 ↔ D2F-01-D', '端子: 基板用端子ストレート形 ↔ はんだづけ小型端子'] });
+  });
+});
+
+describe('the matching CLI', () => {
+  it('runs one operation at a time, so a read-only queue request never writes mapping inputs', () => {
+    const before = readFileSync('data/matching/catalog.jsonl', 'utf8');
+    for (const flags of [['--names', '--similar'], ['--supplement', 'switch-science=missing.json', '--names'], ['--discover', '--check'], ['--replace', 'akizuki/100091']]) {
+      const run = spawnSync(process.execPath, ['--import', 'tsx', 'scripts/matching/generate.ts', ...flags], { encoding: 'utf8', timeout: 60_000 });
+      expect(run.status, flags.join(' ')).not.toBe(0);
+      expect(run.stderr).toMatch(/choose one operation|--replace requires --supplement/);
+    }
+    expect(readFileSync('data/matching/catalog.jsonl', 'utf8')).toBe(before);
   });
 });
