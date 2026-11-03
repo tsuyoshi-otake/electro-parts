@@ -83,7 +83,10 @@ test('shows the FT232RQ kit history (1150 → 1200) on the saved product page wi
   // The chart is drawn lazily once visible.
   await panel(page).scrollIntoViewIfNeeded();
   await expect(page.locator('#electronics-price-history-root svg[role="img"]')).toBeVisible();
-  await expect(page.locator('#electronics-price-history-root svg circle')).toHaveCount(2);
+  await expect(page.locator('#electronics-price-history-root svg[role="img"] circle')).toHaveCount(2);
+  // Akizuki shows a stock count; the recorded counts (20, then 781) are drawn under the price chart.
+  await expect(page.locator('#electronics-price-history-root .stock-chart circle')).toHaveCount(2);
+  await expect(page.locator('#electronics-price-history-root .stock-chart circle').last()).toHaveAttribute('aria-label', /在庫数 781$/);
   await panel(page).screenshot({ path: path.resolve(process.cwd(), 'test-results', 'e2e', 'panel-109951.png') });
   await page.locator('.block-goods-detail').screenshot({ path: path.resolve(process.cwd(), 'test-results', 'e2e', 'detail-109951.png') });
   // Page content untouched, panel first in the centre pane at full content width.

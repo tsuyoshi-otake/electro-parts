@@ -4,6 +4,9 @@ import { HOST_ELEMENT_ID, mountHistoryPanel, OWNER_ATTRIBUTE } from '../../users
 import { DataClient } from '../../userscript/core/dataClient.ts';
 import { EXCHANGE_RATE_URL, ExchangeRateClient, parseRateResponse, yenFromMinor } from '../../userscript/core/exchangeRate.ts';
 import type { HostResponse } from '../../userscript/core/types.ts';
+import { PREFERENCES_STORAGE_KEY } from '../../userscript/core/preferences.ts';
+import { indexRelations } from '../../userscript/core/relations.ts';
+import { comparisonFixture } from './comparison-fixtures.ts';
 import { fakeHost, json, sampleManifest, sampleProduct, testAdapter, type FakeHost } from './helpers.ts';
 
 const HOUR = 3_600_000;
@@ -72,6 +75,13 @@ describe('provider response', () => {
     expect(yenFromMinor(795, rate)).toBe(1255); // 1254.67
     expect(yenFromMinor(5750, { base: 'GBP', jpyPerUnit: JPY_PER_GBP, via: 'USD', updatedAt: NOW })).toBe(11634); // 11634.19
   });
+
+  it('adds a card fee in percent on top of the rate before rounding', () => {
+    const rate = { base: 'USD', jpyPerUnit: 157.820352, via: null, updatedAt: NOW };
+    expect(yenFromMinor(550, rate, 0)).toBe(868);
+    expect(yenFromMinor(550, rate, 3.63)).toBe(900); // 899.52
+    expect(yenFromMinor(550, rate, 1.6)).toBe(882); // 881.90
+  });
 });
 
 describe('once a day per browser', () => {
@@ -131,6 +141,32 @@ describe('once a day per browser', () => {
     expect(rateRequests(host)).toBe(1);
     await page(host).get('GBP');
     expect(rateRequests(host)).toBe(1);
+  });
+
+  it('answers GBP on a page that asked for USD first, with one refresh of an entry saved before cross rates', async () => {
+    const host = rateHost();
+    const old = { base: 'USD', jpyPerUnit: 150, updatedAt: NOW - 2 * HOUR, nextUpdateAt: NOW + 20 * HOUR, fetchedAt: NOW - HOUR };
+    host.store.set(KEY, JSON.stringify({ rate: old, failures: 0, retryAt: 0, leaseUntil: 0 }));
+    const client = page(host);
+    // A USD price, then a GBP store row on the same page.
+    await expect(client.get('USD')).resolves.toMatchObject({ jpyPerUnit: 150 });
+    expect(rateRequests(host)).toBe(0);
+    const [first, second] = await Promise.all([client.get('GBP'), client.get('GBP')]);
+    expect(first).toMatchObject({ base: 'GBP', jpyPerUnit: JPY_PER_GBP, via: 'USD' });
+    expect(second).toEqual(first);
+    await expect(client.get('USD')).resolves.toMatchObject({ jpyPerUnit: 150 });
+    expect(rateRequests(host)).toBe(1);
+  });
+
+  it('answers no GBP rate on that page while the old entry is backing off, without a request', async () => {
+    const host = rateHost();
+    const old = { base: 'USD', jpyPerUnit: 150, updatedAt: NOW - 2 * HOUR, nextUpdateAt: NOW + 20 * HOUR, fetchedAt: NOW - HOUR };
+    host.store.set(KEY, JSON.stringify({ rate: old, failures: 1, retryAt: NOW + HOUR, leaseUntil: 0 }));
+    const client = page(host);
+    await expect(client.get('USD')).resolves.toMatchObject({ jpyPerUnit: 150 });
+    await expect(client.get('GBP')).resolves.toBeNull();
+    await expect(client.get('GBP')).resolves.toBeNull();
+    expect(rateRequests(host)).toBe(0);
   });
 
   it('answers no GBP rate when the answer lacks one, and does not fetch again for it', async () => {
@@ -261,14 +297,14 @@ describe('panel yen reference', () => {
     return product;
   }
 
-  async function mount(host: FakeHost, product: ProductFileV1 | null, rates = new ExchangeRateClient(host)) {
+  async function mount(host: FakeHost, product: ProductFileV1 | null, rates = new ExchangeRateClient(host), options: Partial<Parameters<typeof mountHistoryPanel>[0]> = {}) {
     const buy = document.createElement('div');
     buy.id = 'buy';
     document.body.appendChild(buy);
     host.routes.set(`${BASE}/${manifestPath('teststore')}`, json(sampleManifest()));
     if (product !== null) host.routes.set(`${BASE}/${productPath('teststore', 'P1')}`, json(product));
     const handle = await mountHistoryPanel({ adapters: [testAdapter], host, client: new DataClient(host, { baseUrl: BASE }), doc: document,
-      location: { hostname: 'example.test', pathname: '/p/P1' }, dataBaseUrl: BASE, lazyChart: false, exchangeRates: rates });
+      location: { hostname: 'example.test', pathname: '/p/P1' }, dataBaseUrl: BASE, lazyChart: false, exchangeRates: rates, ...options });
     handles.push(handle);
     return document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!;
   }
@@ -280,18 +316,21 @@ describe('panel yen reference', () => {
     document.body.replaceChildren();
   });
 
-  it('shows the current USD price in yen with the rate, its date and the attribution', async () => {
+  it('shows the current USD price in yen as the headline, the recorded price beside it, and one rate note with the attribution', async () => {
     const shadow = await mount(rateHost(), usdProduct());
-    const fx = shadow.querySelector('.fx');
-    expect(fx?.querySelector('.fx-value')?.textContent).toBe('約 ￥868（円換算の参考値）');
-    expect(fx?.textContent).toContain('1 USD = 157.82円');
-    expect(fx?.textContent).toContain('税・送料・関税・決済時の換算を含みません');
-    const link = fx?.querySelector('a');
+    expect(shadow.querySelector('.hero-value')?.textContent).toBe('約 ￥868');
+    const recorded = shadow.querySelector('.fx-recorded');
+    expect(recorded?.textContent).toContain('記録価格 $5.50');
+    // Directly after the headline price.
+    expect(recorded?.previousElementSibling?.className).toBe('hero-value');
+    const note = shadow.querySelector('.fx-note');
+    expect(note?.textContent).toContain('1 USD = 157.82円');
+    expect(note?.textContent).toContain('税・送料・関税を含まず');
+    expect(note?.textContent).toContain('カードの海外事務手数料は含みません');
+    const link = note?.querySelector('a');
     expect(link?.textContent).toBe('Rates By Exchange Rate API');
     expect(link?.getAttribute('href')).toBe('https://www.exchangerate-api.com');
     expect(link?.rel).toBe('noopener noreferrer');
-    // Directly after the headline price.
-    expect(fx?.previousElementSibling?.className).toBe('hero-value');
   });
 
   it('shows a GBP price in yen with the cross rate and the two quoted rates it came from', async () => {
@@ -301,27 +340,62 @@ describe('panel yen reference', () => {
     segment.stats = { ...segment.stats, current: { state: 'exact', minAmountMinor: 5750, maxAmountMinor: 5750 } };
     const host = rateHost();
     const shadow = await mount(host, gbp);
-    const fx = shadow.querySelector('.fx');
-    expect(fx?.querySelector('.fx-value')?.textContent).toBe('約 ￥11,634（円換算の参考値）');
-    expect(fx?.textContent).toContain('1 GBP = 202.33円（USD/JPY と USD/GBP から算出、');
-    expect(fx?.querySelector('a')?.textContent).toBe('Rates By Exchange Rate API');
-    expect(shadow.querySelector('.hero-value')?.textContent).toContain('£57.50');
+    expect(shadow.querySelector('.hero-value')?.textContent).toBe('約 ￥11,634');
+    expect(shadow.querySelector('.fx-recorded')?.textContent).toContain('記録価格 £57.50');
+    const note = shadow.querySelector('.fx-note');
+    expect(note?.textContent).toContain('1 GBP = 202.33円（USD/JPY と USD/GBP から算出、');
+    expect(note?.querySelector('a')?.textContent).toBe('Rates By Exchange Rate API');
     expect(rateRequests(host)).toBe(1);
   });
 
-  it('converts only that figure: the delta, statistics and chart stay in USD', async () => {
+  it('converts only the current price: the change, statistics and chart stay in USD', async () => {
     const shadow = await mount(rateHost(), usdProduct());
-    expect(shadow.querySelector('.hero-value')?.textContent).toContain('+$0.50');
-    const outside = [...shadow.querySelectorAll('.rows, svg')].map((el) => el.textContent ?? '').join(' ');
+    expect(shadow.querySelector('.fx-recorded .delta')?.textContent).toContain('+$0.50');
+    const outside = [...shadow.querySelectorAll('.rows, svg, table')].map((el) => el.textContent ?? '').join(' ');
     expect(outside).toContain('$5.00');
     expect(outside).not.toMatch(/[¥￥]/);
-    expect(shadow.querySelectorAll('.fx')).toHaveLength(1);
+    expect(shadow.querySelectorAll('.fx-note')).toHaveLength(1);
   });
 
   it('keeps the USD panel unchanged when no rate is available', async () => {
     const shadow = await mount(rateHost({ status: 503, text: '' }), usdProduct());
-    expect(shadow.querySelector('.fx')).toBeNull();
+    expect(shadow.querySelector('.fx-note')).toBeNull();
+    expect(shadow.querySelector('.fx-recorded')).toBeNull();
     expect(shadow.querySelector('.hero-value')?.textContent).toContain('$5.50');
+    expect(shadow.querySelector('.hero-value')?.textContent).toContain('+$0.50');
+  });
+
+  it('adds the chosen card fee to every yen value and says which fee it includes', async () => {
+    const host = rateHost();
+    host.store.set(PREFERENCES_STORAGE_KEY, JSON.stringify({ cardFee: { enabled: true, cardId: 'smbc-visa-mastercard', customPercent: null }, showStock: true }));
+    const shadow = await mount(host, usdProduct());
+    // $5.50 × 157.820352 × 1.0363 = 899.52
+    expect(shadow.querySelector('.hero-value')?.textContent).toBe('約 ￥900');
+    expect(shadow.querySelector('.fx-recorded')?.textContent).toContain('カード手数料 3.63%込み');
+    expect(shadow.querySelector('.fx-note')?.textContent).toContain('カードの海外事務手数料 3.63%（三井住友カード（Visa・Mastercard））を加算しています。');
+  });
+
+  it('reads a USD store row in yen on a yen page and fetches the rate for it once', async () => {
+    const host = rateHost();
+    const { relation, other } = comparisonFixture();
+    const segment = other.offers[0]!.segments[0]!;
+    segment.basis = { ...segment.basis, currency: 'USD' };
+    segment.stats = { ...segment.stats, current: { state: 'exact', minAmountMinor: 550, maxAmountMinor: 550 } };
+    host.routes.set(`${BASE}/${manifestPath('otherstore')}`, json(sampleManifest({ storeId: 'otherstore' })));
+    host.routes.set(`${BASE}/${productPath('otherstore', 'P2')}`, json(other));
+    const rates = new ExchangeRateClient(host);
+    const get = vi.spyOn(rates, 'get');
+    const shadow = await mount(host, sampleProduct(), rates, { relationIndex: indexRelations([relation]) });
+    const row = shadow.querySelector('.store-price');
+    expect(row?.querySelector('.hero-value')?.textContent).toBe('約 ￥868');
+    expect(row?.querySelector('.fx-recorded')?.textContent).toBe('記録価格 $5.50');
+    expect(row?.textContent).toContain('送料・関税別のため円の店舗の後に表示');
+    // The viewed yen price is untouched and no cheapest claim is made across currencies.
+    expect(shadow.querySelector('.stats-col > .hero-value')?.textContent).toContain('￥1,200');
+    expect(row?.querySelector('.badge.cheapest')).toBeNull();
+    expect(shadow.querySelector('.fx-note')?.textContent).toContain('1 USD = 157.82円');
+    expect(get.mock.calls.map(([currency]) => currency)).toEqual(['USD']);
+    expect(rateRequests(host)).toBe(1);
   });
 
   it('does not ask for a rate for a yen product or a product without data', async () => {
@@ -332,7 +406,7 @@ describe('panel yen reference', () => {
       const shadow = await mount(host, product, rates);
       expect(get).not.toHaveBeenCalled();
       expect(rateRequests(host)).toBe(0);
-      expect(shadow.querySelector('.fx')).toBeNull();
+      expect(shadow.querySelector('.fx-note')).toBeNull();
       for (const handle of handles.splice(0)) handle.destroy();
       document.body.replaceChildren();
     }

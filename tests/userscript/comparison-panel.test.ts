@@ -87,9 +87,28 @@ describe('cross-store comparison panel', () => {
     const f = setup(); f.draw();
     expect(f.text()).toContain('店舗別の記録価格'); expect(f.text()).toContain('Store A（閲覧中）'); expect(f.text()).toContain('Store Aの価格履歴・統計');
     expect(f.text()).toContain('記録価格差（他店 − 閲覧中） +￥300'); expect(f.text()).toContain('現在の最安価格を示すものではありません');
-    expect(f.shadow.querySelectorAll('g[data-series]')).toHaveLength(2);
+    expect(f.shadow.querySelectorAll('.eph-comparison-chart g[data-series]')).toHaveLength(2);
     const link = f.shadow.querySelector<HTMLAnchorElement>('.store-price a')!;
     expect(link.href).toBe(f.entry.target.url); expect(link.rel).toContain('noopener');
+  });
+
+  it('draws the recorded stock counts of both stores under the price chart, in the same series colors', () => {
+    const f = setup(); f.draw();
+    const groups = [...f.shadow.querySelectorAll<SVGGElement>('.eph-inventory-chart g[data-series]')];
+    expect(groups.map((g) => [g.dataset['series'], g.getAttribute('data-series-index')])).toEqual([['current', '0'], ['example-pair', '1']]);
+    expect(f.shadow.querySelector('.stock-chart')?.textContent).toContain('表示在庫数の推移');
+    expect([...groups[0]!.querySelectorAll('circle')].map((c) => c.getAttribute('aria-label')).join(' ')).toContain('在庫数 781');
+  });
+
+  it('leaves out the stock chart when the setting is off, and a store that shows no count', () => {
+    const f = setup();
+    f.ctx.preferences = { cardFee: { enabled: false, cardId: 'smbc-visa-mastercard', customPercent: null }, showStock: false };
+    f.draw();
+    expect(f.shadow.querySelector('.stock-chart')).toBeNull();
+    f.ctx.preferences = { ...f.ctx.preferences, showStock: true };
+    f.other.offers[0]!.inventory = { semantics: 'not_exposed', points: [], truncated: false, totalPoints: 0 };
+    f.draw();
+    expect([...f.shadow.querySelectorAll<SVGGElement>('.eph-inventory-chart g[data-series]')].map((g) => g.dataset['series'])).toEqual(['current']);
   });
 
   it('preserves disclosure state, legend selection and focus when another data result arrives', () => {
@@ -100,7 +119,10 @@ describe('cross-store comparison panel', () => {
     expect(f.shadow.querySelector<HTMLDetailsElement>('.related-evidence')!.open).toBe(true);
     expect(f.shadow.querySelectorAll<HTMLInputElement>('.series-controls input')[1]!.checked).toBe(false);
     expect(f.shadow.activeElement?.getAttribute('data-focus-key')).toBe('series-example-pair');
-    expect(f.shadow.querySelectorAll<SVGGElement>('g[data-series]')[1]!.style.display).toBe('none');
+    expect(f.shadow.querySelectorAll<SVGGElement>('.eph-comparison-chart g[data-series]')[1]!.style.display).toBe('none');
+    // The store switch hides that store's stock line too.
+    expect(f.shadow.querySelector<SVGGElement>('.eph-inventory-chart g[data-series="example-pair"]')!.style.display).toBe('none');
+    expect(f.shadow.querySelector<SVGGElement>('.eph-inventory-chart g[data-series="current"]')!.style.display).toBe('');
     f.shadow.querySelector<HTMLInputElement>('.series-controls input')!.click();
     expect(f.shadow.querySelector<HTMLElement>('[role="status"]')!.hidden).toBe(false);
   });

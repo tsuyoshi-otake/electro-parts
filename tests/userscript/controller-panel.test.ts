@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { manifestPath, productPath } from '../../src/publisher/contract.ts';
 import { HOST_ELEMENT_ID, OWNER_ATTRIBUTE, THEME_STORAGE_KEY, mountHistoryPanel } from '../../userscript/core/controller.ts';
 import { DataClient } from '../../userscript/core/dataClient.ts';
+import { PREFERENCES_STORAGE_KEY } from '../../userscript/core/preferences.ts';
 import { PAGE_THEME_CONTROL_ID } from '../../userscript/ui/pageTheme.ts';
 import { PANEL_TITLE } from '../../userscript/ui/panel.ts';
 import { indexRelations } from '../../userscript/core/relations.ts';
@@ -146,7 +147,7 @@ describe('history panel controller', () => {
     const host = hostWithData();
     const handle = await mount(host);
     const root = document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!;
-    const buttons = root.querySelectorAll('button');
+    const buttons = root.querySelectorAll<HTMLButtonElement>('.theme-controls button');
     expect([...buttons].map((b) => b.textContent)).toEqual(['ライト', 'ダーク']);
     buttons[1]!.focus();
     buttons[1]!.click();
@@ -167,6 +168,101 @@ describe('history panel controller', () => {
     other.destroy();
     await mount(host);
     expect(document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!.querySelector('section')?.dataset['theme']).toBe('light');
+  });
+
+  it('opens the settings dialog, keeps it open across the re-render a change causes, and saves each change', async () => {
+    page();
+    const host = hostWithData();
+    const handle = await mount(host);
+    const root = () => document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!;
+    const button = root().querySelector<HTMLButtonElement>('.settings-button')!;
+    expect(button.textContent).toBe('設定');
+    expect(button.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(root().querySelector<HTMLDialogElement>('dialog.settings')!.hasAttribute('open')).toBe(false);
+    button.click();
+    const dialog = () => root().querySelector<HTMLDialogElement>('dialog.settings')!;
+    expect(dialog().hasAttribute('open')).toBe(true);
+    // Off by default, with the default card selected.
+    const fee = () => dialog().querySelector<HTMLInputElement>('[data-focus-key="pref-fee-enabled"]')!;
+    expect(fee().checked).toBe(false);
+    expect(dialog().querySelector<HTMLSelectElement>('select')!.value).toBe('smbc-visa-mastercard');
+    fee().focus();
+    fee().checked = true;
+    fee().dispatchEvent(new Event('change'));
+    await vi.waitFor(() => expect(JSON.parse(host.store.get(PREFERENCES_STORAGE_KEY) ?? '{}')).toMatchObject({ cardFee: { enabled: true, cardId: 'smbc-visa-mastercard' } }));
+    // Rebuilt open, with the changed control still focused.
+    expect(dialog().hasAttribute('open')).toBe(true);
+    expect(fee().checked).toBe(true);
+    expect(root().activeElement).toBe(fee());
+    const card = dialog().querySelector<HTMLSelectElement>('select')!;
+    card.value = 'amex';
+    card.dispatchEvent(new Event('change'));
+    await vi.waitFor(() => expect(JSON.parse(host.store.get(PREFERENCES_STORAGE_KEY)!).cardFee.cardId).toBe('amex'));
+    const stock = dialog().querySelector<HTMLInputElement>('[data-focus-key="pref-show-stock"]')!;
+    expect(root().querySelector('.stock-chart')).not.toBeNull();
+    stock.checked = false;
+    stock.dispatchEvent(new Event('change'));
+    expect(root().querySelector('.stock-chart')).toBeNull();
+    await vi.waitFor(() => expect(JSON.parse(host.store.get(PREFERENCES_STORAGE_KEY)!).showStock).toBe(false));
+    // Escape closes it and focus returns to the button that opened it.
+    dialog().dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(dialog().hasAttribute('open')).toBe(false);
+    expect(root().activeElement).toBe(root().querySelector('.settings-button'));
+    expect(host.requests).toHaveLength(2); // settings changes must not reload history
+    handle.destroy();
+
+    // The next page reads the saved settings.
+    page();
+    await mount(host);
+    root().querySelector<HTMLButtonElement>('.settings-button')!.click();
+    expect(dialog().querySelector<HTMLSelectElement>('select')!.value).toBe('amex');
+    expect(dialog().querySelector<HTMLInputElement>('[data-focus-key="pref-show-stock"]')!.checked).toBe(false);
+    expect(root().querySelector('.stock-chart')).toBeNull();
+    dialog().querySelector<HTMLButtonElement>('[data-focus-key="pref-close"]')!.click();
+    expect(dialog().hasAttribute('open')).toBe(false);
+  });
+
+  it('accepts an entered fee only within 0 to 10 percent', async () => {
+    page();
+    const host = hostWithData();
+    await mount(host);
+    const root = document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!;
+    root.querySelector<HTMLButtonElement>('.settings-button')!.click();
+    const dialog = () => root.querySelector<HTMLDialogElement>('dialog.settings')!;
+    const card = dialog().querySelector<HTMLSelectElement>('select')!;
+    card.value = 'custom';
+    card.dispatchEvent(new Event('change'));
+    const percent = () => dialog().querySelector<HTMLInputElement>('[data-focus-key="pref-fee-percent"]')!;
+    percent().value = '12';
+    percent().dispatchEvent(new Event('change'));
+    expect(dialog().querySelector('.error')?.textContent).toBe('0〜10 の数値を入力してください');
+    expect(percent().getAttribute('aria-invalid')).toBe('true');
+    await vi.waitFor(() => expect(JSON.parse(host.store.get(PREFERENCES_STORAGE_KEY)!).cardFee).toMatchObject({ cardId: 'custom', customPercent: null }));
+    percent().value = '2.5';
+    percent().dispatchEvent(new Event('change'));
+    await vi.waitFor(() => expect(JSON.parse(host.store.get(PREFERENCES_STORAGE_KEY)!).cardFee).toMatchObject({ cardId: 'custom', customPercent: 2.5 }));
+    expect(percent().value).toBe('2.5');
+  });
+
+  it('keeps the panel usable with default settings if settings storage fails', async () => {
+    page();
+    const host = hostWithData();
+    const get = host.storage.get;
+    const set = host.storage.set;
+    host.storage.get = async (key) => { if (key === PREFERENCES_STORAGE_KEY) throw new Error('blocked'); return get(key); };
+    host.storage.set = async (key, value) => { if (key === PREFERENCES_STORAGE_KEY) throw new Error('blocked'); return set(key, value); };
+    await mount(host);
+    const root = document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!;
+    expect(shadowText()).toContain('￥1,200');
+    expect(host.logs).toContain('warn: settings unavailable; using defaults');
+    root.querySelector<HTMLButtonElement>('.settings-button')!.click();
+    const stock = root.querySelector<HTMLInputElement>('[data-focus-key="pref-show-stock"]')!;
+    expect(stock.checked).toBe(true);
+    stock.checked = false;
+    stock.dispatchEvent(new Event('change'));
+    // The change applies to this page even though it could not be saved.
+    expect(root.querySelector('.stock-chart')).toBeNull();
+    await vi.waitFor(() => expect(host.logs).toContain('warn: settings could not be saved'));
   });
 
   it('defaults to light even on a dark system and honors a saved dark preference', async () => {

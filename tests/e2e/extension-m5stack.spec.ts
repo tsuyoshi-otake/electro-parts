@@ -32,13 +32,14 @@ test('M5Stack extension selects USD variants, shows a daily yen reference and pr
     const panel=page.locator('#electronics-price-history-root');
     await expect(page.locator('.product-main > #electronics-price-history-root + .product-description')).toBeAttached();
     await expect(panel).toContainText('$5.50');await expect(panel).toContainText('USD');
-    await expect(panel.locator('.fx-value')).toHaveText('約 ￥868（円換算の参考値）');
-    await expect(panel.locator('.fx a')).toHaveAttribute('href','https://www.exchangerate-api.com');
+    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥868');
+    await expect(panel.locator('.stats-col > .fx-recorded')).toContainText('記録価格 $5.50');
+    await expect(panel.locator('.fx-note a')).toHaveAttribute('href','https://www.exchangerate-api.com');
     await expect(panel.locator('section')).toHaveAttribute('data-theme','light');
     const originalBody = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
     await panel.getByLabel('バリエーション').selectOption('50308212326657');
     await expect(panel).toContainText('$7.95');await expect(panel).toContainText('税区分不明');
-    await expect(panel.locator('.fx-value')).toHaveText('約 ￥1,255（円換算の参考値）');
+    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥1,255');
     await panel.scrollIntoViewIfNeeded();await expect(panel.locator('svg.eph-chart')).toBeVisible();
     await panel.getByRole('button',{name:'ダーク',exact:true}).click();
     await expect(panel.locator('section')).toHaveAttribute('data-theme','dark');
@@ -51,7 +52,25 @@ test('M5Stack extension selects USD variants, shows a daily yen reference and pr
     await expect(page.locator('body')).toHaveCSS('background-color','rgb(62, 62, 62)');
     await expect(panel).not.toContainText('取得できませんでした');
     // The stored rate serves the reload: one rate request per day, not per page.
-    await expect(panel.locator('.fx-value')).toContainText('約 ￥');
+    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥868');
+    // Settings: the card fee is off until chosen; the choice survives a reload and costs no request.
+    await panel.getByRole('button',{name:'設定',exact:true}).click();
+    const dialog=panel.getByRole('dialog',{name:'表示設定'});
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole('checkbox',{name:'カードの海外事務手数料を円換算に含める'})).not.toBeChecked();
+    await dialog.getByRole('checkbox',{name:'カードの海外事務手数料を円換算に含める'}).check();
+    await expect(dialog).toBeVisible();
+    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥900');
+    await dialog.getByLabel('カードの種類').selectOption('jcb');
+    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥882');
+    await panel.screenshot({path:'test-results/e2e/m5stack-settings-dark.png'});
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(panel.getByRole('button',{name:'設定',exact:true})).toBeFocused();
+    await page.reload();
+    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥882');
+    await expect(panel.locator('.stats-col > .fx-recorded')).toContainText('カード手数料 1.6%込み');
+    await expect(panel.locator('.fx-note')).toContainText('JCBカード（JCB発行）');
     expect(rateRequests).toEqual(['https://open.er-api.com/v6/latest/USD']);
     await page.setViewportSize({width:390,height:844});
     await panel.getByLabel('バリエーション').selectOption('50308212326657');

@@ -63,6 +63,20 @@ test('KSY extension follows the product dialog without navigation and keeps the 
     await expect(related(['akizuki', '129604', 'ksy', '1094'])).toContainText('秋月電子');
     await expect(related(['switch-science', '9809', 'ksy', '1094'])).toContainText('他店の履歴はまだ記録されていません');
     await expect(panel).not.toContainText('読み込み中');
+    // KSY shows a stock count, so its recorded counts are drawn under the price chart; the setting hides them.
+    // The panel is taller than the dialog; the chart at its top is drawn once it scrolls into view.
+    await panel.locator('.chart-box').scrollIntoViewIfNeeded();
+    await expect(panel.locator('.stock-chart svg.eph-inventory-chart')).toBeVisible();
+    await expect(panel.locator('.stock-chart circle').last()).toHaveAttribute('aria-label', /在庫数 363$/);
+    await panel.getByRole('button', { name: '設定', exact: true }).click();
+    const settings = panel.getByRole('dialog', { name: '表示設定' });
+    await settings.getByRole('checkbox', { name: '在庫数の推移をグラフに表示' }).uncheck();
+    await expect(panel.locator('.stock-chart')).toHaveCount(0);
+    await expect(panel).toContainText('表示在庫数 363');
+    await settings.getByRole('checkbox', { name: '在庫数の推移をグラフに表示' }).check();
+    await expect(panel.locator('.stock-chart svg')).toBeVisible();
+    await settings.getByRole('button', { name: '閉じる' }).click();
+    await expect(settings).toBeHidden();
 
     await openProduct(page, '483');
     await expect(panel).toHaveAttribute('data-page-key', '483');
