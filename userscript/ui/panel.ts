@@ -54,9 +54,17 @@ function shownQuantities(inventory: InventoryV1): boolean {
   return inventory.semantics !== 'not_exposed' && inventory.points.some((p) => p[1] !== null);
 }
 
+/**
+ * Page CSS that matches the host element outranks `:host`, and the panel would
+ * inherit the store's font from it. `.eph` therefore starts from `all: initial`
+ * and sets its own text properties; no page selector reaches inside the shadow root.
+ */
 export const PANEL_CSS = `
-:host { all: initial; display: block; font: 13px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif; }
+:host { all: initial; display: block; }
 .eph {
+  all: initial; display: block;
+  font: 13px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  text-size-adjust: 100%; -webkit-text-size-adjust: 100%;
   container-type: inline-size;
   color-scheme: light;
   --bg: #fff; --fg: #16202b; --muted: #5f6b7a; --line: #e3e8ef; --line-soft: #eef2f6;
@@ -73,14 +81,14 @@ export const PANEL_CSS = `
 
 .head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
 .brand { font-size: 13px; font-weight: 700; letter-spacing: .01em; }
-.badge { font-size: 11px; padding: 1px 7px; border-radius: 10px; background: var(--chip); color: var(--chip-fg); font-weight: 500; }
+.badge { font-size: 12px; padding: 1px 7px; border-radius: 10px; background: var(--chip); color: var(--chip-fg); font-weight: 500; }
 .badge.stale { background: #fff4e5; color: #8a5a00; }
 .badge.error { background: #fde8e8; color: #9b1c1c; }
 .eph[data-theme="dark"] .badge.stale { background: #3b2f14; color: #f0c274; }
 .eph[data-theme="dark"] .badge.error { background: #3d1f1f; color: #f5a3a3; }
 .theme-controls { display: flex; gap: 4px; }
 .theme-controls button, .settings-button { font: inherit; font-size: 12px; min-height: 32px; padding: 4px 10px; border: 1px solid var(--muted); border-radius: 4px; background: var(--bg); color: var(--fg); cursor: pointer; }
-.theme-controls button:hover, .settings-button:hover { background: var(--chip); }
+@media (hover: hover) { .theme-controls button:hover, .settings-button:hover { background: var(--chip); } }
 .theme-controls button[aria-pressed="true"] { background: var(--chip); border-color: var(--accent); color: var(--accent); font-weight: 700; }
 .theme-controls button:active, .settings-button:active { background: var(--line); }
 .theme-controls button:focus-visible, .settings-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -95,7 +103,7 @@ export const PANEL_CSS = `
 .chart-box { min-width: 0; min-height: 90px; }
 .eph svg { display: block; width: 100%; height: auto; }
 .eph .eph-grid { stroke: var(--line-soft); stroke-width: 1; }
-.eph .eph-axis, .eph .eph-chart-empty { font-size: 11px; fill: var(--muted); }
+.eph .eph-axis, .eph .eph-chart-empty { font-size: 12px; fill: var(--muted); }
 .eph .eph-line { stroke: var(--accent); stroke-width: 2.5; }
 .eph .eph-band { fill: var(--accent); fill-opacity: 0.14; }
 .eph .eph-gap { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
@@ -103,17 +111,17 @@ export const PANEL_CSS = `
 .eph .stock-chart { margin-top: 10px; padding-top: 6px; border-top: 1px dashed var(--line-soft); }
 .eph .eph-inventory-chart .eph-line { stroke-width: 2; }
 
-.hero-label { font-size: 11px; color: var(--muted); }
+.hero-label { font-size: 12px; color: var(--muted); }
 .hero-value { font-size: 27px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; }
-.hero-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.hero-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .delta { font-size: 13px; font-weight: 700; margin-left: 8px; white-space: nowrap; }
 .delta.up { color: var(--up); } .delta.down { color: var(--down); }
 
 .rows { margin: 12px 0 0; }
 .rows > div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 5px 0; border-top: 1px solid var(--line-soft); }
-.rows dt { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+.rows dt { font-size: 12px; color: var(--muted); white-space: nowrap; }
 .rows dd { margin: 0; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
-.rows dd .sub { display: block; font-weight: 400; color: var(--muted); font-size: 11px; }
+.rows dd .sub { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
 
 .foot-blocks { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 8px; }
 .eph details { margin: 4px 0; }
@@ -121,8 +129,8 @@ export const PANEL_CSS = `
 .eph table { border-collapse: collapse; font-size: 12px; margin-top: 6px; }
 .eph th, .eph td { border-bottom: 1px solid var(--line-soft); padding: 3px 16px 3px 0; text-align: left; font-variant-numeric: tabular-nums; }
 .eph th { color: var(--muted); font-weight: 500; }
-.eph ul.caveats { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: 11px; }
-.eph footer { font-size: 11px; color: var(--muted); margin-top: 8px; }
+.eph ul.caveats { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: 12px; }
+.eph footer { font-size: 12px; color: var(--muted); margin-top: 8px; }
 .eph a { color: var(--accent); }
 .eph p { margin: 6px 0; }
 .eph .muted { color: var(--muted); }

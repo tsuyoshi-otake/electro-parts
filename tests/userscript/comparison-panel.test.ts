@@ -174,7 +174,7 @@ describe('cross-store comparison panel', () => {
       { id: 'b', label: 'B', start: t + 2 * day, end: t + 2 * day, points: [[t + 2 * day, 'exact', 200, 200]], presence: [[t + 2 * day, 1]] },
     ], { width: 640, height: 200, currency: 'JPY' });
     const a = svg.querySelector('g[data-series="a"]')!, b = svg.querySelector('g[data-series="b"]')!;
-    expect(a.querySelector('path')?.getAttribute('d')).toMatch(/^M67\.4 [\d.]+H342\.0$/);
+    expect(a.querySelector('path')?.getAttribute('d')).toMatch(/^M73\.3 [\d.]+H345\.0$/);
     expect(b.querySelector('path')).toBeNull(); expect(b.querySelectorAll('circle')).toHaveLength(1);
     expect(b.querySelector('circle')!.getAttribute('aria-label')).toContain('2026-09-03');
     expect(b.querySelector('circle')!.getAttribute('tabindex')).toBe('0');

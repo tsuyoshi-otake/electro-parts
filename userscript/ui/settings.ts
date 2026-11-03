@@ -22,7 +22,7 @@ export const SETTINGS_CSS = `
 .eph dialog.settings label.field > span { display: block; font-size: 12px; color: var(--muted); }
 .eph dialog.settings select, .eph dialog.settings input[type="number"] { width: 100%; min-height: 32px; font-size: 13px; }
 .eph dialog.settings input[type="number"] { font: inherit; padding: 2px 6px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
-.eph dialog.settings .hint { margin: 6px 0 0; font-size: 11px; color: var(--muted); }
+.eph dialog.settings .hint { margin: 6px 0 0; font-size: 12px; color: var(--muted); }
 .eph dialog.settings .error { margin: 4px 0 0; font-size: 12px; color: var(--up); }
 .eph dialog.settings .actions { display: flex; justify-content: flex-end; }
 .eph dialog.settings .actions button { font: inherit; font-size: 13px; min-height: 32px; padding: 4px 14px; border: 1px solid var(--muted); border-radius: 4px; background: var(--chip); color: var(--fg); cursor: pointer; }
@@ -68,7 +68,8 @@ export function buildSettingsDialog(doc: Document, prefs: Preferences, handlers:
   const card = el(doc, 'select');
   card.dataset['focusKey'] = 'pref-fee-card';
   for (const preset of CARD_FEE_PRESETS) {
-    const option = el(doc, 'option', `${preset.label} ${formatFeePercent(preset.percent)}`);
+    // The rate leads: a narrow select cuts the end of the label, and the rate is what is chosen by.
+    const option = el(doc, 'option', `${formatFeePercent(preset.percent)}　${preset.label}`);
     option.value = preset.id;
     option.selected = preset.id === prefs.cardFee.cardId;
     card.appendChild(option);

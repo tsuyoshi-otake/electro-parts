@@ -14,7 +14,7 @@ import { formatFeePercent, type AppliedCardFee } from '../core/preferences.ts';
 export const YEN_CSS = `
 .eph .fx-recorded { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .eph .fx-recorded .delta { font-size: 12px; margin-left: 6px; }
-.eph .fx-note { margin-top: 10px; padding-top: 6px; border-top: 1px dashed var(--line-soft); font-size: 11px; color: var(--muted); }
+.eph .fx-note { margin-top: 10px; padding-top: 6px; border-top: 1px dashed var(--line-soft); font-size: 12px; color: var(--muted); }
 .eph .fx-note p { margin: 2px 0; }
 `;
 
