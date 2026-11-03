@@ -5,7 +5,7 @@ import type { YenConverter } from './yen.ts';
 
 export const RELATED_CSS = `
 .eph .comparison-heading { margin: 0 0 8px; font-size: 12px; font-weight: 700; }
-.eph .body.has-comparison { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; }
+.eph .body.has-comparison { --body-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; }
 .eph .stats-col { min-width: 0; container: store-summary / inline-size; }
 .eph .store-prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 12px; }
 .eph .store-price { min-width: 0; border-top: 1px solid var(--line); padding-top: 10px; overflow-wrap: anywhere; }
@@ -53,8 +53,6 @@ export const RELATED_CSS = `
 .eph circle:focus-visible { stroke: var(--fg); stroke-width: 2px; }
 .eph .series-controls input { accent-color: var(--accent); }
 @media (pointer: coarse) { .eph .series-controls label, .eph summary, .eph .related-card a { min-height: 44px; } }
-@media (max-width: 900px) { .eph .body.has-comparison { grid-template-columns: 1fr; } }
-@container (max-width: 700px) { .eph .body.has-comparison { grid-template-columns: 1fr; } }
 `;
 
 function node(doc: Document, tag: string, content: string, className = ''): HTMLElement {

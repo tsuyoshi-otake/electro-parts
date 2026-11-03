@@ -131,11 +131,20 @@ test('production bundle compares both directions and toggles a series with the k
   await expect.poll(() => panel(page).locator('.store-prices').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(1);
   await expect(panel(page).locator('.eph-comparison-chart')).toHaveAttribute('viewBox', /^0 0 3\d{2} 220$/);
   expect(await chartThenPrices()).toBe('above');
-  // A wide viewport with the panel in a narrow store column stacks the same way.
+  // A wide viewport with the panel in a store column stacks the same way (#71): side by side needs an inner
+  // width of 960px, which Akizuki's column has and Switch Science's 776px column does not.
   await page.setViewportSize({ width: 1440, height: 1100 });
-  await panel(page).evaluate(el => { (el as HTMLElement).style.width = '600px'; });
-  await expect.poll(chartThenPrices).toBe('above');
-  await panel(page).evaluate(el => { (el as HTMLElement).style.width = ''; });
+  const setPanelWidth = (width: string) => panel(page).evaluate((el, w) => { (el as HTMLElement).style.width = w; }, width);
+  const padding = await panel(page).evaluate(el => {
+    const section = el.shadowRoot!.querySelector('section')!;
+    const style = getComputedStyle(section);
+    return el.getBoundingClientRect().width - (section.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight));
+  });
+  for (const [width, expected] of [['776px', 'above'], [`${959 + padding}px`, 'above'], [`${960 + padding}px`, 'left']] as const) {
+    await setPanelWidth(width);
+    await expect.poll(chartThenPrices, { message: width }).toBe(expected);
+  }
+  await setPanelWidth('');
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(checkbox).not.toBeChecked();
   await expect(panel(page).locator('.eph-comparison-chart g[data-series]').nth(1)).toBeHidden();
