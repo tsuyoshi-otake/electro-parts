@@ -4,6 +4,8 @@ import type { StorePageAdapter } from '../core/types.ts';
 import { pageThemeCss } from '../ui/pageTheme.ts';
 
 const PATH=/^\/(?:collections\/[^/]+\/)?products\/([^/]+)\/?$/;
+/** The purchase column drops under the gallery here (measured 2026-11-03: one column at 768 px, beside it at 769 px). */
+const ONE_COLUMN='(max-width: 768px)';
 function handle(path:string):string|null {
   try {const m=PATH.exec(path);return m?decodeURIComponent(m[1]!):null;} catch{return null;}
 }
@@ -45,7 +47,18 @@ html[data-eph-page-theme="dark"] .m5product-detail * { box-shadow: none !importa
       return shopifyPageKey(M5STACK_STORE,fromPath);
     } catch{return null;}
   },
+  layoutQuery:ONE_COLUMN,
   findMountPoint(doc) {
+    // One column: the product form's last child, under add to cart and the
+    // payment buttons. Before the description it would sit below the "Also Add"
+    // upsell, 740-890 px under the button (measured 2026-11-03 at 390 and 768 px).
+    // Not after the form: the upsell script inserts itself right after the form
+    // once it loads, which is after we mount. Inside, the panel's controls stay in
+    // its shadow tree, so they are not the form's controls and never submit it.
+    // Picking a variant keeps the form and its children.
+    const form=doc.defaultView?.matchMedia?.(ONE_COLUMN).matches===true
+      ?doc.querySelector('.product-info-wrapper .product__content form.shopify-product-form'):null;
+    if(form) return {anchor:form,position:'append'};
     // Left column, directly below the image gallery and above the description,
     // as near the top as Akizuki's panel. The purchase column beside it is
     // absolutely positioned and comes earlier in DOM order, so inserting here

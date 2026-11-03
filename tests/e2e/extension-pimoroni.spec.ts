@@ -87,15 +87,33 @@ test('Pimoroni extension shows the GBP history with a cross-rate yen reference o
     await expect(panel).toContainText('£57.50');
     await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥11,500');
 
-    // One column below 1024 px: the panel follows the purchase box, inside the page width.
-    await page.setViewportSize({ width: 390, height: 844 });
-    const narrow = await page.evaluate(() => {
-      const host = document.querySelector('#electronics-price-history-root')!.getBoundingClientRect();
-      const purchase = document.querySelector('.product-page > .purchase')!.getBoundingClientRect();
-      return { afterPurchase: host.top >= purchase.bottom - 1, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+    // One column at 1024 px and below: the same panel moves right under the add-to-cart row,
+    // ahead of the cross-sell, inside the page width; it moves back when the page is two columns again.
+    const placement = () => page.evaluate(() => {
+      const host = document.querySelector('#electronics-price-history-root')!;
+      const box = host.getBoundingClientRect();
+      const button = document.querySelector('#add_to_cart .add-to-cart')!.getBoundingClientRect();
+      return {
+        afterAddToCart: host.previousElementSibling?.id === 'add_to_cart',
+        beforeCrossSell: Boolean(host.compareDocumentPosition(document.getElementById('options')!) & Node.DOCUMENT_POSITION_FOLLOWING),
+        nearButton: box.top >= button.bottom && box.top - button.bottom < 200,
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      };
     });
-    expect(narrow).toEqual({ afterPurchase: true, overflow: 0 });
+    const before = await panel.evaluateHandle((el) => el.shadowRoot);
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await expect.poll(placement).toEqual({ afterAddToCart: true, beforeCrossSell: true, nearButton: true, overflow: 0 });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect.poll(placement).toEqual({ afterAddToCart: true, beforeCrossSell: true, nearButton: true, overflow: 0 });
+    await panel.getByLabel('バリエーション').selectOption('54894104052091');
+    await expect(panel).toContainText('£82.50');
     await panel.screenshot({ path: 'test-results/e2e/pimoroni-narrow.png' });
+    await page.setViewportSize({ width: 1040, height: 900 });
+    await expect(page.locator('.product-page > #electronics-price-history-root + .about')).toBeAttached();
+    // Moved, not rebuilt: the chosen variant and the shadow tree stay.
+    await expect(panel).toContainText('£82.50');
+    expect(await panel.evaluate((el, root) => el.shadowRoot === root, before)).toBe(true);
+    await page.setViewportSize({ width: 390, height: 844 });
     await panel.getByRole('button', { name: 'ライト', exact: true }).click();
     await expect(page.locator('html')).not.toHaveAttribute('data-eph-page-theme', 'dark');
     await expect(page.locator('body')).toHaveCSS('background-color', light.body);

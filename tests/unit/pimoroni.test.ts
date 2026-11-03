@@ -91,6 +91,27 @@ describe('Pimoroni product page',()=>{
       } finally {dom.window.close();}
     }
   });
+  it('mounts right after the add-to-cart row while the page is one column, and before the description otherwise',()=>{
+    const url='https://shop.pimoroni.com/en-jp/products/presto';
+    const dom=new JSDOM(savedPage(),{url,virtualConsole:new VirtualConsole()});
+    try {
+      const doc=dom.window.document;
+      // The page's own breakpoint: its inline style drops `.product-page` to one column there.
+      expect(pimoroniPageAdapter.layoutQuery).toBe('screen and (max-width: 1024px)');
+      let oneColumn=true;
+      dom.window.matchMedia=((query:string)=>({matches:oneColumn&&query===pimoroniPageAdapter.layoutQuery})) as unknown as typeof dom.window.matchMedia;
+      const mount=pimoroniPageAdapter.findMountPoint(doc);
+      expect(mount?.anchor.id).toBe('add_to_cart');
+      expect(mount?.anchor.closest('.product-page > .purchase')).not.toBeNull();
+      expect(mount?.position).toBe('after');
+      expect(mount?.hostStyle).toBeUndefined();
+      // Ahead of the cross-sell and the newsletter that fill the rest of the purchase column.
+      for(const id of ['options','newsletter'])
+        expect(mount!.anchor.compareDocumentPosition(doc.getElementById(id)!)&dom.window.Node.DOCUMENT_POSITION_FOLLOWING,id).toBeTruthy();
+      oneColumn=false;
+      expect(pimoroniPageAdapter.findMountPoint(doc)?.anchor.classList.contains('about')).toBe(true);
+    } finally {dom.window.close();}
+  });
   it('rejects a canonical for another product or origin, and other markets',()=>{
     const url='https://shop.pimoroni.com/en-jp/products/presto';
     const dom=new JSDOM(savedPage(),{url,virtualConsole:new VirtualConsole()});

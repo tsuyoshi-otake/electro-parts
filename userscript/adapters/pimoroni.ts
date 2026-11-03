@@ -9,6 +9,8 @@ const HOSTNAME = 'shop.pimoroni.com';
  * either way. Other markets' copies are not matched.
  */
 const PATH = /^\/(?:en-jp\/)?(?:collections\/[^/]+\/)?products\/([^/]+)\/?$/;
+/** The product page's own breakpoint: `.product-page` drops to one column (its inline style). */
+const ONE_COLUMN = 'screen and (max-width: 1024px)';
 function handle(path: string): string | null {
   try { const m = PATH.exec(path); return m ? decodeURIComponent(m[1]!) : null; } catch { return null; }
 }
@@ -76,11 +78,22 @@ export const pimoroniPageAdapter: StorePageAdapter = {
       return shopifyPageKey(PIMORONI_STORE, fromPath);
     } catch { return null; }
   },
+  layoutQuery: ONE_COLUMN,
   findMountPoint(doc) {
-    // `.product-page` is a grid: the gallery and then the description in the
-    // left column, the sticky purchase column on the right. Before the
-    // description is the left column under the gallery; below 1024 px the grid
-    // is one column in DOM order, which puts the panel after the purchase box.
+    // One column: right after the add-to-cart row and its tax note, inside the
+    // purchase box. After the whole purchase column it would sit below the
+    // cross-sell and the newsletter, 1,400-1,600 px under the button (measured
+    // 2026-11-03 at 390 and 1024 px). Picking a variant keeps that box.
+    const addToCart = doc.defaultView?.matchMedia?.(ONE_COLUMN).matches === true
+      ? doc.querySelector('.product-page > .purchase #add_to_cart') : null;
+    if (addToCart) return { anchor: addToCart, position: 'after' };
+    // Two columns: `.product-page` is a grid with the gallery and then the
+    // description in the left column, the sticky purchase column on the right.
+    // Before the description is the left column under the gallery: once it is
+    // scrolled into view, add to cart sticks beside it (measured 2026-11-03 at
+    // 1280-1920 px). Not inside the purchase column: that column sticks at the
+    // top and is already taller than the screen, so the panel's lower half would
+    // stay out of view until the end of the product page.
     const about = doc.querySelector('.product-page > .about');
     if (about) return { anchor: about, position: 'before', hostStyle: { 'grid-column': '1' } };
     const purchase = doc.querySelector('.product-page > .purchase');

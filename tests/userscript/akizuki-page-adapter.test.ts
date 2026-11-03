@@ -73,4 +73,24 @@ describe('Akizuki page adapter', () => {
     h1.remove();
     expect(akizukiPageAdapter.findMountPoint(document)).toBeNull();
   });
+
+  it('mounts right after the purchase box on the smartphone page, which has no centre pane', () => {
+    // The store serves this page by user agent. Its detail block is one flex
+    // column (measured 2026-11-03): the purchase box is a direct item, followed
+    // by the history button, FAQ and overview.
+    document.body.replaceChildren();
+    const detail = document.createElement('div');
+    detail.className = 'block-goods-detail';
+    const sales = document.createElement('div');
+    sales.id = 'SalesArea';
+    const history = document.createElement('div');
+    history.className = 'block-goods-detail-history-btn';
+    detail.append(sales, history);
+    document.body.appendChild(detail);
+    expect(akizukiPageAdapter.findMountPoint(document)).toEqual({ anchor: sales, position: 'after' });
+    // The desktop page keeps the centre pane, whatever the width.
+    loadHtml(document, html);
+    expect(akizukiPageAdapter.findMountPoint(document)?.anchor.className).toContain('pane-goods-center');
+    expect(akizukiPageAdapter.layoutQuery).toBeUndefined();
+  });
 });

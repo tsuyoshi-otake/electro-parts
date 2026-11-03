@@ -61,6 +61,18 @@ describe('M5Stack full public catalogue',()=>{
       dom.window.document.querySelector('.product-main > .product-description')!.remove();
       expect(m5stackPageAdapter.findMountPoint(dom.window.document)?.anchor.classList.contains('product-wrapper')).toBe(true);
       expect(m5stackPageAdapter.findMountPoint(dom.window.document)?.position).toBe('after');
+      // One column (measured: 768 px and below): the product form's last child, inside the
+      // purchase column. The live page's upsell inserts itself right after the form later.
+      expect(m5stackPageAdapter.layoutQuery).toBe('(max-width: 768px)');
+      let oneColumn=true;
+      dom.window.matchMedia=((query:string)=>({matches:oneColumn&&query===m5stackPageAdapter.layoutQuery})) as unknown as typeof dom.window.matchMedia;
+      const narrow=m5stackPageAdapter.findMountPoint(dom.window.document);
+      expect(narrow?.anchor.matches('.product-info-wrapper .product__content form.shopify-product-form')).toBe(true);
+      expect(narrow?.anchor.querySelector('[id^="AddToCart"]')).not.toBeNull();
+      expect(narrow?.position).toBe('append');
+      expect(narrow?.hostStyle).toBeUndefined();
+      oneColumn=false;
+      expect(m5stackPageAdapter.findMountPoint(dom.window.document)?.anchor.classList.contains('product-wrapper')).toBe(true);
       dom.window.document.querySelector('link[rel=canonical]')!.setAttribute('href',url+'-different');
       expect(m5stackPageAdapter.extractPageKey(dom.window.document,dom.window.location)).toBeNull();
     } finally {dom.window.close();}

@@ -54,13 +54,52 @@ interface Panel {
   close(): void;
 }
 
+/**
+ * Puts the host at the mount point, carrying that mount point's declarations
+ * only (the controller is the one writer of the host's inline style). A host
+ * already there is left alone. A host already in the document moves with
+ * `moveBefore` where the browser has it, which keeps its state (focus, an open
+ * modal dialog); otherwise it is re-inserted.
+ */
 function insert(mount: MountPoint, node: HTMLElement): void {
   const { anchor, position } = mount;
+  node.removeAttribute('style');
   for (const [property, value] of Object.entries(mount.hostStyle ?? {})) node.style.setProperty(property, value);
-  if (position === 'append') anchor.appendChild(node);
-  else if (position === 'prepend') anchor.insertBefore(node, anchor.firstChild);
-  else if (position === 'before') anchor.parentNode?.insertBefore(node, anchor);
-  else anchor.parentNode?.insertBefore(node, anchor.nextSibling);
+  const parent = position === 'append' || position === 'prepend' ? anchor : anchor.parentNode;
+  if (parent === null) return;
+  const before = position === 'append' ? null : position === 'prepend' ? anchor.firstChild : position === 'before' ? anchor : anchor.nextSibling;
+  if (node.parentNode === parent && (before === node || node.nextSibling === before)) return;
+  const moveBefore = (parent as ParentNode & { moveBefore?: (node: Node, child: Node | null) => void }).moveBefore;
+  if (node.isConnected && typeof moveBefore === 'function') {
+    try {
+      moveBefore.call(parent, node, before);
+      return;
+    } catch { /* Refused (another document or shadow tree): re-insert below. */ }
+  }
+  parent.insertBefore(node, before);
+}
+
+/**
+ * Keeps the host where the adapter wants it when the page's layout switches:
+ * each time the adapter's layout query flips, its mount point is asked again.
+ * A host the page removed, or a layout with no mount point, stays as it is.
+ * Returns the stop.
+ */
+function followLayout(adapter: StorePageAdapter, doc: Document, node: HTMLElement, host: HostEnv): () => void {
+  const view = doc.defaultView;
+  if (adapter.layoutQuery === undefined || view === null || typeof view.matchMedia !== 'function') return () => undefined;
+  const query = view.matchMedia(adapter.layoutQuery);
+  const relocate = () => {
+    if (!node.isConnected) return;
+    try {
+      const mount = adapter.findMountPoint(doc);
+      if (mount !== null) insert(mount, node);
+    } catch (e) {
+      host.log('error', `panel could not follow the layout: ${(e as Error).message}`);
+    }
+  };
+  query.addEventListener('change', relocate);
+  return () => query.removeEventListener('change', relocate);
 }
 
 /** Resolves with the mount point, waiting (bounded) for late DOM if needed. */
@@ -202,6 +241,7 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       const shadow = hostEl.attachShadow({ mode: 'open' });
       insert(mount, hostEl);
       handle.mounted = true;
+      const stopFollowingLayout = followLayout(adapter, doc, hostEl, host);
       // The panel carries the theme switch; a reset offered while none was shown would only cover the page.
       pageTheme.withdrawLightReset();
       const ctx: PanelContext = {
@@ -224,7 +264,10 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       };
       const initialOffer = adapter.initialOfferId?.(options.location);
       if (initialOffer) ctx.selectedOfferId = initialOffer;
-      cleanup = () => ctx.cleanup?.();
+      cleanup = () => {
+        stopFollowingLayout();
+        ctx.cleanup?.();
+      };
       let current: LoadState = { kind: 'loading' };
       let selected: number | null = null;
       ctx.onSelectOffer = (id) => {
