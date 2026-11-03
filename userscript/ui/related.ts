@@ -5,13 +5,11 @@ import type { YenConverter } from './yen.ts';
 
 export const RELATED_CSS = `
 .eph .comparison-heading { margin: 0 0 8px; font-size: 12px; font-weight: 700; }
-.eph .body.has-comparison { --body-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; }
-.eph .stats-col { min-width: 0; container: store-summary / inline-size; }
-.eph .store-prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 12px; }
-.eph .store-price { min-width: 0; border-top: 1px solid var(--line); padding-top: 10px; overflow-wrap: anywhere; }
+.eph .stats-col { min-width: 0; }
+.eph .store-prices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 14px 20px; margin-top: 12px; }
+.eph .store-price, .eph .store-prices > .current-price { min-width: 0; border-top: 1px solid var(--line); padding-top: 10px; overflow-wrap: anywhere; }
 .eph .store-price > a { display: block; font-size: 12px; line-height: 1.5; margin-bottom: 6px; }
 .eph .store-price .related-meta, .eph .store-price .comparison-note { line-height: 1.5; }
-@container store-summary (max-width: 399px) { .eph .store-prices { grid-template-columns: 1fr; } }
 .eph .store-price .hero-value { font-size: 22px; margin: 3px 0; }
 .eph .store-order { margin-top: 12px; }
 .eph .store-prices-more { margin-top: 8px; }
@@ -150,15 +148,18 @@ function storePriceRow(doc: Document, current: ProductFileV1, segment: SegmentV1
 }
 
 /**
- * Verified identity rows beside the current price, in stock first and cheapest recorded price first,
- * the first few shown and the rest folded. Eligibility still controls subtraction and the 最安 badge.
+ * Verified identity rows after the viewed store's card (`lead`), in stock first and cheapest recorded
+ * price first, the first few shown and the rest folded. The cards share one grid that wraps by width,
+ * so the viewed store and the others sit side by side when the panel has room. Eligibility still
+ * controls subtraction and the 最安 badge.
  */
-export function renderStorePrices(doc: Document, parent: HTMLElement, current: ProductFileV1, segment: SegmentV1, entries: readonly RelatedEntry[], label: (id: string) => string, ownFresh: boolean, yen?: YenConverter): void {
+export function renderStorePrices(doc: Document, parent: HTMLElement, lead: HTMLElement, current: ProductFileV1, segment: SegmentV1, entries: readonly RelatedEntry[], label: (id: string) => string, ownFresh: boolean, yen?: YenConverter): void {
   const rows = orderStorePrices(entries.filter((e) => e.relation.kind === 'same_product' && e.relation.reviewStatus === 'verified'));
-  if (!rows.length) return;
+  if (!rows.length) { parent.appendChild(lead); return; }
   const cheapest = ownFresh ? cheapestComparable(current, segment, rows) : new Set<string>();
-  if (rows.length > 1) parent.appendChild(node(doc, 'div', '在庫ありの店舗を先に、記録価格の安い順に表示しています。', 'related-meta store-order'));
+  if (rows.length > 1) parent.appendChild(node(doc, 'div', '他店は在庫ありの店舗を先に、記録価格の安い順に表示しています。', 'related-meta store-order'));
   const grid = node(doc, 'div', '', 'store-prices');
+  grid.appendChild(lead);
   for (const entry of rows.slice(0, VISIBLE_STORE_PRICES)) grid.appendChild(storePriceRow(doc, current, segment, entry, label, ownFresh, cheapest.has(entry.relation.id), yen));
   parent.appendChild(grid);
   const rest = rows.slice(VISIBLE_STORE_PRICES);

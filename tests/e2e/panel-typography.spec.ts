@@ -33,7 +33,7 @@ test('the panel keeps its own typography under store CSS that styles its host', 
     await page.goto('https://shop.m5stack.com/products/m5stamp-lora-module-sx1262');
     await page.addStyleTag({ content: STORE_LIKE_CSS });
     const panel = page.locator('#electronics-price-history-root');
-    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥868');
+    await expect(panel.locator('.current-price > .hero-value')).toHaveText('約 ￥868');
     // The host itself does take the store's font: that is the leak the panel must not inherit.
     await expect(panel).toHaveCSS('font-family', '"Courier New", monospace');
     const section = panel.locator('section.eph');

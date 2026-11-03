@@ -391,7 +391,7 @@ describe('panel yen reference', () => {
     expect(row?.querySelector('.fx-recorded')?.textContent).toBe('記録価格 $5.50');
     expect(row?.textContent).toContain('送料・関税別のため円の店舗の後に表示');
     // The viewed yen price is untouched and no cheapest claim is made across currencies.
-    expect(shadow.querySelector('.stats-col > .hero-value')?.textContent).toContain('￥1,200');
+    expect(shadow.querySelector('.current-price > .hero-value')?.textContent).toContain('￥1,200');
     expect(row?.querySelector('.badge.cheapest')).toBeNull();
     expect(shadow.querySelector('.fx-note')?.textContent).toContain('1 USD = 157.82円');
     expect(get.mock.calls.map(([currency]) => currency)).toEqual(['USD']);
