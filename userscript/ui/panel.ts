@@ -58,6 +58,12 @@ function shownQuantities(inventory: InventoryV1): boolean {
  * Page CSS that matches the host element outranks `:host`, and the panel would
  * inherit the store's font from it. `.eph` therefore starts from `all: initial`
  * and sets its own text properties; no page selector reaches inside the shadow root.
+ *
+ * The chart and the statistics sit side by side only when the panel's inner width
+ * is at least 960px (Akizuki's 1,080px column). Store columns such as Switch Science
+ * (776px) or M5Stack (860px) stack them, chart first. The breakpoint lives here only:
+ * the comparison layout sets its column ratio through `--body-columns`. The 900px
+ * media query covers browsers without container queries (Chrome 102–104).
  */
 export const PANEL_CSS = `
 :host { all: initial; display: block; }
@@ -97,9 +103,9 @@ export const PANEL_CSS = `
 .basis { font-size: 12px; color: var(--muted); }
 .eph select { font: inherit; font-size: 12px; max-width: 100%; min-width: 0; padding: 2px 4px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
 
-.body { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(250px, 1fr); gap: 4px 26px; align-items: start; padding-top: 12px; }
+.body { display: grid; grid-template-columns: var(--body-columns, minmax(0, 1.75fr) minmax(250px, 1fr)); gap: 4px 26px; align-items: start; padding-top: 12px; }
 @media (max-width: 900px) { .body { grid-template-columns: 1fr; } }
-@container (max-width: 700px) { .body { grid-template-columns: 1fr; } }
+@container (max-width: 959px) { .body { grid-template-columns: 1fr; } }
 .chart-box { min-width: 0; min-height: 90px; }
 .eph svg { display: block; width: 100%; height: auto; }
 .eph .eph-grid { stroke: var(--line-soft); stroke-width: 1; }
