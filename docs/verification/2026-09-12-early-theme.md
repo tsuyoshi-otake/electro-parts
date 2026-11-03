@@ -10,4 +10,4 @@ The extension previously ran at document_idle, causing light page content to ren
 - Verify: non-E2E suite and all three TypeScript projects. Expect: pass. 462 tests passed (`4ff747099c710fc5184ce6bb0fe9361c`); all typechecks passed.
 - Verify: close browsers in finally, list matching browser/runner processes. Expect: zero survivors. Passed. Updated `dist/chrome-local-0.4.7-181818` from the verified ZIP; content SHA256 matches `35D36D56D51A21E0D8517D6BB2F64D62184770C13C0A7B6BA44A088A5BDF8BF3`.
 
-Temporary scripts and evidence: `C:/Users/developer/tmp/electro-ui047/verify-early-theme.cjs`, `early-theme-verified/`, `check-first-paint.cjs`. Normal Chrome reload is manual. Not deployed or submitted to the store.
+Temporary scripts and evidence: `~/tmp/electro-ui047/verify-early-theme.cjs`, `early-theme-verified/`, `check-first-paint.cjs`. Normal Chrome reload is manual. Not deployed or submitted to the store.

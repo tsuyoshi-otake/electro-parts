@@ -60,6 +60,18 @@ jobs:
             echo "::error::store-specific names found in the common core"; exit 1
           fi
 
+      - name: Tracked files must not hold local user paths
+        run: |
+          set -euo pipefail
+          # The repository is public. Evidence kept on a developer's machine is
+          # cited as ~/tmp/..., never by its absolute path. Naming the bare
+          # pattern (C:\Users with no directory after it) is allowed.
+          hits=$(git grep -nIE 'C:[\\/]+Users[\\/]+[A-Za-z0-9._~-]' -- . || true)
+          if [ -n "$hits" ]; then
+            echo "$hits"
+            echo "::error::local user paths found in tracked files; cite them as ~/tmp/..."; exit 1
+          fi
+
       - name: Build userscript
         run: |
           node --import tsx scripts/build-userscript.ts --out dist/site

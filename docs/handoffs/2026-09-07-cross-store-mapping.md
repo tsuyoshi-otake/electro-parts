@@ -64,4 +64,4 @@
 4. 価格比較承認を増やす場合は両店の商品ページで販売数量・セット構成・付属品・税・offer ID・対象variantを確認し、別の承認として記録する。保存カタログの型番一致だけでは承認不可。現在価格・最安・代替互換性を保証しない。
 5. 今後も検証は実装担当自身が行う。GitHub操作は `gh` のみ。依存は7日以上経過した版、lockfile維持。ブラウザはChrome優先、ローカルで不要な独立headless/SwiftShaderを起動しない。
 
-補助的なローカル資料は `C:\Users\developer\tmp\electro-parts-matching\`。`verify-release-v041.mts`、`published-before-v041.json`、`release-verification-v041.json`、`ci-v041-initial/` のスクリーンショット等。引継ぎの正本はこの文書とリポジトリ内の根拠ファイルであり、一時フォルダーの存続には依存しない。
+補助的なローカル資料は `~/tmp/electro-parts-matching/`。`verify-release-v041.mts`、`published-before-v041.json`、`release-verification-v041.json`、`ci-v041-initial/` のスクリーンショット等。引継ぎの正本はこの文書とリポジトリ内の根拠ファイルであり、一時フォルダーの存続には依存しない。

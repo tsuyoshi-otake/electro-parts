@@ -32,5 +32,5 @@
 
 ## 証跡
 
-`C:/Users/developer/tmp/electro-m5stack/` にrobots.txt、サイトマップ、一覧JSON3ページ、商品HTML1件、research.cjs、summary.json、summary-normalized.jsonを保存。
+`~/tmp/electro-m5stack/` にrobots.txt、サイトマップ、一覧JSON3ページ、商品HTML1件、research.cjs、summary.json、summary-normalized.jsonを保存。
 初回TKW run `8f4384b2a228539ca861d8584342b0b8` はURLエンコード差の検査でexit 1。ネットワーク再取得はせず、保存データで正規化を適用した検査がexit 0、差分0件となった。調査用nodeプロセス残存0件を確認。実装テストやブラウザー検証を完了したという意味ではない。
