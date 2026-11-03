@@ -182,12 +182,24 @@ describe('Chrome Web Store dashboard texts', () => {
     }
   });
 
-  it('names every site the content script runs on', async () => {
-    const { description, hostReason } = await texts();
+  it('names every site the content script runs on in the host permission reason', async () => {
+    const { hostReason } = await texts();
     expect(contentScriptHosts.length).toBeGreaterThan(0);
     for (const host of contentScriptHosts) {
-      expect(description, `description: ${host}`).toContain(host);
       expect(hostReason, `host permission reason: ${host}`).toContain(host);
+    }
+  });
+
+  // 0.7.2 was rejected (Yellow Argon, excessive keywords) for listing every store
+  // with its domain in the description and every store in the manifest description.
+  it('keeps the list of sites out of the public descriptions', async () => {
+    const { description } = await texts();
+    for (const host of contentScriptHosts) {
+      expect(description, `description: ${host}`).not.toContain(host);
+    }
+    // The store names the rejected manifest description listed.
+    for (const name of ['秋月電子通商', 'スイッチサイエンス', 'M5Stack', 'Raspberry Pi Shop by KSY', 'せんごく', 'Pimoroni']) {
+      expect(EXTENSION_DESCRIPTION, `manifest description: ${name}`).not.toContain(name);
     }
   });
 
