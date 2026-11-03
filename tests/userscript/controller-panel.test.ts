@@ -587,3 +587,222 @@ describe('history panel controller on pages that change the product in place', (
     expect(document.querySelector('h1')?.textContent).toBe('Test Part');
   });
 });
+
+/**
+ * A `matchMedia` for one query whose result the test flips. jsdom has none;
+ * the list's listeners are a real EventTarget's.
+ */
+function switchableMedia(matches: boolean) {
+  const list = Object.assign(new EventTarget(), { matches, media: '' });
+  const listeners = new Set<EventListenerOrEventListenerObject | null>();
+  const add = list.addEventListener.bind(list);
+  const remove = list.removeEventListener.bind(list);
+  list.addEventListener = (type, listener, options) => { listeners.add(listener); add(type, listener, options); };
+  list.removeEventListener = (type, listener, options) => { listeners.delete(listener); remove(type, listener, options); };
+  const asked: string[] = [];
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    value: (query: string) => {
+      asked.push(query);
+      return Object.assign(list, { media: query });
+    },
+  });
+  return {
+    asked,
+    listening: () => listeners.size,
+    flip(value: boolean) {
+      list.matches = value;
+      list.dispatchEvent(new Event('change'));
+    },
+    uninstall() {
+      delete (window as { matchMedia?: unknown }).matchMedia;
+    },
+  };
+}
+
+/** Narrow: after `#narrow`. Wide: after `#buy`, claiming the grid's columns. Counts its calls. */
+function layoutAdapter(): StorePageAdapter & { calls: number } {
+  const adapter = {
+    ...testAdapter,
+    calls: 0,
+    layoutQuery: '(max-width: 600px)',
+    findMountPoint(d: Document) {
+      adapter.calls++;
+      return d.defaultView?.matchMedia?.('(max-width: 600px)').matches === true
+        ? { anchor: d.getElementById('narrow')!, position: 'after' as const }
+        : { anchor: d.getElementById('buy')!, position: 'after' as const, hostStyle: { 'grid-column': '1 / -1' } };
+    },
+  };
+  return adapter;
+}
+
+function layoutPage(): void {
+  page();
+  const narrow = document.createElement('div');
+  narrow.id = 'narrow';
+  document.body.insertBefore(narrow, document.querySelector('h1'));
+}
+
+describe('history panel controller across the page layout switch', () => {
+  it('moves the same panel to the adapter\'s other place each time the layout query flips, with that place\'s declarations only', async () => {
+    layoutPage();
+    const media = switchableMedia(false);
+    try {
+      const host = hostWithData();
+      const handle = await mount(host, { adapters: [layoutAdapter()] });
+      const el = document.getElementById(HOST_ELEMENT_ID)!;
+      const shadow = el.shadowRoot;
+      const requests = host.requests.length;
+      expect(media.asked).toContain('(max-width: 600px)');
+      expect(el.previousElementSibling?.id).toBe('buy');
+      expect(el.style.getPropertyValue('grid-column')).toBe('1 / -1');
+
+      media.flip(true);
+      expect(el.previousElementSibling?.id).toBe('narrow');
+      expect(el.getAttribute('style') ?? '').toBe('');
+      media.flip(false);
+      expect(el.previousElementSibling?.id).toBe('buy');
+      expect(el.style.getPropertyValue('grid-column')).toBe('1 / -1');
+      // Moved, not rebuilt: the same host and shadow tree, no new requests.
+      expect(document.getElementById(HOST_ELEMENT_ID)).toBe(el);
+      expect(el.shadowRoot).toBe(shadow);
+      expect(shadowText()).toContain('￥1,200');
+      expect(host.requests).toHaveLength(requests);
+      handle.destroy();
+    } finally { media.uninstall(); }
+  });
+
+  it('leaves the page untouched when the place has not changed, and asks nothing of adapters without a layout query', async () => {
+    layoutPage();
+    const media = switchableMedia(false);
+    try {
+      const adapter = { ...layoutAdapter(), findMountPoint: (d: Document) => ({ anchor: d.getElementById('buy')!, position: 'after' as const }) };
+      const handle = await mount(hostWithData(), { adapters: [adapter] });
+      const observer = new MutationObserver(() => undefined);
+      observer.observe(document.body, { childList: true, subtree: true });
+      media.flip(true);
+      expect(observer.takeRecords()).toEqual([]);
+      observer.disconnect();
+      handle.destroy();
+
+      layoutPage();
+      media.asked.length = 0;
+      const plain = await mount(hostWithData());
+      expect(plain.mounted).toBe(true);
+      expect(media.asked).toEqual([]);
+      expect(media.listening()).toBe(0);
+      plain.destroy();
+    } finally { media.uninstall(); }
+  });
+
+  it('moves a host in the document with moveBefore where the browser has it, and re-inserts it when that is refused', async () => {
+    layoutPage();
+    const media = switchableMedia(false);
+    const proto = Element.prototype as { moveBefore?: (node: Node, child: Node | null) => void };
+    expect(proto.moveBefore).toBeUndefined();
+    const moved: Node[] = [];
+    let refuse = false;
+    proto.moveBefore = function (this: Element, node: Node, child: Node | null) {
+      if (refuse) throw new DOMException('refused', 'HierarchyRequestError');
+      moved.push(node);
+      this.insertBefore(node, child);
+    };
+    try {
+      const handle = await mount(hostWithData(), { adapters: [layoutAdapter()] });
+      const el = document.getElementById(HOST_ELEMENT_ID)!;
+      // The first insertion is not a move.
+      expect(moved).toEqual([]);
+      media.flip(true);
+      expect(moved).toEqual([el]);
+      expect(el.previousElementSibling?.id).toBe('narrow');
+      refuse = true;
+      media.flip(false);
+      expect(el.previousElementSibling?.id).toBe('buy');
+      expect(moved).toEqual([el]);
+      handle.destroy();
+    } finally {
+      delete proto.moveBefore;
+      media.uninstall();
+    }
+  });
+
+  it('opens the settings dialog as a modal again and gives focus back when the host had to be re-inserted', async () => {
+    // A browser without moveBefore (jsdom too) re-inserts the host, which drops a
+    // modal out of the top layer and loses focus while the dialog stays open.
+    layoutPage();
+    const media = switchableMedia(false);
+    const proto = HTMLDialogElement.prototype as { showModal?: () => void };
+    expect(proto.showModal).toBeUndefined();
+    const modals: HTMLDialogElement[] = [];
+    proto.showModal = function (this: HTMLDialogElement) {
+      if (this.open) throw new DOMException('already open', 'InvalidStateError');
+      modals.push(this);
+      this.setAttribute('open', '');
+    };
+    try {
+      const host = hostWithData();
+      const handle = await mount(host, { adapters: [layoutAdapter()] });
+      const el = document.getElementById(HOST_ELEMENT_ID)!;
+      const shadow = el.shadowRoot!;
+      shadow.querySelector<HTMLButtonElement>('.settings-button')!.click();
+      const dialog = shadow.querySelector<HTMLDialogElement>('dialog.settings')!;
+      expect(modals).toEqual([dialog]);
+      const fee = dialog.querySelector<HTMLInputElement>('[data-focus-key="pref-fee-enabled"]')!;
+      fee.focus();
+
+      media.flip(true);
+      expect(el.previousElementSibling?.id).toBe('narrow');
+      expect(modals).toEqual([dialog, dialog]);
+      expect(dialog.open).toBe(true);
+      expect(shadow.activeElement).toBe(fee);
+      // Still open as far as the panel knows: the re-render a change causes rebuilds it open.
+      fee.checked = true;
+      fee.dispatchEvent(new Event('change'));
+      await vi.waitFor(() => expect(JSON.parse(host.store.get(PREFERENCES_STORAGE_KEY) ?? '{}')).toMatchObject({ cardFee: { enabled: true } }));
+      const rebuilt = shadow.querySelector<HTMLDialogElement>('dialog.settings')!;
+      expect(rebuilt).not.toBe(dialog);
+      expect(modals.at(-1)).toBe(rebuilt);
+      expect(rebuilt.open).toBe(true);
+
+      // A closed dialog stays closed through a move.
+      shadow.querySelector<HTMLButtonElement>('[data-focus-key="pref-close"]')!.click();
+      const opened = modals.length;
+      media.flip(false);
+      expect(el.previousElementSibling?.id).toBe('buy');
+      expect(modals).toHaveLength(opened);
+      expect(shadow.querySelector<HTMLDialogElement>('dialog.settings')!.open).toBe(false);
+      handle.destroy();
+    } finally {
+      delete proto.showModal;
+      media.uninstall();
+    }
+  });
+
+  it('stops following once the panel is closed, never puts back a host the page removed, and logs an adapter that throws', async () => {
+    layoutPage();
+    const media = switchableMedia(false);
+    try {
+      const host = hostWithData();
+      const adapter = layoutAdapter();
+      const handle = await mount(host, { adapters: [adapter] });
+      const el = document.getElementById(HOST_ELEMENT_ID)!;
+      expect(media.listening()).toBe(1);
+
+      const original = adapter.findMountPoint;
+      adapter.findMountPoint = () => { throw new Error('boom'); };
+      expect(() => media.flip(true)).not.toThrow();
+      expect(host.logs).toContain('error: panel could not follow the layout: boom');
+      expect(el.previousElementSibling?.id).toBe('buy');
+      adapter.findMountPoint = original;
+
+      el.remove(); // the page rebuilt that part of itself
+      const calls = adapter.calls;
+      media.flip(false);
+      expect(el.isConnected).toBe(false);
+      expect(adapter.calls).toBe(calls);
+
+      handle.destroy();
+      expect(media.listening()).toBe(0);
+    } finally { media.uninstall(); }
+  });
+});

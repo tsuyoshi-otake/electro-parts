@@ -83,6 +83,13 @@ html[data-eph-page-theme="dark"] :is(.block-goods-favorite--btn, .block-add-cart
     // pane is a plain 1080px block that starts exactly where we want to be.
     const center = doc.querySelector('.pane-goods-center');
     if (center !== null) return { anchor: center, position: 'prepend' };
+    // The smartphone page (the store picks it by user agent, not by width) has
+    // no centre pane: its detail block is one flex column with the purchase box
+    // `#SalesArea` as a direct item. Right after it is under the add-to-cart
+    // button; appended to the column the panel sat below the FAQ, overview and
+    // maker links, 1,130 px under the button (measured 2026-11-03 at 390 px).
+    const phoneSales = doc.querySelector('.block-goods-detail > #SalesArea');
+    if (phoneSales !== null) return { anchor: phoneSales, position: 'after' };
     const detail = doc.querySelector('.block-goods-detail');
     if (detail !== null) return { anchor: detail, position: 'append', hostStyle: FULL_WIDTH };
     const sales = doc.getElementById('SalesArea');

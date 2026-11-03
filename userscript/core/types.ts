@@ -43,6 +43,13 @@ export interface StorePageAdapter {
    */
   watchPageKey?(doc: Document, onChange: (pageKey: string | null) => void): () => void;
   findMountPoint(doc: Document): MountPoint | null;
+  /**
+   * A media query whose result changes `findMountPoint`'s answer, such as the
+   * width at which the store's product page drops to one column. While a panel
+   * is shown, the controller asks `findMountPoint` again whenever the query's
+   * result flips and moves the panel there. Without it the place is found once.
+   */
+  readonly layoutQuery?: string;
   initialOfferId?(location: { search?: string }): string | undefined;
 }
 

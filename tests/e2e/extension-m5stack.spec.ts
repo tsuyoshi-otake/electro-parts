@@ -72,7 +72,26 @@ test('M5Stack extension selects USD variants, shows a daily yen reference and pr
     await expect(panel.locator('.stats-col > .fx-recorded')).toContainText('カード手数料 1.6%込み');
     await expect(panel.locator('.fx-note')).toContainText('JCBカード（JCB発行）');
     expect(rateRequests).toEqual(['https://open.er-api.com/v6/latest/USD']);
+    // One column at 768 px and below: the same panel moves to the end of the product form (under add to cart),
+    // and an open settings dialog stays open and modal through the move.
+    await panel.getByRole('button',{name:'設定',exact:true}).click();
+    await expect(dialog).toBeVisible();
+    await page.setViewportSize({width:768,height:900});
+    await expect(page.locator('.product__content form.shopify-product-form > #electronics-price-history-root:last-child')).toBeAttached();
+    await expect(dialog).toBeVisible();
+    expect(await dialog.evaluate(el=>el.matches(':modal'))).toBe(true);
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await page.setViewportSize({width:769,height:900});
+    await expect(page.locator('.product-main > #electronics-price-history-root + .product-description')).toBeAttached();
     await page.setViewportSize({width:390,height:844});
+    await expect(page.locator('.product__content form.shopify-product-form > #electronics-price-history-root:last-child')).toBeAttached();
+    // The live shop's upsell inserts itself right after the form once its script loads: it lands below the panel.
+    expect(await page.evaluate(()=>{
+      const widget=document.createElement('div');widget.id='productBoughtTogether';widget.style.height='400px';
+      document.querySelector('.product__content form.shopify-product-form')!.after(widget);
+      return document.getElementById('electronics-price-history-root')!.getBoundingClientRect().bottom<=widget.getBoundingClientRect().top;
+    })).toBe(true);
     await panel.getByLabel('バリエーション').selectOption('50308212326657');
     await expect(panel).toContainText('$7.95');
     const bounds=await panel.getByLabel('バリエーション').boundingBox();
