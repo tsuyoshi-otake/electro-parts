@@ -16,7 +16,7 @@ import {
   type ProductFileV1,
 } from '../../src/publisher/contract.ts';
 import { datasetVersionOf, generateStoreDataset, type GenerateOptions } from '../../src/publisher/generate.ts';
-import { DatasetVerificationError, resolveInside, verifyStoreDataset, writeStoreDataset } from '../../src/publisher/write.ts';
+import { DatasetVerificationError, renameRetryingLocks, resolveInside, verifyStoreDataset, writeStoreDataset } from '../../src/publisher/write.ts';
 import { day, dayMs, quote, SYNTHETIC_CAPABILITIES, syntheticSnapshot, type SyntheticProduct } from '../helpers/synthetic.ts';
 
 const caps = SYNTHETIC_CAPABILITIES;
@@ -265,6 +265,34 @@ describe('writeStoreDataset / verifyStoreDataset', () => {
     await writeStoreDataset(dir, second);
     const verified = await verifyStoreDataset(dir, 'synthetic');
     expect(verified.productCount).toBe(1);
+  });
+
+  it('retries a rename Windows refuses while a scanner holds new files, a bounded number of times', async () => {
+    const locked = Object.assign(new Error('EPERM: operation not permitted, rename'), { code: 'EPERM' });
+    const waits: number[] = [];
+    let calls = 0;
+    const flaky = async () => {
+      calls++;
+      if (calls < 3) throw locked;
+    };
+    const deps = { sleep: async (ms: number) => { waits.push(ms); }, random: () => 1 };
+    await renameRetryingLocks('a', 'b', { ...deps, rename: flaky, platform: 'win32' });
+    expect(calls).toBe(3);
+    expect(waits).toEqual([50, 100]);
+
+    // Bounded: the eighth refusal is the caller's.
+    calls = 0;
+    waits.length = 0;
+    await expect(renameRetryingLocks('a', 'b', { ...deps, rename: async () => { calls++; throw locked; }, platform: 'win32' })).rejects.toBe(locked);
+    expect(calls).toBe(8);
+    expect(waits).toEqual([50, 100, 200, 400, 800, 1600, 3200]);
+
+    // Other platforms and other errors fail on the first attempt.
+    for (const [platform, error] of [['linux', locked], ['win32', Object.assign(new Error('ENOENT'), { code: 'ENOENT' })]] as const) {
+      calls = 0;
+      await expect(renameRetryingLocks('a', 'b', { ...deps, rename: async () => { calls++; throw error; }, platform })).rejects.toBe(error);
+      expect(calls).toBe(1);
+    }
   });
 
   it('never writes outside the site root', () => {
