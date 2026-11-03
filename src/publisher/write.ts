@@ -37,6 +37,37 @@ export function resolveInside(root: string, relative: string): string {
   return target;
 }
 
+export interface RenameRetry {
+  rename: (from: string, to: string) => Promise<void>;
+  sleep: (ms: number) => Promise<void>;
+  platform: NodeJS.Platform;
+  random: () => number;
+}
+
+const LOCK_CODES = new Set(['EPERM', 'EACCES', 'EBUSY']);
+const RENAME_ATTEMPTS = 8;
+
+/**
+ * Renames, retrying while Windows holds a just-written file open. An on-access
+ * scanner can lock files for a few seconds after they are written, and the
+ * rename of the freshly built store then fails with EPERM although nothing in
+ * this process holds it. The retry is bounded (8 attempts, exponential backoff
+ * with jitter, about 13 s at most); other platforms and other errors fail at once.
+ */
+export async function renameRetryingLocks(from: string, to: string, deps: Partial<RenameRetry> = {}): Promise<void> {
+  const { rename: move = rename, sleep = (ms) => new Promise<void>((resolve) => setTimeout(resolve, ms)), platform = process.platform, random = Math.random } = deps;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      await move(from, to);
+      return;
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (platform !== 'win32' || code === undefined || !LOCK_CODES.has(code) || attempt >= RENAME_ATTEMPTS) throw error;
+      await sleep(Math.round(50 * 2 ** (attempt - 1) * (0.5 + random() / 2)));
+    }
+  }
+}
+
 /**
  * Writes one store's dataset under `siteRoot` (the directory later uploaded
  * to Pages). The store directory is built next to its final location and
@@ -74,7 +105,7 @@ export async function writeStoreDataset(siteRoot: string, dataset: StoreDataset)
 
   await mkdir(path.dirname(finalDir), { recursive: true });
   await rm(finalDir, { recursive: true, force: true });
-  await rename(stagingDir, finalDir);
+  await renameRetryingLocks(stagingDir, finalDir);
   return { storeDir: finalDir, productCount: dataset.products.length, bytesTotal, bytesMax };
 }
 

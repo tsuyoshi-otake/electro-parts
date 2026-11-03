@@ -42,6 +42,13 @@ async function setup(page: Page, source: 0 | 1, failure = false, selected = rela
   });
   await page.route('**/*', async (route) => {
     const url = route.request().url();
+    // The daily rate for the USD row is its own request, outside the history load counts.
+    if (new URL(url).hostname === 'open.er-api.com') {
+      const last = Math.floor(Date.now() / 1000) - 3600;
+      await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify({ result: 'success', base_code: 'USD', time_last_update_unix: last, time_next_update_unix: last + 86400, rates: { USD: 1, JPY: 150, GBP: 0.75 } }) });
+      return;
+    }
     if (url === currentRef.url) {
       const body = '<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Comparison fixture</title><style>body{margin:20px auto;padding:0 12px;max-width:1080px;font-family:system-ui}</style><h1>ATOM Lite — test fixture</h1><button>カートに入れる</button><div class="product--outer"></div><div class="pane-goods-center"></div></html>';
       await route.fulfill({ status: 200, contentType: 'text/html', body }); return;
@@ -78,15 +85,15 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(panel(page)).toContainText('記録価格差（他店 − 閲覧中） −￥200');
   await expect(panel(page)).not.toContainText('読み込み中');
   await panel(page).scrollIntoViewIfNeeded();
-  await expect(panel(page).locator('g[data-series]')).toHaveCount(2);
-  await expect(panel(page).locator('g[data-series]').nth(1).locator('circle')).toHaveCount(1);
+  await expect(panel(page).locator('.eph-comparison-chart g[data-series]')).toHaveCount(2);
+  await expect(panel(page).locator('.eph-comparison-chart g[data-series]').nth(1).locator('circle')).toHaveCount(1);
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-desktop-light.png' });
   await panel(page).getByRole('button', { name: 'ダーク', exact: true }).click();
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-desktop-dark.png' });
   const checkbox = panel(page).getByRole('checkbox', { name: 'スイッチサイエンス', exact: true });
   await checkbox.focus(); await page.keyboard.press('Space');
   await expect(checkbox).not.toBeChecked();
-  await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
+  await expect(panel(page).locator('.eph-comparison-chart g[data-series]').nth(1)).toBeHidden();
   await expect(checkbox).toBeFocused();
   // The same ATOM Lite at せんごく (0.6.1) is a third identity card, a reference price without arithmetic.
   await expect(panel(page).locator('.store-price')).toHaveCount(3);
@@ -104,6 +111,11 @@ test('production bundle compares both directions and toggles a series with the k
   expect(Math.abs(cardBounds[0]!.y - cardBounds[1]!.y)).toBeLessThan(2);
   expect(cardBounds[1]!.x).toBeGreaterThan(cardBounds[0]!.x + cardBounds[0]!.width);
   await expect(panel(page)).toContainText('$7.50');
+  // The USD row reads in yen beside its recorded price; the rate note names the source.
+  await expect(panel(page).locator('.store-price').nth(2).locator('.hero-value')).toHaveText('約 ￥1,125');
+  await expect(panel(page).locator('.store-price').nth(2).locator('.fx-recorded')).toHaveText('記録価格 $7.50');
+  await expect(panel(page).locator('.fx-note')).toContainText('1 USD = 150.00円');
+  await expect(panel(page).locator('.fx-note a')).toHaveText('Rates By Exchange Rate API');
   // The chart comes first at every width: left of the store prices here, above them when stacked.
   const chartThenPrices = () => panel(page).evaluate(el => {
     const root = el.shadowRoot!;
@@ -126,9 +138,9 @@ test('production bundle compares both directions and toggles a series with the k
   await panel(page).evaluate(el => { (el as HTMLElement).style.width = ''; });
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(checkbox).not.toBeChecked();
-  await expect(panel(page).locator('g[data-series]').nth(1)).toBeHidden();
+  await expect(panel(page).locator('.eph-comparison-chart g[data-series]').nth(1)).toBeHidden();
   await checkbox.check();
-  await expect(panel(page).locator('g[data-series]').nth(1)).toBeVisible();
+  await expect(panel(page).locator('.eph-comparison-chart g[data-series]').nth(1)).toBeVisible();
   expect(requests).toHaveLength(13);
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-mobile.png' });
   const overflow = await panel(page).evaluate((el) => {

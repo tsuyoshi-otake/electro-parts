@@ -1,3 +1,4 @@
+import type { ProductFileV1 } from '../../src/publisher/contract.ts';
 import type { DataClient, LoadState } from './dataClient.ts';
 import type { ExchangeRateClient } from './exchangeRate.ts';
 import type { HostEnv, MountPoint, StorePageAdapter } from './types.ts';
@@ -5,6 +6,7 @@ import { renderPanel, type PanelContext } from '../ui/panel.ts';
 import { createPageTheme } from '../ui/pageTheme.ts';
 import { relatedEntries, relationProductKey, type ProductRelation } from './relations.ts';
 import { matchesUrlPattern } from './urlPattern.ts';
+import { parsePreferences, PREFERENCES_STORAGE_KEY, serializePreferences, type Preferences } from './preferences.ts';
 
 /**
  * Page lifecycle: pick the adapter for the current location, find the page
@@ -119,6 +121,11 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       return handle;
     }
     handle.destroy = release;
+    // Read alongside the theme so the page colors are not delayed by it.
+    const preferencesRead = host.storage.get(PREFERENCES_STORAGE_KEY).then(parsePreferences, () => {
+      host.log('warn', 'settings unavailable; using defaults');
+      return parsePreferences(null);
+    });
     let theme: 'light' | 'dark' = 'light';
     try {
       const saved = await host.storage.get(THEME_STORAGE_KEY);
@@ -126,12 +133,19 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
     } catch { host.log('warn', 'display preference unavailable; using light theme'); }
     const pageTheme = createPageTheme(doc, adapter.pageThemeCss ?? '');
     pageTheme.set(theme);
+    let preferences: Preferences = await preferencesRead;
     handle.destroy = () => { pageTheme.destroy(); release(); };
     // Serialize writes so a slow earlier save cannot overwrite a later click.
     let themeSave = Promise.resolve();
     const saveTheme = (value: 'light' | 'dark') => {
       themeSave = themeSave.then(() => host.storage.set(THEME_STORAGE_KEY, value)).catch(() => {
         host.log('warn', 'display preference could not be saved');
+      });
+    };
+    let preferencesSave = Promise.resolve();
+    const savePreferences = (value: Preferences) => {
+      preferencesSave = preferencesSave.then(() => host.storage.set(PREFERENCES_STORAGE_KEY, serializePreferences(value))).catch(() => {
+        host.log('warn', 'settings could not be saved');
       });
     };
     // Every exit without a panel keeps a direct way back to the store's colors.
@@ -200,6 +214,13 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
           pageTheme.set(value);
           saveTheme(value);
         },
+        preferences,
+        onPreferencesChange: (value) => {
+          preferences = value;
+          ctx.preferences = value;
+          savePreferences(value);
+          render();
+        },
       };
       const initialOffer = adapter.initialOfferId?.(options.location);
       if (initialOffer) ctx.selectedOfferId = initialOffer;
@@ -234,17 +255,24 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
         for (const entry of ctx.related ?? []) entry.state = { kind: 'error', message: 'この商品の観測データがありません' };
         return;
       }
-      // A yen reference only for a product with prices in a supported currency;
-      // the client answers from its stored rate on most pages and fetches at most
-      // once a day. Without a rate the panel stays as it is.
+      // Current prices in a supported currency read in yen, on the viewed product
+      // and on loaded rows of other stores alike. The client answers from its
+      // stored rate on most pages and fetches at most once a day; each currency
+      // is asked once per panel. Without a rate the panel shows recorded prices.
       const rates = options.exchangeRates;
-      const rateCurrency = rates === undefined ? undefined
-        : loaded.product.offers.flatMap((offer) => offer.segments).map((segment) => segment.basis.currency).find((currency) => rates.supports(currency));
-      const rateLoad = rates === undefined || rateCurrency === undefined ? Promise.resolve() : rates.get(rateCurrency).then((rate) => {
-        if (closed || rate === null) return;
-        ctx.exchangeRate = rate;
-        render();
-      });
+      const rateLoads = new Map<string, Promise<void>>();
+      const ensureRates = (product: ProductFileV1) => {
+        if (rates === undefined) return;
+        for (const currency of new Set(product.offers.flatMap((offer) => offer.segments).map((segment) => segment.basis.currency))) {
+          if (!rates.supports(currency) || rateLoads.has(currency)) continue;
+          rateLoads.set(currency, rates.get(currency).then((rate) => {
+            if (closed || rate === null) return;
+            ctx.yenRates = { ...ctx.yenRates, [currency]: rate };
+            render();
+          }));
+        }
+      };
+      ensureRates(loaded.product);
       // Only the page controller owns related loads. Renders, theme changes and
       // stale-while-revalidate callbacks never initiate more work. Two workers,
       // no automatic retries, and closed panels do not start queued requests.
@@ -258,7 +286,7 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       }
       const jobs = [...groups.values()];
       let next = 0;
-      await Promise.all([rateLoad, ...Array.from({ length: Math.min(2, jobs.length) }, async () => {
+      await Promise.all(Array.from({ length: Math.min(2, jobs.length) }, async () => {
         while (!closed && next < jobs.length) {
           const group = jobs[next++];
           const first = group?.[0];
@@ -266,10 +294,12 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
           await options.client.load(first.target.storeId, first.target.pageKey, (state) => {
             if (closed) return;
             for (const entry of group) entry.state = state;
+            if (state.kind === 'ready') ensureRates(state.product);
             render();
           });
         }
-      })]);
+      }));
+      await Promise.all(rateLoads.values());
     };
 
     const watch = adapter.watchPageKey;

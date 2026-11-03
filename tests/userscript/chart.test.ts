@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { PresencePointV1, PricePointV1 } from '../../src/publisher/contract.ts';
-import { buildStepChart, pricedIntervals } from '../../userscript/ui/chart.ts';
+import { buildInventoryChart, buildStepChart, pricedIntervals, type InventorySeries } from '../../userscript/ui/chart.ts';
 import { formatMoney, formatPercent, formatPriceValue, formatSignedMoney } from '../../userscript/core/format.ts';
 
 const D = 86_400_000;
@@ -90,5 +90,38 @@ describe('formatting', () => {
     expect(formatPercent(-10)).toBe('−10.0%');
     expect(formatPriceValue({ state: 'range', minAmountMinor: 90, maxAmountMinor: 110 }, 'JPY')).toBe('￥90〜￥110');
     expect(formatPriceValue({ state: 'unavailable', minAmountMinor: null, maxAmountMinor: null }, 'JPY')).toBe('価格表示なし');
+  });
+});
+
+describe('stock count chart', () => {
+  const series = (points: [number, number | null][], extra: Partial<InventorySeries> = {}): InventorySeries =>
+    ({ id: 'current', label: 'Store A', index: 0, points, start: t(0), end: t(9), ...extra });
+  const paths = (svg: SVGSVGElement) => [...svg.querySelectorAll('g[data-series] path')].map((p) => p.getAttribute('d')!);
+
+  it('holds each count until the next point and breaks the line where no count was shown', () => {
+    const svg = buildInventoryChart(document, [series([[t(0), 20], [t(3), null], [t(5), 781]])], { width: 640, height: 120 });
+    // Two runs: 20 from day 0 to 3, then 781 from day 5 to the last observation.
+    expect(paths(svg)[0]!.match(/M/g)).toHaveLength(2);
+    expect([...svg.querySelectorAll('circle')].map((c) => c.getAttribute('aria-label'))).toEqual([
+      expect.stringContaining('在庫数 20'), expect.stringContaining('在庫数 781'),
+    ]);
+    expect(svg.getAttribute('aria-label')).toContain('在庫数の推移');
+    expect([...svg.querySelectorAll('text.eph-axis')].map((n) => n.textContent)).toContain('0');
+  });
+
+  it('stops each series at its own last observation and keeps its color slot', () => {
+    const svg = buildInventoryChart(document, [
+      series([[t(0), 5]]),
+      series([[t(0), 8], [t(7), 9]], { id: 'other', label: 'Store B', index: 2, end: t(7) }),
+    ], { width: 640, height: 120 });
+    const groups = [...svg.querySelectorAll<SVGGElement>('g[data-series]')];
+    expect(groups.map((g) => [g.dataset['series'], g.getAttribute('data-series-index')])).toEqual([['current', '0'], ['other', '2']]);
+    const ends = paths(svg).map((d) => Number(d.split('H').at(-1)));
+    expect(ends[1]).toBeLessThan(ends[0]!);
+  });
+
+  it('draws nothing for series without any count', () => {
+    const svg = buildInventoryChart(document, [series([[t(0), null]]), series([], { id: 'other' })], { width: 640, height: 120 });
+    expect(svg.querySelectorAll('g[data-series]')).toHaveLength(0);
   });
 });

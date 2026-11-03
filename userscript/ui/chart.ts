@@ -1,4 +1,4 @@
-import type { PresencePointV1, PricePointV1 } from '../../src/publisher/contract.ts';
+import type { InventoryPointV1, PresencePointV1, PricePointV1 } from '../../src/publisher/contract.ts';
 import { formatDate, formatDateTime, formatMoney } from '../core/format.ts';
 
 /**
@@ -150,6 +150,87 @@ export function buildComparisonChart(doc: Document, series: readonly ComparisonS
     }
     svg.appendChild(group);
   });
+  return svg;
+}
+
+export interface InventorySeries {
+  /** The price series id, so the store switches hide both lines together. */
+  id: string;
+  label: string;
+  /** Color slot shared with the price chart. */
+  index: number;
+  points: readonly InventoryPointV1[];
+  start: number;
+  end: number;
+}
+
+/**
+ * Recorded stock counts as steps under the price chart. A count holds until
+ * the next point; a null count (none shown at that observation) breaks the
+ * line, and each series stops at its own last observation.
+ */
+export function buildInventoryChart(doc: Document, series: readonly InventorySeries[], options: Pick<ChartOptions, 'width' | 'height'>): SVGSVGElement {
+  const { width, height } = options;
+  const svg = el(doc, 'svg', { viewBox: `0 0 ${width} ${height}`, width: '100%', role: 'group', class: 'eph-inventory-chart', 'aria-label': '店舗が表示した在庫数の推移。点にフォーカスすると観測日時と在庫数を確認できます。' });
+  const prepared = series.map((s) => {
+    const steps: { from: number; to: number; count: number }[] = [];
+    s.points.forEach(([t, count], i) => {
+      const to = Math.min(s.end, s.points[i + 1]?.[0] ?? s.end);
+      const from = Math.max(t, s.start);
+      if (count !== null && to >= from && t <= s.end) steps.push({ from, to, count });
+    });
+    return { ...s, steps };
+  }).filter((s) => s.steps.length > 0);
+  if (!prepared.length) return svg;
+  const start = Math.min(...prepared.map((s) => s.start));
+  const end = Math.max(...prepared.map((s) => s.end));
+  const span = Math.max(3_600_000, end - start);
+  const plotW = width - PAD.left - PAD.right;
+  const plotH = height - PAD.top - PAD.bottom;
+  const x = (t: number) => PAD.left + plotW * (0.02 + 0.96 * (t - start) / span);
+  const hi = Math.max(1, ...prepared.flatMap((s) => s.steps.map((step) => step.count))) * 1.1;
+  const y = (v: number) => PAD.top + plotH - v / hi * plotH;
+  for (const v of niceTicks(0, hi, 2)) {
+    const yy = y(v);
+    svg.appendChild(el(doc, 'line', { x1: PAD.left, x2: width - PAD.right, y1: yy, y2: yy, class: 'eph-grid' }));
+    const label = el(doc, 'text', { x: PAD.left - 6, y: yy + 4, 'text-anchor': 'end', class: 'eph-axis' });
+    label.textContent = String(v);
+    svg.appendChild(label);
+  }
+  let right = -Infinity;
+  let previous = '';
+  for (const t of [start, end]) {
+    const anchor = t === start ? 'start' : 'end';
+    const left = anchor === 'end' ? x(t) - X_LABEL_WIDTH : x(t);
+    const content = formatDate(t);
+    if (content === previous || left < right + X_LABEL_GAP) continue;
+    const label = el(doc, 'text', { x: x(t), y: height - 6, 'text-anchor': anchor, class: 'eph-axis' });
+    label.textContent = content;
+    svg.appendChild(label);
+    right = left + X_LABEL_WIDTH;
+    previous = content;
+  }
+  for (const s of prepared) {
+    const group = el(doc, 'g', { 'data-series': s.id, 'data-series-index': s.index, 'aria-label': `${s.label}の在庫数` });
+    let line = '';
+    let lastTo: number | null = null;
+    for (const step of s.steps) {
+      const yy = y(step.count).toFixed(1);
+      line += lastTo === step.from ? `V${yy}H${x(step.to).toFixed(1)}` : `M${x(step.from).toFixed(1)} ${yy}H${x(step.to).toFixed(1)}`;
+      lastTo = step.to;
+    }
+    group.appendChild(el(doc, 'path', { d: line, class: 'eph-line', fill: 'none' }));
+    for (const [t, count] of s.points) {
+      if (count === null || t < s.start || t > s.end) continue;
+      const label = `${s.label} · ${formatDateTime(t)} · 在庫数 ${count}`;
+      const dot = el(doc, 'circle', { cx: x(t), cy: y(count), r: 3, class: 'eph-dot', tabindex: 0, role: 'img', 'aria-label': label });
+      const title = el(doc, 'title', {});
+      title.textContent = label;
+      dot.appendChild(title);
+      group.appendChild(dot);
+    }
+    svg.appendChild(group);
+  }
   return svg;
 }
 

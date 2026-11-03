@@ -124,9 +124,12 @@ function parseStored(text: string | null, base: string): StoredState {
   }
 }
 
-/** The yen amount, rounded to whole yen, for `minor` units of the rate's currency. */
-export function yenFromMinor(minor: number, rate: JpyRate): number {
-  return Math.round((minor / 10 ** minorDigits(rate.base)) * rate.jpyPerUnit);
+/**
+ * The yen amount, rounded to whole yen, for `minor` units of the rate's
+ * currency, with an optional card fee in percent added on top of the rate.
+ */
+export function yenFromMinor(minor: number, rate: JpyRate, feePercent = 0): number {
+  return Math.round((minor / 10 ** minorDigits(rate.base)) * rate.jpyPerUnit * (1 + feePercent / 100));
 }
 
 export interface ExchangeRateClientOptions {
@@ -154,6 +157,8 @@ export class ExchangeRateClient {
   private readonly timeoutMs: number;
   private readonly random: () => number;
   private answer: Promise<StoredRate | null> | null = null;
+  /** A second answer, only when the first was an entry saved before cross rates. */
+  private crossAnswer: Promise<StoredRate | null> | null = null;
 
   constructor(
     private readonly host: HostEnv,
@@ -177,16 +182,26 @@ export class ExchangeRateClient {
 
   /**
    * One answer per client: re-renders and variant switches on a page never ask
-   * twice. The first currency asked decides whether a stored entry without
-   * cross rates is refreshed.
+   * twice. A page that asks for the quoted currency first and a cross currency
+   * later (a USD price, then a GBP store row) gets at most one more answer, and
+   * only when the first was an entry saved before cross rates.
    */
   get(currency: string): Promise<JpyRate | null> {
     if (!this.supports(currency)) return Promise.resolve(null);
-    this.answer ??= this.resolve(currency !== this.base).catch((e: unknown) => {
+    const needsCross = currency !== this.base;
+    this.answer ??= this.settle(needsCross);
+    return this.answer.then((rate) => {
+      if (rate === null || !needsCross || rate.cross !== undefined) return rate === null ? null : rateFor(rate, currency);
+      this.crossAnswer ??= this.settle(true);
+      return this.crossAnswer.then((again) => (again === null ? null : rateFor(again, currency)));
+    });
+  }
+
+  private settle(needsCross: boolean): Promise<StoredRate | null> {
+    return this.resolve(needsCross).catch((e: unknown) => {
       this.host.log('warn', `exchange rate unavailable: ${String(e)}`);
       return null;
     });
-    return this.answer.then((rate) => (rate === null ? null : rateFor(rate, currency)));
   }
 
   private async resolve(needsCross: boolean): Promise<StoredRate | null> {

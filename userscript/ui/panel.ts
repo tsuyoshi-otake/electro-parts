@@ -1,10 +1,13 @@
-import type { CaveatKey, ManifestV1, OfferV1, PriceValueV1, ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
+import type { CaveatKey, InventoryV1, ManifestV1, OfferV1, ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
 import type { LoadState } from '../core/dataClient.ts';
-import { EXCHANGE_RATE_ATTRIBUTION, yenFromMinor, type JpyRate } from '../core/exchangeRate.ts';
-import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatMoney, formatPercent, formatPriceValue, formatSignedMoney } from '../core/format.ts';
-import { buildStepChart, buildComparisonChart, type ComparisonSeries } from './chart.ts';
-import { comparisonEligibility, currentOffer, type RelatedEntry } from '../core/relations.ts';
+import type { JpyRate } from '../core/exchangeRate.ts';
+import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatPercent, formatPriceValue, formatSignedMoney } from '../core/format.ts';
+import { appliedCardFee, DEFAULT_PREFERENCES, type Preferences } from '../core/preferences.ts';
+import { buildStepChart, buildComparisonChart, buildInventoryChart, type ComparisonSeries, type InventorySeries } from './chart.ts';
+import { comparisonEligibility, currentOffer, primaryQuote, type RelatedEntry } from '../core/relations.ts';
 import { RELATED_CSS, renderRelatedGroups, renderStorePrices } from './related.ts';
+import { buildSettingsDialog, openSettingsDialog, SETTINGS_CSS } from './settings.ts';
+import { YEN_CSS, yenConverter, type YenConverter } from './yen.ts';
 
 /**
  * The history panel. Rendered into a Shadow DOM root so neither the page's
@@ -36,8 +39,19 @@ export interface PanelContext {
   cleanup?: () => void;
   selectedOfferId?: string;
   onSelectOffer?: (id: string) => void;
-  /** Shown as a yen reference under the current price when its currency matches. */
-  exchangeRate?: JpyRate;
+  /** Yen per unit by currency; current prices in these currencies read in yen. */
+  yenRates?: Readonly<Record<string, JpyRate>>;
+  /** The viewer's settings; the defaults until the stored ones are read. */
+  preferences?: Preferences;
+  /** Saves the settings and re-renders. Without it the panel shows no settings button. */
+  onPreferencesChange?(preferences: Preferences): void;
+  /** The settings dialog survives re-renders through this flag. */
+  settingsOpen?: boolean;
+}
+
+/** Counts the store showed and the collector recorded; a boolean-only store has none. */
+function shownQuantities(inventory: InventoryV1): boolean {
+  return inventory.semantics !== 'not_exposed' && inventory.points.some((p) => p[1] !== null);
 }
 
 export const PANEL_CSS = `
@@ -65,12 +79,12 @@ export const PANEL_CSS = `
 .eph[data-theme="dark"] .badge.stale { background: #3b2f14; color: #f0c274; }
 .eph[data-theme="dark"] .badge.error { background: #3d1f1f; color: #f5a3a3; }
 .theme-controls { display: flex; gap: 4px; }
-.theme-controls button { font: inherit; font-size: 12px; min-height: 32px; padding: 4px 10px; border: 1px solid var(--muted); border-radius: 4px; background: var(--bg); color: var(--fg); cursor: pointer; }
-.theme-controls button:hover { background: var(--chip); }
+.theme-controls button, .settings-button { font: inherit; font-size: 12px; min-height: 32px; padding: 4px 10px; border: 1px solid var(--muted); border-radius: 4px; background: var(--bg); color: var(--fg); cursor: pointer; }
+.theme-controls button:hover, .settings-button:hover { background: var(--chip); }
 .theme-controls button[aria-pressed="true"] { background: var(--chip); border-color: var(--accent); color: var(--accent); font-weight: 700; }
-.theme-controls button:active { background: var(--line); }
-.theme-controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-@media (pointer: coarse) { .theme-controls button { min-height: 44px; } }
+.theme-controls button:active, .settings-button:active { background: var(--line); }
+.theme-controls button:focus-visible, .settings-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (pointer: coarse) { .theme-controls button, .settings-button { min-height: 44px; } }
 .spacer { flex: 1 1 auto; }
 .basis { font-size: 12px; color: var(--muted); }
 .eph select { font: inherit; font-size: 12px; max-width: 100%; min-width: 0; padding: 2px 4px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
@@ -86,14 +100,14 @@ export const PANEL_CSS = `
 .eph .eph-band { fill: var(--accent); fill-opacity: 0.14; }
 .eph .eph-gap { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
 .eph .eph-dot { fill: var(--accent); }
+.eph .stock-chart { margin-top: 10px; padding-top: 6px; border-top: 1px dashed var(--line-soft); }
+.eph .eph-inventory-chart .eph-line { stroke-width: 2; }
 
 .hero-label { font-size: 11px; color: var(--muted); }
 .hero-value { font-size: 27px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; }
 .hero-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
 .delta { font-size: 13px; font-weight: 700; margin-left: 8px; white-space: nowrap; }
 .delta.up { color: var(--up); } .delta.down { color: var(--down); }
-.fx { margin-top: 4px; }
-.fx-value { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
 
 .rows { margin: 12px 0 0; }
 .rows > div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 5px 0; border-top: 1px solid var(--line-soft); }
@@ -112,7 +126,7 @@ export const PANEL_CSS = `
 .eph a { color: var(--accent); }
 .eph p { margin: 6px 0; }
 .eph .muted { color: var(--muted); }
-` + RELATED_CSS;
+` + RELATED_CSS + YEN_CSS + SETTINGS_CSS;
 
 function text(doc: Document, tag: string, content: string, className?: string): HTMLElement {
   const node = doc.createElement(tag);
@@ -138,7 +152,7 @@ function pickSegment(offer: OfferV1, index: number | null): { segment: SegmentV1
 }
 
 /** Chart column: drawn immediately, or when the panel first becomes visible. */
-function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, segment: SegmentV1, ownFresh: boolean): void {
+function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, offer: OfferV1, segment: SegmentV1, ownFresh: boolean): void {
   const doc = ctx.doc;
   const box = doc.createElement('div');
   box.className = 'chart-box';
@@ -151,62 +165,63 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
     if (!ownFresh || !eligibility.comparable || entry.state.kind !== 'ready') return [];
     return [{ id: entry.relation.id, label: storeLabel(entry.target.storeId), points: eligibility.other.points, presence: eligibility.other.presence,
       start: Math.max(entry.state.product.observation.firstObservedAt ?? eligibility.other.stats.segmentStartAt, eligibility.other.stats.segmentStartAt),
-      end: entry.state.product.product.lastSeenAt }];
+      end: entry.state.product.product.lastSeenAt, inventory: primaryQuote(entry.state.product, entry.target)?.offer.inventory ?? null }];
   });
-  const series: ComparisonSeries[] = [{ id: 'current', label: `${storeLabel(product.storeId)}（閲覧中）`, points: segment.points, presence: segment.presence,
-    start: Math.max(start, segment.stats.segmentStartAt), end: product.product.lastSeenAt }, ...others];
+  const series: (ComparisonSeries & { inventory: InventoryV1 | null })[] = [{ id: 'current', label: `${storeLabel(product.storeId)}（閲覧中）`, points: segment.points, presence: segment.presence,
+    start: Math.max(start, segment.stats.segmentStartAt), end: product.product.lastSeenAt, inventory: offer.inventory }, ...others];
+  // Stock counts share the price chart's series, colors and store switches.
+  const stock: InventorySeries[] = (ctx.preferences ?? DEFAULT_PREFERENCES).showStock
+    ? series.flatMap((s, index) => s.inventory !== null && shownQuantities(s.inventory) ? [{ id: s.id, label: s.label, index, points: s.inventory.points, start: s.start, end: s.end }] : [])
+    : [];
   const draw = () => {
     if (box.childNodes.length > 0) return;
     const chartWidth = () => Math.max(280, Math.min(CHART_SIZE.width, box.clientWidth || CHART_SIZE.width));
+    let width = chartWidth();
+    const hidden = ctx.hiddenSeries ??= new Set();
+    const makeSvg = () => others.length
+      ? buildComparisonChart(doc, series, { width, height: width < 450 ? 220 : CHART_SIZE.height, currency: segment.basis.currency })
+      : buildStepChart(doc, segment.points, segment.presence, {
+        width, height: width < 450 ? 220 : CHART_SIZE.height,
+        start,
+        end,
+        currency: segment.basis.currency,
+        label: basisLabel(segment.basis),
+      });
+    const makeStock = () => buildInventoryChart(doc, stock, { width, height: width < 450 ? 110 : 120 });
+    // Both charts follow the store switches; a hidden store stays hidden after a resize.
+    const applyHidden = () => {
+      for (const group of box.querySelectorAll<SVGGElement>('g[data-series]')) group.style.display = hidden.has(group.dataset['series']!) ? 'none' : '';
+    };
+    let svg = makeSvg();
+    let stockSvg = stock.length ? makeStock() : null;
+    const stockBox = stockSvg === null ? null : text(doc, 'div', '', 'stock-chart');
+    if (stockBox !== null && stockSvg !== null) {
+      stockBox.append(text(doc, 'div', '表示在庫数の推移（店舗が表示した数。実在庫を保証しません）', 'related-meta'), stockSvg);
+    }
     if (others.length) {
-      let width = chartWidth();
-      const makeSvg = () => buildComparisonChart(doc, series, { width, height: width < 450 ? 220 : CHART_SIZE.height, currency: segment.basis.currency });
-      let svg = makeSvg();
       const controls = doc.createElement('div'); controls.className = 'series-controls'; controls.setAttribute('role', 'group'); controls.setAttribute('aria-label', 'グラフに表示する店舗');
-      const hidden = ctx.hiddenSeries ??= new Set();
       const message = text(doc, 'div', '表示する店舗を選択してください', 'related-meta'); message.setAttribute('role', 'status');
       const updateMessage = () => { message.hidden = series.some((s) => !hidden.has(s.id)); };
       series.forEach((s, i) => {
         const label = doc.createElement('label'); label.dataset['seriesIndex'] = String(i);
         const input = doc.createElement('input'); input.type = 'checkbox'; input.checked = !hidden.has(s.id); input.dataset['focusKey'] = `series-${s.id}`;
-        const update = () => {
-          const group = [...svg.querySelectorAll<SVGGElement>('g[data-series]')].find((g) => g.dataset['series'] === s.id);
-          if (group) group.style.display = input.checked ? '' : 'none'; updateMessage();
-        };
-        input.addEventListener('change', () => { if (input.checked) hidden.delete(s.id); else hidden.add(s.id); update(); });
+        input.addEventListener('change', () => { if (input.checked) hidden.delete(s.id); else hidden.add(s.id); applyHidden(); updateMessage(); });
         const swatch = text(doc, 'span', '', 'series-swatch'); swatch.setAttribute('aria-hidden', 'true');
-        label.append(input, swatch, doc.createTextNode(s.label)); controls.appendChild(label); update();
+        label.append(input, swatch, doc.createTextNode(s.label)); controls.appendChild(label);
       });
       box.append(controls, svg, message, text(doc, 'div', '各店舗の最終観測までを表示。観測が1回だけの店舗は点のみです。最終観測より後の価格は未確認です。点にフォーカスすると日時と価格を確認できます。', 'related-meta'));
-      // Resize only the SVG, not the controls or data. This keeps axis text
-      // readable on narrow screens and avoids refetching or losing checkboxes.
-      if (doc.defaultView && typeof doc.defaultView.ResizeObserver === 'function') {
-        const resize = new doc.defaultView.ResizeObserver(() => {
-          const nextWidth = chartWidth(); if (nextWidth === width) return; width = nextWidth;
-          const next = makeSvg();
-          for (const group of next.querySelectorAll<SVGGElement>('g[data-series]')) group.style.display = hidden.has(group.dataset['series']!) ? 'none' : '';
-          svg.replaceWith(next); svg = next;
-        });
-        resize.observe(box);
-        const previousCleanup = ctx.cleanup;
-        ctx.cleanup = () => { previousCleanup?.(); resize.disconnect(); };
-      }
-      return;
-    }
-    let width = chartWidth();
-    const makeSvg = () => buildStepChart(doc, segment.points, segment.presence, {
-      width, height: width < 450 ? 220 : CHART_SIZE.height,
-      start,
-      end,
-      currency: segment.basis.currency,
-      label: basisLabel(segment.basis),
-    });
-    let svg = makeSvg();
-    box.appendChild(svg);
+      updateMessage();
+    } else box.appendChild(svg);
+    if (stockBox !== null) box.appendChild(stockBox);
+    applyHidden();
+    // Resize only the SVGs, not the controls or data. This keeps axis text
+    // readable on narrow screens and avoids refetching or losing checkboxes.
     if (doc.defaultView && typeof doc.defaultView.ResizeObserver === 'function') {
       const resize = new doc.defaultView.ResizeObserver(() => {
         const nextWidth = chartWidth(); if (nextWidth === width) return; width = nextWidth;
         const next = makeSvg(); svg.replaceWith(next); svg = next;
+        if (stockSvg !== null) { const nextStock = makeStock(); stockSvg.replaceWith(nextStock); stockSvg = nextStock; }
+        applyHidden();
       });
       resize.observe(box);
       const previousCleanup = ctx.cleanup;
@@ -229,33 +244,11 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
 }
 
 /**
- * The current recorded price read in yen. Only this one figure is converted:
- * deltas, statistics, the chart and other stores keep their recorded currency,
- * so the reference never becomes a comparison or a cheapest flag.
+ * Summary column: the current price as the headline, then the comparison
+ * figures. A current price in a currency with a rate reads in yen, with the
+ * recorded price and its change beside it; `fxSlot` is where the rate note goes.
  */
-function renderYenReference(doc: Document, parent: HTMLElement, value: PriceValueV1, rate: JpyRate): void {
-  if (value.state === 'unavailable' || value.minAmountMinor === null || value.maxAmountMinor === null) return;
-  const yen = (minor: number) => formatMoney(yenFromMinor(minor, rate), 'JPY');
-  const amount = value.state === 'range' && value.minAmountMinor !== value.maxAmountMinor
-    ? `${yen(value.minAmountMinor)}〜${yen(value.maxAmountMinor)}` : yen(value.minAmountMinor);
-  const wrap = doc.createElement('div');
-  wrap.className = 'fx';
-  wrap.appendChild(text(doc, 'div', `約 ${amount}（円換算の参考値）`, 'fx-value'));
-  // A cross rate says which quoted rates it was divided from.
-  const via = rate.via === null ? '' : `${rate.via}/JPY と ${rate.via}/${rate.base} から算出、`;
-  const meta = text(doc, 'div', `1 ${rate.base} = ${rate.jpyPerUnit.toFixed(2)}円（${via}${formatDateTime(rate.updatedAt)} 更新）· 税・送料・関税・決済時の換算を含みません · `, 'hero-meta');
-  const link = doc.createElement('a');
-  link.href = EXCHANGE_RATE_ATTRIBUTION.href;
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
-  link.textContent = EXCHANGE_RATE_ATTRIBUTION.label;
-  meta.appendChild(link);
-  wrap.appendChild(meta);
-  parent.appendChild(wrap);
-}
-
-/** Summary column: the current price as the headline, then the comparison figures. */
-function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, offer: OfferV1, segment: SegmentV1, ownFresh: boolean): void {
+function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, offer: OfferV1, segment: SegmentV1, ownFresh: boolean, yen: YenConverter, fxSlot: HTMLElement): void {
   const doc = ctx.doc;
   const currency = segment.basis.currency;
   const s = segment.stats;
@@ -267,21 +260,30 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
   const storeLabel = ctx.storeLabel ?? ((id: string) => id);
   if (related.length) col.appendChild(text(doc, 'div', '店舗別の記録価格', 'comparison-heading'));
   col.appendChild(text(doc, 'div', related.length ? `${storeLabel(product.storeId)}（閲覧中）` : '現在の記録価格', 'hero-label'));
-  const hero = text(doc, 'div', formatPriceValue(s.current, currency), 'hero-value');
+  const recorded = formatPriceValue(s.current, currency);
+  const inYen = yen.convert(s.current, currency);
+  const hero = text(doc, 'div', inYen?.amount ?? recorded, 'hero-value');
   const dir = s.change.direction;
-  if (s.change.differenceMinor !== null) {
-    const delta = `${formatSignedMoney(s.change.differenceMinor, currency)}${s.change.percent === null ? '' : ` (${formatPercent(s.change.percent)})`}`;
-    hero.appendChild(text(doc, 'span', delta, `delta${dir === 'up' || dir === 'down' ? ` ${dir}` : ''}`));
-  }
+  const delta = s.change.differenceMinor === null ? null
+    : text(doc, 'span', `${formatSignedMoney(s.change.differenceMinor, currency)}${s.change.percent === null ? '' : ` (${formatPercent(s.change.percent)})`}`, `delta${dir === 'up' || dir === 'down' ? ` ${dir}` : ''}`);
   col.appendChild(hero);
-  if (ctx.exchangeRate !== undefined && ctx.exchangeRate.base === currency) renderYenReference(doc, col, s.current, ctx.exchangeRate);
+  if (inYen === null) {
+    if (delta !== null) hero.appendChild(delta);
+  } else {
+    // The change is between recorded prices, so it stays in the recorded currency.
+    const line = text(doc, 'div', `記録価格 ${recorded}`, 'fx-recorded');
+    if (delta !== null) line.appendChild(delta);
+    if (inYen.includes !== null) line.appendChild(doc.createTextNode(` · ${inYen.includes}`));
+    col.appendChild(line);
+  }
   col.appendChild(text(doc, 'div', `${formatDate(s.currentSinceAt)} から${s.previousDistinct === null ? '(初回観測)' : ''}`, 'hero-meta'));
   const lastAvail = offer.availability[offer.availability.length - 1];
   if (related.length) {
     col.appendChild(text(doc, 'div', `最終観測 ${formatDateTime(product.product.lastSeenAt)}`, 'hero-meta'));
     if (lastAvail) col.appendChild(text(doc, 'div', `観測時の在庫: ${availabilityLabel(lastAvail[1])}`, 'hero-meta'));
-    renderStorePrices(doc, col, product, segment, related, storeLabel, ownFresh);
+    renderStorePrices(doc, col, product, segment, related, storeLabel, ownFresh, yen);
   }
+  col.appendChild(fxSlot);
 
   const rows = doc.createElement('dl');
   rows.className = 'rows';
@@ -300,7 +302,7 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
   }
   if (lastAvail !== undefined) {
     const qty = offer.inventory.points[offer.inventory.points.length - 1];
-    const qtyText = qty !== undefined && qty[1] !== null && offer.inventory.semantics !== 'not_exposed' ? `表示在庫数 ${qty[1]}` : undefined;
+    const qtyText = qty !== undefined && qty[1] !== null && shownQuantities(offer.inventory) ? `表示在庫数 ${qty[1]}` : undefined;
     const label = `${availabilityLabel(lastAvail[1])}${lastAvail[4] !== null && lastAvail[4] !== availabilityLabel(lastAvail[1]) ? `(${lastAvail[4]})` : ''}`;
     row(doc, rows, '最新の在庫表示', label, qtyText !== undefined ? `${qtyText} · ${formatDate(lastAvail[0])}` : formatDate(lastAvail[0]));
   }
@@ -415,6 +417,26 @@ function renderPanelContent(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   }
   head.appendChild(themes);
   root.appendChild(head);
+  if (ctx.onPreferencesChange !== undefined) {
+    const onChange = ctx.onPreferencesChange.bind(ctx);
+    const button = text(doc, 'button', '設定', 'settings-button') as HTMLButtonElement;
+    button.type = 'button';
+    button.dataset['focusKey'] = 'settings';
+    button.setAttribute('aria-haspopup', 'dialog');
+    const dialog = buildSettingsDialog(doc, ctx.preferences ?? DEFAULT_PREFERENCES, {
+      change: onChange,
+      closed: () => {
+        ctx.settingsOpen = false;
+        button.focus({ preventScroll: true });
+      },
+    });
+    button.addEventListener('click', () => {
+      ctx.settingsOpen = true;
+      openSettingsDialog(dialog);
+    });
+    head.appendChild(button);
+    root.appendChild(dialog);
+  }
   shadow.appendChild(root);
 
   const badge = (label: string, cls?: string) => {
@@ -464,6 +486,8 @@ function renderPanelContent(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   }
   const picked = offer === null ? null : pickSegment(offer, selectedSegment);
   const tail = doc.createElement('div');
+  const yen = yenConverter(ctx.yenRates ?? {}, appliedCardFee(ctx.preferences ?? DEFAULT_PREFERENCES));
+  const fxSlot = doc.createElement('div');
   if (offer === null || picked === null) {
     root.appendChild(text(doc, 'p', '価格の記録がありません。', 'muted'));
     root.appendChild(tail);
@@ -487,15 +511,18 @@ function renderPanelContent(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
     const body = doc.createElement('div');
     body.className = `body${ctx.related?.length ? ' has-comparison' : ''}`;
     const ownFresh = state.freshness === 'fresh' && state.note === null;
-    renderChart(ctx, body, product, picked.segment, ownFresh);
-    renderStats(ctx, body, product, offer, picked.segment, ownFresh);
+    renderChart(ctx, body, product, offer, picked.segment, ownFresh);
+    renderStats(ctx, body, product, offer, picked.segment, ownFresh, yen, fxSlot);
     root.appendChild(body);
     tail.className = 'foot-blocks';
     root.appendChild(tail);
     renderChangeTable(doc, tail, picked.segment);
   }
 
-  renderRelatedGroups(doc, tail, ctx.related ?? [], ctx.storeLabel ?? ((id: string) => id));
+  renderRelatedGroups(doc, tail, ctx.related ?? [], ctx.storeLabel ?? ((id: string) => id), yen);
+  // One rate note for every yen value above, written once they are all known.
+  if (fxSlot.parentNode === null) tail.appendChild(fxSlot);
+  yen.renderNote(doc, fxSlot);
 
   const caveats: CaveatKey[] = [...manifestCaveats(state.manifest), ...product.caveats];
   if (product.product.metadata.some((m) => m.suspicious)) caveats.push('suspicious_identity');
@@ -521,5 +548,8 @@ export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   for (const d of shadow.querySelectorAll<HTMLDetailsElement>('details[data-state-key]')) {
     const open = disclosures.get(d.dataset['stateKey']); if (open !== undefined) d.open = open;
   }
+  // The rebuilt settings dialog opens again before focus returns to the control inside it.
+  const settings = shadow.querySelector<HTMLDialogElement>('dialog.settings');
+  if (settings !== null && ctx.settingsOpen) openSettingsDialog(settings);
   if (focused) [...shadow.querySelectorAll<HTMLElement>('[data-focus-key]')].find((e) => e.dataset['focusKey'] === focused)?.focus({ preventScroll: true });
 }
