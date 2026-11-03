@@ -1,3 +1,4 @@
+import type { ProductPageInventoryRaw } from '../productPageInventory.ts';
 /**
  * Raw snapshot format produced by the Switch Science collector
  * (`schemaVersion: 1`). These types describe the on-disk JSON and are used
@@ -99,6 +100,8 @@ export interface SwitchScienceRawSnapshot {
   };
   validation: { errors: string[]; warnings: string[] };
   items: SwitchScienceRawItem[];
+  /** Counts read from product pages (ADR-0027); absent in snapshots from before. */
+  pageInventory?: ProductPageInventoryRaw;
 }
 
 export const SWITCH_SCIENCE_RAW_SCHEMA_VERSION = 1;

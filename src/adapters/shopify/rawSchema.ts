@@ -1,3 +1,4 @@
+import type { ProductPageInventoryRaw } from '../productPageInventory.ts';
 import { shopifyPageKey, type ShopifyStore } from './identity.ts';
 
 export interface ShopifyVariant {
@@ -12,6 +13,8 @@ export interface ShopifySnapshot {
   schemaVersion: 1; currency: string; currencyEvidence: string; retrievedAt: string;
   complete: boolean; catalogHandles: string[]; pageCount: number;
   items: ShopifyItem[]; errors: string[];
+  /** Counts read from product pages, for a store that reads them (ADR-0027). */
+  pageInventory?: ProductPageInventoryRaw;
 }
 /** Minor units of a two-decimal `products.json` amount in `currency`. */
 export function decimalMinor(raw: unknown, currency: string): number {

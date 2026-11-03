@@ -211,6 +211,9 @@ function offerV1(offer: OfferHistory, ctx: ProductContext): OfferV1 {
       points: kept.map((p) => [p.t, p.state]),
       truncated: kept.length < inventoryTotal,
       totalPoints: inventoryTotal,
+      ...(ctx.capabilities.inventoryQuantityCap === undefined || semantics !== 'site_reported'
+        ? {}
+        : { cappedAt: ctx.capabilities.inventoryQuantityCap }),
     },
   };
 }

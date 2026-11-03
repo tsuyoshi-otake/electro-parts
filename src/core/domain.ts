@@ -73,6 +73,14 @@ export interface Availability {
   /** Site-reported quantity. `null` never means "sold out". */
   quantity: number | null;
   quantitySemantics: QuantitySemantics;
+  /**
+   * The source exposes a count, but this observation did not read it: for
+   * example the product's own page was outside this run's rotation, or its
+   * fetch failed. `quantity` is then `null`, and the inventory series keeps its
+   * previous change point instead of recording "not shown". Present only when
+   * true, so snapshots without it keep their normalized hash.
+   */
+  quantityUnobserved?: true;
   /** Source status text before mapping, kept for display / audit. */
   rawStatus: string | null;
 }

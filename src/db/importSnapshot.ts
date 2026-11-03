@@ -230,8 +230,12 @@ export function importSnapshot(db: Db, snapshot: NormalizedSnapshot, options: Im
         );
         if (av.plan.changed) stats.changedAvailability += 1;
 
-        const inv = inventory.insert([offerId], { t: observedAt, state: offer.availability.quantity }, offerRuns);
-        if (inv.plan.changed) stats.changedInventory += 1;
+        // A count the source has but this run did not read adds no change point:
+        // recording null would draw "not shown" between two real counts.
+        if (offer.availability.quantityUnobserved !== true) {
+          const inv = inventory.insert([offerId], { t: observedAt, state: offer.availability.quantity }, offerRuns);
+          if (inv.plan.changed) stats.changedInventory += 1;
+        }
 
         // Price bases: presence over offer-present runs.
         const offerBases = bases.get(offerId) ?? new Map<string, BasisRow>();

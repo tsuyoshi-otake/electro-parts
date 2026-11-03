@@ -26,6 +26,7 @@ import {
   catalogPageUrl,
   parseCatalogPage,
 } from './catalog.ts';
+import { productPageWarnings, readProductPages, type ProductPageReader, type ProductPagesConfig } from '../productPageInventory.ts';
 import { fetchSwitchScienceSitemap, sitemapIndexUrl, type SwitchScienceSitemap } from './sitemap.ts';
 
 /** How many uncovered handles are named in the snapshot for diagnosis. */
@@ -45,6 +46,11 @@ export interface CrawlOptions {
   /** Sitemap products allowed to be absent from the walk before the run is incomplete. */
   maxUncoveredProducts?: number;
   maxSubSitemaps?: number;
+  /**
+   * Read the stock count from the product pages of in-stock, single-variant
+   * products, one rotation slice per run (ADR-0027). Only after a complete walk.
+   */
+  productPages?: { config: ProductPagesConfig; reader: ProductPageReader };
   now?: () => Date;
   log?: (message: string) => void;
 }
@@ -198,6 +204,25 @@ export async function crawlSwitchScience(options: CrawlOptions): Promise<CrawlRe
   // the sitemap. It is reported, never fatal.
   if (unlisted > 0) warnings.push(`${unlisted} product(s) are in the collection but not in the sitemap yet`);
 
+  // Out-of-stock products are not read: the catalogue already says so, and
+  // skipping them nearly halves the requests. Their series keeps its last count.
+  let pageInventory: SwitchScienceRawSnapshot['pageInventory'];
+  if (options.productPages !== undefined && errors.length === 0 && walk.items.length > 0) {
+    pageInventory = await readProductPages({
+      fetcher: options.fetcher,
+      reader: options.productPages.reader,
+      config: options.productPages.config,
+      observedAtMs: now().getTime(),
+      nowMs: () => now().getTime(),
+      log: options.log ?? (() => {}),
+      tag: '[crawl]',
+      targets: walk.items
+        .filter((i) => i.variants.length === 1 && i.variants[0]!.available)
+        .map((i) => ({ key: i.handle, url: `${baseUrl}/products/${i.handle}`, offerIds: [String(i.variants[0]!.variantId)] })),
+    });
+    warnings.push(...productPageWarnings(pageInventory));
+  }
+
   const finishedAt = now();
   const stats = options.fetcher.stats;
   const variants = walk.items.reduce((n, i) => n + i.variants.length, 0);
@@ -233,6 +258,7 @@ export async function crawlSwitchScience(options: CrawlOptions): Promise<CrawlRe
     },
     validation: { errors, warnings },
     items: walk.items,
+    ...(pageInventory === undefined ? {} : { pageInventory }),
   };
   options.log?.(
     `[crawl] ${snapshot.extractedTotal} product(s), ${variants} variant(s), covered ${catalog.covered}/${catalog.productTotal}, complete=${snapshot.complete}`,

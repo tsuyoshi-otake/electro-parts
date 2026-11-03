@@ -4,6 +4,7 @@ import { sha256OfCanonicalJson } from '../../core/hash.ts';
 import { normalizeUtcIso } from '../../core/time.ts';
 import { IssueCollector } from '../../core/validation.ts';
 import type { StoreSnapshotAdapter } from '../../stores/adapter.ts';
+import { validateProductPageInventoryRaw, withPageQuantity, type ProductPageInventoryRaw } from '../productPageInventory.ts';
 import { shopifyCurrencyEvidence, shopifyHandleFromKey, shopifyPageKey, shopifyProductUrl, type ShopifyStore } from './identity.ts';
 import { decimalMinor, parseShopifyItem, record, type ShopifyItem, type ShopifySnapshot } from './rawSchema.ts';
 
@@ -41,12 +42,19 @@ export function validateShopifyRaw(store: ShopifyStore, value: unknown) {
       if (!handles.has(h)) throw new Error(`Uncovered sitemap product: ${h}`);
     }
     if (expected.size !== s['catalogHandles'].length) throw new Error('Duplicate sitemap product');
+    if (s['pageInventory'] !== undefined) {
+      const pages = validateProductPageInventoryRaw(s['pageInventory']);
+      const variants = new Set((s['items'] as ShopifyItem[]).flatMap((p) => p.variants.map((v) => String(v.id))));
+      const stray = Object.keys(pages.quantities).find((id) => !variants.has(id));
+      if (stray !== undefined) throw new Error(`Page count for unknown variant ${stray}`);
+      c.metrics['productPagesRead'] = pages.read;
+    }
     c.metrics['itemCount'] = handles.size;
     c.metrics['catalogUncovered'] = 0;
   } catch (e) { c.error(`${store.storeId}.raw`, (e as Error).message); }
   return c.result();
 }
-export function normalizeShopifyItem(store: ShopifyStore, p: ShopifyItem): NormalizedProduct {
+export function normalizeShopifyItem(store: ShopifyStore, p: ShopifyItem, pages?: ProductPageInventoryRaw): NormalizedProduct {
   const key = shopifyPageKey(store, p.handle);
   return {
     externalProductId: key, pageKey: key,
@@ -60,20 +68,20 @@ export function normalizeShopifyItem(store: ShopifyStore, p: ShopifyItem): Norma
       return {externalOfferId:String(v.id),offerKind:'variant',sku:v.sku,
         variantName:v.title==='Default Title'?null:v.title,
         priceQuotes:[quote(v.price,'selling'),...(v.compare_at_price===null?[]:[quote(v.compare_at_price,'compare_at')])],
-        availability:{state:v.available?'in_stock':'out_of_stock',purchasable:v.available,
-          quantity:null,quantitySemantics:'not_exposed',rawStatus:null}};
+        availability:withPageQuantity({state:v.available?'in_stock':'out_of_stock',purchasable:v.available,rawStatus:null},pages,String(v.id))};
     }),
   };
 }
-export function shopifySnapshotAdapter(store: ShopifyStore): StoreSnapshotAdapter {
+/** `capabilities` declares a site-reported count for a store whose collector reads product pages. */
+export function shopifySnapshotAdapter(store: ShopifyStore, capabilities: StoreCapabilities = SHOPIFY_CAPABILITIES): StoreSnapshotAdapter {
   return {
-    storeId:store.storeId,capabilities:SHOPIFY_CAPABILITIES,validateRaw:value=>validateShopifyRaw(store,value),
+    storeId:store.storeId,capabilities,validateRaw:value=>validateShopifyRaw(store,value),
     normalize(value,rawSha256): NormalizedSnapshot {
       const validation = validateShopifyRaw(store, value);
       if (validation.errors.length) throw new Error(validation.errors.map(e=>e.message).join('; '));
       const s=value as ShopifySnapshot;
       const body={storeId:store.storeId,observedAt:normalizeUtcIso(s.retrievedAt),sourceSchemaVersion:'1',complete:true,
-        coverageId:'shopify:products',products:s.items.map(p=>normalizeShopifyItem(store,parseShopifyItem(store,p))).sort((a,b)=>a.pageKey.localeCompare(b.pageKey,'en'))};
+        coverageId:'shopify:products',products:s.items.map(p=>normalizeShopifyItem(store,parseShopifyItem(store,p),s.pageInventory)).sort((a,b)=>a.pageKey.localeCompare(b.pageKey,'en'))};
       return {...body,rawSha256,normalizedHash:sha256OfCanonicalJson(body)};
     },
     isValidPageKey:key=>shopifyHandleFromKey(store,key)!==null,

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { PresencePointV1, PricePointV1 } from '../../src/publisher/contract.ts';
 import { buildInventoryChart, buildStepChart, pricedIntervals, type InventorySeries } from '../../userscript/ui/chart.ts';
-import { formatMoney, formatPercent, formatPriceValue, formatSignedMoney } from '../../userscript/core/format.ts';
+import { formatMoney, formatPercent, formatPriceValue, formatSignedMoney, formatStockCount } from '../../userscript/core/format.ts';
 
 const D = 86_400_000;
 const t = (day: number) => 1_800_000_000_000 + day * D;
@@ -90,6 +90,12 @@ describe('formatting', () => {
     expect(formatPercent(-10)).toBe('−10.0%');
     expect(formatPriceValue({ state: 'range', minAmountMinor: 90, maxAmountMinor: 110 }, 'JPY')).toBe('￥90〜￥110');
     expect(formatPriceValue({ state: 'unavailable', minAmountMinor: null, maxAmountMinor: null }, 'JPY')).toBe('価格表示なし');
+  });
+  it('reads a stock count at the display cap as a lower bound (#74)', () => {
+    expect(formatStockCount(42)).toBe('42');
+    expect(formatStockCount(99, 100)).toBe('99');
+    expect(formatStockCount(100, 100)).toBe('100+');
+    expect(formatStockCount(0, 100)).toBe('0');
   });
 });
 

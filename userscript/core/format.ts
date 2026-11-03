@@ -47,6 +47,14 @@ export function formatPercent(p: number): string {
   return `${sign}${(Math.round(Math.abs(p) * 10) / 10).toFixed(1)}%`;
 }
 
+/**
+ * A recorded stock count. When the store shows no more than `cappedAt`
+ * (「100+」), a count at the cap is that lower bound and reads 「100+」.
+ */
+export function formatStockCount(count: number, cappedAt?: number): string {
+  return cappedAt !== undefined && count >= cappedAt ? `${cappedAt}+` : String(count);
+}
+
 const TAX_LABEL: Record<PriceBasis['taxTreatment'], string> = { tax_included: '税込', tax_excluded: '税抜', unknown: '税区分不明' };
 const QUOTE_LABEL: Record<PriceBasis['quoteKind'], string> = { selling: '販売価格', compare_at: '参考価格' };
 
@@ -79,7 +87,7 @@ export const CAVEAT_TEXT: Record<CaveatKey, string> = {
   sampling_interval_weekly: '価格・在庫はおおむね1週間に1回の観測です。観測の間の変化は記録されません。',
   sampling_interval_every_two_days: '価格・在庫はおおむね2日に1回の観測です。観測の間の変化は記録されません。',
   absence_not_discontinued: '一覧から消えた商品は「未掲載」であり、販売終了とは限りません。',
-  site_reported_quantity: '在庫数はサイト表示値をそのまま記録したもので、実在庫を保証しません。',
+  site_reported_quantity: '在庫数は店舗のページが示す値をそのまま記録したもので、実在庫を保証しません。',
   quantity_semantics_unknown: '在庫数の意味(実在庫か目安か)は不明です。',
   suspicious_identity: '商品名と型番が同時に変わった記録があり、同じ番号が別商品に再利用された可能性があります。',
 };

@@ -78,3 +78,54 @@ describe('M5Stack full public catalogue',()=>{
     } finally {dom.window.close();}
   });
 });
+
+describe('M5Stack stock counts from product pages (#74)', () => {
+  const PAGES = { shards: 1, maxPages: 900, maxFailures: 30, maxMinutes: 35 };
+  it('reads every product page and records each variant count as site-reported', async () => {
+    const { m5stackFixture } = await import('../helpers/m5stack.ts');
+    const { m5stackSnapshotAdapter } = await import('../../src/adapters/m5stack/snapshotAdapter.ts');
+    const variants = new Map(m5stackFixture().pages.flat().map((p) => [p.handle, p.variants.map((v) => v.id)]));
+    const lora = gunzipSync(readFileSync('tests/fixtures/m5stack/product-lora-stock-lines.html.gz')).toString();
+    // Every other page carries only the theme's variant options (the script-less layout).
+    const options = (handle: string) => variants.get(handle)!.map((id, i) => `<option data-inventory="${i + 5}" value="${id}">`).join('');
+    const result = await collectM5StackFixture((url, body) => {
+      const m = /\/products\/([^/?]+)$/.exec(new URL(url).pathname);
+      if (m === null) return body;
+      const handle = decodeURIComponent(m[1]!);
+      return handle === 'm5stamp-lora-module-sx1262' ? lora : options(handle);
+    }, { maxRequests: 1000, productPages: PAGES });
+    expect(result.complete).toBe(true);
+    expect(result.warnings).toEqual([]);
+    expect(result.metrics).toMatchObject({ productPagesSelected: 664, productPagesRead: 664, productPagesFailed: 0 });
+    expect(result.requests.filter((u) => u.includes('/products/'))).toHaveLength(664);
+    const normalized = m5stackSnapshotAdapter.normalize(result.raw, 'a'.repeat(64));
+    const offers = normalized.products.find((p) => p.pageKey === m5stackPageKey('m5stamp-lora-module-sx1262'))!.offers;
+    expect(offers.map((o) => [o.externalOfferId, o.availability.quantity, o.availability.quantitySemantics])).toEqual([
+      ['50308212261121', 139, 'site_reported'],
+      ['50308212293889', 187, 'site_reported'],
+      ['50308212326657', 63, 'site_reported'],
+    ]);
+    expect(m5stackSnapshotAdapter.capabilities).toMatchObject({ supportsInventoryQuantity: true, inventoryQuantitySemantics: 'site_reported' });
+    expect(m5stackSnapshotAdapter.capabilities).not.toHaveProperty('inventoryQuantityCap');
+  });
+  it('keeps the catalogue run when the product pages fail, and marks the counts unobserved', async () => {
+    const { m5stackSnapshotAdapter } = await import('../../src/adapters/m5stack/snapshotAdapter.ts');
+    const result = await collectM5StackFixture((url, body) => (url.includes('/products/') ? '<html>maintenance</html>' : body),
+      { maxRequests: 1000, productPages: { ...PAGES, maxFailures: 3 } });
+    expect(result.complete).toBe(true);
+    expect(result.warnings[0]).toContain('Product pages stopped early (0/664 read): more than 3 failed pages');
+    expect(result.requests.filter((u) => u.includes('/products/'))).toHaveLength(4);
+    const offer = m5stackSnapshotAdapter.normalize(result.raw, 'a'.repeat(64)).products[0]!.offers[0]!;
+    expect(offer.availability).toMatchObject({ quantity: null, quantitySemantics: 'site_reported', quantityUnobserved: true });
+  });
+  it('without product pages configured, the catalogue alone is read and counts stay not exposed', async () => {
+    const result = await collectM5StackFixture();
+    expect(result.raw).not.toHaveProperty('pageInventory');
+    expect(result.requests.some((u) => u.includes('/products/'))).toBe(false);
+    expect((await loadM5StackNormalized()).products[0]!.offers[0]!.availability).toMatchObject({ quantity: null, quantitySemantics: 'not_exposed' });
+  });
+  it('refuses product page settings for a store without a page reader', async () => {
+    const { pimoroniCollector } = await import('../../src/collectors/pimoroni/collector.ts');
+    expect(() => pimoroniCollector.validateConfig({ userAgent: 'electro-parts-test/1.0', productPages: PAGES })).toThrow('has no product page reader');
+  });
+});

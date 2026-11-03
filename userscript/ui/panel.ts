@@ -1,7 +1,7 @@
 import type { CaveatKey, InventoryV1, ManifestV1, OfferV1, ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
 import type { LoadState } from '../core/dataClient.ts';
 import type { JpyRate } from '../core/exchangeRate.ts';
-import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatPercent, formatPriceValue, formatSignedMoney } from '../core/format.ts';
+import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatPercent, formatPriceValue, formatSignedMoney, formatStockCount } from '../core/format.ts';
 import { appliedCardFee, DEFAULT_PREFERENCES, type Preferences } from '../core/preferences.ts';
 import { buildStepChart, buildComparisonChart, buildInventoryChart, type ComparisonSeries, type InventorySeries } from './chart.ts';
 import { comparisonEligibility, currentOffer, primaryQuote, type RelatedEntry } from '../core/relations.ts';
@@ -55,6 +55,13 @@ export interface PanelContext {
 /** Counts the store showed and the collector recorded; a boolean-only store has none. */
 function shownQuantities(inventory: InventoryV1): boolean {
   return inventory.semantics !== 'not_exposed' && inventory.points.some((p) => p[1] !== null);
+}
+
+/** The stock chart heading; it explains 「N+」 only when a drawn count reached a store's cap. */
+function stockHeading(stock: readonly InventorySeries[]): string {
+  const caps = [...new Set(stock.flatMap((s) => s.cappedAt !== undefined && s.points.some(([, n]) => n !== null && n >= s.cappedAt!) ? [s.cappedAt] : []))];
+  const capNote = caps.map((c) => `「${c}+」は${c}以上`).join('、');
+  return `在庫数の推移（店舗のページが示す数。${capNote === '' ? '' : `${capNote}。`}実在庫を保証しません）`;
 }
 
 /**
@@ -191,7 +198,9 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
     start: Math.max(start, segment.stats.segmentStartAt), end: product.product.lastSeenAt, inventory: offer.inventory }, ...others];
   // Stock counts share the price chart's series, colors and store switches.
   const stock: InventorySeries[] = (ctx.preferences ?? DEFAULT_PREFERENCES).showStock
-    ? series.flatMap((s, index) => s.inventory !== null && shownQuantities(s.inventory) ? [{ id: s.id, label: s.label, index, points: s.inventory.points, start: s.start, end: s.end }] : [])
+    ? series.flatMap((s, index) => s.inventory !== null && shownQuantities(s.inventory)
+      ? [{ id: s.id, label: s.label, index, points: s.inventory.points, start: s.start, end: s.end, ...(s.inventory.cappedAt === undefined ? {} : { cappedAt: s.inventory.cappedAt }) }]
+      : [])
     : [];
   const draw = () => {
     if (box.childNodes.length > 0) return;
@@ -216,7 +225,7 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
     let stockSvg = stock.length ? makeStock() : null;
     const stockBox = stockSvg === null ? null : text(doc, 'div', '', 'stock-chart');
     if (stockBox !== null && stockSvg !== null) {
-      stockBox.append(text(doc, 'div', '表示在庫数の推移（店舗が表示した数。実在庫を保証しません）', 'related-meta'), stockSvg);
+      stockBox.append(text(doc, 'div', stockHeading(stock), 'related-meta'), stockSvg);
     }
     if (others.length) {
       const controls = doc.createElement('div'); controls.className = 'series-controls'; controls.setAttribute('role', 'group'); controls.setAttribute('aria-label', 'グラフに表示する店舗');
@@ -325,7 +334,7 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
   }
   if (lastAvail !== undefined) {
     const qty = offer.inventory.points[offer.inventory.points.length - 1];
-    const qtyText = qty !== undefined && qty[1] !== null && shownQuantities(offer.inventory) ? `表示在庫数 ${qty[1]}` : undefined;
+    const qtyText = qty !== undefined && qty[1] !== null && shownQuantities(offer.inventory) ? `在庫数 ${formatStockCount(qty[1], offer.inventory.cappedAt)}` : undefined;
     const label = `${availabilityLabel(lastAvail[1])}${lastAvail[4] !== null && lastAvail[4] !== availabilityLabel(lastAvail[1]) ? `(${lastAvail[4]})` : ''}`;
     row(doc, rows, '最新の在庫表示', label, qtyText !== undefined ? `${qtyText} · ${formatDate(lastAvail[0])}` : formatDate(lastAvail[0]));
   }

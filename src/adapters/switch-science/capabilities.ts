@@ -2,6 +2,9 @@ import type { StoreCapabilities } from '../../core/capabilities.ts';
 
 export const SWITCH_SCIENCE_STORE_ID = 'switch-science';
 
+/** The product page shows 「在庫数: 100+」 from this count up (ADR-0027). */
+export const SWITCH_SCIENCE_STOCK_DISPLAY_CAP = 100;
+
 /**
  * What Switch Science's data can express.
  *
@@ -13,8 +16,9 @@ export const SWITCH_SCIENCE_STORE_ID = 'switch-science';
  * not today's sample of it; claiming otherwise would mean the day a product
  * gains a second variant is the day the adapter starts lying about it.
  *
- * Inventory quantity is the opposite case: the bulk catalogue API exposes only
- * a boolean `available`, so the quantity is genuinely absent, not merely zero.
+ * Inventory quantity: the bulk catalogue API exposes only a boolean
+ * `available`. The count comes from the product pages the collector reads in a
+ * rotation (ADR-0027), and the page caps it at `100+`.
  */
 export const SWITCH_SCIENCE_CAPABILITIES: StoreCapabilities = {
   supportsExactPrice: true,
@@ -24,7 +28,8 @@ export const SWITCH_SCIENCE_CAPABILITIES: StoreCapabilities = {
   supportsTaxIncluded: true,
   supportsTaxExcluded: false,
   supportsAvailability: true,
-  supportsInventoryQuantity: false,
-  inventoryQuantitySemantics: 'not_exposed',
+  supportsInventoryQuantity: true,
+  inventoryQuantitySemantics: 'site_reported',
+  inventoryQuantityCap: SWITCH_SCIENCE_STOCK_DISPLAY_CAP,
   primaryQuote: { quoteKind: 'selling', taxTreatment: 'tax_included' },
 };

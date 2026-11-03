@@ -54,7 +54,7 @@ test('KSY extension follows the product dialog without navigation and keeps the 
     await expect(panel).toHaveAttribute('data-page-key', '1094');
     await expect(page.locator('#detail #electronics-price-history-root + #dt_Description')).toBeAttached();
     await expect(panel).toContainText('￥913');
-    await expect(panel).toContainText('表示在庫数 363');
+    await expect(panel).toContainText('在庫数 363');
     await expect(panel).toContainText('税込');
     await expect(panel).not.toContainText('取得できませんでした');
     await expect(panel.locator('section')).toHaveAttribute('data-theme', 'light');
@@ -72,7 +72,7 @@ test('KSY extension follows the product dialog without navigation and keeps the 
     const settings = panel.getByRole('dialog', { name: '表示設定' });
     await settings.getByRole('checkbox', { name: '在庫数の推移をグラフに表示' }).uncheck();
     await expect(panel.locator('.stock-chart')).toHaveCount(0);
-    await expect(panel).toContainText('表示在庫数 363');
+    await expect(panel).toContainText('在庫数 363');
     await settings.getByRole('checkbox', { name: '在庫数の推移をグラフに表示' }).check();
     await expect(panel.locator('.stock-chart svg')).toBeVisible();
     await settings.getByRole('button', { name: '閉じる' }).click();

@@ -2,7 +2,9 @@ import { SWITCH_SCIENCE_STORE_ID } from '../../adapters/switch-science/capabilit
 import type { CollectDeps, CollectOutcome, StoreCollector } from '../../stores/collector.ts';
 import { PoliteFetcher, type PoliteFetcherOptions } from '../politeFetcher.ts';
 import { CATALOG_PAGE_LIMIT, DEFAULT_COLLECTION, SWITCH_SCIENCE_BASE_URL } from './catalog.ts';
+import { parseProductPagesConfig, type ProductPagesConfig } from '../productPageInventory.ts';
 import { crawlSwitchScience, DEFAULT_MAX_PAGES } from './crawl.ts';
+import { readSwitchScienceProductPage } from './productPage.ts';
 
 /**
  * `collector` section of `config/switch-science.json`. Every field is optional
@@ -23,6 +25,8 @@ export interface SwitchScienceCollectorConfig {
   maxRequests: number;
   maxSubSitemaps: number;
   maxUncoveredProducts: number;
+  /** Product pages read for stock counts (ADR-0027); null reads none. */
+  productPages: ProductPagesConfig | null;
 }
 
 function num(v: unknown, name: string, fallback: number, min: number, max?: number): number {
@@ -56,6 +60,7 @@ export function parseSwitchScienceCollectorConfig(config: Record<string, unknown
     maxRequests: num(config['maxRequests'], 'maxRequests', 500, 1),
     maxSubSitemaps: num(config['maxSubSitemaps'], 'maxSubSitemaps', 64, 1),
     maxUncoveredProducts: num(config['maxUncoveredProducts'], 'maxUncoveredProducts', 0, 0),
+    productPages: parseProductPagesConfig(config['productPages']),
   };
 }
 
@@ -89,6 +94,7 @@ export const switchScienceCollector: StoreCollector = {
       maxPages: c.maxPages,
       maxSubSitemaps: c.maxSubSitemaps,
       maxUncoveredProducts: c.maxUncoveredProducts,
+      ...(c.productPages === null ? {} : { productPages: { config: c.productPages, reader: readSwitchScienceProductPage } }),
       log: deps.log,
       ...(deps.now === undefined ? {} : { now: deps.now }),
     });
@@ -111,6 +117,13 @@ export const switchScienceCollector: StoreCollector = {
         unsupportedHandles: s.dataQuality.unsupportedHandle,
         unparsablePrices: s.dataQuality.unparsablePrice,
         unavailableItems: s.dataQuality.unavailable,
+        ...(s.pageInventory === undefined
+          ? {}
+          : {
+              productPagesSelected: s.pageInventory.selected,
+              productPagesRead: s.pageInventory.read,
+              productPagesFailed: s.pageInventory.failures.length,
+            }),
         logicalPages: s.requests.logicalPages,
         httpAttempts: s.requests.httpAttemptsIncludingRetries,
         retries: fetcher.stats.retries,

@@ -78,7 +78,7 @@ test('shows the FT232RQ kit history (1150 → 1200) on the saved product page wi
   await expect(section).toContainText('+￥50');
   await expect(section).toContainText('￥1,150〜￥1,200');
   await expect(section).toContainText('在庫あり');
-  await expect(section).toContainText('表示在庫数 781');
+  await expect(section).toContainText('在庫数 781');
   await expect(section).toContainText('観測期間 2026-08-02〜2026-09-06(2 回)');
   // The chart is drawn lazily once visible.
   await panel(page).scrollIntoViewIfNeeded();
