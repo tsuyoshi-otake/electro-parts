@@ -24,7 +24,7 @@ export const PANEL_TITLE = 'Electronics Price History';
 
 /**
  * Maximum chart dimensions. The viewBox follows the box's width up to this cap, so axis
- * text keeps its 12px; the cap is above the widest panel measured (Pimoroni, 1,091px).
+ * text keeps its 12px; the cap is above the widest store panel measured (1,091px).
  */
 const CHART_SIZE = { width: 1200, height: 280 };
 
