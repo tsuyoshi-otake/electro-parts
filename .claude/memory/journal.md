@@ -1285,3 +1285,11 @@ Learning: check each listing claim against the rendering code, not against the p
   - The 0.7.2 record still described an unsubmitted draft. It now records the rejection and says not to resubmit that ZIP.
   - The landing page sentence told Pimoroni desktop users to look under the purchase area. It now says the panel is beside the purchase area, under the product images, on M5Stack wider than 768 px and Pimoroni wider than 1024 px (the adapters' two-column mounts).
 - Learning: a count or region claim in public text needs the same check as a store list. The draft counted every store except Pimoroni as domestic without checking where each shop is; M5Stack's official shop is overseas.
+
+## 2026-11-03 0.7.3 release: PR #70 merged, Pages republished, live check, submitted for review (#69)
+- PR #70: CI passed; Codex's three P2 findings fixed in 8d33308 and resolved; independent rubric verifier (Sonnet, fresh context) 10 of 10. Squash-merged as 239835a (tree identical to 8d33308); #69 closed; branch deleted.
+- Pages: "Crawl and publish" with `republish=true` on 239835a (run 41582374971, about 2 min): success; all six `datasetVersion`/`runCount` unchanged against a baseline taken just before (`~/tmp/electro-073/pages-before`). ZIP SHA-256 e8a771bc18123ed7…, 785,578 bytes, byte-identical to a local `build-extension --zip` on 239835a; userscript `@version 0.7.3`; landing page leads with 0.7.3.
+- The extracted 0.7.2 and 0.7.3 ZIPs differ only in the bundle header version line and the manifest `version`/`description`, so the 0.7.2 placement and typography checks were not repeated.
+- Live check of the Pages ZIP (`~/tmp/electro-073/live.mjs`, 0.7.0 script plus a description check): 22 of 23; the failure is KSY `ERR_CONNECTION_TIMED_OUT` (store down since at least 03:17 UTC). Page errors only store-side. Screenshots looked at. No process left.
+- Store: `upload` → draft 0.7.3 (the status still read 拒否 from 0.7.2 until submission); `fill` 4× `same`; `blockers` none; the owner pressed 「審査のため送信」 (「おしたー」); `status` 審査待ち, draft 0.7.3, published 0.6.3; `close` deleted the profile, no Chrome left. Record: docs/verification/2026-11-03-release-073.md.
+- Observed: right after the owner submitted, `status` briefly read 「公開済み - 一般公開」 before the status tab read 審査待ち, so read the status tab (or `status` again) before concluding.
