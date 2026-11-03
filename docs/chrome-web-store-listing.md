@@ -23,7 +23,7 @@
 | --- | --- |
 | 言語 | 日本語 |
 | アイテム名 | `Electronics Price History` |
-| 概要(132 文字以内) | `電子部品通販の商品ページに、価格の推移グラフと観測時の在庫を表示。他店で同じ商品を確認済みなら、その記録価格も並べます。秋月電子通商・スイッチサイエンス・M5Stack公式・Raspberry Pi Shop by KSY・せんごく・Pimoroniに対応。` |
+| 概要(132 文字以内) | `電子部品通販の商品ページに、価格の推移グラフと観測時の在庫を表示。他店で同じ商品を確認済みなら、その記録価格も並べます。国内4店舗と海外2店舗に対応。` |
 | カテゴリ | ショッピング |
 | スクリーンショット | この順に 4 枚(いずれも 1280×800)。`dist/store/screenshot-comparison-akizuki.png`、`dist/store/screenshot-comparison-switch-science.png`、`dist/store/screenshot-akizuki.png`、`dist/store/screenshot-switch-science.png` |
 | ショップ アイコン | 128×128。`dist/extension/icons/icon-128.png`(パッケージに入っているものと同じファイル) |
@@ -52,12 +52,8 @@
 ・版・容量違いなどの似た商品は、違いを明記して別枠で紹介(互換性の保証ではありません)
 
 ■ 対応サイト
-・秋月電子通商(akizukidenshi.com)
-・スイッチサイエンス(www.switch-science.com)
-・M5Stack公式ショップ(shop.m5stack.com)
-・Raspberry Pi Shop by KSY(raspberry-pi.ksyic.com。一覧や固定リンクから開いた商品の詳細)
-・せんごくネット通販(www.sengoku.co.jp。「電子工作部品」の商品)
-・Pimoroni(shop.pimoroni.com。英国の店舗。日本向けの /en-jp のページを含む)
+国内の電子部品通販4店舗と、海外の2店舗の商品ページで動作します。対応店舗の一覧はホームページにあります。
+https://tsuyoshi-otake.github.io/electro-parts/
 各店の商品ページを開くと、ページ内に履歴パネルが出ます。カート・購入手続き・会員ページでは動作しません。
 
 ■ 使い方
@@ -147,7 +143,10 @@ GBP の参考値は同じ USD の応答から計算するクロスレートで�
 
 リモートコード「いいえ」、データ使用の 3 つの証明、プライバシーポリシー URL、販売地域は版をまたいで残るので、`fill` は触らない。変えたときは手で直し、この文書も直す。
 
-却下されたらメールに**理由の項番**(例: Blue Argon = 権限の過剰要求、Yellow Magnesium = 説明と機能の不一致)が入る。
+却下されたらメールに**理由の項番**(例: Blue Argon = 権限の過剰要求、Yellow Magnesium = 説明と機能の不一致、Yellow Argon = 説明のキーワード過剰)が入る。
+同じ内容はダッシュボードの「ステータス」タブにも出る(違反のタイプ・参照 ID・引用された文・修正方法)。
+0.7.2 は Yellow Argon で却下された(2026-11-03)。概要の 6 店舗名の列挙と、説明の「■ 対応サイト」の店舗名+ドメインの一覧が引用された。
+そのため概要と説明には店舗名やドメインを並べず、店舗数とホームページ(一覧がある)を書く。ドメインの一覧は、審査担当者が読むホスト権限の理由に書く。
 直すのは掲載情報かパッケージのどちらかで、判断そのものを議論しない。パッケージを直した場合は版を上げて再アップロードする。
 
 公開後は、ストア側で自動更新が配られる。**zip の手動導入(デベロッパーモード)を続けている利用者は自動更新されない**ので、
@@ -156,7 +155,7 @@ GBP の参考値は同じ USD の応答から計算するクロスレートで�
 ## 変更したら一緒に見直す場所
 
 - `scripts/build-extension.ts`(名前・説明・権限・アイコン。テストが上限と一致を検査する)
-- `userscript/adapters/<store>.ts` の `matchPatterns`(コンテンツスクリプトの実行範囲。広げたり狭めたりしたら、説明の「■ 対応サイト」・単一用途の説明・コンテンツスクリプトの対象サイトの 3 か所をそろえる)
+- `userscript/adapters/<store>.ts` の `matchPatterns`(コンテンツスクリプトの実行範囲。店舗を足したり減らしたりしたら、単一用途の説明とコンテンツスクリプトの対象サイトをそろえ、概要と説明「■ 対応サイト」の店舗数と、`public/index.html` の対応サイトの一覧を直す)
 - `public/privacy.html`(このページの内容と食い違わせない。通信先を足したら両方に書く)
 - `docs/adr/0022-yen-reference-from-daily-exchange-rate.md`(為替レートの取得先・頻度)と `docs/adr/0026-yen-headline-card-fee-and-stock-chart-settings.md`(円で出す範囲・カード手数料・在庫数グラフの設定)
 - `README.md` / `public/index.html`(導入手順)
