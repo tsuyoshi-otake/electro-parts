@@ -12,7 +12,7 @@ import type { PriceBasis } from '../core/price.ts';
  * new userscripts never read each other's files. Minor bumps only add
  * optional fields.
  */
-export const CONTRACT_VERSION = '1.1.0';
+export const CONTRACT_VERSION = '1.2.0';
 export const CONTRACT_MAJOR = 1;
 
 export const DATA_ROOT = `data/v${CONTRACT_MAJOR}`;
@@ -93,6 +93,13 @@ export interface InventoryV1 {
   /** Only the most recent `points` are published when the series is long. */
   truncated: boolean;
   totalPoints: number;
+  /**
+   * Since 1.2.0. The store shows counts at or above this value as `N+`, so a
+   * point equal to it means "at least this many". Absent when every count is
+   * shown as it is. A field, not a third tuple element: 1.1 clients reject
+   * points that are not `[t, quantity]`, and ignore unknown fields.
+   */
+  cappedAt?: number;
 }
 
 export interface OfferV1 {
@@ -372,6 +379,9 @@ function checkOffer(c: Checker, v: unknown, path: string): void {
     c.oneOf(inv['semantics'], SEMANTICS, `${path}.inventory.semantics`);
     c.bool(inv['truncated'], `${path}.inventory.truncated`);
     c.int(inv['totalPoints'], `${path}.inventory.totalPoints`);
+    if (inv['cappedAt'] !== undefined && (!Number.isSafeInteger(inv['cappedAt']) || (inv['cappedAt'] as number) <= 0)) {
+      c.fail(`${path}.inventory.cappedAt`, 'expected a positive integer');
+    }
     if (c.arr(inv['points'], `${path}.inventory.points`)) {
       inv['points'].forEach((p, i) => {
         const at = `${path}.inventory.points[${i}]`;

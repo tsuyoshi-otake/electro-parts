@@ -297,10 +297,12 @@ describe('Switch Science normalization', () => {
   it('is registered next to the other stores', () => {
     expect(listStoreIds()).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy', 'sengoku', 'pimoroni']);
     expect(getStoreAdapter('switch-science')).toBe(switchScienceSnapshotAdapter);
+    // #74: the count comes from the product pages, which show 「100+」 from 100 up.
     expect(switchScienceSnapshotAdapter.capabilities).toMatchObject({
       supportsVariants: true,
-      supportsInventoryQuantity: false,
-      inventoryQuantitySemantics: 'not_exposed',
+      supportsInventoryQuantity: true,
+      inventoryQuantitySemantics: 'site_reported',
+      inventoryQuantityCap: 100,
       primaryQuote: { quoteKind: 'selling', taxTreatment: 'tax_included' },
     });
   });

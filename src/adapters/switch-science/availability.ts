@@ -1,4 +1,5 @@
 import type { Availability, AvailabilityState } from '../../core/domain.ts';
+import { withPageQuantity, type ProductPageInventoryRaw } from '../productPageInventory.ts';
 import type { SwitchScienceRawVariant } from './rawSchema.ts';
 
 /**
@@ -17,20 +18,25 @@ export function mapSwitchScienceAvailabilityState(available: boolean): Availabil
   return available ? 'in_stock' : 'out_of_stock';
 }
 
-export function normalizeSwitchScienceAvailability(variant: SwitchScienceRawVariant): Availability {
+/**
+ * The count is the one the product page showed, when this run read it
+ * (ADR-0027). A snapshot from before the pages were read has none: `null` there
+ * means "not exposed", never "zero".
+ */
+export function normalizeSwitchScienceAvailability(variant: SwitchScienceRawVariant, pages?: ProductPageInventoryRaw): Availability {
   const available = variant.available === true;
-  return {
-    state: mapSwitchScienceAvailabilityState(available),
-    purchasable: available,
-    // The bulk API never carries a quantity. `null` here means "not exposed",
-    // never "zero" — the distinction the domain model exists to preserve.
-    quantity: null,
-    quantitySemantics: 'not_exposed',
-    // `rawStatus` is the source's own *status text*, kept so a reader can see
-    // what the store said. This source shows no such text: it sends a boolean,
-    // which `state` and `purchasable` already carry in full. Echoing it back as
-    // the string "available" would only put an English word into the panel
-    // beside the label it duplicates.
-    rawStatus: null,
-  };
+  return withPageQuantity(
+    {
+      state: mapSwitchScienceAvailabilityState(available),
+      purchasable: available,
+      // `rawStatus` is the source's own *status text*, kept so a reader can see
+      // what the store said. This source shows no such text: it sends a boolean,
+      // which `state` and `purchasable` already carry in full. Echoing it back as
+      // the string "available" would only put an English word into the panel
+      // beside the label it duplicates.
+      rawStatus: null,
+    },
+    pages,
+    String(variant.variantId),
+  );
 }

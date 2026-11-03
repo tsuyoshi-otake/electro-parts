@@ -77,8 +77,8 @@ test('shows the ¥165 camera cable on the saved Switch Science page, reading onl
   await expect(section).toContainText('在庫あり');
   await expect(section).toContainText('観測期間 2026-09-07〜2026-09-07(1 回)');
   await expect(section).toContainText('価格変更の記録');
-  // The store exposes no quantity, so the panel must not print one.
-  await expect(section).not.toContainText('表示在庫数');
+  // This saved dataset predates the product-page counts (#74), so the panel must not print one.
+  await expect(section).not.toContainText(/在庫数 \d/);
 
   await panel(page).scrollIntoViewIfNeeded();
   await expect(page.locator('#electronics-price-history-root svg[role="img"]')).toBeVisible();

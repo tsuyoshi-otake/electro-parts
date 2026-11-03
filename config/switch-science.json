@@ -10,9 +10,10 @@
     "jitterMs": 750,
     "maxAttempts": 4,
     "timeoutMs": 30000,
-    "maxRequests": 300,
+    "maxRequests": 2100,
     "maxSubSitemaps": 64,
-    "maxUncoveredProducts": 25
+    "maxUncoveredProducts": 25,
+    "productPages": { "shards": 4, "maxPages": 1800, "maxFailures": 50, "maxMinutes": 55 }
   },
   "sanity": {
     "maxItemCountDropRatio": 0.1,

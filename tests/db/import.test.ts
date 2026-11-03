@@ -248,6 +248,23 @@ describe('importSnapshot', () => {
     const inv = readStoreHistory(db, 'synthetic').products[0]!.offers[0]!.inventory;
     expect(inv.map((p) => p.state)).toEqual([3, 0, null]);
   });
+
+  it('adds no inventory change point for a count the run did not read (#74)', () => {
+    // A rotation reads a product's page on some runs only: the runs in between
+    // must neither record "not shown" nor invent a reading.
+    importSnapshot(db, syntheticSnapshot(day(0), [{ id: 'a', quantity: 3 }]), { capabilities: caps });
+    importSnapshot(db, syntheticSnapshot(day(1), [{ id: 'a', quantity: 'unobserved' }]), { capabilities: caps });
+    importSnapshot(db, syntheticSnapshot(day(2), [{ id: 'a', quantity: 'unobserved' }]), { capabilities: caps });
+    importSnapshot(db, syntheticSnapshot(day(3), [{ id: 'a', quantity: 5 }]), { capabilities: caps });
+    importSnapshot(db, syntheticSnapshot(day(4), [{ id: 'a', quantity: 'unobserved' }]), { capabilities: caps });
+    const offer = readStoreHistory(db, 'synthetic').products[0]!.offers[0]!;
+    expect(offer.inventory).toEqual([
+      { t: dayMs(0), state: 3 },
+      { t: dayMs(3), state: 5 },
+    ]);
+    // The availability series still records every run, with the count's semantics unchanged.
+    expect(offer.availability.map((a) => a.state.quantitySemantics)).toEqual(['site_reported']);
+  });
 });
 
 describe('inventory retention', () => {

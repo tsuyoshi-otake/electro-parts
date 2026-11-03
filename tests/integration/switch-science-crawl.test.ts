@@ -219,3 +219,54 @@ describe('switchScienceCollector', () => {
     expect(logs.some((l) => l.startsWith('[crawl]'))).toBe(true);
   });
 });
+
+describe('Switch Science stock counts from product pages (#74)', () => {
+  const page = (handle: string, count: string) =>
+    `<html><head><link rel="canonical" href="https://www.switch-science.com/products/${handle}"></head><body><p>在庫数: ${count}</p></body></html>`;
+
+  it('reads the pages of in-stock products, keeps 100+ as the cap, leaves an unread one unobserved and a sold-out one without a count', async () => {
+    const shop = fakeShop();
+    const products = addProducts(shop, 8);
+    products[1]!.variants[0]!.available = false;
+    products.forEach((p, i) => shop.bodyOverrides.set(`${FAKE_BASE}/products/${p.handle}`, page(p.handle, String(i * 3))));
+    shop.bodyOverrides.set(`${FAKE_BASE}/products/${products[2]!.handle}`, page(products[2]!.handle, '100+'));
+    shop.bodyOverrides.delete(`${FAKE_BASE}/products/${products[3]!.handle}`); // removed since the catalogue: 404
+    const logs: string[] = [];
+    const outcome = await switchScienceCollector.collect(
+      {
+        userAgent: 'electro-parts-price-history/0.1 (+https://example.test; research)',
+        baseUrl: FAKE_BASE,
+        pageLimit: 10,
+        minIntervalMs: 500,
+        jitterMs: 0,
+        productPages: { shards: 1, maxPages: 100, maxFailures: 5, maxMinutes: 30 },
+      },
+      { log: (m) => logs.push(m), transport: transportFor(shop), sleep: async () => undefined, now: fixedClock },
+    );
+    expect(outcome.complete).toBe(true);
+    // The unavailable product's page is never requested.
+    expect(shop.log).not.toContain(`${FAKE_BASE}/products/${products[1]!.handle}`);
+    expect(outcome.metrics).toMatchObject({ productPagesSelected: 7, productPagesRead: 6, productPagesFailed: 1 });
+    expect(outcome.warnings).toEqual([expect.stringContaining(`1 product page(s) not read, e.g. ${products[3]!.handle}: GET`)]);
+    expect(switchScienceSnapshotAdapter.validateRaw(outcome.raw).errors).toEqual([]);
+    const byHandle = new Map(
+      switchScienceSnapshotAdapter.normalize(outcome.raw, 'f'.repeat(64)).products.map((p) => [p.pageKey, p.offers[0]!.availability]),
+    );
+    expect(byHandle.get(products[0]!.handle)).toMatchObject({ quantity: 0, quantitySemantics: 'site_reported' });
+    expect(byHandle.get(products[4]!.handle)).toMatchObject({ quantity: 12, quantitySemantics: 'site_reported' });
+    expect(byHandle.get(products[2]!.handle)).toMatchObject({ quantity: 100, quantitySemantics: 'site_reported' });
+    // Not read because it cannot be bought: no count, so an older one is not held next to 「在庫切れ」.
+    expect(byHandle.get(products[1]!.handle)).toEqual({ state: 'out_of_stock', purchasable: false, rawStatus: null, quantity: null, quantitySemantics: 'site_reported' });
+    expect(byHandle.get(products[3]!.handle)).toMatchObject({ quantity: null, quantityUnobserved: true });
+  });
+
+  it('rejects a product page section that does not hold together', async () => {
+    const shop = fakeShop();
+    addProducts(shop, 3);
+    const snap = (await crawl(shop)).snapshot;
+    expect(snap).not.toHaveProperty('pageInventory'); // not configured: nothing requested, nothing recorded
+    expect(shop.log.some((u) => u.includes('/products/'))).toBe(false);
+    const bad = { ...snap, pageInventory: { round: 0, shards: 1, shard: 0, eligible: 3, selected: 3, read: 4, failures: [], stopped: null, quantities: {} } };
+    expect(switchScienceSnapshotAdapter.validateRaw(bad).errors.map((e) => e.code)).toEqual(['raw.page_inventory']);
+  });
+});

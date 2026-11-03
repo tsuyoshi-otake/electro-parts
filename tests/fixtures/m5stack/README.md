@@ -9,3 +9,12 @@ not a sample or a permanent count assertion about the live store.
 `product.html.gz` is the real m5stamp-lora-module-sx1262 page with scripts, iframes
 and hidden inputs removed. Its canonical URL and product layout are retained.
 Tests replace network responses; they do not contact the live shop.
+
+`product-tab5-stock-lines.html.gz` and `product-lora-stock-lines.html.gz` (Issue #74,
+ADR-0027) are lines cut from the real m5stack-tab5-iot-development-kit-esp32-p4 and
+m5stamp-lora-module-sx1262 pages retrieved 2026-11-04: the canonical link, the
+`_SIConfig.product = {...};` line, the `_SIConfig.product.variants[i]['inventory_quantity']`
+lines, the variant `<option data-inventory>` elements and the 「10+ In Stock」 line.
+Nothing else from the pages is kept. The counts in them are that day's values, not
+assertions about the live store. In the Tab5 page the second variant has no `<option>`;
+that is how the page was, and the test relies on it.

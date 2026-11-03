@@ -11,6 +11,7 @@ import { isSafeKey } from '../../core/identity.ts';
 import { normalizeUtcIso, parseUtcMs } from '../../core/time.ts';
 import { IssueCollector, type ValidationResult } from '../../core/validation.ts';
 import type { StoreSnapshotAdapter } from '../../stores/adapter.ts';
+import { validateProductPageInventoryRaw, type ProductPageInventoryRaw } from '../productPageInventory.ts';
 import { normalizeSwitchScienceAvailability } from './availability.ts';
 import { SWITCH_SCIENCE_CAPABILITIES, SWITCH_SCIENCE_STORE_ID } from './capabilities.ts';
 import {
@@ -107,6 +108,13 @@ export function validateSwitchScienceRaw(raw: unknown): ValidationResult {
     if (typeof catalog['unlisted'] === 'number') c.metrics['catalogUnlisted'] = catalog['unlisted'];
   } else {
     c.error('raw.catalog_missing', 'catalog block missing');
+  }
+  if (raw['pageInventory'] !== undefined) {
+    try {
+      c.metrics['productPagesRead'] = validateProductPageInventoryRaw(raw['pageInventory']).read;
+    } catch (e) {
+      c.error('raw.page_inventory', (e as Error).message);
+    }
   }
 
   const items = raw['items'];
@@ -205,7 +213,7 @@ export function switchScienceCoverageId(raw: SwitchScienceRawSnapshot): string {
   return `shopify:collections/${raw.collection}`;
 }
 
-function normalizeVariant(variant: SwitchScienceRawVariant): NormalizedOffer {
+function normalizeVariant(variant: SwitchScienceRawVariant, pages?: ProductPageInventoryRaw): NormalizedOffer {
   const quotes: PriceQuote[] = [
     variant.priceYen === null
       ? {
@@ -252,11 +260,11 @@ function normalizeVariant(variant: SwitchScienceRawVariant): NormalizedOffer {
     sku,
     variantName: title === '' || title === 'Default Title' ? null : title,
     priceQuotes: quotes,
-    availability: normalizeSwitchScienceAvailability(variant),
+    availability: normalizeSwitchScienceAvailability(variant, pages),
   };
 }
 
-export function normalizeSwitchScienceItem(item: SwitchScienceRawItem): NormalizedProduct {
+export function normalizeSwitchScienceItem(item: SwitchScienceRawItem, pages?: ProductPageInventoryRaw): NormalizedProduct {
   const variants = [...item.variants].sort((a, b) => a.position - b.position || a.variantId - b.variantId);
   const aliases: ProductAlias[] = [
     { kind: 'handle', value: item.handle },
@@ -281,13 +289,13 @@ export function normalizeSwitchScienceItem(item: SwitchScienceRawItem): Normaliz
       category: productType === '' ? null : productType,
       canonicalUrl: switchScienceProductUrl(item.handle),
     },
-    offers: variants.map(normalizeVariant),
+    offers: variants.map((v) => normalizeVariant(v, pages)),
   };
 }
 
 export function normalizeSwitchScienceRaw(raw: SwitchScienceRawSnapshot, rawSha256: string): NormalizedSnapshot {
   const products = raw.items
-    .map(normalizeSwitchScienceItem)
+    .map((item) => normalizeSwitchScienceItem(item, raw.pageInventory))
     .sort((a, b) => (a.externalProductId < b.externalProductId ? -1 : a.externalProductId > b.externalProductId ? 1 : 0));
   const body = {
     storeId: SWITCH_SCIENCE_STORE_ID,

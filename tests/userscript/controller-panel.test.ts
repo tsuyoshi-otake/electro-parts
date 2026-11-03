@@ -318,7 +318,7 @@ describe('history panel controller', () => {
     expect(text).toContain('+4.4%');
     expect(text).toContain('￥1,150〜￥1,200');
     expect(text).toContain('在庫あり');
-    expect(text).toContain('表示在庫数 781');
+    expect(text).toContain('在庫数 781 · ');
     expect(text).toContain('販売価格 / 税込 / 1個');
     expect(text).toContain('観測期間 2026-08-02〜2026-09-06(2 回)');
     expect(text).toContain('データ版 v1');

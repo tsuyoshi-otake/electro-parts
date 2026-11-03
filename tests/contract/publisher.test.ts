@@ -138,6 +138,24 @@ describe('generateStoreDataset', () => {
     expect(generateStoreDataset(h1, { ...gen, sqliteSchemaVersion: gen.sqliteSchemaVersion + 1 }).manifest.datasetVersion).not.toBe(d1.manifest.datasetVersion);
   });
 
+  it('marks the display cap of a store that shows counts as N+ (#74)', () => {
+    const historyWith = (capabilities: typeof caps) => {
+      const db = openInMemory();
+      migrate(db);
+      importSnapshot(db, syntheticSnapshot(day(0), [{ id: 'a', quantity: 100 }, { id: 'b' }]), { capabilities });
+      return readStoreHistory(db, 'synthetic');
+    };
+    const ds = generateStoreDataset(historyWith({ ...caps, inventoryQuantityCap: 100 }), gen);
+    expect(product(ds.products, 'a').offers[0]!.inventory).toEqual({ semantics: 'site_reported', points: [[dayMs(0), 100]], truncated: false, totalPoints: 1, cappedAt: 100 });
+    for (const file of ds.products) expect(validateProductFileV1(file)).toEqual([]);
+    const bad = structuredClone(product(ds.products, 'a'));
+    bad.offers[0]!.inventory.cappedAt = 0;
+    expect(validateProductFileV1(bad)).toEqual([expect.stringContaining('$.offers[0].inventory.cappedAt')]);
+    // Without a cap the field is absent, so uncapped stores publish exactly what they did before.
+    const plain = generateStoreDataset(historyWith(caps), gen);
+    expect(product(plain.products, 'a').offers[0]!.inventory).not.toHaveProperty('cappedAt');
+  });
+
   it('truncates long inventory series and flags it', () => {
     const runs: [string, SyntheticProduct[]][] = [];
     for (let i = 0; i < 10; i += 1) runs.push([day(i), [{ id: 'a', quantity: 100 - i }]]);

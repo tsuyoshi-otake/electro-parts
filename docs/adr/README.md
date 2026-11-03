@@ -28,5 +28,6 @@
 | 0024 | [せんごくネット通販は「電子工作部品」の分類一覧を 4000 件未満の単位で読み、事実だけを記録する](0024-sengoku-electronic-parts-category-listings.md) | 採用 |
 | 0025 | [Pimoroni は基準通貨 GBP の Shopify カタログを転送なしで読み、日本向けの商品ページにも GBP の記録を出す](0025-pimoroni-gbp-base-catalogue-without-redirects.md) | 採用 |
 | 0026 | [現在の記録価格を円で見出しにし、カード手数料と在庫数グラフを設定モーダルで切り替える](0026-yen-headline-card-fee-and-stock-chart-settings.md) | 採用 |
+| 0027 | [スイッチサイエンスと M5Stack 公式の在庫数を商品ページから読む](0027-stock-counts-from-product-pages.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。

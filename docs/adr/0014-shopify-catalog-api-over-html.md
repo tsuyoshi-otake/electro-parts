@@ -1,6 +1,6 @@
 # ADR-0014: Switch Science は HTML ではなく Shopify のカタログ JSON から読む
 
-- 状態: 採用(2026-09-07)
+- 状態: 採用(2026-09-07)。在庫数を商品ページから読む点は [ADR-0027](0027-stock-counts-from-product-pages.md) で改訂(2026-11-04)
 - 関連: `src/collectors/switch-science/`、`src/adapters/switch-science/rawSchema.ts`、ADR-0004、ADR-0008、ADR-0009、ADR-0012
 
 ## 背景

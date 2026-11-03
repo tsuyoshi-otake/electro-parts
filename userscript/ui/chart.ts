@@ -1,5 +1,5 @@
 import type { InventoryPointV1, PresencePointV1, PricePointV1 } from '../../src/publisher/contract.ts';
-import { formatDate, formatDateTime, formatMoney } from '../core/format.ts';
+import { formatDate, formatDateTime, formatMoney, formatStockCount } from '../core/format.ts';
 
 /**
  * Dependency-free SVG step chart of one price segment. A price stays in
@@ -163,6 +163,8 @@ export interface InventorySeries {
   points: readonly InventoryPointV1[];
   start: number;
   end: number;
+  /** The store's display cap; a count at it is a lower bound and reads 「N+」. */
+  cappedAt?: number;
 }
 
 /**
@@ -172,7 +174,7 @@ export interface InventorySeries {
  */
 export function buildInventoryChart(doc: Document, series: readonly InventorySeries[], options: Pick<ChartOptions, 'width' | 'height'>): SVGSVGElement {
   const { width, height } = options;
-  const svg = el(doc, 'svg', { viewBox: `0 0 ${width} ${height}`, width: '100%', role: 'group', class: 'eph-inventory-chart', 'aria-label': '店舗が表示した在庫数の推移。点にフォーカスすると観測日時と在庫数を確認できます。' });
+  const svg = el(doc, 'svg', { viewBox: `0 0 ${width} ${height}`, width: '100%', role: 'group', class: 'eph-inventory-chart', 'aria-label': '店舗のページが示す在庫数の推移。点にフォーカスすると観測日時と在庫数を確認できます。' });
   const prepared = series.map((s) => {
     const steps: { from: number; to: number; count: number }[] = [];
     s.points.forEach(([t, count], i) => {
@@ -223,7 +225,7 @@ export function buildInventoryChart(doc: Document, series: readonly InventorySer
     group.appendChild(el(doc, 'path', { d: line, class: 'eph-line', fill: 'none' }));
     for (const [t, count] of s.points) {
       if (count === null || t < s.start || t > s.end) continue;
-      const label = `${s.label} · ${formatDateTime(t)} · 在庫数 ${count}`;
+      const label = `${s.label} · ${formatDateTime(t)} · 在庫数 ${formatStockCount(count, s.cappedAt)}`;
       const dot = el(doc, 'circle', { cx: x(t), cy: y(count), r: 3, class: 'eph-dot', tabindex: 0, role: 'img', 'aria-label': label });
       const title = el(doc, 'title', {});
       title.textContent = label;

@@ -35,7 +35,8 @@ export interface SyntheticOffer {
   unit?: string | null;
   availability?: AvailabilityState;
   purchasable?: boolean | null;
-  quantity?: number | null;
+  /** `'unobserved'`: the source has a count this run did not read (ADR-0027). */
+  quantity?: number | null | 'unobserved';
   rawStatus?: string | null;
   sku?: string | null;
   variantName?: string | null;
@@ -71,7 +72,8 @@ export function quote(price: number | [number, number] | null, unit: string | nu
 }
 
 function offerOf(o: SyntheticOffer, fallbackId: string): NormalizedProduct['offers'][number] {
-  const quantity = o.quantity ?? null;
+  const unobserved = o.quantity === 'unobserved';
+  const quantity = o.quantity === 'unobserved' ? null : (o.quantity ?? null);
   return {
     externalOfferId: o.offerId ?? fallbackId,
     offerKind: o.offerId === undefined ? 'default' : 'variant',
@@ -82,8 +84,9 @@ function offerOf(o: SyntheticOffer, fallbackId: string): NormalizedProduct['offe
       state: o.availability ?? 'in_stock',
       purchasable: o.purchasable === undefined ? true : o.purchasable,
       quantity,
-      quantitySemantics: quantity === null ? 'unknown' : 'site_reported',
+      quantitySemantics: quantity === null && !unobserved ? 'unknown' : 'site_reported',
       rawStatus: o.rawStatus === undefined ? null : o.rawStatus,
+      ...(unobserved ? { quantityUnobserved: true as const } : {}),
     },
   };
 }

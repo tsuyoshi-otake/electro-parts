@@ -96,8 +96,25 @@ describe('cross-store comparison panel', () => {
     const f = setup(); f.draw();
     const groups = [...f.shadow.querySelectorAll<SVGGElement>('.eph-inventory-chart g[data-series]')];
     expect(groups.map((g) => [g.dataset['series'], g.getAttribute('data-series-index')])).toEqual([['current', '0'], ['example-pair', '1']]);
-    expect(f.shadow.querySelector('.stock-chart')?.textContent).toContain('表示在庫数の推移');
+    expect(f.shadow.querySelector('.stock-chart')?.textContent).toContain('在庫数の推移（店舗のページが示す数。実在庫を保証しません）');
     expect([...groups[0]!.querySelectorAll('circle')].map((c) => c.getAttribute('aria-label')).join(' ')).toContain('在庫数 781');
+  });
+
+  it('reads a count at the store display cap as 「100+」 and explains it only when one is drawn (#74)', () => {
+    const f = setup();
+    const own = f.current.offers[0]!.inventory;
+    const at = own.points.map(([t]) => t);
+    f.current.offers[0]!.inventory = { ...own, points: [[at[0]!, 37], [at[at.length - 1]!, 100]], cappedAt: 100 };
+    f.draw();
+    expect(f.text()).toContain('在庫数 100+ · ');
+    const labels = [...f.shadow.querySelectorAll('.eph-inventory-chart g[data-series="current"] circle')].map((c) => c.getAttribute('aria-label'));
+    expect(labels).toEqual([expect.stringMatching(/在庫数 37$/), expect.stringMatching(/在庫数 100\+$/)]);
+    expect(f.shadow.querySelector('.stock-chart > div')?.textContent).toBe('在庫数の推移（店舗のページが示す数。「100+」は100以上。実在庫を保証しません）');
+    // Below the cap the count is exact, and the heading says nothing about it.
+    f.current.offers[0]!.inventory = { ...own, points: [[at[0]!, 37], [at[at.length - 1]!, 99]], cappedAt: 100 };
+    f.draw();
+    expect(f.text()).toContain('在庫数 99 · ');
+    expect(f.shadow.querySelector('.stock-chart > div')?.textContent).toBe('在庫数の推移（店舗のページが示す数。実在庫を保証しません）');
   });
 
   it('leaves out the stock chart when the setting is off, and a store that shows no count', () => {

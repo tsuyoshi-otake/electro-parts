@@ -1,7 +1,8 @@
-import { shopifyCurrencyEvidence, shopifyPageKey, type ShopifyStore } from '../../adapters/shopify/identity.ts';
+import { shopifyCurrencyEvidence, shopifyPageKey, shopifyProductUrl, type ShopifyStore } from '../../adapters/shopify/identity.ts';
 import { parseShopifyPage, record, type ShopifySnapshot } from '../../adapters/shopify/rawSchema.ts';
 import type { StoreCollector } from '../../stores/collector.ts';
 import { noRedirectTransport, PoliteFetcher } from '../politeFetcher.ts';
+import { parseProductPagesConfig, productPageWarnings, readProductPages, type ProductPageReader } from '../productPageInventory.ts';
 import { decodeSitemapBody, parseSitemapIndex, parseSitemapLocs } from '../sitemapXml.ts';
 
 function configNumber(c: Record<string, unknown>, key: string, fallback: number, min: number, max: number): number {
@@ -16,7 +17,7 @@ export function shopifyCollectorConfig(c: Record<string, unknown>) {
     maxSubSitemaps:configNumber(c,'maxSubSitemaps',16,1,64),
     minIntervalMs:configNumber(c,'minIntervalMs',1500,500,60000),jitterMs:configNumber(c,'jitterMs',750,0,60000),
     maxAttempts:configNumber(c,'maxAttempts',4,1,8),timeoutMs:configNumber(c,'timeoutMs',30000,1000,60000),
-    maxRequests:configNumber(c,'maxRequests',100,1,1000)};
+    maxRequests:configNumber(c,'maxRequests',100,1,5000),productPages:parseProductPagesConfig(c['productPages'])};
 }
 /**
  * products.json has no currency field. Pin the base currency on every run,
@@ -32,13 +33,23 @@ async function proveCurrency(store: ShopifyStore, fetcher: PoliteFetcher): Promi
   const meta=record(JSON.parse(await fetcher.fetchText(`${store.origin}/meta.json`)));
   if(meta['currency']!==store.currency) throw new Error(`Store base currency is not ${store.currency}`);
 }
-export function shopifyCollector(store: ShopifyStore): StoreCollector {
+/**
+ * `productPageReader` reads the stock counts a store's product page shows
+ * (ADR-0027). With it and a `collector.productPages` section, a complete
+ * catalogue is followed by one request per product in this run's slice.
+ */
+export function shopifyCollector(store: ShopifyStore, productPageReader?: ProductPageReader): StoreCollector {
   const tag=`[${store.storeId}]`;
+  const configOf=(config: Record<string, unknown>)=>{
+    const c=shopifyCollectorConfig(config);
+    if(c.productPages!==null&&productPageReader===undefined) throw new Error(`collector.productPages: ${store.label} has no product page reader`);
+    return c;
+  };
   return {
     storeId:store.storeId,
-    validateConfig(c) {shopifyCollectorConfig(c);},
+    validateConfig(c) {configOf(c);},
     async collect(config,deps) {
-      const c=shopifyCollectorConfig(config);
+      const c=configOf(config);
       const transport=deps.transport ?? (store.currencyEvidence==='meta' ? noRedirectTransport : undefined);
       const fetcher=new PoliteFetcher({...c,log:deps.log,
         ...(transport===undefined?{}:{transport}),
@@ -90,10 +101,18 @@ export function shopifyCollector(store: ShopifyStore): StoreCollector {
         if(!s.items.length) throw new Error('Empty catalogue');
         s.complete=true;
       } catch(e) {s.errors.push((e as Error).message);}
+      // Only a complete catalogue is worth enriching: an incomplete run is rejected anyway.
+      if(s.complete&&c.productPages!==null&&productPageReader!==undefined) {
+        const now=()=>(deps.now?.()??new Date()).getTime();
+        s.pageInventory=await readProductPages({fetcher,reader:productPageReader,config:c.productPages,observedAtMs:now(),nowMs:now,log:deps.log,tag,
+          targets:s.items.map(p=>({key:p.handle,url:shopifyProductUrl(store,p.handle),offerIds:p.variants.map(v=>String(v.id))}))});
+      }
       s.retrievedAt=(deps.now?.()??new Date()).toISOString();
-      return {raw:s,retrievedAt:s.retrievedAt,complete:s.complete,errors:s.errors,warnings:[],
+      return {raw:s,retrievedAt:s.retrievedAt,complete:s.complete,errors:s.errors,warnings:s.pageInventory===undefined?[]:productPageWarnings(s.pageInventory),
         metrics:{items:s.items.length,variants:s.items.reduce((n,p)=>n+p.variants.length,0),catalogProducts:s.catalogHandles.length,
-          catalogPages:s.pageCount,httpAttempts:fetcher.stats.httpAttempts,retries:fetcher.stats.retries,waitedMs:fetcher.stats.waitedMs}};
+          catalogPages:s.pageCount,
+          ...(s.pageInventory===undefined?{}:{productPagesSelected:s.pageInventory.selected,productPagesRead:s.pageInventory.read,productPagesFailed:s.pageInventory.failures.length}),
+          httpAttempts:fetcher.stats.httpAttempts,retries:fetcher.stats.retries,waitedMs:fetcher.stats.waitedMs}};
     },
   };
 }
