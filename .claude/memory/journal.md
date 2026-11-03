@@ -1280,3 +1280,8 @@ Learning: check each listing claim against the rendering code, not against the p
 - Contract test: 「names every site」 now checks the host permission reason only; a new test keeps every content-script host out of the listing description and the six store names quoted in the rejection out of the manifest description. Fail-before: with the old listing doc it fails on `akizukidenshi.com`; with only the old manifest description it fails on 秋月電子通商.
 - Verification: typecheck 0; `npm test` 56 files / 742; E2E 21/21; no runner left.
 - Wording drafted by Claude; the owner approves it before the merge, since it is public text.
+- PR #70 review (Codex, three P2), all valid and fixed:
+  - Store count: M5Stack's official shop is not domestic (headquarters in Shenzhen, prices in USD), so 「国内5店舗と英国の1店舗」 was wrong. It is now 「国内4店舗と海外2店舗」 in the manifest description and 「国内の電子部品通販4店舗と、海外の2店舗」 in the listing; the owner had approved the wording, and only the count changed.
+  - The 0.7.2 record still described an unsubmitted draft. It now records the rejection and says not to resubmit that ZIP.
+  - The landing page sentence told Pimoroni desktop users to look under the purchase area. It now says the panel is beside the purchase area, under the product images, on M5Stack wider than 768 px and Pimoroni wider than 1024 px (the adapters' two-column mounts).
+- Learning: a count or region claim in public text needs the same check as a store list. The draft counted every store except Pimoroni as domestic without checking where each shop is; M5Stack's official shop is overseas.
