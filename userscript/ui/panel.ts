@@ -561,3 +561,24 @@ export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   if (settings !== null && ctx.settingsOpen) openSettingsDialog(settings);
   if (focused) [...shadow.querySelectorAll<HTMLElement>('[data-focus-key]')].find((e) => e.dataset['focusKey'] === focused)?.focus({ preventScroll: true });
 }
+
+/**
+ * Taking the host out of the document and inserting it again (a move where the
+ * browser has no `moveBefore`) loses focus and drops an open modal dialog out of
+ * the top layer, while the dialog keeps its open attribute. Call before such a
+ * move; the returned function, run after it, opens the settings dialog as a
+ * modal again and gives focus back. Neither step fires the dialog's `close`, so
+ * the panel still counts it as open.
+ */
+export function keepPanelStateAcrossReinsert(shadow: ShadowRoot): () => void {
+  const focused = shadow.activeElement as HTMLElement | null;
+  const settings = shadow.querySelector<HTMLDialogElement>('dialog.settings');
+  const modal = settings !== null && settings.open && settings.dataset['fallback'] === undefined;
+  return () => {
+    if (settings !== null && modal && settings.isConnected) {
+      settings.removeAttribute('open'); // showModal refuses a dialog that is already open
+      openSettingsDialog(settings);
+    }
+    if (focused?.isConnected === true) focused.focus({ preventScroll: true });
+  };
+}

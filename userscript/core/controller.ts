@@ -2,7 +2,7 @@ import type { ProductFileV1 } from '../../src/publisher/contract.ts';
 import type { DataClient, LoadState } from './dataClient.ts';
 import type { ExchangeRateClient } from './exchangeRate.ts';
 import type { HostEnv, MountPoint, StorePageAdapter } from './types.ts';
-import { renderPanel, type PanelContext } from '../ui/panel.ts';
+import { keepPanelStateAcrossReinsert, renderPanel, type PanelContext } from '../ui/panel.ts';
 import { createPageTheme } from '../ui/pageTheme.ts';
 import { relatedEntries, relationProductKey, type ProductRelation } from './relations.ts';
 import { matchesUrlPattern } from './urlPattern.ts';
@@ -59,33 +59,37 @@ interface Panel {
  * only (the controller is the one writer of the host's inline style). A host
  * already there is left alone. A host already in the document moves with
  * `moveBefore` where the browser has it, which keeps its state (focus, an open
- * modal dialog); otherwise it is re-inserted.
+ * modal dialog); otherwise it is re-inserted. Returns true only for that
+ * re-insertion of a host that was in the document, which lost that state.
  */
-function insert(mount: MountPoint, node: HTMLElement): void {
+function insert(mount: MountPoint, node: HTMLElement): boolean {
   const { anchor, position } = mount;
   node.removeAttribute('style');
   for (const [property, value] of Object.entries(mount.hostStyle ?? {})) node.style.setProperty(property, value);
   const parent = position === 'append' || position === 'prepend' ? anchor : anchor.parentNode;
-  if (parent === null) return;
+  if (parent === null) return false;
   const before = position === 'append' ? null : position === 'prepend' ? anchor.firstChild : position === 'before' ? anchor : anchor.nextSibling;
-  if (node.parentNode === parent && (before === node || node.nextSibling === before)) return;
+  if (node.parentNode === parent && (before === node || node.nextSibling === before)) return false;
   const moveBefore = (parent as ParentNode & { moveBefore?: (node: Node, child: Node | null) => void }).moveBefore;
   if (node.isConnected && typeof moveBefore === 'function') {
     try {
       moveBefore.call(parent, node, before);
-      return;
+      return false;
     } catch { /* Refused (another document or shadow tree): re-insert below. */ }
   }
+  const reinserted = node.isConnected;
   parent.insertBefore(node, before);
+  return reinserted;
 }
 
 /**
  * Keeps the host where the adapter wants it when the page's layout switches:
  * each time the adapter's layout query flips, its mount point is asked again.
  * A host the page removed, or a layout with no mount point, stays as it is.
- * Returns the stop.
+ * A re-inserted host gets its open settings dialog and focus back. Returns the
+ * stop.
  */
-function followLayout(adapter: StorePageAdapter, doc: Document, node: HTMLElement, host: HostEnv): () => void {
+function followLayout(adapter: StorePageAdapter, doc: Document, node: HTMLElement, shadow: ShadowRoot, host: HostEnv): () => void {
   const view = doc.defaultView;
   if (adapter.layoutQuery === undefined || view === null || typeof view.matchMedia !== 'function') return () => undefined;
   const query = view.matchMedia(adapter.layoutQuery);
@@ -93,7 +97,9 @@ function followLayout(adapter: StorePageAdapter, doc: Document, node: HTMLElemen
     if (!node.isConnected) return;
     try {
       const mount = adapter.findMountPoint(doc);
-      if (mount !== null) insert(mount, node);
+      if (mount === null) return;
+      const restore = keepPanelStateAcrossReinsert(shadow);
+      if (insert(mount, node)) restore();
     } catch (e) {
       host.log('error', `panel could not follow the layout: ${(e as Error).message}`);
     }
@@ -241,7 +247,7 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       const shadow = hostEl.attachShadow({ mode: 'open' });
       insert(mount, hostEl);
       handle.mounted = true;
-      const stopFollowingLayout = followLayout(adapter, doc, hostEl, host);
+      const stopFollowingLayout = followLayout(adapter, doc, hostEl, shadow, host);
       // The panel carries the theme switch; a reset offered while none was shown would only cover the page.
       pageTheme.withdrawLightReset();
       const ctx: PanelContext = {

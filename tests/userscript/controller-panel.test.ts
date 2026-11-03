@@ -726,6 +726,58 @@ describe('history panel controller across the page layout switch', () => {
     }
   });
 
+  it('opens the settings dialog as a modal again and gives focus back when the host had to be re-inserted', async () => {
+    // A browser without moveBefore (jsdom too) re-inserts the host, which drops a
+    // modal out of the top layer and loses focus while the dialog stays open.
+    layoutPage();
+    const media = switchableMedia(false);
+    const proto = HTMLDialogElement.prototype as { showModal?: () => void };
+    expect(proto.showModal).toBeUndefined();
+    const modals: HTMLDialogElement[] = [];
+    proto.showModal = function (this: HTMLDialogElement) {
+      if (this.open) throw new DOMException('already open', 'InvalidStateError');
+      modals.push(this);
+      this.setAttribute('open', '');
+    };
+    try {
+      const host = hostWithData();
+      const handle = await mount(host, { adapters: [layoutAdapter()] });
+      const el = document.getElementById(HOST_ELEMENT_ID)!;
+      const shadow = el.shadowRoot!;
+      shadow.querySelector<HTMLButtonElement>('.settings-button')!.click();
+      const dialog = shadow.querySelector<HTMLDialogElement>('dialog.settings')!;
+      expect(modals).toEqual([dialog]);
+      const fee = dialog.querySelector<HTMLInputElement>('[data-focus-key="pref-fee-enabled"]')!;
+      fee.focus();
+
+      media.flip(true);
+      expect(el.previousElementSibling?.id).toBe('narrow');
+      expect(modals).toEqual([dialog, dialog]);
+      expect(dialog.open).toBe(true);
+      expect(shadow.activeElement).toBe(fee);
+      // Still open as far as the panel knows: the re-render a change causes rebuilds it open.
+      fee.checked = true;
+      fee.dispatchEvent(new Event('change'));
+      await vi.waitFor(() => expect(JSON.parse(host.store.get(PREFERENCES_STORAGE_KEY) ?? '{}')).toMatchObject({ cardFee: { enabled: true } }));
+      const rebuilt = shadow.querySelector<HTMLDialogElement>('dialog.settings')!;
+      expect(rebuilt).not.toBe(dialog);
+      expect(modals.at(-1)).toBe(rebuilt);
+      expect(rebuilt.open).toBe(true);
+
+      // A closed dialog stays closed through a move.
+      shadow.querySelector<HTMLButtonElement>('[data-focus-key="pref-close"]')!.click();
+      const opened = modals.length;
+      media.flip(false);
+      expect(el.previousElementSibling?.id).toBe('buy');
+      expect(modals).toHaveLength(opened);
+      expect(shadow.querySelector<HTMLDialogElement>('dialog.settings')!.open).toBe(false);
+      handle.destroy();
+    } finally {
+      delete proto.showModal;
+      media.uninstall();
+    }
+  });
+
   it('stops following once the panel is closed, never puts back a host the page removed, and logs an adapter that throws', async () => {
     layoutPage();
     const media = switchableMedia(false);
