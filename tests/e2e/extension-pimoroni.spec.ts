@@ -50,8 +50,8 @@ test('Pimoroni extension shows the GBP history with a cross-rate yen reference o
     await expect(panel).toContainText('£57.50'); await expect(panel).toContainText('GBP'); await expect(panel).toContainText('税区分不明');
     await expect(panel).not.toContainText('取得できませんでした');
     // GBP gets a yen reference through the cross rate, and says which rates it came from.
-    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥11,500');
-    await expect(panel.locator('.stats-col > .fx-recorded')).toContainText('記録価格 £57.50');
+    await expect(panel.locator('.current-price > .hero-value')).toHaveText('約 ￥11,500');
+    await expect(panel.locator('.current-price > .fx-recorded')).toContainText('記録価格 £57.50');
     await expect(panel).toContainText('1 GBP = 200.00円（USD/JPY と USD/GBP から算出、');
     await expect(panel).toContainText('Rates By Exchange Rate API');
     const columns = await page.evaluate(() => {
@@ -62,7 +62,7 @@ test('Pimoroni extension shows the GBP history with a cross-rate yen reference o
     expect(columns).toEqual({ underMedia: true, leftOfPurchase: true });
     await panel.getByLabel('バリエーション').selectOption('54894104052091');
     await expect(panel).toContainText('£82.50');
-    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥16,500');
+    await expect(panel.locator('.current-price > .hero-value')).toHaveText('約 ￥16,500');
     await panel.scrollIntoViewIfNeeded(); await expect(panel.locator('svg.eph-chart')).toBeVisible();
     const light = await page.evaluate(() => ({ body: getComputedStyle(document.body).backgroundColor, header: getComputedStyle(document.querySelector('#header')!).backgroundColor }));
     // The shop filters some images itself (brightness, drop shadows); the dark theme adds none.
@@ -85,7 +85,7 @@ test('Pimoroni extension shows the GBP history with a cross-rate yen reference o
     await page.reload(); await expect(panel.locator('section')).toHaveAttribute('data-theme', 'dark');
     await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(62, 62, 62)');
     await expect(panel).toContainText('£57.50');
-    await expect(panel.locator('.stats-col > .hero-value')).toHaveText('約 ￥11,500');
+    await expect(panel.locator('.current-price > .hero-value')).toHaveText('約 ￥11,500');
 
     // One column at 1024 px and below: the same panel moves right under the add-to-cart row,
     // ahead of the cross-sell, inside the page width; it moves back when the page is two columns again.

@@ -116,33 +116,34 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(panel(page).locator('.store-price').nth(2).locator('.fx-recorded')).toHaveText('記録価格 $7.50');
   await expect(panel(page).locator('.fx-note')).toContainText('1 USD = 150.00円');
   await expect(panel(page).locator('.fx-note a')).toHaveText('Rates By Exchange Rate API');
-  // The chart comes first at every width: left of the store prices here, above them when stacked.
-  const chartThenPrices = () => panel(page).evaluate(el => {
+  // #71: the chart spans the panel and the store prices follow below it at every width; below the chart the
+  // viewed store's card shares a row with the other stores whenever two cards fit.
+  const layout = () => panel(page).evaluate(el => {
     const root = el.shadowRoot!;
+    const body = root.querySelector('.body')!.getBoundingClientRect();
     const chart = root.querySelector('.chart-box')!.getBoundingClientRect();
     const prices = root.querySelector('.stats-col')!.getBoundingClientRect();
-    return chart.right <= prices.left + 1 ? 'left' : chart.bottom <= prices.top + 1 ? 'above' : 'after';
+    const lead = root.querySelector('.store-prices > .current-price')!.getBoundingClientRect();
+    const first = root.querySelector('.store-prices > .store-price')!.getBoundingClientRect();
+    const order = chart.right <= prices.left + 1 ? 'left' : chart.bottom <= prices.top + 1 ? 'above' : 'after';
+    const fullWidth = Math.abs(chart.width - body.width) <= 1;
+    const leadBeside = Math.abs(lead.top - first.top) < 2 && first.left >= lead.right;
+    return `${order}${fullWidth ? ' full' : ''}${leadBeside ? ' beside' : ''}`;
   });
-  expect(await chartThenPrices()).toBe('left');
+  expect(await layout()).toBe('above full beside');
   // Four store manifests, the page's own history and MAX_RELATED_HISTORY_LOADS (8) related histories: since 0.6.7 the
   // ATOM family also holds the official and せんごく ATOM Matrix pages, so 9 related products meet the cap.
   expect(requests).toHaveLength(13);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect.poll(() => panel(page).locator('.store-prices').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(1);
   await expect(panel(page).locator('.eph-comparison-chart')).toHaveAttribute('viewBox', /^0 0 3\d{2} 220$/);
-  expect(await chartThenPrices()).toBe('above');
-  // A wide viewport with the panel in a store column stacks the same way (#71): side by side needs an inner
-  // width of 960px, which Akizuki's column has and Switch Science's 776px column does not.
+  expect(await layout()).toBe('above full');
+  // The store columns the panel sits in on the live sites (Switch Science 776px, せんごく 730px) stack the same way.
   await page.setViewportSize({ width: 1440, height: 1100 });
   const setPanelWidth = (width: string) => panel(page).evaluate((el, w) => { (el as HTMLElement).style.width = w; }, width);
-  const padding = await panel(page).evaluate(el => {
-    const section = el.shadowRoot!.querySelector('section')!;
-    const style = getComputedStyle(section);
-    return el.getBoundingClientRect().width - (section.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight));
-  });
-  for (const [width, expected] of [['776px', 'above'], [`${959 + padding}px`, 'above'], [`${960 + padding}px`, 'left']] as const) {
+  for (const width of ['860px', '776px', '730px']) {
     await setPanelWidth(width);
-    await expect.poll(chartThenPrices, { message: width }).toBe(expected);
+    await expect.poll(layout, { message: width }).toBe('above full beside');
   }
   await setPanelWidth('');
   await page.setViewportSize({ width: 390, height: 844 });
@@ -178,7 +179,7 @@ test('four same-product stores: three rows in stock and cheaper first, the out-o
   await expect(panel(page)).not.toContainText('読み込み中');
   const visible = panel(page).locator('.store-prices').first().locator('.store-price');
   expect(await visible.evaluateAll(rows => rows.map(r => (r as HTMLElement).dataset['relationId']))).toEqual(['a117056-s7678', 'a117056-s7677', JSON.stringify(['akizuki', '117056', 'ksy', '720'])]);
-  await expect(panel(page).locator('.store-order')).toHaveText('在庫ありの店舗を先に、記録価格の安い順に表示しています。');
+  await expect(panel(page).locator('.store-order')).toHaveText('他店は在庫ありの店舗を先に、記録価格の安い順に表示しています。');
   const more = panel(page).locator('details.store-prices-more');
   const summary = more.locator('summary[data-focus-key="store-prices-more"]');
   await expect(summary).toHaveText('他の店舗（1件）');

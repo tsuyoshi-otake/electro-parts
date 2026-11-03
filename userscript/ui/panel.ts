@@ -22,8 +22,11 @@ import { YEN_CSS, yenConverter, type YenConverter } from './yen.ts';
 
 export const PANEL_TITLE = 'Electronics Price History';
 
-/** Maximum chart dimensions; narrow columns keep a readable viewBox. */
-const CHART_SIZE = { width: 760, height: 280 };
+/**
+ * Maximum chart dimensions. The viewBox follows the box's width up to this cap, so axis
+ * text keeps its 12px; the cap is above the widest store panel measured (1,091px).
+ */
+const CHART_SIZE = { width: 1200, height: 280 };
 
 export interface PanelContext {
   doc: Document;
@@ -59,11 +62,12 @@ function shownQuantities(inventory: InventoryV1): boolean {
  * inherit the store's font from it. `.eph` therefore starts from `all: initial`
  * and sets its own text properties; no page selector reaches inside the shadow root.
  *
- * The chart and the statistics sit side by side only when the panel's inner width
- * is at least 960px (Akizuki's 1,080px column). Store columns such as Switch Science
- * (776px) or M5Stack (860px) stack them, chart first. The breakpoint lives here only:
- * the comparison layout sets its column ratio through `--body-columns`. The 900px
- * media query covers browsers without container queries (Chrome 102–104).
+ * The chart always spans the panel and everything else follows below it, at every
+ * width (#71). Below the chart the space is shared by width, never by store: the
+ * store price cards wrap into as many columns as fit (related.ts), and a product
+ * without other stores puts its statistics beside its current price once the
+ * panel's inner width reaches 560px. Without container queries (Chrome 102–104)
+ * that statistics block simply stays under the price.
  */
 export const PANEL_CSS = `
 :host { all: initial; display: block; }
@@ -103,9 +107,11 @@ export const PANEL_CSS = `
 .basis { font-size: 12px; color: var(--muted); }
 .eph select { font: inherit; font-size: 12px; max-width: 100%; min-width: 0; padding: 2px 4px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
 
-.body { display: grid; grid-template-columns: var(--body-columns, minmax(0, 1.75fr) minmax(250px, 1fr)); gap: 4px 26px; align-items: start; padding-top: 12px; }
-@media (max-width: 900px) { .body { grid-template-columns: 1fr; } }
-@container (max-width: 959px) { .body { grid-template-columns: 1fr; } }
+.body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; padding-top: 12px; }
+@container (min-width: 560px) {
+  .body:not(.has-comparison) > .stats-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); column-gap: 32px; align-items: start; }
+  .body:not(.has-comparison) > .stats-col > .rows { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; }
+}
 .chart-box { min-width: 0; min-height: 90px; }
 .eph svg { display: block; width: 100%; height: auto; }
 .eph .eph-grid { stroke: var(--line-soft); stroke-width: 1; }
@@ -272,15 +278,17 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
   col.className = 'stats-col';
   const related = ctx.related ?? [];
   const storeLabel = ctx.storeLabel ?? ((id: string) => id);
-  if (related.length) col.appendChild(text(doc, 'div', '店舗別の記録価格', 'comparison-heading'));
-  col.appendChild(text(doc, 'div', related.length ? `${storeLabel(product.storeId)}（閲覧中）` : '現在の記録価格', 'hero-label'));
+  // The viewed store's price block: the first store card when other stores are shown.
+  const current = doc.createElement('div');
+  current.className = 'current-price';
+  current.appendChild(text(doc, 'div', related.length ? `${storeLabel(product.storeId)}（閲覧中）` : '現在の記録価格', 'hero-label'));
   const recorded = formatPriceValue(s.current, currency);
   const inYen = yen.convert(s.current, currency);
   const hero = text(doc, 'div', inYen?.amount ?? recorded, 'hero-value');
   const dir = s.change.direction;
   const delta = s.change.differenceMinor === null ? null
     : text(doc, 'span', `${formatSignedMoney(s.change.differenceMinor, currency)}${s.change.percent === null ? '' : ` (${formatPercent(s.change.percent)})`}`, `delta${dir === 'up' || dir === 'down' ? ` ${dir}` : ''}`);
-  col.appendChild(hero);
+  current.appendChild(hero);
   if (inYen === null) {
     if (delta !== null) hero.appendChild(delta);
   } else {
@@ -288,15 +296,16 @@ function renderStats(ctx: PanelContext, parent: HTMLElement, product: ProductFil
     const line = text(doc, 'div', `記録価格 ${recorded}`, 'fx-recorded');
     if (delta !== null) line.appendChild(delta);
     if (inYen.includes !== null) line.appendChild(doc.createTextNode(` · ${inYen.includes}`));
-    col.appendChild(line);
+    current.appendChild(line);
   }
-  col.appendChild(text(doc, 'div', `${formatDate(s.currentSinceAt)} から${s.previousDistinct === null ? '(初回観測)' : ''}`, 'hero-meta'));
+  current.appendChild(text(doc, 'div', `${formatDate(s.currentSinceAt)} から${s.previousDistinct === null ? '(初回観測)' : ''}`, 'hero-meta'));
   const lastAvail = offer.availability[offer.availability.length - 1];
   if (related.length) {
-    col.appendChild(text(doc, 'div', `最終観測 ${formatDateTime(product.product.lastSeenAt)}`, 'hero-meta'));
-    if (lastAvail) col.appendChild(text(doc, 'div', `観測時の在庫: ${availabilityLabel(lastAvail[1])}`, 'hero-meta'));
-    renderStorePrices(doc, col, product, segment, related, storeLabel, ownFresh, yen);
-  }
+    current.appendChild(text(doc, 'div', `最終観測 ${formatDateTime(product.product.lastSeenAt)}`, 'hero-meta'));
+    if (lastAvail) current.appendChild(text(doc, 'div', `観測時の在庫: ${availabilityLabel(lastAvail[1])}`, 'hero-meta'));
+    col.appendChild(text(doc, 'div', '店舗別の記録価格', 'comparison-heading'));
+    renderStorePrices(doc, col, current, product, segment, related, storeLabel, ownFresh, yen);
+  } else col.appendChild(current);
   col.appendChild(fxSlot);
 
   const rows = doc.createElement('dl');

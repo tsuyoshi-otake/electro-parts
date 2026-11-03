@@ -93,7 +93,9 @@ describe('same-product store order (#55)', () => {
 describe('same-product store rows in the panel (#55)', () => {
   const render = (entries: RelatedEntry[], f: Fixture, ownFresh = true) => {
     const parent = document.createElement('div');
-    renderStorePrices(document, parent, f.current, f.segment, entries, (id) => id, ownFresh);
+    const lead = document.createElement('div');
+    lead.className = 'current-price';
+    renderStorePrices(document, parent, lead, f.current, f.segment, entries, (id: string) => id, ownFresh);
     return parent;
   };
 
@@ -105,13 +107,15 @@ describe('same-product store rows in the panel (#55)', () => {
     ], f);
     const visible = [...parent.querySelectorAll(':scope > .store-prices > .store-price')].map((r) => (r as HTMLElement).dataset['relationId']);
     expect(visible).toEqual(['b', 'd', 'e']);
+    // The viewed store's card leads the same grid, so it wraps beside the other stores (#71).
+    expect(parent.querySelector(':scope > .store-prices')!.firstElementChild!.className).toBe('current-price');
     const more = parent.querySelector<HTMLDetailsElement>(':scope > details.store-prices-more')!;
     expect(more.dataset['stateKey']).toBe('store-prices-more');
     expect(more.open).toBe(false);
     expect(more.querySelector('summary')!.textContent).toBe('他の店舗（2件）');
     expect([...more.querySelectorAll('.store-price')].map((r) => (r as HTMLElement).dataset['relationId'])).toEqual(['c', 'usd']);
     expect(more.querySelector('[data-relation-id="usd"]')!.textContent).toContain('送料・関税別');
-    expect(parent.querySelector('.store-order')!.textContent).toBe('在庫ありの店舗を先に、記録価格の安い順に表示しています。');
+    expect(parent.querySelector('.store-order')!.textContent).toBe('他店は在庫ありの店舗を先に、記録価格の安い順に表示しています。');
     expect(parent.textContent).not.toContain('最安');
   });
 
@@ -126,10 +130,11 @@ describe('same-product store rows in the panel (#55)', () => {
     expect(render(cheaper, f, false).querySelector('.badge.cheapest')).toBeNull();
   });
 
-  it('renders nothing when no verified same-product row exists', () => {
+  it('keeps only the viewed store card when no verified same-product row exists', () => {
     const f = comparisonFixture();
     const candidate = entryFor(f, 'candidate', { price: 1000 });
     candidate.relation = { ...candidate.relation, reviewStatus: 'candidate' };
-    expect(render([candidate], f).childElementCount).toBe(0);
+    const parent = render([candidate], f);
+    expect([...parent.children].map((c) => c.className)).toEqual(['current-price']);
   });
 });
