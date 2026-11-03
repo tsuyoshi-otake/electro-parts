@@ -1185,3 +1185,12 @@ Learning: check each listing claim against the rendering code, not against the p
 - Not done: the paths remain in git history. Rewriting the history of the public repository is the owner's decision.
 - Rubric verifier (`.claude/goal-loop/local-path-hygiene/rubric.md`): C2-C4 passed first time; C1 failed because the rubric's own C2 text spelled out the old prefix, so committing the rubric would have tripped the new guard. Reworded to describe the prefix in words; the re-check passed.
 - Learning: cite machine-local evidence as `~/tmp/...` from the start; the CI guard now enforces it for text files (binary fixtures are skipped by `git grep -I`, so scan decompressed fixtures by hand).
+
+## 2026-11-03 merge of #56, #58 and #60 into main (0.6.9 and 0.7.0, not released)
+- User request: 「CI後にマージ」 for the three open PRs, in the order #56 → #58 → #60.
+- #56 (`feat/store-price-order`, CI green) squash-merged as 949754d; its tree equals the PR head 36e27d5.
+- #58 was stacked on #56. Rebased with `git rebase --onto origin/main 36e27d5`; the rebased head 93ef0e2 has the same tree as the verified 11e0dbf. Base switched to `main` before the old base branch was deleted, so the PR was not closed. Force-pushed with a lease on the old head. Squash-merged after its CI passed as 03954bc.
+- #60 was based on the old main. Rebased onto #58's tip; the only conflict was the end of this journal (both PRs appended), resolved by keeping both entries in order. The new CI guard finds no local user path in the combined tree. Locally on the combined tree: typecheck 0, `npm test` 708/708, E2E 19/19, no runner processes left. After #58 merged, `--onto origin/main 93ef0e2` gave the same tree again; the force-push cancelled the earlier run (`cancel-in-progress`), so the merge waited for the new one. Squash-merged after its CI passed as 16a5dd9.
+- Branches deleted after merging: `feat/store-price-order`, `feat/pimoroni-store`, `chore/remove-local-paths` (local and remote).
+- Not done: no release. Version 0.7.0 is on main but not tagged or published; the Chrome Web Store 0.6.8 review result is still unchecked, and the live checks (Pimoroni dark theme and yen line) come before the next submission.
+- Learning: when a stacked PR's base is squash-merged, rebase with `--onto <new main> <old base head>`, compare the trees before pushing, and retarget the PR before deleting the old base branch.
