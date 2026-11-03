@@ -1213,3 +1213,33 @@ Learning: check each listing claim against the rendering code, not against the p
 - Store: `cws:dashboard status` read 審査待ち, draft 0.6.8, published 0.6.3, so 0.7.0 cannot be uploaded yet. The owner decides whether to wait or withdraw 0.6.8.
 - Not done: the KSY live page and the 0.7.0 upload/draft. Kept: `~/tmp/electro-070` (live.mjs, ext.zip, ext/, shots, Pages copies) until 0.7.0 passes review.
 - Learning: a live-check script that scopes chart elements must use the chart's own class; the comparison chart is not `role="img"` (the single-store chart is).
+
+## 2026-11-03 UI/UX consistency audit of the 0.7.0 panel on live store pages (no code change)
+- User request: 「我々のUIがサイト上でどのように表示されてUXがすぐれていて、統一性があるかチェックしようか」.
+- Method: `~/tmp/electro-070/ux/audit.mjs` loaded the Pages ZIP (0.7.0) in Playwright `channel: 'chromium'` with a fresh profile, desktop 1440×900 and phone 390×844 (touch, isMobile, dsf 2), light then dark, on one product page each for Akizuki, Switch Science, M5Stack, Sengoku and Pimoroni (KSY was still down). 20 captures, all settled; screenshots and `audit.json` in `~/tmp/electro-070/ux/shots/`.
+- Consistent: no horizontal overflow on any page or width; the same header/chart/store-rows/notes structure everywhere; dark panel and page both `rgb(62, 62, 62)`; text contrast ≥ 4.5:1; the settings dialog fits at both widths.
+- Findings:
+  1. Store typography leaks into the panel: M5Stack renders the panel in Montserrat 14px, Akizuki phone in 14px, the rest in system-ui 13px. Page CSS that matches the host element beats the `:host` rule, and the panel inherits it. On M5Stack phone the wider title pushes 設定 onto a second header row (head 83px vs 71px).
+  2. The settings card select truncates its label on phone: 「三井住友カード（Visa・Mastercard） 3.63%」 is cut inside the percent, the one number the user is choosing by.
+  3. `:hover` backgrounds on series labels and summaries are not limited to `(hover: hover)`, so on touch screens the last tapped toggle keeps the chip background (seen on the Switch Science legend in the phone dark capture).
+  4. Most secondary text is 11px (meta lines, notes, axes, badges), e.g. Akizuki desktop 53 elements at 11px against 36 at 12px.
+  5. Placement differs by store anchor: phone panel tops at y 1,437 (SS) to 3,227 (Pimoroni, below the reviews block). A placement change is an ADR-level decision; reported only.
+- Correction: the audit first reported 32px header buttons on phone. A separate probe (`~/tmp/electro-070/ux/probe.mjs`, one Akizuki page, no element screenshot) read `(pointer: coarse)` true and 44px for the header buttons and summaries, as panel.ts and related.ts intend. `audit.mjs` measured after `locator.screenshot()`, which left the measurement out of step with the viewport capture.
+- Store-side, not ours: the M5Stack phone page's floating back-to-top button overlaps the panel chart.
+- Learning: in mobile emulation, take layout measurements before any element screenshot, and confirm an odd size against the viewport capture before reporting it.
+
+## 2026-11-03 panel-consistency-071: verifier iteration 1 (#65)
+- Rubric verifier (`.claude/goal-loop/panel-consistency-071/rubric.md`): 8 of 9 passed; C5 failed because `PAD.left` was raised from 56 to 62 without a comment stating the basis, and the `X_LABEL_WIDTH` comment said "scaled to 61" while the constant is 63.
+- Investigate: the values were right (56 × 12/11 = 61.1 → 62 for the y labels; 61 + the 2 units of slack the old 58 had over its measured 56 = 63); only the comments did not say so.
+- Fix: comments on `PAD` and `X_LABEL_WIDTH` now state both derivations. Typecheck 0.
+
+## 2026-11-03 panel-consistency-071: typography pinned in the shadow root, 12px floor, hover-only highlights, rate-first card options (#65, 0.7.1)
+- User requests: 「0.7.1で直す」 for the four audit findings, 「デスクトップ向けでよく確認して」, and on placement 「真下じゃなくていいよ付近ね」.
+- Root cause (typography): page CSS that matches the host element outranks `:host`, and `.eph` inherited the host's font (M5Stack Montserrat 14px; Akizuki 14px at phone width, measured without any element screenshot). Fix: `.eph` starts with `all: initial; display: block;` and sets `font: 13px/1.6 system-ui, …` and `text-size-adjust: 100%`; `:host` keeps only `all: initial; display: block`.
+- Other fixes: every 11px/11.5px size in the panel CSS is 12px (badge, axis, hero label/meta, rows, caveats, footer, related meta/evidence, fx note, settings hint); `PAD.left` 56 → 62 and `X_LABEL_WIDTH` 58 → 63 for the 12px axis; `:hover` rules under `@media (hover: hover)`; card options read `3.63%　三井住友カード（Visa・Mastercard）` (values and ids unchanged).
+- Tests: `tests/userscript/panel-css.test.ts` (12px floor, hover media, `.eph` text properties), a card-options test in `settings-dialog.test.ts`, `tests/e2e/panel-typography.spec.ts` (store-like CSS on `div`/`section`; host takes it, `.eph`/`.brand`/dialog keep theirs). All four unit tests and the E2E failed before the fix (E2E read `"Courier New", monospace`). The comparison chart test's pinned path moved with `PAD.left` (73.3/345.0 = 62 + 566 × 0.02/0.5).
+- Verification: typecheck 0; `npm test` 56 files / 734; E2E 20/20; no runner left. Live with a local 0.7.1 build (`~/tmp/electro-071/desktop-audit.mjs`, one page per store, 1920/1440/1280/1024/390, light and dark, 50 captures): system-ui 13px/20.8px everywhere, no text under 12px, header on one row, no clipped y label, no panel overflow, dark page and panel `rgb(62, 62, 62)`; the settings select shows the whole `3.63%　三井住友カード（Visa・Mastercard）` at 1440 and 390. Akizuki's 56px horizontal scroll at 1024 is the store's 1080px header and wrapper (same without the extension). Page errors only the known SS `empire.js` and M5Stack Goaffpro.
+- Placement (no change): near the purchase button at 1920/1440/1280 on all five checked stores (SS 106px below, Akizuki 166px below the purchase box, Sengoku under the price block, M5Stack beside the button, Pimoroni beside its sticky purchase column). Far where the store drops to one column: Pimoroni at 1024 (1,570px) and 390, Akizuki and M5Stack at 390. Needs a width-dependent mount; left for a follow-up.
+- Side effect accepted: at 12px the 「最安（比較条件を確認した店舗の記録価格）」 badge wraps to two lines in Akizuki's narrow store column.
+- KSY: `raspberry-pi.ksyic.com` still refused connections at six checks 5 minutes apart (10:49–11:15 JST); its saved-page E2E passed.
+- Verifier iteration 2 (fresh context): 9 of 9 passed.

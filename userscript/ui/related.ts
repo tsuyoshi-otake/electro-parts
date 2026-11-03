@@ -18,7 +18,7 @@ export const RELATED_CSS = `
 .eph .store-prices-more > .store-prices { margin-top: 4px; }
 .eph .store-price .badge.cheapest { display: inline-block; margin: 0 0 4px; }
 .eph .related-name { font-size: 12px; overflow-wrap: anywhere; }
-.eph .related-meta, .eph .comparison-note { font-size: 11px; color: var(--muted); }
+.eph .related-meta, .eph .comparison-note { font-size: 12px; color: var(--muted); }
 .eph .comparison-difference { font-size: 12px; margin: 6px 0; font-variant-numeric: tabular-nums; }
 .eph .related-section { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
 .eph .related-card { padding: 8px 0; min-width: 0; }
@@ -31,7 +31,7 @@ export const RELATED_CSS = `
 .eph .related-store { flex: 0 0 9em; }
 .eph .related-offer-body { flex: 1 1 12em; min-width: 0; overflow-wrap: anywhere; }
 .eph .related-offer .hero-value { font-size: 16px; margin: 2px 0; }
-.eph .related-evidence { font-size: 11px; color: var(--muted); }
+.eph .related-evidence { font-size: 12px; color: var(--muted); }
 .eph .related-evidence p { overflow-wrap: anywhere; }
 .eph .series-controls { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 4px; }
 .eph .series-controls label { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; cursor: pointer; font-size: 12px; }
@@ -44,9 +44,11 @@ export const RELATED_CSS = `
 .eph[data-theme="dark"] [data-series-index="3"] { --accent: #6cd9d5; }
 .eph [data-series-index="1"] .eph-line, .eph [data-series-index="3"] .eph-line { stroke-dasharray: 7 4; }
 .eph [data-series-index="1"] .series-swatch, .eph [data-series-index="3"] .series-swatch { border-top-style: dashed; }
-.eph a:hover { text-decoration-thickness: 2px; }
 .eph a:active, .eph summary:active { color: var(--fg); }
-.eph summary:hover, .eph .series-controls label:hover { background: var(--chip); }
+@media (hover: hover) {
+  .eph a:hover { text-decoration-thickness: 2px; }
+  .eph summary:hover, .eph .series-controls label:hover { background: var(--chip); }
+}
 .eph :is(a, summary, select, input, circle):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .eph circle:focus-visible { stroke: var(--fg); stroke-width: 2px; }
 .eph .series-controls input { accent-color: var(--accent); }

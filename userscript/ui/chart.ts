@@ -30,7 +30,8 @@ interface Interval {
 }
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const PAD = { left: 56, right: 12, top: 10, bottom: 24 };
+/** `left` holds the y tick labels: 56 suited the 11px axis font, and 56 x 12/11 rounds up to 62 for 12px. */
+const PAD = { left: 62, right: 12, top: 10, bottom: 24 };
 
 /** Splits the price change points into priced, listed intervals. Exported for tests. */
 export function pricedIntervals(points: readonly PricePointV1[], presence: readonly PresencePointV1[], end: number): Interval[] {
@@ -250,8 +251,8 @@ function niceTicks(lo: number, hi: number, count: number): number[] {
   return ticks;
 }
 
-/** A `YYYY-MM-DD` at the axis font size, in viewBox units (measured: 56). */
-const X_LABEL_WIDTH = 58;
+/** A `YYYY-MM-DD` at the 12px axis font, in viewBox units: 56 measured at 11px scales to 61, plus the 2 units of slack it had before. */
+const X_LABEL_WIDTH = 63;
 /** Clear space required between two x-axis dates, in the same units. */
 const X_LABEL_GAP = 12;
 
