@@ -1354,3 +1354,11 @@ Learning: check each listing claim against the rendering code, not against the p
 - Product choice: SS 10978, M5Stack ATOM Lite and LoRa were not read on 2026-11-04 (SS reads one quarter per day and stopped at 350; M5Stack stopped at 291), so the products with counts were picked from the failed run's snapshots.
 - KSY: `curl` timed out after 15 s at 13:30Z; still down.
 - Pending: CWS upload of 0.7.6 after the 0.7.4 review ends (owner presses 「審査のため送信」; listing text changed); KSY live check; sengoku/Pimoroni resume at the next scheduled run (cron 2026-11-05T20:00Z), the first with the #78 fixes.
+
+## 2026-11-04 Chrome Web Store: 0.7.6 submitted (#76)
+- Precondition: the public listing page read version 0.7.4, so the 0.7.4 review had ended (no dashboard needed to learn that).
+- Launch: `npm run cws:dashboard -- launch` (and PowerShell `Start-Process`) from the Bash tool left no Chrome running: the detached child died when the command returned. Running chrome.exe itself as a `run_in_background` task kept it up (sign-in page on 9333). Recorded in rules.md.
+- Dashboard (owner signed in): `status` 公開済み, draft 0.7.4, published 0.7.4 → `upload` Pages ZIP ac26b98c… → draft 0.7.6 → `fill` both tabs saved, four fields `same` → `check` same → `blockers` none.
+- Submit: the owner's first press did not reach the server — `status` twice (immediately and +10 s) and `blockers` two minutes later still showed 公開済み with 「審査のため送信」 enabled. Cause not established: either the confirmation dialog was left open, or my `status` (which reloads the page) discarded it. Second press → 審査待ち after about 15 s (immediately after it still read 公開済み). `close` deleted the profile; no Chrome with it left.
+- Learning (procedure updated in docs/chrome-web-store-listing.md step 8): wait about 15 s after the owner says they pressed before the first `status`, never reload while they may be in the dialog, and treat 「審査のため送信」 still enabled after two minutes as "not sent".
+- Pending: the 0.7.6 review result; the KSY live page (still unreachable 13:48Z).
