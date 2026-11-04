@@ -45,8 +45,22 @@ function positiveInt(v: unknown, name: string, fallback: number): number {
 
 function cadence(v: unknown): ObservationCadence {
   if (v === undefined) return 'monthly';
-  if (v !== 'every_two_days' && v !== 'weekly' && v !== 'monthly') throw new Error("config: observation.cadence must be 'every_two_days', 'weekly' or 'monthly'");
+  if (v !== 'every_two_days' && v !== 'weekly' && v !== 'monthly' && v !== 'stopped') {
+    throw new Error("config: observation.cadence must be 'every_two_days', 'weekly', 'monthly' or 'stopped'");
+  }
   return v;
+}
+
+/**
+ * A store whose observation has stopped (`observation.cadence: "stopped"`)
+ * keeps its published history, but nothing may add to it: no crawl, no
+ * snapshot import, no bootstrap. Only a republish regenerates its dataset.
+ * Every entry point that observes a store calls this first.
+ */
+export function assertObserved(config: PipelineConfig): void {
+  if (config.observation.cadence === 'stopped') {
+    throw new Error(`${config.storeId} is no longer observed (observation.cadence "stopped" in its config); only a republish regenerates its dataset`);
+  }
 }
 
 function optionalString(v: unknown, name: string, fallback: string): string {

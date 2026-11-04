@@ -155,6 +155,7 @@ describe('KSY snapshot normalization', () => {
     const result = sanityCheck(s, null, config.sanity);
     expect(result.errors).toEqual([]);
     expect(result.metrics['unavailablePriceCount']).toBe(43);
-    expect(config.observation.cadence).toBe('every_two_days');
+    // The site is gone (2026-11-04); the published history stays (#80).
+    expect(config.observation.cadence).toBe('stopped');
   });
 });

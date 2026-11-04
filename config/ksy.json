@@ -10,7 +10,7 @@
     "maxItemCountDropRatio": 0.1, "maxMissingProductRatio": 0.1,
     "maxPriceChangeRatio": 0.3, "maxUnavailablePriceRatio": 0.15
   },
-  "observation": { "cadence": "every_two_days" },
+  "observation": { "cadence": "stopped" },
   "inventory": { "retentionDays": 400, "pointLimit": 730 },
   "paths": { "snapshots": "snapshots", "work": "state/work", "site": "site", "reports": "reports" },
   "previousStateUrl": "https://tsuyoshi-otake.github.io/electro-parts/state"

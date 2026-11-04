@@ -65,6 +65,14 @@ describe('generateStoreDataset', () => {
     }
     expect(alternate.manifest.caveats).not.toContain('sampling_interval_weekly');
     expect(alternate.manifest.datasetVersion).not.toBe(weekly.manifest.datasetVersion);
+    // A stopped store keeps its observation window but claims no interval:
+    // neither a caveat nor samplingIntervalDays (#80).
+    const stopped = generateStoreDataset(readStoreHistory(db, 'synthetic'), { ...gen, observationCadence: 'stopped' });
+    expect(validateManifestV1(stopped.manifest)).toEqual([]);
+    expect(stopped.manifest.observation).toEqual(ds.manifest.observation);
+    expect(stopped.manifest.caveats).toEqual(['observation_window', 'absence_not_discontinued', 'site_reported_quantity']);
+    expect(new Set([ds, weekly, alternate, stopped].map((d) => d.manifest.datasetVersion)).size).toBe(4);
+    expect(stopped.products).toEqual(ds.products.map((p) => ({ ...p, datasetVersion: stopped.manifest.datasetVersion })));
     expect(ds.products.map((p) => p.pageKey)).toEqual(['a', 'b']);
 
     const a = product(ds.products, 'a');

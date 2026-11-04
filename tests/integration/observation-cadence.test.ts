@@ -1,8 +1,11 @@
+import { spawnSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parsePipelineConfig, type PipelineConfig } from '../../src/pipeline/config.ts';
 import { observationDue } from '../../scripts/observation-schedule.ts';
+import { configCadence, observedStores, type ObservedStoresInput } from '../../scripts/observed-stores.ts';
+import type { ObservationCadence } from '../../src/publisher/contract.ts';
 
 /**
  * The crawl schedule and the published sampling caveat are two statements of
@@ -40,14 +43,14 @@ function configs(): { store: string; config: PipelineConfig }[] {
 const isEvery = (field: string): boolean => field === '*';
 
 describe('observation cadence', () => {
-  it('observes both stores every two days through a gated daily wake-up', () => {
-    expect(configs().every(({ config }) => config.observation.cadence === 'every_two_days')).toBe(true);
+  it('observes every store still observed every two days through a gated daily wake-up', () => {
+    const cadences = configs().map(({ config }) => config.observation.cadence);
+    expect(cadences.every((c) => c === 'every_two_days' || c === 'stopped')).toBe(true);
+    expect(cadences).toContain('every_two_days');
     expect(twoDayCron).toBe('0 20 * * *');
     expect(crons).toContain(twoDayCron);
-    expect(workflow).toContain('"$EVERY_TWO_DAYS_CRON") wanted=every_two_days ;;');
     expect(workflow).toContain("if: needs.schedule.outputs.due == 'true'");
     expect(workflow).toContain('run: node scripts/observation-schedule.ts');
-    expect(workflow).toContain('unknown schedule');
   });
   it('alternates through month/year boundaries and leap day, including delayed starts', () => {
     const anchor = Date.parse('2026-09-10T20:00:00Z');
@@ -88,7 +91,8 @@ describe('observation cadence', () => {
   });
 
   it('never schedules a cadence no store declares', () => {
-    const declared = new Set(configs().map((c) => c.config.observation.cadence));
+    // A stopped store is observed by no schedule at all.
+    const declared = new Set(configs().map((c) => c.config.observation.cadence).filter((c) => c !== 'stopped'));
     if (!declared.has('weekly')) expect(crons).not.toContain(weeklyCron);
     expect(crons.length).toBe(declared.size);
   });
@@ -96,8 +100,71 @@ describe('observation cadence', () => {
   it('reads the cadence from the configs rather than naming stores in the schedule', () => {
     // The selection loop must consult the config file; hard-coding a store
     // name next to a cron is what lets the two drift apart.
-    expect(workflow).toContain(`jq -r '.observation.cadence // "monthly"' "config/$store.json"`);
+    // The selection is scripts/observed-stores.ts, which reads each config
+    // through the pipeline's own parser: no second copy of the cadence
+    // default lives in the workflow's shell.
+    expect(workflow).toContain('observe=$(node --import tsx scripts/observed-stores.ts)');
+    expect(workflow).not.toContain('.observation.cadence');
     const scheduleBlock = workflow.slice(workflow.indexOf('  schedule:'), workflow.indexOf('  workflow_dispatch:'));
     for (const { store } of configs()) expect(scheduleBlock).not.toContain(store);
+  });
+});
+
+describe('which stores a run observes (#80)', () => {
+  const cadences: Record<string, ObservationCadence> = { a: 'every_two_days', b: 'weekly', c: 'stopped', d: 'monthly', e: 'every_two_days' };
+  const input = (over: Partial<ObservedStoresInput>): ObservedStoresInput => ({
+    event: 'workflow_dispatch', cron: undefined, requested: '', republish: false,
+    stores: Object.keys(cadences), everyTwoDaysCron: '0 20 * * *', cadenceOf: (s) => cadences[s]!, ...over,
+  });
+
+  it('takes the stores that declare the schedule\'s cadence, and refuses an unknown cron', () => {
+    expect(observedStores(input({ event: 'schedule', cron: '0 20 * * *' }))).toEqual(['a', 'e']);
+    expect(() => observedStores(input({ event: 'schedule', cron: '0 20 */2 * *' }))).toThrow("unknown schedule '0 20 */2 * *'");
+    expect(() => observedStores(input({ event: 'schedule', cron: undefined }))).toThrow("unknown schedule ''");
+  });
+
+  it('observes every store still observed when a manual run names none', () => {
+    expect(observedStores(input({}))).toEqual(['a', 'b', 'd', 'e']);
+    expect(observedStores(input({ requested: '  ' }))).toEqual(['a', 'b', 'd', 'e']);
+  });
+
+  it('observes named stores as named, and refuses an unknown or a stopped one', () => {
+    expect(observedStores(input({ requested: 'e  b' }))).toEqual(['e', 'b']);
+    // A schedule event never overrides an explicit list.
+    expect(observedStores(input({ event: 'schedule', cron: '0 20 * * *', requested: 'd' }))).toEqual(['d']);
+    expect(() => observedStores(input({ requested: 'a x' }))).toThrow("unknown store 'x'");
+    expect(() => observedStores(input({ requested: 'a c' }))).toThrow(`store 'c' is no longer observed (observation.cadence "stopped" in config/c.json)`);
+  });
+
+  it('observes nothing on a republish, whatever was named', () => {
+    expect(observedStores(input({ republish: true, requested: 'c' }))).toEqual([]);
+    expect(observedStores(input({ republish: true, event: 'schedule', cron: 'nonsense' }))).toEqual([]);
+  });
+
+  it('never observes a stopped store from the real configs, by schedule or by an all-store run', () => {
+    const real = { stores: declaredStores, everyTwoDaysCron: twoDayCron!, cadenceOf: (s: string) => configCadence(s, path.join(repoRoot, 'config')) };
+    const stopped = configs().filter((c) => c.config.observation.cadence === 'stopped').map((c) => c.store);
+    const observed = declaredStores.filter((s) => !stopped.includes(s));
+    expect(stopped).toEqual(['ksy']);
+    expect(observedStores(input({ ...real, event: 'schedule', cron: twoDayCron! }))).toEqual(observed);
+    expect(observedStores(input({ ...real }))).toEqual(observed);
+    expect(() => observedStores(input({ ...real, requested: 'ksy' }))).toThrow('no longer observed');
+  });
+
+  it('prints the list on stdout for the workflow, and the reason as a workflow error on failure', () => {
+    const cli = (env: Record<string, string>) => spawnSync(process.execPath, ['--import', 'tsx', 'scripts/observed-stores.ts'], {
+      cwd: repoRoot, encoding: 'utf8', timeout: 60_000,
+      env: { ...process.env, STORES: declaredStores.join(' '), EVERY_TWO_DAYS_CRON: twoDayCron!, EVENT_NAME: 'workflow_dispatch', EVENT_CRON: '', OBSERVE: '', REPUBLISH: 'false', ...env },
+    });
+    const all = cli({});
+    expect(all.status).toBe(0);
+    expect(all.stdout.trim().split(' ')).toEqual(declaredStores.filter((s) => s !== 'ksy'));
+    const named = cli({ OBSERVE: 'ksy' });
+    expect(named.status).toBe(1);
+    expect(named.stdout).toBe('');
+    expect(named.stderr.trim()).toBe(`::error::store 'ksy' is no longer observed (observation.cadence "stopped" in config/ksy.json)`);
+    const republish = cli({ OBSERVE: 'ksy', REPUBLISH: 'true' });
+    expect(republish.status).toBe(0);
+    expect(republish.stdout).toBe('\n');
   });
 });

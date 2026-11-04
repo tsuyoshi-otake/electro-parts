@@ -30,5 +30,6 @@
 | 0026 | [現在の記録価格を円で見出しにし、カード手数料と在庫数グラフを設定モーダルで切り替える](0026-yen-headline-card-fee-and-stock-chart-settings.md) | 採用 |
 | 0027 | [スイッチサイエンスと M5Stack 公式の在庫数を商品ページから読む](0027-stock-counts-from-product-pages.md) | 採用 |
 | 0028 | [グラフにポインターを重ねた位置の値を表示する](0028-chart-pointer-readout.md) | 採用 |
+| 0029 | [サイトが閉じた店舗は観測を止め、公開済みの履歴だけを再生成し続ける](0029-stopped-store-observation.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。
