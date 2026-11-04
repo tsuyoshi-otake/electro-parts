@@ -89,6 +89,26 @@ test('shows the FT232RQ kit history (1150 → 1200) on the saved product page wi
   await expect(page.locator('#electronics-price-history-root .stock-chart circle').last()).toHaveAttribute('aria-label', /在庫数 781$/);
   await panel(page).screenshot({ path: path.resolve(process.cwd(), 'test-results', 'e2e', 'panel-109951.png') });
   await page.locator('.block-goods-detail').screenshot({ path: path.resolve(process.cwd(), 'test-results', 'e2e', 'detail-109951.png') });
+  // #76: the line's value under the pointer, on both charts, inside the chart.
+  const priceChart = page.locator('#electronics-price-history-root svg[role="img"]');
+  const [first, second] = await Promise.all([0, 1].map((i) => priceChart.locator('circle.eph-dot').nth(i).boundingBox()));
+  await page.mouse.move((first!.x + second!.x) / 2 + first!.width / 2, first!.y + first!.height / 2);
+  await expect(priceChart.locator('.eph-readout-text')).toHaveText([/^2026-08-\d\d$/, '￥1,150']);
+  await expect(priceChart.locator('.eph-readout > g > .eph-readout-marker')).toHaveCount(1);
+  await page.mouse.move(second!.x + second!.width / 2, second!.y + second!.height / 2);
+  await expect(priceChart.locator('.eph-readout-text')).toHaveText(['2026-09-06', '￥1,200']);
+  const chartBox = (await priceChart.boundingBox())!;
+  const labelBox = (await priceChart.locator('.eph-readout-label').boundingBox())!;
+  expect(labelBox.x).toBeGreaterThanOrEqual(chartBox.x);
+  expect(labelBox.x + labelBox.width).toBeLessThanOrEqual(chartBox.x + chartBox.width);
+  await panel(page).screenshot({ path: path.resolve(process.cwd(), 'test-results', 'e2e', 'panel-109951-readout.png') });
+  const stockDot = (await page.locator('#electronics-price-history-root .stock-chart circle.eph-dot').last().boundingBox())!;
+  await page.mouse.move(stockDot.x + stockDot.width / 2, stockDot.y + stockDot.height / 2);
+  await expect(page.locator('#electronics-price-history-root .stock-chart .eph-readout-text')).toHaveText(['2026-09-06', '在庫数 781']);
+  // Leaving clears it, and the price chart's readout went when the pointer left that chart.
+  await expect(priceChart.locator('.eph-readout-text')).toHaveCount(0);
+  await page.mouse.move(1, 1);
+  await expect(page.locator('#electronics-price-history-root .eph-readout-text')).toHaveCount(0);
   // Page content untouched, panel first in the centre pane at full content width.
   await expect(page.locator('h1.block-goods-name--text')).toHaveText('[109951]FT232RQ USBシリアル変換モジュールキット');
   expect(await page.locator('.pane-goods-center > #electronics-price-history-root:first-child').count()).toBe(1);

@@ -56,7 +56,7 @@ describe('step chart intervals', () => {
     expect(svg.querySelectorAll('circle')).toHaveLength(2);
     const line = svg.querySelector('path.eph-line')!.getAttribute('d')!;
     expect(line.split('M')).toHaveLength(3); // two separate runs → two moveTo commands
-    expect(svg.querySelector('title')?.textContent).toContain('変更点 2 件');
+    expect(svg.getAttribute('aria-label')).toContain('変更点 2 件');
   });
 
   it('prints one date per x label, and drops the ones that would collide', () => {

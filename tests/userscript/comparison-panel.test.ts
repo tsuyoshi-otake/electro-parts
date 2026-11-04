@@ -144,6 +144,23 @@ describe('cross-store comparison panel', () => {
     expect(f.shadow.querySelector<HTMLElement>('[role="status"]')!.hidden).toBe(false);
   });
 
+  it('leaves a store switched off out of the pointer readout on both charts (#76)', () => {
+    const f = setup(); f.draw();
+    const readRows = () => [...f.shadow.querySelectorAll<SVGSVGElement>('.eph-comparison-chart, .eph-inventory-chart')].map((svg) => {
+      const w = Number(svg.getAttribute('viewBox')!.split(' ')[2]);
+      svg.getBoundingClientRect = () => ({ left: 0, top: 0, x: 0, y: 0, width: w, height: 200, right: w, bottom: 200, toJSON: () => ({}) });
+      svg.querySelector('.eph-readout-hit')!.dispatchEvent(new MouseEvent('pointermove', { clientX: w / 2, bubbles: true }));
+      // Each row is "<store> <value>"; the first line is the time.
+      return [...svg.querySelectorAll('.eph-readout-text')].slice(1).map((n) => n.textContent!.split(' ')[0]);
+    });
+    // Price chart, then stock chart.
+    expect(readRows()).toEqual([['Store', 'Store'], ['Store', 'Store']]);
+    expect(f.shadow.querySelector('.eph-comparison-chart .eph-readout')!.textContent).toContain('Store B');
+    f.shadow.querySelectorAll<HTMLInputElement>('.series-controls input')[1]!.click();
+    expect(readRows()).toEqual([['Store'], ['Store']]);
+    for (const readout of f.shadow.querySelectorAll('.eph-readout')) expect(readout.textContent).not.toContain('Store B');
+  });
+
   it('keeps detailed own-store statistics available in a disclosure without stretching the initial comparison', () => {
     const f = setup(); f.draw();
     const details = f.shadow.querySelector<HTMLDetailsElement>('details[data-state-key="own-statistics"]')!;

@@ -129,6 +129,12 @@ export const PANEL_CSS = `
 .eph .eph-dot { fill: var(--accent); }
 .eph .stock-chart { margin-top: 10px; padding-top: 6px; border-top: 1px dashed var(--line-soft); }
 .eph .eph-inventory-chart .eph-line { stroke-width: 2; }
+.eph .eph-readout-hit { cursor: crosshair; }
+.eph .eph-readout-guide { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 2; }
+.eph .eph-readout-marker { fill: var(--accent); stroke: var(--bg); stroke-width: 1.5; }
+.eph .eph-readout-bg { fill: var(--bg); fill-opacity: 0.96; stroke: var(--line); }
+.eph .eph-readout-text { font-size: 12px; fill: var(--fg); font-variant-numeric: tabular-nums; }
+.eph .eph-readout-time { font-weight: 700; }
 
 .hero-label { font-size: 12px; color: var(--muted); }
 .hero-value { font-size: 27px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; }
@@ -238,7 +244,7 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
         const swatch = text(doc, 'span', '', 'series-swatch'); swatch.setAttribute('aria-hidden', 'true');
         label.append(input, swatch, doc.createTextNode(s.label)); controls.appendChild(label);
       });
-      box.append(controls, svg, message, text(doc, 'div', '各店舗の最終観測までを表示。観測が1回だけの店舗は点のみです。最終観測より後の価格は未確認です。点にフォーカスすると日時と価格を確認できます。', 'related-meta'));
+      box.append(controls, svg, message, text(doc, 'div', '各店舗の最終観測までを表示。観測が1回だけの店舗は点のみです。最終観測より後の価格は未確認です。グラフに重ねると、その日の各店舗の記録価格を表示します（キーボードでは点にフォーカス）。', 'related-meta'));
       updateMessage();
     } else box.appendChild(svg);
     if (stockBox !== null) box.appendChild(stockBox);
