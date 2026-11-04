@@ -4,7 +4,7 @@
     "userAgent": "electro-parts-price-history/0.4.4 (+https://github.com/tsuyoshi-otake/electro-parts; research)",
     "pageLimit": 250, "maxPages": 40, "maxSubSitemaps": 16,
     "minIntervalMs": 1500, "jitterMs": 750, "maxAttempts": 4,
-    "timeoutMs": 30000, "maxRequests": 1000,
+    "timeoutMs": 30000, "maxRequests": 1000, "maxWaitMs": 300000,
     "productPages": { "shards": 1, "maxPages": 900, "maxFailures": 30, "maxMinutes": 35 }
   },
   "sanity": {

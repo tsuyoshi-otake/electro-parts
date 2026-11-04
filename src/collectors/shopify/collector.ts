@@ -17,6 +17,8 @@ export function shopifyCollectorConfig(c: Record<string, unknown>) {
     maxSubSitemaps:configNumber(c,'maxSubSitemaps',16,1,64),
     minIntervalMs:configNumber(c,'minIntervalMs',1500,500,60000),jitterMs:configNumber(c,'jitterMs',750,0,60000),
     maxAttempts:configNumber(c,'maxAttempts',4,1,8),timeoutMs:configNumber(c,'timeoutMs',30000,1000,60000),
+    // The longest Retry-After this store's run waits out; a longer one stops its requests.
+    maxWaitMs:configNumber(c,'maxWaitMs',120000,1000,600000),
     maxRequests:configNumber(c,'maxRequests',100,1,5000),productPages:parseProductPagesConfig(c['productPages'])};
 }
 /**

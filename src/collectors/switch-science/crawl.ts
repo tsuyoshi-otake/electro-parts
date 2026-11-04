@@ -28,6 +28,7 @@ import {
 } from './catalog.ts';
 import { productPageWarnings, readProductPages, type ProductPageReader, type ProductPagesConfig } from '../productPageInventory.ts';
 import { fetchSwitchScienceSitemap, sitemapIndexUrl, type SwitchScienceSitemap } from './sitemap.ts';
+import { showsStockCount } from './productPage.ts';
 
 /** How many uncovered handles are named in the snapshot for diagnosis. */
 const UNCOVERED_SAMPLE_SIZE = 20;
@@ -206,6 +207,7 @@ export async function crawlSwitchScience(options: CrawlOptions): Promise<CrawlRe
 
   // Out-of-stock products are not read: the catalogue already says so, and
   // skipping them nearly halves the requests. Their series keeps its last count.
+  // Products whose page shows no count (back-order items) are not read either.
   let pageInventory: SwitchScienceRawSnapshot['pageInventory'];
   if (options.productPages !== undefined && errors.length === 0 && walk.items.length > 0) {
     pageInventory = await readProductPages({
@@ -217,7 +219,7 @@ export async function crawlSwitchScience(options: CrawlOptions): Promise<CrawlRe
       log: options.log ?? (() => {}),
       tag: '[crawl]',
       targets: walk.items
-        .filter((i) => i.variants.length === 1 && i.variants[0]!.available)
+        .filter((i) => i.variants.length === 1 && i.variants[0]!.available && showsStockCount(i.title))
         .map((i) => ({ key: i.handle, url: `${baseUrl}/products/${i.handle}`, offerIds: [String(i.variants[0]!.variantId)] })),
     });
     warnings.push(...productPageWarnings(pageInventory));

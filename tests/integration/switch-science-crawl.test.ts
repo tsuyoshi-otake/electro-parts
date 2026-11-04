@@ -260,6 +260,36 @@ describe('Switch Science stock counts from product pages (#74)', () => {
     expect(byHandle.get(products[3]!.handle)).toMatchObject({ quantity: null, quantityUnobserved: true });
   });
 
+  it('does not read the pages of back-order products, which show no count (#78)', async () => {
+    const shop = fakeShop();
+    const products = addProducts(shop, 4);
+    // Titled as the store titles them; on 2026-11-04 all 51 such pages read had no 在庫数 line.
+    products[2]!.title = `《お取り寄せ商品》${products[2]!.title}`;
+    products.forEach((p) => shop.bodyOverrides.set(`${FAKE_BASE}/products/${p.handle}`, page(p.handle, '7')));
+    shop.bodyOverrides.set(`${FAKE_BASE}/products/${products[2]!.handle}`, '<html><body><p>お取り寄せ</p></body></html>');
+    const outcome = await switchScienceCollector.collect(
+      {
+        userAgent: 'electro-parts-price-history/0.1 (+https://example.test; research)',
+        baseUrl: FAKE_BASE,
+        pageLimit: 10,
+        minIntervalMs: 500,
+        jitterMs: 0,
+        productPages: { shards: 1, maxPages: 100, maxFailures: 5, maxMinutes: 30 },
+      },
+      { log: () => undefined, transport: transportFor(shop), sleep: async () => undefined, now: fixedClock },
+    );
+    expect(outcome.complete).toBe(true);
+    expect(shop.log).not.toContain(`${FAKE_BASE}/products/${products[2]!.handle}`);
+    expect(outcome.metrics).toMatchObject({ productPagesSelected: 3, productPagesRead: 3, productPagesFailed: 0 });
+    expect(outcome.warnings).toEqual([]);
+    const byHandle = new Map(
+      switchScienceSnapshotAdapter.normalize(outcome.raw, 'f'.repeat(64)).products.map((p) => [p.pageKey, p.offers[0]!.availability]),
+    );
+    expect(byHandle.get(products[0]!.handle)).toMatchObject({ quantity: 7, quantitySemantics: 'site_reported' });
+    // Still on sale, so unobserved rather than "no count shown".
+    expect(byHandle.get(products[2]!.handle)).toMatchObject({ purchasable: true, quantity: null, quantityUnobserved: true });
+  });
+
   it('rejects a product page section that does not hold together', async () => {
     const shop = fakeShop();
     addProducts(shop, 3);
