@@ -90,11 +90,25 @@ test('production bundle compares both directions and toggles a series with the k
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-desktop-light.png' });
   await panel(page).getByRole('button', { name: 'ダーク', exact: true }).click();
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-desktop-dark.png' });
+  // #76: over the other store's one observation, the readout names both stores in their colors.
+  const comparison = panel(page).locator('.eph-comparison-chart');
+  const otherDot = (await comparison.locator('g[data-series]').nth(1).locator('circle').boundingBox())!;
+  await page.mouse.move(otherDot.x + otherDot.width / 2, otherDot.y + otherDot.height / 2);
+  await expect(comparison.locator('.eph-readout-text')).toHaveCount(3);
+  await expect(comparison.locator('.eph-readout-text').nth(2)).toHaveText('スイッチサイエンス ￥1,000');
+  await expect(comparison.locator('.eph-readout-label [data-series-index]')).toHaveCount(2);
+  await panel(page).screenshot({ path: 'test-results/e2e/comparison-desktop-dark-readout.png' });
   const checkbox = panel(page).getByRole('checkbox', { name: 'スイッチサイエンス', exact: true });
   await checkbox.focus(); await page.keyboard.press('Space');
   await expect(checkbox).not.toBeChecked();
   await expect(panel(page).locator('.eph-comparison-chart g[data-series]').nth(1)).toBeHidden();
   await expect(checkbox).toBeFocused();
+  // A store switched off leaves the readout at the next move.
+  await page.mouse.move(otherDot.x + otherDot.width / 2 - 1, otherDot.y + otherDot.height / 2);
+  await expect(comparison.locator('.eph-readout-text')).toHaveCount(2);
+  await expect(comparison.locator('.eph-readout')).not.toContainText('スイッチサイエンス');
+  await page.mouse.move(1, 1);
+  await expect(comparison.locator('.eph-readout-text')).toHaveCount(0);
   // The same ATOM Lite at せんごく (0.6.1) is a third identity card, a reference price without arithmetic.
   await expect(panel(page).locator('.store-price')).toHaveCount(3);
   await expect(panel(page).locator(`.store-price[data-relation-id='${JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU'])}']`)).toContainText('せんごく');

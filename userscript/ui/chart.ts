@@ -1,5 +1,6 @@
 import type { InventoryPointV1, PresencePointV1, PricePointV1 } from '../../src/publisher/contract.ts';
 import { formatDate, formatDateTime, formatMoney, formatStockCount } from '../core/format.ts';
+import { attachReadout, type ReadoutLine, type ReadoutValue } from './chartReadout.ts';
 
 /**
  * Dependency-free SVG step chart of one price segment. A price stays in
@@ -122,8 +123,10 @@ export function buildComparisonChart(doc: Document, series: readonly ComparisonS
     label.textContent = content; svg.appendChild(label);
     right = left + labelWidth; previous = content;
   }
+  const groups: SVGGElement[] = [];
   prepared.forEach((s, i) => {
     const group = el(doc, 'g', { 'data-series': s.id, 'data-series-index': i, 'aria-label': s.label });
+    groups.push(group);
     let line = ''; let band = ''; let lastTo: number | null = null;
     for (const iv of s.intervals) {
       const from = Math.max(iv.from, s.start);
@@ -150,6 +153,12 @@ export function buildComparisonChart(doc: Document, series: readonly ComparisonS
       const title = el(doc, 'title', {}); title.textContent = label; dot.appendChild(title); group.appendChild(dot);
     }
     svg.appendChild(group);
+  });
+  attachReadout(doc, svg, {
+    width, height, left: PAD.left, right: width - PAD.right, top: PAD.top, bottom: height - PAD.bottom, start, end, x,
+    time: (px) => start + ((px - PAD.left) / plotW - 0.02) / 0.96 * span,
+    timeText: readoutTimeText(start, end),
+    lines: prepared.map((s, i) => ({ label: s.label, index: i, group: groups[i]!, valueAt: priceValueAt(s.intervals, s.points, s.start, s.end, y, currency) })),
   });
   return svg;
 }
@@ -213,8 +222,10 @@ export function buildInventoryChart(doc: Document, series: readonly InventorySer
     right = left + X_LABEL_WIDTH;
     previous = content;
   }
+  const lines: ReadoutLine[] = [];
   for (const s of prepared) {
     const group = el(doc, 'g', { 'data-series': s.id, 'data-series-index': s.index, 'aria-label': `${s.label}の在庫数` });
+    lines.push({ label: s.label, index: s.index, group, valueAt: stockValueAt(s, y) });
     let line = '';
     let lastTo: number | null = null;
     for (const step of s.steps) {
@@ -234,7 +245,66 @@ export function buildInventoryChart(doc: Document, series: readonly InventorySer
     }
     svg.appendChild(group);
   }
+  attachReadout(doc, svg, {
+    width, height, left: PAD.left, right: width - PAD.right, top: PAD.top, bottom: height - PAD.bottom, start, end, x,
+    time: (px) => start + ((px - PAD.left) / plotW - 0.02) / 0.96 * span,
+    timeText: readoutTimeText(start, end),
+    lines,
+  });
   return svg;
+}
+
+/** Date only, or date and time for a window shorter than three days (as the x axis). */
+function readoutTimeText(start: number, end: number): (t: number) => string {
+  return end - start < 3 * 86_400_000 ? formatDateTime : formatDate;
+}
+
+/** The step in effect at `t`: the later one where two meet. */
+function stepAt<T extends { from: number; to: number }>(steps: readonly T[], t: number): T | undefined {
+  let found: T | undefined;
+  for (const step of steps) {
+    if (step.from > t) break;
+    if (t <= step.to) found = step;
+  }
+  return found;
+}
+
+/** The point closest to `t` within `tolerance`. */
+function nearestPoint<T extends readonly [number, ...unknown[]]>(points: readonly T[], t: number, tolerance: number): T | undefined {
+  let best: T | undefined;
+  for (const p of points) if (Math.abs(p[0] - t) <= tolerance && (best === undefined || Math.abs(p[0] - t) < Math.abs(best[0] - t))) best = p;
+  return best;
+}
+
+function priceText(min: number, max: number, currency: string): string {
+  return min === max ? formatMoney(min, currency) : `${formatMoney(min, currency)}〜${formatMoney(max, currency)}`;
+}
+
+/**
+ * The price a line shows at `t`: a dot under the pointer reads as that dot,
+ * otherwise the step in effect. The dots are filtered as the drawn ones are.
+ */
+function priceValueAt(intervals: readonly Interval[], points: readonly PricePointV1[], from: number, to: number, y: (v: number) => number, currency: string): ReadoutLine['valueAt'] {
+  const dots = points.filter((p) => p[0] >= from && p[0] <= to && p[1] !== 'unavailable' && p[2] !== null);
+  return (t, tolerance) => {
+    if (t < from - tolerance || t > to + tolerance) return { text: '観測期間外' };
+    const dot = nearestPoint(dots, t, tolerance);
+    if (dot !== undefined && dot[2] !== null) return { text: priceText(dot[2], dot[1] === 'range' && dot[3] !== null ? dot[3] : dot[2], currency), y: y(dot[2]) };
+    const step = stepAt(intervals, t);
+    return step === undefined ? { text: '価格の記録なし' } : { text: priceText(step.min, step.max, currency), y: y(step.min) };
+  };
+}
+
+function stockValueAt(s: InventorySeries & { steps: readonly { from: number; to: number; count: number }[] }, y: (v: number) => number): ReadoutLine['valueAt'] {
+  const dots = s.points.filter(([t, count]) => count !== null && t >= s.start && t <= s.end);
+  const text = (count: number) => `在庫数 ${formatStockCount(count, s.cappedAt)}`;
+  return (t, tolerance): ReadoutValue => {
+    if (t < s.start - tolerance || t > s.end + tolerance) return { text: '観測期間外' };
+    const dot = nearestPoint(dots, t, tolerance);
+    if (dot !== undefined && dot[1] !== null) return { text: text(dot[1]), y: y(dot[1]) };
+    const step = stepAt(s.steps, t);
+    return step === undefined ? { text: '在庫数の記録なし' } : { text: text(step.count), y: y(step.count) };
+  };
 }
 
 function el<K extends keyof SVGElementTagNameMap>(doc: Document, name: K, attrs: Record<string, string | number>): SVGElementTagNameMap[K] {
@@ -274,8 +344,8 @@ export function buildStepChart(doc: Document, points: readonly PricePointV1[], p
   const span = Math.max(1, drawEnd - start);
   const x = (t: number) => PAD.left + ((t - start) / span) * plotW;
 
-  const title = el(doc, 'title', {});
   if (intervals.length === 0) {
+    const title = el(doc, 'title', {});
     title.textContent = '観測期間内に価格の記録はありません';
     svg.appendChild(title);
     svg.setAttribute('aria-label', title.textContent);
@@ -302,8 +372,8 @@ export function buildStepChart(doc: Document, points: readonly PricePointV1[], p
   const y = (v: number) => PAD.top + plotH - ((v - lo) / (hi - lo)) * plotH;
 
   const summary = `${formatDate(start)}〜${formatDate(end)} の価格推移。最低 ${formatMoney(Math.min(...intervals.map((i) => i.min)), currency)}、最高 ${formatMoney(Math.max(...intervals.map((i) => i.max)), currency)}、変更点 ${points.length} 件。${options.label ?? ''}`.trim();
-  title.textContent = summary;
-  svg.appendChild(title);
+  // The summary is the accessible name only: a <title> on the root would pop
+  // the browser's own tooltip over the pointer readout.
   svg.setAttribute('aria-label', summary);
 
   // Grid + y labels.
@@ -368,5 +438,12 @@ export function buildStepChart(doc: Document, points: readonly PricePointV1[], p
     dot.appendChild(t);
     svg.appendChild(dot);
   }
+  // The readout stops at the last observation; the tail after it is drawing only.
+  attachReadout(doc, svg, {
+    width, height, left: PAD.left, right: width - PAD.right, top: PAD.top, bottom: height - PAD.bottom, start, end, x,
+    time: (px) => start + (px - PAD.left) / plotW * span,
+    timeText: readoutTimeText(start, end),
+    lines: [{ label: '', index: 0, valueAt: priceValueAt(intervals, points, start, end, y, currency) }],
+  });
   return svg;
 }
