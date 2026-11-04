@@ -11,7 +11,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { writeRawSnapshotFile } from '../core/snapshotFile.ts';
-import { loadPipelineConfig } from '../pipeline/config.ts';
+import { assertObserved, loadPipelineConfig } from '../pipeline/config.ts';
 import { reportToMarkdown, type PipelineReport } from '../pipeline/report.ts';
 import { runPipeline, SITE_STATE_DIR } from '../pipeline/run.ts';
 import { verifyPublication } from '../pipeline/verifyPublication.ts';
@@ -58,6 +58,7 @@ async function commandCrawl(args: string[]): Promise<number> {
   const { values } = parseArgs({ args, options: { config: { type: 'string' }, out: { type: 'string' } } });
   if (values.config === undefined) throw new Error(USAGE);
   const config = await loadPipelineConfig(values.config);
+  assertObserved(config);
   const collector = getStoreCollector(config.storeId);
   const outcome = await collector.collect(config.collector, { log });
   const dir = values.out ?? config.paths.snapshots;

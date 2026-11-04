@@ -155,32 +155,13 @@ jobs:
           EVENT_CRON: ${{ github.event.schedule }}
         run: |
           set -uo pipefail
-          observe="${OBSERVE:-}"
-          # A schedule observes only the stores that declare its cadence. The
-          # mapping lives in the store configs, never here, so a store cannot
-          # be crawled every two days while claiming a monthly interval.
-          by_schedule=false
-          if [ -z "$observe" ] && [ "${EVENT_NAME:-}" = "schedule" ]; then
-            case "${EVENT_CRON:-}" in
-              "$EVERY_TWO_DAYS_CRON") wanted=every_two_days ;;
-              *) echo "::error::unknown schedule '${EVENT_CRON:-}'"; exit 1 ;;
-            esac
-            for store in $STORES; do
-              declared=$(jq -r '.observation.cadence // "monthly"' "config/$store.json")
-              if [ "$declared" = "$wanted" ]; then observe="$observe $store"; fi
-            done
-            observe=$(echo $observe)
-            by_schedule=true
-            echo "::notice title=Schedule::cron '${EVENT_CRON:-}' observes the $wanted stores: ${observe:-none}"
-          fi
-          if [ -z "$observe" ] && [ "$by_schedule" != "true" ]; then observe="$STORES"; fi
-          if [ "${REPUBLISH:-false}" = "true" ]; then observe=""; fi
-          for store in $observe; do
-            case " $STORES " in
-              *" $store "*) ;;
-              *) echo "::error::unknown store '$store'; known stores: $STORES"; exit 1 ;;
-            esac
-          done
+          # Which stores this run observes comes from each store's
+          # observation.cadence, never from store names here: a schedule takes
+          # the stores that declare its cadence, a manual run with no stores
+          # takes every store still observed, and a stopped store is never
+          # observed. Unknown or stopped stores named in `stores` are an error.
+          if ! observe=$(node --import tsx scripts/observed-stores.ts); then exit 1; fi
+          echo "::notice title=Observed stores::${EVENT_NAME:-} ${EVENT_CRON:-} observes: ${observe:-none}"
           if [ "${BOOTSTRAP:-false}" = "true" ] && [ "$(echo $observe | wc -w)" != "1" ]; then
             echo "::error::bootstrap starts one store's history; set 'stores' to exactly one store"
             exit 1

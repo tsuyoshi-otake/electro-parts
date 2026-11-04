@@ -129,8 +129,12 @@ export type CaveatKey = (typeof CAVEAT_KEYS)[number];
  * How often a store is observed. Stores are crawled at different rates --
  * a JSON catalogue costs ~54 requests, an HTML crawl ~2,700 -- so the
  * sampling caveat is per store, not per project.
+ *
+ * `stopped` is a store that is no longer observed at all (its site is gone):
+ * its published history is regenerated as it stands, nothing crawls it, and
+ * its dataset states no sampling interval, because there is none any more.
  */
-export type ObservationCadence = 'every_two_days' | 'weekly' | 'monthly';
+export type ObservationCadence = 'every_two_days' | 'weekly' | 'monthly' | 'stopped';
 
 export interface ObservationWindowV1 {
   runCount: number;

@@ -194,6 +194,41 @@ describe('pipeline state machine', () => {
     expect(r.report.stages.every((s) => s.status === 'skipped')).toBe(true);
   });
 
+  it('never observes a store whose observation has stopped, and still republishes its history (#80)', async () => {
+    const stopped: PipelineConfig = { ...config, observation: { cadence: 'stopped' } };
+    const runsBefore = (await verifyStateDir(pagesDir)).stores['akizuki']!.runCount;
+    const requestsBefore = site.log.length;
+    const logs: string[] = [];
+    const deps = { log: (m: string) => logs.push(m), now: clock, transport: transportFor(site), sleep: async () => undefined, random: () => 0 };
+    const snapshot = (await import('node:fs/promises').then((m) => m.readdir(path.join(root, 'snapshots')))).sort().map((f) => path.join('snapshots', f))[0]!;
+
+    // A crawl, a snapshot import and a bootstrap would each add an observation.
+    for (const extra of [{}, { snapshotPath: snapshot }, { bootstrap: true }]) {
+      const r = await run(false, { config: stopped, deps, ...extra });
+      expect(r.report.outcome).toBe('failed');
+      expect(r.exitCode).toBe(1);
+      expect(r.report.publishable).toBe(false);
+      expect(r.report.stages.every((s) => s.status === 'skipped')).toBe(true);
+    }
+    expect(site.log.length).toBe(requestsBefore);
+    expect(logs.filter((m) => m.includes('akizuki is no longer observed'))).toHaveLength(3);
+
+    const r = await run(false, { config: stopped, republish: true });
+    expect(r.report.outcome).toBe('unchanged');
+    expect(r.exitCode).toBe(0);
+    expect(r.report.publishable).toBe(true);
+    expect(site.log.length).toBe(requestsBefore);
+    const manifest = JSON.parse(await readFile(path.join(root, 'site', 'data', 'v1', 'stores', 'akizuki', 'manifest.json'), 'utf8'));
+    expect(validateManifestV1(manifest)).toEqual([]);
+    // The history stays; no sampling interval is claimed for a store nobody observes.
+    expect(manifest.observation.runCount).toBe(runsBefore);
+    expect(manifest.observation).not.toHaveProperty('samplingIntervalDays');
+    expect(manifest.caveats.filter((c: string) => c.startsWith('sampling_interval'))).toEqual([]);
+    expect(manifest.caveats).toContain('observation_window');
+    expect((await verifyStateDir(path.join(root, 'site', SITE_STATE_DIR))).stores['akizuki']!.runCount).toBe(runsBefore);
+    await expect(verifyPublication(path.join(root, 'site'), stopped)).resolves.toBeDefined();
+  });
+
   it('quarantines a crawl that lost most of the catalogue and keeps the history intact', async () => {
     resetSite(site);
     addListing(site, { kind: 'r', slug: 'rkit' }, '組立キット', catalog(5), 10);

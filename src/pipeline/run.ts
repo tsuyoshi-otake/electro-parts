@@ -17,7 +17,7 @@ import { writeStoreDataset } from '../publisher/write.ts';
 import type { CollectDeps } from '../stores/collector.ts';
 import { getStoreCollector } from '../stores/collectorRegistry.ts';
 import { getStoreAdapter } from '../stores/registry.ts';
-import type { PipelineConfig } from './config.ts';
+import { assertObserved, type PipelineConfig } from './config.ts';
 import { acquirePreviousState, type FetchLike, type PreviousStateSource } from './previousState.ts';
 import { EXIT_CODES, newReport, runStage, StageFailedError, type PipelineOutcome, type PipelineReport } from './report.ts';
 import { verifyPublication } from './verifyPublication.ts';
@@ -108,6 +108,7 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
     if (options.republish === true && (options.bootstrap || options.snapshotPath !== undefined)) {
       throw new Error('republish cannot be combined with bootstrap or a snapshot: both add an observation');
     }
+    if (options.republish !== true) assertObserved(config);
 
     // previous_state
     const state = await runStage(report, 'previous_state', now, async (d) => {

@@ -2,16 +2,16 @@
 
 電子部品通販サイトの商品ページに、**観測した価格・在庫表示・掲載状況の履歴**を表示するプロジェクトです。
 
-- クローラーが定期的に(現在は6店舗とも2日ごと → [ADR-0016](docs/adr/0016-per-store-observation-cadence.md))対象サイトのカタログを巡回して生スナップショットを保存し、
+- クローラーが定期的に(現在はKSYを除く5店舗が2日ごと、KSYは観測停止 → [ADR-0016](docs/adr/0016-per-store-observation-cadence.md)、[ADR-0029](docs/adr/0029-stopped-store-observation.md))対象サイトのカタログを巡回して生スナップショットを保存し、
 - 6店舗で共有する SQLite に**変化点だけ**を取り込み、
 - 静的 JSON(契約 v1)として GitHub Pages に公開し、
 - **Electronics Price History** が商品ページにパネルを差し込みます。Tampermonkey ユーザースクリプトと Chrome 拡張の 2 つの形があり、中身は同じバンドルです([ADR-0019](docs/adr/0019-chrome-extension-second-host.md))。
 
 **インストール**: Chrome は [Chrome ウェブストア](https://chromewebstore.google.com/detail/electronics-price-history/jklcjijjlombfgmagcbmfkjglomaiipj) から入れるのがいちばん簡単です(ストア経由で自動更新)。Tampermonkey の場合は [ユーザースクリプト](https://tsuyoshi-otake.github.io/electro-parts/electronics-price-history.user.js) を開きます。詳しくは [Chrome 拡張のインストール](#chrome-拡張のインストール) と [ユーザースクリプトのインストール](#ユーザースクリプトのインストール)。
 
-対象は **秋月電子通商**(`akizuki`、一覧HTML)、**スイッチサイエンス**(`switch-science`、Shopifyカタログ)、**M5Stack公式ショップ**(`m5stack`、Shopifyカタログ)、**Raspberry Pi Shop by KSY**(`ksy`、公開一覧のJSON)、**せんごくネット通販**(`sengoku`、「電子工作部品」の分類一覧HTML)、**Pimoroni**(`pimoroni`、英国、Shopifyカタログ)の6店舗です。M5Stackの収集・USD・バリエーションの扱いは [対応仕様](docs/roadmap/m5stack-support.md)、KSYの収集範囲と商品ダイアログの扱いは [ADR-0023](docs/adr/0023-ksy-public-list-and-in-place-product-dialog.md)、せんごくの収集範囲と記録しないものは [ADR-0024](docs/adr/0024-sengoku-electronic-parts-category-listings.md)、PimoroniのGBPと地域別の転送の扱いは [ADR-0025](docs/adr/0025-pimoroni-gbp-base-catalogue-without-redirects.md) を参照してください。aitendoは未実装です。
+対象は **秋月電子通商**(`akizuki`、一覧HTML)、**スイッチサイエンス**(`switch-science`、Shopifyカタログ)、**M5Stack公式ショップ**(`m5stack`、Shopifyカタログ)、**Raspberry Pi Shop by KSY**(`ksy`、公開一覧のJSON。サイト閉鎖のため2026-11-04に観測を止め、2026-11-02までの記録だけを公開、[ADR-0029](docs/adr/0029-stopped-store-observation.md))、**せんごくネット通販**(`sengoku`、「電子工作部品」の分類一覧HTML)、**Pimoroni**(`pimoroni`、英国、Shopifyカタログ)の6店舗です。M5Stackの収集・USD・バリエーションの扱いは [対応仕様](docs/roadmap/m5stack-support.md)、KSYの収集範囲と商品ダイアログの扱いは [ADR-0023](docs/adr/0023-ksy-public-list-and-in-place-product-dialog.md)、せんごくの収集範囲と記録しないものは [ADR-0024](docs/adr/0024-sengoku-electronic-parts-category-listings.md)、PimoroniのGBPと地域別の転送の扱いは [ADR-0025](docs/adr/0025-pimoroni-gbp-base-catalogue-without-redirects.md) を参照してください。aitendoは未実装です。
 
-> データについて: 表示される値はこのプロジェクトが観測した時点の店頭表示の記録で、店舗の公式データではありません。6店舗とも2日ごとの観測設定で、観測間の変化は記録されません。M5StackはUSD、PimoroniはGBPのまま記録・表示し、税・送料・関税込みの支払額を表しません。現在の記録価格に添える円換算は、1日1回取得した為替レートによる参考値です。詳しくは [データの注意点](#データの注意点) を読んでください。
+> データについて: 表示される値はこのプロジェクトが観測した時点の店頭表示の記録で、店舗の公式データではありません。KSYを除く5店舗は2日ごとの観測設定で、観測間の変化は記録されません。KSYは2026-11-02の観測が最後です。M5StackはUSD、PimoroniはGBPのまま記録・表示し、税・送料・関税込みの支払額を表しません。現在の記録価格に添える円換算は、1日1回取得した為替レートによる参考値です。詳しくは [データの注意点](#データの注意点) を読んでください。
 
 ## 目次
 
@@ -270,7 +270,7 @@ npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.
 - 公開は `pages-publish` の concurrency グループで**単一ライター**。実行中の公開はキャンセルされず、後続はキューに入ります。
 - 店舗は 1 つの job の中で**直列**に回ります。共有するのは 1 つの SQLite と 1 つの `state/` なので、並行にすると後から最終化したほうが他方の run を捨てます。ワークフローは 1 店舗目のあと `--previous-dir site/state` を足して連結します。
 - **1 店舗が失敗しても、走った店舗の公開は止めません。** ただしデプロイはサイト全体の差し替えなので、失敗した店舗をそのままにすると公開データが消えます。そこで、履歴に run がある(`state.json` の `stores.<id>.runCount > 0`)のにサイトにマニフェストが無い店舗を `--republish` で作り直し、それでも欠けていればゲートがデプロイを**拒否**します(fail-closed)。ジョブ自体は失敗した店舗があれば最後に失敗します。
-- **どの店舗を観測するかは cron には書いてありません。** 毎朝05:00 JSTに起動し、2026-09-11を基準に隔日のみ収集します。各 `config/<store>.json` の `observation.cadence` が `every_two_days` の店舗が対象です。現在は6店舗とも隔日です。収集日の対象外店舗は `--republish` で維持し、中間日はクロールも公開も行いません。手動実行は隔日判定を通過します。
+- **どの店舗を観測するかは cron には書いてありません。** 毎朝05:00 JSTに起動し、2026-09-11を基準に隔日のみ収集します。各 `config/<store>.json` の `observation.cadence` を `scripts/observed-stores.ts` が読み、`every_two_days` の店舗を対象にします。現在はKSYを除く5店舗が隔日で、KSYは `stopped`(サイト閉鎖、2026-11-04)です。`stopped` の店舗は定期実行でも `stores` を空にした手動実行でも観測せず、`stores` に書くとエラーになります。収集日の対象外店舗は `--republish` で維持し、中間日はクロールも公開も行いません。手動実行は隔日判定を通過します。
 - Pages への反映は 1 つのアーティファクト(データ + 状態 + ユーザースクリプト + 拡張 zip)で行うので、読者が中途半端なデータセットを見ることはありません(原子的公開)。
 - SQLite は git にコミットしません。最終化した DB は Pages の `state/` に公開し、次回の入力になります。バックアップは Actions の成果物(90 日)。ロールバックは「該当 run の `state-<run id>` 成果物を `--previous-dir` で読み直して公開する」手順([docs/runbook.md](docs/runbook.md))。
 - 権限は最小(`contents: read`、デプロイジョブだけ `pages: write` + `id-token: write`)。アクションはコミット SHA でピン留め。シークレットは使いません。
@@ -333,7 +333,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 | 3 年 | 1,095 | 453.8 ms | 740.5 ms | 3841.4 ms | 610.2 s | 941.7 ms | 175.3 ms | 5473.0 ms | 493.5 ms | 35.39 MB | 32.23 MB | 6.4 KB | 72,756 | 562.75 MB |
 | 5 年 | 1,825 | 413.3 ms | 719.9 ms | 4508.0 ms | 905.3 s | 877.9 ms | 95.2 ms | 4281.5 ms | 509.9 ms | 53.86 MB | 39.00 MB | 7.8 KB | 110,020 | 666.30 MB |
 
-「取り込み合計」は履歴を作るために 365〜1,825 回の取り込みを連続で回した合計で、実運用では 1 run ぶん(p95 で 0.5〜0.8 秒)だけです。6店舗の収集設定は2日に1回・05:00 JSTです。この表は9,000商品の合成データであり、現在の全店舗の商品数・変化率での実測ではありません。5 年の p50 が 3 年より小さいのは同じマシンでの測定ばらつきです。「最大」は SQLite が WAL/ページを整理する run に当たったときの値。
+「取り込み合計」は履歴を作るために 365〜1,825 回の取り込みを連続で回した合計で、実運用では 1 run ぶん(p95 で 0.5〜0.8 秒)だけです。KSYを除く5店舗の収集設定は2日に1回・05:00 JSTです。この表は9,000商品の合成データであり、現在の全店舗の商品数・変化率での実測ではありません。5 年の p50 が 3 年より小さいのは同じマシンでの測定ばらつきです。「最大」は SQLite が WAL/ページを整理する run に当たったときの値。
 
 予算に対する実測(5 年時点): 取り込み 4.5 s < 10 s、生成 + 書き込み 4.4 s < 30 s、最大の商品ファイル 7.8 KB < 64 KB、静的データ 39.0 MB < 50 MB、SQLite 53.9 MB(Pages の 1 ファイル 100 MB 制限内)。すべて予算内です。
 <!-- bench:end -->
@@ -357,7 +357,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 パネルとマニフェストの `caveats` に同じ内容が載ります。
 
 - **observation_window**: 履歴はこのプロジェクトが観測を始めた日以降のものです。それ以前の価格は分かりません。
-- **収集間隔**: 6店舗とも約2日に1回の観測です。観測の間に起きた変化(短時間の値下げ、在庫の増減)は記録されません。「変化点の時刻」は**変化を初めて観測した時刻**で、実際に変わった時刻ではありません。契約v1.1の省略可能フィールド `observation.samplingIntervalDays: 2` から注意書きを表示します。旧版は未知のcaveatキーを拒否するため、この間隔を新しいキーとして配信しません。従来の月次・週次の注意書きも読み込めます。
+- **収集間隔**: KSYを除く5店舗は約2日に1回の観測です。観測の間に起きた変化(短時間の値下げ、在庫の増減)は記録されません。「変化点の時刻」は**変化を初めて観測した時刻**で、実際に変わった時刻ではありません。契約v1.1の省略可能フィールド `observation.samplingIntervalDays: 2` から注意書きを表示します。旧版は未知のcaveatキーを拒否するため、この間隔を新しいキーとして配信しません。従来の月次・週次の注意書きも読み込めます。観測を止めた店舗(KSY)は間隔を表明せず、`samplingIntervalDays` も間隔の注意書きも出しません。表示されるのは観測期間(最初と最後の観測日、回数)だけです(ADR-0029)。
 - **absence_not_discontinued**: 一覧から消えたことは「掲載なし」と記録します。販売終了とは限りません(一時的な非掲載、ジャンル変更、クロール範囲外など)。
 - **site_reported_quantity**: 在庫数は店舗のページが示す数値そのものです。店舗側の集計ルールや倉庫の実数とは異なることがあります。M5Stack公式ショップはページの「10+ In Stock」のような段階表示ではなく、その元になっているページのデータの数を記録します。スイッチサイエンスの「100+」は100以上を意味する下限として記録し、`cappedAt: 100` を付けて配信します。
 - **suspicious_identity**: 同じ商品コードで名前や型番が大きく変わった場合に付きます。コードの再利用の可能性があります。

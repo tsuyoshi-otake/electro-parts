@@ -128,14 +128,23 @@ interface ProductContext {
   inventoryPointLimit: number;
 }
 
+/**
+ * The caveat that states how far apart two observations are. Older v1 clients
+ * reject unknown caveat keys but ignore optional fields, so the two-day
+ * interval is carried by observation.samplingIntervalDays instead. A stopped
+ * store has no interval: claiming one would tell a reader that a change after
+ * the last observation would have been recorded.
+ */
+const SAMPLING_CAVEAT: Readonly<Record<ObservationCadence, CaveatKey | null>> = {
+  every_two_days: null,
+  weekly: 'sampling_interval_weekly',
+  monthly: 'sampling_interval',
+  stopped: null,
+};
+
 function storeLevelCaveats(capabilities: StoreCapabilities, cadence: ObservationCadence): CaveatKey[] {
-  const caveats: CaveatKey[] = [
-    'observation_window',
-    // Older v1 clients reject unknown caveat keys but ignore optional fields.
-    // The new interval is carried by observation.samplingIntervalDays instead.
-    ...(cadence === 'every_two_days' ? [] : [cadence === 'weekly' ? 'sampling_interval_weekly' as const : 'sampling_interval' as const]),
-    'absence_not_discontinued',
-  ];
+  const sampling = SAMPLING_CAVEAT[cadence];
+  const caveats: CaveatKey[] = ['observation_window', ...(sampling === null ? [] : [sampling]), 'absence_not_discontinued'];
   if (capabilities.supportsInventoryQuantity) {
     caveats.push(capabilities.inventoryQuantitySemantics === 'site_reported' ? 'site_reported_quantity' : 'quantity_semantics_unknown');
   }
