@@ -1362,3 +1362,7 @@ Learning: check each listing claim against the rendering code, not against the p
 - Submit: the owner's first press did not reach the server — `status` twice (immediately and +10 s) and `blockers` two minutes later still showed 公開済み with 「審査のため送信」 enabled. Cause not established: either the confirmation dialog was left open, or my `status` (which reloads the page) discarded it. Second press → 審査待ち after about 15 s (immediately after it still read 公開済み). `close` deleted the profile; no Chrome with it left.
 - Learning (procedure updated in docs/chrome-web-store-listing.md step 8): wait about 15 s after the owner says they pressed before the first `status`, never reload while they may be in the dialog, and treat 「審査のため送信」 still enabled after two minutes as "not sent".
 - Pending: the 0.7.6 review result; the KSY live page (still unreachable 13:48Z).
+
+## 2026-11-04 KSY will not come back (owner)
+- The owner said KSY's site will not recover (「いや、復旧しないよ」). The bounded probe (10 min × 6) was stopped after its first request; the KSY live check is dropped, recorded in docs/verification/2026-11-04-release-076.md.
+- State: config/ksy.json is still `every_two_days`, so each scheduled run tries it and quarantines it (exit 3, about 1 min on 2026-11-04); since #78 that is a warning only. The config has no "stopped" cadence (`every_two_days` | `weekly` | `monthly`), so ending its crawl is a spec decision for the owner, not a config tweak.
