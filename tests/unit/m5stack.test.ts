@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
 import { readFileSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
-import { collectM5StackFixture, loadM5StackNormalized } from '../helpers/m5stack.ts';
+import { collectM5StackFixture, loadM5StackNormalized, m5stackFixture } from '../helpers/m5stack.ts';
 import { M5STACK_STORE } from '../../src/adapters/m5stack/identity.ts';
 import { shopifyHandleFromKey, shopifyPageKey } from '../../src/adapters/shopify/identity.ts';
 import { decimalMinor } from '../../src/adapters/shopify/rawSchema.ts';
@@ -123,6 +123,50 @@ describe('M5Stack stock counts from product pages (#74)', () => {
     expect(result.raw).not.toHaveProperty('pageInventory');
     expect(result.requests.some((u) => u.includes('/products/'))).toBe(false);
     expect((await loadM5StackNormalized()).products[0]!.offers[0]!.availability).toMatchObject({ quantity: null, quantitySemantics: 'not_exposed' });
+  });
+  describe('a Retry-After longer than two minutes on a product page (#78)', () => {
+    // On 2026-11-04 the store answered one product page with Retry-After 130 s. Not a 429: the stage
+    // went on to fail the next two pages on the fetcher's block, and stopped on consecutive failures.
+    const m5stackFixtureProducts = new Map(m5stackFixture().pages.flat().map((p) => [p.handle, p]));
+    const shipped = (JSON.parse(readFileSync('config/m5stack.json', 'utf8')) as { collector: Record<string, unknown> }).collector;
+    const options = (url: string, body: string) => {
+      const m = /\/products\/([^/?]+)$/.exec(new URL(url).pathname);
+      if (m === null) return body;
+      const product = m5stackFixtureProducts.get(decodeURIComponent(m[1]!))!;
+      return product.variants.map((v) => `<option data-inventory="5" value="${v.id}">`).join('');
+    };
+    const refuseOnce = () => {
+      let refused = false;
+      return (url: string) => {
+        if (refused || !url.includes('/products/') || !url.endsWith('/products/m5stamp-lora-module-sx1262')) return undefined;
+        refused = true;
+        return { status: 503, retryAfter: '130' };
+      };
+    };
+    it('is waited out with the shipped settings, and every page is still requested', async () => {
+      const result = await collectM5StackFixture(options, shipped, { refuse: refuseOnce() });
+      expect(result.complete).toBe(true);
+      expect(result.warnings.filter((w) => w.includes('stopped early'))).toEqual([]);
+      expect(result.metrics).toMatchObject({ productPagesSelected: 664, productPagesFailed: 0, retries: 1 });
+      expect(result.metrics['waitedMs']).toBeGreaterThanOrEqual(130_000);
+      expect(result.requests.filter((u) => u.endsWith('/products/m5stamp-lora-module-sx1262'))).toHaveLength(2);
+    });
+    it('stops the stage at the fetcher default of two minutes', async () => {
+      const { maxWaitMs: _, ...defaults } = shipped;
+      const result = await collectM5StackFixture(options, defaults, { refuse: refuseOnce() });
+      expect(result.complete).toBe(true);
+      // The 2026-11-04 run log, as it read then.
+      expect(result.warnings[0]).toMatch(/^Product pages stopped early \(\d+\/664 read\): 3 consecutive fetch failures: .*blocked by Retry-After for another 130000 ms$/);
+      expect(result.warnings[1]).toContain("exceeding this run's 120000 ms wait limit");
+    });
+  });
+  it('bounds the collector wait limit and defaults it to two minutes', async () => {
+    const { shopifyCollectorConfig } = await import('../../src/collectors/shopify/collector.ts');
+    const userAgent = 'electro-parts-test/1.0';
+    expect(shopifyCollectorConfig({ userAgent }).maxWaitMs).toBe(120_000);
+    expect(shopifyCollectorConfig({ userAgent, maxWaitMs: 300_000 }).maxWaitMs).toBe(300_000);
+    expect(() => shopifyCollectorConfig({ userAgent, maxWaitMs: 999 })).toThrow('Invalid collector.maxWaitMs');
+    expect(() => shopifyCollectorConfig({ userAgent, maxWaitMs: 600_001 })).toThrow('Invalid collector.maxWaitMs');
   });
   it('refuses product page settings for a store without a page reader', async () => {
     const { pimoroniCollector } = await import('../../src/collectors/pimoroni/collector.ts');

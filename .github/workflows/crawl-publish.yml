@@ -207,9 +207,14 @@ jobs:
 
             echo "::group::pipeline $store ${flags# }"
             # tee so the job log shows the run even when the artifact is not read.
+            # The step's shell is `bash -e` and pipefail is on, so without +e a
+            # store exiting 3 (quarantined) or 1 (failed) ended the loop here,
+            # and with it every later store and the deployment (#78).
+            set +e
             # shellcheck disable=SC2086
             node --import tsx src/cli/main.ts pipeline --config "$config" $flags 2>&1 | tee "pipeline-$store.md"
             code=${PIPESTATUS[0]}
+            set -e
             echo "::endgroup::"
             echo "$store: pipeline exit code $code"
             if [ "$code" = "1" ]; then
