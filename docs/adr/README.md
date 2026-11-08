@@ -31,5 +31,6 @@
 | 0027 | [スイッチサイエンスと M5Stack 公式の在庫数を商品ページから読む](0027-stock-counts-from-product-pages.md) | 採用 |
 | 0028 | [グラフにポインターを重ねた位置の値を表示する](0028-chart-pointer-readout.md) | 採用 |
 | 0029 | [サイトが閉じた店舗は観測を止め、公開済みの履歴だけを再生成し続ける](0029-stopped-store-observation.md) | 採用 |
+| 0030 | [観測を全店舗で毎日行う](0030-daily-observation.md) | 採用 |
 
 新しい ADR は次の番号で追加する。置き換える場合は古い ADR の状態を「置換」にして相互リンクする。

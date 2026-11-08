@@ -8,7 +8,7 @@ import type { Availability } from '../core/domain.ts';
  * from `quantities` is "not read this run", never "zero".
  */
 export interface ProductPageInventoryRaw {
-  /** `observationRound` of the run; with `shards` it names the rotation slice read. */
+  /** `observationDayCount` of the run (one per observation day); with `shards` it names the rotation slice read. */
   round: number;
   shards: number;
   shard: number;

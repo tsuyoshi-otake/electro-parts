@@ -24,7 +24,7 @@ name: Crawl and publish
 
 on:
   schedule:
-    # Wake daily at 05:00 JST; the schedule job selects every second day.
+    # Wake daily at 05:00 JST and observe every store whose cadence is daily.
     # Store selection comes from observation.cadence, not store names here.
     - cron: '0 20 * * *'
   workflow_dispatch:
@@ -65,34 +65,12 @@ env:
   # `config/<store>.json`, a collector, an adapter, and the upload step that
   # names its snapshot artifact.
   STORES: akizuki switch-science m5stack ksy sengoku pimoroni
-  # Daily wake-up; observation-schedule.ts gates alternate days.
-  EVERY_TWO_DAYS_CRON: '0 20 * * *'
+  # The daily wake-up: the stores that declare cadence "daily" are observed by it.
+  DAILY_CRON: '0 20 * * *'
   NODE_OPTIONS: --max-old-space-size=2048
 
 jobs:
-  schedule:
-    name: Check observation day
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    outputs:
-      due: ${{ steps.schedule.outputs.due }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version-file: .node-version
-      - id: schedule
-        env:
-          EVENT_CRON: ${{ github.event.schedule }}
-        run: node scripts/observation-schedule.ts
-
   crawl:
-    needs: schedule
-    if: needs.schedule.outputs.due == 'true'
     name: Crawl, import and generate
     runs-on: ubuntu-latest
     timeout-minutes: 240

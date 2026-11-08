@@ -1,5 +1,5 @@
 import type { ProductPageInventoryRaw } from '../adapters/productPageInventory.ts';
-import { observationRound } from '../core/observationDay.ts';
+import { observationDayCount } from '../core/observationDay.ts';
 import { FetchFailedError, RequestBudgetExceededError, type PoliteFetcher } from './politeFetcher.ts';
 
 /**
@@ -101,7 +101,7 @@ export interface ReadProductPagesOptions {
 }
 
 export async function readProductPages(o: ReadProductPagesOptions): Promise<ProductPageInventoryRaw> {
-  const round = observationRound(o.observedAtMs);
+  const round = observationDayCount(o.observedAtMs);
   const { shard, slice } = selectRotation(o.targets, round, o.config);
   const out: ProductPageInventoryRaw = {
     round, shards: o.config.shards, shard, eligible: o.targets.length, selected: slice.length, read: 0,
