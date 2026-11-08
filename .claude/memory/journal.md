@@ -1381,3 +1381,8 @@ Learning: check each listing claim against the rendering code, not against the p
 - Verification: 80 published SS products sampled (59 in stock now), counted by slice: slice 1 10/10 have a count, slice 2 16/16, slice 3 0/17, slice 4 9/16. About 41% of in-stock SS products show no chart until the first cycle ends with the 2026-11-12 run; after that only newly listed or restocked products wait, up to 8 days.
 - Learning: a missing stock chart on an in-stock SS product during the first cycle (or for a new/restocked one) is the rotation; check `shardOf(pageKey, 4)` against the run rounds before looking for a bug. The panel gives no hint why the chart is absent.
 - Open (owner's decision, changes the load on the store): read in-stock products that have no count yet ahead of their slice, bounded per run, so a new or restocked product gets its first count at the next observation day instead of up to 8 days later.
+
+## 2026-11-08 Chrome Web Store: 0.7.6 published (#76)
+- The listing page named 0.7.4 only at 2026-11-04T14:36Z (0.7.6 in review since the owner's submission) and names 0.7.6 only at 2026-11-08T13:44Z. So the review passed and 0.7.6 went public between those two reads; the exact time was not read from the dashboard. Recorded in docs/verification/2026-11-04-release-076.md.
+- The release chain for 0.7.6 is complete: Pages (userscript `@version 0.7.6`, ZIP ac26b98c...), the #78 recovery, the store listing. Not done and not asked for: a check of the installed extension on a normal Chrome (the project's pre-submission check used the published ZIP in local Chromium).
+- Pending, separate from the release: the owner's answer on reading never-counted SS products ahead of their slice (see the 2026-11-08 SKU 11427 entry).
