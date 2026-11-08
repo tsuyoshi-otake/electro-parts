@@ -76,7 +76,9 @@ export function generateStoreDataset(history: StoreHistory, options: GenerateOpt
   };
   const latestObservedAt = latest?.observedAt ?? 0;
 
-  const storeCaveats = storeLevelCaveats(history.capabilities, options.observationCadence ?? 'monthly');
+  const cadence = options.observationCadence ?? 'monthly';
+  const storeCaveats = storeLevelCaveats(history.capabilities, cadence);
+  const { intervalDays } = SAMPLING[cadence];
   const seenPageKeys = new Set<string>();
   const products: ProductFileV1[] = [];
   for (const product of history.products) {
@@ -107,8 +109,10 @@ export function generateStoreDataset(history: StoreHistory, options: GenerateOpt
     datasetVersion,
     generatedAt: options.generatedAt,
     capabilities: history.capabilities,
-    observation: { ...observation, latestCoverageId: latest?.coverageId ?? null,
-      ...(options.observationCadence === 'every_two_days' ? { samplingIntervalDays: 2 } : {}),
+    observation: {
+      ...observation,
+      latestCoverageId: latest?.coverageId ?? null,
+      ...(intervalDays === undefined ? {} : { samplingIntervalDays: intervalDays }),
     },
     productCount: products.length,
     productPathTemplate: PRODUCT_PATH_TEMPLATE,
@@ -129,22 +133,23 @@ interface ProductContext {
 }
 
 /**
- * The caveat that states how far apart two observations are. Older v1 clients
- * reject unknown caveat keys but ignore optional fields, so the two-day
- * interval is carried by observation.samplingIntervalDays instead. A stopped
- * store has no interval: claiming one would tell a reader that a change after
- * the last observation would have been recorded.
+ * What a cadence tells a reader about how far apart two observations are.
+ * Older v1 clients reject unknown caveat keys but ignore optional fields, so a
+ * daily store carries its interval in observation.samplingIntervalDays and no
+ * caveat key (the client words it); weekly and monthly keep their older keys.
+ * A stopped store claims no interval at all: one would tell a reader that a
+ * change after the last observation would have been recorded.
  */
-const SAMPLING_CAVEAT: Readonly<Record<ObservationCadence, CaveatKey | null>> = {
-  every_two_days: null,
-  weekly: 'sampling_interval_weekly',
-  monthly: 'sampling_interval',
-  stopped: null,
+const SAMPLING: Readonly<Record<ObservationCadence, { caveat: CaveatKey | null; intervalDays?: number }>> = {
+  daily: { caveat: null, intervalDays: 1 },
+  weekly: { caveat: 'sampling_interval_weekly' },
+  monthly: { caveat: 'sampling_interval' },
+  stopped: { caveat: null },
 };
 
 function storeLevelCaveats(capabilities: StoreCapabilities, cadence: ObservationCadence): CaveatKey[] {
-  const sampling = SAMPLING_CAVEAT[cadence];
-  const caveats: CaveatKey[] = ['observation_window', ...(sampling === null ? [] : [sampling]), 'absence_not_discontinued'];
+  const { caveat } = SAMPLING[cadence];
+  const caveats: CaveatKey[] = ['observation_window', ...(caveat === null ? [] : [caveat]), 'absence_not_discontinued'];
   if (capabilities.supportsInventoryQuantity) {
     caveats.push(capabilities.inventoryQuantitySemantics === 'site_reported' ? 'site_reported_quantity' : 'quantity_semantics_unknown');
   }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { validateProductPageInventoryRaw, withPageQuantity, type ProductPageInventoryRaw } from '../../src/adapters/productPageInventory.ts';
-import { observationDayCount, observationRound, OBSERVATION_DAY_ANCHOR_MS } from '../../src/core/observationDay.ts';
+import { observationDayCount, OBSERVATION_DAY_ANCHOR_MS } from '../../src/core/observationDay.ts';
 import { PoliteFetcher } from '../../src/collectors/politeFetcher.ts';
 import {
   parseProductPagesConfig,
@@ -39,9 +39,9 @@ function fetcher(answer: (url: string) => { status: number; body?: string }, clo
   return { f, requests, clock };
 }
 
-async function run(answer: (url: string) => { status: number; body?: string }, over: Partial<ProductPagesConfig> = {}, list = targets(10), r = reader) {
+async function run(answer: (url: string) => { status: number; body?: string }, over: Partial<ProductPagesConfig> = {}, list = targets(10), r = reader, observedAtMs = OBSERVATION_DAY_ANCHOR_MS) {
   const { f, requests, clock } = fetcher(answer);
-  const raw = await readProductPages({ fetcher: f, targets: list, reader: r, config: config(over), observedAtMs: OBSERVATION_DAY_ANCHOR_MS,
+  const raw = await readProductPages({ fetcher: f, targets: list, reader: r, config: config(over), observedAtMs,
     nowMs: () => clock.t, log: () => {}, tag: '[test]' });
   return { raw, requests };
 }
@@ -55,15 +55,23 @@ function byPosition(answer: (position: number, url: string) => { status: number;
   };
 }
 
-describe('observation rounds', () => {
-  it('advance by one per scheduled observation day, including runs GitHub delays by hours', () => {
-    for (let day = 0; day < 20; day += 2) {
+describe('observation days', () => {
+  it('advance by one per day, including runs GitHub delays by hours', () => {
+    for (let day = 0; day < 20; day++) {
       const at = OBSERVATION_DAY_ANCHOR_MS + day * DAY;
-      expect(observationRound(at)).toBe(day / 2);
-      expect(observationRound(at + 7 * 3_600_000)).toBe(day / 2); // 02:00 the next morning UTC
-      expect(observationDayCount(at + DAY)).toBe(day + 1);
+      expect(observationDayCount(at)).toBe(day);
+      expect(observationDayCount(at + 7 * 3_600_000)).toBe(day); // 02:00 the next morning UTC
     }
-    expect(() => observationRound(Number.NaN)).toThrow('Invalid');
+    expect(() => observationDayCount(Number.NaN)).toThrow('Invalid');
+  });
+  it('rotates to the next slice on each consecutive day (the crawl is daily, #82)', async () => {
+    const seen: number[] = [];
+    for (let day = 0; day < 8; day++) {
+      const { raw } = await run(ok, { shards: 4 }, targets(40), reader, OBSERVATION_DAY_ANCHOR_MS + day * DAY + 3_600_000);
+      expect(raw.round).toBe(day);
+      seen.push(raw.shard);
+    }
+    expect(seen).toEqual([0, 1, 2, 3, 0, 1, 2, 3]);
   });
 });
 

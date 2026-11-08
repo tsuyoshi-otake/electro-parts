@@ -3,7 +3,6 @@ import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parsePipelineConfig, type PipelineConfig } from '../../src/pipeline/config.ts';
-import { observationDue } from '../../scripts/observation-schedule.ts';
 import { configCadence, observedStores, type ObservedStoresInput } from '../../scripts/observed-stores.ts';
 import type { ObservationCadence } from '../../src/publisher/contract.ts';
 
@@ -25,7 +24,7 @@ const workflow = readFileSync(workflowPath, 'utf8');
 
 const crons = [...workflow.matchAll(/^\s*- cron: '([^']+)'/gm)].map((m) => m[1] as string);
 const weeklyCron = /^\s*WEEKLY_CRON: '([^']+)'/m.exec(workflow)?.[1] ?? null;
-const twoDayCron = /^\s*EVERY_TWO_DAYS_CRON: '([^']+)'/m.exec(workflow)?.[1] ?? null;
+const dailyCron = /^\s*DAILY_CRON: '([^']+)'/m.exec(workflow)?.[1] ?? null;
 
 const declaredStores = (/^\s*STORES: (.+)$/m.exec(workflow)?.[1] ?? '').trim().split(/\s+/).filter(Boolean);
 
@@ -43,25 +42,21 @@ function configs(): { store: string; config: PipelineConfig }[] {
 const isEvery = (field: string): boolean => field === '*';
 
 describe('observation cadence', () => {
-  it('observes every store still observed every two days through a gated daily wake-up', () => {
+  it('observes every store still observed once a day, straight from the daily wake-up (#82)', () => {
     const cadences = configs().map(({ config }) => config.observation.cadence);
-    expect(cadences.every((c) => c === 'every_two_days' || c === 'stopped')).toBe(true);
-    expect(cadences).toContain('every_two_days');
-    expect(twoDayCron).toBe('0 20 * * *');
-    expect(crons).toContain(twoDayCron);
-    expect(workflow).toContain("if: needs.schedule.outputs.due == 'true'");
-    expect(workflow).toContain('run: node scripts/observation-schedule.ts');
+    expect(cadences.every((c) => c === 'daily' || c === 'stopped')).toBe(true);
+    expect(cadences).toContain('daily');
+    expect(dailyCron).toBe('0 20 * * *');
+    expect(crons).toEqual([dailyCron]);
+    // Every wake-up is an observation day: nothing sits between the cron and the crawl.
+    expect(workflow).not.toContain('observation-schedule');
+    expect(workflow).not.toMatch(/^\s+needs: schedule$/m);
+    expect(workflow).not.toContain('outputs.due');
   });
-  it('alternates through month/year boundaries and leap day, including delayed starts', () => {
-    const anchor = Date.parse('2026-09-10T20:00:00Z');
-    for (let day = 0; day < 800; day++) {
-      for (const delay of [0, 5 * 3_600_000]) {
-        expect(observationDue('schedule', twoDayCron!, anchor + day * 86_400_000 + delay)).toBe(day % 2 === 0);
-      }
-    }
-    expect(observationDue('workflow_dispatch', undefined, anchor + 86_400_000)).toBe(true);
-    expect(() => observationDue('schedule', '0 20 */2 * *', anchor)).toThrow('Unknown');
-    expect(() => observationDue('schedule', twoDayCron!, NaN)).toThrow('Invalid');
+  it('schedules a daily cron that is actually daily', () => {
+    const [minute, hour, dayOfMonth, month, dayOfWeek] = (dailyCron as string).split(/\s+/);
+    expect([minute, hour].every((f) => /^\d+$/.test(f as string)), 'a daily cron pins a time of day').toBe(true);
+    for (const field of [dayOfMonth, month, dayOfWeek]) expect(isEvery(field as string), 'a daily cron pins no date').toBe(true);
   });
   it('gives every store config a place in the workflow', () => {
     const stores = configs().map((c) => c.store).sort();
@@ -83,7 +78,7 @@ describe('observation cadence', () => {
   it('schedules a monthly cron that is actually monthly', () => {
     const monthlyStores = configs().filter((c) => c.config.observation.cadence === 'monthly');
     if (monthlyStores.length === 0) return;
-    const monthly = crons.filter((c) => c !== weeklyCron && c !== twoDayCron);
+    const monthly = crons.filter((c) => c !== weeklyCron && c !== dailyCron);
     expect(monthly.length, 'exactly one monthly schedule').toBe(1);
     const [, , dayOfMonth, month] = (monthly[0] as string).split(/\s+/);
     expect(isEvery(dayOfMonth as string), 'a monthly cron must pin a day of the month').toBe(false);
@@ -111,10 +106,10 @@ describe('observation cadence', () => {
 });
 
 describe('which stores a run observes (#80)', () => {
-  const cadences: Record<string, ObservationCadence> = { a: 'every_two_days', b: 'weekly', c: 'stopped', d: 'monthly', e: 'every_two_days' };
+  const cadences: Record<string, ObservationCadence> = { a: 'daily', b: 'weekly', c: 'stopped', d: 'monthly', e: 'daily' };
   const input = (over: Partial<ObservedStoresInput>): ObservedStoresInput => ({
     event: 'workflow_dispatch', cron: undefined, requested: '', republish: false,
-    stores: Object.keys(cadences), everyTwoDaysCron: '0 20 * * *', cadenceOf: (s) => cadences[s]!, ...over,
+    stores: Object.keys(cadences), dailyCron: '0 20 * * *', cadenceOf: (s) => cadences[s]!, ...over,
   });
 
   it('takes the stores that declare the schedule\'s cadence, and refuses an unknown cron', () => {
@@ -142,11 +137,11 @@ describe('which stores a run observes (#80)', () => {
   });
 
   it('never observes a stopped store from the real configs, by schedule or by an all-store run', () => {
-    const real = { stores: declaredStores, everyTwoDaysCron: twoDayCron!, cadenceOf: (s: string) => configCadence(s, path.join(repoRoot, 'config')) };
+    const real = { stores: declaredStores, dailyCron: dailyCron!, cadenceOf: (s: string) => configCadence(s, path.join(repoRoot, 'config')) };
     const stopped = configs().filter((c) => c.config.observation.cadence === 'stopped').map((c) => c.store);
     const observed = declaredStores.filter((s) => !stopped.includes(s));
     expect(stopped).toEqual(['ksy']);
-    expect(observedStores(input({ ...real, event: 'schedule', cron: twoDayCron! }))).toEqual(observed);
+    expect(observedStores(input({ ...real, event: 'schedule', cron: dailyCron! }))).toEqual(observed);
     expect(observedStores(input({ ...real }))).toEqual(observed);
     expect(() => observedStores(input({ ...real, requested: 'ksy' }))).toThrow('no longer observed');
   });
@@ -154,7 +149,7 @@ describe('which stores a run observes (#80)', () => {
   it('prints the list on stdout for the workflow, and the reason as a workflow error on failure', () => {
     const cli = (env: Record<string, string>) => spawnSync(process.execPath, ['--import', 'tsx', 'scripts/observed-stores.ts'], {
       cwd: repoRoot, encoding: 'utf8', timeout: 60_000,
-      env: { ...process.env, STORES: declaredStores.join(' '), EVERY_TWO_DAYS_CRON: twoDayCron!, EVENT_NAME: 'workflow_dispatch', EVENT_CRON: '', OBSERVE: '', REPUBLISH: 'false', ...env },
+      env: { ...process.env, STORES: declaredStores.join(' '), DAILY_CRON: dailyCron!, EVENT_NAME: 'workflow_dispatch', EVENT_CRON: '', OBSERVE: '', REPUBLISH: 'false', ...env },
     });
     const all = cli({});
     expect(all.status).toBe(0);

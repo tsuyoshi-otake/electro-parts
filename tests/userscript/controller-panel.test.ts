@@ -57,14 +57,14 @@ async function mount(host: FakeHost, options: Partial<Parameters<typeof mountHis
 }
 
 describe('history panel controller', () => {
-  it('shows the optional two-day interval without requiring a new published caveat key', async () => {
+  it.each([[1, 'おおむね1日に1回'], [2, 'おおむね2日に1回']])('shows the optional %i-day interval without requiring a new published caveat key', async (days, text) => {
     page(); const host = hostWithData();
     const manifest = sampleManifest();
-    manifest.observation.samplingIntervalDays = 2;
+    manifest.observation.samplingIntervalDays = days;
     manifest.caveats = ['observation_window'];
     host.routes.set(`${BASE}/${manifestPath('teststore')}`, json(manifest));
     const handle = await mount(host);
-    expect(shadowText()).toContain('おおむね2日に1回');
+    expect(shadowText()).toContain(text);
     expect(shadowText()).not.toContain('取得できません');
     handle.destroy();
   });

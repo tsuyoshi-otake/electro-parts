@@ -20,8 +20,8 @@
 
 ## 定期 run(月次と週次)
 
-- schedule は `0 20 * * *`(UTC)で毎朝05:00 JSTに起動し、2026-09-11を基準に2日に1回だけ収集する。中間日はcrawl/deployをスキップし、手動実行は日付判定を通過する。観測する店舗を順に収集し、それ以外の店舗は `--republish` で再生成する。
-- **どの店舗を観測するかは cron には書いていない。** `scripts/observed-stores.ts` が `config/<store>.json` の `observation.cadence` を読んで決める。schedule は `every_two_days` の店舗を観測し、`stores` を空にした手動実行は `stopped` 以外の全店舗を観測する。選ばれなかった店舗は `--republish` で維持する。現在は KSY だけが `stopped`(2026-11-04、ADR-0029)で、残り 5 店舗は `every_two_days`。選んだ結果は Actions の notice(`Observed stores`)に出る。未知の cron、未知の店舗、`stopped` の店舗を `stores` に書いた場合はエラーで停止する。
+- schedule は `0 20 * * *`(UTC)で毎朝05:00 JSTに起動し、毎日収集する(ADR-0030)。隔日だったころの判定ジョブ(`scripts/observation-schedule.ts`)は廃止した。観測する店舗を順に収集し、それ以外の店舗は `--republish` で再生成する。
+- **どの店舗を観測するかは cron には書いていない。** `scripts/observed-stores.ts` が `config/<store>.json` の `observation.cadence` を読んで決める。schedule は `daily` の店舗を観測し、`stores` を空にした手動実行は `stopped` 以外の全店舗を観測する。選ばれなかった店舗は `--republish` で維持する。現在は KSY だけが `stopped`(2026-11-04、ADR-0029)で、残り 5 店舗は `daily`。選んだ結果は Actions の notice(`Observed stores`)に出る。未知の cron、未知の店舗、`stopped` の店舗を `stores` に書いた場合はエラーで停止する。
 - 定期実行と手動実行が重なる場合も、`pages-publish` の concurrency で直列化する。
 - 頻度が低いぶん、秋月は 1 回失敗すると次の自動 run まで 1 か月空く(スイッチサイエンスは 1 週間)。**失敗・隔離が出たら、直してから `workflow_dispatch` で回し直す**のが通常の運用。特定の店舗だけ直したいときは `stores` にその店舗を書く(他店舗は公開済みデータセットのまま維持される)。
 - Actions summary に**店舗ごとに**、結果(`published` / `unchanged` / `quarantined` / `failed`)、run 時間、リクエスト数、件数、価格変更数、隔離理由が出る。最後に `### Site` として、サイトに載った店舗と `datasetVersion`、サイトサイズが出る。
@@ -103,9 +103,9 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 
 - 全店舗の定期 run を止める: workflow の schedule をコメントアウトしてコミット。公開データはそのまま残る。
 - **1 店舗の観測を止める**(サイト閉鎖など、再開の見込みがない場合): `config/<store>.json` の `observation.cadence` を `"stopped"` にしてコミットする。schedule も `stores` 空の手動実行もその店舗を観測せず、毎回 `--republish` で公開済み履歴から再生成する。パイプライン自体も、`--republish` 以外(クロール・`--snapshot`・`--bootstrap`)と `crawl` コマンドを拒否する(終了コード 1)。マニフェストから `samplingIntervalDays` と観測間隔の注意書きが消え、観測期間(最初〜最後の観測日と回数)は残る。反映は次の run か `republish=true` の手動実行(ADR-0029)。
-- 店舗の頻度は `config/<store>.json` の `observation.cadence` (`every_two_days` / `weekly` / `monthly` / `stopped`)で指定する。**注意書きは cadence から決まるので、手で直さない。** 現在の workflow は隔日のみ。周期を追加する際は cron・`scripts/observed-stores.ts`・`tests/integration/observation-cadence.test.ts` も変更する。
+- 店舗の頻度は `config/<store>.json` の `observation.cadence` (`daily` / `weekly` / `monthly` / `stopped`)で指定する。**注意書きは cadence から決まるので、手で直さない。** 現在の workflow が持つ cron は毎日 1 本だけ。周期を追加する際は cron・`scripts/observed-stores.ts`・`tests/integration/observation-cadence.test.ts` も変更する。
 - 新しい周期を足す: `src/publisher/contract.ts`(`ObservationCadence` と省略可能な観測間隔フィールド。旧版が未知のcaveatキーを拒否することに注意)、`userscript/core/format.ts`(利用者に見える文言)、workflow の cron と選択ロジック、そして上のテストを一緒に更新する(ADR-0016)。
-- 隔日化後もアクセス間隔・ジッター・再試行上限は維持する。秋月の HTML 巡回は 1 run 約 2,700 リクエスト・約 85 分。公開データとは別に、90日保存するスナップショットと状態バックアップの Actions artifact 容量をジョブごとに確認する。
+- 毎日化後もアクセス間隔・ジッター・再試行上限は維持する。秋月の HTML 巡回は 1 run 約 2,700 リクエスト・約 85 分。全店舗を順に回す 1 run は約 2 時間 55 分(2026-11-07 の run、ジョブの上限は 240 分)。毎日化で 1 日の観測量は隔日のときの 2 倍になるが、1 run の長さは変わらない。公開データとは別に、90日保存するスナップショットと状態バックアップの Actions artifact 容量をジョブごとに確認する。
 
 ## サイト運営者から連絡があった場合
 

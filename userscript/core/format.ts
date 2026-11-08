@@ -86,6 +86,7 @@ export const CAVEAT_TEXT: Record<CaveatKey, string> = {
   sampling_interval: '価格・在庫はおおむね1か月に1回の観測です。観測の間の変化は記録されません。',
   sampling_interval_weekly: '価格・在庫はおおむね1週間に1回の観測です。観測の間の変化は記録されません。',
   sampling_interval_every_two_days: '価格・在庫はおおむね2日に1回の観測です。観測の間の変化は記録されません。',
+  sampling_interval_daily: '価格・在庫はおおむね1日に1回の観測です。観測の間の変化は記録されません。',
   absence_not_discontinued: '一覧から消えた商品は「未掲載」であり、販売終了とは限りません。',
   site_reported_quantity: '在庫数は店舗のページが示す値をそのまま記録したもので、実在庫を保証しません。',
   quantity_semantics_unknown: '在庫数の意味(実在庫か目安か)は不明です。',

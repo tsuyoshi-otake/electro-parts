@@ -26,8 +26,8 @@ export interface ObservedStoresInput {
   republish: boolean;
   /** `STORES`: every store the site publishes, in run order. */
   stores: readonly string[];
-  /** The workflow's `EVERY_TWO_DAYS_CRON`. */
-  everyTwoDaysCron: string;
+  /** The workflow's `DAILY_CRON`: the one schedule, which the daily stores declare. */
+  dailyCron: string;
   cadenceOf: (store: string) => ObservationCadence;
 }
 
@@ -44,8 +44,8 @@ export function observedStores(input: ObservedStoresInput): string[] {
     return requested;
   }
   if (input.event === 'schedule') {
-    if (input.cron !== input.everyTwoDaysCron) throw new Error(`unknown schedule '${input.cron ?? ''}'`);
-    return input.stores.filter((store) => input.cadenceOf(store) === 'every_two_days');
+    if (input.cron !== input.dailyCron) throw new Error(`unknown schedule '${input.cron ?? ''}'`);
+    return input.stores.filter((store) => input.cadenceOf(store) === 'daily');
   }
   return input.stores.filter((store) => input.cadenceOf(store) !== 'stopped');
 }
@@ -59,14 +59,14 @@ export function configCadence(store: string, configDir = 'config'): ObservationC
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const env = process.env;
   try {
-    if (!env.STORES || !env.EVERY_TWO_DAYS_CRON) throw new Error('STORES and EVERY_TWO_DAYS_CRON are required');
+    if (!env.STORES || !env.DAILY_CRON) throw new Error('STORES and DAILY_CRON are required');
     const observed = observedStores({
       event: env.EVENT_NAME,
       cron: env.EVENT_CRON,
       requested: env.OBSERVE ?? '',
       republish: env.REPUBLISH === 'true',
       stores: env.STORES.split(/\s+/).filter(Boolean),
-      everyTwoDaysCron: env.EVERY_TWO_DAYS_CRON,
+      dailyCron: env.DAILY_CRON,
       cadenceOf: (store) => configCadence(store),
     });
     process.stdout.write(`${observed.join(' ')}\n`);

@@ -375,7 +375,11 @@ function renderChangeTable(doc: Document, parent: HTMLElement, segment: SegmentV
 
 function manifestCaveats(manifest: ManifestV1 | null): CaveatKey[] {
   const keys = [...(manifest?.caveats ?? [])];
-  if (manifest?.observation.samplingIntervalDays === 2) keys.push('sampling_interval_every_two_days');
+  // The interval travels as an optional field, never as a caveat key: older
+  // clients reject keys they do not know. Two days stays for datasets cached
+  // from before the daily schedule.
+  if (manifest?.observation.samplingIntervalDays === 1) keys.push('sampling_interval_daily');
+  else if (manifest?.observation.samplingIntervalDays === 2) keys.push('sampling_interval_every_two_days');
   return keys;
 }
 

@@ -118,6 +118,7 @@ export const CAVEAT_KEYS = [
   'sampling_interval',
   'sampling_interval_weekly',
   'sampling_interval_every_two_days',
+  'sampling_interval_daily',
   'absence_not_discontinued',
   'site_reported_quantity',
   'quantity_semantics_unknown',
@@ -134,7 +135,7 @@ export type CaveatKey = (typeof CAVEAT_KEYS)[number];
  * its published history is regenerated as it stands, nothing crawls it, and
  * its dataset states no sampling interval, because there is none any more.
  */
-export type ObservationCadence = 'every_two_days' | 'weekly' | 'monthly' | 'stopped';
+export type ObservationCadence = 'daily' | 'weekly' | 'monthly' | 'stopped';
 
 export interface ObservationWindowV1 {
   runCount: number;

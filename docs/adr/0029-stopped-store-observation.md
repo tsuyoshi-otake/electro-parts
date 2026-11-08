@@ -39,5 +39,5 @@ Raspberry Pi Shop by KSY(`ksy`)は 2026-11-04 の 13:30Z・13:48Z・14:00Z に�
 
 - 観測日の run から KSY の約 55 秒と隔離の警告がなくなる。KSY のデータセットは毎回 `--republish` で再生成されるので、Pages から消えない。
 - KSY の `datasetVersion` は一度だけ変わる。`samplingIntervalDays` がマニフェストから消えるためで、`runCount` と変化点は変わらない。
-- 観測を再開する場合は、cadence を `every_two_days` などに戻すだけでよい。履歴は続きから増える。
+- 観測を再開する場合は、cadence を `daily` などに戻すだけでよい(当時は `every_two_days` だった。ADR-0030 で `daily` になった)。履歴は続きから増える。
 - 残る課題(範囲外): 比較カードの KSY 商品リンクは閉じたサイトを指している。拡張機能の host permission とストア掲載文にも KSY が残っている。どちらも、表示や掲載文を変える次のリリースで扱う。
