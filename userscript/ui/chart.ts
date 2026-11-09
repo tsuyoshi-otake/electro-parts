@@ -193,7 +193,13 @@ export function buildInventoryChart(doc: Document, series: readonly InventorySer
     });
     return { ...s, steps };
   }).filter((s) => s.steps.length > 0);
-  if (!prepared.length) return svg;
+  if (!prepared.length) {
+    // A period that holds no count, such as a month after the last one shown.
+    const msg = el(doc, 'text', { x: width / 2, y: height / 2, 'text-anchor': 'middle', class: 'eph-chart-empty' });
+    msg.textContent = 'この期間に在庫数の記録なし';
+    svg.appendChild(msg);
+    return svg;
+  }
   const start = Math.min(...prepared.map((s) => s.start));
   const end = Math.max(...prepared.map((s) => s.end));
   const span = Math.max(3_600_000, end - start);
@@ -337,7 +343,10 @@ export function buildStepChart(doc: Document, points: readonly PricePointV1[], p
   // two-observation window and dragged the end label into the start label.
   const tail = Math.max(3_600_000, (end - start) * 0.04);
   const drawEnd = end + tail;
-  const intervals = pricedIntervals(points, presence, drawEnd);
+  // A window that starts after the first change keeps the price in effect at
+  // its start, drawn from the start; what came before is outside the plot.
+  const intervals = pricedIntervals(points, presence, drawEnd).filter((iv) => iv.to > start).map((iv) => (iv.from < start ? { ...iv, from: start } : iv));
+  const changesInWindow = points.filter((p) => p[0] >= start && p[0] <= end).length;
   const svg = el(doc, 'svg', { viewBox: `0 0 ${width} ${height}`, width: '100%', role: 'img', class: 'eph-chart' });
   const plotW = width - PAD.left - PAD.right;
   const plotH = height - PAD.top - PAD.bottom;
@@ -371,7 +380,7 @@ export function buildStepChart(doc: Document, points: readonly PricePointV1[], p
   }
   const y = (v: number) => PAD.top + plotH - ((v - lo) / (hi - lo)) * plotH;
 
-  const summary = `${formatDate(start)}〜${formatDate(end)} の価格推移。最低 ${formatMoney(Math.min(...intervals.map((i) => i.min)), currency)}、最高 ${formatMoney(Math.max(...intervals.map((i) => i.max)), currency)}、変更点 ${points.length} 件。${options.label ?? ''}`.trim();
+  const summary = `${formatDate(start)}〜${formatDate(end)} の価格推移。最低 ${formatMoney(Math.min(...intervals.map((i) => i.min)), currency)}、最高 ${formatMoney(Math.max(...intervals.map((i) => i.max)), currency)}、変更点 ${changesInWindow} 件。${options.label ?? ''}`.trim();
   // The summary is the accessible name only: a <title> on the root would pop
   // the browser's own tooltip over the pointer readout.
   svg.setAttribute('aria-label', summary);

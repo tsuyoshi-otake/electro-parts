@@ -122,7 +122,7 @@ export function buildSettingsDialog(doc: Document, prefs: Preferences, handlers:
   showStock.checked = prefs.showStock;
   showStock.dataset['focusKey'] = 'pref-show-stock';
   showStock.addEventListener('change', () => handlers.change({ ...prefs, showStock: showStock.checked }));
-  stockLabel.append(showStock, doc.createTextNode('在庫数の推移をグラフに表示'));
+  stockLabel.append(showStock, doc.createTextNode('在庫数の推移と推定販売数を表示'));
   stock.append(stockLabel, el(doc, 'p', '店舗が在庫数を表示し、その数を記録している商品だけに表示します。', 'hint'));
   dialog.appendChild(stock);
 

@@ -1,10 +1,13 @@
-import type { CaveatKey, InventoryV1, ManifestV1, OfferV1, ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
+import type { AvailabilityPointV1, CaveatKey, InventoryV1, ManifestV1, OfferV1, ProductFileV1, SegmentV1 } from '../../src/publisher/contract.ts';
+import { chartWindowStart, DEFAULT_CHART_PERIOD, type ChartPeriodId } from '../core/chartPeriod.ts';
+import { estimateSales } from '../core/stockSales.ts';
 import type { LoadState } from '../core/dataClient.ts';
 import type { JpyRate } from '../core/exchangeRate.ts';
 import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatPercent, formatPriceValue, formatSignedMoney, formatStockCount } from '../core/format.ts';
 import { appliedCardFee, DEFAULT_PREFERENCES, type Preferences } from '../core/preferences.ts';
 import { buildStepChart, buildComparisonChart, buildInventoryChart, type ComparisonSeries, type InventorySeries } from './chart.ts';
 import { comparisonEligibility, currentOffer, primaryQuote, type RelatedEntry } from '../core/relations.ts';
+import { buildPeriodControls, buildSalesSummary, PERIOD_CSS, type SalesRow } from './periodView.ts';
 import { RELATED_CSS, renderRelatedGroups, renderStorePrices } from './related.ts';
 import { buildSettingsDialog, openSettingsDialog, SETTINGS_CSS } from './settings.ts';
 import { YEN_CSS, yenConverter, type YenConverter } from './yen.ts';
@@ -50,6 +53,8 @@ export interface PanelContext {
   onPreferencesChange?(preferences: Preferences): void;
   /** The settings dialog survives re-renders through this flag. */
   settingsOpen?: boolean;
+  /** The period the charts show; kept here so a re-render does not reset it. Absent = the whole record. */
+  chartPeriod?: ChartPeriodId;
 }
 
 /** Counts the store showed and the collector recorded; a boolean-only store has none. */
@@ -57,9 +62,13 @@ function shownQuantities(inventory: InventoryV1): boolean {
   return inventory.semantics !== 'not_exposed' && inventory.points.some((p) => p[1] !== null);
 }
 
-/** The stock chart heading; it explains 「N+」 only when a drawn count reached a store's cap. */
+/**
+ * The stock chart heading; it explains 「N+」 only when a count reached a store's cap
+ * and its step lies inside the window, so the note never names a mark that is not drawn.
+ */
 function stockHeading(stock: readonly InventorySeries[]): string {
-  const caps = [...new Set(stock.flatMap((s) => s.cappedAt !== undefined && s.points.some(([, n]) => n !== null && n >= s.cappedAt!) ? [s.cappedAt] : []))];
+  const drawnAtCap = (s: InventorySeries) => s.points.some(([t, n], i) => n !== null && n >= s.cappedAt! && t <= s.end && (s.points[i + 1]?.[0] ?? s.end) >= s.start);
+  const caps = [...new Set(stock.flatMap((s) => s.cappedAt !== undefined && drawnAtCap(s) ? [s.cappedAt] : []))];
   const capNote = caps.map((c) => `「${c}+」は${c}以上`).join('、');
   return `在庫数の推移（店舗のページが示す数。${capNote === '' ? '' : `${capNote}。`}実在庫を保証しません）`;
 }
@@ -104,12 +113,12 @@ export const PANEL_CSS = `
 .eph[data-theme="dark"] .badge.stale { background: #3b2f14; color: #f0c274; }
 .eph[data-theme="dark"] .badge.error { background: #3d1f1f; color: #f5a3a3; }
 .theme-controls { display: flex; gap: 4px; }
-.theme-controls button, .settings-button { font: inherit; font-size: 12px; min-height: 32px; padding: 4px 10px; border: 1px solid var(--muted); border-radius: 4px; background: var(--bg); color: var(--fg); cursor: pointer; }
-@media (hover: hover) { .theme-controls button:hover, .settings-button:hover { background: var(--chip); } }
-.theme-controls button[aria-pressed="true"] { background: var(--chip); border-color: var(--accent); color: var(--accent); font-weight: 700; }
-.theme-controls button:active, .settings-button:active { background: var(--line); }
-.theme-controls button:focus-visible, .settings-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-@media (pointer: coarse) { .theme-controls button, .settings-button { min-height: 44px; } }
+.theme-controls button, .period-controls button, .settings-button { font: inherit; font-size: 12px; min-height: 32px; padding: 4px 10px; border: 1px solid var(--muted); border-radius: 4px; background: var(--bg); color: var(--fg); cursor: pointer; }
+@media (hover: hover) { .theme-controls button:hover, .period-controls button:hover, .settings-button:hover { background: var(--chip); } }
+.theme-controls button[aria-pressed="true"], .period-controls button[aria-pressed="true"] { background: var(--chip); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.theme-controls button:active, .period-controls button:active, .settings-button:active { background: var(--line); }
+.theme-controls button:focus-visible, .period-controls button:focus-visible, .settings-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (pointer: coarse) { .theme-controls button, .period-controls button, .settings-button { min-height: 44px; } }
 .spacer { flex: 1 1 auto; }
 .basis { font-size: 12px; color: var(--muted); }
 .eph select { font: inherit; font-size: 12px; max-width: 100%; min-width: 0; padding: 2px 4px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
@@ -159,7 +168,7 @@ export const PANEL_CSS = `
 .eph a { color: var(--accent); }
 .eph p { margin: 6px 0; }
 .eph .muted { color: var(--muted); }
-` + RELATED_CSS + YEN_CSS + SETTINGS_CSS;
+` + RELATED_CSS + YEN_CSS + SETTINGS_CSS + PERIOD_CSS;
 
 function text(doc: Document, tag: string, content: string, className?: string): HTMLElement {
   const node = doc.createElement(tag);
@@ -184,6 +193,11 @@ function pickSegment(offer: OfferV1, index: number | null): { segment: SegmentV1
   return segment === undefined ? null : { segment, index: offer.segments.indexOf(segment) };
 }
 
+/** A chart series with the stock counts and availability of the offer it draws; the estimate reads both. */
+type StoreSeries = ComparisonSeries & { inventory: InventoryV1 | null; availability: readonly AvailabilityPointV1[] };
+
+const quoted = (offer: OfferV1 | undefined) => ({ inventory: offer?.inventory ?? null, availability: offer?.availability ?? [] });
+
 /** Chart column: drawn immediately, or when the panel first becomes visible. */
 function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFileV1, offer: OfferV1, segment: SegmentV1, ownFresh: boolean): void {
   const doc = ctx.doc;
@@ -198,41 +212,68 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
     if (!ownFresh || !eligibility.comparable || entry.state.kind !== 'ready') return [];
     return [{ id: entry.relation.id, label: storeLabel(entry.target.storeId), points: eligibility.other.points, presence: eligibility.other.presence,
       start: Math.max(entry.state.product.observation.firstObservedAt ?? eligibility.other.stats.segmentStartAt, eligibility.other.stats.segmentStartAt),
-      end: entry.state.product.product.lastSeenAt, inventory: primaryQuote(entry.state.product, entry.target)?.offer.inventory ?? null }];
+      end: entry.state.product.product.lastSeenAt, ...quoted(primaryQuote(entry.state.product, entry.target)?.offer) }];
   });
-  const series: (ComparisonSeries & { inventory: InventoryV1 | null })[] = [{ id: 'current', label: `${storeLabel(product.storeId)}（閲覧中）`, points: segment.points, presence: segment.presence,
-    start: Math.max(start, segment.stats.segmentStartAt), end: product.product.lastSeenAt, inventory: offer.inventory }, ...others];
-  // Stock counts share the price chart's series, colors and store switches.
-  const stock: InventorySeries[] = (ctx.preferences ?? DEFAULT_PREFERENCES).showStock
-    ? series.flatMap((s, index) => s.inventory !== null && shownQuantities(s.inventory)
-      ? [{ id: s.id, label: s.label, index, points: s.inventory.points, start: s.start, end: s.end, ...(s.inventory.cappedAt === undefined ? {} : { cappedAt: s.inventory.cappedAt }) }]
-      : [])
-    : [];
+  const series: StoreSeries[] = [{ id: 'current', label: `${storeLabel(product.storeId)}（閲覧中）`, points: segment.points, presence: segment.presence,
+    start: Math.max(start, segment.stats.segmentStartAt), end: product.product.lastSeenAt, ...quoted(offer) }, ...others];
+  const showStock = (ctx.preferences ?? DEFAULT_PREFERENCES).showStock;
+  // One window for every chart and estimate: it ends at the latest observation shown
+  // and never starts before the first one (ADR-0031).
+  const windowEnd = Math.max(end, ...series.map((s) => s.end));
+  const earliest = Math.min(start, ...series.map((s) => s.start));
+  const viewOf = (period: ChartPeriodId) => {
+    const from = chartWindowStart(period, windowEnd, earliest);
+    const windowed = series.map((s) => ({ ...s, start: Math.max(s.start, from) }));
+    // Stock counts share the price chart's series, colors and store switches.
+    const stock: InventorySeries[] = showStock
+      ? windowed.flatMap((s, index) => s.inventory !== null && shownQuantities(s.inventory)
+        ? [{ id: s.id, label: s.label, index, points: s.inventory.points, start: s.start, end: s.end, ...(s.inventory.cappedAt === undefined ? {} : { cappedAt: s.inventory.cappedAt }) }]
+        : [])
+      : [];
+    const sales: SalesRow[] = showStock
+      ? windowed.map((s) => ({ id: s.id, label: s.label, estimate: s.inventory !== null && shownQuantities(s.inventory) ? estimateSales(s.inventory.points, s.availability, from, s.end, s.inventory.cappedAt) : null }))
+      : [];
+    return { from, series: windowed, stepStart: Math.max(start, from), stock, sales };
+  };
   const draw = () => {
     if (box.childNodes.length > 0) return;
     const chartWidth = () => Math.max(280, Math.min(CHART_SIZE.width, box.clientWidth || CHART_SIZE.width));
     let width = chartWidth();
     const hidden = ctx.hiddenSeries ??= new Set();
+    let view = viewOf(ctx.chartPeriod ?? DEFAULT_CHART_PERIOD);
     const makeSvg = () => others.length
-      ? buildComparisonChart(doc, series, { width, height: width < 450 ? 220 : CHART_SIZE.height, currency: segment.basis.currency })
+      ? buildComparisonChart(doc, view.series, { width, height: width < 450 ? 220 : CHART_SIZE.height, currency: segment.basis.currency })
       : buildStepChart(doc, segment.points, segment.presence, {
         width, height: width < 450 ? 220 : CHART_SIZE.height,
-        start,
+        start: view.stepStart,
         end,
         currency: segment.basis.currency,
         label: basisLabel(segment.basis),
       });
-    const makeStock = () => buildInventoryChart(doc, stock, { width, height: width < 450 ? 110 : 120 });
-    // Both charts follow the store switches; a hidden store stays hidden after a resize.
+    const makeStock = () => buildInventoryChart(doc, view.stock, { width, height: width < 450 ? 110 : 120 });
+    // Everything drawn per store follows the store switches (the lines and the sales rows);
+    // a hidden store stays hidden after a resize or a change of period.
     const applyHidden = () => {
-      for (const group of box.querySelectorAll<SVGGElement>('g[data-series]')) group.style.display = hidden.has(group.dataset['series']!) ? 'none' : '';
+      for (const part of box.querySelectorAll<HTMLElement | SVGElement>('[data-series]')) part.style.display = hidden.has(part.dataset['series']!) ? 'none' : '';
     };
     let svg = makeSvg();
-    let stockSvg = stock.length ? makeStock() : null;
-    const stockBox = stockSvg === null ? null : text(doc, 'div', '', 'stock-chart');
-    if (stockBox !== null && stockSvg !== null) {
-      stockBox.append(text(doc, 'div', stockHeading(stock), 'related-meta'), stockSvg);
-    }
+    let stockSvg: SVGSVGElement | null = null;
+    const stockBox = view.stock.length ? text(doc, 'div', '', 'stock-chart') : null;
+    // The stock section: heading, chart and the estimate, rebuilt for the chosen period.
+    const fillStock = () => {
+      if (stockBox === null) return;
+      stockSvg = makeStock();
+      const summary = buildSalesSummary(doc, view.sales, { from: view.from, to: windowEnd });
+      stockBox.replaceChildren(text(doc, 'div', stockHeading(view.stock), 'related-meta'), stockSvg, ...(summary === null ? [] : [summary]));
+    };
+    fillStock();
+    const periods = buildPeriodControls(doc, ctx.chartPeriod ?? DEFAULT_CHART_PERIOD, (id) => {
+      ctx.chartPeriod = id;
+      view = viewOf(id);
+      const next = makeSvg(); svg.replaceWith(next); svg = next;
+      fillStock();
+      applyHidden();
+    });
     if (others.length) {
       const controls = doc.createElement('div'); controls.className = 'series-controls'; controls.setAttribute('role', 'group'); controls.setAttribute('aria-label', 'グラフに表示する店舗');
       const message = text(doc, 'div', '表示する店舗を選択してください', 'related-meta'); message.setAttribute('role', 'status');
@@ -244,9 +285,9 @@ function renderChart(ctx: PanelContext, parent: HTMLElement, product: ProductFil
         const swatch = text(doc, 'span', '', 'series-swatch'); swatch.setAttribute('aria-hidden', 'true');
         label.append(input, swatch, doc.createTextNode(s.label)); controls.appendChild(label);
       });
-      box.append(controls, svg, message, text(doc, 'div', '各店舗の最終観測までを表示。観測が1回だけの店舗は点のみです。最終観測より後の価格は未確認です。グラフに重ねると、その日の各店舗の記録価格を表示します（キーボードでは点にフォーカス）。', 'related-meta'));
+      box.append(periods, controls, svg, message, text(doc, 'div', '各店舗の最終観測までを表示。観測が1回だけの店舗は点のみです。最終観測より後の価格は未確認です。グラフに重ねると、その日の各店舗の記録価格を表示します（キーボードでは点にフォーカス）。', 'related-meta'));
       updateMessage();
-    } else box.appendChild(svg);
+    } else box.append(periods, svg);
     if (stockBox !== null) box.appendChild(stockBox);
     applyHidden();
     // Resize only the SVGs, not the controls or data. This keeps axis text

@@ -70,10 +70,10 @@ test('KSY extension follows the product dialog without navigation and keeps the 
     await expect(panel.locator('.stock-chart circle').last()).toHaveAttribute('aria-label', /在庫数 363$/);
     await panel.getByRole('button', { name: '設定', exact: true }).click();
     const settings = panel.getByRole('dialog', { name: '表示設定' });
-    await settings.getByRole('checkbox', { name: '在庫数の推移をグラフに表示' }).uncheck();
+    await settings.getByRole('checkbox', { name: '在庫数の推移と推定販売数を表示' }).uncheck();
     await expect(panel.locator('.stock-chart')).toHaveCount(0);
     await expect(panel).toContainText('在庫数 363');
-    await settings.getByRole('checkbox', { name: '在庫数の推移をグラフに表示' }).check();
+    await settings.getByRole('checkbox', { name: '在庫数の推移と推定販売数を表示' }).check();
     await expect(panel.locator('.stock-chart svg')).toBeVisible();
     await settings.getByRole('button', { name: '閉じる' }).click();
     await expect(settings).toBeHidden();
