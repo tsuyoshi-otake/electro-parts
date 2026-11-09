@@ -220,6 +220,18 @@ test('generated Pico family shows concrete differences and retains the native pr
   await expect(panel(page).locator('summary[data-focus-key="group-similar"]')).toHaveText('類似商品 (21件・7種類)');
   await expect(panel(page).locator('.related-card')).toHaveCount(7);
   await expect(panel(page).locator('.related-offer')).toHaveCount(21);
+  // #95: the first three variants are visible in a grid and the other four are folded under 他の類似商品, like the store prices.
+  await expect(panel(page).locator('.related-card').filter({ visible: true })).toHaveCount(3);
+  const more = panel(page).locator('summary[data-focus-key="related-more-similar"]');
+  await expect(more).toHaveText('他の類似商品（4種類）');
+  const cardPositions = () => panel(page).evaluate(el => [...el.shadowRoot!.querySelectorAll('.related-section > .related-cards > .related-card')]
+    .map(card => { const r = card.getBoundingClientRect(); return [Math.round(r.left), Math.round(r.top)] as const; }));
+  const stacked = await cardPositions();
+  expect(stacked).toHaveLength(3);
+  // At 390 px the cards stack in one column, as the store prices do.
+  expect(new Set(stacked.map(([left]) => left)).size).toBe(1);
+  expect(stacked[0]![1]).toBeLessThan(stacked[1]![1]);
+  expect(stacked[1]![1]).toBeLessThan(stacked[2]![1]);
   await expect(panel(page)).toContainText('無線: なし → Wi-Fi/Bluetooth');
   await expect(panel(page)).toContainText('MCU: RP2040 → RP2350');
   await expect(panel(page)).not.toContainText('記録価格差');
@@ -258,11 +270,30 @@ test('generated Pico family shows concrete differences and retains the native pr
   // Resizing redraws locally and theme rerenders retain cleanup ownership.
   await panel(page).evaluate(el => { (el as HTMLElement).style.width = '1080px'; });
   await expect(chart).toHaveAttribute('viewBox', / 280$/);
+  // With room the first three related cards sit side by side in one row.
+  await expect.poll(async () => new Set((await cardPositions()).map(([, top]) => top)).size).toBe(1);
+  const side = await cardPositions();
+  expect(side[0]![0]).toBeLessThan(side[1]![0]);
+  expect(side[1]![0]).toBeLessThan(side[2]![0]);
+  // No card's content spills past the card into the next column. A store title ending in an ideographic space may hang by its width (about 12 px); more is a spill.
+  const spill = await panel(page).evaluate(el => [...el.shadowRoot!.querySelectorAll('.related-section .related-card')]
+    .map(card => { const box = card.getBoundingClientRect(); return Math.max(0, ...[...card.querySelectorAll('*')].map(child => Math.round(child.getBoundingClientRect().right - box.right))); }));
+  expect(Math.max(...spill)).toBeLessThanOrEqual(12);
+  await panel(page).screenshot({path: 'test-results/e2e/pico-family-wide.png'});
   await panel(page).evaluate(el => { (el as HTMLElement).style.width = '390px'; });
   await expectReadableAxis();
   await expect(chart).toHaveAttribute('viewBox', / 220$/);
   expect(requests.length).toBe(settledRequests);
   await panel(page).screenshot({path: 'test-results/e2e/pico-family-narrow-container.png'});
+  // Opening the fold shows the other four cards; the group keeps its own open state.
+  await more.click();
+  await expect(panel(page).locator('.related-card').filter({ visible: true })).toHaveCount(7);
+  await panel(page).screenshot({path: 'test-results/e2e/pico-family-fold-open.png'});
+  // The dark theme keeps the cards on the same rules as the store prices.
+  await panel(page).evaluate(el => { (el as HTMLElement).style.width = '1080px'; });
+  await panel(page).getByRole('button', {name: 'ダーク'}).click();
+  await expect(panel(page).locator('.related-card').filter({ visible: true })).toHaveCount(7);
+  await panel(page).screenshot({path: 'test-results/e2e/pico-family-wide-dark.png'});
 });
 
 test('other-store 429 keeps the own history and product link without arithmetic or retries', async ({ page }) => {
