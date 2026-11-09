@@ -3,7 +3,7 @@
   "collector": {
     "userAgent": "electro-parts-price-history/0.6.0 (+https://github.com/tsuyoshi-otake/electro-parts; research)",
     "minIntervalMs": 2000, "jitterMs": 1000, "maxAttempts": 4,
-    "timeoutMs": 30000, "maxRequests": 2000
+    "timeoutMs": 30000, "maxRequests": 2000, "maxListingPasses": 2
   },
   "sanity": {
     "maxItemCountDropRatio": 0.1, "maxMissingProductRatio": 0.1,

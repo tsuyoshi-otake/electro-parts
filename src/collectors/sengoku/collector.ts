@@ -2,7 +2,7 @@ import { SENGOKU_ORIGIN, SENGOKU_STORE_ID } from '../../adapters/sengoku/identit
 import { SENGOKU_PAGE_SIZE, SENGOKU_ROOT_CID, SENGOKU_SEARCH_CAP, type SengokuItem, type SengokuSnapshot } from '../../adapters/sengoku/rawSchema.ts';
 import type { StoreCollector } from '../../stores/collector.ts';
 import { PoliteFetcher } from '../politeFetcher.ts';
-import { parseSengokuCategoryTree, parseSengokuListingPage, type SengokuCategory, type SengokuListingRow } from './pages.ts';
+import { parseSengokuCategoryTree, parseSengokuListingPage, type SengokuCategory, type SengokuListingPage, type SengokuListingRow } from './pages.ts';
 
 /**
  * せんごくネット通販 collector (ADR-0024).
@@ -19,7 +19,18 @@ import { parseSengokuCategoryTree, parseSengokuListingPage, type SengokuCategory
  * (全280件)」); that page must still hold 40 rows. A product
  * listed in several categories is kept once, with every listing it appeared
  * in. Plain GETs, no cookies, the shop's own listing URLs.
+ *
+ * Pages are read by offset, so a product added or removed while a listing is
+ * being read shifts every later row by one: the pass is inconsistent, and
+ * the pages after the change cannot be told from the pages before it. The
+ * counter shows it (the total changes), and the pass is discarded whole. The
+ * listing is then read again from its first page, after a wait that doubles
+ * with each further pass, up to `maxListingPasses` passes; one that never
+ * holds still ends the crawl incomplete (#88, ADR-0024).
  */
+
+/** The wait before the second pass over a listing; each further pass doubles it, and random jitter up to half of it is added. */
+export const SENGOKU_REREAD_SETTLE_MS = 60_000;
 
 function configNumber(c: Record<string, unknown>, key: string, fallback: number, min: number, max: number): number {
   const n = c[key] ?? fallback;
@@ -36,6 +47,7 @@ export function sengokuCollectorConfig(c: Record<string, unknown>) {
     maxAttempts: configNumber(c, 'maxAttempts', 4, 1, 8),
     timeoutMs: configNumber(c, 'timeoutMs', 30000, 1000, 60000),
     maxRequests: configNumber(c, 'maxRequests', 2000, 1, 5000),
+    maxListingPasses: configNumber(c, 'maxListingPasses', 2, 1, 4),
   };
 }
 
@@ -46,6 +58,13 @@ export function sengokuCategoryUrl(cid: number): string {
 /** The listing URLs the shop's own pager links to. */
 export function sengokuListingUrl(cid: number, st: number): string {
   return `${SENGOKU_ORIGIN}/mod/sgk_cart/search.php?cid=${cid}${st === 0 ? '' : `&st=${st}`}`;
+}
+
+/** A pass over one listing that saw its total change: the pass is unusable, whether to read again is the caller's decision. */
+class ListingChangedError extends Error {
+  constructor(readonly at: string, readonly from: number, readonly to: number) {
+    super(`${at}: the listed total changed from ${from} to ${to} during the crawl`);
+  }
 }
 
 function sameFacts(a: SengokuListingRow, b: SengokuListingRow): boolean {
@@ -59,9 +78,11 @@ export const sengokuCollector: StoreCollector = {
     sengokuCollectorConfig(c);
   },
   async collect(config, deps) {
-    const c = sengokuCollectorConfig(config);
+    const { maxListingPasses, ...fetchOptions } = sengokuCollectorConfig(config);
+    const sleep = deps.sleep ?? ((ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)));
+    const random = deps.random ?? Math.random;
     const fetcher = new PoliteFetcher({
-      ...c,
+      ...fetchOptions,
       headers: { accept: 'text/html' },
       log: deps.log,
       ...(deps.transport === undefined ? {} : { transport: deps.transport }),
@@ -75,6 +96,8 @@ export const sengokuCollector: StoreCollector = {
     let differing = 0;
     let emptyListings = 0;
     let listPages = 0;
+    let rereads = 0;
+    let rereadWaitedMs = 0;
 
     const keep = (row: SengokuListingRow, cid: number) => {
       const known = byCode.get(row.code);
@@ -100,7 +123,31 @@ export const sengokuCollector: StoreCollector = {
       }
     };
 
-    const readListing = async (category: SengokuCategory): Promise<void> => {
+    /** One pass over the pages of a listing. Rows are returned, not kept: nothing is recorded until every page of the pass agrees. */
+    const readPass = async (cid: number, first: SengokuListingPage): Promise<SengokuListingRow[]> => {
+      const total = first.total;
+      const rows: SengokuListingRow[] = [];
+      const codes = new Set<string>();
+      let page = first;
+      for (let st = 0; st < total; st += SENGOKU_PAGE_SIZE) {
+        if (st > 0) page = await readPage(cid, st);
+        const at = `Listing ${cid} at ${st}`;
+        if (page.total !== total) throw new ListingChangedError(at, total, page.total);
+        const end = Math.min(st + SENGOKU_PAGE_SIZE, total);
+        // The shop prints an exactly full last page after the first as S–(S−1): 「241件～240件(全280件)」.
+        const fullLastPage = st > 0 && end === st + SENGOKU_PAGE_SIZE && end === total && page.end === st;
+        if (page.start !== st + 1 || (page.end !== end && !fullLastPage)) throw new Error(`${at}: the counter says ${page.start}–${page.end} where ${st + 1}–${end} was asked for`);
+        if (page.rows.length !== end - st) throw new Error(`${at}: ${page.rows.length} rows where the counter promised ${end - st}`);
+        for (const row of page.rows) {
+          if (codes.has(row.code)) throw new Error(`${at}: repeated product ${row.code}`);
+          codes.add(row.code);
+          rows.push(row);
+        }
+      }
+      return rows;
+    };
+
+    const readListing = async (category: SengokuCategory, pass = 1): Promise<void> => {
       const { cid, name } = category;
       const first = await readPage(cid, 0);
       const total = first.total;
@@ -116,23 +163,20 @@ export const sengokuCollector: StoreCollector = {
         emptyListings += 1;
         return;
       }
-      const codes = new Set<string>();
-      let page = first;
-      for (let st = 0; st < total; st += SENGOKU_PAGE_SIZE) {
-        if (st > 0) page = await readPage(cid, st);
-        const at = `Listing ${cid} at ${st}`;
-        if (page.total !== total) throw new Error(`${at}: the listed total changed from ${total} to ${page.total} during the crawl`);
-        const end = Math.min(st + SENGOKU_PAGE_SIZE, total);
-        // The shop prints an exactly full last page after the first as S–(S−1): 「241件～240件(全280件)」.
-        const fullLastPage = st > 0 && end === st + SENGOKU_PAGE_SIZE && end === total && page.end === st;
-        if (page.start !== st + 1 || (page.end !== end && !fullLastPage)) throw new Error(`${at}: the counter says ${page.start}–${page.end} where ${st + 1}–${end} was asked for`);
-        if (page.rows.length !== end - st) throw new Error(`${at}: ${page.rows.length} rows where the counter promised ${end - st}`);
-        for (const row of page.rows) {
-          if (codes.has(row.code)) throw new Error(`${at}: repeated product ${row.code}`);
-          codes.add(row.code);
-          keep(row, cid);
-        }
+      let rows: SengokuListingRow[];
+      try {
+        rows = await readPass(cid, first);
+      } catch (e) {
+        if (!(e instanceof ListingChangedError) || pass >= maxListingPasses) throw e;
+        rereads += 1;
+        warnings.push(`listing ${cid} (${name}): the listed total changed from ${e.from} to ${e.to} during the crawl; read again from its first page (pass ${pass + 1} of ${maxListingPasses})`);
+        const waitMs = SENGOKU_REREAD_SETTLE_MS * 2 ** (pass - 1) * (1 + random() / 2);
+        deps.log(`[sengoku] ${cid} ${name}: ${e.message}; waiting ${Math.round(waitMs / 1000)} s, then reading it again (pass ${pass + 1} of ${maxListingPasses})`);
+        rereadWaitedMs += waitMs;
+        await sleep(waitMs);
+        return readListing(category, pass + 1);
       }
+      for (const row of rows) keep(row, cid);
       s.listings.push({ cid, name, listedTotal: total, pageCount: Math.ceil(total / SENGOKU_PAGE_SIZE) });
       deps.log(`[sengoku] ${cid} ${name}: ${total} products (${byCode.size} distinct so far)`);
     };
@@ -152,7 +196,7 @@ export const sengokuCollector: StoreCollector = {
       raw: s, retrievedAt: s.retrievedAt, complete: s.complete, errors: s.errors, warnings,
       metrics: {
         items: s.items.length, listings: s.listings.length, splitListings: s.splitListings.length, emptyListings,
-        listPages, differingDuplicates: differing,
+        listPages, rereads, rereadWaitedMs, differingDuplicates: differing,
         httpAttempts: fetcher.stats.httpAttempts, retries: fetcher.stats.retries, waitedMs: fetcher.stats.waitedMs,
       },
     };

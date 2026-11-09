@@ -100,11 +100,17 @@ export function sengokuSite(tree: readonly SyntheticListing[]): Map<string, stri
 }
 
 /** Runs the real collector against a synthetic shop; `edit` may rewrite any response body. */
-export async function collectSengokuFixture(options: { tree?: SyntheticListing[]; edit?: (url: string, body: string) => string; status?: (url: string) => number } = {}) {
+export async function collectSengokuFixture(options: {
+  tree?: SyntheticListing[]; edit?: (url: string, body: string) => string; status?: (url: string) => number;
+  /** Collector settings on top of the user agent. */
+  config?: Record<string, unknown>;
+  /** Receives every wait the collector asks for (the fetcher's pacing and the re-read settle wait). */
+  sleeps?: number[];
+} = {}) {
   const site = sengokuSite(options.tree ?? syntheticSengokuShop());
   const requests: string[] = [];
-  const outcome = await sengokuCollector.collect({ userAgent: 'electro-parts-test/1.0' }, {
-    log: () => {}, now: () => new Date(SENGOKU_RETRIEVED_AT), sleep: async () => {}, random: () => 0,
+  const outcome = await sengokuCollector.collect({ userAgent: 'electro-parts-test/1.0', ...options.config }, {
+    log: () => {}, now: () => new Date(SENGOKU_RETRIEVED_AT), sleep: async (ms) => { options.sleeps?.push(ms); }, random: () => 0,
     transport: async (url) => {
       requests.push(url);
       const body = site.get(url);
