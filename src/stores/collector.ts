@@ -13,6 +13,13 @@ export interface CollectDeps {
   transport?: HttpTransport;
   sleep?: (ms: number) => Promise<void>;
   random?: () => number;
+  /**
+   * A directory that survives from one run to the next (the workflow caches
+   * it), for data a collector derives and can rebuild: losing it must only cost
+   * the collector time, never correctness. Absent when nothing is kept (the
+   * standalone `collect` command, tests).
+   */
+  carryDir?: string;
 }
 
 export interface CollectOutcome {

@@ -1,9 +1,15 @@
+import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import { AKIZUKI_STORE_ID } from '../../adapters/akizuki/capabilities.ts';
 import type { CollectDeps, CollectOutcome, StoreCollector } from '../../stores/collector.ts';
 import { PoliteFetcher, type PoliteFetcherOptions } from '../politeFetcher.ts';
 import { crawlAkizuki } from './crawl.ts';
 import { AKIZUKI_BASE_URL, AKIZUKI_LISTING_PAGE_CAP, type ListingKind } from './listings.ts';
 import { isAkizukiMaintenancePage } from './listingParser.ts';
+import { parseCoverSource, serializeCoverSource, type CoverSettings, type CoverSource } from './cover.ts';
+
+/** In `CollectDeps.carryDir`: what the last complete full run learned about which listing shows which product. */
+export const AKIZUKI_COVER_SOURCE_FILE = 'akizuki-cover.json.gz';
 
 /**
  * `collector` section of `config/akizuki.json`. Every field is optional
@@ -22,6 +28,24 @@ export interface AkizukiCollectorConfig {
   maxRequests: number;
   maxPagesPerListing: number;
   maxUncoveredProducts: number;
+  /** The cover crawl (#93); undefined: every run walks every listing. */
+  cover: CoverSettings | undefined;
+}
+
+function coverSettings(v: unknown): CoverSettings | undefined {
+  if (v === undefined) return undefined;
+  if (typeof v !== 'object' || v === null || Array.isArray(v)) throw new Error('collector.cover must be an object');
+  const o = v as Record<string, unknown>;
+  const int = (name: string, fallback: number, min: number, max: number): number => {
+    const n = o[name] ?? fallback;
+    if (!Number.isSafeInteger(n) || (n as number) < min || (n as number) > max) throw new Error(`collector.cover.${name} must be an integer between ${min} and ${max}`);
+    return n as number;
+  };
+  return {
+    fullCrawlEveryDays: int('fullCrawlEveryDays', 7, 1, 30),
+    maxRepairListings: int('maxRepairListings', 40, 0, 200),
+    escalateAfterMissing: int('escalateAfterMissing', 30, 0, 2000),
+  };
 }
 
 function num(v: unknown, name: string, fallback: number, min: number): number {
@@ -54,7 +78,39 @@ export function parseAkizukiCollectorConfig(config: Record<string, unknown>): Ak
     maxRequests: num(config['maxRequests'], 'maxRequests', 2000, 1),
     maxPagesPerListing: num(config['maxPagesPerListing'], 'maxPagesPerListing', AKIZUKI_LISTING_PAGE_CAP, 1),
     maxUncoveredProducts: num(config['maxUncoveredProducts'], 'maxUncoveredProducts', 0, 0),
+    cover: coverSettings(config['cover']),
   };
+}
+
+/** The cover source is a cache: a missing or damaged file means a full run, never a failed one. */
+async function readCoverSource(file: string, log: (message: string) => void): Promise<CoverSource | null> {
+  let bytes: Uint8Array;
+  try {
+    bytes = await readFile(file);
+  } catch (e) {
+    log(`[crawl] no cover source (${(e as NodeJS.ErrnoException).code ?? 'unreadable'}); this run reads every listing`);
+    return null;
+  }
+  const parsed = parseCoverSource(bytes);
+  if ('error' in parsed) {
+    log(`[crawl] cover source ignored: ${parsed.error}; this run reads every listing`);
+    return null;
+  }
+  return parsed.source;
+}
+
+/** Written beside itself and renamed, so a run that dies half-way never leaves a file the next run would half-read. */
+async function writeCoverSource(file: string, source: CoverSource, log: (message: string) => void): Promise<void> {
+  const temporary = `${file}.${process.pid}.tmp`;
+  try {
+    await mkdir(path.dirname(file), { recursive: true });
+    await writeFile(temporary, serializeCoverSource(source));
+    await rename(temporary, file);
+    log(`[crawl] cover source written: ${source.listings.length} listings, ${source.products.length} products (full run of ${source.builtAt})`);
+  } catch (e) {
+    log(`[crawl] cover source not written: ${(e as Error).message}; the next run reads every listing`);
+    await rm(temporary, { force: true }).catch(() => undefined);
+  }
 }
 
 export const akizukiCollector: StoreCollector = {
@@ -79,16 +135,20 @@ export const akizukiCollector: StoreCollector = {
       ...(deps.now === undefined ? {} : { now: () => deps.now!().getTime() }),
     };
     const fetcher = new PoliteFetcher(fetcherOptions);
+    const coverFile = deps.carryDir === undefined ? null : path.join(deps.carryDir, AKIZUKI_COVER_SOURCE_FILE);
+    const source = c.cover === undefined || coverFile === null ? null : await readCoverSource(coverFile, deps.log);
     const result = await crawlAkizuki({
       fetcher,
       listingKinds: c.listingKinds,
       baseUrl: c.baseUrl,
       maxPagesPerListing: c.maxPagesPerListing,
       maxUncoveredProducts: c.maxUncoveredProducts,
+      ...(c.cover === undefined ? {} : { cover: { source, settings: c.cover } }),
       log: deps.log,
       ...(deps.now === undefined ? {} : { now: deps.now }),
     });
     const s = result.snapshot;
+    if (result.coverSource !== null && coverFile !== null) await writeCoverSource(coverFile, result.coverSource, deps.log);
     return {
       raw: s,
       retrievedAt: s.retrievedAt,
@@ -108,6 +168,15 @@ export const akizukiCollector: StoreCollector = {
         retries: fetcher.stats.retries,
         waitedMs: fetcher.stats.waitedMs,
         durationMs: result.durationMs,
+        ...(s.crawl === undefined
+          ? {}
+          : {
+              coverRun: s.crawl.mode === 'cover' ? 1 : 0,
+              plannedListings: s.crawl.plannedListings,
+              repairListings: s.crawl.repairListings,
+              missingAfterRepair: s.crawl.missingAfterRepair,
+              escalated: s.crawl.escalated ? 1 : 0,
+            }),
       },
     };
   },

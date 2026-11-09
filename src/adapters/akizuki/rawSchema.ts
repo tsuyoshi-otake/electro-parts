@@ -58,6 +58,12 @@ export interface AkizukiRawListing {
   failedPages: number;
   extractedOccurrences: number;
   matchesListedTotal: boolean;
+  /**
+   * Markup the listing's products came in: `card` states a cart and a stock
+   * quantity, `table` does not, `index` is a branch that only links to its
+   * children. Absent in snapshots written before the cover crawl (#93).
+   */
+  layout?: 'card' | 'table' | 'index';
 }
 
 /** What the sitemap said the catalogue holds, and how much of it the run saw. */
@@ -79,11 +85,35 @@ export interface AkizukiRawCatalog {
   unlisted: number;
 }
 
+/**
+ * How the run chose its listings (#93, ADR-0032). A `full` run walks every
+ * listing of the families; a `cover` run walks the listings a weighted set
+ * cover of the last full run picked, repairs what they missed, and says so.
+ * Absent in snapshots written before the cover crawl, which were all full.
+ */
+export interface AkizukiRawCrawl {
+  mode: 'full' | 'cover';
+  /** Why a full run was chosen, or how the cover run ended. */
+  reason: string;
+  /** Listing families the run claims to cover (`c`, `r`); the coverage id names them, not the slugs read. */
+  families: string[];
+  /** When the full run the cover was planned from finished; null for a full run planned from nothing. */
+  sourceBuiltAt: string | null;
+  plannedListings: number;
+  repairListings: number;
+  /** Products of the last full run that no listing read this run showed. */
+  missingAfterRepair: number;
+  /** A cover run that lost too much and read the remaining listings too. */
+  escalated: boolean;
+}
+
 export interface AkizukiRawSnapshot {
   schemaVersion: number;
   source: string;
   retrievedAt: string;
   complete: boolean;
+  /** Absent in snapshots written before the cover crawl. */
+  crawl?: AkizukiRawCrawl;
   catalog: AkizukiRawCatalog;
   listingCount: number;
   occurrenceTotal: number;

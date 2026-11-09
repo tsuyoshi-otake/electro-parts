@@ -10,7 +10,8 @@
     "timeoutMs": 30000,
     "maxRequests": 5000,
     "maxPagesPerListing": 50,
-    "maxUncoveredProducts": 600
+    "maxUncoveredProducts": 600,
+    "cover": { "fullCrawlEveryDays": 7, "maxRepairListings": 40, "escalateAfterMissing": 30 }
   },
   "sanity": {
     "maxItemCountDropRatio": 0.2,

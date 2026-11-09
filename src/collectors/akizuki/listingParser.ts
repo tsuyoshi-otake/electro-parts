@@ -32,6 +32,12 @@ export interface ListingPage {
   items: ListingItem[];
   /** Non-fatal per-item problems (kept for the run summary). */
   issues: string[];
+  /**
+   * Which markup the products came in. Only the card layout states a cart and
+   * a stock quantity, so the cover plan prefers it (see `cover.ts`); `none` for
+   * a branch that only links to its children.
+   */
+  layout: 'card' | 'table' | 'none';
 }
 
 /** One product occurrence on a listing page, before cross-listing deduplication. */
@@ -218,7 +224,7 @@ function hasItems(html: string): boolean {
 }
 
 /** Reads the products of whichever layout the page uses. */
-function extractItems(html: string, issues: string[]): ListingItem[] {
+function extractItems(html: string, issues: string[]): { items: ListingItem[]; layout: 'card' | 'table' } {
   const useTable = TABLE_MARKER.test(html) && blockRanges(html, CARD_OPEN, CARD_END).starts.length === 0;
   const layout = useTable ? TABLE_LAYOUT : CARD_LAYOUT;
   const { starts, end } = blockRanges(html, useTable ? TABLE_OPEN : CARD_OPEN, useTable ? TABLE_END : CARD_END);
@@ -228,7 +234,7 @@ function extractItems(html: string, issues: string[]): ListingItem[] {
     const item = parseItem(block, i + 1, issues, layout);
     if (item !== null) items.push(item);
   });
-  return items;
+  return { items, layout: useTable ? 'table' : 'card' };
 }
 
 export function parseAkizukiListingPage(html: string): ListingPage {
@@ -241,7 +247,7 @@ export function parseAkizukiListingPage(html: string): ListingPage {
     // A category that only links to its children carries no counter and no
     // products. Anything else without a counter is a structural surprise.
     if (hasItems(html)) throw new ListingParseError('listed total (pager-count) not found although the page shows products');
-    return { listingName, indexOnly: true, listedTotal: 0, currentPage: 1, lastPage: 1, nextPath: null, items: [], issues: [] };
+    return { listingName, indexOnly: true, listedTotal: 0, currentPage: 1, lastPage: 1, nextPath: null, items: [], issues: [], layout: 'none' };
   }
   const listedTotal = Number.parseInt(listedTotalText.replace(/,/g, ''), 10);
   const currentPage = Number.parseInt(first(/class="pager-current">\s*<span>(\d+)<\/span>/, html) ?? '1', 10);
@@ -254,7 +260,7 @@ export function parseAkizukiListingPage(html: string): ListingPage {
   }
 
   const issues: string[] = [];
-  const items = extractItems(html, issues);
+  const { items, layout } = extractItems(html, issues);
   if (items.length === 0 && listedTotal > 0) throw new ListingParseError(`no product blocks found on a page listing ${listedTotal} items`);
-  return { listingName, indexOnly: false, listedTotal, currentPage, lastPage, nextPath, items, issues };
+  return { listingName, indexOnly: false, listedTotal, currentPage, lastPage, nextPath, items, issues, layout };
 }

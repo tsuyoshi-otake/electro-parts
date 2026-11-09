@@ -12,6 +12,12 @@
  * error, or a sitemap product no listing showed marks the snapshot
  * `complete: false`, which the adapter refuses to import. A collection gap must
  * never be published as a delisting.
+ *
+ * With `cover` configured the crawl is not always the whole walk (#93,
+ * ADR-0032): a full run records which listing shows which product, and the runs
+ * after it read only a set cover of those listings, repair what the cover
+ * missed, and read everything again when too much is missing. The sitemap
+ * check, the page and counter checks and the snapshot are the same in both.
  */
 import type { AkizukiRawCatalog, AkizukiRawItem, AkizukiRawListing, AkizukiRawSnapshot } from '../../adapters/akizuki/rawSchema.ts';
 import { AKIZUKI_RAW_SCHEMA_VERSION } from '../../adapters/akizuki/rawSchema.ts';
@@ -27,6 +33,7 @@ import {
 } from './listings.ts';
 import { ListingParseError, parseAkizukiListingPage, type ListingItem, type ListingPage } from './listingParser.ts';
 import { fetchAkizukiSitemap, sitemapIndexUrl, type AkizukiSitemap } from './sitemap.ts';
+import { buildCoverSource, decideCrawl, pickRepair, type CoverSettings, type CoverSource, type ListingMembership } from './cover.ts';
 
 /** How many uncovered sales codes are named in the snapshot for diagnosis. */
 const UNCOVERED_SAMPLE_SIZE = 20;
@@ -43,6 +50,11 @@ export interface CrawlOptions {
   maxPagesPerListing?: number;
   /** Sitemap products allowed to be absent from every listing before the run is incomplete. Default 0. */
   maxUncoveredProducts?: number;
+  /**
+   * The cover crawl: what the last full run learned (`source`, null when there
+   * is none) and the knobs. Absent: every run walks every listing.
+   */
+  cover?: { source: CoverSource | null; settings: CoverSettings };
   now?: () => Date;
   log?: (message: string) => void;
 }
@@ -53,6 +65,8 @@ export interface CrawlResult {
   startedAt: string;
   finishedAt: string;
   durationMs: number;
+  /** After a complete full run: the membership to plan the next cover runs from. Null otherwise. */
+  coverSource: CoverSource | null;
 }
 
 interface Occurrence {
@@ -79,6 +93,7 @@ async function crawlListing(ref: ListingRef, o: ListingCrawlOptions): Promise<Li
   let name = ref.slug;
   let listedTotal = 0;
   let totalPages = 0;
+  let layout: AkizukiRawListing['layout'];
   let successfulPages = 0;
   let failedPages = 0;
 
@@ -116,6 +131,7 @@ async function crawlListing(ref: ListingRef, o: ListingCrawlOptions): Promise<Li
   const truncated = firstPage !== null && firstPage.listedTotal >= AKIZUKI_LISTING_RESULT_CAP;
   if (firstPage !== null) {
     name = firstPage.listingName;
+    layout = firstPage.layout === 'none' ? 'index' : firstPage.layout;
     listedTotal = firstPage.listedTotal;
     totalPages = firstPage.lastPage;
     if (totalPages > o.maxPagesPerListing) {
@@ -148,6 +164,7 @@ async function crawlListing(ref: ListingRef, o: ListingCrawlOptions): Promise<Li
     failedPages,
     extractedOccurrences,
     matchesListedTotal: failedPages === 0 && errors.length === 0 && (truncated || extractedOccurrences === listedTotal),
+    ...(layout === undefined ? {} : { layout }),
   };
   o.log?.(
     `[crawl] ${id} "${name}" pages=${successfulPages}/${totalPages} occurrences=${extractedOccurrences}/${truncated ? 'capped' : listedTotal}` +
@@ -229,6 +246,10 @@ export function deduplicateOccurrences(occurrences: readonly Occurrence[], warni
   return [...byKey.values()];
 }
 
+function refFromId(id: string): ListingRef {
+  return { kind: id.charAt(0) as ListingKind, slug: id.slice(2) };
+}
+
 /** Expands the sitemap into the listing set to walk. */
 export function listingsFromSitemap(sitemap: AkizukiSitemap, kinds: readonly ListingKind[]): ListingRef[] {
   const refs: ListingRef[] = [];
@@ -254,23 +275,80 @@ export async function crawlAkizuki(options: CrawlOptions): Promise<CrawlResult> 
   const warnings: string[] = [];
 
   const sitemap = await fetchAkizukiSitemap({ fetcher: options.fetcher, baseUrl, ...(options.log === undefined ? {} : { log: options.log }) });
-  const listings = options.listings ?? listingsFromSitemap(sitemap, kinds);
+  const fullSet = options.listings ?? listingsFromSitemap(sitemap, kinds);
+  const cover = options.cover;
+  const decision = decideCrawl({
+    source: cover?.source ?? null,
+    settings: cover?.settings,
+    kinds,
+    sitemap,
+    now: startedAt,
+    explicitListings: options.listings !== undefined,
+  });
+  if (cover !== undefined) options.log?.(`[crawl] ${decision.mode} run: ${decision.reason}`);
 
   const listingRecords: AkizukiRawListing[] = [];
   const occurrences: Occurrence[] = [];
   const seenIds = new Set<string>();
-  for (const ref of listings) {
+  const observed = new Set<string>();
+  const memberships: ListingMembership[] = [];
+  const walk = async (ref: ListingRef): Promise<void> => {
     const id = listingId(ref);
     if (seenIds.has(id)) {
       errors.push(`listing ${id} configured twice`);
-      continue;
+      return;
     }
     seenIds.add(id);
     const l = await crawlListing(ref, o);
     listingRecords.push(l.record);
     occurrences.push(...l.occurrences);
+    for (const occ of l.occurrences) observed.add(occ.item.salesCode);
     errors.push(...l.errors);
     warnings.push(...l.warnings);
+    const layout = l.record.layout;
+    if ((layout === 'card' || layout === 'table') && l.errors.length === 0 && l.record.failedPages === 0) {
+      memberships.push({ id, pages: l.record.successfulPages, layout, truncated: l.record.truncated, codes: l.occurrences.map((occ) => occ.item.salesCode) });
+    }
+  };
+
+  let mode: 'full' | 'cover' = decision.mode;
+  let reason = decision.reason;
+  let plannedListings = 0;
+  let repairListings = 0;
+  let missingAfterRepair = 0;
+  let escalated = false;
+  if (decision.mode === 'full') {
+    for (const ref of fullSet) await walk(ref);
+    plannedListings = listingRecords.length;
+  } else {
+    const source = cover!.source!;
+    const { maxRepairListings, escalateAfterMissing } = cover!.settings;
+    for (const planned of decision.plan) await walk(refFromId(planned.id));
+    plannedListings = decision.plan.length;
+    const missing = new Set<number>();
+    source.products.forEach((code, i) => {
+      if (!observed.has(code)) missing.add(i);
+    });
+    // A page that failed makes the snapshot incomplete whatever else is read,
+    // so a failing site is not asked for more.
+    while (errors.length === 0 && missing.size > 0 && repairListings < maxRepairListings) {
+      const next = pickRepair(source, missing, seenIds);
+      if (next === null) break;
+      await walk(refFromId(next.id));
+      repairListings += 1;
+      for (const i of [...missing]) if (observed.has(source.products[i] as string)) missing.delete(i);
+    }
+    missingAfterRepair = missing.size;
+    if (errors.length === 0 && missingAfterRepair > escalateAfterMissing) {
+      escalated = true;
+      mode = 'full';
+      reason = `${missingAfterRepair} product(s) of the last full run were missing after ${repairListings} repair listing(s) (more than ${escalateAfterMissing}); every other listing was read too`;
+      for (const ref of fullSet) if (!seenIds.has(listingId(ref))) await walk(ref);
+    } else {
+      reason = `${decision.reason}; ${repairListings} repair listing(s), ${missingAfterRepair} product(s) of the last full run not found`;
+      if (missingAfterRepair > 0) warnings.push(`${missingAfterRepair} product(s) of the last full run were not found in the ${seenIds.size} listings read and are treated as gone`);
+    }
+    options.log?.(`[crawl] cover run: ${reason}`);
   }
   const items = deduplicateOccurrences(occurrences, warnings);
 
@@ -305,6 +383,20 @@ export async function crawlAkizuki(options: CrawlOptions): Promise<CrawlResult> 
     source: `${baseUrl}/catalog/`,
     retrievedAt: finishedAt.toISOString(),
     complete: errors.length === 0 && failedPages === 0 && listingMismatches === 0 && items.length > 0,
+    ...(cover === undefined
+      ? {}
+      : {
+          crawl: {
+            mode,
+            reason,
+            families: [...kinds].sort(),
+            sourceBuiltAt: decision.mode === 'cover' ? cover.source!.builtAt : null,
+            plannedListings,
+            repairListings,
+            missingAfterRepair,
+            escalated,
+          },
+        }),
     catalog,
     listingCount: listingRecords.length,
     occurrenceTotal: occurrences.length,
@@ -332,5 +424,16 @@ export async function crawlAkizuki(options: CrawlOptions): Promise<CrawlResult> 
     listings: listingRecords,
     items,
   };
-  return { snapshot, sitemap, startedAt: startedAt.toISOString(), finishedAt: finishedAt.toISOString(), durationMs: finishedAt.getTime() - startedAt.getTime() };
+  const coverSource =
+    cover !== undefined && mode === 'full' && options.listings === undefined && snapshot.complete
+      ? buildCoverSource(snapshot.retrievedAt, kinds, memberships)
+      : null;
+  return {
+    snapshot,
+    sitemap,
+    startedAt: startedAt.toISOString(),
+    finishedAt: finishedAt.toISOString(),
+    durationMs: finishedAt.getTime() - startedAt.getTime(),
+    coverSource,
+  };
 }

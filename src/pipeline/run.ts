@@ -24,6 +24,9 @@ import { verifyPublication } from './verifyPublication.ts';
 
 export const SITE_STATE_DIR = 'state';
 
+/** Under the work directory: what a collector keeps between runs (`CollectDeps.carryDir`). The workflow caches it. */
+export const CARRY_DIR_NAME = 'carry';
+
 export interface RunDeps extends CollectDeps {
   fetchImpl?: FetchLike;
 }
@@ -146,7 +149,7 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
           return { raw: file.json, rawSha256: file.rawSha256, retrievedAt: null as string | null };
         }
         const collector = getStoreCollector(config.storeId);
-        const outcome = await collector.collect(config.collector, deps);
+        const outcome = await collector.collect(config.collector, { ...deps, carryDir: path.join(workDir, CARRY_DIR_NAME) });
         Object.assign(d, outcome.metrics, { complete: outcome.complete, errors: outcome.errors.length });
         report.warnings.push(...outcome.warnings.map((w) => `collect: ${w}`));
         report.warnings.push(...outcome.errors.map((w) => `collect error: ${w}`));
