@@ -130,4 +130,53 @@ describe('stock count chart', () => {
     const svg = buildInventoryChart(document, [series([[t(0), null]]), series([], { id: 'other' })], { width: 640, height: 120 });
     expect(svg.querySelectorAll('g[data-series]')).toHaveLength(0);
   });
+
+  it('says so when the chosen period holds no count, instead of leaving the box blank', () => {
+    // The last count was shown and then went missing on day 3; the window starts on day 5.
+    const svg = buildInventoryChart(document, [series([[t(0), 20], [t(3), null]], { start: t(5) })], { width: 640, height: 120 });
+    expect(svg.querySelectorAll('g[data-series]')).toHaveLength(0);
+    expect(svg.querySelector('text.eph-chart-empty')?.textContent).toBe('この期間に在庫数の記録なし');
+  });
+
+  it('draws the count in effect at the start of the window from the start, and no dot for a point before it', () => {
+    const svg = buildInventoryChart(document, [series([[t(0), 20], [t(6), 12]], { start: t(3) })], { width: 640, height: 120 });
+    expect([...svg.querySelectorAll('circle')].map((c) => c.getAttribute('aria-label'))).toEqual([expect.stringContaining('在庫数 12')]);
+    // 20 from the window start to day 6, then 12 to the end: two steps.
+    const d = paths(svg)[0]!;
+    expect(d.startsWith('M')).toBe(true);
+    expect(d.match(/H/g)).toHaveLength(2);
+  });
+});
+
+describe('step chart over a window that starts after the first change', () => {
+  const points: PricePointV1[] = [[t(0), 'exact', 100, 100], [t(5), 'exact', 120, 120], [t(9), 'exact', 140, 140]];
+  const presence: PresencePointV1[] = [[t(0), 1]];
+  const xs = (d: string) => [...d.matchAll(/[MH]\s*(-?\d+(?:\.\d+)?)/g)].map((m) => Number(m[1]));
+
+  it('draws the price in effect at the start from the start of the plot, and nothing left of it', () => {
+    const svg = buildStepChart(document, points, presence, { width: 640, height: 200, start: t(6), end: t(10), currency: 'JPY' });
+    const d = svg.querySelector('path.eph-line')!.getAttribute('d')!;
+    // PAD.left is 62: the first step begins exactly there, and no coordinate falls in the axis labels.
+    expect(d.startsWith('M62.0 ')).toBe(true);
+    expect(Math.min(...xs(d))).toBeGreaterThanOrEqual(62);
+    // 120 from day 6 (the start) to day 9, then 140: two steps, so one vertical join.
+    expect(d.match(/V/g)).toHaveLength(1);
+  });
+
+  it('counts, labels and ranges only what the window holds', () => {
+    const svg = buildStepChart(document, points, presence, { width: 640, height: 200, start: t(6), end: t(10), currency: 'JPY' });
+    expect(svg.querySelectorAll('circle')).toHaveLength(1);
+    const label = svg.getAttribute('aria-label')!;
+    expect(label).toContain('変更点 1 件');
+    expect(label).toContain('最低 ￥120');
+    expect(label).toContain('最高 ￥140');
+    expect(label).not.toContain('￥100');
+  });
+
+  it('is the same drawing as before for a window that starts at the first change', () => {
+    const whole = buildStepChart(document, points, presence, { width: 640, height: 200, start: t(0), end: t(10), currency: 'JPY' });
+    expect(whole.getAttribute('aria-label')).toContain('変更点 3 件');
+    expect(whole.querySelectorAll('circle')).toHaveLength(3);
+    expect(whole.querySelector('path.eph-line')!.getAttribute('d')!.startsWith('M62.0 ')).toBe(true);
+  });
 });

@@ -145,3 +145,57 @@ test('reports products that are not in the dataset yet', async ({ page }) => {
   await expect(panel(page)).toHaveAttribute('data-page-key', '999999');
   await expect(panelText(page)).toContainText('まだ観測データに含まれていません');
 });
+
+test('period buttons redraw both charts for the chosen window and the estimated sales follow it (#85)', async ({ page }) => {
+  await setup(page, { dataOnline: true });
+  await page.goto(PRODUCT_URL);
+  await injectUserscript(page);
+  await panel(page).scrollIntoViewIfNeeded();
+  const root = '#electronics-price-history-root';
+  const priceChart = page.locator(`${root} svg[role="img"]`);
+  await expect(priceChart).toBeVisible();
+  const period = (label: string) => page.locator(`${root} .period-controls button`, { hasText: label });
+  await expect(page.locator(`${root} .period-controls button`)).toHaveText(['1ヶ月', '3ヶ月', '半年', '1年', '2年', '3年', '全期間']);
+  await expect(page.locator(`${root} .period-controls button[aria-pressed="true"]`)).toHaveText('全期間');
+  // The whole record (2026-08-02 to 2026-09-06): both points, and the rise 20 → 781 is added stock, never a sale.
+  const summary = page.locator(`${root} .sales-summary`);
+  await expect(summary).toContainText('推定販売数（2026-08-02〜2026-09-06');
+  await expect(summary).toContainText('0個');
+  await expect(summary).toContainText('増加 1 回（+761個）');
+  await expect(priceChart.locator('circle')).toHaveCount(2);
+  await expect(page.locator(`${root} .stock-chart circle`)).toHaveCount(2);
+  // 1ヶ月 = the 30 days before the last observation, so it starts on 2026-08-07: only the second point is inside.
+  await period('1ヶ月').click();
+  await expect(period('1ヶ月')).toHaveAttribute('aria-pressed', 'true');
+  await expect(period('全期間')).toHaveAttribute('aria-pressed', 'false');
+  await expect(priceChart.locator('circle')).toHaveCount(1);
+  await expect(page.locator(`${root} .stock-chart circle`)).toHaveCount(1);
+  await expect(priceChart).toHaveAttribute('aria-label', /^2026-08-07〜2026-09-06 の価格推移/);
+  await expect(summary).toContainText('推定販売数（2026-08-07〜2026-09-06');
+  // The redrawn chart reads the price in effect at the start of the window (1150, set before it) and the last point.
+  const plot = (await priceChart.locator('.eph-readout-hit').boundingBox())!;
+  await page.mouse.move(plot.x + plot.width * 0.1, plot.y + plot.height / 2);
+  await expect(priceChart.locator('.eph-readout-text')).toHaveText([/^2026-08-\d\d$/, '￥1,150']);
+  const dot = (await priceChart.locator('circle.eph-dot').boundingBox())!;
+  await page.mouse.move(dot.x + dot.width / 2, dot.y + dot.height / 2);
+  await expect(priceChart.locator('.eph-readout-text')).toHaveText(['2026-09-06', '￥1,200']);
+  await page.mouse.move(1, 1);
+  // The line starts inside the plot: nothing is drawn over the axis labels.
+  // In viewBox units, so the stroke's own overflow (a miter join reaches about 5px) is not counted.
+  const [lineLeft, plotLeft] = await priceChart.evaluate((svg) => [(svg.querySelector('path.eph-line') as SVGGraphicsElement).getBBox().x, Number(svg.querySelector('.eph-readout-hit')!.getAttribute('x'))] as const);
+  expect(lineLeft).toBeGreaterThanOrEqual(plotLeft);
+  await panel(page).screenshot({ path: path.resolve(process.cwd(), 'test-results', 'e2e', 'panel-109951-period-1m.png') });
+  // A period longer than the record shows the record; going back to the whole record restores everything.
+  await period('3年').click();
+  await expect(priceChart.locator('circle')).toHaveCount(2);
+  await expect(priceChart).toHaveAttribute('aria-label', /^2026-08-02〜2026-09-06 の価格推移/);
+  await period('全期間').click();
+  await expect(priceChart.locator('circle')).toHaveCount(2);
+  await expect(page.locator(`${root} .stock-chart circle`)).toHaveCount(2);
+  // The buttons are touch-sized buttons of the panel's own kind: keyboard operable, named, no network traffic.
+  await period('1年').focus();
+  await page.keyboard.press('Enter');
+  await expect(period('1年')).toHaveAttribute('aria-pressed', 'true');
+  const requests = await page.evaluate(() => (window as unknown as { __gmRequests: string[] }).__gmRequests);
+  expect(requests).toHaveLength(2);
+});
