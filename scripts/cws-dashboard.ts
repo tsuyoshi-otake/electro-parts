@@ -12,20 +12,21 @@
  *   node --import tsx scripts/cws-dashboard.ts launch            separate profile, CDP on 127.0.0.1:9333; the person signs in
  *   node --import tsx scripts/cws-dashboard.ts status            item status, draft and published versions
  *   node --import tsx scripts/cws-dashboard.ts upload <zip>      upload the verified package
- *   node --import tsx scripts/cws-dashboard.ts fill              paste the listing texts and save each tab's draft
- *   node --import tsx scripts/cws-dashboard.ts check             compare the dashboard fields with the listing doc (read-only)
+ *   node --import tsx scripts/cws-dashboard.ts fill              paste the listing texts, save the draft, read every field back from a fresh tab, put again what did not stick (3 rounds); exit 1 if a field still does not hold its text
+ *   node --import tsx scripts/cws-dashboard.ts check             compare the dashboard fields with the listing doc (read-only); exit 1 if one differs
  *   node --import tsx scripts/cws-dashboard.ts blockers          read 「送信できない理由」 and close it with Escape
  *   node --import tsx scripts/cws-dashboard.ts close             close that Chrome and delete its profile (it holds a sign-in)
  *
  * Options: --port (9333), --profile (~/tmp/electro-cws/profile), --chrome (Chrome's path).
  */
-import { chromium, type Browser, type Page } from '@playwright/test';
+import { chromium, expect, type Browser, type Page } from '@playwright/test';
 import { spawn } from 'node:child_process';
 import { mkdir, readFile, rm } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
+import { FILL_ROUNDS, fillUntilKept } from './lib/fill-until-kept.ts';
 import { readStoreListingTexts, STORE_LISTING_DOC, type StoreListingTexts } from './lib/store-listing.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -47,6 +48,7 @@ const FIELDS: readonly { tab: Tab; label: string; text: keyof StoreListingTexts 
   { tab: 'privacy', label: 'storage が必要な理由', text: 'storageReason' },
   { tab: 'privacy', label: 'ホスト権限 が必要な理由', text: 'hostReason' },
 ];
+type Field = (typeof FIELDS)[number];
 
 async function listingTexts(): Promise<StoreListingTexts> {
   return readStoreListingTexts(await readFile(path.join(here, '..', STORE_LISTING_DOC), 'utf8'));
@@ -103,39 +105,55 @@ async function upload(page: Page, zip: string): Promise<void> {
   await status(page);
 }
 
+/** On screen while the dashboard saves. A save also starts by itself when a field loses focus. */
+const SAVING = 'アイテムを保存しています';
+
 async function saveDraft(page: Page): Promise<void> {
-  await press(page, '下書きとして保存する');
-  await page.getByText('アイテムが保存されました。').first().waitFor({ timeout: 30_000 });
-}
-
-async function fill(page: Page): Promise<void> {
-  const texts = await listingTexts();
-  for (const tab of ['listing', 'privacy'] as const) {
-    await openTab(page, tab);
-    for (const field of FIELDS.filter((f) => f.tab === tab)) {
-      const box = page.getByLabel(field.label, { exact: true });
-      await box.fill(texts[field.text]);
-      await box.blur();
-    }
-    await saveDraft(page);
-    console.log(`${tab}: saved`);
+  const button = page.getByRole('button', { name: '下書きとして保存する' }).filter({ visible: true }).first();
+  // The button is disabled while a save runs, and pressing a disabled button does nothing (0.7.8: the press was lost
+  // while the dashboard's own save ran). So it is waited for; still disabled after 10 s, nothing is left to press.
+  const enabled = await expect(button).toBeEnabled({ timeout: 10_000 }).then(() => true, () => false);
+  if (enabled) {
+    await press(page, '下書きとして保存する');
+    await page.getByText('アイテムが保存されました。').first().waitFor({ timeout: 30_000 });
   }
-  await check(page);
+  await page.getByText(SAVING).first().waitFor({ state: 'hidden', timeout: 30_000 });
 }
 
-async function check(page: Page): Promise<void> {
+async function putField(page: Page, field: Field, text: string): Promise<void> {
+  await openTab(page, field.tab);
+  const box = page.getByLabel(field.label, { exact: true });
+  await box.fill(text);
+  await box.blur();
+  await saveDraft(page);
+  console.log(`put     ${field.label}`);
+}
+
+/** Reads the field from a freshly loaded tab: a toast or a pause proves nothing about what the dashboard kept. */
+async function holdsText(page: Page, field: Field, text: string): Promise<boolean> {
+  await openTab(page, field.tab);
+  const value = await page.getByLabel(field.label, { exact: true }).inputValue();
+  const same = value === text;
+  console.log(`${same ? 'same   ' : 'DIFFERS'} ${field.label} (${[...value].length} chars)`);
+  return same;
+}
+
+/** Puts each field that does not hold its text, reads all of them back, and repeats (`fillUntilKept`). Returns the labels still not kept. */
+export async function fill(page: Page): Promise<string[]> {
+  const texts = await listingTexts();
+  const unkept = await fillUntilKept(FIELDS, {
+    put: (field) => putField(page, field, texts[field.text]),
+    kept: (field) => holdsText(page, field, texts[field.text]),
+  });
+  return unkept.map((field) => field.label);
+}
+
+/** Read-only. Returns how many fields differ from the listing document. */
+export async function check(page: Page): Promise<number> {
   const texts = await listingTexts();
   let differs = 0;
-  for (const tab of ['listing', 'privacy'] as const) {
-    await openTab(page, tab);
-    for (const field of FIELDS.filter((f) => f.tab === tab)) {
-      const value = await page.getByLabel(field.label, { exact: true }).inputValue();
-      const same = value === texts[field.text];
-      if (!same) differs += 1;
-      console.log(`${same ? 'same' : 'DIFFERS'}  ${field.label} (${[...value].length} chars)`);
-    }
-  }
-  if (differs > 0) process.exitCode = 1;
+  for (const field of FIELDS) if (!(await holdsText(page, field, texts[field.text]))) differs += 1;
+  return differs;
 }
 
 async function blockers(page: Page): Promise<void> {
@@ -195,15 +213,22 @@ async function main(): Promise<void> {
   const port = Number(values.port);
   if (command === 'launch') return launch(values.chrome, values.profile, port);
 
-  const deadline = setTimeout(() => { console.error('timed out after 180 s'); process.exit(2); }, 180_000);
+  const deadline = setTimeout(() => { console.error('timed out after 300 s'); process.exit(2); }, 300_000);
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${port}`);
   try {
     if (command === 'close') return await close(browser, values.profile);
     const page = await dashboardPage(browser);
     if (command === 'status') await status(page);
     else if (command === 'upload' && arg) await upload(page, path.resolve(arg));
-    else if (command === 'fill') await fill(page);
-    else if (command === 'check') await check(page);
+    else if (command === 'fill') {
+      const unkept = await fill(page);
+      if (unkept.length > 0) {
+        console.error(`not kept after ${FILL_ROUNDS} rounds: ${unkept.join(', ')}`);
+        process.exitCode = 1;
+      }
+    } else if (command === 'check') {
+      if ((await check(page)) > 0) process.exitCode = 1;
+    }
     else if (command === 'blockers') await blockers(page);
     else throw new Error('usage: cws-dashboard.ts launch|status|upload <zip>|fill|check|blockers|close');
   } finally {
