@@ -27,7 +27,7 @@ interface StandIn {
   saves: number;
 }
 
-async function standIn(page: Page, options: { ignoring?: string } = {}): Promise<StandIn> {
+async function standIn(page: Page, options: { ignoring?: string; savedToast?: boolean } = {}): Promise<StandIn> {
   const state: StandIn = { server: Object.fromEntries(LABELS.map((l) => [l, `old text of ${l}`])), saves: 0 };
   let inFlight = 0;
   const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
@@ -37,6 +37,7 @@ async function standIn(page: Page, options: { ignoring?: string } = {}): Promise
 ${TABS[tab].map((label, i) => `<label for="f${i}">${label}</label><textarea id="f${i}" data-label="${label}">${escape(state.server[label]!)}</textarea>`).join('\n')}
 <script>
   const toast = document.getElementById('toast'), button = document.getElementById('save');
+  const SAVED = ${JSON.stringify(options.savedToast === false ? '' : 'アイテムが保存されました。')};
   let saving = 0;
   async function save() {
     saving += 1; button.disabled = true; toast.textContent = 'アイテムを保存しています…';
@@ -45,7 +46,7 @@ ${TABS[tab].map((label, i) => `<label for="f${i}">${label}</label><textarea id="
     const stored = await (await fetch('/__save', { method: 'POST', body: JSON.stringify(sent) })).json();
     for (const t of document.querySelectorAll('textarea')) t.value = stored[t.dataset.label];
     saving -= 1;
-    if (saving === 0) { button.disabled = false; toast.textContent = 'アイテムが保存されました。'; setTimeout(() => { if (saving === 0) toast.textContent = ''; }, 800); }
+    if (saving === 0) { button.disabled = false; toast.textContent = SAVED; setTimeout(() => { if (saving === 0) toast.textContent = ''; }, 800); }
   }
   for (const t of document.querySelectorAll('textarea')) t.addEventListener('blur', save);
   button.addEventListener('click', save);
@@ -112,4 +113,11 @@ test('fill names a field the dashboard never keeps, after a bounded number of ro
   expect(state.server['説明']).toBe(want['説明']);
   // Every field is put once and the one that never sticks once more for each further round; a put saves at most twice (on losing focus, then the button).
   expect(state.saves).toBeLessThanOrEqual((4 + (FILL_ROUNDS - 1)) * 2);
+});
+
+test('fill does not depend on a "saved" toast, which is gone again before it is looked for', async ({ page }) => {
+  // A wait for the toast hung for 30 s in CI when it was wiped within a few milliseconds (the autosave 60 ms slower than the press's save).
+  const state = await standIn(page, { savedToast: false });
+  expect(await fill(page)).toEqual([]);
+  expect(state.server).toEqual(WANT_OF(await wanted()));
 });

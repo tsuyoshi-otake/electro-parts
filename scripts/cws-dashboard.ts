@@ -115,7 +115,10 @@ async function saveDraft(page: Page): Promise<void> {
   const enabled = await expect(button).toBeEnabled({ timeout: 10_000 }).then(() => true, () => false);
   if (enabled) {
     await press(page, '下書きとして保存する');
-    await page.getByText('アイテムが保存されました。').first().waitFor({ timeout: 30_000 });
+    // The save has started once SAVING is on screen. The "saved" toast is not waited for: it is on screen only for a moment
+    // and a wait that misses it fails the whole run after 30 s (CI 2026-11-09, a stand-in toast wiped almost at once).
+    // What the dashboard kept is read back anyway; a press that started nothing leaves SAVING off screen and the field unkept.
+    await page.getByText(SAVING).first().waitFor({ timeout: 3_000 }).catch(() => undefined);
   }
   await page.getByText(SAVING).first().waitFor({ state: 'hidden', timeout: 30_000 });
 }
