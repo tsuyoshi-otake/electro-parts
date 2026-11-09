@@ -122,6 +122,17 @@ jobs:
           echo "file=$file" >> "$GITHUB_OUTPUT"
           echo "::notice title=Re-importing::$file (from run $RUN_ID; no crawl)"
 
+      # What the Akizuki crawl learned in its last full run: which listing shows
+      # which product (ADR-0032). It is a cache in the strict sense. Losing it
+      # (evicted after 7 days without a run, a manual run on another branch)
+      # only makes the next Akizuki run read every listing, as it did before.
+      - name: Restore the Akizuki cover source
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: state/work/carry
+          key: akizuki-cover-${{ github.run_id }}
+          restore-keys: akizuki-cover-
+
       - name: Run the pipeline for every store
         id: pipeline
         env:
@@ -184,6 +195,15 @@ jobs:
             fi
           done
           echo "failed_stores=${failed# }" >> "$GITHUB_OUTPUT"
+
+      # Written by a complete full run only; a cover run leaves the file as it
+      # found it, so its age keeps counting from that full run.
+      - name: Save the Akizuki cover source
+        if: always() && hashFiles('state/work/carry/*') != ''
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: state/work/carry
+          key: akizuki-cover-${{ github.run_id }}-${{ github.run_attempt }}
 
       # A store that failed before it wrote anything leaves no dataset in the
       # site, and the deployment replaces the site wholesale — so publishing as

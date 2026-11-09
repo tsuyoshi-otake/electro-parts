@@ -72,8 +72,8 @@ describe('Akizuki crawl against a fake site', () => {
     expect(snap.requests).toEqual({ logicalPages: 7, httpAttemptsIncludingRetries: 7, successfulResponses: 7, intervalMs: 0 });
     expect(snap.validation).toEqual({ listingMismatches: 0, errors: [], warnings: [] });
     expect(snap.listings).toEqual([
-      { kind: 'c', slug: 'ckit', name: '組立キット', url: `${BASE}/catalog/c/ckit/`, listedTotal: 25, truncated: false, totalPages: 3, successfulPages: 3, failedPages: 0, extractedOccurrences: 25, matchesListedTotal: true },
-      { kind: 'c', slug: 'csensor', name: 'センサー', url: `${BASE}/catalog/c/csensor/`, listedTotal: 14, truncated: false, totalPages: 2, successfulPages: 2, failedPages: 0, extractedOccurrences: 14, matchesListedTotal: true },
+      { kind: 'c', slug: 'ckit', name: '組立キット', url: `${BASE}/catalog/c/ckit/`, listedTotal: 25, truncated: false, totalPages: 3, successfulPages: 3, failedPages: 0, extractedOccurrences: 25, matchesListedTotal: true, layout: 'card' },
+      { kind: 'c', slug: 'csensor', name: 'センサー', url: `${BASE}/catalog/c/csensor/`, listedTotal: 14, truncated: false, totalPages: 2, successfulPages: 2, failedPages: 0, extractedOccurrences: 14, matchesListedTotal: true, layout: 'card' },
     ]);
 
     const first = snap.items.find((i) => i.salesCode === '100001')!;

@@ -210,6 +210,9 @@ function listingKey(url: unknown): string | null {
  * instead of thousands of products appearing out of nowhere.
  */
 export function akizukiCoverageId(raw: AkizukiRawSnapshot): string {
+  // A cover run reads a subset of the listings but covers the same catalogue,
+  // so it names the families it claims, not the families of the slugs it read.
+  if (raw.schemaVersion === 3 && raw.crawl !== undefined) return `sitemap:${[...new Set(raw.crawl.families)].sort().join('+')}`;
   const legacy = (raw as unknown as { genres?: { url: string }[] }).genres;
   const listings = (raw.listings ?? legacy ?? []) as { url: string }[];
   const keys = listings.map((l) => listingKey(l.url)).filter((k): k is string => k !== null);

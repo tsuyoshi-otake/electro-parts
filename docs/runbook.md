@@ -90,6 +90,45 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 3. `site/` を Pages にデプロイする。Actions の workflow_dispatch にはロールバック入力がないので、手動でブランチに成果物を置く代わりに、**新しい workflow を一時的に作らず**、ローカルの `site/` を `actions/upload-pages-artifact` 相当の手順でアップロードする方法を推奨する(`gh api` は使わない。`actions/deploy-pages` はワークフローからしか動かないため、実際には「ロールバック用の workflow_dispatch を追加する」小さな変更をコミットするのが現実的)。
 4. その後の run は公開された(戻した)状態を前回状態として続く。
 
+## 秋月の cover クロール
+
+秋月は週 1 回だけ全一覧を読み(full)、ほかの日は前回の full の結果から選んだ一覧だけを読む(cover)。仕組みと判断は ADR-0032(Issue #93)。
+
+### いつ full になるか
+
+- 前回の full から 7 日(− 6 時間)以上たった日。毎朝 05:00 JST の run が数時間ずれても、ちょうど 7 日後に full になる。
+- 記録(キャッシュ)が無い・読めない日。導入した日、Actions のキャッシュが 7 日使われず破棄された日、別ブランチで手動実行した日。
+- 選んだ一覧がサイトマップから消えた日、系統が `c+r` から変わった日。
+- cover の途中で多く欠けた日(escalate)。
+
+迷ったら full になる。full は従来と同じで、約 90 分かかる。
+
+### どちらの日だったかを見る
+
+1. Actions の run ログで `[crawl] full run: …` または `[crawl] cover run: …` を探す。後ろに理由が付く。
+2. 生スナップショットの `crawl` ブロック(`mode`、`reason`、`sourceBuiltAt`、`plannedListings`、`repairListings`、`missingAfterRepair`、`escalated`)。cover を設定したときだけ出る。
+3. レポートの指標: `coverRun`(cover の日は 1)、`plannedListings`、`repairListings`、`missingAfterRepair`、`escalated`。
+
+### 確認項目(導入後の最初の run で)
+
+- 初日は full で、ログに `[crawl] cover source written: N listings, M products` が出る。`layout` が付いた一覧の数と、カード形式 / 表形式の割合は生スナップショットの `listings[].layout` で見る。
+- 2 日目は `[crawl] cover run:` で、`plannedListings` が約 600 前後、秋月の所要時間が約 30 分。想定より大きいなら表形式の一覧が多い(ADR-0032 の見積もりは上限側)。
+- cover の日の商品数が full の日と大きく違わない(sanity しきい値は従来どおり)。`missingAfterRepair` が毎日 10 件を超えるなら、計画の一覧がサイトの変化に追いついていないので、`fullCrawlEveryDays` を短くするか下の戻し方を使う。
+- 7 日目前後に `the last full run was … days ago` の理由で full に戻る。
+
+### 戻す・止める
+
+- **cover を止める**: `config/akizuki.json` の `collector.cover` を消してコミットする。翌日から毎日 full で、`crawl` ブロックも出ない。
+- **毎日 full のまま記録だけ残す**: `fullCrawlEveryDays` を `1` にする。
+- **今日だけ full にする**: Actions のキャッシュ一覧で `akizuki-cover-` で始まるものをすべて削除して手動実行する(復元は一番新しいものを選ぶので、1 件だけ消しても古い記録が戻る)。記録が無いので full になり、新しい記録が書かれる。
+- 記録が壊れていても run は失敗しない。ログに `cover source ignored: …` が出て、その日は full になる。
+
+### 注意
+
+- 記録は `state/work/carry/akizuki-cover.json.gz`。公開データ・履歴 DB・状態バックアップには入らない。消してよい。
+- 新商品が計画に入っていない一覧にしか載らないと、次の full まで見えない(最大 7 日)。サイトマップに現れた新商品は `catalog.unlisted` の警告に出る。
+- cover の日の `sourceListings` などの一覧内位置は full と違う。履歴・公開データには使われていない。
+
 ## 失敗(failed)が出たら
 
 - 前回状態の取得失敗(`previous_state`): Pages が落ちている、または初回で `bootstrap` を忘れている。Pages の URL に `state/state.json` があるか確認。
@@ -105,7 +144,7 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 - **1 店舗の観測を止める**(サイト閉鎖など、再開の見込みがない場合): `config/<store>.json` の `observation.cadence` を `"stopped"` にしてコミットする。schedule も `stores` 空の手動実行もその店舗を観測せず、毎回 `--republish` で公開済み履歴から再生成する。パイプライン自体も、`--republish` 以外(クロール・`--snapshot`・`--bootstrap`)と `crawl` コマンドを拒否する(終了コード 1)。マニフェストから `samplingIntervalDays` と観測間隔の注意書きが消え、観測期間(最初〜最後の観測日と回数)は残る。反映は次の run か `republish=true` の手動実行(ADR-0029)。
 - 店舗の頻度は `config/<store>.json` の `observation.cadence` (`daily` / `weekly` / `monthly` / `stopped`)で指定する。**注意書きは cadence から決まるので、手で直さない。** 現在の workflow が持つ cron は毎日 1 本だけ。周期を追加する際は cron・`scripts/observed-stores.ts`・`tests/integration/observation-cadence.test.ts` も変更する。
 - 新しい周期を足す: `src/publisher/contract.ts`(`ObservationCadence` と省略可能な観測間隔フィールド。旧版が未知のcaveatキーを拒否することに注意)、`userscript/core/format.ts`(利用者に見える文言)、workflow の cron と選択ロジック、そして上のテストを一緒に更新する(ADR-0016)。
-- 毎日化後もアクセス間隔・ジッター・再試行上限は維持する。秋月の HTML 巡回は 1 run 約 2,700 リクエスト・約 85 分。全店舗を順に回す 1 run は約 2 時間 55 分(2026-11-07 の run、ジョブの上限は 240 分)。毎日化で 1 日の観測量は隔日のときの 2 倍になるが、1 run の長さは変わらない。公開データとは別に、90日保存するスナップショットと状態バックアップの Actions artifact 容量をジョブごとに確認する。
+- 毎日化後もアクセス間隔・ジッター・再試行上限は維持する。秋月の HTML 巡回は、全一覧の日(週 1 回)が約 2,700 リクエスト・約 85 分、ほかの日は約 900 リクエスト・約 30 分(ADR-0032、実測は導入後に確認)。全店舗を順に回す 1 run は約 2 時間 55 分(2026-11-07 の run、ジョブの上限は 240 分)。毎日化で 1 日の観測量は隔日のときの 2 倍になるが、1 run の長さは変わらない。公開データとは別に、90日保存するスナップショットと状態バックアップの Actions artifact 容量をジョブごとに確認する。
 
 ## サイト運営者から連絡があった場合
 
