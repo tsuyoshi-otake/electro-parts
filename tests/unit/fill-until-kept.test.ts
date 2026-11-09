@@ -59,6 +59,17 @@ describe('fillUntilKept', () => {
     expect([...d.puts]).toEqual([['description', 1], ['purpose', 2], ['storage', 1], ['host', 1]]);
   });
 
+  it('reads back a field that was already kept too, because another field\'s save can undo it', async () => {
+    // `description` holds its text at the start and is not put; saving `purpose` the first time puts it back to the old text.
+    const d = dashboard({ description: true, purpose: false, storage: true, host: true }, (field, held, n) => {
+      held[field] = true;
+      if (field === 'purpose' && n === 1) held.description = false;
+    });
+    expect(await fillUntilKept(FIELDS, d.io)).toEqual([]);
+    expect([...d.puts]).toEqual([['purpose', 1], ['description', 1]]);
+    expect(d.held).toEqual({ description: true, purpose: true, storage: true, host: true });
+  });
+
   it('gives up after the rounds it was given and names what is still not kept', async () => {
     const d = dashboard(allStale(), (field, held) => { if (field !== 'storage') held[field] = true; });
     expect(await fillUntilKept(FIELDS, d.io)).toEqual(['storage']);
