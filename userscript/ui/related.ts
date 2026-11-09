@@ -6,7 +6,8 @@ import type { YenConverter } from './yen.ts';
 export const RELATED_CSS = `
 .eph .comparison-heading { margin: 0 0 8px; font-size: 12px; font-weight: 700; }
 .eph .stats-col { min-width: 0; }
-.eph .store-prices { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 14px 20px; margin-top: 12px; }
+/* One column rule for both card lists, so the related cards wrap exactly like the store prices. */
+.eph .store-prices, .eph .related-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 14px 20px; margin-top: 12px; }
 .eph .store-price, .eph .store-prices > .current-price { min-width: 0; border-top: 1px solid var(--line); padding-top: 10px; overflow-wrap: anywhere; }
 .eph .store-price > a { display: block; font-size: 12px; line-height: 1.5; margin-bottom: 6px; }
 .eph .store-price .related-meta, .eph .store-price .comparison-note { line-height: 1.5; }
@@ -14,13 +15,14 @@ export const RELATED_CSS = `
 .eph .store-order { margin-top: 12px; }
 .eph .store-prices-more { margin-top: 8px; }
 .eph .store-prices-more > .store-prices { margin-top: 4px; }
+.eph .related-more { margin-top: 8px; }
+.eph .related-more > .related-cards { margin-top: 4px; }
 .eph .store-price .badge.cheapest { display: inline-block; margin: 0 0 4px; }
 .eph .related-name { font-size: 12px; overflow-wrap: anywhere; }
 .eph .related-meta, .eph .comparison-note { font-size: 12px; color: var(--muted); }
 .eph .comparison-difference { font-size: 12px; margin: 6px 0; font-variant-numeric: tabular-nums; }
 .eph .related-section { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
-.eph .related-card { padding: 8px 0; min-width: 0; }
-.eph .related-card + .related-card { border-top: 1px solid var(--line-soft); }
+.eph .related-card { min-width: 0; border-top: 1px solid var(--line); padding-top: 10px; overflow-wrap: anywhere; }
 .eph .related-card ul { margin: 4px 0; padding-left: 18px; }
 .eph .related-title { font-size: 12px; font-weight: 700; overflow-wrap: anywhere; }
 .eph .related-card .related-name { margin: 2px 0; }
@@ -129,6 +131,9 @@ function price(doc: Document, parent: HTMLElement, entry: RelatedEntry, yen: Yen
 /** Rows shown before the fold; the rest stay one click away. */
 export const VISIBLE_STORE_PRICES = 3;
 
+/** Cards shown before the fold in each related group (類似商品 and the other candidate groups); the rest stay one click away. */
+export const VISIBLE_RELATED_CARDS = 3;
+
 function storePriceRow(doc: Document, current: ProductFileV1, segment: SegmentV1, entry: RelatedEntry, label: (id: string) => string, ownFresh: boolean, cheapest: boolean, yen: YenConverter | undefined): HTMLElement {
   const row = node(doc, 'div', '', 'store-price'); row.dataset['relationId'] = entry.relation.id;
   row.appendChild(node(doc, 'div', label(entry.target.storeId), 'comparison-heading'));
@@ -200,7 +205,24 @@ function offerRow(doc: Document, entry: RelatedEntry, label: (id: string) => str
   row.append(store, body); return row;
 }
 
-/** Unconfirmed identity and alternatives never enter the normal price chart. */
+function relatedCard(doc: Document, key: string, members: readonly RelatedEntry[], label: (id: string) => string, yen: YenConverter | undefined): HTMLElement {
+  const card = node(doc, 'div', '', 'related-card');
+  const first = members[0]!;
+  if (key === 'similar') {
+    card.appendChild(node(doc, 'div', members.reduce((name, e) => e.target.name.length < name.length ? e.target.name : name, first.target.name), 'related-title'));
+    // Generated feature differences have an explicit ordered pair. Reverse
+    // them on the other store; free-text legacy evidence keeps its wording.
+    for (const difference of first.relation.differences) card.appendChild(node(doc, 'p', directedDifference(difference, first.sourceIndex), 'related-name'));
+  }
+  card.appendChild(node(doc, 'div', `参考記録価格（販売条件を要確認）${members.some((e) => e.state.kind === 'reference_only') ? '。通信量を抑えるため履歴の自動取得は上位候補のみで、価格のない店舗は商品リンクで確認できます。' : ''}`, 'related-meta'));
+  for (const entry of members) card.appendChild(offerRow(doc, entry, label, yen));
+  return card;
+}
+
+/**
+ * Unconfirmed identity and alternatives never enter the normal price chart. Each group lays its cards
+ * out like the store prices: the first few (closest first) in one wrapping grid, the rest folded.
+ */
 export function renderRelatedGroups(doc: Document, parent: HTMLElement, entries: readonly RelatedEntry[], label: (id: string) => string, yen?: YenConverter): void {
   for (const [key, title, matches] of [
     ['same', '同一商品候補', (e: RelatedEntry) => e.relation.kind === 'same_product' && e.relation.reviewStatus !== 'verified'],
@@ -211,19 +233,16 @@ export function renderRelatedGroups(doc: Document, parent: HTMLElement, entries:
     const cards = key === 'similar' ? variantGroups(group) : group.map((entry) => [entry]);
     const section = details(doc, `${title} (${cards.length < group.length ? `${group.length}件・${cards.length}種類` : group.length})`, `group-${key}`); section.className = 'related-section';
     section.open = key === 'similar';
-    if (key === 'similar') section.appendChild(node(doc, 'p', '用途・機能が近い商品を、確認した差分が少ない順に表示します。互換性や置き換え可能性は保証しません。差分は閲覧中の商品 → 他店の商品です。差分が同じ商品は1枚にまとめ、店舗ごとに表示します。', 'related-meta'));
-    for (const members of cards) {
-      const card = node(doc, 'div', '', 'related-card');
-      const first = members[0]!;
-      if (key === 'similar') {
-        card.appendChild(node(doc, 'div', members.reduce((name, e) => e.target.name.length < name.length ? e.target.name : name, first.target.name), 'related-title'));
-        // Generated feature differences have an explicit ordered pair. Reverse
-        // them on the other store; free-text legacy evidence keeps its wording.
-        for (const difference of first.relation.differences) card.appendChild(node(doc, 'p', directedDifference(difference, first.sourceIndex), 'related-name'));
-      }
-      card.appendChild(node(doc, 'div', `参考記録価格（販売条件を要確認）${members.some((e) => e.state.kind === 'reference_only') ? '。通信量を抑えるため履歴の自動取得は上位候補のみで、価格のない店舗は商品リンクで確認できます。' : ''}`, 'related-meta'));
-      for (const entry of members) card.appendChild(offerRow(doc, entry, label, yen));
-      section.appendChild(card);
+    if (key === 'similar') section.appendChild(node(doc, 'p', `用途・機能が近い商品を、確認した差分が少ない順に表示します。互換性や置き換え可能性は保証しません。差分は閲覧中の商品 → 他店の商品です。差分が同じ商品は1枚にまとめ、店舗ごとに表示します。${cards.length > VISIBLE_RELATED_CARDS ? `近い順に上位${VISIBLE_RELATED_CARDS}種類を表示し、残りは折りたたんでいます。` : ''}`, 'related-meta'));
+    const grid = node(doc, 'div', '', 'related-cards');
+    for (const members of cards.slice(0, VISIBLE_RELATED_CARDS)) grid.appendChild(relatedCard(doc, key, members, label, yen));
+    section.appendChild(grid);
+    const rest = cards.slice(VISIBLE_RELATED_CARDS);
+    if (rest.length) {
+      const more = details(doc, `他の${title}（${rest.length}${key === 'similar' ? '種類' : '件'}）`, `related-more-${key}`); more.className = 'related-more';
+      const moreGrid = node(doc, 'div', '', 'related-cards');
+      for (const members of rest) moreGrid.appendChild(relatedCard(doc, key, members, label, yen));
+      more.appendChild(moreGrid); section.appendChild(more);
     }
     parent.appendChild(section);
   }
