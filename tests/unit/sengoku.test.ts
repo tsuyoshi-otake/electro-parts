@@ -5,7 +5,7 @@ import type { SengokuItem, SengokuSnapshot } from '../../src/adapters/sengoku/ra
 import {
   SENGOKU_CAPABILITIES, normalizeAvailability, normalizeSengokuItem, sengokuSnapshotAdapter, sengokuUnitLabel, validateSengokuRaw,
 } from '../../src/adapters/sengoku/snapshotAdapter.ts';
-import { sengokuCollectorConfig, sengokuListingUrl } from '../../src/collectors/sengoku/collector.ts';
+import { SENGOKU_REREAD_SETTLE_MS, sengokuCollectorConfig, sengokuListingUrl } from '../../src/collectors/sengoku/collector.ts';
 import { SengokuPageError, parseSengokuCategoryTree, parseSengokuListingPage, withoutDescriptions } from '../../src/collectors/sengoku/pages.ts';
 import { getStoreCollector } from '../../src/stores/collectorRegistry.ts';
 import { getStoreAdapter } from '../../src/stores/registry.ts';
@@ -179,6 +179,62 @@ describe('Sengoku collector', () => {
     const r = await collectSengokuFixture({ edit });
     expect(r.complete).toBe(false);
     expect(r.errors.join('\n')).toMatch(message);
+  });
+
+  describe('a listing whose total changes while it is being read (#88)', () => {
+    // The total of listing 3013 (two pages) reads 46 on the second page of the first pass only.
+    const changesOnce = () => {
+      let reads = 0;
+      return (url: string, body: string) => (url === LISTING(3013, 40) && (reads += 1) === 1 ? body.replace('(全45件)', '(全46件)') : body);
+    };
+    const changesAlways = (url: string, body: string) => (url === LISTING(3013, 40) ? body.replace('(全45件)', '(全46件)') : body);
+    const readsOf = (requests: string[], cid: number) => requests.filter((u) => u.includes(`search.php?cid=${cid}`));
+
+    it('reads that listing again from its first page and ends with the snapshot an undisturbed crawl gives', async () => {
+      const clean = await collectSengokuFixture();
+      const sleeps: number[] = [];
+      const r = await collectSengokuFixture({ edit: changesOnce(), sleeps });
+      expect(r.errors).toEqual([]);
+      expect(r.complete).toBe(true);
+      // Nothing of the discarded pass is kept: every product once per listing it is in, in the same order.
+      expect(r.raw).toEqual(clean.raw);
+      expect(readsOf(r.requests, 3013)).toEqual([LISTING(3013), LISTING(3013, 40), LISTING(3013), LISTING(3013, 40)]);
+      expect(r.warnings).toEqual(['listing 3013 (マイコン・半導体・LED): the listed total changed from 45 to 46 during the crawl; read again from its first page (pass 2 of 2)']);
+      expect(r.metrics).toMatchObject({ rereads: 1, listPages: 9, items: 120, listings: 5 });
+      // The re-read waits for the shop to settle first; random() is 0 here, so the wait is the base.
+      expect(sleeps.filter((ms) => ms >= SENGOKU_REREAD_SETTLE_MS)).toEqual([SENGOKU_REREAD_SETTLE_MS]);
+      expect(r.metrics['rereadWaitedMs']).toBe(SENGOKU_REREAD_SETTLE_MS);
+      expect(validateSengokuRaw(r.raw).errors).toEqual([]);
+    });
+
+    it.each([[1, 1], [2, 2], [3, 3]])('with %i pass(es) allowed, a listing that keeps changing is read %i time(s), then ends incomplete', async (passes, reads) => {
+      const r = await collectSengokuFixture({ edit: changesAlways, config: { maxListingPasses: passes } });
+      expect(r.complete).toBe(false);
+      expect(r.errors[0]).toMatch(/^Listing 3013 at 40: the listed total changed from 45 to 46 during the crawl/);
+      expect(readsOf(r.requests, 3013)).toHaveLength(reads * 2);
+      expect(r.metrics).toMatchObject({ rereads: reads - 1 });
+      expect(r.raw.items).toEqual([]);
+    });
+
+    it('keeps the settle wait growing with each further pass', async () => {
+      const sleeps: number[] = [];
+      await collectSengokuFixture({ edit: changesAlways, config: { maxListingPasses: 3 }, sleeps });
+      expect(sleeps.filter((ms) => ms >= SENGOKU_REREAD_SETTLE_MS)).toEqual([SENGOKU_REREAD_SETTLE_MS, SENGOKU_REREAD_SETTLE_MS * 2]);
+    });
+
+    it('does not re-read for the other refusals: a skipped row, a short page, a repeated product', async () => {
+      const skipped = await collectSengokuFixture({ edit: (url, body) => (url === LISTING(3013, 40) ? body.replace('41件～45件', '42件～45件') : body) });
+      expect(skipped.complete).toBe(false);
+      expect(readsOf(skipped.requests, 3013)).toHaveLength(2);
+      expect(skipped.metrics).toMatchObject({ rereads: 0 });
+    });
+
+    it('accepts one to four passes and refuses anything else', () => {
+      const base = { userAgent: 'electro-parts-test/1.0' };
+      expect(sengokuCollectorConfig(base)).toMatchObject({ maxListingPasses: 2 });
+      expect(sengokuCollectorConfig({ ...base, maxListingPasses: 4 })).toMatchObject({ maxListingPasses: 4 });
+      for (const bad of [0, 5, 1.5, '2']) expect(() => sengokuCollectorConfig({ ...base, maxListingPasses: bad }), String(bad)).toThrow(/maxListingPasses/);
+    });
   });
 
   it('ends incomplete when the shop refuses a page, without insisting', async () => {
