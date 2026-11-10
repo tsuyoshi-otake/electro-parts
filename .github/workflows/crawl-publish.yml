@@ -241,8 +241,10 @@ jobs:
 
       # Measured after the uploads, so it covers nearly the whole job.
       # JOB_LIMIT_MINUTES must equal this job's timeout-minutes (a test pins it).
+      # A job that failed before the checkout has no script to run: the step is
+      # skipped rather than adding a second error that hides the first (#110).
       - name: Run length against the limit
-        if: always()
+        if: always() && hashFiles('scripts/run-budget.ts') != ''
         env:
           JOB_LIMIT_MINUTES: 150
         run: node scripts/run-budget.ts
@@ -334,6 +336,11 @@ jobs:
         run: |
           set -uo pipefail
           failed=""
+          # The downloads above create these only when an artifact matched. With
+          # no snapshot in the whole run, `find` on a missing directory exits 1,
+          # and under `bash -e` with pipefail that ended the step at the
+          # assignment instead of marking the store as failed (#110).
+          mkdir -p snapshots collected
           for store in $STORES; do
             config="config/$store.json"
             if [ ! -f "$config" ]; then echo "::error::no config for store $store ($config)"; exit 1; fi
@@ -345,7 +352,7 @@ jobs:
                 if [ -n "${SNAPSHOT_FILE:-}" ]; then
                   file="$SNAPSHOT_FILE"
                 else
-                  file=$(find snapshots -type f -name "$store-*.json*" 2>/dev/null | sort | tail -1)
+                  file=$(find snapshots -type f -name "$store-*.json*" | sort | tail -1)
                 fi
                 if [ -z "$file" ]; then
                   failed="$failed $store"
@@ -354,7 +361,7 @@ jobs:
                 fi
                 if [ "${BOOTSTRAP:-false}" = "true" ]; then flags="$flags --bootstrap"; fi
                 flags="$flags --snapshot $file"
-                record=$(find collected -type f -name "collect-$store.json" 2>/dev/null | sort | tail -1)
+                record=$(find collected -type f -name "collect-$store.json" | sort | tail -1)
                 if [ -n "$record" ]; then flags="$flags --collect-record $record"; fi
                 ;;
               # Not observed this run: regenerate its dataset from the published
@@ -501,8 +508,10 @@ jobs:
 
       # Measured after the uploads, so it covers nearly the whole job.
       # JOB_LIMIT_MINUTES must equal this job's timeout-minutes (a test pins it).
+      # A job that failed before the checkout has no script to run: the step is
+      # skipped rather than adding a second error that hides the first (#110).
       - name: Run length against the limit
-        if: always()
+        if: always() && hashFiles('scripts/run-budget.ts') != ''
         env:
           JOB_LIMIT_MINUTES: 60
         run: node scripts/run-budget.ts

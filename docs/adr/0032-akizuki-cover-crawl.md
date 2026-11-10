@@ -78,4 +78,22 @@
 ## 検証
 
 - `tests/unit/akizuki-cover.test.ts`(計画・repair・full/cover の判定・記録の検証と直列化、性質テスト)、`tests/integration/akizuki-cover-crawl.test.ts`(偽サイトで full と cover が同じ結果になること、移動・消えた商品、escalate、失敗ページ、サイトマップから消えた一覧、古い記録、表形式の商品)、`tests/integration/akizuki-collector-cover.test.ts`(記録ファイルの読み書きと破損)、`tests/integration/akizuki-cover-pipeline.test.ts`(`runPipeline` を通して 2 日目が cover になり、`present = 0` の偽イベントが出ないこと)。
-- 実スナップショット 4 件での再生は上の表。形式の記録が付いた**実サイトでの最初の full と、翌日の cover** はまだ確かめていない(導入後の run で確認する。runbook の確認項目)。
+- 実スナップショット 4 件での再生は上の表。形式の記録が付いた実サイトでの最初の full は 2026-11-10 に確かめた(下の追記)。**翌日の cover はまだ確かめていない**(runbook の確認項目)。
+
+## 追記: 実サイトでの最初の full(2026-11-10)
+
+定期 run 42743844544(2026-11-10、cover の記録が無い初日)。ログは `[crawl] no cover source (ENOENT)` → full、`cover source written: 1756 listings, 12821 products`、キャッシュ `akizuki-cover-42743844544-1` を保存。生スナップショット(`akizuki-2026-11-10T04-06-13-601Z.json.gz`、`complete`)の `crawl` は `mode: full`、`reason: no cover source from an earlier full run`、`plannedListings: 1871`、`escalated: false`。収集は 5,411.7 秒、2,718 ページ、失敗ページ 0。
+
+`listings[].layout` の内訳(1,871 一覧、読んだ一覧ページ 2,711):
+
+| 形式 | 一覧 | ページ | ページの割合 | 載っていた商品(延べ) |
+|---|---|---|---|---|
+| card | 1,751 | 2,590 | 95.5% | 84,176 |
+| index(商品を載せない目次) | 115 | 115 | 4.2% | 0 |
+| table | 5 | 6 | 0.2% | 269 |
+
+- **表形式は 5 一覧・6 ページだけ**(`c/cantenna-`、`c/cbatbox`、`c/cdrivekit`、`c/cheatsink`、`c/cscrew`)。「表形式が多いと削減が小さくなる」という限界は、今のサイトではほぼ効かない。
+- 3,000 件で打ち切られる一覧は 2 つ(`c/c0`、`r/rparts`、どちらも card・50 ページ)。
+- このスナップショットから記録を組み直し(1,756 一覧・12,821 商品で、ログの件数と一致)、`planCover` に渡すと **561 一覧・821 ページ(2,711 の 30.3%)**。表形式の一覧は計画に入らず、打ち切りの一覧が 1 つ入る。保存済みスナップショットでの再生(596 一覧・857〜898 ページ、32〜33%。こちらは repair のページを含む)と同じ水準。これは手元での組み直しによる見込みで、ランナーが保存した記録そのものを読んだ値ではない(スクリプトと出力は `~/tmp/pc93-real/`)。
+- 翌日の run が実際に cover になり、`plannedListings` がこの前後になるかは、次の定期 run で確かめる。
+
