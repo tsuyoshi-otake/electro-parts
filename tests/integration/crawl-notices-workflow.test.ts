@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -94,10 +94,16 @@ describe('crawl notices: workflow wiring', () => {
       expect(steps[1], job).toContain('JOB_STARTED_AT=$(date +%s)');
     }
   });
-  it('runs the run-length step even after a failure', () => {
+  it('runs the run-length step even after a failure, and skips it when the checkout did not happen', () => {
     for (const job of ['collect', 'publish']) {
-      expect(jobBlock(job)).toMatch(/- name: Run length against the limit\n {8}if: always\(\)\n/);
+      expect(jobBlock(job)).toMatch(/- name: Run length against the limit\n {8}if: always\(\) && hashFiles\('scripts\/run-budget\.ts'\) != ''\n/);
     }
+  });
+  it('creates the snapshot and record directories before the loop that searches them', () => {
+    const step = pipelineStepRunText();
+    const mkdir = step.indexOf('mkdir -p snapshots collected');
+    expect(mkdir).toBeGreaterThan(-1);
+    expect(mkdir).toBeLessThan(step.indexOf('for store in $STORES; do'));
   });
   it('gives the alerts job exactly contents:read and issues:write, and no dependency install', () => {
     const block = jobBlock('alerts');
@@ -302,5 +308,134 @@ describe('crawl notices: run-budget.ts as the collect and publish jobs run it', 
     expect(run(budgetScript, [], { JOB_STARTED_AT: 'abc', JOB_LIMIT_MINUTES: '240' }).status).toBe(1);
     expect(run(budgetScript, [], { JOB_STARTED_AT: startedMinutesAgo(1), JOB_LIMIT_MINUTES: undefined }).status).toBe(1);
     expect(run(budgetScript, [], { JOB_STARTED_AT: startedMinutesAgo(1), JOB_LIMIT_MINUTES: '0' }).status).toBe(1);
+  });
+});
+
+/** The shell text of the publish job's import step, as written in the workflow (indentation removed). */
+function pipelineStepRunText(): string {
+  const step = jobBlock('publish')
+    .split(/^ {6}- name: /m)
+    .find((text) => text.startsWith('Run the pipeline for every store'));
+  if (step === undefined) throw new Error('no step "Run the pipeline for every store" in the publish job');
+  const body = /^ {8}run: \|\n((?: {10}.*\n|\n)+)/m.exec(step);
+  if (body === null) throw new Error('the pipeline step has no run block');
+  return (body[1] as string).replace(/^ {10}/gm, '');
+}
+
+/** Git Bash on Windows (a bare `bash` there can be the WSL launcher); plain `bash` elsewhere. */
+function findBash(): string | undefined {
+  if (process.platform !== 'win32') return 'bash';
+  return ['C:\\Program Files\\Git\\bin\\bash.exe', 'C:\\Program Files\\Git\\usr\\bin\\bash.exe'].find((candidate) => existsSync(candidate));
+}
+const bash = findBash();
+
+describe('crawl notices: the import step as the publish job runs it', () => {
+  const fakeNode = '#!/usr/bin/env bash\necho "$*" >> "$FAKE_NODE_LOG"\nmkdir -p site/state\necho {} > site/state/state.json\necho "fake node $*"\nexit "${FAKE_NODE_EXIT:-0}"\n';
+
+  interface Setup {
+    stores: string;
+    observe: string;
+    files?: string[];
+    configs?: string[];
+    nodeExit?: string;
+  }
+  function runStep(setup: Setup) {
+    const dir = tmp();
+    const work = path.join(dir, 'work');
+    mkdirSync(path.join(work, 'config'), { recursive: true });
+    for (const store of setup.configs ?? setup.stores.split(' ')) writeFileSync(path.join(work, 'config', `${store}.json`), '{}');
+    for (const file of setup.files ?? []) {
+      mkdirSync(path.dirname(path.join(work, file)), { recursive: true });
+      writeFileSync(path.join(work, file), '{}');
+    }
+    mkdirSync(path.join(dir, 'bin'));
+    writeFileSync(path.join(dir, 'bin', 'node'), fakeNode);
+    chmodSync(path.join(dir, 'bin', 'node'), 0o755);
+    const script = path.join(dir, 'step.sh');
+    writeFileSync(script, pipelineStepRunText());
+    const output = path.join(dir, 'github-output');
+    const log = path.join(dir, 'node.log');
+    writeFileSync(output, '');
+    writeFileSync(log, '');
+    const result = spawnSync(bash as string, ['--noprofile', '--norc', '-e', script], {
+      cwd: work,
+      env: {
+        ...process.env,
+        PATH: `${path.join(dir, 'bin')}${path.delimiter}${process.env.PATH ?? ''}`,
+        STORES: setup.stores,
+        OBSERVE: setup.observe,
+        BOOTSTRAP: 'false',
+        SNAPSHOT_FILE: '',
+        GITHUB_OUTPUT: output,
+        FAKE_NODE_LOG: log,
+        FAKE_NODE_EXIT: setup.nodeExit ?? '0',
+      },
+      encoding: 'utf8',
+      timeout: 30_000,
+    });
+    const calls = readFileSync(log, 'utf8').split('\n').filter((line) => line !== '');
+    return { result, output: readFileSync(output, 'utf8'), calls };
+  }
+
+  const noSnapshot = 'The collect job produced no snapshot; see its log.';
+  const snapshot = 'snapshots/alpha-2026-01-01T00-00-00-000Z.json.gz';
+  const betaSnapshot = 'snapshots/beta-2026-01-01T00-00-00-000Z.json.gz';
+
+  it.skipIf(bash === undefined).each([
+    ['the failed observed store first', 'alpha beta'],
+    ['the failed observed store last', 'beta alpha'],
+  ])('marks an observed store with no snapshot as failed and republishes the others, with no snapshots directory at all (#110): %s', (_name, stores) => {
+    const { result, output, calls } = runStep({ stores, observe: 'alpha' });
+    expect(result.error).toBeUndefined();
+    expect(result.status, result.stdout + result.stderr).toBe(0);
+    expect(output).toContain('failed_stores=alpha\n');
+    expect(result.stdout).toContain(`::error title=alpha failed::${noSnapshot}`);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]).toContain('config/beta.json');
+    expect(calls[0]).toContain('--republish');
+    expect(calls.join('\n')).not.toContain('alpha.json');
+  });
+  it.skipIf(bash === undefined)('imports the snapshot without a collect record when there is none', () => {
+    const { result, output, calls } = runStep({ stores: 'alpha', observe: 'alpha', files: [snapshot] });
+    expect(result.status, result.stdout + result.stderr).toBe(0);
+    expect(output).toBe('failed_stores=\n');
+    expect(calls).toHaveLength(1);
+    expect(calls[0]).toContain('config/alpha.json');
+    expect(calls[0]).toContain(`--snapshot ${snapshot}`);
+    expect(calls[0]).not.toContain('--collect-record');
+  });
+  it.skipIf(bash === undefined)('passes the collect record when there is one', () => {
+    const { result, calls } = runStep({ stores: 'alpha', observe: 'alpha', files: [snapshot, 'collected/collect-alpha.json'] });
+    expect(result.status, result.stdout + result.stderr).toBe(0);
+    expect(calls).toHaveLength(1);
+    expect(calls[0]).toContain(`--snapshot ${snapshot}`);
+    expect(calls[0]).toContain('--collect-record collected/collect-alpha.json');
+  });
+  it.skipIf(bash === undefined)('imports the newest of two snapshots of one store', () => {
+    const newest = 'snapshots/alpha-2026-02-01T00-00-00-000Z.json.gz';
+    const { result, calls } = runStep({ stores: 'alpha', observe: 'alpha', files: [newest, snapshot] });
+    expect(result.status, result.stdout + result.stderr).toBe(0);
+    expect(calls[0]).toContain(`--snapshot ${newest}`);
+    expect(calls[0]).not.toContain(snapshot);
+  });
+  it.skipIf(bash === undefined)('does not count a quarantine (exit 3) as failed', () => {
+    const { result, output, calls } = runStep({ stores: 'alpha beta', observe: 'alpha beta', files: [snapshot, betaSnapshot], nodeExit: '3' });
+    expect(result.status, result.stdout + result.stderr).toBe(0);
+    expect(output).toBe('failed_stores=\n');
+    expect(calls).toHaveLength(2);
+  });
+  it.skipIf(bash === undefined)('counts every other exit as failed and still attempts every store', () => {
+    const { result, output, calls } = runStep({ stores: 'alpha beta', observe: 'alpha beta', files: [snapshot, betaSnapshot], nodeExit: '1' });
+    expect(result.status, result.stdout + result.stderr).toBe(0);
+    expect(output).toBe('failed_stores=alpha beta\n');
+    expect(result.stdout).toContain('::error title=alpha failed::');
+    expect(result.stdout).toContain('::error title=beta failed::');
+    expect(calls).toHaveLength(2);
+  });
+  it.skipIf(bash === undefined)('exits 1 for a store without a config file', () => {
+    const { result, calls } = runStep({ stores: 'alpha', observe: 'alpha', configs: [] });
+    expect(result.status).toBe(1);
+    expect(result.stdout).toContain('::error::no config for store');
+    expect(calls).toHaveLength(0);
   });
 });
