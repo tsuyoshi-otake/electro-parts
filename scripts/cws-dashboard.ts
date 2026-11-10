@@ -26,6 +26,7 @@ import { homedir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
+import { closeProfile } from './lib/close-profile.ts';
 import { FILL_ROUNDS, fillUntilKept } from './lib/fill-until-kept.ts';
 import { readStoreListingTexts, STORE_LISTING_DOC, type StoreListingTexts } from './lib/store-listing.ts';
 
@@ -187,20 +188,20 @@ async function launch(chrome: string, profile: string, port: number): Promise<vo
   console.log(`Chrome started with ${profile}. Sign in to the dashboard in that window; nothing attaches until then.`);
 }
 
-async function close(browser: Browser, profile: string): Promise<void> {
-  const session = await browser.newBrowserCDPSession();
-  await session.send('Browser.close').catch(() => {});
-  // Chrome releases the profile shortly after it exits.
-  for (let attempt = 0; attempt < 10; attempt += 1) {
-    try {
-      await rm(profile, { recursive: true, force: true });
-      console.log(`closed; deleted ${profile}`);
-      return;
-    } catch {
-      await new Promise((r) => setTimeout(r, 1000));
-    }
-  }
-  throw new Error(`could not delete ${profile}; delete it once Chrome has exited`);
+/** Closes the dedicated Chrome if it still answers on the port, then deletes the signed-in profile either way (#118). */
+async function close(port: number, profile: string): Promise<void> {
+  const { browserClosed } = await closeProfile({
+    async closeBrowser() {
+      const browser = await chromium.connectOverCDP(`http://127.0.0.1:${port}`).catch(() => null);
+      if (browser === null) return false;
+      const session = await browser.newBrowserCDPSession();
+      await session.send('Browser.close').catch(() => {});
+      return true;
+    },
+    removeProfile: () => rm(profile, { recursive: true, force: true }),
+    wait: (ms) => new Promise((r) => setTimeout(r, ms)),
+  });
+  console.log(`${browserClosed ? 'closed' : 'no Chrome on the port (already closed)'}; deleted ${profile}`);
 }
 
 async function main(): Promise<void> {
@@ -217,9 +218,11 @@ async function main(): Promise<void> {
   if (command === 'launch') return launch(values.chrome, values.profile, port);
 
   const deadline = setTimeout(() => { console.error('timed out after 300 s'); process.exit(2); }, 300_000);
+  if (command === 'close') {
+    try { return await close(port, values.profile); } finally { clearTimeout(deadline); }
+  }
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${port}`);
   try {
-    if (command === 'close') return await close(browser, values.profile);
     const page = await dashboardPage(browser);
     if (command === 'status') await status(page);
     else if (command === 'upload' && arg) await upload(page, path.resolve(arg));
