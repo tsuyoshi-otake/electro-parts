@@ -71,3 +71,43 @@ ADR-0032 は「並列取得(案 A)」を、同時接続とリクエスト密度�
 - `tests/unit/collect-record.test.ts`、`tests/integration/collect-job.test.ts`: 記録の検証、`crawl` → `pipeline --snapshot --collect-record` が live の pipeline と同じレポートになること、店舗違い・SHA 違いの記録で失敗すること、不完全な収集が隔離され理由が Issue の判定に出ること、`crawl` が `carryDir` を渡すこと。
 - `tests/integration/crawl-notices-workflow.test.ts`、`tests/integration/observation-cadence.test.ts`: ジョブの依存・権限・上限と `JOB_LIMIT_MINUTES` の一致、matrix と成果物の名前、ワークフローに店舗名が無いこと。
 - 実ジョブでの確認は下の追記に記録する。
+
+## 追記: 実ジョブでの確認(2026-11-10)
+
+PR #107 のマージ前後に GitHub 上で確かめたこと。すべて `workflow_dispatch`。訓練はマージしない使い捨てブランチで行い、`dry_run=true` でデプロイと通知を止めた。
+
+| 確認 | run | 結果 |
+|---|---|---|
+| 1 店舗の dry run(マージ前のブランチ、`stores=pimoroni`) | 42755210529 | 成功。`plan` 12 秒、`Collect pimoroni` 47 秒(キャッシュなし、crawl 終了コード 0、成果物 2 つ、`run length: 1 min of 150`)、`publish` 53 秒。pattern 指定のダウンロードがスナップショットと記録を見つけ、`pipeline pimoroni --snapshot … --collect-record … --previous-dir site/state` の `collect` 段階に記録の 30.4 秒と指標が出た。ほかの店舗は `--republish` で `unchanged`。`deploy` と `alerts` は skipped |
+| 訓練 1: 収集ジョブをチェックアウト前に失敗させる(`stores=pimoroni`) | 42763450891 | **設計と違った。** `publish` はほかの 5 店舗を republish したあと、「Run the pipeline for every store」が終了コード 1 で止まった。店舗は `failed` と記録されず、サイトの生成と成果物のアップロードが飛ばされた。収集ジョブ側では run-length のステップが `MODULE_NOT_FOUND` で 2 つ目のエラーを出した(Issue #110) |
+| 訓練 2: 修正後に同じ訓練 | 42765293997 | 設計どおり。収集ジョブは訓練のステップだけが赤で、run-length は skipped。`publish` は 5 店舗が終了コード 0、Pimoroni に `The collect job produced no snapshot; see its log.` のエラー、「Restore stores the site is missing」が Pimoroni を公開済み履歴から復元、レポート・状態・Pages の成果物(16,913,289 バイト)をアップロード、`run length: 1 min of 60 (2 %)`、最後の「Fail the job when a store failed」が `stores that observed nothing: pimoroni` で赤。`deploy` と `alerts` は dry run のため skipped |
+| `republish=true`(main、0.7.9 の公開) | 42764947030 | 成功、1 分 55 秒。matrix が空で収集ジョブは skipped、`publish` → `deploy` と `alerts` が動いた |
+
+### 訓練 1 で見つかった不具合(#110、PR #111)
+
+- **原因**: スナップショットと記録を `file=$(find snapshots … | sort | tail -1)`、`record=$(find collected … | sort | tail -1)` で探していた。2 つのディレクトリは成果物のダウンロードが 1 件でも一致したときだけできる。1 件も無いと `find` が 1 で終わり、ステップのシェル(`bash -e`)と `pipefail` のもとでは代入の行でステップが終わる。スナップショットはあるが記録のディレクトリが無い場合も、1 行下で同じことが起きた。
+- **当たる日**: その run でスナップショットを上げた店舗が 1 つも無い日(1 店舗だけの手動実行でその収集が落ちた、全店舗の収集が落ちた)。1 店舗でも上げていればディレクトリがあるので、落ちた店舗は設計どおり扱われていた。
+- **影響**: Pages は前の版のまま残る(データは失われない)。ただし失敗の報告と `failed_stores` が出ず、ログには店舗名のない `exit code 1` だけが残る。
+- **修正**: ループの前に `mkdir -p snapshots collected`。`find` のエラー出力は捨てない。run-length のステップは、チェックアウトが済んでいないジョブでは動かさない(`hashFiles('scripts/run-budget.ts') != ''`)。
+- **テスト**: `tests/integration/crawl-notices-workflow.test.ts` が、このステップのシェル本文をワークフローから取り出し、偽の `node` を PATH に置いて `bash --noprofile --norc -e` で実際に走らせる(Windows は Git Bash)。このステップの errexit と pipefail が原因の不具合は #78 に続いて 2 回目で、文字列の一致だけでは防げなかった。修正前のワークフローでは 8 件が落ちる。
+- マージ前の dry run で見つからなかったのは、その 1 店舗が成果物を 2 つとも上げていてディレクトリがあったため。**成功する経路の dry run だけでは、失敗時の設計は確かめられない。**
+
+### 並列にしたあとの長さの見込み(直列だった最後の run から)
+
+2026-11-10 の定期 run(42743844544、まだ直列の版、2 時間 57 分 32 秒)の `collect` 段階の長さ:
+
+| 店舗 | 収集の長さ | 備考 |
+|---|---|---|
+| 秋月 | 5,411.7 秒(約 90 分) | cover の記録が無い初日なので full。2,718 ページ |
+| スイッチサイエンス | 2,418.6 秒(約 40 分) | 商品ページ 1,232 件を選び 1,227 件を読んだ |
+| せんごく | 1,386.7 秒(約 23 分) | 読み直し 0 |
+| M5Stack | 1,289.2 秒(約 21 分) | 在庫のない商品のページを省く変更(#104)の前 |
+| Pimoroni | 29.9 秒 | |
+
+合計は約 175.6 分。並列では最も長い店舗で決まるので、full の日は約 90 分 + 準備と取り込み、cover の日はスイッチサイエンスの約 40 分 + 準備と取り込みになる見込み。
+
+### まだ確かめていないこと
+
+- 全店舗を並列に収集する定期 run そのもの(最初は 2026-11-10T20:00Z の cron。起動は数時間遅れることがある)。そこで見るもの: 各収集ジョブの長さ、秋月が cover になること(`akizuki-cover-` のキャッシュが matrix のジョブで戻ること)、run 全体が 110 分以内、`### Run length`、`alerts` ジョブ。
+- 全店舗の収集が落ちた日。シェルのテストは「スナップショットが 1 件も無い run」を通すが、その日の残りのステップ(どの店舗も pipeline を動かさず `site/state` が無い)は実ジョブで動かしていない。読んだ限りでは `Check the site is complete` が `publishable=false` を出してデプロイせず、ジョブは最後に赤になる。
+- 同じ run の「Re-run failed jobs」(runbook で使わないことにしている)。

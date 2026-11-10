@@ -114,8 +114,8 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 
 ### 確認項目(導入後の最初の run で)
 
-- 初日は full で、ログに `[crawl] cover source written: N listings, M products` が出る。`layout` が付いた一覧の数と、カード形式 / 表形式の割合は生スナップショットの `listings[].layout` で見る。
-- 2 日目は `[crawl] cover run:` で、`plannedListings` が約 600 前後、秋月の所要時間が約 30 分。想定より大きいなら表形式の一覧が多い(ADR-0032 の見積もりは上限側)。
+- 初日は full で、ログに `[crawl] cover source written: N listings, M products` が出る。`layout` が付いた一覧の数と、カード形式 / 表形式の割合は生スナップショットの `listings[].layout` で見る。 **確認済み(2026-11-10、run 42743844544)**: 1,756 一覧・12,821 商品。card 1,751 一覧(ページの 95.5%)、table 5 一覧(0.2%)、商品を載せない index 115 一覧。
+- 2 日目は `[crawl] cover run:` で、`plannedListings` が 560 前後(2026-11-10 のスナップショットから組み直した計画は 561 一覧・821 ページ)、秋月の所要時間が約 30 分。**未確認**(最初の機会は 2026-11-10T20:00Z の定期 run)。
 - cover の日の商品数が full の日と大きく違わない(sanity しきい値は従来どおり)。`missingAfterRepair` が毎日 10 件を超えるなら、計画の一覧がサイトの変化に追いついていないので、`fullCrawlEveryDays` を短くするか下の戻し方を使う。
 - 7 日目前後に `the last full run was … days ago` の理由で full に戻る。
 
@@ -213,6 +213,7 @@ ADR-0034。run は次の順に進む。
 
   記録の店舗 ID かスナップショットの SHA-256 が合わなければ、`collect` 段階が失敗する(別の run の記録を取り違えたときに気づける)。`--collect-record` を省くと、従来の `--snapshot` と同じ動作になる。
 - 戻す: ワークフローを 1 つ前の版に戻す。`pipeline` の live 収集はそのまま残っているので、コードは戻さなくてよい。
+- 実ジョブで確かめた範囲(1 店舗の dry run、収集を落とす訓練、republish)と、まだ確かめていない範囲(全店舗を並列に収集する定期 run、全店舗の収集が落ちた日)は ADR-0034 の追記にある。失敗時の動きを変えたら、成功する経路の dry run だけでなく、収集ジョブを落とす訓練もやり直す(#110)。
 
 ## 頻度を変える / 止める
 
