@@ -48,8 +48,14 @@ export interface RelatedEntry {
   state: LoadState | { kind: 'reference_only' };
 }
 
-/** Per page, beyond the current product; all remaining relation links still render. */
+/** Per shown variant, beyond the current product; all remaining relation links still render. */
 export const MAX_RELATED_HISTORY_LOADS = 8;
+
+/**
+ * The ceiling of related loads one page view may start, over all variant selections. A product with many
+ * variants must not turn variant clicks into an unbounded number of requests (ADR-0017, Issue #114).
+ */
+export const MAX_RELATED_HISTORY_LOADS_PER_PAGE = 24;
 
 export const relationProductKey = (storeId: string, pageKey: string): string => JSON.stringify([storeId, pageKey]);
 
@@ -88,15 +94,35 @@ export function relatedEntries(relations: readonly ProductRelation[], storeId: s
   const ordered = [...relations].sort((a, b) => rank(a) - rank(b)
     || (a.similarity?.distance ?? a.differences.length) - (b.similarity?.distance ?? b.differences.length)
     || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
-  const loading = new Set<string>();
   return ordered.flatMap((relation): RelatedEntry[] => {
     const i = relation.products.findIndex((p) => relationProductKey(p.storeId, p.pageKey) === key);
     if (i !== 0 && i !== 1) return [];
     const target = relation.products[i === 0 ? 1 : 0];
-    const targetKey = relationProductKey(target.storeId, target.pageKey);
-    if (loading.size < MAX_RELATED_HISTORY_LOADS) loading.add(targetKey);
-    return [{ relation, sourceIndex: i, target, state: { kind: loading.has(targetKey) ? 'loading' : 'reference_only' } }];
+    return [{ relation, sourceIndex: i, target, state: { kind: 'reference_only' } }];
   });
+}
+
+/** The offer on screen: the selected one when the product has it, else the current offer. */
+export function shownOffer(product: ProductFileV1, selectedOfferId: string | undefined): OfferV1 | null {
+  return product.offers.find((offer) => offer.externalOfferId === selectedOfferId) ?? currentOffer(product);
+}
+
+/** The rows that belong to the offer on screen: a row whose own side names no offer always does; one that names an offer only for the equal id and sku. */
+export function entriesForOffer(entries: readonly RelatedEntry[], offer: OfferV1 | null): RelatedEntry[] {
+  return entries.filter((entry) => {
+    const named = entry.relation.products[entry.sourceIndex].offer;
+    return !named || (named.id === offer?.externalOfferId && named.sku === offer.sku);
+  });
+}
+
+/** Keys of the first MAX_RELATED_HISTORY_LOADS distinct targets of the shown rows, in their order. */
+export function historyTargets(shown: readonly RelatedEntry[]): string[] {
+  const keys = new Set<string>();
+  for (const entry of shown) {
+    if (keys.size >= MAX_RELATED_HISTORY_LOADS) break;
+    keys.add(relationProductKey(entry.target.storeId, entry.target.pageKey));
+  }
+  return [...keys];
 }
 
 function normalized(value: string): string {

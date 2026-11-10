@@ -6,7 +6,7 @@ import type { JpyRate } from '../core/exchangeRate.ts';
 import { availabilityLabel, basisLabel, caveatText, formatDate, formatDateTime, formatPercent, formatPriceValue, formatSignedMoney, formatStockCount } from '../core/format.ts';
 import { appliedCardFee, DEFAULT_PREFERENCES, type Preferences } from '../core/preferences.ts';
 import { buildStepChart, buildComparisonChart, buildInventoryChart, type ComparisonSeries, type InventorySeries } from './chart.ts';
-import { comparisonEligibility, currentOffer, primaryQuote, type RelatedEntry } from '../core/relations.ts';
+import { comparisonEligibility, entriesForOffer, primaryQuote, shownOffer, type RelatedEntry } from '../core/relations.ts';
 import { buildPeriodControls, buildSalesSummary, PERIOD_CSS, type SalesRow } from './periodView.ts';
 import { RELATED_CSS, renderRelatedGroups, renderStorePrices } from './related.ts';
 import { buildSettingsDialog, openSettingsDialog, SETTINGS_CSS } from './settings.ts';
@@ -552,7 +552,7 @@ function renderPanelContent(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   if (!product.product.listed) badge('最新の観測では未掲載', 'stale');
   head.appendChild(text(doc, 'span', '', 'spacer'));
 
-  const offer = product.offers.find((item) => item.externalOfferId === ctx.selectedOfferId) ?? currentOffer(product);
+  const offer = shownOffer(product, ctx.selectedOfferId);
   if (product.offers.length > 1 && ctx.onSelectOffer) {
     const select = doc.createElement('select');
     select.setAttribute('aria-label', 'バリエーション');
@@ -620,11 +620,7 @@ export function renderPanel(ctx: PanelContext, shadow: ShadowRoot, state: LoadSt
   ctx.cleanup?.(); delete ctx.cleanup;
   const allRelated = ctx.related;
   if (state.kind === 'ready') {
-    const offer = state.product.offers.find(o => o.externalOfferId === ctx.selectedOfferId) ?? currentOffer(state.product);
-    ctx.related = (allRelated ?? []).filter(entry => {
-      const selected = entry.relation.products[entry.sourceIndex].offer;
-      return !selected || (selected.id === offer?.externalOfferId && selected.sku === offer.sku);
-    });
+    ctx.related = entriesForOffer(allRelated ?? [], shownOffer(state.product, ctx.selectedOfferId));
   }
   try { renderPanelContent(ctx, shadow, state, selectedSegment, onSelectSegment); }
   finally { if (allRelated === undefined) delete ctx.related; else ctx.related = allRelated; }

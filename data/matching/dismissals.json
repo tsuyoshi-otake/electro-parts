@@ -713,5 +713,49 @@
     "evidence": "類似候補（共通語幹: C126）。スイッチサイエンス「ATOMS3R カメラキット(8MB PSRAM搭載)」とせんごく「【10008】ATOMS3R Ext プロトキット(8MB PSRAM搭載、液晶なし)　M5STACK-C126-EXT」。前者はカメラで撮影するカメラキット、後者は液晶なしでプロト基板を付けた開発キットで、ATOMS3R本体は共通でも主な用途が異なり、互いの代わりにならない。初回判定（Claude Sonnet 5.5）はATOMS3Rの4構成を1つの製品群としたが、統合確認（Claude Opus 5.5）でカメラキットと本体・プロトキットの2群に分けた。",
     "reviewedAt": "2026-11-02",
     "reviewerModel": "Claude Opus 5.5"
+  },
+  {
+    "products": [
+      "akizuki/113343",
+      "pimoroni/h-adafruit-radio-bonnet-rfm96w-433mhz-radiofruit"
+    ],
+    "fingerprint": "082bcdf992ab4710d2c76f7698c6dcc5056b65dff66ac943086577c6e198ce70",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: ADA4075）。秋月電子「2回路入ローノイズ低歪HiFiオペアンプ ADA4075-2」（型番ADA4075-2ARZ）はオペアンプのICで、Pimoroni「Adafruit Radio Bonnet RFM96W @ 433MHz - RadioFruit」（SKU ADA4075）のADA4075はAdafruitの商品番号4075で、無線ボンネットである。型番の語幹が偶然重なるだけの別種の商品のため代替品にならない。",
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Claude Fable 5.2"
+  },
+  {
+    "products": [
+      "akizuki/114518",
+      "pimoroni/h-adafruit-grand-central-m4-express-featuring-samd51-without-headers"
+    ],
+    "fingerprint": "5352b0aabb9a943ee6daa2297e4cb4530c692a1a0fbba9a4c1ca111f54e9e1d7",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: ADA4084）。秋月電子「高速低雑音オペアンプ ADA4084-1ARZ」はオペアンプのICで、Pimoroni「Adafruit Grand Central M4 Express featuring SAMD51 - Without Headers」（SKU ADA4084）のADA4084はAdafruitの商品番号4084で、Grand Central M4のボードである。型番の語幹が偶然重なるだけの別種の商品のため代替品にならない。",
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Claude Fable 5.2"
+  },
+  {
+    "products": [
+      "akizuki/114650",
+      "pimoroni/h-adafruit-grand-central-m4-express-featuring-samd51-without-headers"
+    ],
+    "fingerprint": "f944cf777f361a377d915c8cece59651cac233b0e0fa82c04cadc4e67e72371c",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: ADA4084）。秋月電子「高速低雑音オペアンプ ADA4084-2ARZ」はオペアンプのICで、Pimoroni「Adafruit Grand Central M4 Express featuring SAMD51 - Without Headers」（SKU ADA4084）のADA4084はAdafruitの商品番号4084で、Grand Central M4のボードである。型番の語幹が偶然重なるだけの別種の商品のため代替品にならない。",
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Claude Fable 5.2"
+  },
+  {
+    "products": [
+      "m5stack/h-triviapod",
+      "pimoroni/h-tinypico-esp32"
+    ],
+    "fingerprint": "244ce06eced42651db14b0caba918f09e9c0053b9d18c271a3f3618965fa2e04",
+    "decision": "different",
+    "evidence": "類似候補（共通語幹: TP-01）。M5Stack公式「TriviaPOD」（型番TP-01-A）とPimoroni「TinyPICO V3 - ESP32 Dev Board」（販売元Unexpected Maker、SKU TP-01）は、メーカーも商品も異なり、型番の語幹TP-01が重なるだけのため代替品にならない。",
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Claude Fable 5.2"
   }
 ]

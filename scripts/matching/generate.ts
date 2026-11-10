@@ -5,7 +5,7 @@ import { parseArgs } from 'node:util';
 import type { ProductRelation, RelationProduct } from '../../userscript/core/relations.ts';
 import { packRelations } from '../../userscript/core/relationTable.ts';
 import { assertCatalog, catalogStores, discover, discoverCatalog, fingerprint, hash, listingKey, normalizeCode, pairId, usefulCode, type Alias, type Catalog, type Dismissal, type ExtraKeys, type Family, type Listing, type Review } from './model.ts';
-import { importCatalogs, appendStore, applySupplements, derivedCodes, extraKeys, identityCodes, referenceKeys, snapshotListings } from './catalogs.ts';
+import { importCatalogs, appendStore, applySupplements, derivedCodes, extraKeys, referenceKeys, snapshotListings, variantCodes } from './catalogs.ts';
 import { proposeByName, proposeSimilar } from './names.ts';
 
 export function endpoint(p: Listing, offerId?: string | null): RelationProduct {
@@ -77,7 +77,7 @@ export function generate(catalog: Catalog, legacy: readonly ProductRelation[], r
     for (const [i, product] of candidate.products.entries()) {
       if (!product.variants) continue;
       const variant = product.variants.find(v => v.offerId === review.offerIds?.[i]);
-      if (!variant || !identityCodes(product.storeId, product.manufacturer, [variant.sku]).some(code => candidate.codes.includes(code))) {
+      if (!variant || !variantCodes(product, variant).some(code => candidate.codes.includes(code))) {
         throw new Error(`reviewed variant must match candidate code: ${review.id}`);
       }
     }

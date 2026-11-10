@@ -82,9 +82,10 @@
     "codes": [
       "SWITCH-SCIENCE/212",
       "SWITCH-SCIENCE/750",
-      "SWITCH-SCIENCE/8522"
+      "SWITCH-SCIENCE/8522",
+      "PIMORONI/H-ADAFRUIT-FEATHER-328P-ATMEGA328P-3-3V-8-MHZ"
     ],
-    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SWITCH-SCIENCE/212はスイッチサイエンス「Arduino Nano 3.0 (ATmega328P搭載)--販売終了」と商品名の共通語「ATMEGA328P」（名前の類似度0.306）、SWITCH-SCIENCE/750はスイッチサイエンス「Arduino Nano 3.1 (ATmega328P搭載)--販売終了」と商品名の共通語「ATMEGA328P」（名前の類似度0.306）、SWITCH-SCIENCE/8522はスイッチサイエンス「Atmega328P スケッチ書き込み装置治具」と商品名の共通語「ATMEGA328P」（名前の類似度0.203）。同一性は組ごとのレビューで判定する。",
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。SWITCH-SCIENCE/212はスイッチサイエンス「Arduino Nano 3.0 (ATmega328P搭載)--販売終了」と商品名の共通語「ATMEGA328P」（名前の類似度0.306）、SWITCH-SCIENCE/750はスイッチサイエンス「Arduino Nano 3.1 (ATmega328P搭載)--販売終了」と商品名の共通語「ATMEGA328P」（名前の類似度0.306）、SWITCH-SCIENCE/8522はスイッチサイエンス「Atmega328P スケッチ書き込み装置治具」と商品名の共通語「ATMEGA328P」（名前の類似度0.203）、PIMORONI/H-ADAFRUIT-FEATHER-328P-ATMEGA328P-3-3V-8-MHZはPimoroni「Adafruit Feather 328P - Atmega328P 3.3V @ 8 MHz」と商品名の共通語「ATMEGA328P」（名前の類似度0.255）。同一性は組ごとのレビューで判定する。",
     "reviewedAt": "2026-11-02"
   },
   {
@@ -442,9 +443,11 @@
     "codes": [
       "AKIZUKI/117257",
       "SWITCH-SCIENCE/5161",
-      "SWITCH-SCIENCE/9211"
+      "SWITCH-SCIENCE/9211",
+      "PIMORONI/H-ESP8266-SMT-MODULE-ESP-12",
+      "PIMORONI/H-SPARKFUN-WIFI-SHIELD-ESP8266"
     ],
-    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/117257は秋月電子「ESP8266開発用ボード ESP8266-DevKitS」と商品名の共通語「ESP8266」（名前の類似度0.208）、SWITCH-SCIENCE/5161はスイッチサイエンス「《お取り寄せ商品》WT8266-S1 WiFi Module Based on ESP8266」と商品名の共通語「ESP8266」（名前の類似度0.214）、SWITCH-SCIENCE/9211はスイッチサイエンス「半導体キーホルダー２（ESP8266）」と商品名の共通語「ESP8266」（名前の類似度0.227）。同一性は組ごとのレビューで判定する。",
+    "evidence": "名前ベース探索（0.6.5、#49）で見つけた組の探索キー。型番欄に型番がない。AKIZUKI/117257は秋月電子「ESP8266開発用ボード ESP8266-DevKitS」と商品名の共通語「ESP8266」（名前の類似度0.208）、SWITCH-SCIENCE/5161はスイッチサイエンス「《お取り寄せ商品》WT8266-S1 WiFi Module Based on ESP8266」と商品名の共通語「ESP8266」（名前の類似度0.214）、SWITCH-SCIENCE/9211はスイッチサイエンス「半導体キーホルダー２（ESP8266）」と商品名の共通語「ESP8266」（名前の類似度0.227）、PIMORONI/H-ESP8266-SMT-MODULE-ESP-12はPimoroni「ESP8266 SMT Module - ESP-12」と商品名の共通語「ESP8266」（名前の類似度0.213）、PIMORONI/H-SPARKFUN-WIFI-SHIELD-ESP8266はPimoroni「SparkFun WiFi Shield - ESP8266」と商品名の共通語「ESP8266」（名前の類似度0.431）。同一性は組ごとのレビューで判定する。",
     "reviewedAt": "2026-11-02"
   },
   {
@@ -1246,5 +1249,95 @@
     ],
     "evidence": "類似探索の同一性確認（0.6.8、#53）の探索キー。型番 M5STACK-A005-B と A005 は末尾だけが違い、末尾 -B の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
     "reviewedAt": "2026-11-02"
+  },
+  {
+    "key": "switch-science/5554",
+    "fingerprint": "b3d8574f9cfe496618037231bd0d8c96b17df67a9f4d854da148a8f8c70e70d5",
+    "codes": [
+      "PIMORONI/H-ADAFRUIT-FEATHER-NRF52-BLUEFRUIT-LE-NRF52832"
+    ],
+    "evidence": "名前ベース探索（0.7.10、#94）で見つけた組の探索キー。両方の行に型番があるが一致しない。PIMORONI/H-ADAFRUIT-FEATHER-NRF52-BLUEFRUIT-LE-NRF52832はPimoroni「Adafruit Feather nRF52 Bluefruit LE - nRF52832」と商品名の共通語「NRF52832」（名前の類似度0.255）。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
+  },
+  {
+    "key": "akizuki/115294",
+    "fingerprint": "36b830bfa342941be78fb7dfc6a5ae19a6af331e09f9e1e1d646d7569bdd90cb",
+    "codes": [
+      "SEN0305-S"
+    ],
+    "evidence": "類似探索の同一性確認（0.7.10、#94）の探索キー。型番 SEN0305 と Pimoroni の SEN0305-S は末尾だけが違い、末尾 -S の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
+  },
+  {
+    "key": "switch-science/6248",
+    "fingerprint": "451d7729c5b860a822c9c6104586235ecbee317333d0e44494e1eafd997dc33c",
+    "codes": [
+      "SEN0305-S"
+    ],
+    "evidence": "類似探索の同一性確認（0.7.10、#94）の探索キー。型番 SEN0305 と Pimoroni の SEN0305-S は末尾だけが違い、末尾 -S の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
+  },
+  {
+    "key": "switch-science/4199",
+    "fingerprint": "907fb671c415967db5cd71952257b25182d49e0f4c7e23cf6d6968b5e5989a16",
+    "codes": [
+      "DFR0119-O"
+    ],
+    "evidence": "類似探索の同一性確認（0.7.10、#94）の探索キー。型番 DFROBOT-DFR0119 と Pimoroni の DFR0119-O は店舗の接頭辞を除くと末尾だけが違い、末尾 -O の意味は名称にも他の項目にも示されない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
+  },
+  {
+    "key": "akizuki/130369",
+    "fingerprint": "8f33119c2f8a763590461c424d028b9ffbc062c44ea71aa008f617d572e52da5",
+    "codes": [
+      "SC1509-10"
+    ],
+    "evidence": "類似探索の同一性確認（0.7.10、#94）の探索キー。型番 SC1509 と Pimoroni の SC1509-10 は末尾だけが違い、末尾 -10 はPimoroniのvariant名「10x」から販売数量と読めるが、版（A2/A4）の別は型番欄にない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
+  },
+  {
+    "key": "ksy/1184",
+    "fingerprint": "e886bf969accd30af2b6133f08c10ed1319a2821b1001a099bf4d7dc4f53caa6",
+    "codes": [
+      "SC1509-10"
+    ],
+    "evidence": "類似探索の同一性確認（0.7.10、#94）の探索キー。型番 SC1509 と Pimoroni の SC1509-10 は末尾だけが違い、末尾 -10 はPimoroniのvariant名「10x」から販売数量と読めるが、版（A2/A4）の別は型番欄にない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
+  },
+  {
+    "key": "switch-science/10244",
+    "fingerprint": "1b6da53616c94114c57e0baea698954fcafa7776736c4d7f60ca161c6892c6fe",
+    "codes": [
+      "SC1509-10"
+    ],
+    "evidence": "類似探索の同一性確認（0.7.10、#94）の探索キー。型番 SC1509 と Pimoroni の SC1509-10 は末尾だけが違い、末尾 -10 はPimoroniのvariant名「10x」から販売数量と読めるが、版（A2/A4）の別は型番欄にない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
+  },
+  {
+    "key": "akizuki/130370",
+    "fingerprint": "fcf88da089f6966908ebd44f915413d2de14539e1f582994a0245dca2370ba3c",
+    "codes": [
+      "SC1510-10"
+    ],
+    "evidence": "類似探索の同一性確認（0.7.10、#94）の探索キー。型番 SC1510 と Pimoroni の SC1510-10 は末尾だけが違い、末尾 -10 はPimoroniのvariant名「10x」から販売数量と読めるが、版（A2/A4）の別は型番欄にない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
+  },
+  {
+    "key": "ksy/1185",
+    "fingerprint": "87046691cfaee84c7bb0bb21f970c78c3e0cc742b399c736f775fb4dc188bb83",
+    "codes": [
+      "SC1510-10"
+    ],
+    "evidence": "類似探索の同一性確認（0.7.10、#94）の探索キー。型番 SC1510 と Pimoroni の SC1510-10 は末尾だけが違い、末尾 -10 はPimoroniのvariant名「10x」から販売数量と読めるが、版（A2/A4）の別は型番欄にない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
+  },
+  {
+    "key": "switch-science/10247",
+    "fingerprint": "bebd03c4565a7ab3a63e925941e3f91c9a739ecc730ec19b641814ba5163b2bc",
+    "codes": [
+      "SC1510-10"
+    ],
+    "evidence": "類似探索の同一性確認（0.7.10、#94）の探索キー。型番 SC1510 と Pimoroni の SC1510-10 は末尾だけが違い、末尾 -10 はPimoroniのvariant名「10x」から販売数量と読めるが、版（A2/A4）の別は型番欄にない。同一性は組ごとのレビューで判定する。",
+    "reviewedAt": "2026-11-10"
   }
 ]

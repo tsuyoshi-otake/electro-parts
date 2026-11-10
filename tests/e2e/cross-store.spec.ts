@@ -8,8 +8,14 @@ import { sampleManifest, sampleProduct } from '../userscript/helpers.ts';
 const relation = PRODUCT_RELATIONS.find((r) => r.id === 'a117209-s6262')!;
 const panel = (page: Page) => page.locator('#electronics-price-history-root');
 
-/** Real production bundle/adapters/catalogue; synthetic observations, all network intercepted. */
-async function setup(page: Page, source: 0 | 1, failure = false, selected = relation, adjust?: (p: ReturnType<typeof sampleProduct>) => void) {
+/** The currency each shop's rows with a reviewed selling variant are recorded in: Pimoroni in GBP, the other such shop (M5Stack) in USD. */
+const offerCurrency = (storeId: string): string => storeId === 'pimoroni' ? 'GBP' : 'USD';
+
+/**
+ * Real production bundle/adapters/catalogue; synthetic observations, all network intercepted.
+ * `body` replaces the saved-page stand-in of the viewed store when its adapter needs more than the default markup.
+ */
+async function setup(page: Page, source: 0 | 1, failure = false, selected = relation, adjust?: (p: ReturnType<typeof sampleProduct>) => void, body?: string) {
   const requests: string[] = [];
   const currentRef = selected.products[source];
   const refs = new Map(PRODUCT_RELATIONS.filter(r => r.products.some(p => p.storeId === currentRef.storeId && p.pageKey === currentRef.pageKey))
@@ -22,7 +28,7 @@ async function setup(page: Page, source: 0 | 1, failure = false, selected = rela
     if (ref.offer) {
       p.offers[0]!.externalOfferId = ref.offer.id; p.offers[0]!.sku = ref.offer.sku;
       const s = p.offers[0]!.segments[0]!;
-      s.basis.currency = 'USD'; s.basis.taxTreatment = 'unknown';
+      s.basis.currency = offerCurrency(ref.storeId); s.basis.taxTreatment = 'unknown';
       s.stats.current = { state: 'exact', minAmountMinor: 750, maxAmountMinor: 750 };
     }
     if (i !== -1 && selected.pricePolicy) {
@@ -50,8 +56,8 @@ async function setup(page: Page, source: 0 | 1, failure = false, selected = rela
       return;
     }
     if (url === currentRef.url) {
-      const body = '<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Comparison fixture</title><style>body{margin:20px auto;padding:0 12px;max-width:1080px;font-family:system-ui}</style><h1>ATOM Lite — test fixture</h1><button>カートに入れる</button><div class="product--outer"></div><div class="pane-goods-center"></div></html>';
-      await route.fulfill({ status: 200, contentType: 'text/html', body }); return;
+      const html = body ?? '<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Comparison fixture</title><style>body{margin:20px auto;padding:0 12px;max-width:1080px;font-family:system-ui}</style><h1>ATOM Lite — test fixture</h1><button>カートに入れる</button><div class="product--outer"></div><div class="pane-goods-center"></div></html>';
+      await route.fulfill({ status: 200, contentType: 'text/html', body: html }); return;
     }
     requests.push(url);
     const manifest = url.includes('/manifest.json');
@@ -59,8 +65,8 @@ async function setup(page: Page, source: 0 | 1, failure = false, selected = rela
     if (!product || (failure && product.storeId !== currentRef.storeId)) {
       await route.fulfill({ status: 429, headers: { 'access-control-allow-origin': '*' }, body: 'fixture failure' }); return;
     }
-    const body = manifest ? sampleManifest({ storeId: product.storeId }) : product;
-    await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(body) });
+    const payload = manifest ? sampleManifest({ storeId: product.storeId }) : product;
+    await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify(payload) });
   });
   await page.addInitScript(() => {
     const mem = new Map();
@@ -109,12 +115,14 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(comparison.locator('.eph-readout')).not.toContainText('スイッチサイエンス');
   await page.mouse.move(1, 1);
   await expect(comparison.locator('.eph-readout-text')).toHaveCount(0);
-  // The same ATOM Lite at せんごく (0.6.1) is a third identity card, a reference price without arithmetic.
-  await expect(panel(page).locator('.store-price')).toHaveCount(3);
+  // The same ATOM Lite at せんごく (0.6.1) is a third identity card, a reference price without arithmetic; Pimoroni's C008 (0.7.10, #94) is a fourth.
+  await expect(panel(page).locator('.store-price')).toHaveCount(4);
   await expect(panel(page).locator(`.store-price[data-relation-id='${JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU'])}']`)).toContainText('せんごく');
   // #55: in stock and cheaper first; the USD official row goes after the yen stores; 最安 only on the approved pair.
   expect(await panel(page).locator('.store-price').evaluateAll(rows => rows.map(r => (r as HTMLElement).dataset['relationId']))).toEqual([
     'a117209-s6262', JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU']), expect.stringContaining('m5stack'),
+    // 0.7.10: Pimoroni records GBP, so like the USD official row it follows the yen stores; on equal recorded amounts the relation order decides.
+    JSON.stringify(['akizuki', '117209', 'pimoroni', 'h-atom-lite-esp32-development-kit']),
   ]);
   await expect(panel(page).locator('.store-price[data-relation-id="a117209-s6262"] .badge.cheapest')).toHaveText('最安（比較条件を確認した店舗の記録価格）');
   await expect(panel(page).locator('.badge.cheapest')).toHaveCount(1);
@@ -128,6 +136,16 @@ test('production bundle compares both directions and toggles a series with the k
   // The USD row reads in yen beside its recorded price; the rate note names the source.
   await expect(panel(page).locator('.store-price').nth(2).locator('.hero-value')).toHaveText('約 ￥1,125');
   await expect(panel(page).locator('.store-price').nth(2).locator('.fx-recorded')).toHaveText('記録価格 $7.50');
+  // The Pimoroni row (GBP, tax unknown) reads the same way: a yen reference at 1 GBP = 200 yen (150 / 0.75), the recorded £ price beside it,
+  // after the yen stores with the same note, and with neither a difference nor a cheapest mark (no approved price policy).
+  const pimoroniRow = panel(page).locator('.store-price').nth(3);
+  await expect(pimoroniRow.locator('.comparison-heading')).toHaveText('Pimoroni');
+  await expect(pimoroniRow).toContainText('送料・関税別');
+  await expect(pimoroniRow.locator('.hero-value')).toHaveText('約 ￥1,500');
+  await expect(pimoroniRow.locator('.fx-recorded')).toHaveText('記録価格 £7.50');
+  await expect(pimoroniRow).toContainText('参考記録価格 · 販売単位・付属品等の比較条件が未確認');
+  await expect(pimoroniRow.locator('.badge.cheapest, .comparison-difference')).toHaveCount(0);
+  await expect(panel(page).locator('.fx-note')).toContainText('1 GBP = 200.00円');
   await expect(panel(page).locator('.fx-note')).toContainText('1 USD = 150.00円');
   await expect(panel(page).locator('.fx-note a')).toHaveText('Rates By Exchange Rate API');
   // #71: the chart spans the panel and the store prices follow below it at every width; below the chart the
@@ -145,11 +163,13 @@ test('production bundle compares both directions and toggles a series with the k
     return `${order}${fullWidth ? ' full' : ''}${leadBeside ? ' beside' : ''}`;
   });
   expect(await layout()).toBe('above full beside');
-  // Four store manifests, the page's own history and MAX_RELATED_HISTORY_LOADS (8) related histories: since 0.6.7 the
+  // Five store manifests, the page's own history and MAX_RELATED_HISTORY_LOADS (8) related histories: since 0.6.7 the
   // ATOM family also holds the official and せんごく ATOM Matrix pages, so 9 related products meet the cap.
-  expect(requests).toHaveLength(13);
+  // 0.7.10 (#94): Pimoroni's manifest is the fifth (was four, 13 requests); the ATOM Lite now has 11 relations, still capped at 8 histories.
+  expect(requests).toHaveLength(14);
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect.poll(() => panel(page).locator('.store-prices').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(1);
+  // 0.7.10: four other-store rows, so the fourth sits in the folded second grid; the first grid holds the viewed store and the first three.
+  await expect.poll(() => panel(page).locator('.store-prices').first().evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(1);
   await expect(panel(page).locator('.eph-comparison-chart')).toHaveAttribute('viewBox', /^0 0 3\d{2} 220$/);
   expect(await layout()).toBe('above full');
   // The store columns the panel sits in on the live sites (Switch Science 776px, せんごく 730px) stack the same way.
@@ -165,7 +185,7 @@ test('production bundle compares both directions and toggles a series with the k
   await expect(panel(page).locator('.eph-comparison-chart g[data-series]').nth(1)).toBeHidden();
   await checkbox.check();
   await expect(panel(page).locator('.eph-comparison-chart g[data-series]').nth(1)).toBeVisible();
-  expect(requests).toHaveLength(13);
+  expect(requests).toHaveLength(14);
   await panel(page).screenshot({ path: 'test-results/e2e/comparison-mobile.png' });
   const overflow = await panel(page).evaluate((el) => {
     const section = el.shadowRoot!.querySelector('section')!;
@@ -304,5 +324,134 @@ test('other-store 429 keeps the own history and product link without arithmetic 
   await expect(panel(page).locator(`[data-focus-key="product-${relation.id}"]`)).toHaveAttribute('href', relation.products[1].url);
   await panel(page).getByRole('button', { name: 'ダーク', exact: true }).click();
   await expect(panel(page)).not.toContainText('読み込み中');
-  expect(requests).toHaveLength(5);
+  // The own product and five store manifests (the viewed store's and the four others'), Pimoroni's included since 0.7.10 (#94; was 5 requests).
+  expect(requests).toHaveLength(6);
+});
+
+/** The parts of a saved Pimoroni product page the page adapter reads: the canonical link and the product grid it mounts in. */
+const pimoroniBody = (handle: string) => `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pimoroni fixture</title><link rel="canonical" href="https://shop.pimoroni.com/products/${handle}"><style>body{margin:20px auto;padding:0 12px;max-width:1080px;font-family:system-ui}</style><div class="product-page"><div class="media"></div><div class="purchase"><div id="add_to_cart"><button class="add-to-cart">Add to cart</button></div></div><div class="about"></div></div></html>`;
+
+/** Display names the page shows for each shop; typed out so a wrong label in the catalogue cannot pass by comparing the data with itself. */
+const SHOP_LABEL: Record<string, string> = { 'akizuki': '秋月電子', 'ksy': 'KSY', 'sengoku': 'せんごく', 'switch-science': 'スイッチサイエンス' };
+
+/** The viewed Pimoroni product with these selling variants in GBP (price in pence), tax unknown as the shop records it. */
+function withVariants(p: ReturnType<typeof sampleProduct>, variants: readonly (readonly [id: string, sku: string, name: string, pence: number])[]): void {
+  const template = p.offers[0]!;
+  p.offers = variants.map(([id, sku, name, pence]) => {
+    const offer = structuredClone(template);
+    offer.externalOfferId = id; offer.sku = sku; offer.variantName = name;
+    const segment = offer.segments[0]!;
+    segment.basis.unitLabel = null;
+    segment.stats.current = { state: 'exact', minAmountMinor: pence, maxAmountMinor: pence };
+    segment.stats.previousDistinct = null;
+    segment.stats.change = { differenceMinor: null, percent: null, direction: 'unknown' };
+    segment.points = [[p.product.lastSeenAt, 'exact', pence, pence]];
+    return offer;
+  });
+}
+
+/** The reviewed relations of one Pimoroni product, for the variant that has this offer id. */
+const pimoroniRelations = (pageKey: string, offerId: string) => PRODUCT_RELATIONS.filter(r => r.products.some(p => p.storeId === 'pimoroni' && p.pageKey === pageKey && p.offer?.id === offerId));
+
+test('a Pimoroni page shows its other-store cards for the variant it shows, in £ with a yen reference and without a price difference (#94)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  const withoutHeaders = '54906879181179', withHeaders = '54906879213947';
+  // The Pico 2 has two variants; each is the same product as one listing at each of four shops (ksy, akizuki, sengoku, switch-science).
+  const selected = PRODUCT_RELATIONS.find(r => r.id === JSON.stringify(['akizuki', '129604', 'pimoroni', 'h-raspberry-pi-pico-2']))!;
+  const requests = await setup(page, 1, false, selected, (p) => {
+    if (p.storeId === 'pimoroni') withVariants(p, [[withoutHeaders, 'SC1631', 'Without Headers', 500], [withHeaders, 'SC1632', 'With Headers', 750]]);
+  }, pimoroniBody('raspberry-pi-pico-2'));
+  const own = panel(page).locator('.current-price');
+  const storeRows = panel(page).locator('.store-price');
+  await expect(panel(page)).toHaveAttribute('data-page-key', 'h-raspberry-pi-pico-2');
+  await expect(panel(page)).not.toContainText('読み込み中');
+  await expect(page.locator('.product-page > #electronics-price-history-root + .about')).toBeAttached();
+
+  // Variant "Without Headers" (from ?variant=): the own price is £5.00 with its yen reference at 1 GBP = 200 yen.
+  await expect(panel(page).getByLabel('バリエーション')).toHaveValue(withoutHeaders);
+  await expect(own.locator('.hero-value')).toHaveText('約 ￥1,000');
+  await expect(own.locator('.fx-recorded')).toContainText('記録価格 £5.00');
+  await expect(panel(page)).toContainText('税区分不明');
+  await expect(panel(page).locator('.fx-note')).toContainText('1 GBP = 200.00円（USD/JPY と USD/GBP から算出、');
+  const cardsOf = async () => storeRows.evaluateAll(rows => rows.map(r => (r as HTMLElement).dataset['relationId']!).sort());
+  const expectCards = async (offerId: string) => {
+    const wanted = pimoroniRelations('h-raspberry-pi-pico-2', offerId);
+    expect(wanted).toHaveLength(4);
+    expect(await cardsOf()).toEqual(wanted.map(r => r.id).sort());
+    for (const r of wanted) {
+      const other = r.products.find(p => p.storeId !== 'pimoroni')!;
+      const row = panel(page).locator(`.store-price[data-relation-id='${r.id}']`);
+      await expect(row.locator('.comparison-heading')).toHaveText(SHOP_LABEL[other.storeId]!);
+      await expect(row.locator('.hero-value')).toHaveText('￥1,200');
+      await expect(row.locator('[data-focus-key^="product-"]')).toHaveAttribute('href', other.url);
+      await expect(row).toContainText('参考記録価格 · 販売単位・付属品等の比較条件が未確認');
+      await expect(row.locator('.badge.cheapest, .comparison-difference')).toHaveCount(0);
+    }
+  };
+  await expectCards(withoutHeaders);
+  // ADR-0017: no pair with Pimoroni is approved for price comparison, so no cheapest mark and no arithmetic between £ and yen rows.
+  await expect(panel(page).locator('.badge.cheapest')).toHaveCount(0);
+  await expect(panel(page).locator('.comparison-difference')).toHaveCount(0);
+  await expect(panel(page)).not.toContainText('記録価格差');
+  await expect(panel(page).locator('summary[data-focus-key="store-prices-more"]')).toHaveText('他の店舗（1件）');
+  await panel(page).scrollIntoViewIfNeeded();
+  await panel(page).screenshot({ path: 'test-results/e2e/pimoroni-related.png' });
+
+  // The other variant: its own price, and the cards of the listings that equal that variant.
+  await panel(page).getByLabel('バリエーション').selectOption(withHeaders);
+  await expect(own.locator('.hero-value')).toHaveText('約 ￥1,500');
+  await expect(own.locator('.fx-recorded')).toContainText('記録価格 £7.50');
+  await expectCards(withHeaders);
+  await expect(panel(page).locator('.badge.cheapest')).toHaveCount(0);
+  await expect(panel(page)).not.toContainText('記録価格差');
+  // Four manifests of the other shops, the Pimoroni manifest and product, and the 8 related histories of both variants (the cap).
+  expect(requests).toHaveLength(14);
+});
+
+test('a Pimoroni page with five variants and 20 reviewed listings shows only the cards of the variant it shows (#94)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  const pi4gb = '41044580204627', pi8gb = '41044580171859';
+  const selected = PRODUCT_RELATIONS.find(r => r.id === JSON.stringify(['akizuki', '129325', 'pimoroni', 'h-raspberry-pi-5']))!;
+  const requests = await setup(page, 1, false, selected, (p) => {
+    if (p.storeId === 'pimoroni') withVariants(p, [[pi4gb, 'SC1111', '4GB RAM', 8800], [pi8gb, 'SC1112', '8GB RAM', 14000], ['42119790428243', 'SC1110', '2GB RAM', 6200],
+      ['54937425674619', 'SC1113', '16GB RAM', 30800], ['55956625195387', 'SC2162', '1GB RAM', 3600]]);
+  }, pimoroniBody('raspberry-pi-5'));
+  const rowIds = () => panel(page).locator('.store-price').evaluateAll(rows => rows.map(r => (r as HTMLElement).dataset['relationId']!).sort());
+  const otherProducts = () => requests.filter(url => url.includes('/products/') && !url.includes('/stores/pimoroni/'));
+  // #114: the shown variant's rows are the ones that load — all four show a recorded price, none stays reference-only.
+  const expectPricedRows = async (offerId: string) => {
+    const wanted = pimoroniRelations('h-raspberry-pi-5', offerId);
+    expect(wanted).toHaveLength(4);
+    expect(await rowIds()).toEqual(wanted.map(r => r.id).sort());
+    for (const r of wanted) {
+      const row = panel(page).locator(`.store-price[data-relation-id='${r.id}']`);
+      const other = r.products.find(p => p.storeId !== 'pimoroni')!;
+      await expect(row.locator('.comparison-heading')).toHaveText(SHOP_LABEL[other.storeId]!);
+      await expect(row.locator('.hero-value')).toHaveText('￥1,200');
+      await expect(row).toContainText('最終観測');
+      await expect(row).not.toContainText('履歴の自動取得は上位候補のみ');
+    }
+  };
+  await expect(panel(page)).toHaveAttribute('data-page-key', 'h-raspberry-pi-5');
+  await expect(panel(page)).not.toContainText('読み込み中');
+  // 4GB RAM: one listing at each of four shops; the 16 listings of the four other variants are not shown.
+  await expect(panel(page).locator('.current-price .fx-recorded')).toContainText('記録価格 £88.00');
+  await expectPricedRows(pi4gb);
+  await expect(panel(page).locator('.badge.cheapest, .comparison-difference')).toHaveCount(0);
+  await expect(panel(page)).not.toContainText('記録価格差');
+  // #114: the cap counts the rows of the variant on screen, so the 4 shown targets load (not the first 8 of all 20 relations):
+  // the Pimoroni manifest and product, the four other shops' manifests and the four shown products.
+  expect(otherProducts()).toHaveLength(4);
+  expect(requests).toHaveLength(10);
+  await panel(page).scrollIntoViewIfNeeded();
+  await panel(page).screenshot({ path: 'test-results/e2e/pimoroni-related-pi5-4gb.png' });
+  await panel(page).getByLabel('バリエーション').selectOption(pi8gb);
+  await expect(panel(page).locator('.current-price .fx-recorded')).toContainText('記録価格 £140.00');
+  await expectPricedRows(pi8gb);
+  await expect(panel(page).locator('.badge.cheapest, .comparison-difference')).toHaveCount(0);
+  // Switching loaded that variant's four targets too: eight product requests in all, each target once, the manifests cached.
+  expect(otherProducts()).toHaveLength(8);
+  expect(requests).toHaveLength(14);
+  await panel(page).scrollIntoViewIfNeeded();
+  await panel(page).screenshot({ path: 'test-results/e2e/pimoroni-related-pi5.png' });
 });

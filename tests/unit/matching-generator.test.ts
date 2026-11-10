@@ -6,13 +6,17 @@ import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { discoveryTiers, endpoint, generate, parseCatalog, serializeCatalog, serializeRelations, serializeStoreLabels } from '../../scripts/matching/generate.ts';
 import { catalogStores, discover, discoverCatalog, fingerprint, hash, listingKey, normalizeCode, pageReference, type Alias, type Catalog, type Dismissal, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
-import { appendStore, appendSupplement, applySupplements, derivedCodes, identityCodes, referenceKeys, snapshotListings, type SnapshotListings } from '../../scripts/matching/catalogs.ts';
+import { appendStore, appendSupplement, applySupplements, derivedCodes, extraKeys, identityCodes, referenceKeys, snapshotListings, variantCodes, type SnapshotListings } from '../../scripts/matching/catalogs.ts';
 import { normalizeKsyItem } from '../../src/adapters/ksy/snapshotAdapter.ts';
 import { normalizeSengokuItem } from '../../src/adapters/sengoku/snapshotAdapter.ts';
 import type { ProductRelation } from '../../userscript/core/relations.ts';
 import { PRODUCT_RELATIONS } from '../../userscript/adapters/productRelations.ts';
 import { collectKsyFixture } from '../helpers/ksy.ts';
 import { collectSengokuFixture } from '../helpers/sengoku.ts';
+import { collectPimoroniFixture, loadPimoroniNormalized } from '../helpers/pimoroni.ts';
+import { PIMORONI_STORE } from '../../src/adapters/pimoroni/identity.ts';
+import { shopifyHandleFromKey, shopifyProductUrl } from '../../src/adapters/shopify/identity.ts';
+import type { ShopifySnapshot } from '../../src/adapters/shopify/rawSchema.ts';
 
 const read = (file: string): string => readFileSync(`data/matching/${file}`, 'utf8');
 const catalog = parseCatalog(read('catalog.jsonl'));
@@ -43,6 +47,12 @@ describe('reproducible reviewed matching pipeline', () => {
       'm5stack/ksy': { candidates: 9, verified: 9, unresolved: 0, pending: 0 },
       'm5stack/sengoku': { candidates: 397, verified: 394, unresolved: 1, pending: 0 },
       'ksy/sengoku': { candidates: 161, verified: 157, unresolved: 4, pending: 0 },
+      // Pimoroni, the sixth store (#94): the pairs its saved catalogue adds, every one reviewed.
+      'akizuki/pimoroni': { candidates: 134, verified: 129, unresolved: 4, pending: 0 },
+      'switch-science/pimoroni': { candidates: 1010, verified: 998, unresolved: 11, pending: 0 },
+      'm5stack/pimoroni': { candidates: 77, verified: 77, unresolved: 0, pending: 0 },
+      'ksy/pimoroni': { candidates: 170, verified: 168, unresolved: 2, pending: 0 },
+      'sengoku/pimoroni': { candidates: 327, verified: 322, unresolved: 3, pending: 0 },
     });
     const strips = result.relations.filter(r => r.products[0].storeId === 'switch-science' && ['5208','5209'].includes(r.products[0].pageKey) && r.products[1].storeId === 'm5stack');
     expect(strips).toHaveLength(2);
@@ -61,18 +71,19 @@ describe('reproducible reviewed matching pipeline', () => {
     expect(discoverCatalog({...catalog, listings: [...catalog.listings].reverse()}, ...discoveryTiers(catalog, aliases)).map(c => c.id)).toEqual(result.candidates.map(c => c.id));
   });
   it('searches every pinned listing and accounts for every candidate without automatic promotion', () => {
-    expect(catalog.listings).toHaveLength(44518);
-    expect(result.candidates).toHaveLength(4231);
+    // 44,518 rows of the five earlier stores plus the Pimoroni catalogue (#94): 2,854 rows and 1,718 pairs, one per Pimoroni candidate of the store pairs above.
+    expect(catalog.listings).toHaveLength(47372);
+    expect(result.candidates).toHaveLength(5949);
     expect(result.report.pending).toEqual([]);
-    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(126);
-    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(143);
-    expect(result.report).toMatchObject({ sameVerified: 3962, similarVerified: 1512, pricePolicies: 2 });
-    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(4231);
+    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(130);
+    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(163);
+    expect(result.report).toMatchObject({ sameVerified: 5656, similarVerified: 1581, pricePolicies: 2 });
+    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(5949);
     expect(result.report.byBrand['Seeed']!.accepted).toBeGreaterThan(30);
     expect(result.report.byBrand['Raspberry Pi Trading']!.accepted).toBeGreaterThan(40);
     expect(result.report.byBrand['Arduino']!.accepted).toBeGreaterThan(25);
     expect(generate(catalog, [], [], [], aliases).relations).toEqual([]);
-    expect(generate(catalog, [], [], [], aliases).report.pending).toHaveLength(4231);
+    expect(generate(catalog, [], [], [], aliases).report.pending).toHaveLength(5949);
   });
 
   it('generates the store labels as their own module, so the table is not needed to name a store', () => {
@@ -211,6 +222,89 @@ describe('indexed candidate discovery', () => {
     expect(derivedCodes(row('akizuki', 'C008-B-V11'))).toEqual([]);
     expect(derivedCodes(row('akizuki', '【19192】 1.28inch LCD Module'))).toEqual([]); // only せんごく writes brackets this way.
     expect(derivedCodes(row('ksy', 'RASPIZWHSC0065', 'ラズベリーパイ財団'))).toEqual([]); // KSY codes go through reviewed aliases only.
+  });
+  describe('Pimoroni maker forms (#94)', () => {
+    const pimRow = (vendor: string, skus: string[], storeId = 'pimoroni'): Listing => ({...sample, storeId, pageKey: `p-${skus[0]}`, vendor, manufacturer: '', modelNumber: skus.length === 1 ? skus[0]! : '',
+      codes: skus.map(normalizeCode), expectedModels: [skus.length === 1 ? skus[0]! : ''], variants: skus.map((sku, i) => ({ offerId: String(i + 1), sku, name: `v${i}` })) });
+    const shop = (code: string): Listing => ({...sample, storeId: 'switch-science', pageKey: `s-${code}`, vendor: '', manufacturer: '', codes: [code], modelNumber: code, expectedModels: [code]});
+    const meet = (left: Listing, right: Listing) => discover([left], [right], extraKeys([]));
+
+    it.each([['Adafruit', 'ADA6044', 'ADA-6044'], ['Pololu', 'POL-799', 'POLOLU-799'], ['Kitronik', 'KIT-5038', 'KITRONIK-5038']])('%s: %s pairs with %s as a derived candidate that its fingerprint covers', (vendor, sku, written) => {
+      const pim = pimRow(vendor, [sku]); const other = shop(written);
+      expect(discover([other], [pim])).toHaveLength(0);
+      expect(derivedCodes(pim)).toEqual([written]);
+      const [c] = meet(other, pim);
+      expect(c).toMatchObject({ derived: true, codes: [written] });
+      // The key is part of the fingerprint, like every other derived candidate; the stored row is unchanged.
+      expect(c!.fingerprint).toBe(hash(hash(fingerprint(other) + fingerprint(pim)) + JSON.stringify([written])));
+      expect(pim.codes).toEqual([sku]); expect(pim.expectedModels).toEqual([sku]);
+    });
+    it('gates on the vendor label and on Pimoroni', () => {
+      expect(derivedCodes(pimRow('Sparkfun', ['ADA1234']))).toEqual([]);
+      expect(derivedCodes(pimRow('Generic', ['POL-1234']))).toEqual([]);
+      expect(derivedCodes(pimRow('Adafruit', ['KIT-5038']))).toEqual([]);
+      expect(derivedCodes(pimRow('Adafruit', ['ADA1234'], 'sengoku'))).toEqual([]);
+      expect(derivedCodes(pimRow('Adafruit', ['ADA1234'], 'switch-science'))).toEqual([]);
+    });
+    it('gates on the SKU pattern', () => {
+      for (const [vendor, sku] of [['Adafruit', 'ADA1234A'], ['Adafruit', 'ADA-1234'], ['Pololu', 'POL1234'], ['Pololu', 'POL-12A4'], ['Kitronik', 'KIT5038'], ['Kitronik', 'KIT-ABC']] as const) {
+        expect(derivedCodes(pimRow(vendor, [sku])), sku).toEqual([]);
+      }
+    });
+    it('keeps the rest of a Kitronik SKU, so a suffix is never dropped', () => {
+      const v2 = pimRow('Kitronik', ['KIT-5038-V2']);
+      expect(derivedCodes(v2)).toEqual(['KITRONIK-5038-V2']);
+      expect(meet(shop('KITRONIK-5038'), v2)).toHaveLength(0);
+      expect(meet(shop('KITRONIK-5038-V2'), v2)).toHaveLength(1);
+      expect(derivedCodes(pimRow('Kitronik', ['KIT-5601B']))).toEqual(['KITRONIK-5601B']);
+    });
+    it('never turns a bare number into a key', () => {
+      expect(meet(shop('ADA-1032'), pimRow('Pololu', ['POL-1032']))).toHaveLength(0);
+      expect(meet(shop('1032'), pimRow('Adafruit', ['ADA1032']))).toHaveLength(0);
+      expect(derivedCodes(pimRow('Adafruit', ['ADA1032']))).not.toContain('1032');
+    });
+    it('gives every variant of a multi-variant product its key', () => {
+      const many = pimRow('Pololu', ['POL-1352', 'POL-1354', 'POL-1356']);
+      expect(derivedCodes(many)).toEqual(['POLOLU-1352', 'POLOLU-1354', 'POLOLU-1356']);
+      expect(meet(shop('POLOLU-1354'), many)[0]).toMatchObject({ codes: ['POLOLU-1354'], derived: true });
+    });
+    it('finds the Switch Science and せんごく rows of the saved catalogue only through the key', () => {
+      const ss = result.candidates.find(c => c.products[0].storeId === 'switch-science' && c.products[0].pageKey === '5809' && c.products[1].storeId === 'pimoroni')!;
+      expect(ss).toMatchObject({ derived: true, codes: ['ADA-4311'] });
+      const sg = result.candidates.find(c => c.products[0].storeId === 'sengoku' && c.products[0].pageKey === 'EEHD-5PZR' && c.products[1].storeId === 'pimoroni')!;
+      expect(sg).toMatchObject({ derived: true, codes: ['KITRONIK-5659'] });
+    });
+  });
+
+  describe('a review of a candidate found through a Pimoroni derived key (#94)', () => {
+    // Found through the derived key of a variant SKU: the pairs an alias made from a page reference (the rejected name proposals of #94) carry no variant code.
+    const derivedOnly = (vendor: string, minVariants = 1) => result.candidates.find(c => c.derived && c.products[1].storeId === 'pimoroni' && c.products[1].vendor === vendor
+      && c.products[1].variants!.length >= minVariants && !c.products[1].codes.some(code => c.codes.includes(code))
+      && c.products[1].variants!.some(v => variantCodes(c.products[1], v).some(code => c.codes.includes(code))))!;
+    const reviewOf = (c: ReturnType<typeof derivedOnly>, offerId: string): Review => ({ id: c.id, fingerprint: c.fingerprint, decision: 'same_product', reviewedAt: '2026-11-10',
+      evidence: '名称・メーカー品番・販売構成を両店の保存行で突合した検証用の判定。', differences: [], missingEvidence: ['販売数量'],
+      offerIds: [c.products[0].variants ? c.products[0].variants[0]!.offerId : null, offerId] });
+    const matching = (c: ReturnType<typeof derivedOnly>) => c.products[1].variants!.find(v => variantCodes(c.products[1], v).some(code => c.codes.includes(code)))!;
+
+    it.each(['Adafruit', 'Pololu', 'Kitronik'])('%s: the variant whose SKU gives the matched key is accepted', vendor => {
+      const c = derivedOnly(vendor);
+      expect(c, vendor).toBeDefined();
+      expect(generate(catalog, [], [reviewOf(c, matching(c).offerId)], []).relations.find(r => r.id === c.id)).toMatchObject({ kind: 'same_product' });
+    });
+    it('still refuses a variant of the same product whose SKU gives no matched key, and a variant that is not on the product', () => {
+      for (const vendor of ['Adafruit', 'Pololu', 'Kitronik']) {
+        const c = derivedOnly(vendor, vendor === 'Kitronik' ? 1 : 2);
+        const other = c.products[1].variants!.find(v => !variantCodes(c.products[1], v).some(code => c.codes.includes(code)));
+        if (other) expect(() => generate(catalog, [], [reviewOf(c, other.offerId)], [])).toThrow(/variant must match candidate code/);
+        expect(() => generate(catalog, [], [reviewOf(c, 'no-such-offer')], [])).toThrow(/variant must match candidate code/);
+      }
+    });
+    it('reads a variant SKU by the same rule as the candidate search', () => {
+      const pim: Listing = { ...sample, storeId: 'pimoroni', vendor: 'Adafruit', manufacturer: '', codes: ['ADA1234', 'ADA1234A'], variants: [{ offerId: '1', sku: 'ADA1234', name: 'a' }, { offerId: '2', sku: 'ADA1234A', name: 'b' }] };
+      expect(variantCodes(pim, pim.variants![0]!)).toEqual(['ADA-1234', 'ADA1234']);
+      expect(variantCodes(pim, pim.variants![1]!)).toEqual(['ADA1234A']);
+      expect(variantCodes({ ...pim, vendor: 'Generic' }, pim.variants![0]!)).toEqual(['ADA1234']);
+    });
   });
   it('frees a part number from ordering annotations, alternatives, maker prefixes and resale numbers (#48)', () => {
     const row = (storeId: string, modelNumber: string, vendor = ''): Listing => ({...sample, storeId, modelNumber, vendor, manufacturer: '', codes: [normalizeCode(modelNumber)]});
@@ -351,7 +445,7 @@ describe('catalogue supplements', () => {
   const renamed = m5.map(p => listingKey(p) === listingKey(target) ? {...p, name: `${p.name} (renamed)`} : p);
 
   it('records the pinned sources, the 2026-10-03 and 2026-10-31 supplements and the two re-reviewed rows', () => {
-    expect(catalogStores(catalog)).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy', 'sengoku']);
+    expect(catalogStores(catalog)).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy', 'sengoku', 'pimoroni']);
     // KSY's 2026-10-31 list added nothing, so it has no supplement.
     expect(catalog.sources.filter(s => s.supplement).map(s => [s.storeId, s.observedAt.slice(0, 10), s.count, s.supplement!.snapshotCount]))
       .toEqual([['akizuki', '2026-10-03', 4130, 12800], ['switch-science', '2026-10-03', 101, 10442], ['m5stack', '2026-10-03', 9, 672],
@@ -449,7 +543,7 @@ describe('KSY source', () => {
   it('joins the reviewed KSY pairs as identities only and keeps the Pi 5 SC1110 contradiction unresolved', () => {
     // The pairs reviewed when KSY was added, the two the 0.6.5 names found, the UnitV2 family's 0.6.6 relations and the 0.6.7 relations (M5Stack Basic versions, I2C hub 1to6); its pairs with せんごく are checked with that store.
     const ksy = result.relations.filter(r => r.products.some(p => p.storeId === 'ksy') && !r.products.some(p => p.storeId === 'sengoku'));
-    expect(ksy).toHaveLength(607);
+    expect(ksy).toHaveLength(778);
     for (const r of ksy) expect(r.pricePolicy).toBeNull();
     const id = (...key: string[]): string => JSON.stringify(key);
     // Same precedent as a129606-s10908: the code says 2GB on one side, the other side's name says 1GB.
@@ -507,8 +601,14 @@ describe('せんごく source', () => {
   });
 
   it('joins every reviewed せんごく pair as an identity only, with the integrating review\'s changes on record', () => {
-    const joined = result.relations.filter(r => r.products.some(p => p.storeId === 'sengoku'));
-    expect(joined).toHaveLength(3506);
+    // Pimoroni comes after せんごく in the store order, so its pairs have せんごく on the left; they are checked after the loop (#94).
+    const joined = result.relations.filter(r => r.products.some(p => p.storeId === 'sengoku') && !r.products.some(p => p.storeId === 'pimoroni'));
+    // 3,506 before #94 plus the two M5StickC family pairs of EEHD-6YND (K016-P-SE) with the original M5StickC (m5stack h-stick-c, switch-science 6350).
+    expect(joined).toHaveLength(3508);
+    const withPimoroni = result.relations.filter(r => r.products.some(p => p.storeId === 'sengoku') && r.products.some(p => p.storeId === 'pimoroni'));
+    // 325 reviewed pairs (327 candidates, the two name proposals of EEHD-566P rejected) and 9 family pairs with Pimoroni rows.
+    expect(withPimoroni).toHaveLength(334);
+    for (const r of withPimoroni) { expect(r.products.map(p => p.storeId)).toEqual(['sengoku', 'pimoroni']); expect(r.pricePolicy).toBeNull(); }
     for (const r of joined) {
       expect(r.pricePolicy).toBeNull();
       // The panel swaps `項目: left ↔ right` per product, so せんごく must be the right-hand side.
@@ -516,7 +616,7 @@ describe('せんごく source', () => {
       // Family relations state the feature values; reviews quote each store.
       for (const d of r.differences) expect(d).toMatch(r.similarity ? /^[^:]+: .+ ↔ .+$/ : /^[^:]+: .+ ↔ せんごく「.+」$/);
     }
-    expect(joined.filter(r => r.similarity)).toHaveLength(788);
+    expect(joined.filter(r => r.similarity)).toHaveLength(790); // 788 plus the two M5StickC pairs above
     const id = (...key: string[]): string => JSON.stringify(key);
     // The official page body names StampS3A (recorded by the SS 10300 review); the first review stopped at the title.
     const cardputer = byId.get(id('m5stack', 'h-m5stack-cardputer-with-m5stamps3-v1-1', 'sengoku', 'EEHD-6RTA'))!;
@@ -596,14 +696,14 @@ describe('similar-product leads (0.6.6)', () => {
     const id = (...key: string[]): string => JSON.stringify(key);
     expect(result.report.similarProposals).toEqual([]);
     // 0.6.6 and 0.6.7 together; the identity dismissals were settled by alias and review (#52 for 0.6.6, #53 for 0.6.7).
-    expect(result.report.dismissedLeads).toEqual({ different: 65, identity: 0 });
+    expect(result.report.dismissedLeads).toEqual({ different: 69, identity: 0 }); // 65 plus the four Pimoroni stems that are coincidences (ADA4075, ADA4084 twice, TP-01; #94)
     const stemFamilies = families.filter(f => f.id.startsWith('stem-'));
-    expect(stemFamilies).toHaveLength(121);
+    expect(stemFamilies).toHaveLength(124); // plus stem-k059, stem-m031-c and stem-kitronik-5610 (#94)
     for (const f of stemFamilies) expect(result.report.familyCounts[f.id]).toBeGreaterThan(0);
-    expect(stemFamilies.reduce((n, f) => n + result.report.familyCounts[f.id]!, 0)).toBe(592);
+    expect(stemFamilies.reduce((n, f) => n + result.report.familyCounts[f.id]!, 0)).toBe(650); // 592 plus 58 pairs: the three new families, the 15 Pimoroni members joining existing families, and the two M5StickC members (#94)
     // Without the reviewed families and dismissals, the leads are open again.
-    expect(generate(catalog, legacy, reviews, families.filter(f => !f.id.startsWith('stem-')), aliases).report.similarProposals).toHaveLength(613);
-    expect(generate(catalog, legacy, reviews, families, aliases).similarProposals).toHaveLength(65);
+    expect(generate(catalog, legacy, reviews, families.filter(f => !f.id.startsWith('stem-')), aliases).report.similarProposals).toHaveLength(665); // 613 plus the 52 Pimoroni leads those families and the four dismissals settle (#94)
+    expect(generate(catalog, legacy, reviews, families, aliases).similarProposals).toHaveLength(69); // the 69 dismissed leads
     // Variants of one line become similar products and name the M5Stack offer.
     expect(byId.get(id('switch-science', '7536', 'm5stack', 'h-m5stack-unitv2-usb-version-without-camera'))).toMatchObject({
       kind: 'similar_product', reviewStatus: 'verified', similarity: { family: 'UnitV2 AIカメラ' },
@@ -647,11 +747,11 @@ describe('base-code leads and the settled identities (0.6.7)', () => {
       }
       return counts;
     };
-    expect(tally(dismissed.filter(p => p.tokens.length === 0))).toEqual({ different: 32 });
+    expect(tally(dismissed.filter(p => p.tokens.length === 0))).toEqual({ different: 36 }); // 32 plus the four Pimoroni stem coincidences, which share no name word (#94)
     expect(tally(dismissed.filter(p => p.tokens.length > 0))).toEqual({ different: 33 });
-    // Without the stem families, 391 base-code leads are open: names need not share a word.
+    // Without the stem families, 425 base-code leads are open (391 plus the 34 Pimoroni ones, #94): names need not share a word.
     const open = generate(catalog, legacy, reviews, families.filter(f => !f.id.startsWith('stem-')), aliases).similarProposals;
-    expect(open.filter(p => p.tokens.length === 0)).toHaveLength(391);
+    expect(open.filter(p => p.tokens.length === 0)).toHaveLength(425);
     // A004 and A004-V3 (v3.0) are SKUs the maker sells apart, so the first decision (identity) became a family.
     expect(byId.get(id('switch-science', '6612', 'm5stack', 'h-m5stack-faces-gamepad-panel-v3-0'))).toMatchObject({
       kind: 'similar_product', reviewStatus: 'verified', similarity: { family: 'M5Stack Faces用ゲームパッドパネル' }, differences: ['型番: A004 ↔ A004-V3'] });
@@ -699,6 +799,94 @@ describe('the settled 0.6.7 identities (0.6.8)', () => {
     expect(byId.get(id('akizuki', '114312', 'sengoku', 'EEHD-4HNL'))).toMatchObject({ kind: 'same_product' });
     expect(byId.get(id('akizuki', '114312', 'sengoku', 'EEHD-4HNU'))).toMatchObject({
       kind: 'similar_product', differences: ['型番: D2F-01 ↔ D2F-01-D', '端子: 基板用端子ストレート形 ↔ はんだづけ小型端子'] });
+  });
+});
+
+describe('Pimoroni source', () => {
+  const pimoroni = catalog.listings.filter(p => p.storeId === 'pimoroni');
+  const withoutPimoroni: Catalog = { ...catalog, sources: catalog.sources.filter(s => s.storeId !== 'pimoroni'), listings: catalog.listings.filter(p => p.storeId !== 'pimoroni') };
+  /** The repository's saved capture through the real collector, written as the complete snapshot file the importer reads. */
+  async function pimoroniSnapshotFile(edit?: (raw: ShopifySnapshot) => void): Promise<{ file: string; raw: ShopifySnapshot; cleanup: () => void }> {
+    const { raw } = await collectPimoroniFixture();
+    edit?.(raw);
+    const dir = mkdtempSync(path.join(tmpdir(), 'pimoroni-catalog-'));
+    const file = path.join(dir, `pimoroni-${raw.retrievedAt.replace(/[:.]/g, '-')}.json.gz`);
+    writeFileSync(file, gzipSync(JSON.stringify(raw)));
+    return { file, raw, cleanup: () => rmSync(dir, { recursive: true, force: true }) };
+  }
+  const skuCodes = (variants: { sku: string | null }[]): string[] => [...new Set(variants.map(v => normalizeCode(v.sku ?? '')).filter(Boolean))].sort();
+
+  it('projects every product through the store\'s own normalization, keeping the vendor label and no manufacturer', async () => {
+    const { file, raw, cleanup } = await pimoroniSnapshotFile();
+    try {
+      const { listings, observedAt } = await snapshotListings('pimoroni', file);
+      const normalized = new Map((await loadPimoroniNormalized()).products.map(n => [n.pageKey, n]));
+      expect(listings).toHaveLength(raw.items.length);
+      expect(normalized.size).toBe(raw.items.length);
+      for (const [i, item] of raw.items.entries()) {
+        const n = normalized.get(listings[i]!.pageKey)!;
+        // The runtime compares expectedNames / expectedModels with the published `current`: same fields, same fallback.
+        expect(listings[i]).toMatchObject({ storeId: 'pimoroni', name: n.metadata.name, modelNumber: n.metadata.modelNumber ?? '', url: n.metadata.canonicalUrl,
+          manufacturer: '', manufacturerProductName: '', manufacturerProductCode: '', vendor: item.vendor ?? '', expectedModels: [n.metadata.modelNumber ?? ''], observedAt,
+          variants: item.variants.map(v => ({ offerId: String(v.id), sku: v.sku ?? '', name: v.title })), codes: skuCodes(item.variants) });
+      }
+      const one = raw.items.findIndex(p => p.variants.length === 1);
+      const many = raw.items.findIndex(p => p.variants.length > 1);
+      // One variant: its SKU is the model. Several: the model is empty (as the published history has none) and every variant SKU is a code.
+      expect(listings[one]!.modelNumber).toBe(raw.items[one]!.variants[0]!.sku);
+      expect(listings[many]).toMatchObject({ modelNumber: '', expectedModels: [''] });
+      expect(listings[many]!.codes).toEqual(skuCodes(raw.items[many]!.variants));
+      expect(listings[many]!.codes.length).toBeGreaterThan(1);
+    } finally { cleanup(); }
+  });
+
+  it('maps no vendor label to a manufacturer: no Pimoroni SKU carries a shop prefix, so a prefixed one is kept as written', async () => {
+    const rows: [string, string][] = [['M5Stack', 'M5STACK-U130'], ['Raspberry Pi', 'RPI-SC1677'], ['DFRobot', 'DFROBOT-SEN0604']];
+    const { file, cleanup } = await pimoroniSnapshotFile(raw => rows.forEach(([vendor, sku], i) => { Object.assign(raw.items[i]!, { vendor }); raw.items[i]!.variants = [{ ...raw.items[i]!.variants[0]!, sku }]; }));
+    try {
+      const { listings } = await snapshotListings('pimoroni', file);
+      expect(listings.slice(0, 3).map(p => [p.vendor, p.manufacturer, p.codes])).toEqual(rows.map(([vendor, sku]) => [vendor, '', [sku]]));
+    } finally { cleanup(); }
+  });
+
+  it('does not let a differently written maker label rule a pair out', () => {
+    const official = pimoroni.find(p => p.vendor === 'Raspberry Pi' && p.codes.includes('SC0940'))!;
+    const ss = catalog.listings.find(p => p.storeId === 'switch-science' && p.manufacturer === 'Raspberry Pi Trading' && p.codes.includes('SC0940'))!;
+    expect(discover([ss], [official])).toHaveLength(1);
+  });
+
+  it('refuses an incomplete snapshot, and a second source for a store that has one', async () => {
+    const short = await pimoroniSnapshotFile(raw => { raw.items.pop(); });
+    try {
+      await expect(snapshotListings('pimoroni', short.file)).rejects.toThrow(/incomplete pimoroni snapshot/);
+      expect(() => appendStore(catalog, 'pimoroni', short.file, { text: '{}', observedAt: '2026-11-10T00:00:00.000Z', listings: [] })).toThrow(/pimoroni source already exists/);
+    } finally { short.cleanup(); }
+  });
+
+  it('pins the complete 2026-11-09 snapshot as the store\'s first source, appended after every other row', () => {
+    expect(catalog.sources.filter(s => s.storeId === 'pimoroni')).toEqual([{ storeId: 'pimoroni', file: 'pimoroni-2026-11-09T02-03-01-206Z.json.gz',
+      sha256: 'b1cab290e508b09da24e505e726860827ef35e35ce6649306664826dd5a9923d', observedAt: '2026-11-09T02:03:01.206Z', count: 2854 }]);
+    expect(catalogStores(catalog).at(-1)).toBe('pimoroni');
+    expect(catalog.listings.slice(-pimoroni.length)).toEqual(pimoroni);
+    expect(pimoroni).toHaveLength(2854);
+    expect(pimoroni.reduce((n, p) => n + p.variants!.length, 0)).toBe(3789);
+    for (const p of pimoroni) {
+      expect(p.url).toBe(shopifyProductUrl(PIMORONI_STORE, shopifyHandleFromKey(PIMORONI_STORE, p.pageKey)!));
+      expect(p).toMatchObject({ manufacturer: '', observedAt: '2026-11-09T02:03:01.206Z', expectedModels: [p.modelNumber] });
+      expect(p.vendor).toBeTruthy();
+      expect(p.modelNumber).toBe(p.variants!.length === 1 ? p.variants![0]!.sku : '');
+      expect(p.codes).toEqual(skuCodes(p.variants!));
+    }
+    // The page key is the reversible handle key the published history uses.
+    expect(pimoroni.find(p => p.pageKey === 'h-presto')!.url).toBe('https://shop.pimoroni.com/products/presto');
+  });
+
+  // The snapshot is the 2026-11-09 daily run's artifact and is not in the repository. Set PIMORONI_SNAPSHOT to that file to prove the rows byte for byte.
+  it.skipIf(!process.env['PIMORONI_SNAPSHOT'])('reproduces the catalogue\'s Pimoroni rows and source record from the saved snapshot file', async () => {
+    const file = process.env['PIMORONI_SNAPSHOT']!;
+    const rebuilt = appendStore(withoutPimoroni, 'pimoroni', file, await snapshotListings('pimoroni', file));
+    expect(rebuilt).toEqual(catalog);
+    expect(serializeCatalog(rebuilt)).toBe(read('catalog.jsonl'));
   });
 });
 

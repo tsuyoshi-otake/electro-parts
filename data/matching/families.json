@@ -997,7 +997,8 @@
       "https://shop.m5stack.com/products/atom-matrix-esp32-development-kit",
       "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-5LAT",
       "https://shop.m5stack.com/products/atom-matrix-esp32-dev-kit-v1-1",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6XMF"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6XMF",
+      "https://shop.pimoroni.com/products/atom-matrix-esp32-development-kit"
     ],
     "members": [
       {
@@ -1081,6 +1082,16 @@
         "features": {
           "モデル": "ATOM Matrix",
           "版": "C008-B-V11 (v1.1)"
+        }
+      },
+      {
+        "key": "pimoroni/h-atom-matrix-esp32-development-kit",
+        "fingerprint": "6b434ffaf8f447c7c0de5fdde96d622b1a66ec637d9e17dad6c544cc29564b8a",
+        "variant": "matrix",
+        "offerId": "31880178532435",
+        "features": {
+          "モデル": "ATOM Matrix",
+          "版": "C008-B"
         }
       }
     ]
@@ -1319,7 +1330,8 @@
       "https://shop.m5stack.com/products/m5stack-poe-camera-w-o-wi-fi-ov2640",
       "https://shop.m5stack.com/products/m5stack-poe-camera-with-wi-fi-ov2640",
       "https://shop.m5stack.com/products/m5stack-poe-camera-with-wi-fi-ov3660",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6KHV"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6KHV",
+      "https://shop.pimoroni.com/products/m5stack-poe-camera-with-wi-fi-ov2640"
     ],
     "members": [
       {
@@ -1403,6 +1415,16 @@
         "variant": "ov3660wifi",
         "features": {
           "カメラ": "OV3660",
+          "無線": "Wi-Fi付き"
+        }
+      },
+      {
+        "key": "pimoroni/h-m5stack-poe-camera-with-wi-fi-ov2640",
+        "fingerprint": "61c89cd61da8f572a16f0cb06820b50643c8a362ecedfff0a3564f9ef9a43ed8",
+        "variant": "ov2640wifi",
+        "offerId": "40529326735443",
+        "features": {
+          "カメラ": "OV2640",
           "無線": "Wi-Fi付き"
         }
       }
@@ -3140,7 +3162,8 @@
       "https://shop.m5stack.com/products/m5stack-unitv2-m12-version-with-cameras",
       "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6MZC",
       "https://www.switch-science.com/products/7534",
-      "https://shop.m5stack.com/products/m5stack-unitv2-usb-version-without-camera"
+      "https://shop.m5stack.com/products/m5stack-unitv2-usb-version-without-camera",
+      "https://shop.pimoroni.com/products/m5stack-unitv2-m12-version-with-cameras"
     ],
     "members": [
       {
@@ -3234,6 +3257,16 @@
         "features": {
           "型番": "U078-USB",
           "版": "USBカメラ対応版(カメラ非搭載)"
+        }
+      },
+      {
+        "key": "pimoroni/h-m5stack-unitv2-m12-version-with-cameras",
+        "fingerprint": "ebd8f65aa7a26776a95411b815f1b828e6d884854158fbe7295fd19c9c7dd9db",
+        "variant": "U078-M12",
+        "offerId": "39546769801299",
+        "features": {
+          "型番": "U078-M12",
+          "版": "M12版"
         }
       }
     ]
@@ -3527,7 +3560,8 @@
       "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6UXG",
       "https://www.switch-science.com/products/6742",
       "https://shop.m5stack.com/products/esp32-psram-timer-camera-x-ov3660",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6UXF"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6UXF",
+      "https://shop.pimoroni.com/products/esp32-psram-timer-camera-x-ov3660"
     ],
     "members": [
       {
@@ -3597,6 +3631,17 @@
         "key": "sengoku/EEHD-6UXF",
         "fingerprint": "5adad66218e5f0ecf850683744a05e41ca2773f5a4f91ad120cf458eff31bb8a",
         "variant": "U082-X",
+        "features": {
+          "型番": "U082-X",
+          "版": "Timer Camera X",
+          "センサー": "OV3660"
+        }
+      },
+      {
+        "key": "pimoroni/h-esp32-psram-timer-camera-x-ov3660",
+        "fingerprint": "bd8897c8693eb550692b062b5e10756e3f580d919704350230655c82ceeb9837",
+        "variant": "U082-X",
+        "offerId": "32292196810835",
         "features": {
           "型番": "U082-X",
           "版": "Timer Camera X",
@@ -4002,7 +4047,8 @@
       "https://shop.m5stack.com/products/ultrasonic-distance-unit-i-o-rcwl-9620",
       "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6UXR",
       "https://www.switch-science.com/products/6738",
-      "https://shop.m5stack.com/products/ultrasonic-distance-unit-rcwl-9600"
+      "https://shop.m5stack.com/products/ultrasonic-distance-unit-rcwl-9600",
+      "https://shop.pimoroni.com/products/ultrasonic-distance-unit-i2c-rcwl-9620"
     ],
     "members": [
       {
@@ -4086,6 +4132,17 @@
           "型番": "U098",
           "センサー": "RCWL-9600",
           "インターフェース": "枝番B1/B2の付かない型番U098（名称にI2C・I/Oの表記なし）"
+        }
+      },
+      {
+        "key": "pimoroni/h-ultrasonic-distance-unit-i2c-rcwl-9620",
+        "fingerprint": "52776cbef49889e2b7608f5685a3e945c5716b14a16787afc665234e13ab7252",
+        "variant": "U098-B1",
+        "offerId": "39618449113171",
+        "features": {
+          "型番": "U098-B1",
+          "センサー": "RCWL-9620",
+          "インターフェース": "I2C"
         }
       }
     ]
@@ -5796,7 +5853,7 @@
   },
   {
     "id": "stem-k016-2",
-    "label": "M5StickC Plus 開発キット",
+    "label": "M5StickC 開発キット",
     "purpose": "ESP32-PICOを搭載した小型のM5StickC系IoT開発キット",
     "reviewedAt": "2026-11-02",
     "sources": [
@@ -5805,7 +5862,10 @@
       "https://shop.m5stack.com/products/m5stickc-plus-esp32-pico-mini-iot-development-kit",
       "https://www.switch-science.com/products/11349",
       "https://shop.m5stack.com/products/m5stickc-plus-se-mini-iot-dev-kit-esp32-pico",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6YND"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6YND",
+      "https://shop.pimoroni.com/products/m5stickc-plus-esp32-pico-mini-iot-development-kit",
+      "https://shop.m5stack.com/products/stick-c",
+      "https://www.switch-science.com/products/6350"
     ],
     "members": [
       {
@@ -5863,6 +5923,35 @@
           "型番": "K016-P-SE",
           "製品名": "M5StickC Plus SE"
         }
+      },
+      {
+        "key": "pimoroni/h-m5stickc-plus-esp32-pico-mini-iot-development-kit",
+        "fingerprint": "5d2f93c4e48e02839b0e3cabdc840b46bbb4519ddca3dc1ed43dd9a4ba4b3950",
+        "variant": "K016-P",
+        "offerId": "32238481735763",
+        "features": {
+          "型番": "K016-P",
+          "製品名": "M5StickC Plus"
+        }
+      },
+      {
+        "key": "m5stack/h-stick-c",
+        "fingerprint": "930b39e9f1cfac3730ed9e177e82e7ab99121569453542857eb4c19703fc1c6e",
+        "variant": "K016-C",
+        "offerId": "43982750843137",
+        "features": {
+          "型番": "K016-C",
+          "製品名": "M5StickC"
+        }
+      },
+      {
+        "key": "switch-science/6350",
+        "fingerprint": "8153ef68aaead84792adb6cf99c90c31475e9f113c383cac270a63a0cc282a41",
+        "variant": "K016-C",
+        "features": {
+          "型番": "K016-C",
+          "製品名": "M5StickC"
+        }
       }
     ]
   },
@@ -5878,7 +5967,8 @@
       "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-5UYM",
       "https://www.switch-science.com/products/7361",
       "https://shop.m5stack.com/products/m5stamp-pico-diy-kit",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-5UYK"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-5UYK",
+      "https://shop.pimoroni.com/products/m5stamp-pico-mate-with-pin-headers"
     ],
     "members": [
       {
@@ -5945,6 +6035,16 @@
           "型番": "K051-B",
           "製品名": "M5Stamp Pico DIY Kit"
         }
+      },
+      {
+        "key": "pimoroni/h-m5stamp-pico-mate-with-pin-headers",
+        "fingerprint": "1c577ce8af9efcfefb30e0297140857d932658beab9bc4fe347cc409c9b67757",
+        "variant": "K051",
+        "offerId": "39496014102611",
+        "features": {
+          "型番": "K051",
+          "製品名": "M5Stamp Pico Mate with Pin Headers"
+        }
       }
     ]
   },
@@ -5959,7 +6059,9 @@
       "https://shop.m5stack.com/products/unit-cam-wi-fi-camera-ov2640",
       "https://www.switch-science.com/products/7365",
       "https://shop.m5stack.com/products/unit-cam-wi-fi-camera-diy-kit-ov2640",
-      "https://shop.m5stack.com/products/unit-cam-wi-fi-camera-with-enclosure-ov2640"
+      "https://shop.m5stack.com/products/unit-cam-wi-fi-camera-with-enclosure-ov2640",
+      "https://shop.pimoroni.com/products/unit-cam-wi-fi-camera-diy-kit-ov2640",
+      "https://shop.pimoroni.com/products/unit-cam-wi-fi-camera-ov2640"
     ],
     "members": [
       {
@@ -6022,6 +6124,28 @@
         "features": {
           "型番": "U109-B",
           "構成": "ケース付き（with Enclosure）",
+          "イメージセンサー": "OV2640"
+        }
+      },
+      {
+        "key": "pimoroni/h-unit-cam-wi-fi-camera-diy-kit-ov2640",
+        "fingerprint": "67960dd4a49b850ac1790ac4b953b5b6df9a350d1762e370f696c13fa0a516c4",
+        "variant": "U109-X",
+        "offerId": "39496010793043",
+        "features": {
+          "型番": "U109-X",
+          "構成": "DIYキット（DIY Kit）",
+          "イメージセンサー": "OV2640"
+        }
+      },
+      {
+        "key": "pimoroni/h-unit-cam-wi-fi-camera-ov2640",
+        "fingerprint": "0d990acaa3c68ab1141b4c1d30eefabb13cc75931bde9b76a21775552a058915",
+        "variant": "U109",
+        "offerId": "39405088440403",
+        "features": {
+          "型番": "U109",
+          "構成": "カメラ本体（Unit Cam Wi-Fi Camera）",
           "イメージセンサー": "OV2640"
         }
       }
@@ -6313,7 +6437,8 @@
     "reviewedAt": "2026-11-02",
     "sources": [
       "https://akizukidenshi.com/catalog/g/g130214/",
-      "https://www.switch-science.com/products/9167"
+      "https://www.switch-science.com/products/9167",
+      "https://shop.pimoroni.com/products/w5500-evb-pico"
     ],
     "members": [
       {
@@ -6329,6 +6454,16 @@
         "key": "switch-science/9167",
         "fingerprint": "ac072972d7cafe08885b070a41116098327bb537c54f411f728f4e2713a61b99",
         "variant": "W5500-EVB-Pico",
+        "features": {
+          "型番": "W5500-EVB-Pico",
+          "イーサネットチップ": "W5500"
+        }
+      },
+      {
+        "key": "pimoroni/h-w5500-evb-pico",
+        "fingerprint": "2dc2aad3be1438d1ef50b3c5d68c93e9edaede9db707d4bc334a19006395a5e3",
+        "variant": "W5500-EVB-Pico",
+        "offerId": "40036706648147",
         "features": {
           "型番": "W5500-EVB-Pico",
           "イーサネットチップ": "W5500"
@@ -6482,7 +6617,8 @@
       "https://shop.m5stack.com/products/gps-module-v2-0-with-external-antenna-at6668",
       "https://www.switch-science.com/products/10694",
       "https://shop.m5stack.com/products/gps-module-v2-1-with-antenna-atgm336h",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6VLW"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6VLW",
+      "https://shop.pimoroni.com/products/gps-module-with-internal-external-antenna-neo-m8n"
     ],
     "members": [
       {
@@ -6556,6 +6692,17 @@
           "型番": "M003-V21",
           "GNSSチップ": "ATGM336H",
           "アンテナ": "アンテナ付属"
+        }
+      },
+      {
+        "key": "pimoroni/h-gps-module-with-internal-external-antenna-neo-m8n",
+        "fingerprint": "0cb50367cae212fb65de129362d6162670e9c7eeb8ec34efe976468c5f7c3cca",
+        "variant": "M003",
+        "offerId": "31880923414611",
+        "features": {
+          "型番": "M003",
+          "GNSSチップ": "NEO-M8N",
+          "アンテナ": "内蔵アンテナと外付けアンテナ"
         }
       }
     ]
@@ -8550,7 +8697,8 @@
       "https://shop.m5stack.com/products/servo-module",
       "https://www.switch-science.com/products/6737",
       "https://shop.m5stack.com/products/servo2-module-16-channels-13-2-pca9685",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-5SJH"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-5SJH",
+      "https://shop.pimoroni.com/products/servo2-module-16-channels-13-2-pca9685"
     ],
     "members": [
       {
@@ -8595,6 +8743,16 @@
         "key": "sengoku/EEHD-5SJH",
         "fingerprint": "d6d52ba24a3ed186496b7f5ab966d68938a102d40fa92ac3657e718ea19c7a5a",
         "variant": "m014b",
+        "features": {
+          "型番": "M014-B",
+          "チャンネル数": "16チャンネル"
+        }
+      },
+      {
+        "key": "pimoroni/h-servo2-module-16-channels-13-2-pca9685",
+        "fingerprint": "2697fca1fc3f7605bac37bee287723cd9a2291eb45c7151164ed072b4bd67580",
+        "variant": "m014b",
+        "offerId": "39855026962515",
         "features": {
           "型番": "M014-B",
           "チャンネル数": "16チャンネル"
@@ -8674,7 +8832,8 @@
       "https://shop.m5stack.com/products/pb-hub",
       "https://www.switch-science.com/products/8304",
       "https://shop.m5stack.com/products/i-o-hub-1-to-6-expansion-unit-stm32f0",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6RWS"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6RWS",
+      "https://shop.pimoroni.com/products/i-o-hub-1-to-6-expansion-unit-stm32f0"
     ],
     "members": [
       {
@@ -8719,6 +8878,16 @@
         "key": "sengoku/EEHD-6RWS",
         "fingerprint": "c58b4a56f2bc14ff2f60333df65e788e9e7b91e8f6059049dfb122bbcf3e002b",
         "variant": "U041-B",
+        "features": {
+          "型番": "U041-B",
+          "マイコン": "STM32F0"
+        }
+      },
+      {
+        "key": "pimoroni/h-i-o-hub-1-to-6-expansion-unit-stm32f0",
+        "fingerprint": "a99450d98c3f9b276e8f314b31c6cf8934345c3a3b006f14c7f36ccc97383605",
+        "variant": "U041-B",
+        "offerId": "40339314049107",
         "features": {
           "型番": "U041-B",
           "マイコン": "STM32F0"
@@ -9349,7 +9518,8 @@
       "https://shop.m5stack.com/products/lan-module-w5500-with-poe",
       "https://www.switch-science.com/products/7590",
       "https://shop.m5stack.com/products/lan-module-w5500-with-poe-v12",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6UR3"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6UR3",
+      "https://shop.pimoroni.com/products/lan-module-w5500-with-poe-v12"
     ],
     "members": [
       {
@@ -9394,6 +9564,16 @@
         "key": "sengoku/EEHD-6UR3",
         "fingerprint": "46d75fb326b0483c9540668611e2e7f5722961b917872f28edb90b389e68b7ec",
         "variant": "K012-C-V12",
+        "features": {
+          "型番": "K012-C-V12",
+          "製品名": "LAN Module W5500 with PoE V12"
+        }
+      },
+      {
+        "key": "pimoroni/h-lan-module-w5500-with-poe-v12",
+        "fingerprint": "900a5d59b232dcbbf86a134ad309149b1c5f103fdd5bf35d3271c271b721979e",
+        "variant": "K012-C-V12",
+        "offerId": "39855161475155",
         "features": {
           "型番": "K012-C-V12",
           "製品名": "LAN Module W5500 with PoE V12"
@@ -9817,7 +9997,8 @@
       "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-647J",
       "https://www.switch-science.com/products/9275",
       "https://shop.m5stack.com/products/4-channel-relay-13-2-module-v1-1-stm32f030",
-      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6UTH"
+      "https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6UTH",
+      "https://shop.pimoroni.com/products/4-channel-relay-module-stm32"
     ],
     "members": [
       {
@@ -9880,6 +10061,17 @@
           "型番": "M121-V11",
           "チップ": "STM32F030",
           "英語名": "4-Channel Relay 13.2 Module V1.1 (STM32F030)"
+        }
+      },
+      {
+        "key": "pimoroni/h-4-channel-relay-module-stm32",
+        "fingerprint": "d6175b63c3b96036177e40cc91b73e2bf63777725d441f9f345d721df49f1dcf",
+        "variant": "M121",
+        "offerId": "39959005724755",
+        "features": {
+          "型番": "M121",
+          "チップ": "STM32",
+          "英語名": "4-Channel Relay Module (STM32)"
         }
       }
     ]
@@ -10429,6 +10621,144 @@
           "型番": "D2F-01F-D",
           "動作形": "低荷重動作形",
           "端子": "はんだづけ小型端子"
+        }
+      }
+    ]
+  },
+  {
+    "id": "stem-k059",
+    "label": "ATOM DTU NB-IoT キット",
+    "purpose": "ATOM用のNB-IoT通信DTUキット。通信モジュールの世代で型番が分かれる",
+    "reviewedAt": "2026-11-10",
+    "sources": [
+      "https://shop.m5stack.com/products/atom-dtu-nb-iot-kit-global-version-sim7020g",
+      "https://shop.pimoroni.com/products/atom-dtu-nb-iot-kit-global-version-sim7020g",
+      "https://shop.m5stack.com/products/atom-dtu-nb-iot2-kit-global-version-sim7028"
+    ],
+    "members": [
+      {
+        "key": "m5stack/h-atom-dtu-nb-iot-kit-global-version-sim7020g",
+        "fingerprint": "90a86e8cee6b8110741058d2f2296eba992e337c0ce7cb26e598e6cf73913adc",
+        "variant": "K059",
+        "offerId": "39942355583148",
+        "features": {
+          "型番": "K059",
+          "通信モジュール": "SIM7020G"
+        }
+      },
+      {
+        "key": "pimoroni/h-atom-dtu-nb-iot-kit-global-version-sim7020g",
+        "fingerprint": "b2a70fcdc1d71aca3f3027b4b86dae6294338cba0fffecedb9e2c38e4101fbc1",
+        "variant": "K059",
+        "offerId": "39405096468563",
+        "features": {
+          "型番": "K059",
+          "通信モジュール": "SIM7020G"
+        }
+      },
+      {
+        "key": "m5stack/h-atom-dtu-nb-iot2-kit-global-version-sim7028",
+        "fingerprint": "d20cf51d0b3412371c1ee293e676ce9d2700b1140b2a8c90e19ac088b7b716ee",
+        "variant": "K059-B",
+        "offerId": "45369692389633",
+        "features": {
+          "型番": "K059-B",
+          "通信モジュール": "SIM7028"
+        }
+      }
+    ]
+  },
+  {
+    "id": "stem-m031-c",
+    "label": "COM.LoRaWAN モジュール（ASR6501）",
+    "purpose": "M5Stack用のLoRaWAN通信モジュール。周波数帯と版で型番が分かれる",
+    "reviewedAt": "2026-11-10",
+    "sources": [
+      "https://shop.m5stack.com/products/com-lorawan-module-868mhz-asr6501",
+      "https://shop.m5stack.com/products/com-lorawan-module-915mhz-asr6501-with-antenna",
+      "https://shop.m5stack.com/products/com-lorawan-module-868mhz-v2-0-asr6501",
+      "https://shop.pimoroni.com/products/com-lorawan-module-868mhz-v2-0-asr6501"
+    ],
+    "members": [
+      {
+        "key": "m5stack/h-com-lorawan-module-868mhz-asr6501",
+        "fingerprint": "72cc596343c913ec9013e2a70f2f87ace05b2837616165de83c9efe1bd2e58bc",
+        "variant": "M031-C",
+        "offerId": "35580975186084",
+        "features": {
+          "型番": "M031-C",
+          "製品名": "COM.LoRaWAN Module 868MHz"
+        }
+      },
+      {
+        "key": "m5stack/h-com-lorawan-module-915mhz-asr6501-with-antenna",
+        "fingerprint": "8fff60904e168a6b690c8e8924a69b8ba181df7544ed2735213feb7b13e27fbb",
+        "variant": "M031-C3",
+        "offerId": "39295244075180",
+        "features": {
+          "型番": "M031-C3",
+          "製品名": "COM.LoRaWAN Module 915MHz"
+        }
+      },
+      {
+        "key": "m5stack/h-com-lorawan-module-868mhz-v2-0-asr6501",
+        "fingerprint": "5a49b3be1fb3f89da0fc723ebc3ebf79a2171a7cb552bd81204ab29dabbbf935",
+        "variant": "M031-C4",
+        "offerId": "42734129414401",
+        "features": {
+          "型番": "M031-C4",
+          "製品名": "COM.LoRaWAN Module 868MHz V2.0"
+        }
+      },
+      {
+        "key": "pimoroni/h-com-lorawan-module-868mhz-v2-0-asr6501",
+        "fingerprint": "db58bf3808adcd9f9b387f161c88dedde0f12d8ea476444f84e536688f994477",
+        "variant": "M031-C4",
+        "offerId": "39959097868371",
+        "features": {
+          "型番": "M031-C4",
+          "製品名": "COM.LoRaWAN Module 868MHz V2.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "stem-kitronik-5610",
+    "label": "Kitronik MI:power board（micro:bit用電源ボード）",
+    "purpose": "micro:bit用の電源ボード。micro:bit V2向けの版で型番が分かれる",
+    "reviewedAt": "2026-11-10",
+    "sources": [
+      "https://www.switch-science.com/products/3178",
+      "https://www.switch-science.com/products/7052",
+      "https://shop.pimoroni.com/products/kitronik-mi-power-board-for-the-bbc-microbit-v2"
+    ],
+    "members": [
+      {
+        "key": "switch-science/3178",
+        "fingerprint": "5a450dcd302ac82cc082969566b440f6d6a675b1cb9129589d6eabad0462f72e",
+        "variant": "5610",
+        "features": {
+          "型番": "KITRONIK-5610",
+          "製品名": "MI:電源ボード"
+        }
+      },
+      {
+        "key": "switch-science/7052",
+        "fingerprint": "f85bb7ac5a2bb2393507988e747d26ad94c439710c5a8828874c33d789d4ebf5",
+        "variant": "5610-V2",
+        "features": {
+          "型番": "5610-V2",
+          "製品名": "MI:電源ボード (V2)"
+        }
+      },
+      {
+        "key": "pimoroni/h-kitronik-mi-power-board-for-the-bbc-microbit-v2",
+        "fingerprint": "c7810df8a4b005d19deb616e447ef875b6e68fba655f89e0283b5997f0f002a9",
+        "variant": "5610-V2",
+        "offerId": "32399875375187",
+        "features": {
+          "型番": "5610-V2",
+          "製品名": "MI:電源ボード (V2)"
         }
       }
     ]
