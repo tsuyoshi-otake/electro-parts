@@ -107,7 +107,9 @@ export function shopifyCollector(store: ShopifyStore, productPageReader?: Produc
       if(s.complete&&c.productPages!==null&&productPageReader!==undefined) {
         const now=()=>(deps.now?.()??new Date()).getTime();
         s.pageInventory=await readProductPages({fetcher,reader:productPageReader,config:c.productPages,observedAtMs:now(),nowMs:now,log:deps.log,tag,
-          targets:s.items.map(p=>({key:p.handle,url:shopifyProductUrl(store,p.handle),offerIds:p.variants.map(v=>String(v.id))}))});
+          // The catalogue already says a product with no available variant cannot be bought, so its page has no count to add;
+          // the adapter records "no count shown" for it (ADR-0027). A product with any available variant is read whole.
+          targets:s.items.filter(p=>p.variants.some(v=>v.available)).map(p=>({key:p.handle,url:shopifyProductUrl(store,p.handle),offerIds:p.variants.map(v=>String(v.id))}))});
       }
       s.retrievedAt=(deps.now?.()??new Date()).toISOString();
       return {raw:s,retrievedAt:s.retrievedAt,complete:s.complete,errors:s.errors,warnings:s.pageInventory===undefined?[]:productPageWarnings(s.pageInventory),

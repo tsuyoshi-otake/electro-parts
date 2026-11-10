@@ -81,7 +81,7 @@ describe('M5Stack full public catalogue',()=>{
 
 describe('M5Stack stock counts from product pages (#74)', () => {
   const PAGES = { shards: 1, maxPages: 900, maxFailures: 30, maxMinutes: 35 };
-  it('reads every product page and records each variant count as site-reported', async () => {
+  it('reads the page of every purchasable product and records each variant count as site-reported', async () => {
     const { m5stackFixture } = await import('../helpers/m5stack.ts');
     const { m5stackSnapshotAdapter } = await import('../../src/adapters/m5stack/snapshotAdapter.ts');
     const variants = new Map(m5stackFixture().pages.flat().map((p) => [p.handle, p.variants.map((v) => v.id)]));
@@ -96,8 +96,8 @@ describe('M5Stack stock counts from product pages (#74)', () => {
     }, { maxRequests: 1000, productPages: PAGES });
     expect(result.complete).toBe(true);
     expect(result.warnings).toEqual([]);
-    expect(result.metrics).toMatchObject({ productPagesSelected: 664, productPagesRead: 664, productPagesFailed: 0 });
-    expect(result.requests.filter((u) => u.includes('/products/'))).toHaveLength(664);
+    expect(result.metrics).toMatchObject({ productPagesSelected: 443, productPagesRead: 443, productPagesFailed: 0 });
+    expect(result.requests.filter((u) => u.includes('/products/'))).toHaveLength(443);
     const normalized = m5stackSnapshotAdapter.normalize(result.raw, 'a'.repeat(64));
     const offers = normalized.products.find((p) => p.pageKey === m5stackPageKey('m5stamp-lora-module-sx1262'))!.offers;
     expect(offers.map((o) => [o.externalOfferId, o.availability.quantity, o.availability.quantitySemantics])).toEqual([
@@ -113,10 +113,62 @@ describe('M5Stack stock counts from product pages (#74)', () => {
     const result = await collectM5StackFixture((url, body) => (url.includes('/products/') ? '<html>maintenance</html>' : body),
       { maxRequests: 1000, productPages: { ...PAGES, maxFailures: 3 } });
     expect(result.complete).toBe(true);
-    expect(result.warnings[0]).toContain('Product pages stopped early (0/664 read): more than 3 failed pages');
+    expect(result.warnings[0]).toContain('Product pages stopped early (0/443 read): more than 3 failed pages');
     expect(result.requests.filter((u) => u.includes('/products/'))).toHaveLength(4);
     const offer = m5stackSnapshotAdapter.normalize(result.raw, 'a'.repeat(64)).products[0]!.offers[0]!;
     expect(offer.availability).toMatchObject({ quantity: null, quantitySemantics: 'site_reported', quantityUnobserved: true });
+  });
+  describe('products with no available variant are not read (#93)', () => {
+    const items = m5stackFixture().pages.flat();
+    const purchasable = (p: (typeof items)[number]) => p.variants.some((v) => v.available);
+    const skipped = items.filter((p) => !purchasable(p));
+    const MIXED = 'stepmotor-module-with-mega328p-drv8825'; // 4 variants, at least one available and one not
+    const productHandle = (url: string) => /\/products\/([^/?]+)$/.exec(new URL(url).pathname)?.[1];
+    const serve = (url: string, body: string) => {
+      const handle = productHandle(url);
+      if (handle === undefined) return body;
+      return items.find((p) => p.handle === decodeURIComponent(handle))!.variants.map((v, i) => `<option data-inventory="${i + 5}" value="${v.id}">`).join('');
+    };
+    const run = (config = {}) => collectM5StackFixture(serve, { maxRequests: 1000, productPages: PAGES, ...config });
+    it('requests exactly the product pages of products with an available variant, and the run stays complete', async () => {
+      const result = await run();
+      expect(result.complete).toBe(true);
+      expect(result.errors).toEqual([]);
+      expect(result.warnings).toEqual([]);
+      expect(skipped.length).toBeGreaterThan(0);
+      const requested = result.requests.filter((u) => u.includes('/products/')).map((u) => decodeURIComponent(u.slice(u.lastIndexOf('/') + 1))).sort();
+      expect(requested).toEqual(items.filter(purchasable).map((p) => p.handle).sort());
+      expect(requested).not.toContain('m5stack-t-shirt-origin');
+    });
+    it('still reads a product with one available and one unavailable variant, for all of its variants', async () => {
+      const mixed = items.find((p) => p.handle === MIXED)!;
+      expect(mixed.variants.some((v) => v.available) && mixed.variants.some((v) => !v.available)).toBe(true);
+      const result = await run();
+      expect(result.requests.filter((u) => u.endsWith(`/products/${MIXED}`))).toHaveLength(1);
+      const quantities = result.raw.pageInventory!.quantities;
+      for (const v of mixed.variants) expect(quantities).toHaveProperty(String(v.id));
+    });
+    it('counts only the targeted pages as selected', async () => {
+      const result = await run();
+      expect(result.metrics).toMatchObject({ productPagesSelected: items.filter(purchasable).length, productPagesRead: items.filter(purchasable).length });
+      expect(result.raw.pageInventory).toMatchObject({ eligible: items.filter(purchasable).length });
+      expect(Object.keys(result.raw.pageInventory!.quantities).some((id) => skipped.some((p) => p.variants.some((v) => String(v.id) === id)))).toBe(false);
+    });
+    it('records no count shown for a skipped product, and keeps unobserved for a purchasable one that was not read', async () => {
+      const { m5stackSnapshotAdapter } = await import('../../src/adapters/m5stack/snapshotAdapter.ts');
+      const normalizedOf = async (config = {}) => m5stackSnapshotAdapter.normalize((await run(config)).raw, 'a'.repeat(64));
+      const offersOf = (n: Awaited<ReturnType<typeof normalizedOf>>, handle: string) => n.products.find((p) => p.pageKey === m5stackPageKey(handle))!.offers;
+      const full = await normalizedOf();
+      for (const o of offersOf(full, 'm5stack-t-shirt-origin')) {
+        expect(o.availability).toMatchObject({ quantity: null, quantitySemantics: 'site_reported' });
+        expect(o.availability).not.toHaveProperty('quantityUnobserved');
+      }
+      // One page per run: every other purchasable product is outside the slice and stays unobserved.
+      const sliced = await normalizedOf({ productPages: { ...PAGES, maxPages: 1 } });
+      const unread = offersOf(sliced, 'm5stack-t-shirt-origin').concat(sliced.products.flatMap((p) => p.offers).filter((o) => o.availability.purchasable));
+      expect(unread.filter((o) => o.availability.quantityUnobserved === true).length).toBeGreaterThan(400);
+      for (const o of offersOf(sliced, 'm5stack-t-shirt-origin')) expect(o.availability).not.toHaveProperty('quantityUnobserved');
+    });
   });
   it('without product pages configured, the catalogue alone is read and counts stay not exposed', async () => {
     const result = await collectM5StackFixture();
@@ -143,11 +195,11 @@ describe('M5Stack stock counts from product pages (#74)', () => {
         return { status: 503, retryAfter: '130' };
       };
     };
-    it('is waited out with the shipped settings, and every page is still requested', async () => {
+    it('is waited out with the shipped settings, and every targeted page is still requested', async () => {
       const result = await collectM5StackFixture(options, shipped, { refuse: refuseOnce() });
       expect(result.complete).toBe(true);
       expect(result.warnings.filter((w) => w.includes('stopped early'))).toEqual([]);
-      expect(result.metrics).toMatchObject({ productPagesSelected: 664, productPagesFailed: 0, retries: 1 });
+      expect(result.metrics).toMatchObject({ productPagesSelected: 443, productPagesFailed: 0, retries: 1 });
       expect(result.metrics['waitedMs']).toBeGreaterThanOrEqual(130_000);
       expect(result.requests.filter((u) => u.endsWith('/products/m5stamp-lora-module-sx1262'))).toHaveLength(2);
     });
@@ -156,7 +208,7 @@ describe('M5Stack stock counts from product pages (#74)', () => {
       const result = await collectM5StackFixture(options, defaults, { refuse: refuseOnce() });
       expect(result.complete).toBe(true);
       // The 2026-11-04 run log, as it read then.
-      expect(result.warnings[0]).toMatch(/^Product pages stopped early \(\d+\/664 read\): 3 consecutive fetch failures: .*blocked by Retry-After for another 130000 ms$/);
+      expect(result.warnings[0]).toMatch(/^Product pages stopped early \(\d+\/443 read\): 3 consecutive fetch failures: .*blocked by Retry-After for another 130000 ms$/);
       expect(result.warnings[1]).toContain("exceeding this run's 120000 ms wait limit");
     });
   });
