@@ -55435,21 +55435,19 @@
   },
   {
     "id": "[\"akizuki\",\"108218\",\"sengoku\",\"EEHD-4WXC\"]",
-    "fingerprint": "84c8da3551df56c7c815b741062e98e7c7d4545daed8ae69a9609a95cd057064",
-    "decision": "unresolved",
-    "evidence": "名前ベースの候補（共通語: MAX31855）。秋月電子「MAX31855使用 K型熱電対アンプモジュール」（型番欄 269）とせんごく「MAX31855搭載 熱電対アンプ breakout board (MAX6675アップグレード版)　ADA-269」（Adafruit）は、どちらも MAX31855 を使う熱電対アンプのモジュールで、秋月電子の型番 269 はせんごくの ADA-269 の数字部分と一致する。ただし秋月電子側はメーカー記載がなく、「269」と「ADA-269」が同じ Adafruit 製品の番号かをフィールドから確認できないため、同一商品とは断定しない。",
+    "fingerprint": "ea4841de2f07696c30732cea62cc9832bd6e6f5a4a8828361dda99c72b6d12b1",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-269（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「269」）。この組はSENGOKU/EEHD-4WXC（0.6.5の名前ベース探索の探索キー）も共有する。秋月電子「MAX31855使用 K型熱電対アンプモジュール」とせんごく「MAX31855搭載 熱電対アンプ breakout board (MAX6675アップグレード版)　ADA-269」（ベンダーAdafruit）は、どちらもMAX31855を使う熱電対アンプのモジュールで、秋月電子の型番269はせんごくのADA-269の数字部分と一致する。0.6.5の判定は要確認（Claude Sonnet 5.5、2026-11-02）で、理由は秋月電子側にメーカー記載がなく269がAdafruitの番号かを確認できないことだった。0.7.11（#113）で、型番欄の数字が他店のメーカー番号と一致し、商品名が製品の種類と搭載チップで一致する行は、メーカー名の記載がなくても同じ製品番号として扱うと決めた。この行も同じ基準で同一商品とする。対応熱電対（K型）の記載は秋月電子側のみ。",
     "differences": [
-      "型番: 秋月電子「269」 ↔ せんごく「ADA-269」",
-      "メーカー: 秋月電子「記載なし」 ↔ せんごく「Adafruit」",
-      "対応熱電対: 秋月電子「K型」 ↔ せんごく「記載なし」"
+      "型番表記: 秋月電子「269」 ↔ せんごく「ADA-269」"
     ],
     "missingEvidence": [
-      "秋月電子側のメーカー（Adafruit かどうか）",
-      "秋月電子の型番 269 が ADA-269 と同一製品を指すこと",
-      "せんごく側の対応熱電対（K型）の記載"
+      "秋月電子側にメーカー名の記載がない",
+      "せんごく側の行に対応熱電対（K型）の記載がない",
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
     ],
-    "reviewedAt": "2026-11-02",
-    "reviewerModel": "Claude Sonnet 5.5"
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Claude Fable 5.2"
   },
   {
     "id": "[\"akizuki\",\"108883\",\"sengoku\",\"EEHD-6KM5\"]",
@@ -86157,5 +86155,1103 @@
       "55092328268155"
     ],
     "reviewerModel": "Claude Fable 5.2"
+  },
+  {
+    "id": "[\"akizuki\",\"107748\",\"pimoroni\",\"h-adafruit-motor-stepper-servo-shield-for-arduino-v2-kit\"]",
+    "fingerprint": "aae2fdfb129cded89a4641b6c09d937401c37734124312e29e5247f9ba6ddda4",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-1438（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1438」）。秋月電子「モーター・シールドキット For Arduino(R)」とPimoroni「Adafruit Motor/Stepper/Servo Shield for Arduino v2 Kit - v2.3」（SKU ADA1438、店舗ラベルAdafruit）は、どちらもArduino用のモーター/ステッパー/サーボシールドキット。版（v2.3）の記載はPimoroni側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「1438」 ↔ Pimoroni「ADA1438」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない",
+      "Pimoroni側の行にのみ版（v2.3）の記載がある"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "382364528"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"108218\",\"pimoroni\",\"h-adafruit-thermocouple-amplifier-max31855-breakout-board\"]",
+    "fingerprint": "48762efbd2f681225d8511048daaae9ee97a82d518cc486a76f88e3a8d30ef0f",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-269（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「269」）。秋月電子「MAX31855使用 K型熱電対アンプモジュール」とPimoroni「Thermocouple Amplifier MAX31855 breakout board (MAX6675 upgrade)」（SKU ADA269、店舗ラベルAdafruit）は、どちらもMAX31855を使う熱電対アンプのモジュールで、秋月電子の型番269はADA269の数字部分と一致する。0.7.11（#113）で、型番欄の数字が他店のメーカー番号と一致し、商品名が製品の種類と搭載チップで一致する行は、メーカー名の記載がなくても同じ製品番号として扱うと決めた。この行も同じ基準で同一商品とする。せんごくの同じ番号の組（ADA-269）と同じ判定に揃える。対応熱電対（K型）の記載は秋月電子側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「269」 ↔ Pimoroni「ADA269」"
+    ],
+    "missingEvidence": [
+      "秋月電子側にメーカー名の記載がない",
+      "Pimoroni側の行に対応熱電対（K型）の記載がない",
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "288858286"
+    ],
+    "reviewerModel": "Claude Fable 5.2"
+  },
+  {
+    "id": "[\"akizuki\",\"108220\",\"pimoroni\",\"h-adafruit-rgb-color-sensor-with-ir-filter\"]",
+    "fingerprint": "0867bc19793554c442b6b35aca12e53b036dd9acb62d8e303db999bdaa39e297",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-1334（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1334」）。秋月電子「TCS34725使用 カラーセンサーモジュール(白色LED搭載)」とPimoroni「RGB Color Sensor with IR filter and White LED - TCS34725」（SKU ADA1334、店舗ラベルAdafruit）は、どちらもTCS34725を使うカラーセンサーモジュールで、白色LED搭載の記載も一致する。",
+    "differences": [
+      "型番表記: 秋月電子「1334」 ↔ Pimoroni「ADA1334」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "311273189"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"108221\",\"pimoroni\",\"h-ina219-high-side-dc-current-sensor-breakout-26v-3-2a-max-stemma-qt\"]",
+    "fingerprint": "738239a62471f4da49a21b7c8b9d9d8c57e16a54b671a7bbf681e567df852e5e",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-904（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「904」）。秋月電子「INA219使用電流センサーモジュール(カレントセンサー)」とPimoroni「INA219 High Side DC Current Sensor Breakout - 26V ±3.2A Max」（SKU ADA904、店舗ラベルAdafruit）は、どちらもINA219を使うハイサイドDC電流センサーブレイクアウト。定格（最大26 V ±3.2A）の記載はPimoroni側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「904」 ↔ Pimoroni「ADA904」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない",
+      "Pimoroni側の行にのみ定格（最大26 V ±3.2A）の記載がある"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32394369106003"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"108221\",\"sengoku\",\"EEHD-4WXH\"]",
+    "fingerprint": "7b4a2e650f5214b36756ab3baaf25de66105b09ec6457d60a888d92e82192d08",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-904（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「904」）。秋月電子「INA219使用電流センサーモジュール(カレントセンサー)」とせんごく「INA219 High Side DC Current Sensor Breakout - 26V ±3.2A Max 　ADA-904」（ベンダーAdafruit）は、どちらもINA219を使うハイサイドDC電流センサーブレイクアウトで、定格（最大26V ±3.2A）の記載も一致する。",
+    "differences": [
+      "型番表記: 秋月電子「904」 ↔ せんごく「ADA-904」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"108942\",\"pimoroni\",\"h-adafruit-ft232h-breakout-general-purpose-usb-to-gpio-spi-i2c\"]",
+    "fingerprint": "1359bf25793c5024659d0a12718d4b73a9614489f6a947ff66a839c5e6837b86",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-2264（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「2264」）。秋月電子「FT232H使用USB⇔GPIO+SPI+I2C変換モジュール」とPimoroni「Adafruit FT232H Breakout - General Purpose USB to GPIO, SPI, I2C - USB C」（SKU ADA2264、店舗ラベルAdafruit）は、どちらもFT232Hを使うUSB⇔GPIO+SPI+I2C変換モジュール。コネクタ（USB Type-C）の記載はPimoroni側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「2264」 ↔ Pimoroni「ADA2264」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない",
+      "Pimoroni側の行にのみUSB Type-Cコネクタの記載がある"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "1004798821"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"112836\",\"pimoroni\",\"h-edge-connector-breakout-board-for-bbc-micro-bit\"]",
+    "fingerprint": "b1665239b91a60ad591f115f98fcd8dc6796ec872ce20888f7782924d0046be3",
+    "decision": "same_product",
+    "evidence": "共有キーはKITRONIK-5601B（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「5601B」）。秋月電子「micro:bit マイクロビット用コネクターブレークアウトボード 完成品」とPimoroni「Edge Connector Breakout Board for micro:bit」（SKU KIT-5601B、店舗ラベルKitronik）は、どちらもmicro:bit用エッジコネクタのブレイクアウトボード。完成品の記載は秋月電子側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「5601B」 ↔ Pimoroni「KIT-5601B」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない",
+      "Pimoroni側の行に完成品かどうかの記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "19642210119"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"114793\",\"pimoroni\",\"h-mini-maestro-usb-servo-controller\"]",
+    "fingerprint": "a89ace0b6429ce54de5c4d27163f71bbff183d152c80bb0bf99bb52f7e6ada2a",
+    "decision": "same_product",
+    "evidence": "共有キーはPOLOLU-1352（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1352」）。秋月電子「Mini Maestro12 USB接続プログラマブル12chサーボコントローラー」とPimoroni「Mini Maestro USB Servo Controller」のvariant「12-Channel」（SKU POL-1352）は、どちらもMini Maestro 12チャンネルUSBサーボコントローラ。",
+    "differences": [
+      "型番表記: 秋月電子「1352」 ↔ Pimoroni「POL-1352」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39352963170387"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"114794\",\"pimoroni\",\"h-mini-maestro-usb-servo-controller\"]",
+    "fingerprint": "6877ba9049b2cdaaa4728e401c03faf3a4723cb3e2b938b4eaf6b9dbefb3cca3",
+    "decision": "same_product",
+    "evidence": "共有キーはPOLOLU-1356（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1356」）。秋月電子「Mini Maestro24 USB接続プログラマブル24chサーボコントローラー」とPimoroni「Mini Maestro USB Servo Controller」のvariant「24-Channel」（SKU POL-1356）は、どちらもMini Maestro 24チャンネルUSBサーボコントローラ。",
+    "differences": [
+      "型番表記: 秋月電子「1356」 ↔ Pimoroni「POL-1356」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39352963235923"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"114798\",\"pimoroni\",\"h-micro-maestro-6-channel-usb-servo-controller-1\"]",
+    "fingerprint": "6efc370068e15971a27a442240e9188616a92f0fdbc401e42c773dfad682582a",
+    "decision": "same_product",
+    "evidence": "共有キーはPOLOLU-1350（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1350」）。秋月電子「Micro Maestro6 USB接続プログラマブル6chサーボコントローラー」とPimoroni「Micro Maestro 6-Channel USB Servo Controller」（SKU POL-1350、店舗ラベルPololu）は、どちらもMicro Maestro 6チャンネルUSBサーボコントローラ。",
+    "differences": [
+      "型番表記: 秋月電子「1350」 ↔ Pimoroni「POL-1350」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39352903008339"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116335\",\"pimoroni\",\"h-adafruit-si7021-temperature-humidity-sensor-breakout-board-stemma-qt\"]",
+    "fingerprint": "8699201554476f9e43961c60ed02ad40b669f8728afd4640a9a22b64bb130377",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-3251（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「3251」）。秋月電子「Si7021使用温湿度センサーモジュール」とPimoroni「Adafruit Si7021 Temperature & Humidity Sensor Breakout Board」（SKU ADA3251、店舗ラベルAdafruit）は、どちらもSi7021を使う温湿度センサーモジュール。",
+    "differences": [
+      "型番表記: 秋月電子「3251」 ↔ Pimoroni「ADA3251」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32206330560595"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116344\",\"pimoroni\",\"h-adafruit-tsl2591-high-dynamic-range-digital-light-sensor\"]",
+    "fingerprint": "5205ee553b808f3d4175e85fe6b8a32d703053023d56942c4a9978dacef2ce01",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-1980（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1980」）。秋月電子「Adafruit TSL2591 High Dynamic Range DigitalLight Sensor」とPimoroni「Adafruit TSL2591 High Dynamic Range Digital Light Sensor」（SKU ADA1980、店舗ラベルAdafruit）は、どちらもAdafruitのTSL2591ハイダイナミックレンジデジタル光センサー。",
+    "differences": [
+      "型番表記: 秋月電子「1980」 ↔ Pimoroni「ADA1980」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "887331421"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116345\",\"pimoroni\",\"h-adafruit-12-key-capacitive-touch-sensor-breakout-mpr121-stemma-qt\"]",
+    "fingerprint": "2777fd4c4c0f02677ee0230519b0bb5fb1024b2e4cb201e676b2980407bf5577",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-1982（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1982」）。秋月電子「Adafruit 12-Key Capacitive Touch SensorBreakout - MPR121」とPimoroni「Adafruit 12-Key Capacitive Touch Sensor Breakout - MPR121」（SKU ADA1982、店舗ラベルAdafruit）は、どちらもAdafruitのMPR121を使う12キー静電容量タッチセンサーブレイクアウト。",
+    "differences": [
+      "型番表記: 秋月電子「1982」 ↔ Pimoroni「ADA1982」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32383279530067"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116347\",\"pimoroni\",\"h-adafruit-feather-m0-basic-proto-atsamd21-cortex-m0\"]",
+    "fingerprint": "9b6e027ceae884f1ad37f8cd89b593ef91e00eee07bb4b87dcfe1e9853a84cd7",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-2772（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「2772」）。秋月電子「Adafruit Feather M0 Basic Proto - ATSAMD21Cortex M0」とPimoroni「Adafruit Feather M0 Basic Proto - ATSAMD21 Cortex M0」（SKU ADA2772、店舗ラベルAdafruit）は、どちらもAdafruit Feather M0 Basic Proto（ATSAMD21 Cortex M0）。",
+    "differences": [
+      "型番表記: 秋月電子「2772」 ↔ Pimoroni「ADA2772」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "2998751920138"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116348\",\"pimoroni\",\"h-adafruit-feather-m0-adalogger\"]",
+    "fingerprint": "4af0f3f01003001224aeca0cdfc632efe9320195d623a3914bd5782cd4643d09",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-2796（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「2796」）。秋月電子「Adafruit Feather M0 Adalogger」とPimoroni「Adafruit Feather M0 Adalogger」（SKU ADA2796、店舗ラベルAdafruit）は、どちらもAdafruit Feather M0 Adalogger。",
+    "differences": [
+      "型番表記: 秋月電子「2796」 ↔ Pimoroni「ADA2796」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "11892212935"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116348\",\"sengoku\",\"EEHD-56JN\"]",
+    "fingerprint": "7dcef00260da863b6f24bf133d4f2c3361670962d1ef326079bc528b533516f2",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-2796（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「2796」）。秋月電子「Adafruit Feather M0 Adalogger」とせんごく「Adafruit Feather M0 Adalogger　ADA-2796」（ベンダーAdafruit）は、どちらもAdafruit Feather M0 Adalogger。",
+    "differences": [
+      "型番表記: 秋月電子「2796」 ↔ せんごく「ADA-2796」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116349\",\"pimoroni\",\"h-adafruit-feather-32u4-bluefruit-le\"]",
+    "fingerprint": "c115090f86c94a2e5bc783449b6ce48de2acc00025a7b066d3748399d6e70261",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-2829（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「2829」）。秋月電子「Adafruit Feather 32u4 Bluefruit LE」とPimoroni「Adafruit Feather 32u4 Bluefruit LE」（SKU ADA2829、店舗ラベルAdafruit）は、どちらもAdafruit Feather 32u4 Bluefruit LE。",
+    "differences": [
+      "型番表記: 秋月電子「2829」 ↔ Pimoroni「ADA2829」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "10589913927"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116349\",\"sengoku\",\"EEHD-4YN8\"]",
+    "fingerprint": "03062159a2039941ad4c738c81ccb165349d7ca5a53137e23739125d81ad8416",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-2829（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「2829」）。秋月電子「Adafruit Feather 32u4 Bluefruit LE」とせんごく「Adafruit Feather 32u4 Bluefruit LE　ADA-2829」（ベンダーAdafruit）は、どちらもAdafruit Feather 32u4 Bluefruit LE。",
+    "differences": [
+      "型番表記: 秋月電子「2829」 ↔ せんごく「ADA-2829」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116350\",\"pimoroni\",\"h-adafruit-feather-m0-bluefruit-le\"]",
+    "fingerprint": "9ec924feeafaa41b413f8d1a5cc286c6f865f485a4dfc387c643c708514ca589",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-2995（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「2995」）。秋月電子「Adafruit Feather M0 Bluefruit LE」とPimoroni「Adafruit Feather M0 Bluefruit LE」（SKU ADA2995、店舗ラベルAdafruit）は、どちらもAdafruit Feather M0 Bluefruit LE。",
+    "differences": [
+      "型番表記: 秋月電子「2995」 ↔ Pimoroni「ADA2995」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32814821642"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116350\",\"sengoku\",\"EEHD-4ZLU\"]",
+    "fingerprint": "3a1c2b5a9047fd48161f225390832a4158e4ca20805af9de05a33e2c44f71fa7",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-2995（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「2995」）。秋月電子「Adafruit Feather M0 Bluefruit LE」とせんごく「Adafruit Feather M0 Bluefruit LE　ADA-2995」（ベンダーAdafruit）は、どちらもAdafruit Feather M0 Bluefruit LE。",
+    "differences": [
+      "型番表記: 秋月電子「2995」 ↔ せんごく「ADA-2995」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116351\",\"pimoroni\",\"h-adafruit-15x7-charlieplex-led-matrix-display-featherwing\"]",
+    "fingerprint": "5c6f29f4fcba98572b1bacf82e63c07922408ef689f9b2af30109139726aa388",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-3134（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「3134」）。秋月電子「Adafruit 15x7 CharliePlex LED Matrix DisplayFeatherWing-Red」とPimoroni「Adafruit 15x7 CharliePlex LED Matrix Display FeatherWing」のvariant「Red」（SKU ADA3134）は、どちらもAdafruit 15x7 CharliePlex LEDマトリクスディスプレイFeatherWingで、色（Red）が一致する。",
+    "differences": [
+      "型番表記: 秋月電子「3134」 ↔ Pimoroni「ADA3134」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "21698096903"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116352\",\"pimoroni\",\"h-teensy-3-x-feather-adapter\"]",
+    "fingerprint": "da8fc7ebe9d1d62db0f6ea6c7f768154be4d896cda3a7211f05508c3ce661fe3",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-3200（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「3200」）。秋月電子「Teensy 3.x Feather Adapter」とPimoroni「Teensy 3.x Feather Adapter」（SKU ADA3200、店舗ラベルAdafruit）は、どちらもTeensy 3.x用Featherアダプタ。",
+    "differences": [
+      "型番表記: 秋月電子「3200」 ↔ Pimoroni「ADA3200」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "27769109383"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116354\",\"pimoroni\",\"h-adafruit-feather-328p-atmega328p-3-3v-8-mhz\"]",
+    "fingerprint": "bea47162de558b7c0cee266443cb0f55e34f95c4db75264ed01e32f84d7cd9b9",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-3458（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「3458」）。秋月電子「Adafruit Feather 328P - Atmega328P 3.3V @ 8MHz compatible with Arduino(R)」とPimoroni「Adafruit Feather 328P - Atmega328P 3.3V @ 8 MHz」（SKU ADA3458、店舗ラベルAdafruit）は、どちらもAdafruit Feather 328P（ATmega328P 3.3V 8MHz）。",
+    "differences": [
+      "型番表記: 秋月電子「3458」 ↔ Pimoroni「ADA3458」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "2089259827210"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116355\",\"pimoroni\",\"h-adafruit-stemma-speaker-plug-and-play-audio-amplifier\"]",
+    "fingerprint": "53b62d88d877318a908c508561dcff2382c947ac90d28b57dbb62cc8d049b000",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-3885（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「3885」）。秋月電子「Adafruit STEMMA Speaker - Plug and Play AudioAmplifier」とPimoroni「Adafruit STEMMA Speaker - Plug and Play Audio Amplifier」（SKU ADA3885、店舗ラベルAdafruit）は、どちらもAdafruit STEMMA Speakerプラグアンドプレイオーディオアンプ。",
+    "differences": [
+      "型番表記: 秋月電子「3885」 ↔ Pimoroni「ADA3885」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "30267266498643"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116356\",\"pimoroni\",\"h-adafruit-neotrellis-rgb-driver-pcb-for-4x4-keypad\"]",
+    "fingerprint": "f81152ff5cc73b97909daecf4d45511a5875fccd6aa4bf3592cba1dea27ed8b3",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-3954（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「3954」）。秋月電子「Adafruit NeoTrellis RGB Driver PCB for 4x4Keypad」とPimoroni「Adafruit NeoTrellis RGB Driver PCB for 4x4 Keypad」（SKU ADA3954、店舗ラベルAdafruit）は、どちらもAdafruit NeoTrellis RGBドライバーPCB（4x4キーパッド用）。",
+    "differences": [
+      "型番表記: 秋月電子「3954」 ↔ Pimoroni「ADA3954」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "21292372492371"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116357\",\"pimoroni\",\"h-adafruit-stemma-soil-sensor-i2c-capacitive-moisture-sensor\"]",
+    "fingerprint": "a4a6c652853d6b272e2503aa18a43ae1792c7304aabcc4047301bd95e4a59eab",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4026（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4026」）。秋月電子「Adafruit STEMMA Soil Sensor - I2C CapacitiveMoisture Sensor」とPimoroni「Adafruit STEMMA Soil Sensor - I2C Capacitive Moisture Sensor」（SKU ADA4026、店舗ラベルAdafruit）は、どちらもAdafruit STEMMA Soil Sensor（I2C静電容量式湿度センサー）。",
+    "differences": [
+      "型番表記: 秋月電子「4026」 ↔ Pimoroni「ADA4026」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39275336663123"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116358\",\"pimoroni\",\"h-adafruit-feather-nrf52840-express\"]",
+    "fingerprint": "9f449807349e5e519fbf582a121493ea199155d12cc7234f0fb7b6b2345ab649",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4062（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4062」）。秋月電子「Adafruit Feather nRF52840 Express」とPimoroni「Adafruit Feather nRF52840 Express」（SKU ADA4062、店舗ラベルAdafruit）は、どちらもAdafruit Feather nRF52840 Express。",
+    "differences": [
+      "型番表記: 秋月電子「4062」 ↔ Pimoroni「ADA4062」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "21391418359891"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116359\",\"pimoroni\",\"h-adafruit-hts221-temperature-humidity-sensor-breakout-board-stemma-qt-qwiic\"]",
+    "fingerprint": "57cc00fc6dc666c35ee89df0f3498b84882ae89f7a52f84142429fe81351e865",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4535（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4535」）。秋月電子「Adafruit HTS221 - Temperature&HumiditySensor Breakout Board」とPimoroni「Adafruit HTS221 - Temperature & Humidity Sensor Breakout Board」（SKU ADA4535、店舗ラベルAdafruit）は、どちらもAdafruit HTS221温湿度センサーブレイクアウト。",
+    "differences": [
+      "型番表記: 秋月電子「4535」 ↔ Pimoroni「ADA4535」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "31600421830739"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116360\",\"pimoroni\",\"h-adafruit-qt-py-samd21-dev-board-with-stemma-qt\"]",
+    "fingerprint": "1e3d5c50ef8cd77f1e0acb63c4cfc2f7fbd3f13da8a526de269008569402a490",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4600（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4600」）。秋月電子「Adafruit QT Py - SAMD21 Dev Board withSTEMMA QT」とPimoroni「Adafruit QT Py - SAMD21 Dev Board」（SKU ADA4600、店舗ラベルAdafruit）は、どちらもAdafruit QT Py SAMD21開発ボード。STEMMA QTの記載は秋月電子側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「4600」 ↔ Pimoroni「ADA4600」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "Pimoroni側の行にSTEMMA QTの記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32302212808787"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116361\",\"pimoroni\",\"h-adafruit-lps22-pressure-sensor-stemma-qt-qwiic-lps22hb\"]",
+    "fingerprint": "287399da99ed0bb8d29d2fda9aaa82b7303588b18d20870286a708bd61b3e823",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4633（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4633」）。秋月電子「Adafruit LPS22 Pressure Sensor - STEMMA QT /Qwiic」とPimoroni「Adafruit LPS22 Pressure Sensor - LPS22HB」（SKU ADA4633、店舗ラベルAdafruit）は、どちらもAdafruit LPS22圧力センサー。センサー品番（LPS22HB）の記載はPimoroni側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「4633」 ↔ Pimoroni「ADA4633」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "Pimoroni側の行にのみセンサー品番（LPS22HB）の記載がある"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "31962492010579"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116362\",\"pimoroni\",\"h-adafruit-featherwing-oled-128x64-oled-add-on-for-feather-stemma-qt-qwiic\"]",
+    "fingerprint": "41e639b22212781356be4956473987ea6ce5fc14c0de493d2079f01b893066ca",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4650（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4650」）。秋月電子「Adafruit FeatherWing OLED - 128x64 OLED Add-on For Feather」とPimoroni「Adafruit FeatherWing OLED - 128x64 OLED Add-on For Feather」（SKU ADA4650、店舗ラベルAdafruit）は、どちらもAdafruit FeatherWing OLED 128x64のFeather用アドオン。",
+    "differences": [
+      "型番表記: 秋月電子「4650」 ↔ Pimoroni「ADA4650」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32206315028563"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116363\",\"pimoroni\",\"h-adafruit-feather-m4-can-express-with-atsame51\"]",
+    "fingerprint": "209e3addadce3ba3017bec71d89c1ced4b853c66e0a79e1ac5ec0f3b44b29d7a",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4759（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4759」）。秋月電子「Adafruit Feather M4 CAN Express with ATSAME51」とPimoroni「Adafruit Feather M4 CAN Express with ATSAME51」（SKU ADA4759、店舗ラベルAdafruit）は、どちらもAdafruit Feather M4 CAN Express（ATSAME51）。",
+    "differences": [
+      "型番表記: 秋月電子「4759」 ↔ Pimoroni「ADA4759」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32383227887699"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116364\",\"pimoroni\",\"h-adafruit-sgp40-air-quality-sensor-breakout-voc-index-stemma-qt-qwiic\"]",
+    "fingerprint": "c3abb06f66926ec1f5e3e9797d7ade5375a2a81f391a4d92557435019bf53371",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4829（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4829」）。秋月電子「Adafruit SGP40 Air Quality Sensor Breakout - VOCIndex」とPimoroni「Adafruit SGP40 Air Quality Sensor Breakout - VOC Index」（SKU ADA4829、店舗ラベルAdafruit）は、どちらもAdafruit SGP40空気質センサーブレイクアウト（VOC Index）。",
+    "differences": [
+      "型番表記: 秋月電子「4829」 ↔ Pimoroni「ADA4829」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32334684225619"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116365\",\"pimoroni\",\"h-adafruit-ltr390-uv-light-sensor-stemma-qt-qwiic\"]",
+    "fingerprint": "dc93da743832fceb5beceb60bc263d3c3e0b6a0fe35e7f53a6126b1b7d51d59d",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4831（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4831」）。秋月電子「Adafruit LTR390 UV Light Sensor - STEMMA QT /Qwiic」とPimoroni「Adafruit LTR390 UV Light Sensor」（SKU ADA4831、店舗ラベルAdafruit）は、どちらもAdafruit LTR390紫外線光センサー。",
+    "differences": [
+      "型番表記: 秋月電子「4831」 ↔ Pimoroni「ADA4831」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32363164663891"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116366\",\"pimoroni\",\"h-adafruit-sensirion-sht40-temperature-humidity-sensor-stemma-qt-qwiic\"]",
+    "fingerprint": "a761d72c414d921bf64e83c484d6082f0533d65264a143d55d3f1d10ff8c0254",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4885（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4885」）。秋月電子「Adafruit Sensirion SHT40 Temperature &Humidity Sensor」とPimoroni「Adafruit Sensirion SHT40 Temperature & Humidity Sensor」（SKU ADA4885、店舗ラベルAdafruit）は、どちらもAdafruit Sensirion SHT40温湿度センサー。",
+    "differences": [
+      "型番表記: 秋月電子「4885」 ↔ Pimoroni「ADA4885」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32394354294867"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"116367\",\"pimoroni\",\"h-adafruit-aw9523-gpio-expander-and-led-driver-breakout-stemma-qt-qwiic\"]",
+    "fingerprint": "6b7ad8445341ed96f5873641e2b3427052f42972a8ed8bb87390780f152fc57d",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4886（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4886」）。秋月電子「Adafruit AW9523 GPIO Expander and LED DriverBreakout」とPimoroni「Adafruit AW9523 GPIO Expander and LED Driver Breakout」（SKU ADA4886、店舗ラベルAdafruit）は、どちらもAdafruit AW9523 GPIOエキスパンダー/LEDドライバーブレイクアウト。",
+    "differences": [
+      "型番表記: 秋月電子「4886」 ↔ Pimoroni「ADA4886」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39287598022739"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"117312\",\"pimoroni\",\"h-adafruit-kb2040-rp2040-kee-boar-driver\"]",
+    "fingerprint": "d2783f46e872400895a8b48d26bb976467b03e4331b0d697c32aa825e3aaefa5",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-5302（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「5302」）。秋月電子「RP2040 Kee Boar Driver」とPimoroni「Adafruit KB2040 - RP2040 Kee Boar Driver」（SKU ADA5302、店舗ラベルAdafruit）は、どちらもRP2040 Kee Boar Driver。製品名「KB2040」の記載はPimoroni側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「5302」 ↔ Pimoroni「ADA5302」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "Pimoroni側の行にのみ製品名（KB2040）の記載がある",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39583871926355"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"117314\",\"pimoroni\",\"h-adafruit-feather-rp2040\"]",
+    "fingerprint": "b4451bee64c354d8ccd3b4f6833c936cfb54b935c6398694577a3e224ceff224",
+    "decision": "unresolved",
+    "evidence": "共有キーはADA-4884（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4884」）。秋月電子「Adafruit Feather RP2040 - Pink」はPinkを指定するが、Pimoroniの製品名「Adafruit Feather RP2040」は色を指定しない。品番4884が一致しても色/基板構成の対応は再確認が必要。既にレビューしたスイッチサイエンスの組と同じ理由で要確認とする。",
+    "differences": [
+      "色指定: 秋月電子「Pink」 ↔ Pimoroni「記載なし」"
+    ],
+    "missingEvidence": [
+      "Pimoroni側の行に色（Pink）または基板構成の記載がない",
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39287605035091"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"117314\",\"sengoku\",\"EEHD-5VNZ\"]",
+    "fingerprint": "5bf2530d609a7f8b29415effeb6c04730533556b107e734fab2072eb372a5a5d",
+    "decision": "unresolved",
+    "evidence": "共有キーはADA-4884（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4884」）。秋月電子「Adafruit Feather RP2040 - Pink」はPinkを指定するが、せんごくの製品名「Adafruit Feather RP2040　ADA-4884」は色を指定しない。品番4884が一致しても色/基板構成の対応は再確認が必要。既にレビューしたスイッチサイエンスの組と同じ理由で要確認とする。",
+    "differences": [
+      "色指定: 秋月電子「Pink」 ↔ せんごく「記載なし」"
+    ],
+    "missingEvidence": [
+      "せんごく側の行に色（Pink）または基板構成の記載がない",
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"117957\",\"pimoroni\",\"h-kitronik-move-motor\"]",
+    "fingerprint": "bec38f5481d570e65ea2e0a9f769236e72f780eaeaa9073718a10c3039903019",
+    "decision": "same_product",
+    "evidence": "共有キーはKITRONIK-5683（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「5683」）。秋月電子「MOVE Motor for the BBC micro:bit」とPimoroni「Kitronik :MOVE Motor」（SKU KIT-5683、店舗ラベルKitronik）は、どちらも:MOVE Motor（micro:bit用）。",
+    "differences": [
+      "型番表記: 秋月電子「5683」 ↔ Pimoroni「KIT-5683」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "31930054836307"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"117959\",\"pimoroni\",\"h-kitronik-smart-greenhouse-kit-for-the-bbc-micro-bit\"]",
+    "fingerprint": "917829069f4a47f5ffce27959e2121c88082ab9cffcfbd15b46be3f219762f14",
+    "decision": "same_product",
+    "evidence": "共有キーはKITRONIK-5699（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「5699」）。秋月電子「Smart Greenhouse Kit for the BBC micro:bit」とPimoroni「Kitronik Smart Greenhouse Kit for the BBC micro:bit」（SKU KIT-5699、店舗ラベルKitronik）は、どちらもSmart Greenhouse Kit（micro:bit用）。",
+    "differences": [
+      "型番表記: 秋月電子「5699」 ↔ Pimoroni「KIT-5699」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32369574969427"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"117961\",\"pimoroni\",\"h-kitronik-simple-servo-control-board-for-bbc-micro-bit\"]",
+    "fingerprint": "47a1dacffed980279ee2651ab771c298326870de9b4677b3a6473ec399a31c4c",
+    "decision": "same_product",
+    "evidence": "共有キーはKITRONIK-5673（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「5673」）。秋月電子「Simple Servo Control Board for BBC micro:bit」とPimoroni「Kitronik Simple Servo Control Board for BBC micro:bit」（SKU KIT-5673、店舗ラベルKitronik）は、どちらもSimple Servo Control Board（micro:bit用）。",
+    "differences": [
+      "型番表記: 秋月電子「5673」 ↔ Pimoroni「KIT-5673」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39658738810963"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"117962\",\"pimoroni\",\"h-kitronik-environmental-control-board-for-bbc-micro-bit\"]",
+    "fingerprint": "ce00323d7e0bc1e13837be9b0abc56d69d44b312c2ba997860d13b57458977eb",
+    "decision": "same_product",
+    "evidence": "共有キーはKITRONIK-5697（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「5697」）。秋月電子「Environmental Control Board for BBC micro:bit」とPimoroni「Kitronik Environmental Control Board for BBC micro:bit」（SKU KIT-5697、店舗ラベルKitronik）は、どちらもEnvironmental Control Board（micro:bit用）。",
+    "differences": [
+      "型番表記: 秋月電子「5697」 ↔ Pimoroni「KIT-5697」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32369579622483"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"117965\",\"pimoroni\",\"h-kitronik-mini-prong-soil-moisture-sensor-for-bbc-micro-bit\"]",
+    "fingerprint": "53df54cec9e198e864a402e50f90af31e0aacf33c92029b168a18b81e222c330",
+    "decision": "same_product",
+    "evidence": "共有キーはKITRONIK-56107（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「56107」）。秋月電子「’Mini’ Prong Soil Moisture Sensor for BBC micro:bit」とPimoroni「Kitronik 'Mini' Prong Soil Moisture Sensor for BBC micro:bit」（SKU KIT-56107、店舗ラベルKitronik）は、どちらも'Mini' Prong土壌湿度センサー（micro:bit用）。",
+    "differences": [
+      "型番表記: 秋月電子「56107」 ↔ Pimoroni「KIT-56107」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32369580179539"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"117966\",\"pimoroni\",\"h-kitronik-view-graphics128-oled-display-128x64-for-bbc-micro-bit\"]",
+    "fingerprint": "08a4af7b7eedf095e307147e5b5b6f0dc346b4e742d0bd14157d4fc9058fd3bc",
+    "decision": "same_product",
+    "evidence": "共有キーはKITRONIK-56115（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「56115」）。秋月電子「VIEW Graphics 128 OLED display 128x64 for BBC micro:bit」とPimoroni「Kitronik :VIEW Graphics128 OLED display 128x64 for BBC micro:bit」（SKU KIT-56115、店舗ラベルKitronik）は、どちらも:VIEW Graphics128 OLEDディスプレイ（128x64、micro:bit用）。",
+    "differences": [
+      "型番表記: 秋月電子「56115」 ↔ Pimoroni「KIT-56115」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39455247204435"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"118238\",\"pimoroni\",\"h-adafruit-apds9960-proximity-light-rgb-and-gesture-sensor\"]",
+    "fingerprint": "27b51316a5e3822f524de445dbcd26aff5f585f53edd359ed4af27f283fee992",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-3595（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「3595」）。秋月電子「APDS-9960使用 光学式ジェスチャーセンサーモジュール」とPimoroni「Adafruit APDS9960 Proximity, Light, RGB, and Gesture Sensor」（SKU ADA3595、店舗ラベルAdafruit）は、どちらもAPDS-9960を使う光学式ジェスチャー/近接/RGBセンサー。",
+    "differences": [
+      "型番表記: 秋月電子「3595」 ↔ Pimoroni「ADA3595」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "48943546762"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"130057\",\"pimoroni\",\"h-pololu-universal-aluminum-mounting-hub-for-5mm-shaft-m3-holes-2-pack\"]",
+    "fingerprint": "74e7044050995421f1b180a1229bafbbc3fbf8c268c0cd6d2ad39e63a06a6d9f",
+    "decision": "same_product",
+    "evidence": "共有キーはPOLOLU-1996（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1996」）。秋月電子「3mmモーターシャフト用ハブ (2個入)」とPimoroni「Pololu Universal Aluminum Mounting Hub, M3 Holes (2-Pack)」のvariant「3mm Shaft」（SKU POL-1996）は、どちらも3mmシャフト用アルミマウンティングハブ2個入。",
+    "differences": [
+      "型番表記: 秋月電子「1996」 ↔ Pimoroni「POL-1996」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39351818059859"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"131479\",\"pimoroni\",\"h-adafruit-as7341-10-channel-light-color-sensor-breakout-stemma-qt-qwiic\"]",
+    "fingerprint": "3522393e2771e408a2ac6f1e9f90541901274c724ed649137d3fed861879af81",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-4698（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4698」）。秋月電子「AS7341使用 10ch 光/カラーセンサーモジュール」とPimoroni「Adafruit AS7341 10-Channel Light / Color Sensor Breakout」（SKU ADA4698、店舗ラベルAdafruit）は、どちらもAS7341を使う10チャンネル光/カラーセンサーブレイクアウト。",
+    "differences": [
+      "型番表記: 秋月電子「4698」 ↔ Pimoroni「ADA4698」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "32173922910291"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"131480\",\"sengoku\",\"EEHD-6V33\"]",
+    "fingerprint": "6281b0a0d54013d078067777d9399f37b6cb706a9a612449bdd30e26e95aabe5",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-6426（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「6426」）。秋月電子「STHS34PF80使用 赤外線人体検知/モーションセンサーモジュール」とせんごく「Adafruit STHS34PF80 IR Presence / Motion Sensor　ADA-6426」（ベンダーAdafruit）は、どちらもSTHS34PF80を使う赤外線人体検知/モーションセンサー。",
+    "differences": [
+      "型番表記: 秋月電子「6426」 ↔ せんごく「ADA-6426」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"131553\",\"pimoroni\",\"h-mp6550-single-brushed-dc-motor-driver-carrier\"]",
+    "fingerprint": "add129e1e2a231fa2a5e72c770fc046011589d8b1f46d904ac009b13ea631ea5",
+    "decision": "same_product",
+    "evidence": "共有キーはPOLOLU-4733（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「4733」）。秋月電子「MP6550使用DCモータードライバーモジュール」とPimoroni「MP6550 Single Brushed DC Motor Driver Carrier」（SKU POL-4733、店舗ラベルPololu）は、どちらもMP6550を使う単一ブラシ付きDCモータードライバー。",
+    "differences": [
+      "型番表記: 秋月電子「4733」 ↔ Pimoroni「POL-4733」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "40494398537811"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"131930\",\"pimoroni\",\"h-pololu-universal-aluminum-mounting-hub-for-5mm-shaft-m3-holes-2-pack\"]",
+    "fingerprint": "40b6fa61426105b14dbac17fe84c792d067ab4ee11350dadf8771c881a82b2e2",
+    "decision": "same_product",
+    "evidence": "共有キーはPOLOLU-1998（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1998」）。秋月電子「5mmモーターシャフト用ハブ (2個入)」とPimoroni「Pololu Universal Aluminum Mounting Hub, M3 Holes (2-Pack)」のvariant「5mm Shaft」（SKU POL-1998）は、どちらも5mmシャフト用アルミマウンティングハブ2個入。",
+    "differences": [
+      "型番表記: 秋月電子「1998」 ↔ Pimoroni「POL-1998」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39351818027091"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"131931\",\"pimoroni\",\"h-pololu-universal-aluminum-mounting-hub-for-5mm-shaft-m3-holes-2-pack\"]",
+    "fingerprint": "6fd80267a33256ea0cb1ad15d3f222adee3d79298534b6941c67aeba22bbc6f7",
+    "decision": "same_product",
+    "evidence": "共有キーはPOLOLU-1999（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1999」）。秋月電子「6mmモーターシャフト用ハブ (2個入)」とPimoroni「Pololu Universal Aluminum Mounting Hub, M3 Holes (2-Pack)」のvariant「6mm Shaft」（SKU POL-1999）は、どちらも6mmシャフト用アルミマウンティングハブ2個入。",
+    "differences": [
+      "型番表記: 秋月電子「1999」 ↔ Pimoroni「POL-1999」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "39351818125395"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"131937\",\"pimoroni\",\"h-adafruit-as7343-14-channel-light-color-sensor-breakout-stemma-qt-qwiic\"]",
+    "fingerprint": "df821c5d29c0cfea5c5be3223898d387b0c240b542b788f47ef62cdb350a0cf9",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-6477（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「6477」）。秋月電子「AS7343使用 14ch 光/カラーセンサーモジュール」とPimoroni「Adafruit AS7343 14-Channel Light / Color Sensor Breakout - STEMMA QT / Qwiic」（SKU ADA6477、店舗ラベルAdafruit）は、どちらもAS7343を使う14チャンネル光/カラーセンサーブレイクアウト。",
+    "differences": [
+      "型番表記: 秋月電子「6477」 ↔ Pimoroni「ADA6477」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "56404830847355"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"131938\",\"pimoroni\",\"h-adafruit-tcs3430-tcs34303-ambient-tri-stimulus-color-sensor\"]",
+    "fingerprint": "4585ec44bdd258bda0a5f0a5cefe1daf37bc4d6af1236c3de1d85412bcff63ef",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-6479（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「6479」）。秋月電子「TCS3430(3)使用 光/カラーセンサーモジュール」とPimoroni「Adafruit TCS3430 / TCS34303 Ambient Tri-Stimulus Color Sensor」（SKU ADA6479、店舗ラベルAdafruit）は、どちらもTCS3430/TCS34303を使う光/カラーセンサー。",
+    "differences": [
+      "型番表記: 秋月電子「6479」 ↔ Pimoroni「ADA6479」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "56404841300347"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"131939\",\"pimoroni\",\"h-adafruit-tmp119-high-precision-i2c-temperature-sensor-stemma-qt\"]",
+    "fingerprint": "c5fd84b06fe0eff53e467b59de389769190b8f19abd07c55f48ca66f6b1aebc7",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-6482（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「6482」）。秋月電子「TMP119使用 高精度温度センサーモジュール」とPimoroni「Adafruit TMP119 High-Precision ±0.03°C I2C Temperature Sensor - STEMMA QT / Qwiic」（SKU ADA6482、店舗ラベルAdafruit）は、どちらもTMP119を使う高精度I2C温度センサー。",
+    "differences": [
+      "型番表記: 秋月電子「6482」 ↔ Pimoroni「ADA6482」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "56404853981563"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "[\"akizuki\",\"131940\",\"pimoroni\",\"h-adafruit-vcnl4030-proximity-and-lux-sensor-stemma-qt-qwiic\"]",
+    "fingerprint": "6b667d269f04c8a94e8c89992e043ec1bbd7776e13de0aab9e54a09368c5e347",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-6491（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「6491」）。秋月電子「VCNL4030使用 近接/照度センサーモジュール」とPimoroni「Adafruit VCNL4030 Proximity and Lux Sensor - STEMMA QT / Qwiic」（SKU ADA6491、店舗ラベルAdafruit）は、どちらもVCNL4030を使う近接/照度センサー。",
+    "differences": [
+      "型番表記: 秋月電子「6491」 ↔ Pimoroni「ADA6491」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "offerIds": [
+      null,
+      "56404950581627"
+    ],
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "a107748-s1438",
+    "fingerprint": "fa6bb184c3508f46527fe0c4bb4b6c78d928a48c18e6bbb46067c6c52b88212f",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-1438（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「1438」）。秋月電子「モーター・シールドキット For Arduino(R)」とスイッチサイエンス「Adafruit モーター/ステッパー/サーボ シールドキット v2」（型番欄「1438」、メーカー欄「Adafruit」）は、どちらもArduino用のモーター/ステッパー/サーボシールドキット。版（v2）の記載はスイッチサイエンス側のみ。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない",
+      "スイッチサイエンス側の行にのみ版（v2）の記載がある"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "a108221-s7022",
+    "fingerprint": "9c20adac45a07e4dfc1fc9e6ce961d3535dad17636457108604956d8a271b7c3",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-904（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「904」）。秋月電子「INA219使用電流センサーモジュール(カレントセンサー)」とスイッチサイエンス「INA219搭載 STEMMA QT互換 ハイサイドDCセンサ ブレイクアウトボード（最大26 V ±3.2A）」（型番欄「904」、メーカー欄「Adafruit」）は、どちらもINA219搭載のハイサイドDCセンサーブレイクアウト。STEMMA QT互換と定格（最大26 V ±3.2A）の記載はスイッチサイエンス側のみ。",
+    "differences": [],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない",
+      "スイッチサイエンス側の行にのみSTEMMA QT互換と定格（最大26 V ±3.2A）の記載がある"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "a112833-s3415",
+    "fingerprint": "45383f449427538932df9c0a799456cc5b8feb6f2b2bb88561cf9da9d2adb1f9",
+    "decision": "same_product",
+    "evidence": "共有キーはKITRONIK-5624（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「5624」）。秋月電子「micro:bit用小型バギーカー」とスイッチサイエンス「micro:bit用 :MOVEミニバギーキット--販売終了」（型番欄「KITRONIK-5624」、メーカー欄「スイッチサイエンス」）は、どちらもmicro:bit用の小型バギーキット（:MOVEミニバギー）。キット構成の明記はスイッチサイエンス側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「5624」 ↔ スイッチサイエンス「KITRONIK-5624」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない",
+      "スイッチサイエンス側の行にのみキット構成の記載がある"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "a113292-s3617",
+    "fingerprint": "03f540292c5bd19cac8707f2112d9700bb41ab6754f6739fab6a00100f3615dd",
+    "decision": "same_product",
+    "evidence": "共有キーはKITRONIK-5612（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「5612」）。秋月電子「micro:bit用サーボドライバー基板」とスイッチサイエンス「micro:bit用サーボドライバボード--販売終了」（型番欄「KITRONIK-5612」、メーカー欄「スイッチサイエンス」）は、どちらもmicro:bit用サーボドライバーボード。",
+    "differences": [
+      "型番表記: 秋月電子「5612」 ↔ スイッチサイエンス「KITRONIK-5612」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "秋月電子側にメーカー名の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
+  },
+  {
+    "id": "a116347-s2750",
+    "fingerprint": "fba52e16ee92f782afc705ed6e378c299f95145666a53dbddcd1659c4e9bcd28",
+    "decision": "same_product",
+    "evidence": "共有キーはADA-2772（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「2772」）。秋月電子「Adafruit Feather M0 Basic Proto - ATSAMD21Cortex M0」とスイッチサイエンス「Adafruit Feather M0 Basic Proto」（型番欄「ADA-2772」、メーカー欄「スイッチサイエンス」）は、どちらもAdafruit Feather M0 Basic Proto。搭載チップ（ATSAMD21 Cortex M0）の記載は秋月電子側のみ。",
+    "differences": [
+      "型番表記: 秋月電子「2772」 ↔ スイッチサイエンス「ADA-2772」"
+    ],
+    "missingEvidence": [
+      "税・送料・通貨換算・販売数量・付属品・書込サービスの価格比較条件は未承認",
+      "スイッチサイエンス側の行にATSAMD21の記載がない"
+    ],
+    "reviewedAt": "2026-11-10",
+    "reviewerModel": "Devin (SWE-2 Max)"
   }
 ]

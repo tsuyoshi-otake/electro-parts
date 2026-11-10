@@ -233,6 +233,8 @@ UA に書いたリポジトリ URL 経由で来る想定。要請に従い sched
 npm run typecheck && npm test
 ```
 
+`npm test` が、落ちたテストがないのに `Worker exited unexpectedly`(`Errors  1 error`)で終わったら、再実行する前に `reports/worker-exits.json` と出力の `[worker-exit]` の行を控える(Issue #108)。終了コード 1 は外部からの停止、134 は V8 の abort、`0xC000…` はネイティブのクラッシュ。再現ループ 62 回では起きておらず原因は未特定なので、控えた 2 つを貼って #108 を開き直す。リトライは足さない。
+
 ```bash
 npm run crawl -- --config config/akizuki.json --out snapshots
 ```

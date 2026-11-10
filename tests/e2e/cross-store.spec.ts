@@ -455,3 +455,30 @@ test('a Pimoroni page with five variants and 20 reviewed listings shows only the
   await panel(page).scrollIntoViewIfNeeded();
   await panel(page).screenshot({ path: 'test-results/e2e/pimoroni-related-pi5.png' });
 });
+
+test('a bare maker number on an akizuki row reaches the Pimoroni card through a reviewed alias (0.7.11, #113)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1100 });
+  // akizuki/116356 writes only the bare "3954" in its model field; the reviewed alias ADA-3954 ties it to Pimoroni's
+  // ADA3954 row. That is the row's only relation, so the alias alone creates the cross-store card.
+  const selected = PRODUCT_RELATIONS.find(r => r.id === JSON.stringify(['akizuki', '116356', 'pimoroni', 'h-adafruit-neotrellis-rgb-driver-pcb-for-4x4-keypad']))!;
+  const requests = await setup(page, 0, false, selected);
+  await expect(panel(page)).toHaveAttribute('data-page-key', '116356');
+  await expect(panel(page)).not.toContainText('読み込み中');
+  await expect(panel(page).locator('.store-price')).toHaveCount(1);
+  const card = panel(page).locator(`.store-price[data-relation-id='${selected.id}']`);
+  await expect(card.locator('.comparison-heading')).toHaveText('Pimoroni');
+  const link = card.locator(`[data-focus-key='product-${selected.id}']`);
+  await expect(link).toHaveText('Adafruit NeoTrellis RGB Driver PCB for 4x4 Keypad · ADA3954');
+  await expect(link).toHaveAttribute('href', 'https://shop.pimoroni.com/products/adafruit-neotrellis-rgb-driver-pcb-for-4x4-keypad?variant=21292372492371');
+  // GBP stays a reference: the yen figure beside the recorded £ price, with neither a difference nor a cheapest mark.
+  await expect(card.locator('.hero-value')).toHaveText('約 ￥2,000');
+  await expect(card.locator('.fx-recorded')).toHaveText('記録価格 £10.00');
+  await expect(card).toContainText('送料・関税別');
+  await expect(card).toContainText('参考記録価格 · 販売単位・付属品等の比較条件が未確認');
+  await expect(card.locator('.badge.cheapest, .comparison-difference')).toHaveCount(0);
+  // The card's evidence names the alias that carries the bare number's maker key.
+  await expect(card.locator('.related-evidence')).toContainText('共有キーはADA-3954（秋月電子の行に確認済みの別名（alias）として付けたコードで、同店の型番欄は「3954」）');
+  await expect(panel(page).locator('.fx-note')).toContainText('1 GBP = 200.00円');
+  // The viewed store's manifest and product plus Pimoroni's manifest and product: four requests.
+  expect(requests).toHaveLength(4);
+});
