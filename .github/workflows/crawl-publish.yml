@@ -19,7 +19,11 @@
 #   artifact (data + state + userscript), so readers never see a half-written
 #   dataset.
 # - Exit codes: 0 published/unchanged, 3 quarantined (still publishable, the
-#   rejection is recorded in the state), 1 failed (that store observed nothing).
+#   rejection is recorded in the state), anything else failed (that store
+#   observed nothing).
+# - A store that was not observed (quarantined or failed) raises an Issue in a
+#   separate `alerts` job, and the Issue closes itself when a later run
+#   observes the store again. The write token lives only in that job.
 name: Crawl and publish
 
 on:
@@ -83,6 +87,9 @@ jobs:
       dataset_versions: ${{ steps.gate.outputs.dataset_versions }}
       failed_stores: ${{ steps.pipeline.outputs.failed_stores }}
     steps:
+      - name: Note when the job started
+        run: echo "JOB_STARTED_AT=$(date +%s)" >> "$GITHUB_ENV"
+
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -187,7 +194,9 @@ jobs:
             set -e
             echo "::endgroup::"
             echo "$store: pipeline exit code $code"
-            if [ "$code" = "1" ]; then
+            # Anything but 0 and 3 failed, not only 1: an abnormal exit (out of
+            # memory, a signal) observed nothing either and must not pass as success.
+            if [ "$code" != "0" ] && [ "$code" != "3" ]; then
               failed="$failed $store"
               echo "::error title=$store failed::The store observed nothing this run; see the job summary for the failing stage."
               # Keep the failing report: the repair step below overwrites it.
@@ -373,6 +382,14 @@ jobs:
           path: site/
           retention-days: 7
 
+      # Measured after the uploads, so it covers nearly the whole job.
+      # JOB_LIMIT_MINUTES must equal this job's timeout-minutes (a test pins it).
+      - name: Run length against the limit
+        if: always()
+        env:
+          JOB_LIMIT_MINUTES: 240
+        run: node scripts/run-budget.ts
+
       # Last, so the artifacts of a failed store are always uploaded. The other
       # stores were still published; this marks the run for a human to look at.
       - name: Fail the job when a store failed
@@ -420,3 +437,42 @@ jobs:
               echo "::warning::Pages did not serve $store datasetVersion $expected within 2 minutes (CDN propagation?)"
             fi
           done
+
+  # Separate from `crawl` on purpose: that job runs npm dependencies and parses
+  # store pages, so it must not hold a token that can write. The write
+  # permission lives here, in a job that installs nothing and runs one
+  # dependency-free script over the uploaded reports.
+  alerts:
+    name: Raise or clear crawl alerts
+    needs: crawl
+    # A dry run publishes nothing, so it neither raises nor clears an alert.
+    if: always() && needs.crawl.result != 'skipped' && inputs.dry_run != true
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+      # Missing when the crawl job was cancelled before it uploaded anything;
+      # the script then has nothing to do, and the red job is the notice.
+      - name: Download the reports
+        continue-on-error: true
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: reports-${{ github.run_id }}
+          path: alerts-in
+      - name: Raise or clear the alerts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          FAILED_STORES: ${{ needs.crawl.outputs.failed_stores }}
+          ALERT_ASSIGNEE: ${{ github.repository_owner }}
+        run: node scripts/crawl-alerts.ts --reports alerts-in
