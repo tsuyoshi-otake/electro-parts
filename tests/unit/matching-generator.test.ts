@@ -47,6 +47,12 @@ describe('reproducible reviewed matching pipeline', () => {
       'm5stack/ksy': { candidates: 9, verified: 9, unresolved: 0, pending: 0 },
       'm5stack/sengoku': { candidates: 397, verified: 394, unresolved: 1, pending: 0 },
       'ksy/sengoku': { candidates: 161, verified: 157, unresolved: 4, pending: 0 },
+      // Pimoroni, the sixth store (#94): the pairs its saved catalogue adds, every one reviewed.
+      'akizuki/pimoroni': { candidates: 134, verified: 129, unresolved: 4, pending: 0 },
+      'switch-science/pimoroni': { candidates: 1010, verified: 998, unresolved: 11, pending: 0 },
+      'm5stack/pimoroni': { candidates: 77, verified: 77, unresolved: 0, pending: 0 },
+      'ksy/pimoroni': { candidates: 170, verified: 168, unresolved: 2, pending: 0 },
+      'sengoku/pimoroni': { candidates: 327, verified: 322, unresolved: 3, pending: 0 },
     });
     const strips = result.relations.filter(r => r.products[0].storeId === 'switch-science' && ['5208','5209'].includes(r.products[0].pageKey) && r.products[1].storeId === 'm5stack');
     expect(strips).toHaveLength(2);
@@ -65,18 +71,19 @@ describe('reproducible reviewed matching pipeline', () => {
     expect(discoverCatalog({...catalog, listings: [...catalog.listings].reverse()}, ...discoveryTiers(catalog, aliases)).map(c => c.id)).toEqual(result.candidates.map(c => c.id));
   });
   it('searches every pinned listing and accounts for every candidate without automatic promotion', () => {
-    expect(catalog.listings).toHaveLength(44518);
-    expect(result.candidates).toHaveLength(4231);
+    // 44,518 rows of the five earlier stores plus the Pimoroni catalogue (#94): 2,854 rows and 1,718 pairs, one per Pimoroni candidate of the store pairs above.
+    expect(catalog.listings).toHaveLength(47372);
+    expect(result.candidates).toHaveLength(5949);
     expect(result.report.pending).toEqual([]);
-    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(126);
-    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(143);
-    expect(result.report).toMatchObject({ sameVerified: 3962, similarVerified: 1512, pricePolicies: 2 });
-    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(4231);
+    expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(130);
+    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(163);
+    expect(result.report).toMatchObject({ sameVerified: 5656, similarVerified: 1581, pricePolicies: 2 });
+    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(5949);
     expect(result.report.byBrand['Seeed']!.accepted).toBeGreaterThan(30);
     expect(result.report.byBrand['Raspberry Pi Trading']!.accepted).toBeGreaterThan(40);
     expect(result.report.byBrand['Arduino']!.accepted).toBeGreaterThan(25);
     expect(generate(catalog, [], [], [], aliases).relations).toEqual([]);
-    expect(generate(catalog, [], [], [], aliases).report.pending).toHaveLength(4231);
+    expect(generate(catalog, [], [], [], aliases).report.pending).toHaveLength(5949);
   });
 
   it('generates the store labels as their own module, so the table is not needed to name a store', () => {
@@ -270,8 +277,10 @@ describe('indexed candidate discovery', () => {
   });
 
   describe('a review of a candidate found through a Pimoroni derived key (#94)', () => {
+    // Found through the derived key of a variant SKU: the pairs an alias made from a page reference (the rejected name proposals of #94) carry no variant code.
     const derivedOnly = (vendor: string, minVariants = 1) => result.candidates.find(c => c.derived && c.products[1].storeId === 'pimoroni' && c.products[1].vendor === vendor
-      && c.products[1].variants!.length >= minVariants && !c.products[1].codes.some(code => c.codes.includes(code)))!;
+      && c.products[1].variants!.length >= minVariants && !c.products[1].codes.some(code => c.codes.includes(code))
+      && c.products[1].variants!.some(v => variantCodes(c.products[1], v).some(code => c.codes.includes(code))))!;
     const reviewOf = (c: ReturnType<typeof derivedOnly>, offerId: string): Review => ({ id: c.id, fingerprint: c.fingerprint, decision: 'same_product', reviewedAt: '2026-11-10',
       evidence: '名称・メーカー品番・販売構成を両店の保存行で突合した検証用の判定。', differences: [], missingEvidence: ['販売数量'],
       offerIds: [c.products[0].variants ? c.products[0].variants[0]!.offerId : null, offerId] });
@@ -436,7 +445,7 @@ describe('catalogue supplements', () => {
   const renamed = m5.map(p => listingKey(p) === listingKey(target) ? {...p, name: `${p.name} (renamed)`} : p);
 
   it('records the pinned sources, the 2026-10-03 and 2026-10-31 supplements and the two re-reviewed rows', () => {
-    expect(catalogStores(catalog)).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy', 'sengoku']);
+    expect(catalogStores(catalog)).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy', 'sengoku', 'pimoroni']);
     // KSY's 2026-10-31 list added nothing, so it has no supplement.
     expect(catalog.sources.filter(s => s.supplement).map(s => [s.storeId, s.observedAt.slice(0, 10), s.count, s.supplement!.snapshotCount]))
       .toEqual([['akizuki', '2026-10-03', 4130, 12800], ['switch-science', '2026-10-03', 101, 10442], ['m5stack', '2026-10-03', 9, 672],
@@ -534,7 +543,7 @@ describe('KSY source', () => {
   it('joins the reviewed KSY pairs as identities only and keeps the Pi 5 SC1110 contradiction unresolved', () => {
     // The pairs reviewed when KSY was added, the two the 0.6.5 names found, the UnitV2 family's 0.6.6 relations and the 0.6.7 relations (M5Stack Basic versions, I2C hub 1to6); its pairs with せんごく are checked with that store.
     const ksy = result.relations.filter(r => r.products.some(p => p.storeId === 'ksy') && !r.products.some(p => p.storeId === 'sengoku'));
-    expect(ksy).toHaveLength(607);
+    expect(ksy).toHaveLength(778);
     for (const r of ksy) expect(r.pricePolicy).toBeNull();
     const id = (...key: string[]): string => JSON.stringify(key);
     // Same precedent as a129606-s10908: the code says 2GB on one side, the other side's name says 1GB.
@@ -592,8 +601,14 @@ describe('せんごく source', () => {
   });
 
   it('joins every reviewed せんごく pair as an identity only, with the integrating review\'s changes on record', () => {
-    const joined = result.relations.filter(r => r.products.some(p => p.storeId === 'sengoku'));
-    expect(joined).toHaveLength(3506);
+    // Pimoroni comes after せんごく in the store order, so its pairs have せんごく on the left; they are checked after the loop (#94).
+    const joined = result.relations.filter(r => r.products.some(p => p.storeId === 'sengoku') && !r.products.some(p => p.storeId === 'pimoroni'));
+    // 3,506 before #94 plus the two M5StickC family pairs of EEHD-6YND (K016-P-SE) with the original M5StickC (m5stack h-stick-c, switch-science 6350).
+    expect(joined).toHaveLength(3508);
+    const withPimoroni = result.relations.filter(r => r.products.some(p => p.storeId === 'sengoku') && r.products.some(p => p.storeId === 'pimoroni'));
+    // 325 reviewed pairs (327 candidates, the two name proposals of EEHD-566P rejected) and 9 family pairs with Pimoroni rows.
+    expect(withPimoroni).toHaveLength(334);
+    for (const r of withPimoroni) { expect(r.products.map(p => p.storeId)).toEqual(['sengoku', 'pimoroni']); expect(r.pricePolicy).toBeNull(); }
     for (const r of joined) {
       expect(r.pricePolicy).toBeNull();
       // The panel swaps `項目: left ↔ right` per product, so せんごく must be the right-hand side.
@@ -601,7 +616,7 @@ describe('せんごく source', () => {
       // Family relations state the feature values; reviews quote each store.
       for (const d of r.differences) expect(d).toMatch(r.similarity ? /^[^:]+: .+ ↔ .+$/ : /^[^:]+: .+ ↔ せんごく「.+」$/);
     }
-    expect(joined.filter(r => r.similarity)).toHaveLength(788);
+    expect(joined.filter(r => r.similarity)).toHaveLength(790); // 788 plus the two M5StickC pairs above
     const id = (...key: string[]): string => JSON.stringify(key);
     // The official page body names StampS3A (recorded by the SS 10300 review); the first review stopped at the title.
     const cardputer = byId.get(id('m5stack', 'h-m5stack-cardputer-with-m5stamps3-v1-1', 'sengoku', 'EEHD-6RTA'))!;
@@ -681,14 +696,14 @@ describe('similar-product leads (0.6.6)', () => {
     const id = (...key: string[]): string => JSON.stringify(key);
     expect(result.report.similarProposals).toEqual([]);
     // 0.6.6 and 0.6.7 together; the identity dismissals were settled by alias and review (#52 for 0.6.6, #53 for 0.6.7).
-    expect(result.report.dismissedLeads).toEqual({ different: 65, identity: 0 });
+    expect(result.report.dismissedLeads).toEqual({ different: 69, identity: 0 }); // 65 plus the four Pimoroni stems that are coincidences (ADA4075, ADA4084 twice, TP-01; #94)
     const stemFamilies = families.filter(f => f.id.startsWith('stem-'));
-    expect(stemFamilies).toHaveLength(121);
+    expect(stemFamilies).toHaveLength(124); // plus stem-k059, stem-m031-c and stem-kitronik-5610 (#94)
     for (const f of stemFamilies) expect(result.report.familyCounts[f.id]).toBeGreaterThan(0);
-    expect(stemFamilies.reduce((n, f) => n + result.report.familyCounts[f.id]!, 0)).toBe(592);
+    expect(stemFamilies.reduce((n, f) => n + result.report.familyCounts[f.id]!, 0)).toBe(650); // 592 plus 58 pairs: the three new families, the 15 Pimoroni members joining existing families, and the two M5StickC members (#94)
     // Without the reviewed families and dismissals, the leads are open again.
-    expect(generate(catalog, legacy, reviews, families.filter(f => !f.id.startsWith('stem-')), aliases).report.similarProposals).toHaveLength(613);
-    expect(generate(catalog, legacy, reviews, families, aliases).similarProposals).toHaveLength(65);
+    expect(generate(catalog, legacy, reviews, families.filter(f => !f.id.startsWith('stem-')), aliases).report.similarProposals).toHaveLength(665); // 613 plus the 52 Pimoroni leads those families and the four dismissals settle (#94)
+    expect(generate(catalog, legacy, reviews, families, aliases).similarProposals).toHaveLength(69); // the 69 dismissed leads
     // Variants of one line become similar products and name the M5Stack offer.
     expect(byId.get(id('switch-science', '7536', 'm5stack', 'h-m5stack-unitv2-usb-version-without-camera'))).toMatchObject({
       kind: 'similar_product', reviewStatus: 'verified', similarity: { family: 'UnitV2 AIカメラ' },
@@ -732,11 +747,11 @@ describe('base-code leads and the settled identities (0.6.7)', () => {
       }
       return counts;
     };
-    expect(tally(dismissed.filter(p => p.tokens.length === 0))).toEqual({ different: 32 });
+    expect(tally(dismissed.filter(p => p.tokens.length === 0))).toEqual({ different: 36 }); // 32 plus the four Pimoroni stem coincidences, which share no name word (#94)
     expect(tally(dismissed.filter(p => p.tokens.length > 0))).toEqual({ different: 33 });
-    // Without the stem families, 391 base-code leads are open: names need not share a word.
+    // Without the stem families, 425 base-code leads are open (391 plus the 34 Pimoroni ones, #94): names need not share a word.
     const open = generate(catalog, legacy, reviews, families.filter(f => !f.id.startsWith('stem-')), aliases).similarProposals;
-    expect(open.filter(p => p.tokens.length === 0)).toHaveLength(391);
+    expect(open.filter(p => p.tokens.length === 0)).toHaveLength(425);
     // A004 and A004-V3 (v3.0) are SKUs the maker sells apart, so the first decision (identity) became a family.
     expect(byId.get(id('switch-science', '6612', 'm5stack', 'h-m5stack-faces-gamepad-panel-v3-0'))).toMatchObject({
       kind: 'similar_product', reviewStatus: 'verified', similarity: { family: 'M5Stack Faces用ゲームパッドパネル' }, differences: ['型番: A004 ↔ A004-V3'] });

@@ -4,7 +4,7 @@ import type { ExchangeRateClient } from './exchangeRate.ts';
 import type { HostEnv, MountPoint, StorePageAdapter } from './types.ts';
 import { keepPanelStateAcrossReinsert, renderPanel, type PanelContext } from '../ui/panel.ts';
 import { createPageTheme } from '../ui/pageTheme.ts';
-import { relatedEntries, relationProductKey, type ProductRelation, type RelationSource } from './relations.ts';
+import { entriesForOffer, historyTargets, MAX_RELATED_HISTORY_LOADS_PER_PAGE, relatedEntries, relationProductKey, shownOffer, type ProductRelation, type RelationSource } from './relations.ts';
 import { matchesUrlPattern } from './urlPattern.ts';
 import { parsePreferences, PREFERENCES_STORAGE_KEY, serializePreferences, type Preferences } from './preferences.ts';
 
@@ -281,10 +281,81 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       };
       let current: LoadState = { kind: 'loading' };
       let selected: number | null = null;
+      // Current prices in a supported currency read in yen, on the viewed product
+      // and on loaded rows of other stores alike. The client answers from its
+      // stored rate on most pages and fetches at most once a day; each currency
+      // is asked once per panel. Without a rate the panel shows recorded prices.
+      const rates = options.exchangeRates;
+      const rateLoads = new Map<string, Promise<void>>();
+      const ensureRates = (product: ProductFileV1) => {
+        if (rates === undefined) return;
+        for (const currency of new Set(product.offers.flatMap((offer) => offer.segments).map((segment) => segment.basis.currency))) {
+          if (!rates.supports(currency) || rateLoads.has(currency)) continue;
+          rateLoads.set(currency, rates.get(currency).then((rate) => {
+            if (closed || rate === null) return;
+            ctx.yenRates = { ...ctx.yenRates, [currency]: rate };
+            render();
+          }));
+        }
+      };
+      // Related loads belong to the rows of the variant on screen (relations.ts holds the rule); this
+      // controller owns their state. A target is asked at most once per page view and at most
+      // MAX_RELATED_HISTORY_LOADS_PER_PAGE targets are ever asked. Every target marked 'loading' either gets
+      // the state client.load delivers or stays queued only because the panel closed.
+      const targetStates = new Map<string, LoadState>();
+      const queue: { storeId: string; pageKey: string; key: string }[] = [];
+      let ownProductMissing = false;
+      const planRelated = () => {
+        if (current.kind !== 'ready' || ownProductMissing || ctx.related === undefined) return;
+        const shown = entriesForOffer(ctx.related, shownOffer(current.product, ctx.selectedOfferId));
+        const byKey = new Map(shown.map((entry) => [relationProductKey(entry.target.storeId, entry.target.pageKey), entry.target]));
+        for (const key of historyTargets(shown)) {
+          const target = byKey.get(key);
+          if (target === undefined || targetStates.has(key) || targetStates.size >= MAX_RELATED_HISTORY_LOADS_PER_PAGE) continue;
+          targetStates.set(key, { kind: 'loading' });
+          queue.push({ storeId: target.storeId, pageKey: target.pageKey, key });
+        }
+        for (const entry of ctx.related) {
+          const state = targetStates.get(relationProductKey(entry.target.storeId, entry.target.pageKey));
+          if (state !== undefined) entry.state = state;
+        }
+      };
+      // Starts workers up to two running; resolves when every running worker has ended. A worker never rejects:
+      // a client that throws ends that target in the error state, is logged, and the worker takes the next target.
+      const workers = new Set<Promise<void>>();
+      const drain = (): Promise<void> => {
+        while (workers.size < 2 && !closed && queue.length > 0) {
+          const worker = (async () => {
+            for (let job = queue.shift(); !closed && job !== undefined; job = queue.shift()) {
+              const { key } = job;
+              const deliver = (state: LoadState) => {
+                if (closed) return;
+                targetStates.set(key, state);
+                for (const entry of ctx.related ?? []) {
+                  if (relationProductKey(entry.target.storeId, entry.target.pageKey) === key) entry.state = state;
+                }
+                if (state.kind === 'ready') ensureRates(state.product);
+                render();
+              };
+              try {
+                await options.client.load(job.storeId, job.pageKey, deliver);
+              } catch (e) {
+                host.log('warn', `related products could not be loaded: ${(e as Error).message}`);
+                deliver({ kind: 'error', message: 'データを取得できませんでした' });
+              }
+            }
+          })();
+          workers.add(worker);
+          void worker.then(() => { workers.delete(worker); });
+        }
+        return Promise.all([...workers]).then(() => undefined);
+      };
       ctx.onSelectOffer = (id) => {
         ctx.selectedOfferId = id;
         selected = null;
+        planRelated();
         render();
+        void drain();
       };
       const render = () => {
         if (closed) return;
@@ -321,6 +392,7 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
           // After the bound or a close the answer is late: it changes nothing.
           if (done) return;
           ctx.related = relatedEntries(relations, adapter.storeId, pageKey);
+          planRelated();
           render();
           finish();
         }).catch((e: unknown) => fail((e as Error).message));
@@ -329,61 +401,25 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       const relationsSettled = options.relations === undefined ? null : loadRelations(options.relations);
       await options.client.load(adapter.storeId, pageKey, (state) => {
         current = state;
+        planRelated();
         render();
       });
       const loaded = current as LoadState;
-      // Current prices in a supported currency read in yen, on the viewed product
-      // and on loaded rows of other stores alike. The client answers from its
-      // stored rate on most pages and fetches at most once a day; each currency
-      // is asked once per panel. Without a rate the panel shows recorded prices.
-      const rates = options.exchangeRates;
-      const rateLoads = new Map<string, Promise<void>>();
-      const ensureRates = (product: ProductFileV1) => {
-        if (rates === undefined) return;
-        for (const currency of new Set(product.offers.flatMap((offer) => offer.segments).map((segment) => segment.basis.currency))) {
-          if (!rates.supports(currency) || rateLoads.has(currency)) continue;
-          rateLoads.set(currency, rates.get(currency).then((rate) => {
-            if (closed || rate === null) return;
-            ctx.yenRates = { ...ctx.yenRates, [currency]: rate };
-            render();
-          }));
-        }
-      };
       if (loaded.kind === 'ready') ensureRates(loaded.product);
       // What follows reads the related entries, so it starts once the relations have settled too.
       if (relationsSettled !== null) await relationsSettled;
       // Related content is not displayed without the current product. Complete
       // those states explicitly without spending requests on invisible cards.
       if (loaded.kind !== 'ready') {
+        ownProductMissing = true;
+        queue.length = 0;
         for (const entry of ctx.related ?? []) entry.state = { kind: 'error', message: 'この商品の観測データがありません' };
         return;
       }
       // Only the page controller owns related loads. Renders, theme changes and
       // stale-while-revalidate callbacks never initiate more work. Two workers,
       // no automatic retries, and closed panels do not start queued requests.
-      const groups = new Map<string, NonNullable<PanelContext['related']>>();
-      for (const entry of ctx.related ?? []) {
-        if (entry.state.kind === 'reference_only') continue;
-        const key = relationProductKey(entry.target.storeId, entry.target.pageKey);
-        const group = groups.get(key) ?? [];
-        group.push(entry);
-        groups.set(key, group);
-      }
-      const jobs = [...groups.values()];
-      let next = 0;
-      await Promise.all(Array.from({ length: Math.min(2, jobs.length) }, async () => {
-        while (!closed && next < jobs.length) {
-          const group = jobs[next++];
-          const first = group?.[0];
-          if (!first || !group) continue;
-          await options.client.load(first.target.storeId, first.target.pageKey, (state) => {
-            if (closed) return;
-            for (const entry of group) entry.state = state;
-            if (state.kind === 'ready') ensureRates(state.product);
-            render();
-          });
-        }
-      }));
+      await drain();
       await Promise.all(rateLoads.values());
     };
 

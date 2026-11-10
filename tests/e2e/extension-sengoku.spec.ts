@@ -5,6 +5,11 @@ import { E2E_EXTENSION_DIR, E2E_SITE_DIR } from './global-setup.ts';
 
 const ORIGIN = 'https://www.sengoku.co.jp';
 const DETAIL = `${ORIGIN}/mod/sgk_cart/detail.php`;
+/** The USD answer the worker already reads; GBP is its JPY rate over its GBP rate (150 / 0.75 = 200 yen), as in extension-pimoroni.spec.ts. */
+const RATE_BODY = () => {
+  const last = Math.floor(Date.now() / 1000) - 3600;
+  return JSON.stringify({ result: 'success', base_code: 'USD', time_last_update_unix: last, time_next_update_unix: last + 86400, rates: { USD: 1, JPY: 150, GBP: 0.75 } });
+};
 
 test('Sengoku extension shows the history below the product block and keeps the store header colours in dark', async () => {
   const scratch = path.join(process.env['USERPROFILE'] ?? process.env['HOME'] ?? '.', 'tmp', 'electro-sengoku-tests');
@@ -26,6 +31,8 @@ test('Sengoku extension shows the history below the product block and keeps the 
         const file = borrowed ? u.pathname.replace('EEHD-5LAU', 'EEHD-6N43') : u.pathname;
         const body = await readFile(path.join(E2E_SITE_DIR, file.replace(/^\/electro-parts\//, '')), 'utf8').catch(() => null);
         await route.fulfill(body === null ? { status: 404, body: 'Not Found' } : { contentType: 'application/json', body: borrowed ? body.replaceAll('EEHD-6N43', 'EEHD-5LAU') : body });
+      } else if (u.hostname === 'open.er-api.com') {
+        await route.fulfill({ contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: RATE_BODY() });
       } else if (`${u.origin}${u.pathname}` === DETAIL) {
         // The saved page answers for any code, as the shop's page does for the code it shows.
         const code = u.searchParams.get('code') ?? '';
@@ -79,8 +86,23 @@ test('Sengoku extension shows the history below the product block and keeps the 
     const akizuki = panel.locator(`.store-price[data-relation-id='${JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU'])}']`);
     await expect(akizuki).toContainText('秋月電子');
     await expect(panel.locator(`[data-focus-key='product-${JSON.stringify(['akizuki', '117209', 'sengoku', 'EEHD-5LAU'])}']`)).toHaveAttribute('href', 'https://akizukidenshi.com/catalog/g/g117209/');
+    // 0.7.10 (#94): the same ATOM Lite is Pimoroni's C008. The saved site holds that shop's 2026-11-03 catalogue (£8.25, out of stock);
+    // GBP with the tax unknown stays a reference price in yen (200 yen per GBP, stubbed) after the yen stores, with no difference.
+    const pimoroni = panel.locator(`.store-price[data-relation-id='${JSON.stringify(['sengoku', 'EEHD-5LAU', 'pimoroni', 'h-atom-lite-esp32-development-kit'])}']`);
+    await expect(pimoroni).toHaveCount(1);
+    await expect(pimoroni.locator('.comparison-heading')).toHaveText('Pimoroni');
+    await expect(pimoroni.locator('.hero-value')).toHaveText('約 ￥1,650');
+    await expect(pimoroni.locator('.fx-recorded')).toContainText('記録価格 £8.25');
+    await expect(pimoroni).toContainText('観測時の在庫: 在庫なし');
+    // The viewed page borrows another product's history here, so the stated reason is the changed product information; the unapproved
+    // price policy is the reason asserted in extension-ksy.spec.ts, where the viewed history is the product's own.
+    await expect(pimoroni).toContainText('参考記録価格 · ');
+    await expect(pimoroni.locator('[data-focus-key^="product-"]')).toHaveAttribute('href', 'https://shop.pimoroni.com/products/atom-lite-esp32-development-kit?variant=31880100708435');
+    await expect(panel.locator('.badge.cheapest, .comparison-difference')).toHaveCount(0);
     await expect(panel).not.toContainText('読み込み中');
     await expect(panel).not.toContainText('記録価格差');
+    await panel.scrollIntoViewIfNeeded();
+    await panel.screenshot({ path: 'test-results/e2e/sengoku-pimoroni-card.png' });
     const related = requests.filter((p) => p.includes('/products/') && !p.includes('/stores/sengoku/'));
     expect(related.length).toBeGreaterThan(0);
     expect(related.length).toBeLessThanOrEqual(8);

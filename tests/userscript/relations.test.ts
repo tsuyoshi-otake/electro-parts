@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { PRODUCT_RELATIONS } from '../../userscript/adapters/productRelations.ts';
 import { PAGE_ADAPTERS } from '../../userscript/adapters/registry.ts';
-import { comparisonEligibility, currentOffer, inMemoryRelations, matchesRelationProduct, primaryQuote, relatedEntries, MAX_RELATED_HISTORY_LOADS } from '../../userscript/core/relations.ts';
-import type { RelationProduct } from '../../userscript/core/relations.ts';
+import { comparisonEligibility, currentOffer, inMemoryRelations, matchesRelationProduct, primaryQuote, relatedEntries, entriesForOffer, historyTargets, shownOffer, relationProductKey, MAX_RELATED_HISTORY_LOADS } from '../../userscript/core/relations.ts';
+import type { RelatedEntry, RelationProduct } from '../../userscript/core/relations.ts';
 import { ksyProductPageHtml, openKsyProduct } from '../helpers/ksy.ts';
 import { sengokuFixture, showSengokuProduct } from '../helpers/sengoku.ts';
 import { comparisonFixture } from './comparison-fixtures.ts';
@@ -14,7 +14,8 @@ describe('curated relation catalogue', () => {
     expect(entries[0]!.relation).toMatchObject({kind: 'same_product', reviewStatus: 'verified'});
     const distances = entries.filter(e => e.relation.similarity).map(e => e.relation.similarity!.distance);
     expect(distances).toEqual([...distances].sort((a,b) => a-b));
-    expect(entries.filter(e => e.state.kind === 'loading').length).toBeLessThanOrEqual(MAX_RELATED_HISTORY_LOADS);
+    expect(entries.every(e => e.state.kind === 'reference_only')).toBe(true);
+    expect(historyTargets(entries).length).toBeLessThanOrEqual(MAX_RELATED_HISTORY_LOADS);
     expect(entries.length).toBe(PRODUCT_RELATIONS.filter(r => r.products.some(p => p.storeId === 'akizuki' && p.pageKey === '116132')).length);
   });
   it('contains unique, reversible store-scoped pairs with source evidence and safe endpoint URLs', async () => {
@@ -163,5 +164,47 @@ describe('comparison eligibility', () => {
     expect(comparisonEligibility(f.current, f.segment, f.entry)).toMatchObject({ comparable: true, differenceMinor: null });
     f.other.storeId = 'foreign';
     expect(matchesRelationProduct(f.entry.target, f.other)).toBe(false);
+  });
+});
+
+describe('rows and loads of the variant on screen', () => {
+  /** One row per target; `offer` names the page's own variant on that row. */
+  const rows = (specs: readonly { target: string; offer?: { id: string; sku: string } }[]) => {
+    const f = comparisonFixture();
+    return specs.map(({ target, offer }, i): RelatedEntry => {
+      const relation = { ...f.relation, id: `r${i}`, products: [{ ...f.relation.products[0], ...(offer ? { offer: { ...offer, name: 'n' } } : {}) }, { ...f.relation.products[1], pageKey: target }] as typeof f.relation.products };
+      return { relation, sourceIndex: 0, target: relation.products[1], state: { kind: 'reference_only' } };
+    });
+  };
+
+  it('relatedEntries starts every row reference-only: the controller decides the loads', () => {
+    const f = comparisonFixture();
+    const many = Array.from({ length: 3 }, (_, i) => ({ ...f.relation, id: `p${i}`, products: [f.relation.products[0], { ...f.relation.products[1], pageKey: `Q${i}` }] as typeof f.relation.products }));
+    expect(relatedEntries(many, 'teststore', 'P1').map((e) => e.state.kind)).toEqual(['reference_only', 'reference_only', 'reference_only']);
+  });
+
+  it('shownOffer is the selected offer when the product has it, else the current offer', () => {
+    const f = comparisonFixture();
+    const second = structuredClone(f.current.offers[0]!); second.externalOfferId = 'second'; second.sku = 'S2';
+    f.current.offers.push(second);
+    expect(shownOffer(f.current, 'second')).toBe(second);
+    expect(shownOffer(f.current, undefined)).toBe(f.current.offers[0]);
+    expect(shownOffer(f.current, 'gone')).toBe(f.current.offers[0]);
+  });
+
+  it('entriesForOffer keeps rows with no own offer and rows naming the shown offer by id and sku', () => {
+    const f = comparisonFixture();
+    const offer = f.current.offers[0]!; // __default__, sku null
+    const entries = rows([{ target: 'any' }, { target: 'same', offer: { id: '__default__', sku: null as unknown as string } }, { target: 'other-id', offer: { id: 'x', sku: 'S' } },
+      { target: 'other-sku', offer: { id: '__default__', sku: 'S9' } }]);
+    expect(entriesForOffer(entries, offer).map((e) => e.target.pageKey)).toEqual(['any', 'same']);
+    expect(entriesForOffer(entries, null).map((e) => e.target.pageKey)).toEqual(['any']);
+  });
+
+  it('historyTargets takes the first 8 distinct targets in order and counts a repeated target once', () => {
+    const specs = [...Array.from({ length: 10 }, (_, i) => ({ target: `T${i}` })), { target: 'T0' }];
+    const shown = rows([{ target: 'T0' }, { target: 'T0' }, ...specs.slice(1)]);
+    expect(historyTargets(shown)).toEqual(Array.from({ length: 8 }, (_, i) => relationProductKey('otherstore', `T${i}`)));
+    expect(historyTargets([])).toEqual([]);
   });
 });

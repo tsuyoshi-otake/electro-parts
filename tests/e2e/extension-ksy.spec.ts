@@ -5,6 +5,11 @@ import { gunzipSync } from 'node:zlib';
 import { E2E_EXTENSION_DIR, E2E_SITE_DIR } from './global-setup.ts';
 
 const ORIGIN = 'https://raspberry-pi.ksyic.com';
+/** The USD answer the worker already reads; GBP is its JPY rate over its GBP rate (150 / 0.75 = 200 yen), as in extension-pimoroni.spec.ts. */
+const RATE_BODY = () => {
+  const last = Math.floor(Date.now() / 1000) - 3600;
+  return JSON.stringify({ result: 'success', base_code: 'USD', time_last_update_unix: last, time_next_update_unix: last + 86400, rates: { USD: 1, JPY: 150, GBP: 0.75 } });
+};
 
 /**
  * What the shop's own script does when a product is opened from the list: it
@@ -37,6 +42,8 @@ test('KSY extension follows the product dialog without navigation and keeps the 
         // Pages answers 404 for a product it has not published; the saved site holds only the fixture histories.
         const body = await readFile(path.join(E2E_SITE_DIR, u.pathname.replace(/^\/electro-parts\//, ''))).catch(() => null);
         await route.fulfill(body === null ? { status: 404, body: 'Not Found' } : { contentType: 'application/json', body });
+      } else if (u.hostname === 'open.er-api.com') {
+        await route.fulfill({ contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: RATE_BODY() });
       } else if (u.origin === ORIGIN && (u.pathname === '/main/index' || u.pathname.startsWith('/main/index/pdp.id/'))) {
         await route.fulfill({ contentType: 'text/html', body: html });
       } else await route.fulfill({ status: 204, body: '' });
@@ -62,6 +69,24 @@ test('KSY extension follows the product dialog without navigation and keeps the 
     const related = (id: string[]) => panel.locator(`.store-price[data-relation-id='${JSON.stringify(id)}']`);
     await expect(related(['akizuki', '129604', 'ksy', '1094'])).toContainText('秋月電子');
     await expect(related(['switch-science', '9809', 'ksy', '1094'])).toContainText('他店の履歴はまだ記録されていません');
+    // 0.7.10 (#94): the Pico 2 is also the same product as Pimoroni's "Without Headers" variant (SC1631). The saved site holds that
+    // shop's catalogue of the 2026-11-03 capture (£4.00). Pimoroni records GBP with the tax unknown (ADR-0017): its row is a reference
+    // price in yen (rate stubbed to 200 yen per GBP, ADR-0022), listed after the yen stores, with no difference and no cheapest badge.
+    const pimoroni = related(['ksy', '1094', 'pimoroni', 'h-raspberry-pi-pico-2']);
+    await expect(pimoroni).toHaveCount(1);
+    await expect(pimoroni.locator('.comparison-heading')).toHaveText('Pimoroni');
+    await expect(pimoroni.locator('.hero-value')).toHaveText('約 ￥800');
+    await expect(pimoroni.locator('.fx-recorded')).toContainText('記録価格 £4.00');
+    await expect(pimoroni).toContainText(/最終観測 2026-11-0[23] \d{2}:\d{2}/); // 2026-11-03T00:00Z, shown in the runner's time zone
+    await expect(pimoroni).toContainText('送料・関税別のため円の店舗の後に表示');
+    await expect(pimoroni).toContainText('参考記録価格 · 販売単位・付属品等の比較条件が未確認');
+    await expect(pimoroni.locator('[data-focus-key^="product-"]')).toHaveAttribute('href', 'https://shop.pimoroni.com/products/raspberry-pi-pico-2?variant=54906879181179');
+    await expect(pimoroni.locator('.badge.cheapest, .comparison-difference')).toHaveCount(0);
+    await expect(panel.locator('.badge.cheapest')).toHaveCount(0);
+    await expect(panel).not.toContainText('記録価格差');
+    await expect(panel).toContainText('1 GBP = 200.00円（USD/JPY と USD/GBP から算出、');
+    await pimoroni.scrollIntoViewIfNeeded();
+    await panel.screenshot({ path: 'test-results/e2e/ksy-pimoroni-card.png' });
     await expect(panel).not.toContainText('読み込み中');
     // KSY shows a stock count, so its recorded counts are drawn under the price chart; the setting hides them.
     // The panel is taller than the dialog; the chart at its top is drawn once it scrolls into view.
@@ -106,13 +131,17 @@ test('KSY extension follows the product dialog without navigation and keeps the 
     expect(requests.filter((p) => p.includes('/stores/ksy/'))).toEqual(['/electro-parts/data/v1/stores/ksy/manifest.json',
       '/electro-parts/data/v1/stores/ksy/products/1094.json', '/electro-parts/data/v1/stores/ksy/products/483.json']);
     // 0.6.3: the Pico and Pi 4 families reach KSY, so each product (1094, 483) fills its cap of 8 other-store histories and no more.
+    // 0.7.10 (#94): Pimoroni joins the Pico 2 and Pi 4 relations (its manifest and one product each). Within the cap of 8 per product the
+    // order of the relation ids decides, so Akizuki 132017 and Sengoku EEHD-6MG3 are no longer among the loaded histories; the total stays 16.
     const others = requests.filter((p) => !p.includes('/stores/ksy/')).sort();
     expect(others.filter((p) => p.includes('/products/'))).toHaveLength(16);
     expect(others).toEqual(['/electro-parts/data/v1/stores/akizuki/manifest.json',
-      ...['114778', '114839', '115359', '115450', '116132', '116834', '129604', '130198', '130330', '130982', '132017']
+      ...['114778', '114839', '115359', '115450', '116132', '116834', '129604', '130198', '130330', '130982']
         .map((id) => `/electro-parts/data/v1/stores/akizuki/products/${id}.json`),
+      '/electro-parts/data/v1/stores/pimoroni/manifest.json',
+      ...['h-raspberry-pi-4', 'h-raspberry-pi-pico-2'].map((id) => `/electro-parts/data/v1/stores/pimoroni/products/${id}.json`),
       '/electro-parts/data/v1/stores/sengoku/manifest.json',
-      ...['EEHD-5S4T', 'EEHD-6HEU', 'EEHD-6MG3'].map((id) => `/electro-parts/data/v1/stores/sengoku/products/${id}.json`),
+      ...['EEHD-5S4T', 'EEHD-6HEU'].map((id) => `/electro-parts/data/v1/stores/sengoku/products/${id}.json`),
       '/electro-parts/data/v1/stores/switch-science/manifest.json',
       '/electro-parts/data/v1/stores/switch-science/products/5682.json', '/electro-parts/data/v1/stores/switch-science/products/9809.json']);
 
