@@ -13,9 +13,9 @@
 ## 決定
 
 - `extension/` はユーザースクリプトと**同じソースから作る第 2 のホスト束縛**である。`userscript/main.ts` が GM API を `HostEnv` に束ねるのと同じ位置に `extension/host.ts` が居る。パネル・アダプタ・データクライアントは共有物であり、複製しない。
-- 束縛の中身は 3 つだけ。保存先は `chrome.storage.local`、時刻は `Date.now()`、通信は**サービスワーカーへのメッセージ 1 種類**(`eph:fetch-text`)。
+- 束縛の中身は 3 つだけ。保存先は `chrome.storage.local`、時刻は `Date.now()`、通信は**サービスワーカーへのメッセージ 1 種類**(`eph:fetch-text`)。0.7.9 で、パッケージ内の対応表を読む 2 種類目(`eph:relations-for`、ネットワークには触れない)を足した([ADR-0035](0035-relations-read-per-product.md))。
 - 通信をコンテンツスクリプトから直接行わない。ワーカーが `credentials: 'omit'` で取得するので、店舗のページはこちらの取得を発行元としても観測しない。これは `GM_xmlhttpRequest { anonymous: true }` が与えていた性質をそのまま保つためであり、同時に取得先の CORS 設定に依存しなくなる。
-- ワーカーは拡張内で唯一ネットワークに触れる場所であり、閉じた扉として書く。受け付けるメッセージは 1 種類、送り主は自分の拡張 ID のみ、URL は `DATA_HOSTS` の https のみ、待ち時間は上限 30 秒。店舗のページから任意の中継として使えない。
+- ワーカーは拡張内で唯一ネットワークに触れる場所であり、閉じた扉として書く。受け付けるメッセージは 1 種類(0.7.9 から 2 種類。2 つ目はネットワークに触れない)、送り主は自分の拡張 ID のみ、URL は `DATA_HOSTS` の https のみ、待ち時間は上限 30 秒。店舗のページから任意の中継として使えない。
 - `manifest.json` は**生成物**で、手書きしない。`content_scripts[].matches` はアダプタ登録簿から、`host_permissions` は `DATA_HOSTS` から、`version` は `USERSCRIPT_VERSION` から作る。権限は `storage` だけで、`tabs`・`cookies`・`<all_urls>` は持たない。
 - アイコンも生成物とする(`scripts/lib/icon.ts` + `png.ts`)。バイナリを 1 つも repo に置かず、色はパネルの配色から取る。
 - 配布は `site/electronics-price-history-extension.zip` 1 つ。展開して「パッケージ化されていない拡張機能を読み込む」で入れる。~~**ウェブストアには出さない**~~(ADR-0020 で撤回。zip の導線は残す)。

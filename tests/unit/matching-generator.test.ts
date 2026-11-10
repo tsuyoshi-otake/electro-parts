@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
-import { discoveryTiers, endpoint, generate, parseCatalog, serializeCatalog, serializeRelations } from '../../scripts/matching/generate.ts';
+import { discoveryTiers, endpoint, generate, parseCatalog, serializeCatalog, serializeRelations, serializeStoreLabels } from '../../scripts/matching/generate.ts';
 import { catalogStores, discover, discoverCatalog, fingerprint, hash, listingKey, normalizeCode, pageReference, type Alias, type Catalog, type Dismissal, type Family, type Listing, type Review } from '../../scripts/matching/model.ts';
 import { appendStore, appendSupplement, applySupplements, derivedCodes, identityCodes, referenceKeys, snapshotListings, type SnapshotListings } from '../../scripts/matching/catalogs.ts';
 import { normalizeKsyItem } from '../../src/adapters/ksy/snapshotAdapter.ts';
@@ -73,6 +73,12 @@ describe('reproducible reviewed matching pipeline', () => {
     expect(result.report.byBrand['Arduino']!.accepted).toBeGreaterThan(25);
     expect(generate(catalog, [], [], [], aliases).relations).toEqual([]);
     expect(generate(catalog, [], [], [], aliases).report.pending).toHaveLength(4231);
+  });
+
+  it('generates the store labels as their own module, so the table is not needed to name a store', () => {
+    expect(serializeStoreLabels()).toBe(readFileSync('userscript/adapters/storeLabels.ts', 'utf8'));
+    expect(serializeStoreLabels()).not.toContain('PRODUCT_RELATIONS');
+    expect(serializeRelations(result.relations)).not.toContain('STORE_LABELS');
   });
 
   it('produces byte-identical artifacts and a lossless, price-free evidence projection', () => {

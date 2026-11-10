@@ -4,7 +4,7 @@ import type { ExchangeRateClient } from './exchangeRate.ts';
 import type { HostEnv, MountPoint, StorePageAdapter } from './types.ts';
 import { keepPanelStateAcrossReinsert, renderPanel, type PanelContext } from '../ui/panel.ts';
 import { createPageTheme } from '../ui/pageTheme.ts';
-import { relatedEntries, relationProductKey, type ProductRelation } from './relations.ts';
+import { relatedEntries, relationProductKey, type ProductRelation, type RelationSource } from './relations.ts';
 import { matchesUrlPattern } from './urlPattern.ts';
 import { parsePreferences, PREFERENCES_STORAGE_KEY, serializePreferences, type Preferences } from './preferences.ts';
 
@@ -21,6 +21,8 @@ export const HOST_ELEMENT_ID = 'electronics-price-history-root';
 export const THEME_STORAGE_KEY = 'eph:theme';
 /** Set on `<html>` by the controller that owns the page. */
 export const OWNER_ATTRIBUTE = 'data-eph-owner';
+/** Related cards are an addition to the product: past this wait the panel stays as it is and the pending work ends. */
+export const RELATIONS_WAIT_MS = 10_000;
 
 export interface ControllerOptions {
   adapters: readonly StorePageAdapter[];
@@ -32,7 +34,8 @@ export interface ControllerOptions {
   /** How long to watch the DOM for a late mount point before giving up. */
   mountTimeoutMs?: number;
   lazyChart?: boolean;
-  relationIndex?: ReadonlyMap<string, readonly ProductRelation[]>;
+  /** Absent means no relations: the panel shows the product alone. */
+  relations?: RelationSource;
   storeLabels?: Readonly<Record<string, string>>;
   /** Yen reference values for prices recorded in a foreign currency. */
   exchangeRates?: Pick<ExchangeRateClient, 'supports' | 'get'>;
@@ -212,6 +215,7 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       let closed = false;
       let hostEl: HTMLElement | null = null;
       let cleanup = () => undefined as void;
+      let stopWaitingForRelations = () => undefined as void;
       const self: Panel = {
         pageKey,
         // Until the host exists the panel is still being set up (or found no
@@ -253,7 +257,7 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       const ctx: PanelContext = {
         doc, dataBaseUrl: options.dataBaseUrl, lazyChart: options.lazyChart ?? true, theme,
         storeLabel: (storeId) => options.storeLabels?.[storeId] ?? storeId,
-        related: relatedEntries(options.relationIndex?.get(relationProductKey(adapter.storeId, pageKey)) ?? [], adapter.storeId, pageKey),
+        related: [],
         onThemeChange: (value) => {
           theme = value;
           ctx.theme = value;
@@ -273,6 +277,7 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
       cleanup = () => {
         stopFollowingLayout();
         ctx.cleanup?.();
+        stopWaitingForRelations();
       };
       let current: LoadState = { kind: 'loading' };
       let selected: number | null = null;
@@ -292,18 +297,41 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
           host.log('error', `render failed: ${(e as Error).message}`);
         }
       };
+      // The product and its relations load side by side; neither waits for the
+      // other to render. Every way the relations end (answer, failure, the wait
+      // bound, a closed panel) settles this promise, and none of them throws.
+      const loadRelations = (source: RelationSource): Promise<void> => new Promise<void>((settle) => {
+        let done = false;
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        const finish = () => {
+          if (done) return;
+          done = true;
+          clearTimeout(timer);
+          settle();
+        };
+        const fail = (message: string) => {
+          if (done) return;
+          host.log('warn', `related products unavailable: ${message}`);
+          finish();
+        };
+        stopWaitingForRelations = finish;
+        timer = setTimeout(() => fail(`no answer within ${RELATIONS_WAIT_MS} ms`), RELATIONS_WAIT_MS);
+        // A synchronous throw from the source becomes a rejection like any other.
+        new Promise<readonly ProductRelation[]>((resolve) => resolve(source.relationsFor(adapter.storeId, pageKey))).then((relations) => {
+          // After the bound or a close the answer is late: it changes nothing.
+          if (done) return;
+          ctx.related = relatedEntries(relations, adapter.storeId, pageKey);
+          render();
+          finish();
+        }).catch((e: unknown) => fail((e as Error).message));
+      });
       render();
+      const relationsSettled = options.relations === undefined ? null : loadRelations(options.relations);
       await options.client.load(adapter.storeId, pageKey, (state) => {
         current = state;
         render();
       });
-      // Related content is not displayed without the current product. Complete
-      // those states explicitly without spending requests on invisible cards.
       const loaded = current as LoadState;
-      if (loaded.kind !== 'ready') {
-        for (const entry of ctx.related ?? []) entry.state = { kind: 'error', message: 'この商品の観測データがありません' };
-        return;
-      }
       // Current prices in a supported currency read in yen, on the viewed product
       // and on loaded rows of other stores alike. The client answers from its
       // stored rate on most pages and fetches at most once a day; each currency
@@ -321,7 +349,15 @@ export async function mountHistoryPanel(options: ControllerOptions): Promise<Con
           }));
         }
       };
-      ensureRates(loaded.product);
+      if (loaded.kind === 'ready') ensureRates(loaded.product);
+      // What follows reads the related entries, so it starts once the relations have settled too.
+      if (relationsSettled !== null) await relationsSettled;
+      // Related content is not displayed without the current product. Complete
+      // those states explicitly without spending requests on invisible cards.
+      if (loaded.kind !== 'ready') {
+        for (const entry of ctx.related ?? []) entry.state = { kind: 'error', message: 'この商品の観測データがありません' };
+        return;
+      }
       // Only the page controller owns related loads. Renders, theme changes and
       // stale-while-revalidate callbacks never initiate more work. Two workers,
       // no automatic retries, and closed panels do not start queued requests.

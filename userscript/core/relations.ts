@@ -53,18 +53,33 @@ export const MAX_RELATED_HISTORY_LOADS = 8;
 
 export const relationProductKey = (storeId: string, pageKey: string): string => JSON.stringify([storeId, pageKey]);
 
-/** O(R) once per script, then O(1 + matches) per page, not a catalogue cross join. */
-export function indexRelations(relations: readonly ProductRelation[]): ReadonlyMap<string, readonly ProductRelation[]> {
-  const index = new Map<string, ProductRelation[]>();
-  for (const relation of relations) {
-    for (const product of relation.products) {
-      const key = relationProductKey(product.storeId, product.pageKey);
-      const group = index.get(key) ?? [];
-      group.push(relation);
-      index.set(key, group);
+/** Where a page's reviewed relations come from. A host may hold the table in memory or ask for one page's share of it. */
+export interface RelationSource {
+  /** Resolves to the relations that have this product as an endpoint, in table order; an empty list when there is none. */
+  relationsFor(storeId: string, pageKey: string): Promise<readonly ProductRelation[]>;
+}
+
+/** The whole table in memory, indexed on the first question (not at script start): O(R) once, then O(1 + matches) per page, not a catalogue cross join. */
+export function inMemoryRelations(relations: readonly ProductRelation[]): RelationSource {
+  let index: ReadonlyMap<string, readonly ProductRelation[]> | undefined;
+  const build = (): ReadonlyMap<string, readonly ProductRelation[]> => {
+    const built = new Map<string, ProductRelation[]>();
+    for (const relation of relations) {
+      // One entry per distinct product key: both endpoints on one page index the relation once, as relationsInShard does.
+      for (const key of new Set(relation.products.map((product) => relationProductKey(product.storeId, product.pageKey)))) {
+        const group = built.get(key) ?? [];
+        group.push(relation);
+        built.set(key, group);
+      }
     }
-  }
-  return index;
+    return built;
+  };
+  return {
+    relationsFor: async (storeId, pageKey) => {
+      index ??= build();
+      return index.get(relationProductKey(storeId, pageKey)) ?? [];
+    },
+  };
 }
 
 export function relatedEntries(relations: readonly ProductRelation[], storeId: string, pageKey: string): RelatedEntry[] {

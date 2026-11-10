@@ -5,7 +5,7 @@ import { DataClient } from '../../userscript/core/dataClient.ts';
 import { EXCHANGE_RATE_URL, ExchangeRateClient, parseRateResponse, yenFromMinor } from '../../userscript/core/exchangeRate.ts';
 import type { HostResponse } from '../../userscript/core/types.ts';
 import { PREFERENCES_STORAGE_KEY } from '../../userscript/core/preferences.ts';
-import { indexRelations } from '../../userscript/core/relations.ts';
+import { inMemoryRelations } from '../../userscript/core/relations.ts';
 import { comparisonFixture } from './comparison-fixtures.ts';
 import { fakeHost, json, sampleManifest, sampleProduct, testAdapter, type FakeHost } from './helpers.ts';
 
@@ -385,7 +385,7 @@ describe('panel yen reference', () => {
     host.routes.set(`${BASE}/${productPath('otherstore', 'P2')}`, json(other));
     const rates = new ExchangeRateClient(host);
     const get = vi.spyOn(rates, 'get');
-    const shadow = await mount(host, sampleProduct(), rates, { relationIndex: indexRelations([relation]) });
+    const shadow = await mount(host, sampleProduct(), rates, { relations: inMemoryRelations([relation]) });
     const row = shadow.querySelector('.store-price');
     expect(row?.querySelector('.hero-value')?.textContent).toBe('約 ￥868');
     expect(row?.querySelector('.fx-recorded')?.textContent).toBe('記録価格 $5.50');

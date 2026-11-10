@@ -5,7 +5,7 @@ import { DataClient } from '../../userscript/core/dataClient.ts';
 import { PREFERENCES_STORAGE_KEY } from '../../userscript/core/preferences.ts';
 import { PAGE_THEME_CONTROL_ID } from '../../userscript/ui/pageTheme.ts';
 import { PANEL_TITLE } from '../../userscript/ui/panel.ts';
-import { indexRelations } from '../../userscript/core/relations.ts';
+import { inMemoryRelations } from '../../userscript/core/relations.ts';
 import type { StorePageAdapter } from '../../userscript/core/types.ts';
 import { comparisonFixture } from './comparison-fixtures.ts';
 import { fakeHost, json, sampleManifest, sampleProduct, testAdapter, type FakeHost } from './helpers.ts';
@@ -75,7 +75,7 @@ describe('history panel controller', () => {
       products: [relation.products[0], {...relation.products[1], pageKey: `Q${i}`, url: `https://other.test/Q${i}`}] as typeof relation.products }));
     host.routes.set(`${BASE}/${manifestPath('otherstore')}`, json(sampleManifest({storeId: 'otherstore'})));
     for (let i = 0; i < 12; i++) host.routes.set(`${BASE}/${productPath('otherstore', `Q${i}`)}`, json({...other, pageKey: `Q${i}`, externalProductId: `Q${i}`}));
-    const handle = await mount(host, {relationIndex: indexRelations(relations)});
+    const handle = await mount(host, {relations: inMemoryRelations(relations)});
     expect(host.requests.filter(url => url.includes('/otherstore/products/'))).toHaveLength(8);
     const root = document.getElementById(HOST_ELEMENT_ID)!.shadowRoot!;
     expect(root.querySelectorAll('.related-card')).toHaveLength(12);
@@ -102,7 +102,7 @@ describe('history panel controller', () => {
       try { await new Promise((resolve) => setTimeout(resolve, 20)); return await fetch(url, timeout); }
       finally { active--; }
     };
-    const handle = await mount(host, { relationIndex: indexRelations(relations) });
+    const handle = await mount(host, { relations: inMemoryRelations(relations) });
     expect(peak).toBe(2);
     expect(active).toBe(0);
     expect(host.requests.filter((url) => url.includes('/otherstore/manifest'))).toHaveLength(1);
@@ -120,7 +120,7 @@ describe('history panel controller', () => {
     page();
     const host = fakeHost();
     const { relation } = comparisonFixture();
-    await mount(host, { relationIndex: indexRelations([relation]) });
+    await mount(host, { relations: inMemoryRelations([relation]) });
     expect(shadowText()).toContain('取得できませんでした');
     expect(host.requests).toHaveLength(1);
     expect(host.requests[0]).toContain('/teststore/');

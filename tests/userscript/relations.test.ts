@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PRODUCT_RELATIONS } from '../../userscript/adapters/productRelations.ts';
 import { PAGE_ADAPTERS } from '../../userscript/adapters/registry.ts';
-import { comparisonEligibility, currentOffer, indexRelations, matchesRelationProduct, primaryQuote, relatedEntries, relationProductKey, MAX_RELATED_HISTORY_LOADS } from '../../userscript/core/relations.ts';
+import { comparisonEligibility, currentOffer, inMemoryRelations, matchesRelationProduct, primaryQuote, relatedEntries, MAX_RELATED_HISTORY_LOADS } from '../../userscript/core/relations.ts';
 import type { RelationProduct } from '../../userscript/core/relations.ts';
 import { ksyProductPageHtml, openKsyProduct } from '../helpers/ksy.ts';
 import { sengokuFixture, showSengokuProduct } from '../helpers/sengoku.ts';
@@ -17,7 +17,7 @@ describe('curated relation catalogue', () => {
     expect(entries.filter(e => e.state.kind === 'loading').length).toBeLessThanOrEqual(MAX_RELATED_HISTORY_LOADS);
     expect(entries.length).toBe(PRODUCT_RELATIONS.filter(r => r.products.some(p => p.storeId === 'akizuki' && p.pageKey === '116132')).length);
   });
-  it('contains unique, reversible store-scoped pairs with source evidence and safe endpoint URLs', () => {
+  it('contains unique, reversible store-scoped pairs with source evidence and safe endpoint URLs', async () => {
     document.head.replaceChildren(); document.body.replaceChildren();
     const seen = new Set<string>();
     const inDialog: RelationProduct[] = [];
@@ -49,9 +49,9 @@ describe('curated relation catalogue', () => {
         expect(r.provenance.method).toBe('retailer-pages'); expect(r.pricePolicy.evidence.length).toBeGreaterThan(20);
         expect(r.pricePolicy.offerIds).toHaveLength(2);
       }
-      const index = indexRelations([r]);
+      const source = inMemoryRelations([r]);
       for (const [i, p] of r.products.entries()) {
-        const entries = relatedEntries(index.get(relationProductKey(p.storeId, p.pageKey))!, p.storeId, p.pageKey);
+        const entries = relatedEntries(await source.relationsFor(p.storeId, p.pageKey), p.storeId, p.pageKey);
         expect(entries).toHaveLength(1); expect(entries[0]!.sourceIndex).toBe(i);
         expect(entries[0]!.target).toBe(r.products[i === 0 ? 1 : 0]);
       }

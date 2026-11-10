@@ -1,6 +1,6 @@
 /**
  * Minimal Chrome extension API surface used by the extension entry points.
- * Hand-written for the same reason as `userscript/gm.d.ts`: the four calls we
+ * Hand-written for the same reason as `userscript/gm.d.ts`: the few calls we
  * make are easier to read here than a dependency, and anything not declared
  * here is a call this extension does not make.
  */
@@ -23,6 +23,8 @@ declare namespace chrome {
     /** This extension's own id; used to reject messages from anywhere else. */
     const id: string;
     function sendMessage(message: unknown): Promise<unknown>;
+    /** Absolute chrome-extension:// URL of a file packaged in this extension. */
+    function getURL(path: string): string;
     namespace onMessage {
       /** Returning true keeps the channel open for an asynchronous `sendResponse`. */
       function addListener(

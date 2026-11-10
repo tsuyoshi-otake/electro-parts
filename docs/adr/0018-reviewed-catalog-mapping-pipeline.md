@@ -178,6 +178,8 @@ M5Stack公式の完全スナップショットを既存の小売資料へ追記�
 | `content.js` の gzip | 765,695 B | 649,274 B |
 | 表の読み込み (node 26、5回、バンドル済み) | 約56–63 ms | 約29–31 ms (1回だけ46 ms) |
 
+0.7.9 から、拡張の `content.js` は表を含まない。同じ詰めた形式の表を連結成分ごとに 64 個へ分け、パッケージ内の `relations/` に置く ([ADR-0035](0035-relations-read-per-product.md))。ユーザースクリプトは従来どおり表を 1 つ持つ。店舗の表示名 `STORE_LABELS` は生成物 `userscript/adapters/storeLabels.ts` に分けた。
+
 件数、要確認の内訳、範囲外は[店舗間の照合範囲](../roadmap/three-store-mapping.md#063-型番表記の補完とaliasの追加2026-11-01判定)を参照。
 
 ## 0.6.4: 注記・メーカー接頭辞・再販表記の探索キーと、探索の段階
