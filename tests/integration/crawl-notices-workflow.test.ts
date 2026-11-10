@@ -60,12 +60,44 @@ function run(script: string, args: string[], env: Record<string, string | undefi
   });
 }
 
+const stores = (/^\s*STORES: (.+)$/m.exec(workflow)?.[1] ?? '').trim().split(/\s+/).filter(Boolean);
+const jobNames = ['plan', 'collect', 'publish', 'deploy', 'alerts'];
+
+/** The `run:` blocks of a job: the shell text, which must not interpolate workflow values. */
+function runBlocks(block: string): string[] {
+  const multiLine = [...block.matchAll(/^ {8}run: \|\n((?: {10}.*\n|\n)+)/gm)].map((m) => m[1] as string);
+  const oneLine = [...block.matchAll(/^ {8}run: (?!\|)(.+)$/gm)].map((m) => m[1] as string);
+  return [...multiLine, ...oneLine];
+}
+
 describe('crawl notices: workflow wiring', () => {
-  it('keeps the run-length limit equal to the crawl job timeout', () => {
-    const timeout = /^    timeout-minutes: (\d+)$/m.exec(jobBlock('crawl'))?.[1];
-    const limit = /JOB_LIMIT_MINUTES: (\d+)/.exec(jobBlock('crawl'))?.[1];
-    expect(timeout).toBeDefined();
-    expect(limit).toBe(timeout);
+  it('has exactly the jobs plan, collect, publish, deploy and alerts', () => {
+    const jobsSection = workflow.slice(workflow.indexOf('\njobs:\n'));
+    const names = [...jobsSection.matchAll(/^ {2}([a-z][a-z0-9_-]*):\n/gm)].map((m) => m[1]);
+    expect(names).toEqual(jobNames);
+  });
+  it.each([
+    ['collect', '150'],
+    ['publish', '60'],
+  ])('keeps the run-length limit of %s equal to its own timeout (%s)', (job, minutes) => {
+    const block = jobBlock(job);
+    expect(/^ {4}timeout-minutes: (\d+)$/m.exec(block)?.[1]).toBe(minutes);
+    expect(/JOB_LIMIT_MINUTES: (\d+)/.exec(block)?.[1]).toBe(minutes);
+    expect(block).toContain('node scripts/run-budget.ts');
+  });
+  it('lets every job that measures its run length note its start time in its first step', () => {
+    const measuring = jobNames.filter((name) => jobBlock(name).includes('scripts/run-budget.ts'));
+    expect(measuring).toEqual(['collect', 'publish']);
+    for (const job of measuring) {
+      const steps = jobBlock(job).split(/^ {6}- name: /m);
+      expect(steps[1], job).toContain('Note when the job started');
+      expect(steps[1], job).toContain('JOB_STARTED_AT=$(date +%s)');
+    }
+  });
+  it('runs the run-length step even after a failure', () => {
+    for (const job of ['collect', 'publish']) {
+      expect(jobBlock(job)).toMatch(/- name: Run length against the limit\n {8}if: always\(\)\n/);
+    }
   });
   it('gives the alerts job exactly contents:read and issues:write, and no dependency install', () => {
     const block = jobBlock('alerts');
@@ -74,18 +106,93 @@ describe('crawl notices: workflow wiring', () => {
     expect(block).not.toMatch(/\btsx\b/);
     expect(block).toContain('node scripts/crawl-alerts.ts');
   });
-  it('keeps issue write access out of the crawl job', () => {
-    expect(permissionsOf(jobBlock('crawl')).join('\n')).not.toMatch(/issues:/);
+  it('lets no job but alerts write issues, and the jobs that run dependencies write nothing', () => {
+    for (const job of jobNames.filter((name) => name !== 'alerts')) expect(permissionsOf(jobBlock(job)).join('\n'), job).not.toMatch(/issues:/);
+    for (const job of ['plan', 'collect']) expect(permissionsOf(jobBlock(job)), job).toEqual(['contents: read']);
+    expect(permissionsOf(jobBlock('publish')).sort()).toEqual(['actions: read', 'contents: read']);
+    for (const job of ['plan', 'collect', 'publish']) expect(permissionsOf(jobBlock(job)).join('\n'), job).not.toMatch(/: write/);
+    expect(permissionsOf(jobBlock('deploy')).sort()).toEqual(['id-token: write', 'pages: write']);
     expect(workflow).toMatch(/^permissions: \{\}$/m);
+  });
+  it('collects each observed store in its own job from the plan, never cancelling the others', () => {
+    const block = jobBlock('collect');
+    expect(block).toMatch(/^ {4}needs: plan$/m);
+    expect(block).toMatch(/^ {4}if: needs\.plan\.outputs\.matrix != '\[\]'$/m);
+    expect(block).toMatch(/^ {6}fail-fast: false$/m);
+    expect(block).toContain('store: ${{ fromJSON(needs.plan.outputs.matrix) }}');
+    expect(block).toContain('name: Collect ${{ matrix.store }}');
+  });
+  it('uploads the snapshot and the collect record under the names the re-import and the import look for', () => {
+    const block = jobBlock('collect');
+    expect(block).toContain('name: snapshot-${{ matrix.store }}-${{ github.run_id }}');
+    expect(block).toContain('path: snapshots/${{ matrix.store }}-*');
+    expect(block).toContain('name: collect-${{ matrix.store }}-${{ github.run_id }}');
+    expect(block).toContain('path: reports/collect-${{ matrix.store }}.json');
+    expect(jobBlock('publish')).toContain('--name "snapshot-$OBSERVE-$RUN_ID"');
+    expect(jobBlock('publish')).toContain('pattern: snapshot-*-${{ github.run_id }}');
+    expect(jobBlock('publish')).toContain('pattern: collect-*-${{ github.run_id }}');
+  });
+  it('restores and saves the carry cache for whichever store is collected, with no store named', () => {
+    const block = jobBlock('collect');
+    expect(block).toContain('key: ${{ matrix.store }}-cover-${{ github.run_id }}\n');
+    expect(block).toContain('restore-keys: ${{ matrix.store }}-cover-\n');
+    expect(block).toContain('key: ${{ matrix.store }}-cover-${{ github.run_id }}-${{ github.run_attempt }}');
+    expect(block).toContain("if: always() && hashFiles('state/work/carry/*') != ''");
+    expect(jobBlock('publish')).not.toContain('actions/cache');
+  });
+  it('names no store anywhere in the workflow but on the STORES line', () => {
+    expect(stores.length).toBeGreaterThan(0);
+    const rest = workflow.replace(/^\s*STORES: .*$/m, '').toLowerCase();
+    for (const store of stores) expect(rest, store).not.toContain(store);
+  });
+  it('plans the matrix with jq from the observed stores, empty for a re-import', () => {
+    const block = jobBlock('plan');
+    expect(block).toContain('scripts/observed-stores.ts');
+    expect(block).toContain(`jq -cn --arg stores "$observe" '$stores | split(" ") | map(select(. != ""))'`);
+    expect(block).toMatch(/if \[ -n "\$\{REIMPORT:-\}" \]; then\n\s+matrix='\[\]'/);
+    expect(block).toContain('observe: ${{ steps.observed.outputs.observe }}');
+    expect(block).toContain('matrix: ${{ steps.observed.outputs.matrix }}');
+    expect(block).toContain('exactly one store');
+  });
+  it('lets publish run after a failed collect without selecting the stores itself', () => {
+    const block = jobBlock('publish');
+    expect(block).toMatch(/^ {4}needs: \[plan, collect\]$/m);
+    expect(block).toMatch(/^ {4}if: always\(\) && needs\.plan\.result == 'success'$/m);
+    expect(block).not.toContain('observed-stores.ts');
+    expect(block).toContain('OBSERVE: ${{ needs.plan.outputs.observe }}');
+    expect(jobBlock('deploy')).toMatch(/^ {4}needs: publish$/m);
+    expect(jobBlock('alerts')).toMatch(/^ {4}needs: publish$/m);
+    expect(jobBlock('alerts')).toContain('FAILED_STORES: ${{ needs.publish.outputs.failed_stores }}');
+    expect(jobBlock('deploy')).toContain('needs.publish.outputs.publishable');
+    expect(workflow).not.toContain('needs.crawl');
+  });
+  it('fails a store with no snapshot without running its pipeline, and passes the record only when there is one', () => {
+    const block = jobBlock('publish');
+    expect(block).toContain('The collect job produced no snapshot; see its log.');
+    expect(block).toMatch(/if \[ -z "\$file" \]; then[\s\S]*?failed="\$failed \$store"[\s\S]*?\n\s+continue\n\s+fi/);
+    expect(block).toContain('flags="$flags --snapshot $file"');
+    expect(block).toContain('if [ -n "$record" ]; then flags="$flags --collect-record $record"; fi');
+    expect(block).toContain('*) flags="--republish" ;;');
+  });
+  it('reads no workflow value inside a run block of collect or publish: values arrive through env', () => {
+    for (const job of ['collect', 'publish']) {
+      for (const text of runBlocks(jobBlock(job))) expect(text, job).not.toMatch(/\$\{\{\s*(matrix|inputs|needs|steps|github)\./);
+    }
+    expect(runBlocks(jobBlock('collect')).length).toBeGreaterThan(1);
+    expect(jobBlock('publish')).toContain('FAILED_STORES: ${{ steps.pipeline.outputs.failed_stores }}');
   });
   it('treats every exit code except 0 and 3 as a failed store', () => {
     expect(workflow).toContain('if [ "$code" != "0" ] && [ "$code" != "3" ]; then');
     expect(workflow).not.toContain('if [ "$code" = "1" ]; then');
   });
-  it('notes the start time in the first step of the crawl job', () => {
-    const steps = jobBlock('crawl').split(/^ {6}- name: /m);
-    expect(steps[1]).toContain('Note when the job started');
-    expect(steps[1]).toContain('JOB_STARTED_AT=$(date +%s)');
+  it('lets the crawl exit 0 or 2 pass and fails the collect step on anything else', () => {
+    const block = jobBlock('collect');
+    expect(block).toContain('code=${PIPESTATUS[0]}');
+    expect(block).toMatch(/set \+e\n\s+node --import tsx src\/cli\/main\.ts crawl --config "config\/\$STORE\.json" 2>&1 \| tee "collect-\$STORE\.log"/);
+    expect(block).toMatch(/0\) ;;/);
+    expect(block).toMatch(/2\) echo "::warning title=\$STORE incomplete::/);
+    expect(block).toMatch(/\*\)\n\s+echo "::error title=\$STORE failed::[^\n]*\n\s+exit 1/);
+    expect(block).toContain('STORE: ${{ matrix.store }}');
   });
 });
 
@@ -162,7 +269,7 @@ describe('crawl notices: crawl-alerts.ts as the alerts job runs it', () => {
   });
 });
 
-describe('crawl notices: run-budget.ts as the crawl job runs it', () => {
+describe('crawl notices: run-budget.ts as the collect and publish jobs run it', () => {
   const startedMinutesAgo = (minutes: number) => String(Math.floor(Date.now() / 1000) - minutes * 60);
 
   it('warns and writes the summary when the job is past 80 % of its limit', () => {
