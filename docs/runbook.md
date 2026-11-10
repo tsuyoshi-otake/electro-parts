@@ -25,13 +25,15 @@
 - 定期実行と手動実行が重なる場合も、`pages-publish` の concurrency で直列化する。
 - 頻度が低いぶん、秋月は 1 回失敗すると次の自動 run まで 1 か月空く(スイッチサイエンスは 1 週間)。**失敗・隔離が出たら、直してから `workflow_dispatch` で回し直す**のが通常の運用。特定の店舗だけ直したいときは `stores` にその店舗を書く(他店舗は公開済みデータセットのまま維持される)。
 - Actions summary に**店舗ごとに**、結果(`published` / `unchanged` / `quarantined` / `failed`)、run 時間、リクエスト数、件数、価格変更数、隔離理由が出る。最後に `### Site` として、サイトに載った店舗と `datasetVersion`、サイトサイズが出る。
-- 終了コード(店舗ごと): 0 = 公開または変化なし、3 = 隔離(公開は続く、warning)、1 = 失敗。
+- 終了コード(店舗ごと): 0 = 公開または変化なし、3 = 隔離(公開は続く、warning)、それ以外 = 失敗。1 のほか、メモリ不足やシグナルによる異常終了も失敗として扱う(何も観測していないので成功にしない。#92)。
   - ワークフローは各店舗の pipeline を `set +e` の中で動かし、終了コードを `PIPESTATUS` で読む。手順のシェルは `bash -e` なので、これが無いと 3 や 1 で手順ごと終わり、後の店舗とデプロイが止まる(2026-11-04 の定期 run、#78)。
 - **1 店舗が失敗しても、他店舗の公開は止まらない。** 失敗した店舗は公開済み履歴から `--republish` で復元されてからデプロイされ、ジョブ自体は最後に失敗する(`failed_stores` に名前が出る)。復元もできなければゲートがデプロイを拒否する。
+- **観測できなかった店舗(隔離・失敗)は Issue で知らせる。** `alerts` ジョブが店舗ごとに `crawl-alert` ラベルの Issue を 1 件作り、次に観測できた run で自動的に閉じる。隔離だけの run はジョブが緑のまま終わるので、Issue が唯一の通知になる。→ [観測できなかった店舗の通知と run の長さ](#観測できなかった店舗の通知と-run-の長さ)
+- **run の長さ**は summary の `### Run length` に、ジョブ上限 240 分に対する経過分と割合で出る。80 %(192 分)を超えると warning 注釈 `Run length near the limit` が出る。
 
 ## 隔離(quarantined)が出たら
 
-隔離は店舗ごと。片方が隔離されても、もう片方の公開は普通に続く。
+隔離は店舗ごと。片方が隔離されても、もう片方の公開は普通に続く。ジョブは緑のまま終わるので、通知は Issue `Crawl alert: <store> was not observed`(ラベル `crawl-alert`)で届く。本文に `sanity.*` コードと run へのリンクが入っている。下の手順で直して回し直すと、観測できた run が Issue を閉じる。
 
 1. summary のその店舗の `sanity.*` コードと指標を読む。
    - `item_count_drop` / `missing_product_ratio`: サイト側の一覧が欠けた可能性。`npm run crawl -- --config config/<store>.json` をローカルで実行し、`complete` と `issues`、`catalog.uncovered` を見る。
@@ -137,6 +139,44 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 - 403 が出る: User-Agent が拒否されている。過去に `crawler` という語を含む UA が拒否された。UA を変えるときは ADR-0009 を守り、識別可能で連絡先を含むものにする。**ブラウザ UA に偽装しない。**
 - verify 失敗: 生成物の契約検証エラー。Publisher のバグなのでコードを直す。
 - デプロイされない(`publishable: false`): サイトに載っていない店舗がある。summary の `### Site` に、どの店舗のマニフェストが無いかが出る。履歴に run がある店舗は自動で復元されるので、ここまで来るのは「復元も失敗した」か「その店舗の設定ファイルが無い」場合。**この状態でデプロイしないのは意図した動作**で、公開サイトから店舗が丸ごと消えるより run が 1 回無駄になるほうがましだから。
+
+## 観測できなかった店舗の通知と run の長さ
+
+隔離(quarantined)は公開を止めないので、ジョブは緑のまま終わる。warning 注釈だけでは見落とす(2026-11-09 のせんごく、#92)。そこで観測できなかった店舗は Issue で知らせる(ADR-0033)。
+
+### どこに出るか
+
+- `Crawl and publish` の `alerts` ジョブが、**店舗ごとに Issue を 1 件**作る。題名は `Crawl alert: <store> was not observed`、ラベルは `crawl-alert`、担当者はリポジトリの所有者(割り当ての通知が届く)。
+- 対象は、その run で `quarantined` または `failed` で終わった店舗。本文に結果、失敗した段階、理由(`sanity.*` コードやエラー文)、run へのリンクが入る。
+- 同じ店舗が次の run でも観測できなければ、新しい Issue は作らず同じ Issue にコメントを足す(1 run につき 1 回)。
+- 次に観測できた run(`collect` が成功し、結果が `published` か `unchanged`)が、コメントを付けて Issue を閉じる。スナップショットの再取り込み(`reimport_snapshot_from_run`)も観測として数える。
+- 作りも閉じもしない run: `dry_run=true`(`alerts` ジョブを動かさない)、その店舗を `--republish` しただけの run。
+
+### 届いたら
+
+1. Issue の理由を読む。`quarantined` は[隔離(quarantined)が出たら](#隔離quarantinedが出たら)、`failed` は[失敗(failed)が出たら](#失敗failedが出たら)の手順へ進む。
+2. 直したら `workflow_dispatch` で `stores: <store>` を指定して回し直す。観測できれば Issue は自動で閉じる。
+3. 手で閉じてもよい。次に観測できなかった run が新しい Issue を作る。
+
+### run の長さ
+
+- `crawl` ジョブの手順 `Run length against the limit` が、ジョブ開始からの経過をジョブ上限(`timeout-minutes: 240`)と比べ、summary の `### Run length` に経過分と割合を出す。成果物のアップロードの後で測るので、ジョブのほぼ全体を含む。
+- 80 %(192 分)を**超える**と warning 注釈 `Run length near the limit` が出る(ちょうど 192 分では出ない)。こちらは Issue を作らない。
+- 出たら次の順で見る。
+  1. summary の店舗ごとの run 時間で、伸びた店舗を特定する。
+  2. 秋月が full の日(週 1 回、約 85 分)だったかを見る(→ [秋月の cover クロール](#秋月の-cover-クロール))。full の日だけ超えるなら想定内。
+  3. 毎日超えるなら、`timeout-minutes` と `JOB_LIMIT_MINUTES` を**同じ値に**上げる(GitHub のホストランナーの上限は 360 分)。2 つの値が違うとテスト `tests/integration/crawl-notices-workflow.test.ts` が落ちる。
+- アクセス間隔を詰めて短くしない(ADR-0009)。
+
+### 仕組みと注意
+
+- `issues: write` を持つのは `alerts` ジョブだけ。`crawl` ジョブ(npm の依存を動かし、店舗のページを解析する)には書き込み権限を渡さない。`alerts` は `npm ci` をせず、依存のない `scripts/crawl-alerts.ts` を素の `node` で動かす。
+- 入力は成果物 `reports-<run id>` の `pipeline-<store>.json`。失敗した店舗は、復元の republish が上書きする前の `pipeline-<store>.failed-run.json` を使う。レポートを書く前に終わった店舗は `failed_stores` から拾う。
+- 店舗由来の文字列はデータとして扱う(コードブロックに入れ、バッククォートと HTML コメントの開始を無効化し、1 行 300 文字・10 行まで)。
+- どの Issue がどの店舗のものかは、本文 1 行目のマーカー `<!-- crawl-alert store=<store> -->` で決める。**この行を編集・削除しない**(消すと次の run が別の Issue を作る)。
+- ローカルで確認する: `node scripts/crawl-alerts.ts --reports <reports のあるディレクトリ> --dry-run`。`gh` を呼ばず、判定と予定の操作を JSON で出す。
+- 止める: workflow の `alerts` ジョブを削除する。公開には影響しない(`deploy` は `alerts` に依存しない)。
+- `alerts` ジョブが失敗しても、その run の公開は済んでいる。同じ run の通知は 1 店舗 1 回なので、ジョブを回し直しても重複しない。
 
 ## 頻度を変える / 止める
 
