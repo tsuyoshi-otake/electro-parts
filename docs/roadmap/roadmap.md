@@ -1,6 +1,6 @@
 # ロードマップ
 
-秋月電子通商・スイッチサイエンス・M5Stack公式ショップ・Raspberry Pi Shop by KSY・せんごくネット通販(電子工作部品)・Pimoroni(英国、GBP)が**実装済み**、aitendo が**未実装**です。M5StackのUSD・全商品収集・バリエーション対応は [対応仕様](m5stack-support.md)、KSYの公開一覧の収集と商品ダイアログの扱いは [ADR-0023](../adr/0023-ksy-public-list-and-in-place-product-dialog.md) を参照してください。エレショップは収集規模と一括提供元が課題のため保留です。
+秋月電子通商・スイッチサイエンス・M5Stack公式ショップ・Raspberry Pi Shop by KSY・せんごくネット通販(電子工作部品)・Pimoroni(英国、GBP)が**実装済み**、aitendo が**未実装**です。M5StackのUSD・全商品収集・バリエーション対応は [対応仕様](m5stack-support.md)、KSYの公開一覧の収集と商品ダイアログの扱いは [ADR-0023](../adr/0023-ksy-public-list-and-in-place-product-dialog.md) を参照してください。エレショップは収集規模と一括提供元が課題のため保留です。 Raspberry Pi Shop by KSY の観測は、サイト閉鎖のため 2026-11-04 に停止し、公開済みの履歴だけを再生成し続けている(ADR-0029)。
 
 ## 拡張点(すでに用意されているもの)
 
