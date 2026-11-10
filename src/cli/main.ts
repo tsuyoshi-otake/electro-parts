@@ -2,24 +2,25 @@
  * Command-line entry point. Every command is a thin wrapper around the
  * pipeline modules; nothing here knows about a specific store.
  *
- *   pipeline  --config config/<store>.json [--bootstrap] [--previous-dir DIR] [--snapshot FILE] [--republish]
- *   crawl     --config ...                     write a raw snapshot only (exit 2 when incomplete)
+ *   pipeline  --config config/<store>.json [--bootstrap] [--previous-dir DIR] [--snapshot FILE [--collect-record FILE]] [--republish]
+ *   crawl     --config ... [--out DIR] [--record FILE]
+ *                                              write a raw snapshot and its collect record only, no import
+ *                                              (exit 0 complete, 2 incomplete: both files are still written)
  *   verify    --config ... [--site DIR]        re-verify a produced site directory
  *   summary   --report reports/pipeline-<store>.json   print Markdown for the Actions summary
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
-import { writeRawSnapshotFile } from '../core/snapshotFile.ts';
+import { collectToFile, writeCollectRecord } from '../pipeline/collect.ts';
 import { assertObserved, loadPipelineConfig } from '../pipeline/config.ts';
 import { reportToMarkdown, type PipelineReport } from '../pipeline/report.ts';
-import { runPipeline, SITE_STATE_DIR } from '../pipeline/run.ts';
+import { runPipeline } from '../pipeline/run.ts';
 import { verifyPublication } from '../pipeline/verifyPublication.ts';
-import { getStoreCollector } from '../stores/collectorRegistry.ts';
 
 const USAGE = `usage:
-  main.ts pipeline --config FILE [--bootstrap] [--previous-dir DIR] [--snapshot FILE] [--republish]
-  main.ts crawl    --config FILE [--out DIR]
+  main.ts pipeline --config FILE [--bootstrap] [--previous-dir DIR] [--snapshot FILE [--collect-record FILE]] [--republish]
+  main.ts crawl    --config FILE [--out DIR] [--record FILE]
   main.ts verify   --config FILE [--site DIR]
   main.ts summary  --report FILE [--append-to FILE]`;
 
@@ -36,6 +37,7 @@ async function commandPipeline(args: string[]): Promise<number> {
       republish: { type: 'boolean', default: false },
       'previous-dir': { type: 'string' },
       snapshot: { type: 'string' },
+      'collect-record': { type: 'string' },
     },
   });
   if (values.config === undefined) throw new Error(USAGE);
@@ -48,6 +50,7 @@ async function commandPipeline(args: string[]): Promise<number> {
     deps: { log },
     ...(values['previous-dir'] === undefined ? {} : { previous: { dir: values['previous-dir'] } }),
     ...(values.snapshot === undefined ? {} : { snapshotPath: values.snapshot }),
+    ...(values['collect-record'] === undefined ? {} : { collectRecordPath: values['collect-record'] }),
   });
   process.stdout.write(reportToMarkdown(result.report));
   log(`report written: ${result.reportPath} (outcome=${String(result.report.outcome)}, exit=${result.exitCode})`);
@@ -55,19 +58,30 @@ async function commandPipeline(args: string[]): Promise<number> {
 }
 
 async function commandCrawl(args: string[]): Promise<number> {
-  const { values } = parseArgs({ args, options: { config: { type: 'string' }, out: { type: 'string' } } });
+  const { values } = parseArgs({ args, options: { config: { type: 'string' }, out: { type: 'string' }, record: { type: 'string' } } });
   if (values.config === undefined) throw new Error(USAGE);
   const config = await loadPipelineConfig(values.config);
   assertObserved(config);
-  const collector = getStoreCollector(config.storeId);
-  const outcome = await collector.collect(config.collector, { log });
-  const dir = values.out ?? config.paths.snapshots;
-  const file = path.join(dir, `${config.storeId}-${outcome.retrievedAt.replace(/[:.]/g, '-')}.json.gz`);
-  const { mkdir } = await import('node:fs/promises');
-  await mkdir(dir, { recursive: true });
-  const written = await writeRawSnapshotFile(file, outcome.raw);
-  process.stdout.write(`${JSON.stringify({ file, complete: outcome.complete, rawSha256: written.rawSha256, bytes: written.bytes, metrics: outcome.metrics, errors: outcome.errors }, null, 2)}\n`);
-  return outcome.complete ? 0 : 2;
+  const cwd = process.cwd();
+  const { record, file } = await collectToFile({
+    config,
+    cwd,
+    deps: { log },
+    ...(values.out === undefined ? {} : { snapshotsDir: values.out }),
+  });
+  const recordFile = path.resolve(cwd, values.record ?? path.join(config.paths.reports, `collect-${config.storeId}.json`));
+  await writeCollectRecord(recordFile, record);
+  const summary = {
+    file: path.relative(cwd, file),
+    record: path.relative(cwd, recordFile),
+    complete: record.complete,
+    rawSha256: record.rawSha256,
+    bytes: record.bytes,
+    metrics: record.metrics,
+    errors: record.errors,
+  };
+  process.stdout.write(`${JSON.stringify(summary, null, 2)}\n`);
+  return record.complete ? 0 : 2;
 }
 
 async function commandVerify(args: string[]): Promise<number> {

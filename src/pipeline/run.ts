@@ -1,8 +1,8 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { NormalizedSnapshot } from '../core/domain.ts';
 import { sanityCheck } from '../core/sanity.ts';
-import { readRawSnapshotFile, writeRawSnapshotFile } from '../core/snapshotFile.ts';
+import { readRawSnapshotFile } from '../core/snapshotFile.ts';
 import { parseUtcMs } from '../core/time.ts';
 import { isImportable, mergeValidation, type ValidationResult } from '../core/validation.ts';
 import { openDatabase, type Db } from '../db/connection.ts';
@@ -15,17 +15,14 @@ import { latestSnapshotSummary } from '../db/sanitySummary.ts';
 import { generateStoreDataset } from '../publisher/generate.ts';
 import { writeStoreDataset } from '../publisher/write.ts';
 import type { CollectDeps } from '../stores/collector.ts';
-import { getStoreCollector } from '../stores/collectorRegistry.ts';
 import { getStoreAdapter } from '../stores/registry.ts';
+import { applyCollectRecord, collectToFile, parseCollectRecord, type CollectRecord } from './collect.ts';
 import { assertObserved, type PipelineConfig } from './config.ts';
 import { acquirePreviousState, type FetchLike, type PreviousStateSource } from './previousState.ts';
 import { EXIT_CODES, newReport, runStage, StageFailedError, type PipelineOutcome, type PipelineReport } from './report.ts';
 import { verifyPublication } from './verifyPublication.ts';
 
 export const SITE_STATE_DIR = 'state';
-
-/** Under the work directory: what a collector keeps between runs (`CollectDeps.carryDir`). The workflow caches it. */
-export const CARRY_DIR_NAME = 'carry';
 
 export interface RunDeps extends CollectDeps {
   fetchImpl?: FetchLike;
@@ -39,6 +36,12 @@ export interface RunOptions {
   previous?: PreviousStateSource;
   /** Import this raw snapshot instead of crawling. */
   snapshotPath?: string;
+  /**
+   * The record `crawl` wrote next to that snapshot (see `collect.ts`): another
+   * job did the crawl, and this is how this run reports it. Only valid with
+   * `snapshotPath`, and it must describe that very file.
+   */
+  collectRecordPath?: string;
   /**
    * Regenerate and republish the site from the published history without
    * observing anything: no crawl, no import, no new run. For changes that
@@ -68,10 +71,6 @@ class Quarantine extends Error {
   }
 }
 
-function snapshotFileName(storeId: string, retrievedAt: string): string {
-  return `${storeId}-${retrievedAt.replace(/[:.]/g, '-')}.json.gz`;
-}
-
 function safeObservedAt(iso: string | null): number | null {
   if (iso === null) return null;
   try {
@@ -98,7 +97,6 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
   const resolve = (p: string): string => path.resolve(options.cwd, p);
   const workDir = resolve(config.paths.work);
   const siteDir = resolve(config.paths.site);
-  const snapshotsDir = resolve(config.paths.snapshots);
   const reportPath = path.join(resolve(config.paths.reports), `pipeline-${config.storeId}.json`);
   const adapter = getStoreAdapter(config.storeId);
   const previous: PreviousStateSource = options.previous ?? (config.previousStateUrl === null ? {} : { url: config.previousStateUrl });
@@ -110,6 +108,9 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
     // republish must not do.
     if (options.republish === true && (options.bootstrap || options.snapshotPath !== undefined)) {
       throw new Error('republish cannot be combined with bootstrap or a snapshot: both add an observation');
+    }
+    if (options.collectRecordPath !== undefined && options.snapshotPath === undefined) {
+      throw new Error('a collect record describes a snapshot: pass the snapshot it belongs to');
     }
     if (options.republish !== true) assertObserved(config);
 
@@ -139,29 +140,46 @@ export async function runPipeline(options: RunOptions): Promise<RunResult> {
       outcome = 'unchanged';
     } else {
       // collect
+      let collectRecord: CollectRecord | null = null;
       const collected = await runStage(report, 'collect', now, async (d) => {
         if (options.snapshotPath !== undefined) {
           const file = await readRawSnapshotFile(resolve(options.snapshotPath));
-          d['source'] = 'file';
-          d['bytes'] = file.bytes;
-          d['rawSha256'] = file.rawSha256;
           report.snapshotPath = options.snapshotPath;
-          return { raw: file.json, rawSha256: file.rawSha256, retrievedAt: null as string | null };
+          if (options.collectRecordPath === undefined) {
+            d['source'] = 'file';
+            d['bytes'] = file.bytes;
+            d['rawSha256'] = file.rawSha256;
+            return { raw: file.json, rawSha256: file.rawSha256, retrievedAt: null as string | null };
+          }
+          // Another job crawled. Its record must describe this very file, or
+          // the report would present one crawl's errors for another's data.
+          const record = parseCollectRecord(JSON.parse(await readFile(resolve(options.collectRecordPath), 'utf8')));
+          if (record.storeId !== config.storeId) {
+            throw new Error(`collect record is for store ${record.storeId}, not ${config.storeId}`);
+          }
+          if (record.rawSha256 !== file.rawSha256) {
+            throw new Error(`collect record does not describe this snapshot (record sha256 ${record.rawSha256}, snapshot sha256 ${file.rawSha256})`);
+          }
+          applyCollectRecord(report, d, record);
+          d['source'] = 'collect-job';
+          collectRecord = record;
+          return { raw: file.json, rawSha256: file.rawSha256, retrievedAt: record.retrievedAt as string | null };
         }
-        const collector = getStoreCollector(config.storeId);
-        const outcome = await collector.collect(config.collector, { ...deps, carryDir: path.join(workDir, CARRY_DIR_NAME) });
-        Object.assign(d, outcome.metrics, { complete: outcome.complete, errors: outcome.errors.length });
-        report.warnings.push(...outcome.warnings.map((w) => `collect: ${w}`));
-        report.warnings.push(...outcome.errors.map((w) => `collect error: ${w}`));
-        await mkdir(snapshotsDir, { recursive: true });
-        const file = path.join(snapshotsDir, snapshotFileName(config.storeId, outcome.retrievedAt));
-        const written = await writeRawSnapshotFile(file, outcome.raw);
-        d['bytes'] = written.bytes;
-        d['rawSha256'] = written.rawSha256;
-        report.snapshotPath = path.relative(options.cwd, file);
-        log(`snapshot written: ${file} (${written.bytes} bytes, complete=${String(outcome.complete)})`);
-        return { raw: outcome.raw, rawSha256: written.rawSha256, retrievedAt: outcome.retrievedAt };
+        const live = await collectToFile({ config, cwd: options.cwd, deps });
+        applyCollectRecord(report, d, live.record);
+        report.snapshotPath = path.relative(options.cwd, live.file);
+        return { raw: live.raw, rawSha256: live.record.rawSha256, retrievedAt: live.record.retrievedAt as string | null };
       });
+      // The time the collection took, in whichever job ran it: the run summary
+      // keeps showing the crawl time rather than the milliseconds of reading a file.
+      const crawled = collectRecord as CollectRecord | null;
+      if (crawled !== null) {
+        const record = report.stages.find((s) => s.name === 'collect');
+        if (record !== undefined) {
+          record.startedAt = crawled.startedAt;
+          record.durationMs = crawled.durationMs;
+        }
+      }
 
       // validate (adapter validation, normalization, sanity vs previous run)
       let normalized: NormalizedSnapshot | null = null;

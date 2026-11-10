@@ -9,7 +9,7 @@
 | Collector | `src/collectors/<store>/` | 店舗ごとの取得(HTML、JSON API)。`RawSnapshot` を返す。`politeFetcher` は再利用 |
 | Store Snapshot Adapter | `src/adapters/<store>/snapshotAdapter.ts` | `RawSnapshot` → 共通 `NormalizedSnapshot`。`StoreCapabilities` の宣言 |
 | Config | `config/<store>.json` | 収集パラメータ、健全性しきい値、`previousStateUrl` |
-| Workflow | `.github/workflows/crawl-publish.yml` | `env.STORES` に店舗 ID を足し、スナップショット成果物の upload step を 1 つ足すだけ。店舗は 1 つの job の中で**直列**に回る(共有する SQLite と `state/` を並行に書けないため) |
+| Workflow | `.github/workflows/crawl-publish.yml` | `env.STORES` に店舗 ID を足すだけ(店舗ごとの step は無い)。収集は店舗ごとのジョブで**並列**、取り込みと公開は 1 つのジョブで `STORES` の順に**直列**(共有する SQLite と `state/` を並行に書けないため。ADR-0034) |
 | Userscript adapter | `userscript/adapters/<store>.ts` | `StorePageAdapter`(`matches`、`pageKey`、`mountPoint`、`storeId`)。`@match` の追加。ページ遷移なしで表示中の商品が変わる店舗は `watchPageKey` も書く(ADR-0023) |
 | 静的契約 | `data/v1/stores/<store>/` | 変更不要。`manifest.json` の `capabilities` と `caveats` で店舗の性質を伝える |
 

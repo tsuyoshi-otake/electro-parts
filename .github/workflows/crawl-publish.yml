@@ -7,10 +7,17 @@
 #   the pipeline. When it cannot be obtained the run fails instead of
 #   silently resetting the history. `bootstrap=true` is the only way to start
 #   from nothing and is refused once a state exists.
-# - Every store shares one history and one `state/` directory, so the stores
-#   run one after another: the first reads the published state, each later one
-#   continues from what the previous store just finalized. Running them in
-#   parallel would make each finalize discard the other's run.
+# - Collection is parallel, import is serial. The stores are independent hosts,
+#   so each observed store is crawled in its own `collect` job (one matrix
+#   entry per store, so the run takes as long as the slowest store, not the
+#   sum), which uploads its raw snapshot and a record of the collection. The
+#   crawl is the only slow part and touches no shared state. One `publish` job
+#   then imports those snapshots one after another: every store shares one
+#   history and one `state/` directory, so the first reads the published state
+#   and each later one continues from what the previous store just finalized.
+#   Importing in parallel would make each finalize discard the other's run.
+#   Per-store load (pacing, request count) is the same as when one job ran
+#   every crawl in series; only the waiting between stores is gone.
 # - The deployment replaces the whole site, so a store that produced nothing
 #   this run would be removed from Pages. Any store the history knows but the
 #   site is missing is republished from that history before the gate, and the
@@ -18,9 +25,11 @@
 # - Deployment happens only when the site is complete, and always as one Pages
 #   artifact (data + state + userscript), so readers never see a half-written
 #   dataset.
-# - Exit codes: 0 published/unchanged, 3 quarantined (still publishable, the
-#   rejection is recorded in the state), anything else failed (that store
-#   observed nothing).
+# - Exit codes of the import: 0 published/unchanged, 3 quarantined (still
+#   publishable, the rejection is recorded in the state), anything else failed
+#   (that store observed nothing). A collection that ended incomplete is not a
+#   failed collect job: its snapshot and record are uploaded, and the import
+#   quarantines it with the collector's errors in the report.
 # - A store that was not observed (quarantined or failed) raises an Issue in a
 #   separate `alerts` job, and the Issue closes itself when a later run
 #   observes the store again. The write token lives only in that job.
@@ -65,19 +74,187 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Every store the site publishes, in run order. Adding one means adding
-  # `config/<store>.json`, a collector, an adapter, and the upload step that
-  # names its snapshot artifact.
+  # Every store the site publishes, in import order. Adding one means adding
+  # `config/<store>.json`, a collector and an adapter; the collect matrix and
+  # the snapshot artifacts follow from the stores a run observes.
   STORES: akizuki switch-science m5stack ksy sengoku pimoroni
   # The daily wake-up: the stores that declare cadence "daily" are observed by it.
   DAILY_CRON: '0 20 * * *'
   NODE_OPTIONS: --max-old-space-size=2048
 
 jobs:
-  crawl:
-    name: Crawl, import and generate
+  # Decides which stores this run observes and hands the collect job its matrix.
+  plan:
+    name: Plan the crawl
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      observe: ${{ steps.observed.outputs.observe }}
+      matrix: ${{ steps.observed.outputs.matrix }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies (lockfile only)
+        run: npm ci
+
+      - name: Select the observed stores
+        id: observed
+        env:
+          OBSERVE: ${{ inputs.stores }}
+          BOOTSTRAP: ${{ inputs.bootstrap }}
+          REPUBLISH: ${{ inputs.republish }}
+          REIMPORT: ${{ inputs.reimport_snapshot_from_run }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_CRON: ${{ github.event.schedule }}
+        run: |
+          set -uo pipefail
+          # Which stores this run observes comes from each store's
+          # observation.cadence, never from store names here: a schedule takes
+          # the stores that declare its cadence, a manual run with no stores
+          # takes every store still observed, and a stopped store is never
+          # observed. Unknown or stopped stores named in `stores` are an error.
+          if ! observe=$(node --import tsx scripts/observed-stores.ts); then exit 1; fi
+          echo "::notice title=Observed stores::${EVENT_NAME:-} ${EVENT_CRON:-} observes: ${observe:-none}"
+          if [ "${BOOTSTRAP:-false}" = "true" ] && [ "$(echo $observe | wc -w)" != "1" ]; then
+            echo "::error::bootstrap starts one store's history; set 'stores' to exactly one store"
+            exit 1
+          fi
+          # A re-import crawls nothing: the snapshot comes from an earlier run.
+          if [ -n "${REIMPORT:-}" ]; then
+            matrix='[]'
+          else
+            matrix=$(jq -cn --arg stores "$observe" '$stores | split(" ") | map(select(. != ""))')
+          fi
+          echo "observe=$observe" >> "$GITHUB_OUTPUT"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  # One job per observed store: the shops are independent hosts, so their
+  # crawls overlap. Nothing here touches the shared history or the site.
+  collect:
+    name: Collect ${{ matrix.store }}
+    needs: plan
+    if: needs.plan.outputs.matrix != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    permissions:
+      contents: read
+    strategy:
+      # One store failing or running long must not cancel the others.
+      fail-fast: false
+      matrix:
+        store: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - name: Note when the job started
+        run: echo "JOB_STARTED_AT=$(date +%s)" >> "$GITHUB_ENV"
+
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies (lockfile only)
+        run: npm ci
+
+      # What a collector learned in its last full run (ADR-0032). It is a cache
+      # in the strict sense. Losing it (evicted after 7 days without a run, a
+      # manual run on another branch) only makes the next run read everything,
+      # as it did before. Stores that keep nothing simply find no cache.
+      - name: Restore what the collector carries between runs
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: state/work/carry
+          key: ${{ matrix.store }}-cover-${{ github.run_id }}
+          restore-keys: ${{ matrix.store }}-cover-
+
+      - name: Crawl
+        env:
+          STORE: ${{ matrix.store }}
+        run: |
+          set -uo pipefail
+          # The same `set +e` as the import loop: with pipefail on, a nonzero
+          # crawl would end the step at the pipe before the exit code is read.
+          set +e
+          node --import tsx src/cli/main.ts crawl --config "config/$STORE.json" 2>&1 | tee "collect-$STORE.log"
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "$STORE: crawl exit code $code"
+          case "$code" in
+            0) ;;
+            # Incomplete: the snapshot and the record are written, and the
+            # import quarantines it with the collector's errors in its report.
+            2) echo "::warning title=$STORE incomplete::The collection ended incomplete; the import will quarantine it." ;;
+            *)
+              echo "::error title=$STORE failed::The crawl failed (exit $code) and left no snapshot; see this job's log."
+              exit 1
+              ;;
+          esac
+
+      # Written by a complete full run only; a cover run leaves the file as it
+      # found it, so its age keeps counting from that full run.
+      - name: Save what the collector carries between runs
+        if: always() && hashFiles('state/work/carry/*') != ''
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: state/work/carry
+          key: ${{ matrix.store }}-cover-${{ github.run_id }}-${{ github.run_attempt }}
+
+      # One artifact per store: a snapshot is the input a re-import needs, and
+      # they are large enough that fetching one should not drag the others along.
+      # The name is what the re-import step of the publish job looks for.
+      - name: Upload raw snapshot
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: snapshot-${{ matrix.store }}-${{ github.run_id }}
+          path: snapshots/${{ matrix.store }}-*
+          # Longer than the crawl interval, so two consecutive snapshots can
+          # always be compared when a run needs explaining (ADR-0013).
+          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
+          if-no-files-found: ignore
+
+      # What the collection reported, for the import job's report.
+      - name: Upload the collect record
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: collect-${{ matrix.store }}-${{ github.run_id }}
+          path: reports/collect-${{ matrix.store }}.json
+          retention-days: 90
+          if-no-files-found: ignore
+
+      # Measured after the uploads, so it covers nearly the whole job.
+      # JOB_LIMIT_MINUTES must equal this job's timeout-minutes (a test pins it).
+      - name: Run length against the limit
+        if: always()
+        env:
+          JOB_LIMIT_MINUTES: 150
+        run: node scripts/run-budget.ts
+
+  publish:
+    name: Import and generate
+    needs: [plan, collect]
+    # `always()`: a store whose collect job failed must not keep the others
+    # from being imported; it is reported as failed and republished from history.
+    if: always() && needs.plan.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
     permissions:
       contents: read
       # Only to read a previous run's snapshot artifact when re-importing.
@@ -105,11 +282,11 @@ jobs:
         run: npm ci
 
       # A fix in the import/generate stages must not cost another full crawl of
-      # a store (Akizuki alone is ~2,700 requests). Re-importing the snapshot a
-      # previous run already collected reproduces everything downstream of
-      # `collect`. `republish` goes further and skips the import too: use it
-      # when only the site changed (userscript bundle, landing page), so the
-      # deployment does not fabricate an observation.
+      # a store (the largest is thousands of requests). Re-importing the
+      # snapshot a previous run already collected reproduces everything
+      # downstream of `collect`. `republish` goes further and skips the import
+      # too: use it when only the site changed (userscript bundle, landing
+      # page), so the deployment does not fabricate an observation.
       - name: Download the snapshot to re-import
         id: reimport
         if: inputs.reimport_snapshot_from_run != '' && inputs.republish != true
@@ -129,49 +306,56 @@ jobs:
           echo "file=$file" >> "$GITHUB_OUTPUT"
           echo "::notice title=Re-importing::$file (from run $RUN_ID; no crawl)"
 
-      # What the Akizuki crawl learned in its last full run: which listing shows
-      # which product (ADR-0032). It is a cache in the strict sense. Losing it
-      # (evicted after 7 days without a run, a manual run on another branch)
-      # only makes the next Akizuki run read every listing, as it did before.
-      - name: Restore the Akizuki cover source
-        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      # The snapshots and records of this run's collect jobs. When no collect
+      # job ran (a republish, a re-import) or none uploaded, nothing matches
+      # and the import step below finds no file for a store.
+      - name: Download this run's snapshots
+        continue-on-error: true
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          path: state/work/carry
-          key: akizuki-cover-${{ github.run_id }}
-          restore-keys: akizuki-cover-
+          pattern: snapshot-*-${{ github.run_id }}
+          merge-multiple: true
+          path: snapshots
+
+      - name: Download this run's collect records
+        continue-on-error: true
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: collect-*-${{ github.run_id }}
+          merge-multiple: true
+          path: collected
 
       - name: Run the pipeline for every store
         id: pipeline
         env:
-          OBSERVE: ${{ inputs.stores }}
+          OBSERVE: ${{ needs.plan.outputs.observe }}
           BOOTSTRAP: ${{ inputs.bootstrap }}
-          REPUBLISH: ${{ inputs.republish }}
           SNAPSHOT_FILE: ${{ steps.reimport.outputs.file }}
-          EVENT_NAME: ${{ github.event_name }}
-          EVENT_CRON: ${{ github.event.schedule }}
         run: |
           set -uo pipefail
-          # Which stores this run observes comes from each store's
-          # observation.cadence, never from store names here: a schedule takes
-          # the stores that declare its cadence, a manual run with no stores
-          # takes every store still observed, and a stopped store is never
-          # observed. Unknown or stopped stores named in `stores` are an error.
-          if ! observe=$(node --import tsx scripts/observed-stores.ts); then exit 1; fi
-          echo "::notice title=Observed stores::${EVENT_NAME:-} ${EVENT_CRON:-} observes: ${observe:-none}"
-          if [ "${BOOTSTRAP:-false}" = "true" ] && [ "$(echo $observe | wc -w)" != "1" ]; then
-            echo "::error::bootstrap starts one store's history; set 'stores' to exactly one store"
-            exit 1
-          fi
-
           failed=""
           for store in $STORES; do
             config="config/$store.json"
             if [ ! -f "$config" ]; then echo "::error::no config for store $store ($config)"; exit 1; fi
             flags=""
-            case " $observe " in
+            case " $OBSERVE " in
               *" $store "*)
+                # A re-import names its snapshot; otherwise the store's collect
+                # job uploaded one, and the newest is the one to import.
+                if [ -n "${SNAPSHOT_FILE:-}" ]; then
+                  file="$SNAPSHOT_FILE"
+                else
+                  file=$(find snapshots -type f -name "$store-*.json*" 2>/dev/null | sort | tail -1)
+                fi
+                if [ -z "$file" ]; then
+                  failed="$failed $store"
+                  echo "::error title=$store failed::The collect job produced no snapshot; see its log."
+                  continue
+                fi
                 if [ "${BOOTSTRAP:-false}" = "true" ]; then flags="$flags --bootstrap"; fi
-                if [ -n "${SNAPSHOT_FILE:-}" ]; then flags="$flags --snapshot $SNAPSHOT_FILE"; fi
+                flags="$flags --snapshot $file"
+                record=$(find collected -type f -name "collect-$store.json" 2>/dev/null | sort | tail -1)
+                if [ -n "$record" ]; then flags="$flags --collect-record $record"; fi
                 ;;
               # Not observed this run: regenerate its dataset from the published
               # history so the deployment does not remove it from Pages.
@@ -204,15 +388,6 @@ jobs:
             fi
           done
           echo "failed_stores=${failed# }" >> "$GITHUB_OUTPUT"
-
-      # Written by a complete full run only; a cover run leaves the file as it
-      # found it, so its age keeps counting from that full run.
-      - name: Save the Akizuki cover source
-        if: always() && hashFiles('state/work/carry/*') != ''
-        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: state/work/carry
-          key: akizuki-cover-${{ github.run_id }}-${{ github.run_attempt }}
 
       # A store that failed before it wrote anything leaves no dataset in the
       # site, and the deployment replaces the site wholesale — so publishing as
@@ -297,64 +472,6 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # One artifact per store: a snapshot is the input a re-import needs, and
-      # they are large enough that fetching one should not drag the other along.
-      - name: Upload raw snapshot (akizuki)
-        if: always() && hashFiles('snapshots/akizuki-*') != ''
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: snapshot-akizuki-${{ github.run_id }}
-          path: snapshots/akizuki-*
-          # Longer than the crawl interval, so two consecutive snapshots can
-          # always be compared when a run needs explaining (ADR-0013).
-          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
-          if-no-files-found: ignore
-
-      - name: Upload raw snapshot (switch-science)
-        if: always() && hashFiles('snapshots/switch-science-*') != ''
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: snapshot-switch-science-${{ github.run_id }}
-          path: snapshots/switch-science-*
-          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
-          if-no-files-found: ignore
-
-      - name: Upload raw snapshot (m5stack)
-        if: always() && hashFiles('snapshots/m5stack-*') != ''
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: snapshot-m5stack-${{ github.run_id }}
-          path: snapshots/m5stack-*
-          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
-          if-no-files-found: ignore
-
-      - name: Upload raw snapshot (ksy)
-        if: always() && hashFiles('snapshots/ksy-*') != ''
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: snapshot-ksy-${{ github.run_id }}
-          path: snapshots/ksy-*
-          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
-          if-no-files-found: ignore
-
-      - name: Upload raw snapshot (sengoku)
-        if: always() && hashFiles('snapshots/sengoku-*') != ''
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: snapshot-sengoku-${{ github.run_id }}
-          path: snapshots/sengoku-*
-          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
-          if-no-files-found: ignore
-
-      - name: Upload raw snapshot (pimoroni)
-        if: always() && hashFiles('snapshots/pimoroni-*') != ''
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: snapshot-pimoroni-${{ github.run_id }}
-          path: snapshots/pimoroni-*
-          retention-days: ${{ inputs.snapshot_retention_days || 90 }}
-          if-no-files-found: ignore
-
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -387,23 +504,25 @@ jobs:
       - name: Run length against the limit
         if: always()
         env:
-          JOB_LIMIT_MINUTES: 240
+          JOB_LIMIT_MINUTES: 60
         run: node scripts/run-budget.ts
 
       # Last, so the artifacts of a failed store are always uploaded. The other
       # stores were still published; this marks the run for a human to look at.
       - name: Fail the job when a store failed
         if: steps.pipeline.outputs.failed_stores != ''
+        env:
+          FAILED_STORES: ${{ steps.pipeline.outputs.failed_stores }}
         run: |
-          echo "stores that observed nothing: ${{ steps.pipeline.outputs.failed_stores }}"
+          echo "stores that observed nothing: $FAILED_STORES"
           exit 1
 
   deploy:
     name: Deploy to GitHub Pages
-    needs: crawl
+    needs: publish
     # `always()`: one store failing must not keep the stores that did run off
     # Pages. The gate has already refused any site that is missing a store.
-    if: always() && needs.crawl.outputs.publishable == 'true' && inputs.dry_run != true
+    if: always() && needs.publish.outputs.publishable == 'true' && inputs.dry_run != true
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -420,7 +539,7 @@ jobs:
       - name: Verify the published manifests
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-          VERSIONS: ${{ needs.crawl.outputs.dataset_versions }}
+          VERSIONS: ${{ needs.publish.outputs.dataset_versions }}
         run: |
           set -uo pipefail
           for store in $(echo "$VERSIONS" | jq -r 'keys[]'); do
@@ -438,15 +557,15 @@ jobs:
             fi
           done
 
-  # Separate from `crawl` on purpose: that job runs npm dependencies and parses
-  # store pages, so it must not hold a token that can write. The write
+  # Separate from `publish` on purpose: that job runs npm dependencies and
+  # parses store pages, so it must not hold a token that can write. The write
   # permission lives here, in a job that installs nothing and runs one
   # dependency-free script over the uploaded reports.
   alerts:
     name: Raise or clear crawl alerts
-    needs: crawl
+    needs: publish
     # A dry run publishes nothing, so it neither raises nor clears an alert.
-    if: always() && needs.crawl.result != 'skipped' && inputs.dry_run != true
+    if: always() && needs.publish.result != 'skipped' && inputs.dry_run != true
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -461,7 +580,7 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .node-version
-      # Missing when the crawl job was cancelled before it uploaded anything;
+      # Missing when the publish job was cancelled before it uploaded anything;
       # the script then has nothing to do, and the red job is the notice.
       - name: Download the reports
         continue-on-error: true
@@ -473,6 +592,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          FAILED_STORES: ${{ needs.crawl.outputs.failed_stores }}
+          FAILED_STORES: ${{ needs.publish.outputs.failed_stores }}
           ALERT_ASSIGNEE: ${{ github.repository_owner }}
         run: node scripts/crawl-alerts.ts --reports alerts-in

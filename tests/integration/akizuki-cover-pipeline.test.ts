@@ -6,7 +6,8 @@ import { AKIZUKI_COVER_SOURCE_FILE } from '../../src/collectors/akizuki/collecto
 import { openDatabase } from '../../src/db/connection.ts';
 import { STATE_DB_FILE_NAME } from '../../src/db/finalize.ts';
 import { parsePipelineConfig, type PipelineConfig } from '../../src/pipeline/config.ts';
-import { CARRY_DIR_NAME, runPipeline, SITE_STATE_DIR } from '../../src/pipeline/run.ts';
+import { CARRY_DIR_NAME } from '../../src/pipeline/collect.ts';
+import { runPipeline, SITE_STATE_DIR } from '../../src/pipeline/run.ts';
 import { syntheticItem } from '../helpers/akizukiHtml.ts';
 import { addListing, FAKE_BASE, fakeSite, transportFor } from '../helpers/fakeAkizukiSite.ts';
 

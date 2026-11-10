@@ -1,6 +1,6 @@
 # 運用ランブック
 
-対象店舗は `.github/workflows/crawl-publish.yml` の `env.STORES`(現在 `akizuki switch-science`)。1 つの job の中で**この順に直列**で回る。共有しているのは 1 つの SQLite 履歴、1 つの `state/`、そして Pages が丸ごと差し替える 1 つの `site/` で、そのすべてが「片方の run がもう片方のデータを壊す経路」になる。
+対象店舗は `.github/workflows/crawl-publish.yml` の `env.STORES`。収集(クロール)は店舗ごとのジョブで**並列**に行い、取り込みと公開は 1 つのジョブの中で**`STORES` の順に直列**で行う(ADR-0034 → [収集ジョブと公開ジョブ](#収集ジョブと公開ジョブ))。共有しているのは 1 つの SQLite 履歴、1 つの `state/`、そして Pages が丸ごと差し替える 1 つの `site/` で、そのすべてが「片方の run がもう片方のデータを壊す経路」になる。だから書き手は `publish` ジョブ 1 つに限る。
 
 ## 初回(ブートストラップ)
 
@@ -20,16 +20,16 @@
 
 ## 定期 run(毎日)
 
-- schedule は `0 20 * * *`(UTC)で毎朝05:00 JSTに起動し、毎日収集する(ADR-0030)。隔日だったころの判定ジョブ(`scripts/observation-schedule.ts`)は廃止した。観測する店舗を順に収集し、それ以外の店舗は `--republish` で再生成する。
+- schedule は `0 20 * * *`(UTC)で毎朝05:00 JSTに起動し、毎日収集する(ADR-0030)。隔日だったころの判定ジョブ(`scripts/observation-schedule.ts`)は廃止した。観測する店舗を店舗ごとのジョブで並列に収集し、1 つのジョブで順に取り込む。それ以外の店舗は `--republish` で再生成する。
 - **どの店舗を観測するかは cron には書いていない。** `scripts/observed-stores.ts` が `config/<store>.json` の `observation.cadence` を読んで決める。schedule は `daily` の店舗を観測し、`stores` を空にした手動実行は `stopped` 以外の全店舗を観測する。選ばれなかった店舗は `--republish` で維持する。現在は KSY だけが `stopped`(2026-11-04、ADR-0029)で、残り 5 店舗は `daily`。選んだ結果は Actions の notice(`Observed stores`)に出る。未知の cron、未知の店舗、`stopped` の店舗を `stores` に書いた場合はエラーで停止する。
 - 定期実行と手動実行が重なる場合も、`pages-publish` の concurrency で直列化する。
 - 観測は毎日なので、失敗・隔離が出た店舗の次の自動 run は翌朝になる。観測できなかった日は拡張機能のグラフの穴として残る。**失敗・隔離が出たら、直してから `workflow_dispatch` で回し直す**のが通常の運用。特定の店舗だけ直したいときは `stores` にその店舗を書く(他店舗は公開済みデータセットのまま維持される)。
 - Actions summary に**店舗ごとに**、結果(`published` / `unchanged` / `quarantined` / `failed`)、run 時間、リクエスト数、件数、価格変更数、隔離理由が出る。最後に `### Site` として、サイトに載った店舗と `datasetVersion`、サイトサイズが出る。
 - 終了コード(店舗ごと): 0 = 公開または変化なし、3 = 隔離(公開は続く、warning)、それ以外 = 失敗。1 のほか、メモリ不足やシグナルによる異常終了も失敗として扱う(何も観測していないので成功にしない。#92)。
   - ワークフローは各店舗の pipeline を `set +e` の中で動かし、終了コードを `PIPESTATUS` で読む。手順のシェルは `bash -e` なので、これが無いと 3 や 1 で手順ごと終わり、後の店舗とデプロイが止まる(2026-11-04 の定期 run、#78)。
-- **1 店舗が失敗しても、他店舗の公開は止まらない。** 失敗した店舗は公開済み履歴から `--republish` で復元されてからデプロイされ、ジョブ自体は最後に失敗する(`failed_stores` に名前が出る)。復元もできなければゲートがデプロイを拒否する。
+- **1 店舗が失敗しても、他店舗の公開は止まらない。** 収集ジョブが落ちた店舗(スナップショットが無い)も、取り込みで落ちた店舗も同じ扱いで、公開済み履歴から `--republish` で復元されてからデプロイされ、`publish` ジョブ自体は最後に失敗する(`failed_stores` に名前が出る)。復元もできなければゲートがデプロイを拒否する。
 - **観測できなかった店舗(隔離・失敗)は Issue で知らせる。** `alerts` ジョブが店舗ごとに `crawl-alert` ラベルの Issue を 1 件作り、次に観測できた run で自動的に閉じる。隔離だけの run はジョブが緑のまま終わるので、Issue が唯一の通知になる。→ [観測できなかった店舗の通知と run の長さ](#観測できなかった店舗の通知と-run-の長さ)
-- **run の長さ**は summary の `### Run length` に、ジョブ上限 240 分に対する経過分と割合で出る。80 %(192 分)を超えると warning 注釈 `Run length near the limit` が出る。
+- **run の長さ**は、収集ジョブ(店舗ごと、上限 150 分)と `publish` ジョブ(上限 60 分)のそれぞれの summary に `### Run length` として、自分の上限に対する経過分と割合で出る。80 %(120 分 / 48 分)を超えると warning 注釈 `Run length near the limit` が出る。
 
 ## 隔離(quarantined)が出たら
 
@@ -49,7 +49,7 @@
 取り込み以降の段階(validate / import / generate)を直したときは、**前の run が集めたスナップショットを再利用する**。クロールをやり直すと秋月なら約 2,700 リクエストを相手サイトに無駄に投げることになる。
 
 - Actions → "Crawl and publish" → Run workflow → `reimport_snapshot_from_run` に元の run id、`stores` に**その 1 店舗だけ**を入れる(スナップショットは店舗のものなので、複数店舗を指定するとワークフローが止める)。
-- その run の `snapshot-<store>-<run id>` 成果物を落として `--snapshot` で流すので、`collect` は走らない(数十秒で終わる)。指定しなかった店舗は `--republish` で公開済みデータセットを保つ。
+- その run の `snapshot-<store>-<run id>` 成果物を落として `--snapshot` で流すので、収集ジョブ(`collect`)は 1 つも起動しない(数十秒で終わる)。収集の記録(`collect-<store>-<run id>`)は使わないので、レポートの `collect` 段階は `source: file` になり、リクエスト数は出ない。指定しなかった店舗は `--republish` で公開済みデータセットを保つ。
 - 成果物の保持は 90 日。それを過ぎた run のスナップショットは使えないので、通常のクロールをやり直す。
 
 ### ローカルで
@@ -161,17 +161,17 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 
 ### run の長さ
 
-- `crawl` ジョブの手順 `Run length against the limit` が、ジョブ開始からの経過をジョブ上限(`timeout-minutes: 240`)と比べ、summary の `### Run length` に経過分と割合を出す。成果物のアップロードの後で測るので、ジョブのほぼ全体を含む。
-- 80 %(192 分)を**超える**と warning 注釈 `Run length near the limit` が出る(ちょうど 192 分では出ない)。こちらは Issue を作らない。
+- 収集ジョブ(`collect`、店舗ごと)と `publish` ジョブのそれぞれで、手順 `Run length against the limit` がジョブ開始からの経過を**そのジョブの**上限(`timeout-minutes`: `collect` 150、`publish` 60)と比べ、summary の `### Run length` に経過分と割合を出す。成果物のアップロードの後で測るので、ジョブのほぼ全体を含む。
+- 80 %(`collect` 120 分、`publish` 48 分)を**超える**と warning 注釈 `Run length near the limit` が出る(ちょうど 80 % では出ない)。こちらは Issue を作らない。
 - 出たら次の順で見る。
-  1. summary の店舗ごとの run 時間で、伸びた店舗を特定する。
-  2. 秋月が full の日(週 1 回、約 85 分)だったかを見る(→ [秋月の cover クロール](#秋月の-cover-クロール))。full の日だけ超えるなら想定内。
-  3. 毎日超えるなら、`timeout-minutes` と `JOB_LIMIT_MINUTES` を**同じ値に**上げる(GitHub のホストランナーの上限は 360 分)。2 つの値が違うとテスト `tests/integration/crawl-notices-workflow.test.ts` が落ちる。
+  1. どのジョブで出たかを見る。収集ジョブなら店舗が分かる。
+  2. 秋月の収集ジョブで、full の日(週 1 回、約 85〜90 分)だったかを見る(→ [秋月の cover クロール](#秋月の-cover-クロール))。full の日でも 120 分は超えない想定なので、超えたらリクエスト数と 1 リクエストあたりの時間を前の run と比べる。
+  3. 毎日超えるなら、そのジョブの `timeout-minutes` と `JOB_LIMIT_MINUTES` を**同じ値に**上げる(GitHub のホストランナーの上限は 360 分)。2 つの値が違うとテスト `tests/integration/crawl-notices-workflow.test.ts` が落ちる。
 - アクセス間隔を詰めて短くしない(ADR-0009)。
 
 ### 仕組みと注意
 
-- `issues: write` を持つのは `alerts` ジョブだけ。`crawl` ジョブ(npm の依存を動かし、店舗のページを解析する)には書き込み権限を渡さない。`alerts` は `npm ci` をせず、依存のない `scripts/crawl-alerts.ts` を素の `node` で動かす。
+- `issues: write` を持つのは `alerts` ジョブだけ。`plan`・`collect`・`publish` ジョブ(npm の依存を動かし、店舗のページを解析する)には書き込み権限を渡さない。`alerts` は `npm ci` をせず、依存のない `scripts/crawl-alerts.ts` を素の `node` で動かす。
 - 入力は成果物 `reports-<run id>` の `pipeline-<store>.json`。失敗した店舗は、復元の republish が上書きする前の `pipeline-<store>.failed-run.json` を使う。レポートを書く前に終わった店舗は `failed_stores` から拾う。
 - 店舗由来の文字列はデータとして扱う(コードブロックに入れ、バッククォートと HTML コメントの開始を無効化し、1 行 300 文字・10 行まで)。
 - どの Issue がどの店舗のものかは、本文 1 行目のマーカー `<!-- crawl-alert store=<store> -->` で決める。**この行を編集・削除しない**(消すと次の run が別の Issue を作る)。
@@ -180,13 +180,47 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 - `alerts` ジョブが失敗しても、その run の公開は済んでいる。同じ run の通知は 1 店舗 1 回なので、ジョブを回し直しても重複しない。
 - 開いている Issue の一覧は、作成の数秒後まで新しい Issue を返さないことがある(2026-11-10 の確認: 数秒以内に続けて 3 回通知すると 3 件作られ、20 秒あけると 1 件にまとまった)。run は毎日なので実運用では重複しないが、`scripts/crawl-alerts.ts` を手で続けて実行するときは間をあける。重複した Issue は、観測できた run がすべて閉じる。
 
+## 収集ジョブと公開ジョブ
+
+ADR-0034。run は次の順に進む。
+
+| ジョブ | やること | 上限 |
+|---|---|---|
+| `plan` | 観測する店舗を決める(`Observed stores` の notice) | 10 分 |
+| `Collect <store>`(店舗ごと、並列) | `crawl` コマンドでその店舗だけを読み、スナップショット(`snapshot-<store>-<run id>`)と収集の記録(`collect-<store>-<run id>`)を成果物に上げる | 150 分 |
+| `publish` | 成果物を落とし、`STORES` の順に `pipeline --snapshot` で取り込み、サイトを作って検査する | 60 分 |
+| `deploy` / `alerts` | 従来どおり | — |
+
+- 各店舗へのリクエスト数・間隔・同時接続数は変わらない。1 店舗につき収集ジョブは 1 つで、その中は 1 本の直列クライアント。
+- `republish=true` と `reimport_snapshot_from_run` の run では、収集ジョブは起動しない(`skipped` と表示される)。これは正常。
+- 収集ジョブの結果の読み方:
+
+  | 収集ジョブ | `publish` での扱い | 通知 |
+  |---|---|---|
+  | 緑(完了) | 取り込む | — |
+  | 緑 + warning `collection incomplete`(終了コード 2) | スナップショットは上がる。取り込みが隔離し、公開済みデータを維持する | Issue(`quarantined`) |
+  | 赤(終了コード 1、タイムアウト、成果物のアップロード失敗) | スナップショットが無いので pipeline を動かさず、`failed` として公開済み履歴から復元する。`publish` は最後に失敗する | Issue(`failed`)、ジョブの失敗通知 |
+
+- **落ちた収集ジョブは「Re-run failed jobs」で回し直さず、原因を直してから `workflow_dispatch` で `stores: <store>` を指定して回し直す。** 同じ run の回し直しでは、同じ名前の成果物(`snapshot-<store>-<run id>` など)をもう一度上げることになり、その動作は確かめていない。新しい run なら名前が重ならず、何を観測したかも 1 つの run にまとまる。
+- 収集は済んでいて取り込みだけが落ちたとき(`publish` が赤、収集ジョブは緑)は、クロールし直さずに `reimport_snapshot_from_run` にその run id を入れて取り込み直す(→ [特定スナップショットの取り込み直し](#特定スナップショットの取り込み直し))。
+- 秋月の cover の記録(`state/work/carry`)は収集ジョブがキャッシュから戻し、収集ジョブが保存する。`publish` はこのキャッシュに触れない。
+- ローカルで同じ流れを確かめる:
+
+  ```bash
+  node --import tsx src/cli/main.ts crawl --config config/<store>.json
+  node --import tsx src/cli/main.ts pipeline --config config/<store>.json --snapshot snapshots/<store>-<timestamp>.json.gz --collect-record reports/collect-<store>.json
+  ```
+
+  記録の店舗 ID かスナップショットの SHA-256 が合わなければ、`collect` 段階が失敗する(別の run の記録を取り違えたときに気づける)。`--collect-record` を省くと、従来の `--snapshot` と同じ動作になる。
+- 戻す: ワークフローを 1 つ前の版に戻す。`pipeline` の live 収集はそのまま残っているので、コードは戻さなくてよい。
+
 ## 頻度を変える / 止める
 
 - 全店舗の定期 run を止める: workflow の schedule をコメントアウトしてコミット。公開データはそのまま残る。
 - **1 店舗の観測を止める**(サイト閉鎖など、再開の見込みがない場合): `config/<store>.json` の `observation.cadence` を `"stopped"` にしてコミットする。schedule も `stores` 空の手動実行もその店舗を観測せず、毎回 `--republish` で公開済み履歴から再生成する。パイプライン自体も、`--republish` 以外(クロール・`--snapshot`・`--bootstrap`)と `crawl` コマンドを拒否する(終了コード 1)。マニフェストから `samplingIntervalDays` と観測間隔の注意書きが消え、観測期間(最初〜最後の観測日と回数)は残る。反映は次の run か `republish=true` の手動実行(ADR-0029)。
 - 店舗の頻度は `config/<store>.json` の `observation.cadence` (`daily` / `weekly` / `monthly` / `stopped`)で指定する。**注意書きは cadence から決まるので、手で直さない。** 現在の workflow が持つ cron は毎日 1 本だけ。周期を追加する際は cron・`scripts/observed-stores.ts`・`tests/integration/observation-cadence.test.ts` も変更する。
 - 新しい周期を足す: `src/publisher/contract.ts`(`ObservationCadence` と省略可能な観測間隔フィールド。旧版が未知のcaveatキーを拒否することに注意)、`userscript/core/format.ts`(利用者に見える文言)、workflow の cron と選択ロジック、そして上のテストを一緒に更新する(ADR-0016)。
-- 毎日化後もアクセス間隔・ジッター・再試行上限は維持する。秋月の HTML 巡回は、全一覧の日(週 1 回)が約 2,700 リクエスト・約 85 分、ほかの日は約 900 リクエスト・約 30 分(ADR-0032、実測は導入後に確認)。全店舗を順に回す 1 run は約 2 時間 55 分(2026-11-07 の run、ジョブの上限は 240 分)。毎日化で 1 日の観測量は隔日のときの 2 倍になるが、1 run の長さは変わらない。公開データとは別に、90日保存するスナップショットと状態バックアップの Actions artifact 容量をジョブごとに確認する。
+- 毎日化後もアクセス間隔・ジッター・再試行上限は維持する。秋月の HTML 巡回は、全一覧の日(週 1 回)が約 2,700 リクエスト・約 85 分、ほかの日は約 900 リクエスト・約 30 分(ADR-0032、実測は導入後に確認)。店舗を 1 つのジョブで順に回していたころの 1 run は約 2 時間 55 分だった(2026-11-07 の run)。店舗ごとの収集ジョブに分けてからは、最も長い店舗の収集時間に取り込みを足した長さになる(ADR-0034、実測は導入後に確認)。店舗ごとのリクエスト数と間隔は変わらない。公開データとは別に、90日保存するスナップショットと状態バックアップの Actions artifact 容量をジョブごとに確認する。
 
 ## サイト運営者から連絡があった場合
 

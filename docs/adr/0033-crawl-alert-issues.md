@@ -36,6 +36,10 @@
 - `JOB_LIMIT_MINUTES` と `timeout-minutes` は同じ値を 2 か所に書く(`timeout-minutes` に式を書けないため)。テストが一致を検査する。
 - 実ジョブでの確認(Issue の作成・通知・自動クローズ、`### Run length` の表示)は、導入後の最初の定期 run と、次に隔離または失敗が出た run で行い、journal に記録する。
 
+## 追記(2026-11-10, ジョブの分割)
+
+ADR-0034 で `crawl` ジョブは `plan` / `collect`(店舗ごと) / `publish` に分かれた。この ADR の `crawl` ジョブは、依存パッケージを動かし店舗のページを解析する `collect` と `publish` に読み替える。どちらにも書き込み権限は無く、`issues: write` を持つのは引き続き `alerts` だけである。run の長さは 1 つのジョブの 240 分ではなく、`collect`(150 分)と `publish`(60 分)のそれぞれで測る。
+
 ## 追記(2026-11-10, 実リポジトリでの確認)
 
 `scripts/crawl-alerts.ts` の関数を、テスト用の店舗 ID `selftest` でこのリポジトリに対して実行した(Issue #101〜#103、すべて閉じてある)。

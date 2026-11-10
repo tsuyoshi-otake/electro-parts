@@ -266,11 +266,11 @@ npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.
 
 | ワークフロー | トリガー | 内容 |
 |---|---|---|
-| `crawl-publish.yml` | 毎日20:00 UTC(翌05:00 JST)に起動して毎日収集、`workflow_dispatch`(`stores` = 観測する店舗を空白区切りで指定、空なら全部、`bootstrap`、`dry_run`、`snapshot_retention_days`、`reimport_snapshot_from_run` = 過去 run のスナップショットを再取り込みしてクロールを省く、`republish` = 公開済み履歴からサイトを作り直すだけで観測を増やさない) | 店舗を順に回す(後の店舗は前の店舗が最終化した状態から) → 履歴にあるのにサイトに無い店舗を `--republish` で復元 → Actions summary にレポート → `site/` にユーザースクリプト・Chrome 拡張 zip・index を追加 → サイトの完全性を検査 → 成果物アップロード(店舗ごとのスナップショット 90 日、レポートと状態 90 日)→ 完全なときだけ Pages へデプロイ → 公開後に店舗ごとの `datasetVersion` を確認 |
+| `crawl-publish.yml` | 毎日20:00 UTC(翌05:00 JST)に起動して毎日収集、`workflow_dispatch`(`stores` = 観測する店舗を空白区切りで指定、空なら全部、`bootstrap`、`dry_run`、`snapshot_retention_days`、`reimport_snapshot_from_run` = 過去 run のスナップショットを再取り込みしてクロールを省く、`republish` = 公開済み履歴からサイトを作り直すだけで観測を増やさない) | 観測する店舗を決める → 店舗ごとのジョブで並列に収集してスナップショットを成果物に上げる → 1 つのジョブで店舗を順に取り込む(後の店舗は前の店舗が最終化した状態から) → 履歴にあるのにサイトに無い店舗を `--republish` で復元 → Actions summary にレポート → `site/` にユーザースクリプト・Chrome 拡張 zip・index を追加 → サイトの完全性を検査 → 成果物アップロード(店舗ごとのスナップショット 90 日、レポートと状態 90 日)→ 完全なときだけ Pages へデプロイ → 公開後に店舗ごとの `datasetVersion` を確認 |
 | `ci.yml` | push(main)、pull_request、手動 | `npm audit`、typecheck、vitest(全プロジェクト)、ユーザースクリプトと Chrome 拡張のビルドおよび禁止 API・CDN 参照の検査、Playwright E2E、Stryker(PR 以外) |
 
 - 公開は `pages-publish` の concurrency グループで**単一ライター**。実行中の公開はキャンセルされず、後続はキューに入ります。
-- 店舗は 1 つの job の中で**直列**に回ります。共有するのは 1 つの SQLite と 1 つの `state/` なので、並行にすると後から最終化したほうが他方の run を捨てます。ワークフローは 1 店舗目のあと `--previous-dir site/state` を足して連結します。
+- 収集(クロール)は店舗ごとのジョブで**並列**に、取り込みと公開は 1 つの job の中で**直列**に行います(ADR-0034)。店舗は別のホストなので、並列にしても各店舗へのリクエスト数・間隔・同時接続数は変わりません。共有するのは 1 つの SQLite と 1 つの `state/` なので、取り込みを並行にすると後から最終化したほうが他方の run を捨てます。取り込みのジョブは 1 店舗目のあと `--previous-dir site/state` を足して連結します。
 - **1 店舗が失敗しても、走った店舗の公開は止めません。** ただしデプロイはサイト全体の差し替えなので、失敗した店舗をそのままにすると公開データが消えます。そこで、履歴に run がある(`state.json` の `stores.<id>.runCount > 0`)のにサイトにマニフェストが無い店舗を `--republish` で作り直し、それでも欠けていればゲートがデプロイを**拒否**します(fail-closed)。ジョブ自体は失敗した店舗があれば最後に失敗します。
 - 秋月は週 1 回だけ全一覧を読み、ほかの日は前回の全一覧の結果から集合被覆で選んだ一覧だけを読みます(ADR-0032)。選んだ一覧に出なかった商品は追加で読み、多すぎれば全一覧を読み直します。記録は Actions のキャッシュで、無ければその日は全一覧です。戻し方と確認項目は [運用手順](docs/runbook.md#秋月の-cover-クロール) にあります。
 - **どの店舗を観測するかは cron には書いてありません。** 毎朝05:00 JSTに起動し、毎日収集します(ADR-0030)。各 `config/<store>.json` の `observation.cadence` を `scripts/observed-stores.ts` が読み、`daily` の店舗を対象にします。現在はKSYを除く5店舗が `daily` で、KSYは `stopped`(サイト閉鎖、2026-11-04)です。`stopped` の店舗は定期実行でも `stores` を空にした手動実行でも観測せず、`stores` に書くとエラーになります。対象外の店舗は `--republish` で維持します。
@@ -388,7 +388,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 2. `src/collectors/<store>/`: `StoreCollector` 実装(`politeFetcher` を使う)。
 3. `src/stores/registry.ts` と `collectorRegistry.ts` に登録、`config/<store>.json` を追加。
 4. `userscript/adapters/<store>.ts`: `StorePageAdapter`(URL 判定、ページキー抽出、差し込み位置)。`registry.ts` に登録すると、ユーザースクリプトの `@match` も拡張マニフェストの `matches` も自動で増えます。
-5. `.github/workflows/crawl-publish.yml` の `env.STORES` に店舗 ID を足し、スナップショット成果物のアップロード step を 1 つ足す。`STORES` に載せるだけで、パイプラインの実行・失敗時の復元・デプロイ前の完全性検査はすべて追随します。
+5. `.github/workflows/crawl-publish.yml` の `env.STORES` に店舗 ID を足す。`STORES` に載せるだけで、収集ジョブ(店舗ごと、スナップショット成果物のアップロードを含む)・パイプラインの実行・失敗時の復元・デプロイ前の完全性検査はすべて追随します(ADR-0034)。
 6. テスト: 保存済みページのフィクスチャ、実データ統合テスト、E2E。
 
 新しい店舗を既存のサイトに足すのは `--bootstrap` **ではありません**。公開済み状態を前回状態として通常どおり回すと、その店舗だけ run 数 0 から始まります。`--bootstrap` は状態がある限り拒否されます(他店舗の履歴を消さないため)。
