@@ -79,7 +79,7 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 2. Verify: `npm run typecheck && npm test && npm run test:e2e`。Expect: 拡張マニフェストの契約テストと、未展開の拡張を実ブラウザに読み込む E2E が通る。
 3. Verify: `npm run build:extension` のあと `chrome://extensions` で `dist/extension` を読み込み、両店舗の実商品ページを開く。Expect: パネルが出る。**これは人が行う確認**で、自動化していない。
 4. 公開は「サイトだけ差し替える」と同じ(`republish`)。zip は `site/electronics-price-history-extension.zip` として同じアーティファクトに入る。
-5. Verify: 公開後に zip を落として `manifest.json` の `version` を見る。Expect: 上げた版。
+5. Verify: 公開後に zip を落として `manifest.json` の `version` を見る。Expect: 上げた版。0.7.9 以降の zip には、店舗間の対応表が `relations/index.json` と `relations/shard-00.json`〜`shard-63.json` として入っている(`content.js` には入っていない。ADR-0035)。対応のある商品のページで他店のカードが出なければ、拡張のサービスワーカーのコンソールと、ページのコンソールの警告 `related products unavailable` を見る。
 6. **zip で入れた利用者は自動更新されない。** 取り直して読み込み直してもらう必要がある。版を上げたら README とランディングページの案内も合わせる。
 7. ウェブストアに掲載している場合は、同じ zip をダッシュボードにもアップロードする。**ストアは同じ版を 2 回受け付けない**ので、版を上げずに出し直すことはできない。貼る文言と手順は `docs/chrome-web-store-listing.md`(ADR-0020)。ダッシュボードへの転記は `npm run cws:dashboard` で行い、「審査のため送信」は人が押す。プライバシーポリシー(`/privacy.html`)が 404 だと審査に出せないので、Pages の更新を先に済ませる。
 8. リリースの記録は `docs/verification/<日付>-release-<版>.md` と `.claude/memory/journal.md` に残す。git のタグと GitHub Releases は v0.4.2(2026-09-08)で止めており、以後は使っていない。公開された版は Chrome の更新サービス(`clients2.google.com/service/update2/crx` の `response=updatecheck`)が返す `version` で確かめられる。

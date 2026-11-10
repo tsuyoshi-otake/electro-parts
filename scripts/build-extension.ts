@@ -14,7 +14,9 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
+import { PRODUCT_RELATIONS } from '../userscript/adapters/productRelations.ts';
 import { PAGE_ADAPTERS } from '../userscript/adapters/registry.ts';
+import { RELATION_INDEX_FILE, RELATION_SHARD_COUNT, relationShardFile, shardRelations } from '../userscript/core/relationShards.ts';
 import { DATA_HOSTS, DEFAULT_DATA_BASE_URL, USERSCRIPT_VERSION } from '../userscript/version.ts';
 import { renderIcon } from './lib/icon.ts';
 import { encodePng } from './lib/png.ts';
@@ -55,8 +57,9 @@ function banner(entry: string): string {
     ' *',
     ' * This extension executes no remote code; every line it runs is in this file.',
     ` * Its only network access is the published dataset at ${DEFAULT_DATA_BASE_URL},`,
-    ' * fetched without cookies. Most of content.js is a generated cross-store',
-    ' * product mapping table (data, not code) from scripts/matching/generate.ts.',
+    ' * fetched without cookies. The generated cross-store product mapping table',
+    ' * (data, not code, from scripts/matching/generate.ts) is not in this file: it',
+    ' * ships as relations/*.json and only background.js reads it, one shard per page.',
     ' */',
   ].join('\n')}\n`;
 }
@@ -126,6 +129,16 @@ export interface ExtensionFile {
   data: Buffer;
 }
 
+/** The index, then every shard. An empty shard is still a file, so a missing file always means a broken package. */
+function relationFiles(): ExtensionFile[] {
+  const { index, shards } = shardRelations(PRODUCT_RELATIONS);
+  if (shards.length !== RELATION_SHARD_COUNT) throw new Error(`expected ${RELATION_SHARD_COUNT} relation shards, got ${shards.length}`);
+  return [
+    { name: RELATION_INDEX_FILE, data: Buffer.from(JSON.stringify(index), 'utf8') },
+    ...shards.map((table, shard) => ({ name: relationShardFile(shard), data: Buffer.from(JSON.stringify(table), 'utf8') })),
+  ];
+}
+
 /** Every file of the unpacked extension, in a stable order. */
 export async function buildExtensionFiles(): Promise<ExtensionFile[]> {
   const [content, background] = await Promise.all([bundle('content.ts'), bundle('background.ts')]);
@@ -134,6 +147,7 @@ export async function buildExtensionFiles(): Promise<ExtensionFile[]> {
     { name: 'background.js', data: Buffer.from(background, 'utf8') },
     { name: 'content.js', data: Buffer.from(content, 'utf8') },
     ...ICON_SIZES.map((size) => ({ name: `icons/icon-${size}.png`, data: encodePng(size, size, renderIcon(size)) })),
+    ...relationFiles(),
   ];
 }
 

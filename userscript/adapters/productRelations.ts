@@ -2,7 +2,6 @@
 import type { ProductRelation } from '../core/relations.ts';
 import { unpackRelations, type PackedRelationTable } from '../core/relationTable.ts';
 
-export const STORE_LABELS: Readonly<Record<string, string>> = { 'akizuki': '秋月電子', 'switch-science': 'スイッチサイエンス', 'm5stack': 'M5Stack公式', 'ksy': 'KSY', 'sengoku': 'せんごく', 'pimoroni': 'Pimoroni' };
 export const PRODUCT_RELATIONS: readonly ProductRelation[] = unpackRelations(JSON.parse(`{"version":1,
 "strings":[
 "same_product",

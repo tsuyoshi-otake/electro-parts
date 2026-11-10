@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { chromeHost, readDataBaseUrl, start } from '../../extension/host.ts';
-import { FETCH_TEXT, isFetchTextRequest } from '../../extension/messages.ts';
+import { chromeHost, readDataBaseUrl, start, workerRelations } from '../../extension/host.ts';
+import { FETCH_TEXT, isFetchTextRequest, isRelationsForRequest, RELATIONS_FOR } from '../../extension/messages.ts';
+import { comparisonFixture } from './comparison-fixtures.ts';
 import { manifestPath, productPath } from '../../src/publisher/contract.ts';
 import { HOST_ELEMENT_ID, OWNER_ATTRIBUTE } from '../../userscript/core/controller.ts';
 import { PANEL_TITLE } from '../../userscript/ui/panel.ts';
@@ -32,6 +33,8 @@ function stubChrome(overrides: Partial<ChromeStub['storage']['local']> = {}, ans
     runtime: {
       id: 'test-extension-id',
       sendMessage: async (message: unknown) => {
+        // The worker's relation answer is not what these tests are about: no relation for any product.
+        if (isRelationsForRequest(message)) return { ok: true, relations: [] };
         if (!isFetchTextRequest(message)) throw new Error('unexpected message');
         requests.push(message.url);
         if (answer !== undefined) return answer(message.url);
@@ -105,6 +108,33 @@ describe('extension network binding', () => {
     await chromeHost().fetchText(`${DEFAULT_DATA_BASE_URL}/x.json`, 1_000);
     expect(isFetchTextRequest({ type: FETCH_TEXT, url: `${DEFAULT_DATA_BASE_URL}/x.json`, timeoutMs: 1_000 })).toBe(true);
     expect(seen).toEqual([`${DEFAULT_DATA_BASE_URL}/x.json`]);
+  });
+});
+
+describe('extension relation binding', () => {
+  /** Replaces the worker: what it answers to the one relations message, and what it was asked. */
+  function stubWorker(answer: unknown): unknown[] {
+    const seen: unknown[] = [];
+    vi.stubGlobal('chrome', { ...(globalThis as unknown as { chrome: object }).chrome, runtime: {
+      id: 'test-extension-id', onMessage: { addListener: () => undefined },
+      sendMessage: async (message: unknown) => { seen.push(message); return answer; },
+    } });
+    return seen;
+  }
+
+  it('resolves with the list the worker answers, having sent one relations message with the product key', async () => {
+    const { relation } = comparisonFixture();
+    const seen = stubWorker({ ok: true, relations: [relation] });
+    await expect(workerRelations().relationsFor('teststore', 'P1')).resolves.toEqual([relation]);
+    expect(seen).toEqual([{ type: RELATIONS_FOR, storeId: 'teststore', pageKey: 'P1' }]);
+    expect(isRelationsForRequest(seen[0])).toBe(true);
+  });
+
+  it('rejects with the error the worker gives, and when the worker does not answer', async () => {
+    stubWorker({ ok: false, error: 'relation shard unreadable (status 404)' });
+    await expect(workerRelations().relationsFor('teststore', 'P1')).rejects.toThrow('relation shard unreadable (status 404)');
+    stubWorker(undefined);
+    await expect(workerRelations().relationsFor('teststore', 'P1')).rejects.toThrow('did not answer');
   });
 });
 
