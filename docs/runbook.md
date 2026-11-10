@@ -18,12 +18,12 @@
 - 初回だけ `stores: <新店舗>` を指定すると、既存店舗はクロールされず公開済みデータセットのまま(`--republish`)で、新店舗だけが観測される。
 - 完了後、両方の `manifest.json` と `state/state.json` の `stores` を確認する。既存店舗の `datasetVersion` が変わっていなければ正しい。
 
-## 定期 run(月次と週次)
+## 定期 run(毎日)
 
 - schedule は `0 20 * * *`(UTC)で毎朝05:00 JSTに起動し、毎日収集する(ADR-0030)。隔日だったころの判定ジョブ(`scripts/observation-schedule.ts`)は廃止した。観測する店舗を順に収集し、それ以外の店舗は `--republish` で再生成する。
 - **どの店舗を観測するかは cron には書いていない。** `scripts/observed-stores.ts` が `config/<store>.json` の `observation.cadence` を読んで決める。schedule は `daily` の店舗を観測し、`stores` を空にした手動実行は `stopped` 以外の全店舗を観測する。選ばれなかった店舗は `--republish` で維持する。現在は KSY だけが `stopped`(2026-11-04、ADR-0029)で、残り 5 店舗は `daily`。選んだ結果は Actions の notice(`Observed stores`)に出る。未知の cron、未知の店舗、`stopped` の店舗を `stores` に書いた場合はエラーで停止する。
 - 定期実行と手動実行が重なる場合も、`pages-publish` の concurrency で直列化する。
-- 頻度が低いぶん、秋月は 1 回失敗すると次の自動 run まで 1 か月空く(スイッチサイエンスは 1 週間)。**失敗・隔離が出たら、直してから `workflow_dispatch` で回し直す**のが通常の運用。特定の店舗だけ直したいときは `stores` にその店舗を書く(他店舗は公開済みデータセットのまま維持される)。
+- 観測は毎日なので、失敗・隔離が出た店舗の次の自動 run は翌朝になる。観測できなかった日は拡張機能のグラフの穴として残る。**失敗・隔離が出たら、直してから `workflow_dispatch` で回し直す**のが通常の運用。特定の店舗だけ直したいときは `stores` にその店舗を書く(他店舗は公開済みデータセットのまま維持される)。
 - Actions summary に**店舗ごとに**、結果(`published` / `unchanged` / `quarantined` / `failed`)、run 時間、リクエスト数、件数、価格変更数、隔離理由が出る。最後に `### Site` として、サイトに載った店舗と `datasetVersion`、サイトサイズが出る。
 - 終了コード(店舗ごと): 0 = 公開または変化なし、3 = 隔離(公開は続く、warning)、それ以外 = 失敗。1 のほか、メモリ不足やシグナルによる異常終了も失敗として扱う(何も観測していないので成功にしない。#92)。
   - ワークフローは各店舗の pipeline を `set +e` の中で動かし、終了コードを `PIPESTATUS` で読む。手順のシェルは `bash -e` なので、これが無いと 3 や 1 で手順ごと終わり、後の店舗とデプロイが止まる(2026-11-04 の定期 run、#78)。
@@ -39,7 +39,7 @@
    - `item_count_drop` / `missing_product_ratio`: サイト側の一覧が欠けた可能性。`npm run crawl -- --config config/<store>.json` をローカルで実行し、`complete` と `issues`、`catalog.uncovered` を見る。
    - `price_change_ratio`: 本当の価格改定か、読み違い(秋月なら単位・税、スイッチサイエンスなら `price` 文字列の解釈)。スナップショット成果物(`snapshot-<store>-<run id>`)を落として数件を目で比較する。
    - `unavailable_price_ratio`: 価格表示の変更。スイッチサイエンスはしきい値が 2 % と厳しい(JSON の `price` は素直な数値文字列なので、読めない価格が増えるのは形が変わった証拠)。
-2. 本当の変化(価格改定)だった場合: `config/<store>.json` の `sanity` しきい値を一時的に上げてコミットし、`workflow_dispatch` で `stores: <store>` を指定して回し直して取り込む(秋月は次の schedule まで 1 か月空く)。または成果物のスナップショットを `--snapshot` で再取り込みする(下記)。
+2. 本当の変化(価格改定)だった場合: `config/<store>.json` の `sanity` しきい値を一時的に上げてコミットし、`workflow_dispatch` で `stores: <store>` を指定して回し直して取り込む(次の schedule は翌朝)。または成果物のスナップショットを `--snapshot` で再取り込みする(下記)。
 3. 隔離された run は `rejected_runs` に残る。取り込み直したい run は同じ観測時刻のスナップショットで `--snapshot` を指定すると通常の取り込みになる(隔離記録は残る)。
 
 ## 特定スナップショットの取り込み直し
@@ -82,6 +82,7 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 5. Verify: 公開後に zip を落として `manifest.json` の `version` を見る。Expect: 上げた版。
 6. **zip で入れた利用者は自動更新されない。** 取り直して読み込み直してもらう必要がある。版を上げたら README とランディングページの案内も合わせる。
 7. ウェブストアに掲載している場合は、同じ zip をダッシュボードにもアップロードする。**ストアは同じ版を 2 回受け付けない**ので、版を上げずに出し直すことはできない。貼る文言と手順は `docs/chrome-web-store-listing.md`(ADR-0020)。ダッシュボードへの転記は `npm run cws:dashboard` で行い、「審査のため送信」は人が押す。プライバシーポリシー(`/privacy.html`)が 404 だと審査に出せないので、Pages の更新を先に済ませる。
+8. リリースの記録は `docs/verification/<日付>-release-<版>.md` と `.claude/memory/journal.md` に残す。git のタグと GitHub Releases は v0.4.2(2026-09-08)で止めており、以後は使っていない。公開された版は Chrome の更新サービス(`clients2.google.com/service/update2/crx` の `response=updatecheck`)が返す `version` で確かめられる。
 
 ## ロールバック
 
@@ -177,6 +178,7 @@ node --import tsx src/cli/main.ts pipeline --config config/akizuki.json --snapsh
 - ローカルで確認する: `node scripts/crawl-alerts.ts --reports <reports のあるディレクトリ> --dry-run`。`gh` を呼ばず、判定と予定の操作を JSON で出す。
 - 止める: workflow の `alerts` ジョブを削除する。公開には影響しない(`deploy` は `alerts` に依存しない)。
 - `alerts` ジョブが失敗しても、その run の公開は済んでいる。同じ run の通知は 1 店舗 1 回なので、ジョブを回し直しても重複しない。
+- 開いている Issue の一覧は、作成の数秒後まで新しい Issue を返さないことがある(2026-11-10 の確認: 数秒以内に続けて 3 回通知すると 3 件作られ、20 秒あけると 1 件にまとまった)。run は毎日なので実運用では重複しないが、`scripts/crawl-alerts.ts` を手で続けて実行するときは間をあける。重複した Issue は、観測できた run がすべて閉じる。
 
 ## 頻度を変える / 止める
 
