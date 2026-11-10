@@ -119,12 +119,12 @@
       "count": 2854
     }
   ],
-  "candidateCount": 5949,
-  "reviewedCount": 5949,
+  "candidateCount": 6010,
+  "reviewedCount": 6010,
   "byStorePair": {
     "akizuki/switch-science": {
-      "candidates": 483,
-      "verified": 425,
+      "candidates": 488,
+      "verified": 430,
       "unresolved": 35,
       "pending": 0
     },
@@ -141,15 +141,15 @@
       "pending": 0
     },
     "akizuki/sengoku": {
-      "candidates": 1012,
-      "verified": 884,
+      "candidates": 1018,
+      "verified": 890,
       "unresolved": 76,
       "pending": 0
     },
     "akizuki/pimoroni": {
-      "candidates": 134,
-      "verified": 129,
-      "unresolved": 4,
+      "candidates": 184,
+      "verified": 178,
+      "unresolved": 5,
       "pending": 0
     },
     "switch-science/m5stack": {
@@ -221,10 +221,10 @@
     "identity": 0
   },
   "legacyCount": 80,
-  "relations": 7414,
-  "sameVerified": 5656,
+  "relations": 7475,
+  "sameVerified": 5716,
   "similarVerified": 1581,
-  "unresolved": 169,
+  "unresolved": 170,
   "pricePolicies": 2,
   "familyCounts": {
     "pico": 336,
@@ -412,7 +412,7 @@
       "rejected": 28,
       "pending": 0,
       "sourceListings": 15838,
-      "unmatchedListings": 14372
+      "unmatchedListings": 14355
     },
     "3CX": {
       "candidates": 0,
@@ -559,13 +559,13 @@
       "unmatchedListings": 3
     },
     "Adafruit": {
-      "candidates": 540,
-      "accepted": 526,
-      "unresolved": 4,
+      "candidates": 584,
+      "accepted": 569,
+      "unresolved": 5,
       "rejected": 10,
       "pending": 0,
       "sourceListings": 1542,
-      "unmatchedListings": 688
+      "unmatchedListings": 680
     },
     "Adapter Technology": {
       "candidates": 3,
@@ -1810,13 +1810,13 @@
       "unmatchedListings": 2
     },
     "Kitronik": {
-      "candidates": 48,
-      "accepted": 48,
+      "candidates": 55,
+      "accepted": 55,
       "unresolved": 0,
       "rejected": 0,
       "pending": 0,
       "sourceListings": 125,
-      "unmatchedListings": 54
+      "unmatchedListings": 53
     },
     "KittenBot": {
       "candidates": 2,
@@ -2593,8 +2593,8 @@
       "unmatchedListings": 2
     },
     "Pololu": {
-      "candidates": 93,
-      "accepted": 88,
+      "candidates": 100,
+      "accepted": 95,
       "unresolved": 1,
       "rejected": 4,
       "pending": 0,
@@ -4114,13 +4114,13 @@
       "unmatchedListings": 18
     },
     "スイッチサイエンス": {
-      "candidates": 106,
-      "accepted": 89,
+      "candidates": 109,
+      "accepted": 92,
       "unresolved": 10,
       "rejected": 7,
       "pending": 0,
       "sourceListings": 5691,
-      "unmatchedListings": 5370
+      "unmatchedListings": 5368
     },
     "スタジオミュウ": {
       "candidates": 0,
@@ -5438,12 +5438,12 @@
     }
   },
   "unmatchedByStore": {
-    "akizuki": 11518,
-    "switch-science": 8143,
+    "akizuki": 11501,
+    "switch-science": 8141,
     "m5stack": 137,
     "ksy": 442,
     "sengoku": 17639,
-    "pimoroni": 1829
+    "pimoroni": 1820
   },
   "limitations": [
     "All pairs of the pinned saved catalogues and their supplements are searched; listings added after the latest supplement and missing catalogue entries are not covered. Pinned rows keep their reviewed evidence unless a supplement replaced them after review.",

@@ -37,10 +37,10 @@ describe('reproducible reviewed matching pipeline', () => {
   });
   it('searches every store pair and preserves distinct variants on a shared official product page', () => {
     expect(result.report.byStorePair).toEqual({
-      'akizuki/switch-science': { candidates: 483, verified: 425, unresolved: 35, pending: 0 },
+      'akizuki/switch-science': { candidates: 488, verified: 430, unresolved: 35, pending: 0 },
       'akizuki/m5stack': { candidates: 24, verified: 22, unresolved: 2, pending: 0 },
       'akizuki/ksy': { candidates: 131, verified: 127, unresolved: 4, pending: 0 },
-      'akizuki/sengoku': { candidates: 1012, verified: 884, unresolved: 76, pending: 0 },
+      'akizuki/sengoku': { candidates: 1018, verified: 890, unresolved: 76, pending: 0 },
       'switch-science/m5stack': { candidates: 547, verified: 541, unresolved: 4, pending: 0 },
       'switch-science/ksy': { candidates: 218, verified: 212, unresolved: 6, pending: 0 },
       'switch-science/sengoku': { candidates: 1249, verified: 1191, unresolved: 11, pending: 0 },
@@ -48,7 +48,7 @@ describe('reproducible reviewed matching pipeline', () => {
       'm5stack/sengoku': { candidates: 397, verified: 394, unresolved: 1, pending: 0 },
       'ksy/sengoku': { candidates: 161, verified: 157, unresolved: 4, pending: 0 },
       // Pimoroni, the sixth store (#94): the pairs its saved catalogue adds, every one reviewed.
-      'akizuki/pimoroni': { candidates: 134, verified: 129, unresolved: 4, pending: 0 },
+      'akizuki/pimoroni': { candidates: 184, verified: 178, unresolved: 5, pending: 0 },
       'switch-science/pimoroni': { candidates: 1010, verified: 998, unresolved: 11, pending: 0 },
       'm5stack/pimoroni': { candidates: 77, verified: 77, unresolved: 0, pending: 0 },
       'ksy/pimoroni': { candidates: 170, verified: 168, unresolved: 2, pending: 0 },
@@ -73,17 +73,17 @@ describe('reproducible reviewed matching pipeline', () => {
   it('searches every pinned listing and accounts for every candidate without automatic promotion', () => {
     // 44,518 rows of the five earlier stores plus the Pimoroni catalogue (#94): 2,854 rows and 1,718 pairs, one per Pimoroni candidate of the store pairs above.
     expect(catalog.listings).toHaveLength(47372);
-    expect(result.candidates).toHaveLength(5949);
+    expect(result.candidates).toHaveLength(6010);
     expect(result.report.pending).toEqual([]);
     expect(reviews.filter(r => r.decision === 'rejected')).toHaveLength(130);
-    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(163);
-    expect(result.report).toMatchObject({ sameVerified: 5656, similarVerified: 1581, pricePolicies: 2 });
-    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(5949);
+    expect(reviews.filter(r => r.decision === 'unresolved')).toHaveLength(164);
+    expect(result.report).toMatchObject({ sameVerified: 5716, similarVerified: 1581, pricePolicies: 2 });
+    expect(Object.values(result.report.byBrand).reduce((n, b) => n + b.candidates, 0)).toBe(6010);
     expect(result.report.byBrand['Seeed']!.accepted).toBeGreaterThan(30);
     expect(result.report.byBrand['Raspberry Pi Trading']!.accepted).toBeGreaterThan(40);
     expect(result.report.byBrand['Arduino']!.accepted).toBeGreaterThan(25);
     expect(generate(catalog, [], [], [], aliases).relations).toEqual([]);
-    expect(generate(catalog, [], [], [], aliases).report.pending).toHaveLength(5949);
+    expect(generate(catalog, [], [], [], aliases).report.pending).toHaveLength(6010);
   });
 
   it('generates the store labels as their own module, so the table is not needed to name a store', () => {
@@ -278,7 +278,9 @@ describe('indexed candidate discovery', () => {
 
   describe('a review of a candidate found through a Pimoroni derived key (#94)', () => {
     // Found through the derived key of a variant SKU: the pairs an alias made from a page reference (the rejected name proposals of #94) carry no variant code.
-    const derivedOnly = (vendor: string, minVariants = 1) => result.candidates.find(c => c.derived && c.products[1].storeId === 'pimoroni' && c.products[1].vendor === vendor
+    // The #113 aliases add derived candidates of their own; this block exercises the derived-key tier, so keep only pairs a run without aliases also finds with the same fingerprint.
+    const withoutAliases = new Map(generate(catalog, [], [], []).candidates.map(c => [c.id, c.fingerprint]));
+    const derivedOnly = (vendor: string, minVariants = 1) => result.candidates.find(c => c.derived && withoutAliases.get(c.id) === c.fingerprint && c.products[1].storeId === 'pimoroni' && c.products[1].vendor === vendor
       && c.products[1].variants!.length >= minVariants && !c.products[1].codes.some(code => c.codes.includes(code))
       && c.products[1].variants!.some(v => variantCodes(c.products[1], v).some(code => c.codes.includes(code))))!;
     const reviewOf = (c: ReturnType<typeof derivedOnly>, offerId: string): Review => ({ id: c.id, fingerprint: c.fingerprint, decision: 'same_product', reviewedAt: '2026-11-10',
@@ -603,8 +605,8 @@ describe('せんごく source', () => {
   it('joins every reviewed せんごく pair as an identity only, with the integrating review\'s changes on record', () => {
     // Pimoroni comes after せんごく in the store order, so its pairs have せんごく on the left; they are checked after the loop (#94).
     const joined = result.relations.filter(r => r.products.some(p => p.storeId === 'sengoku') && !r.products.some(p => p.storeId === 'pimoroni'));
-    // 3,506 before #94 plus the two M5StickC family pairs of EEHD-6YND (K016-P-SE) with the original M5StickC (m5stack h-stick-c, switch-science 6350).
-    expect(joined).toHaveLength(3508);
+    // 3,506 before #94 plus the two M5StickC family pairs of EEHD-6YND (K016-P-SE) with the original M5StickC (m5stack h-stick-c, switch-science 6350), plus the six akizuki pairs the #113 aliases add.
+    expect(joined).toHaveLength(3514);
     const withPimoroni = result.relations.filter(r => r.products.some(p => p.storeId === 'sengoku') && r.products.some(p => p.storeId === 'pimoroni'));
     // 325 reviewed pairs (327 candidates, the two name proposals of EEHD-566P rejected) and 9 family pairs with Pimoroni rows.
     expect(withPimoroni).toHaveLength(334);
