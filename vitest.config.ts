@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import WorkerExitReporter from './tests/helpers/workerExitReporter.ts';
 
 const shared = {
   testTimeout: 60_000,
@@ -8,7 +9,8 @@ const shared = {
 export default defineConfig({
   test: {
     ...shared,
-    reporters: process.env['CI'] ? ['default', 'junit'] : ['default'],
+    // The last one keeps the exit code and the unfinished file when a worker process dies (#108); silent otherwise.
+    reporters: [...(process.env['CI'] ? ['default', 'junit'] : ['default']), new WorkerExitReporter()],
     outputFile: { junit: 'reports/junit.xml' },
     coverage: {
       provider: 'v8',
