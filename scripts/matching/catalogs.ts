@@ -8,7 +8,8 @@ import type { KsyItem, KsySnapshot } from '../../src/adapters/ksy/rawSchema.ts';
 import { normalizeSengokuItem, validateSengokuRaw } from '../../src/adapters/sengoku/snapshotAdapter.ts';
 import type { SengokuItem, SengokuSnapshot } from '../../src/adapters/sengoku/rawSchema.ts';
 import { M5STACK_STORE } from '../../src/adapters/m5stack/identity.ts';
-import { shopifyPageKey, shopifyProductUrl } from '../../src/adapters/shopify/identity.ts';
+import { PIMORONI_STORE } from '../../src/adapters/pimoroni/identity.ts';
+import { shopifyPageKey, shopifyProductUrl, type ShopifyStore } from '../../src/adapters/shopify/identity.ts';
 import type { ShopifyItem, ShopifySnapshot } from '../../src/adapters/shopify/rawSchema.ts';
 import { validateShopifyRaw } from '../../src/adapters/shopify/snapshotAdapter.ts';
 import { validateSwitchScienceRaw } from '../../src/adapters/switch-science/snapshotAdapter.ts';
@@ -35,14 +36,31 @@ function retailerListing(storeId: RetailerStore, item: Record<string, unknown>, 
   };
 }
 
-function m5stackListing(p: ShopifyItem, observedAt: string): Listing {
+/**
+ * A Shopify storefront product through the shared normalization (`shopifyPageKey`, `shopifyProductUrl`), so the expected
+ * name and model are the ones the store's published history carries (ADR-0018 0.5.1). The model is the SKU of a
+ * one-variant product and empty otherwise; every variant SKU is among the codes. `maker` is the manufacturer name
+ * the pair rules may use, `codeMaker` the one `identityCodes` scopes its prefix rules by.
+ */
+function shopifyListing(store: ShopifyStore, p: ShopifyItem, observedAt: string, maker: string, codeMaker: string, makerEvidence: boolean): Listing {
   const variants = p.variants.map(v => ({ offerId: String(v.id), sku: v.sku ?? '', name: v.title }));
   const model = variants.length === 1 ? variants[0]!.sku : '';
-  return { storeId: 'm5stack', pageKey: shopifyPageKey(M5STACK_STORE, p.handle), name: p.title, modelNumber: model,
-    url: shopifyProductUrl(M5STACK_STORE, p.handle), manufacturer: p.vendor?.toLowerCase() === 'm5stack-store' ? 'M5Stack' : p.vendor ?? '', manufacturerProductName: p.title,
-    manufacturerProductCode: model, productCode: '', sku: '', codes: identityCodes('m5stack', p.vendor ?? '', variants.map(v => v.sku)),
+  return { storeId: store.storeId, pageKey: shopifyPageKey(store, p.handle), name: p.title, modelNumber: model,
+    url: shopifyProductUrl(store, p.handle), manufacturer: maker, manufacturerProductName: makerEvidence ? p.title : '',
+    manufacturerProductCode: makerEvidence ? model : '', productCode: '', sku: '', codes: identityCodes(store.storeId, codeMaker, variants.map(v => v.sku)),
     expectedModels: [model], observedAt, variants, vendor: p.vendor ?? '' };
 }
+
+/** The maker's own storefront: its vendor label is the manufacturer, and its title is the maker's product name. */
+const m5stackListing = (p: ShopifyItem, observedAt: string): Listing =>
+  shopifyListing(M5STACK_STORE, p, observedAt, p.vendor?.toLowerCase() === 'm5stack-store' ? 'M5Stack' : p.vendor ?? '', p.vendor ?? '', true);
+
+/**
+ * Pimoroni resells other makers (Adafruit, SparkFun, Pololu...), so its vendor label is the shop's own, kept as
+ * `vendor` for review and never ruling a pair out, as for KSY and せんごく (ADR-0018 0.5.1, 0.6.1). No Pimoroni SKU
+ * carries a shop prefix that `identityCodes` strips, so no label is mapped to a manufacturer name.
+ */
+const pimoroniListing = (p: ShopifyItem, observedAt: string): Listing => shopifyListing(PIMORONI_STORE, p, observedAt, '', '', false);
 
 /**
  * KSY public-list item through the store's own normalization, so the expected name and model are the ones its
@@ -135,6 +153,18 @@ const MAKER_PREFIX = /^(?:SFE|DFROBOT|ADA|POLOLU|WAVESHARE|PIMORONI|ARDUINO|FEET
 const partNumber = (s: string): boolean => s.length >= 4 && /^[A-Z0-9]+(?:-[A-Z0-9]+)*$/.test(s) && /[A-Z]/.test(s) && /\d/.test(s);
 
 /**
+ * Pimoroni writes a reselling maker's part number without the hyphen-prefixed shop form the other stores use
+ * (`ADA6044` for Switch Science's `ADA-6044`, `POL-799` for `POLOLU-799`, `KIT-5038` for `KITRONIK-5038`). Gated on the
+ * vendor label AND the SKU pattern; the rest of a Kitronik SKU is kept verbatim (`KIT-5038-V2` meets only
+ * `KITRONIK-5038-V2`). A bare number is never a key: `ADA-1032` and `POL-1032` are different products.
+ */
+const PIMORONI_MAKER_FORMS: Readonly<Record<string, { sku: RegExp; key: (rest: string) => string }>> = {
+  'Adafruit': { sku: /^ADA(\d+)$/, key: rest => `ADA-${rest}` },
+  'Pololu': { sku: /^POL-(\d+)$/, key: rest => `POLOLU-${rest}` },
+  'Kitronik': { sku: /^KIT-(\d.*)$/, key: rest => `KITRONIK-${rest}` },
+};
+
+/**
  * Match keys read at discovery time from a listing's own fields, in forms seen in the catalogue. The stored `codes`
  * (and so every fingerprint) stay as imported; these keys only add candidates, and each pair is still reviewed.
  * Revision and configuration suffixes stay: an annotation only adds the plain code next to the stored one.
@@ -164,6 +194,9 @@ export function derivedCodes(p: Listing): string[] {
       const sku = code.match(/^(?:SKU-)?(\d{9})(?:\([0-9A-Z]+\))?$/); if (sku) keys.push(sku[1]!);
       if (/^\d{9}(?:\/\d{9})+$/.test(code)) keys.push(...code.split('/'));
     }
+    const pimoroniForm = p.storeId === 'pimoroni' ? PIMORONI_MAKER_FORMS[p.vendor ?? ''] : undefined;
+    const pimoroniRest = pimoroniForm ? code.match(pimoroniForm.sku)?.[1] : undefined;
+    if (pimoroniForm && pimoroniRest) keys.push(pimoroniForm.key(pimoroniRest));
     forms.push(code);
     // An ordering or production annotation after the part number: Toshiba's `TC74HC138AP(F)`, JST's
     // `S2B-PH-K-S(LF)(SN)`, Raspberry Pi's `SC0194(9)`, TI's `LMC660CN/NOPB`. The review decides whether it matters.
@@ -178,6 +211,16 @@ export function derivedCodes(p: Listing): string[] {
     if (rest && partNumber(rest)) keys.push(rest);
   }
   return [...new Set(keys)].filter(key => !p.codes.includes(key));
+}
+
+/**
+ * The keys one reviewed variant of a listing meets: its SKU's identity codes plus the derived keys that same SKU gives
+ * (`ADA6044` -> `ADA-6044`). The one place a variant is tied to a candidate code, so the review check and the candidate
+ * search read a SKU by the same rules.
+ */
+export function variantCodes(p: Listing, variant: { sku: string }): string[] {
+  const own = identityCodes(p.storeId, p.manufacturer, [variant.sku]);
+  return [...new Set([...own, ...derivedCodes({ ...p, modelNumber: '', codes: own })])].sort();
 }
 
 /** `<code>/<page number>` in a せんごく model: the code and the Switch Science page it names (4 or 5 digits). */
@@ -252,6 +295,7 @@ const PROJECTIONS: Readonly<Record<string, { validate: (raw: unknown) => Validat
   'switch-science': { validate: validateSwitchScienceRaw, listings: (raw: SwitchScienceRawSnapshot) =>
     raw.items.map(i => retailerListing('switch-science', switchScienceItem(i), raw.retrievedAt)) },
   'm5stack': { validate: (raw: unknown) => validateShopifyRaw(M5STACK_STORE, raw), listings: (raw: ShopifySnapshot) => raw.items.map(p => m5stackListing(p, raw.retrievedAt)) },
+  'pimoroni': { validate: (raw: unknown) => validateShopifyRaw(PIMORONI_STORE, raw), listings: (raw: ShopifySnapshot) => raw.items.map(p => pimoroniListing(p, raw.retrievedAt)) },
   'ksy': { validate: validateKsyRaw, listings: (raw: KsySnapshot) => raw.items.map(i => ksyListing(i, raw.retrievedAt)) },
   'sengoku': { validate: validateSengokuRaw, listings: (raw: SengokuSnapshot) => raw.items.map(i => sengokuListing(i, raw.retrievedAt)) },
 };
