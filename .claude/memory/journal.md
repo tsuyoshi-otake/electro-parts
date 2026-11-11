@@ -1554,3 +1554,11 @@ Learning: check each listing claim against the rendering code, not against the p
 - Root cause: `main()` connected over CDP before dispatching every command, `close` included, so `close` never reached the deletion.
 - Fix: `scripts/lib/close-profile.ts` closes a Chrome that answers and deletes the profile either way, with the bounded retry; `close` no longer needs a connection. Workaround used before the fix: `launch` again, then `close`.
 - Verification: 4 unit tests; the old behaviour (stop when no Chrome answers) as a mutation fails 2 of them; `close` with no Chrome running deleted a profile and exited 0; `npm test` 1,248 passed and 1 skipped in 80 files; typecheck 0.
+
+## 2026-11-11 First scheduled run with parallel collect and the Akizuki cover crawl (#93 closed)
+
+- Run 42931541780 (cron 2026-11-10T20:00Z, started 2026-11-11T00:27:50Z, e278cc5): success in 42 min 16 s wall clock, against 2 h 57 min 32 s for the last serial run. #93's last acceptance item ("under 110 min") is met.
+- Collect jobs: Switch Science 40 min 02 s (1,271 requests, the longest), Akizuki 29 min 53 s (cover day: 561 planned + 4 repair listings, 871 requests, missingAfterRepair 1, not escalated; cache akizuki-cover-42743844544-1 restored inside the matrix job), Sengoku 23 min 09 s (548), M5Stack 15 min 16 s (466 product pages selected, 472 requests), Pimoroni 46 s. Import 1 min 26 s, alerts applied 0 actions, deploy 17 s.
+- Requests per store are unchanged by the parallel collect (SS 1,268 → 1,271, Sengoku 547 → 548); the drops for Akizuki and M5Stack come from ADR-0032 and #104.
+- Still unobserved: an Akizuki full day under the parallel workflow (about 7 days after 2026-11-10; expected about 90 min plus setup and import), and a day when every collect job fails.
+- Recorded in the ADR-0034 and ADR-0032 addenda and the runbook. Log kept at ~/tmp/pc93-real/run-42931541780/log.txt.
