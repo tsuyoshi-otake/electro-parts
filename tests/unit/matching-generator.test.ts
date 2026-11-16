@@ -12,6 +12,8 @@ import { normalizeSengokuItem } from '../../src/adapters/sengoku/snapshotAdapter
 import type { ProductRelation } from '../../userscript/core/relations.ts';
 import { PRODUCT_RELATIONS } from '../../userscript/adapters/productRelations.ts';
 import { collectKsyFixture } from '../helpers/ksy.ts';
+import { collectMarutsuFixture } from '../helpers/marutsu.ts';
+import { normalizeMarutsuItem } from '../../src/adapters/marutsu/snapshotAdapter.ts';
 import { collectSengokuFixture } from '../helpers/sengoku.ts';
 import { collectPimoroniFixture, loadPimoroniNormalized } from '../helpers/pimoroni.ts';
 import { PIMORONI_STORE } from '../../src/adapters/pimoroni/identity.ts';
@@ -801,6 +803,64 @@ describe('the settled 0.6.7 identities (0.6.8)', () => {
     expect(byId.get(id('akizuki', '114312', 'sengoku', 'EEHD-4HNL'))).toMatchObject({ kind: 'same_product' });
     expect(byId.get(id('akizuki', '114312', 'sengoku', 'EEHD-4HNU'))).toMatchObject({
       kind: 'similar_product', differences: ['型番: D2F-01 ↔ D2F-01-D', '端子: 基板用端子ストレート形 ↔ はんだづけ小型端子'] });
+  });
+});
+
+describe('マルツ source', () => {
+  /** The synthetic shop through the real collector, written as the complete snapshot file the importer reads. */
+  async function marutsuSnapshotFile(edit?: (raw: Record<string, unknown>) => void): Promise<{ file: string; cleanup: () => void }> {
+    const { raw } = await collectMarutsuFixture();
+    edit?.(raw as unknown as Record<string, unknown>);
+    const dir = mkdtempSync(path.join(tmpdir(), 'marutsu-catalog-'));
+    const file = path.join(dir, `marutsu-${raw.retrievedAt.replace(/[:.]/g, '-')}.json.gz`);
+    writeFileSync(file, gzipSync(JSON.stringify(raw)));
+    return { file, cleanup: () => rmSync(dir, { recursive: true, force: true }) };
+  }
+
+  it('projects the shop\'s rows through its own normalization, the maker label kept as vendor', async () => {
+    const { raw } = await collectMarutsuFixture();
+    const { file, cleanup } = await marutsuSnapshotFile();
+    try {
+      const { listings, observedAt } = await snapshotListings('marutsu', file);
+      expect(listings).toHaveLength(raw.items.length);
+      for (const [i, item] of raw.items.entries()) {
+        const { pageKey, metadata } = normalizeMarutsuItem(item);
+        expect(listings[i]).toMatchObject({ storeId: 'marutsu', pageKey, name: metadata.name, modelNumber: metadata.modelNumber ?? '', url: metadata.canonicalUrl,
+          manufacturer: '', vendor: item.maker?.trim() ?? '', expectedModels: [metadata.modelNumber ?? ''], observedAt });
+      }
+    } finally { cleanup(); }
+  });
+
+  it('strips a shop prefix only where the maker label names that manufacturer', async () => {
+    const rows: [string | null, string][] = [['M5Stack', 'M5STACK-U130'], [null, 'M5STACK-U130'], ['Raspberry Pi', 'RPI-SC1112'], ['LAZOS', 'L-TC100-W1']];
+    const { file, cleanup } = await marutsuSnapshotFile(raw => {
+      const items = raw['items'] as Record<string, unknown>[];
+      rows.forEach(([maker, model], i) => Object.assign(items[i]!, { maker, model }));
+    });
+    try {
+      const { listings } = await snapshotListings('marutsu', file);
+      expect(listings.slice(0, 4).map(p => p.codes)).toEqual([['U130'], ['M5STACK-U130'], ['SC1112'], ['L-TC100-W1']]);
+      // The original model stays in expectedModels, prefix or not.
+      expect(listings.slice(0, 4).map(p => p.expectedModels)).toEqual([['M5STACK-U130'], ['M5STACK-U130'], ['RPI-SC1112'], ['L-TC100-W1']]);
+    } finally { cleanup(); }
+  });
+
+  it('appends as the store\'s first source and refuses a second one', async () => {
+    const { file, cleanup } = await marutsuSnapshotFile();
+    try {
+      const snapshot = await snapshotListings('marutsu', file);
+      const next = appendStore(catalog, 'marutsu', file, snapshot);
+      expect(next.sources.at(-1)).toEqual({ storeId: 'marutsu', file: path.basename(file), sha256: hash(snapshot.text), observedAt: snapshot.observedAt, count: snapshot.listings.length });
+      expect(next.listings.filter(p => p.storeId === 'marutsu')).toEqual(snapshot.listings.slice().sort((a, b) => (listingKey(a) < listingKey(b) ? -1 : 1)));
+      expect(() => appendStore(next, 'marutsu', file, snapshot)).toThrow(/marutsu source already exists/);
+    } finally { cleanup(); }
+  });
+
+  it('refuses an incomplete snapshot', async () => {
+    const short = await marutsuSnapshotFile(raw => { (raw['items'] as unknown[]).pop(); });
+    try {
+      await expect(snapshotListings('marutsu', short.file)).rejects.toThrow(/incomplete marutsu snapshot/);
+    } finally { short.cleanup(); }
   });
 });
 
