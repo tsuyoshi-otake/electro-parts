@@ -8,7 +8,7 @@ const AT = (pathname: string, hostname = 'www.switch-science.com') => ({ hostnam
 
 describe('page adapter registry', () => {
   it('supports exactly the stores that are registered, and each URL belongs to one of them', () => {
-    expect(PAGE_ADAPTERS.map((a) => a.storeId)).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy', 'sengoku', 'pimoroni', 'marutsu']);
+    expect(PAGE_ADAPTERS.map((a) => a.storeId)).toEqual(['akizuki', 'switch-science', 'm5stack', 'ksy', 'sengoku', 'pimoroni']);
     // The build script turns this list into the userscript's `@match` headers,
     // so a pattern added here is a page the script is allowed to run on.
     expect(PAGE_ADAPTERS.flatMap((a) => a.matchPatterns)).toEqual([
@@ -21,8 +21,6 @@ describe('page adapter registry', () => {
         .map((path) => `https://www.sengoku.co.jp${path}`),
       ...['/', '/?*', '/products/*', '/collections/*', '/search*', '/pages/*', '/blogs/*', '/en-jp', '/en-jp?*', '/en-jp/', '/en-jp/?*',
         '/en-jp/products/*', '/en-jp/collections/*', '/en-jp/search*', '/en-jp/pages/*', '/en-jp/blogs/*'].map((path) => `https://shop.pimoroni.com${path}`),
-      ...['/', '/?*', '/Shop.jsp*', '/GoodsListNavi.jsp*', '/GoodsListGoodsNameNavi.jsp*', '/GoodsAllCategoryList.jsp*', '/LargeCategoryList.jsp*', '/RatedList.jsp*', '/pc/i/*']
-        .map((path) => `https://www.marutsu.co.jp${path}`),
     ]);
     const locations = [AT('/catalog/g/g109951/', 'akizukidenshi.com'), AT('/products/9381'), AT('/collections/all/products/9381'),
       AT('/main/index/pdp.id/1094/pdp.open/1094', 'raspberry-pi.ksyic.com'), AT('/mod/sgk_cart/detail.php', 'www.sengoku.co.jp'),
