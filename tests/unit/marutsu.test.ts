@@ -49,6 +49,14 @@ describe('Marutsu listing page', () => {
     });
   });
 
+it('reads only the desktop rows of a page that also renders a smartphone view', () => {
+const page = parseMarutsuListingPage(marutsuFixture('listing-dual-view.html'));
+expect([page.total, page.page, page.perPage, page.rows.length]).toEqual([10, 1, 50, 3]);
+expect(page.rows).toEqual(parseMarutsuListingPage(marutsuFixture('listing-stocked.html')).rows);
+expect(() => parseMarutsuListingPage(marutsuFixture('listing-dual-view.html')
+.replace('resultsMaxShowLine = "50";', 'resultsMaxShowLine = "100";'))).toThrow(/the resultsMaxShowLine counters disagree/);
+});
+
 it('reads the マルツコード and the minimum order quantity when a row prints them', () => {
 const html = marutsuFixture('listing-stocked.html').replace('<dt>型番：</dt>',
 '</dl><dl><dt>マルツコード：</dt><dd>M0013-7432</dd></dl><dl><dt>最小発注数量：</dt><dd>1個</dd></dl><dl><dt>型番：</dt>');
