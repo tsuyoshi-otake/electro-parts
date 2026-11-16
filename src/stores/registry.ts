@@ -1,5 +1,6 @@
 import { akizukiSnapshotAdapter } from '../adapters/akizuki/snapshotAdapter.ts';
 import { ksySnapshotAdapter } from '../adapters/ksy/snapshotAdapter.ts';
+import { marutsuSnapshotAdapter } from '../adapters/marutsu/snapshotAdapter.ts';
 import { m5stackSnapshotAdapter } from '../adapters/m5stack/snapshotAdapter.ts';
 import { pimoroniSnapshotAdapter } from '../adapters/pimoroni/snapshotAdapter.ts';
 import { sengokuSnapshotAdapter } from '../adapters/sengoku/snapshotAdapter.ts';
@@ -11,7 +12,7 @@ import type { StoreSnapshotAdapter } from './adapter.ts';
  * The only place that enumerates concrete stores. Adding a store is one entry
  * here and one in `collectorRegistry.ts`; nothing in the core changes.
  */
-const ADAPTERS: readonly StoreSnapshotAdapter[] = [akizukiSnapshotAdapter, switchScienceSnapshotAdapter, m5stackSnapshotAdapter, ksySnapshotAdapter, sengokuSnapshotAdapter, pimoroniSnapshotAdapter];
+const ADAPTERS: readonly StoreSnapshotAdapter[] = [akizukiSnapshotAdapter, switchScienceSnapshotAdapter, m5stackSnapshotAdapter, ksySnapshotAdapter, sengokuSnapshotAdapter, pimoroniSnapshotAdapter, marutsuSnapshotAdapter];
 
 export function listStoreIds(): StoreId[] {
   return ADAPTERS.map((a) => a.storeId);
