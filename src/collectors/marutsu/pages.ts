@@ -10,6 +10,14 @@
  * specification table that follow the spec block are never parsed.
  * Anything that does not have the expected shape throws, so the crawl
  * ends incomplete instead of publishing a guess.
+ *
+ * The served page renders the same results twice, as desktop rows and
+ * as a smartphone rendering (its fields carry an Sp marker, as in
+ * `salesGoodsCodeSp_N`), and its counter script initialises the
+ * counters unquoted before assigning the real values quoted once per
+ * rendering. Only the desktop rows and the quoted assignments are
+ * read; both were seen on the saved pages of 2025-03-19 and
+ * 2026-01-29.
  */
 import { isMarutsuCode } from '../../adapters/marutsu/identity.ts';
 import type { MarutsuItem, MarutsuPriceTier } from '../../adapters/marutsu/rawSchema.ts';
@@ -68,9 +76,23 @@ function yenAmount(rawText: string, subject: string): number {
   return integer(m[2]!);
 }
 
-const TOTAL = /resultsDataNumber = "([\d,]+)"/;
-const PAGE_NUMBER = /resultsShowPageNumber = "?(\d+)"?/;
-const PER_PAGE = /resultsMaxShowLine = "?(\d+)"?/;
+const TOTAL = /resultsDataNumber = "([\d,]+)"/g;
+const PAGE_NUMBER = /resultsShowPageNumber = "(\d+)"/g;
+const PER_PAGE = /resultsMaxShowLine = "(\d+)"/g;
+
+/**
+ * One counter of the listing script. The page first initialises its
+ * script variables unquoted (`resultsShowPageNumber = 0`) and then
+ * assigns the real values quoted, once per rendered results group;
+ * only the quoted assignments are the page's counters, and every one
+ * of them must agree.
+ */
+function counter(html: string, pattern: RegExp, subject: string): number {
+  const values = [...html.matchAll(pattern)].map((m) => m[1]!);
+  if (values.length === 0) throw new MarutsuPageError(`listing page: no ${subject} counter`);
+  if (new Set(values).size !== 1) throw new MarutsuPageError(`listing page: the ${subject} counters disagree (${values.join(', ')})`);
+  return integer(values[0]!);
+}
 const ROW_START = /<li id="resultsRow_(\d+)" class="DETAILS_ROW[^"]*">/g;
 const NAME_LINK = /<a href="\/pc\/i\/(\d+)\/" id="goodsName_(\d+)_link"[^>]*class="goodsName"[^>]*>([\s\S]*?)<\/a>/;
 const SALES_CODE = /<input type="hidden" id="salesGoodsCode_(\d+)"[^>]*value="(\d+)"/;
@@ -222,17 +244,22 @@ export function parseMarutsuSubcategories(html: string, topPath: string): Maruts
 
 /** One page of a stocked listing: its counter and its product rows, in page order. */
 export function parseMarutsuListingPage(html: string): MarutsuListingPage {
-  const total = TOTAL.exec(html);
-  if (total === null) throw new MarutsuPageError('listing page: no resultsDataNumber counter');
-  const page = PAGE_NUMBER.exec(html);
-  const perPage = PER_PAGE.exec(html);
-  if (page === null || perPage === null) throw new MarutsuPageError('listing page: no page number or page size');
+  const total = counter(html, TOTAL, 'resultsDataNumber');
+  const page = counter(html, PAGE_NUMBER, 'resultsShowPageNumber');
+  const perPage = counter(html, PER_PAGE, 'resultsMaxShowLine');
   const starts = [...html.matchAll(ROW_START)];
-  const rows = starts.map((m, i) => {
+  const rows: MarutsuListingRow[] = [];
+  for (const [i, m] of starts.entries()) {
     const from = m.index;
     const to = i + 1 < starts.length ? starts[i + 1]!.index : html.length;
-    if (Number(m[1]) !== i) throw new MarutsuPageError(`listing page: row ${i + 1} is numbered ${m[1]}`);
-    return parseRow(html.slice(from, to), i);
-  });
-  return { total: integer(total[1]!), page: Number(page[1]), perPage: Number(perPage[1]), rows };
+    const block = html.slice(from, to);
+    // The page renders the same results twice: the desktop rows and a
+    // smartphone rendering whose fields carry an Sp marker
+    // (`salesGoodsCodeSp_N`). Only the desktop rows are the listing.
+    if (block.includes('salesGoodsCodeSp_')) continue;
+    if (!block.includes('salesGoodsCode_')) throw new MarutsuPageError(`listing page: row ${Number(m[1]) + 1} has no sales code input`);
+    if (Number(m[1]) !== rows.length) throw new MarutsuPageError(`listing page: row ${rows.length + 1} is numbered ${m[1]}`);
+    rows.push(parseRow(block, rows.length));
+  }
+  return { total, page, perPage, rows };
 }
