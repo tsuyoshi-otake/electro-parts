@@ -7,6 +7,8 @@ import { normalizeKsyItem, validateKsyRaw } from '../../src/adapters/ksy/snapsho
 import type { KsyItem, KsySnapshot } from '../../src/adapters/ksy/rawSchema.ts';
 import { normalizeSengokuItem, validateSengokuRaw } from '../../src/adapters/sengoku/snapshotAdapter.ts';
 import type { SengokuItem, SengokuSnapshot } from '../../src/adapters/sengoku/rawSchema.ts';
+import { normalizeMarutsuItem, validateMarutsuRaw } from '../../src/adapters/marutsu/snapshotAdapter.ts';
+import type { MarutsuItem, MarutsuSnapshot } from '../../src/adapters/marutsu/rawSchema.ts';
 import { M5STACK_STORE } from '../../src/adapters/m5stack/identity.ts';
 import { PIMORONI_STORE } from '../../src/adapters/pimoroni/identity.ts';
 import { shopifyPageKey, shopifyProductUrl, type ShopifyStore } from '../../src/adapters/shopify/identity.ts';
@@ -273,6 +275,27 @@ export async function importCatalogs(files: readonly [string, string]): Promise<
   assertCatalog(catalog); return catalog;
 }
 
+/**
+ * マルツ maker labels whose model codes may carry a shop prefix that `identityCodes` already strips for that
+ * manufacturer (`M5STACK-…`, `RPI-SC…`). Named from the shop's own maker filter labels; to be confirmed against
+ * the first snapshot. Used for the prefix rules only.
+ */
+const MARUTSU_PREFIX_MAKERS: Readonly<Record<string, string>> = { 'M5Stack': 'M5Stack', 'Raspberry Pi': 'Raspberry Pi Trading' };
+
+/**
+ * マルツ listing row through the store's own normalization, as for KSY and せんごく. The maker line is the
+ * shop's label, so it is kept as `vendor` and never rules a pair out. The model is the spec block's 型番;
+ * the マルツコード names the shop's own catalogue, not the maker, so it is not a code here.
+ */
+function marutsuListing(i: MarutsuItem, observedAt: string): Listing {
+  const { pageKey, metadata } = normalizeMarutsuItem(i);
+  const model = metadata.modelNumber ?? '';
+  const vendor = i.maker?.trim() ?? '';
+  return { storeId: 'marutsu', pageKey, name: metadata.name, modelNumber: model, url: metadata.canonicalUrl, manufacturer: '',
+    manufacturerProductName: '', manufacturerProductCode: '', productCode: '', sku: '', codes: identityCodes('marutsu', MARUTSU_PREFIX_MAKERS[vendor] ?? '', [model]),
+    expectedModels: [model], observedAt, vendor };
+}
+
 /** A complete snapshot file projected to listings; `text` is hashed into the source. */
 export interface SnapshotListings { text: string; observedAt: string; listings: Listing[] }
 
@@ -298,6 +321,7 @@ const PROJECTIONS: Readonly<Record<string, { validate: (raw: unknown) => Validat
   'pimoroni': { validate: (raw: unknown) => validateShopifyRaw(PIMORONI_STORE, raw), listings: (raw: ShopifySnapshot) => raw.items.map(p => pimoroniListing(p, raw.retrievedAt)) },
   'ksy': { validate: validateKsyRaw, listings: (raw: KsySnapshot) => raw.items.map(i => ksyListing(i, raw.retrievedAt)) },
   'sengoku': { validate: validateSengokuRaw, listings: (raw: SengokuSnapshot) => raw.items.map(i => sengokuListing(i, raw.retrievedAt)) },
+  'marutsu': { validate: validateMarutsuRaw, listings: (raw: MarutsuSnapshot) => raw.items.map(i => marutsuListing(i, raw.retrievedAt)) },
 };
 
 export interface SupplementReport {
