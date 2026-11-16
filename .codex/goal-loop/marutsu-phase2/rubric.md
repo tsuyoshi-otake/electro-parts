@@ -1,5 +1,7 @@
 # Goal: finish Marutsu observation and reach the phase 2 candidate checkpoint
 
+Status: superseded on 2026-11-16 by the user's cancellation. See `../withdraw-marutsu/rubric.md`; these original criteria are retained as historical context and no longer authorize collection or matching work.
+
 Workdir: repository root (electro-parts)
 Tracking: #121 (phase 1); create/reuse a phase 2 issue before phase 2 changes.
 Max iterations: 8. Verification owner: Codex itself, per repository instructions.

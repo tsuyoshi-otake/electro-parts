@@ -77,7 +77,7 @@ env:
   # Every store the site publishes, in import order. Adding one means adding
   # `config/<store>.json`, a collector and an adapter; the collect matrix and
   # the snapshot artifacts follow from the stores a run observes.
-  STORES: akizuki switch-science m5stack ksy sengoku pimoroni marutsu
+  STORES: akizuki switch-science m5stack ksy sengoku pimoroni
   # The daily wake-up: the stores that declare cadence "daily" are observed by it.
   DAILY_CRON: '0 20 * * *'
   NODE_OPTIONS: --max-old-space-size=2048

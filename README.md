@@ -2,16 +2,18 @@
 
 電子部品通販サイトの商品ページに、**観測した価格・在庫表示・掲載状況の履歴**を表示するプロジェクトです。
 
-- クローラーが定期的に(現在はKSYを除く6店舗が毎日、KSYは観測停止 → [ADR-0016](docs/adr/0016-per-store-observation-cadence.md)、[ADR-0029](docs/adr/0029-stopped-store-observation.md))対象サイトのカタログを巡回して生スナップショットを保存し、
-- 7店舗で共有する SQLite に**変化点だけ**を取り込み、
+マルツオンラインへの追加対応は、通常の取得がHTTP403で拒否されたため取り消しました。経緯と撤回方針は [ADR-0036](docs/adr/0036-marutsu-stocked-category-listings.md) に記録しています。
+
+- クローラーが定期的に(現在はKSYを除く5店舗が毎日、KSYは観測停止 → [ADR-0016](docs/adr/0016-per-store-observation-cadence.md)、[ADR-0029](docs/adr/0029-stopped-store-observation.md))対象サイトのカタログを巡回して生スナップショットを保存し、
+- 6店舗で共有する SQLite に**変化点だけ**を取り込み、
 - 静的 JSON(契約 v1)として GitHub Pages に公開し、
 - **Electronics Price History** が商品ページにパネルを差し込みます。Tampermonkey ユーザースクリプトと Chrome 拡張の 2 つの形があり、中身は同じバンドルです([ADR-0019](docs/adr/0019-chrome-extension-second-host.md))。
 
 **インストール**: Chrome は [Chrome ウェブストア](https://chromewebstore.google.com/detail/electronics-price-history/jklcjijjlombfgmagcbmfkjglomaiipj) から入れるのがいちばん簡単です(ストア経由で自動更新)。Tampermonkey の場合は [ユーザースクリプト](https://tsuyoshi-otake.github.io/electro-parts/electronics-price-history.user.js) を開きます。詳しくは [Chrome 拡張のインストール](#chrome-拡張のインストール) と [ユーザースクリプトのインストール](#ユーザースクリプトのインストール)。
 
-対象は **秋月電子通商**(`akizuki`、一覧HTML)、**スイッチサイエンス**(`switch-science`、Shopifyカタログ)、**M5Stack公式ショップ**(`m5stack`、Shopifyカタログ)、**Raspberry Pi Shop by KSY**(`ksy`、公開一覧のJSON。サイト閉鎖のため2026-11-04に観測を止め、2026-11-02までの記録だけを公開、[ADR-0029](docs/adr/0029-stopped-store-observation.md))、**せんごくネット通販**(`sengoku`、「電子工作部品」の分類一覧HTML)、**Pimoroni**(`pimoroni`、英国、Shopifyカタログ)、**マルツオンライン**(`marutsu`、在庫品に絞った分類一覧HTML)の7店舗です。M5Stackの収集・USD・バリエーションの扱いは [対応仕様](docs/roadmap/m5stack-support.md)、KSYの収集範囲と商品ダイアログの扱いは [ADR-0023](docs/adr/0023-ksy-public-list-and-in-place-product-dialog.md)、せんごくの収集範囲と記録しないものは [ADR-0024](docs/adr/0024-sengoku-electronic-parts-category-listings.md)、PimoroniのGBPと地域別の転送の扱いは [ADR-0025](docs/adr/0025-pimoroni-gbp-base-catalogue-without-redirects.md)、マルツの収集範囲と記録しないものは [ADR-0036](docs/adr/0036-marutsu-stocked-category-listings.md) を参照してください。aitendoは未実装です。
+対象は **秋月電子通商**(`akizuki`、一覧HTML)、**スイッチサイエンス**(`switch-science`、Shopifyカタログ)、**M5Stack公式ショップ**(`m5stack`、Shopifyカタログ)、**Raspberry Pi Shop by KSY**(`ksy`、公開一覧のJSON。サイト閉鎖のため2026-11-04に観測を止め、2026-11-02までの記録だけを公開、[ADR-0029](docs/adr/0029-stopped-store-observation.md))、**せんごくネット通販**(`sengoku`、「電子工作部品」の分類一覧HTML)、**Pimoroni**(`pimoroni`、英国、Shopifyカタログ)の6店舗です。M5Stackの収集・USD・バリエーションの扱いは [対応仕様](docs/roadmap/m5stack-support.md)、KSYの収集範囲と商品ダイアログの扱いは [ADR-0023](docs/adr/0023-ksy-public-list-and-in-place-product-dialog.md)、せんごくの収集範囲と記録しないものは [ADR-0024](docs/adr/0024-sengoku-electronic-parts-category-listings.md)、PimoroniのGBPと地域別の転送の扱いは [ADR-0025](docs/adr/0025-pimoroni-gbp-base-catalogue-without-redirects.md) を参照してください。aitendoは未実装です。
 
-> データについて: 表示される値はこのプロジェクトが観測した時点の店頭表示の記録で、店舗の公式データではありません。KSYを除く6店舗は毎日1回の観測設定で、観測間の変化は記録されません。KSYは2026-11-02の観測が最後です。M5StackはUSD、PimoroniはGBPのまま記録・表示し、税・送料・関税込みの支払額を表しません。現在の記録価格に添える円換算は、1日1回取得した為替レートによる参考値です。詳しくは [データの注意点](#データの注意点) を読んでください。
+> データについて: 表示される値はこのプロジェクトが観測した時点の店頭表示の記録で、店舗の公式データではありません。KSYを除く5店舗は毎日1回の観測設定で、観測間の変化は記録されません。KSYは2026-11-02の観測が最後です。M5StackはUSD、PimoroniはGBPのまま記録・表示し、税・送料・関税込みの支払額を表しません。現在の記録価格に添える円換算は、1日1回取得した為替レートによる参考値です。詳しくは [データの注意点](#データの注意点) を読んでください。
 
 ## 目次
 
@@ -38,7 +40,6 @@
    - スイッチサイエンス `https://www.switch-science.com/products/<handle>`(`/collections/<コレクション>/products/<handle>` も同じ商品として扱います)→ 右の列の「カートに追加」の下、商品説明の上。
    - M5Stack公式ショップ `https://shop.m5stack.com/products/<handle>` → 左の列の商品画像の下、商品説明の上(画面幅 1024px 未満では購入欄の下)。
    - Pimoroni `https://shop.pimoroni.com/products/<handle>` と、日本から開いたときの `https://shop.pimoroni.com/en-jp/products/<handle>` → 左の列の商品画像の下、商品説明の上(画面幅 1024px 未満では購入欄の下)。ページが円を表示していても、パネルは記録したGBPの価格を出します。
-   - マルツオンライン `https://www.marutsu.co.jp/pc/i/<商品番号>` → 商品名の見出しの下。
 
 パネルの内容:
 
@@ -280,7 +281,7 @@ npm run build:userscript -- --out site --base-url https://tsuyoshi-otake.github.
 - 収集(クロール)は店舗ごとのジョブで**並列**に、取り込みと公開は 1 つの job の中で**直列**に行います(ADR-0034)。店舗は別のホストなので、並列にしても各店舗へのリクエスト数・間隔・同時接続数は変わりません。共有するのは 1 つの SQLite と 1 つの `state/` なので、取り込みを並行にすると後から最終化したほうが他方の run を捨てます。取り込みのジョブは 1 店舗目のあと `--previous-dir site/state` を足して連結します。
 - **1 店舗が失敗しても、走った店舗の公開は止めません。** ただしデプロイはサイト全体の差し替えなので、失敗した店舗をそのままにすると公開データが消えます。そこで、履歴に run がある(`state.json` の `stores.<id>.runCount > 0`)のにサイトにマニフェストが無い店舗を `--republish` で作り直し、それでも欠けていればゲートがデプロイを**拒否**します(fail-closed)。ジョブ自体は失敗した店舗があれば最後に失敗します。
 - 秋月は週 1 回だけ全一覧を読み、ほかの日は前回の全一覧の結果から集合被覆で選んだ一覧だけを読みます(ADR-0032)。選んだ一覧に出なかった商品は追加で読み、多すぎれば全一覧を読み直します。記録は Actions のキャッシュで、無ければその日は全一覧です。戻し方と確認項目は [運用手順](docs/runbook.md#秋月の-cover-クロール) にあります。
-- **どの店舗を観測するかは cron には書いてありません。** 毎朝05:00 JSTに起動し、毎日収集します(ADR-0030)。各 `config/<store>.json` の `observation.cadence` を `scripts/observed-stores.ts` が読み、`daily` の店舗を対象にします。現在はKSYを除く6店舗が `daily` で、KSYは `stopped`(サイト閉鎖、2026-11-04)です。`stopped` の店舗は定期実行でも `stores` を空にした手動実行でも観測せず、`stores` に書くとエラーになります。対象外の店舗は `--republish` で維持します。
+- **どの店舗を観測するかは cron には書いてありません。** 毎朝05:00 JSTに起動し、毎日収集します(ADR-0030)。各 `config/<store>.json` の `observation.cadence` を `scripts/observed-stores.ts` が読み、`daily` の店舗を対象にします。現在はKSYを除く5店舗が `daily` で、KSYは `stopped`(サイト閉鎖、2026-11-04)です。`stopped` の店舗は定期実行でも `stores` を空にした手動実行でも観測せず、`stores` に書くとエラーになります。対象外の店舗は `--republish` で維持します。
 - Pages への反映は 1 つのアーティファクト(データ + 状態 + ユーザースクリプト + 拡張 zip)で行うので、読者が中途半端なデータセットを見ることはありません(原子的公開)。
 - SQLite は git にコミットしません。最終化した DB は Pages の `state/` に公開し、次回の入力になります。バックアップは Actions の成果物(90 日)。ロールバックは「該当 run の `state-<run id>` 成果物を `--previous-dir` で読み直して公開する」手順([docs/runbook.md](docs/runbook.md))。
 - 権限は最小(`contents: read`、デプロイジョブだけ `pages: write` + `id-token: write`)。アクションはコミット SHA でピン留め。シークレットは使いません。
@@ -373,14 +374,13 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 パネルとマニフェストの `caveats` に同じ内容が載ります。
 
 - **observation_window**: 履歴はこのプロジェクトが観測を始めた日以降のものです。それ以前の価格は分かりません。
-- **収集間隔**: KSYを除く6店舗は約1日に1回の観測です。観測の間に起きた変化(短時間の値下げ、在庫の増減)は記録されません。「変化点の時刻」は**変化を初めて観測した時刻**で、実際に変わった時刻ではありません。契約v1.1の省略可能フィールド `observation.samplingIntervalDays: 1` から注意書きを表示します(2 は隔日だった間のデータ用に拡張が読みます)。旧版は未知のcaveatキーを拒否するため、この間隔を新しいキーとして配信しません。従来の月次・週次の注意書きも読み込めます。観測を止めた店舗(KSY)は間隔を表明せず、`samplingIntervalDays` も間隔の注意書きも出しません。表示されるのは観測期間(最初と最後の観測日、回数)だけです(ADR-0029)。
+- **収集間隔**: KSYを除く5店舗は約1日に1回の観測です。観測の間に起きた変化(短時間の値下げ、在庫の増減)は記録されません。「変化点の時刻」は**変化を初めて観測した時刻**で、実際に変わった時刻ではありません。契約v1.1の省略可能フィールド `observation.samplingIntervalDays: 1` から注意書きを表示します(2 は隔日だった間のデータ用に拡張が読みます)。旧版は未知のcaveatキーを拒否するため、この間隔を新しいキーとして配信しません。従来の月次・週次の注意書きも読み込めます。観測を止めた店舗(KSY)は間隔を表明せず、`samplingIntervalDays` も間隔の注意書きも出しません。表示されるのは観測期間(最初と最後の観測日、回数)だけです(ADR-0029)。
 - **absence_not_discontinued**: 一覧から消えたことは「掲載なし」と記録します。販売終了とは限りません(一時的な非掲載、ジャンル変更、クロール範囲外など)。
 - **site_reported_quantity**: 在庫数は店舗のページが示す数値そのものです。店舗側の集計ルールや倉庫の実数とは異なることがあります。M5Stack公式ショップはページの「10+ In Stock」のような段階表示ではなく、その元になっているページのデータの数を記録します。スイッチサイエンスの「100+」は100以上を意味する下限として記録し、`cappedAt: 100` を付けて配信します。
 - **suspicious_identity**: 同じ商品コードで名前や型番が大きく変わった場合に付きます。コードの再利用の可能性があります。
 - 価格は税込・表示単位あたりの販売価格です。数量割引や送料は含みません。
 - せんごくネット通販は「電子工作部品」の分類一覧に載る商品だけを記録します。在庫は「在庫あり / 在庫なし(欠品中)」だけで、数量は出ません。価格は価格欄の1行目(店舗が最初に示す売り方)の税込価格で、2行目以降の数量割引や包装違いは表示しません。「価格お見積り」の商品は価格なしとして記録します。商品説明と画像は記録しません。
 - Pimoroniは店舗の基準通貨GBPの価格を記録します。日本から開いたページの円の表示(店舗の換算)は記録しません。VAT・送料・関税を含むかは記録しておらず、税区分は「不明」です。GBPの円換算の参考値は、USDの応答から求めたクロスレートで添えます(取得は増えません)。在庫は「在庫あり / 在庫なし」だけです。
-- マルツオンラインは大分類7つ(キット・開発ツール・電気部品・電子部品・電線・配線部材・半導体・コネクター)の在庫品(店舗の「明日出荷在庫品」)だけを記録します。在庫のない取扱品は記録しません。価格は価格欄の1段目(店舗が最初に示す数量段階)の税込価格で、2段目以降の数量割引は表示しません。在庫数は店舗が一覧に示す即納在庫数で、営業所別の内訳は記録しません。商品説明・仕様・画像は記録しません。
 
 ## プライバシーとセキュリティ
 
@@ -389,7 +389,7 @@ Playwright は初回に `npx playwright install chromium` が必要です。
 - Chrome 拡張も同じで、Cookie もテレメトリもありません。公開しているプライバシーポリシーは `public/privacy.html`(→ `/privacy.html`)で、GitHub Pages 側に通常のアクセスログが残り得ることも含めて書いています。取得はサービスワーカーが `credentials: 'omit'` で行い(店舗のページは発行元にならない)、受け付けるメッセージは 1 種類・送り主は自分の拡張のみ・URL はデータオリジンと為替レートの固定 URL 1 件のみ・待ち時間の上限は 30 秒です。権限は `storage` とデータオリジンだけで、キャッシュは `chrome.storage.local`。為替レートの取得先は CORS で公開読み取りを許可しているため、ホスト権限を足していません。
 - 描画は Shadow DOM 内で、`textContent` と DOM API だけを使います(`innerHTML` などは CI が禁止)。外部スクリプトや CDN は読み込みません。チャートは同梱の SVG 実装です。
 - ページキーなど URL に入る文字列は `src/core/identity.ts` の安全な文字集合に限定し、Publisher はサイトルートの外に書きません。
-- クローラーは連絡先入りの UA、1 リクエストずつ、1.5 s(せんごく・マルツは 2 s)+ ジッタの間隔、`Retry-After` 尊重、4xx は即中止。アクセス制御を回避する仕組みはありません。
+- クローラーは連絡先入りの UA、1 リクエストずつ、1.5 s(せんごくは 2 s)+ ジッタの間隔、`Retry-After` 尊重、4xx は即中止。アクセス制御を回避する仕組みはありません。
 - 依存は完全ピン留め、`npm audit` を CI で実行。`.npmrc` の `min-release-age=7` で公開 7 日未満のパッケージは採用しません。
 - シークレットは不要です。Pages のデプロイは OIDC トークン(`id-token: write`)だけを使います。
 
